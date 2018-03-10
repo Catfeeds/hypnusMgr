@@ -2,7 +2,7 @@
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
 	updateCheck="false">
 
-	<diskStore path="C:\\Users\\lzb\\AppData\\Local\\Temp\\/${system.project_name}/cache" />
+	<diskStore path="C:/Users/lzb/.IntelliJIdea2017.2/system/compile-server/project-hypnus_1b87afa8/_temp_/${system.project_name}/cache" />
 
 	<cache name="menus" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
 	<cache name="menus2" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />

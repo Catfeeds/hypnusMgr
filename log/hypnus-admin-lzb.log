@@ -52,3 +52,17 @@ hypnus-admin 2018-03-10 12:03:16.070 [main] INFO  com.catt.AbstractMain - []
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 hypnus-admin 2018-03-10 12:03:16.070 [main] INFO  com.catt.AbstractMain - [] Server ip：localhost 
 hypnus-admin 2018-03-10 12:03:16.073 [main] INFO  com.catt.AbstractMain - [] Server Started
+hypnus-admin 2018-03-10 12:05:52.470 [RMI TCP Connection(2)-127.0.0.1] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
+hypnus-admin 2018-03-10 12:05:52.912 [RMI TCP Connection(2)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：platform_name
+hypnus-admin 2018-03-10 12:05:53.188 [RMI TCP Connection(2)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：admin_login_link
+hypnus-admin 2018-03-10 12:05:53.422 [RMI TCP Connection(2)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：admin_login_copyright
+hypnus-admin 2018-03-10 12:09:29.273 [RMI TCP Connection(4)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：platform_name
+hypnus-admin 2018-03-10 12:09:38.330 [RMI TCP Connection(4)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：platform_name
+hypnus-admin 2018-03-10 12:09:38.543 [RMI TCP Connection(4)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：admin_login_link
+hypnus-admin 2018-03-10 12:09:38.766 [RMI TCP Connection(4)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：admin_login_copyright
+hypnus-admin 2018-03-10 12:09:50.667 [RMI TCP Connection(4)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：platform_name
+hypnus-admin 2018-03-10 12:17:31.172 [RMI TCP Connection(8)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：platform_name
+hypnus-admin 2018-03-10 12:59:49.201 [RMI TCP Connection(18)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：platform_name
+hypnus-admin 2018-03-10 13:08:11.133 [RMI TCP Connection(20)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：platform_name
+hypnus-admin 2018-03-10 13:08:11.387 [RMI TCP Connection(20)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：admin_login_link
+hypnus-admin 2018-03-10 13:08:11.634 [RMI TCP Connection(20)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：admin_login_copyright

@@ -127,7 +127,7 @@
                 <prop key="javax.persistence.validation.mode">none</prop>
                 <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider
                 </prop>
-                <prop key="hibernate.search.default.indexBase">C:\\Users\\lzb\\AppData\\Local\\Temp\\/${system.project_name}/index</prop>
+                <prop key="hibernate.search.default.indexBase">C:/Users/lzb/.IntelliJIdea2017.2/system/compile-server/project-hypnus_1b87afa8/_temp_/${system.project_name}/index</prop>
                 <prop key="hibernate.uuid_gen_strategy">uuid</prop>
                 <prop key="hibernate.uuid_gen_strategy_class">com.catt.common</prop>
             </props>
