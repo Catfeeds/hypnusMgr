@@ -1,0 +1,135 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    var aData = [];
+                    aData.push({tabName: "T_CUS_ORDER_RETURN", colName: "I_LOGISTICS_TYPE"});//物流公司
+                    aData.push({tabName: "T_CUS_ORDER_RETURN", colName: "I_TRANSPORT_TYPE"});//运输方式
+                    //2代表反馈数组
+                    adminSystem.getEnumList(aData, 2, function (backData) {
+                        var logisticsType = backData['T_CUS_ORDER_RETURN-I_LOGISTICS_TYPE'].sEnumMapping;
+                        var transportType = backData['T_CUS_ORDER_RETURN-I_TRANSPORT_TYPE'].sEnumMapping;
+                        var logisticsTypeStr = "";
+
+                        var transportTypeStr = "";
+
+                        for (var i = 0, len = logisticsType.length; i < len; i++) {
+                            logisticsTypeStr += "<option value=" + logisticsType[i].value + ">" + logisticsType[i].name + "</option>";
+                        }
+                        $('#logisticsType').html(logisticsTypeStr);
+
+                        for (var i = 0, len = transportType.length; i < len; i++) {
+                            transportTypeStr += "<option value=" + transportType[i].value + ">" + transportType[i].name + "</option>";
+                        }
+                        $('#transportType').html(transportTypeStr);
+
+                    });
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+
+                    $("#submit").click(function () {
+                        var param={};
+                        var logisticsType = $('#logisticsType').val();
+                        var logisticsCode = $('#logisticsCode').val();
+                        var transportType = $('#transportType').val();
+                        var luggage = $('#luggage').val();
+                        if(logisticsType){
+                            param.logisticsType = logisticsType;
+                        }else {
+                            msgBox.tips("快递公司不能为空")
+                        }
+
+                        if(transportType){
+                            param.transportType = transportType;
+                        }else {
+                            msgBox.tips("运输方式不能为空")
+                        }
+
+                        if(luggage && !isNaN(luggage)){
+                            param.luggage = luggage;
+                        }else {
+                            msgBox.tips("运费不能为空且必须是数字");
+                            return;
+                        }
+
+
+                        if(logisticsCode && !isNaN(logisticsCode)){
+                            param.logisticsCode = logisticsCode;
+                        }else {
+                            msgBox.tips("快递单号不能为空且必须是数字");
+                            return;
+                        }
+                       param.orderId =  $('#id').val();
+                        DataHandler.deliverGoods(param, function (result) {
+                            //$('#submit').button('reset');
+                            if (result.type == "success") {
+                                msgBox.tips("操作成功", 1, function () {
+                                    msgBox.exWindow.close($.toJSON(result));
+                                });
+                            }
+                        });
+                    });
+
+
+                    //运费
+                    $("#luggage").on('keyup afterpaste', function () {
+                        testMoney(this)
+                    });
+
+                    $("#close").click(function () {
+                        msgBox.exWindow.close();
+                    });
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {};
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 发货
+                 * @param params
+                 * @param callback
+                 */
+                deliverGoods: function (params, callback) {
+                    $.post(path + "/admin/orderMgr/cusOrder/deliverGoods", params, function (result) {
+                        callback(result);
+                    });
+                },
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });
+
+//金额验证
+function testMoney(ob) {
+    if (!ob.value) {
+        return;
+    }
+    if (!ob.value.match(/^[0-9]+(\.[0-9]{0,2})?$/)) ob.value = ob.t_value; else ob.t_value = ob.value;
+    if (ob.value.match(/^[0-9]+(\.[0-9]{0,2})?$/)) ob.o_value = ob.value;
+    if (ob.value == 'undefined') {
+        ob.value = '';
+    }
+}

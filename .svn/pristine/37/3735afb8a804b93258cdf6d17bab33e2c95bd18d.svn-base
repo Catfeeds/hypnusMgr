@@ -1,0 +1,15 @@
+package com.catt.wfx.service.base.specialSale;
+
+import com.catt.common.base.service.BaseService;
+import com.catt.wfx.repository.entity.specialSale.ActivityProductRel;
+
+/**
+ * 商品活动关联表服务接口
+ * 
+ * @author 邹佳
+ * @date 2017-03-08 16:31:12
+ * @version V1.0
+ */
+public interface ActivityProductRelBaseService extends BaseService<ActivityProductRel, Long> {
+
+}

@@ -1,0 +1,84 @@
+package com.catt.wfx.service.impl.basicConfig;
+
+import com.catt.common.util.collections.MapUtil;
+import com.catt.wfx.repository.entity.basicConfig.RefundsSet;
+import com.catt.wfx.service.base.basicConfig.RefundsSetBaseService;
+import com.catt.wfx.service.basicConfig.RefundsSetService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+@Service("refundsSetServiceImpl")
+public class RefundsSetServiceImpl implements RefundsSetService {
+
+    @Resource(name = "refundsSetBaseServiceImpl")
+    private RefundsSetBaseService refundsSetBaseService;
+
+    /**
+     * 获取退货设置信息
+     *
+     * @return
+     */
+    @Override
+    public RefundsSet getRefundsSet() {
+        List<RefundsSet> sets = refundsSetBaseService.findAll();
+        RefundsSet set = null;
+        if(sets != null && sets.size() > 0){
+            set = sets.get(0);
+        }
+        return set;
+    }
+
+    /**
+     * 保存退货时间设置
+     *
+     * @param param
+     */
+    @Override
+    public void saveRefundsDate(Map<String, Object> param) {
+        Long userId = MapUtil.getLong(param, "userId");
+        String userName = MapUtil.getString(param, "userName");
+        Integer refundDays = MapUtil.getInteger(param, "refundDays");
+        if(refundDays == null || refundDays < 0){
+            return;
+        }
+        RefundsSet set = this.getRefundsSet();
+        if(set == null) {
+            set = new RefundsSet();
+        }
+        set.setCreatedId(userId);
+        set.setCreatedName(userName);
+        set.setRefundDays(refundDays);
+        refundsSetBaseService.saveOrUpdate(set);
+    }
+
+    /**
+     * 保存退货地址设置
+     *
+     * @param param
+     */
+    @Override
+    public void saveRefundsAddress(Map<String, Object> param) {
+        Long userId = MapUtil.getLong(param, "userId");
+        String userName = MapUtil.getString(param, "userName");
+        RefundsSet set = this.getRefundsSet();
+        if(set == null) {
+            set = new RefundsSet();
+            set.setRefundDays(0);
+        }
+        set.setCreatedId(userId);
+        set.setCreatedName(userName);
+        set.setAddress(MapUtil.getString(param, "address"));
+        set.setProvinceId(MapUtil.getString(param, "provinceId"));
+        set.setProvinceName(MapUtil.getString(param, "provinceName"));
+        set.setCityId(MapUtil.getString(param, "cityId"));
+        set.setCityName(MapUtil.getString(param, "cityName"));
+        set.setRegionId(MapUtil.getString(param, "regionId"));
+        set.setRegionName(MapUtil.getString(param, "regionName"));
+        set.setPhone(MapUtil.getString(param, "phone"));
+        set.setOntact(MapUtil.getString(param, "ontact"));
+        refundsSetBaseService.saveOrUpdate(set);
+    }
+}

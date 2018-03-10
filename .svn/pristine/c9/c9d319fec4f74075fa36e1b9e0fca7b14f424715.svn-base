@@ -1,0 +1,54 @@
+// JavaScript Document
+
+
+$(document).ready(function(){
+	//头像居中
+	var wodeLfet = ($(document).outerWidth() - $(".xw_wode").outerWidth())/2;
+	$(".xw_wode").css({left:wodeLfet});
+	//Tab
+	$(".xw_li").click(function(){
+		$(this).parents(".goodsType").find('.xw_li').removeClass("lion");
+		$(this).addClass("lion");
+		var liNum = $(this).parents(".goodsType").find('.xw_li').index(this);
+		$(this).parents(".goodsType").parents(".xw_store_main").find(".xw_goodsList").hide();
+		$(this).parents(".goodsType").parents(".xw_store_main").find(".xw_goodsList").eq(liNum).show();
+	});
+	//商品详情
+	$(".xw_shangpin").click(function(){
+		window.location.href='4-1-2shangpinxiangqing.html';
+	});
+	//商品详情
+	$(".xw_shangpin1").click(function(){
+		window.location.href='4-1-2-1shangpinxiangqing.html';
+	});
+	//特卖会场
+	$(".xw_temai img,.xw_temai h1,.xw_temai h2").click(function(){
+		window.location.href='4-4-2yurehuichang.html';
+	});
+	//拼团详情
+	$(".xw_pintuan").click(function(){
+		window.location.href='4-3-2pintuanxiangqing.html';
+	});
+	//拼团详情
+	$(".xw_pintuan1").click(function(){
+		window.location.href='4-3-2-1pintuanxiangqing.html';
+	});
+	//订单详情
+	$(".xw_dingdan").click(function(){
+		window.location.href='3-2-2dingdanxiangqing.html';
+	});
+	//物流
+	$(".xw_wuliu").click(function(){
+		window.location.href='2-2-3wuliudetail.html';
+	});
+	
+	$(window).bind("resize",resizebind);
+});
+
+	
+/*----------浏览器重置事件--------*/
+function resizebind(){
+	//setpageSize();
+	var wodeLfet = ($(document).outerWidth() - $(".xw_wode").outerWidth())/2;
+	$(".xw_wode").css({left:wodeLfet});
+}

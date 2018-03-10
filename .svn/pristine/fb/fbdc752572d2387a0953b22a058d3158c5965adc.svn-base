@@ -1,0 +1,66 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * Description:
+ * Created by 2017-02-15
+ * author: yuanxingcheng
+ */
+public class CusOrderServiceImplTest extends SpringTest{
+
+    //订单服务
+    @Resource(name = "cusOrderServiceImpl")
+    public CusOrderService cusOrderService;
+
+    /**
+     * 创建订单（店主APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testCreate() throws Exception {
+        Long[] cartIds = {525920693594882048L};
+        Map map = cusOrderService.create(1L, cartIds, 1L, null, null);
+        System.out.print("##############" + map);
+    }
+
+    /**
+     *  获取订单基本信息（店主APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetDataByCartToOrder() throws Exception {
+        Map map = cusOrderService.findOrderInfo(525921052782493696L);
+        System.out.print("##############" + map);
+    }
+
+    /**
+     *  余额支付 (APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testPayByRemainderMoney() throws Exception {
+        cusOrderService.payByRemainderMoney(1L, 525912325266341888L, "1");
+        System.out.print("##############");
+    }
+
+
+    /**
+     *  取消订单(APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testCancelCusOrder() throws Exception {
+        cusOrderService.cancelCusOrder(1L,"2", 525912325266341888L);
+        System.out.print("##############");
+    }
+}

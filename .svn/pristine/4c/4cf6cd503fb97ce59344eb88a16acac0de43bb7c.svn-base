@@ -1,0 +1,45 @@
+package com.catt.wfx.service.impl.couponMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.couponMgr.CouponCusService;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * Description:
+ * Created by 2017-02-14
+ * author: yuanxingcheng
+ */
+public class CouponCusServiceImplTest extends SpringTest{
+
+    //用户代金券服务
+    @Resource(name = "couponCusServiceImpl")
+    public CouponCusService couponCusService;
+
+    /**
+     * 创建订单-可用代金券列表（分页）（APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetUsableCoupon() throws Exception {
+        Long[] cartIds = {525582681753255936l,525586741239742464l};
+        Page<Map> page = couponCusService.getUsableCoupon(1L, cartIds, 1, 10);
+        System.out.print("##############" + page.getContent());
+    }
+
+
+    /**
+     * 创建订单-可用代金券列表（分页）（APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testFindCusCoupon() throws Exception {
+        Page<Map> mapPage = couponCusService.findCusCoupon(1L, 1, 1, 10);
+        System.out.print("##############" + mapPage.getContent());
+    }
+}

@@ -1,0 +1,697 @@
+package com.catt.wfx.service.impl.customerMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.couponMgr.CouponCusDao;
+import com.catt.wfx.repository.dao.customerMgr.CusAccountDetailDao;
+import com.catt.wfx.repository.dao.customerMgr.CusInfoDao;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderDao;
+import com.catt.wfx.repository.dao.util.SeqUtilDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.AgentInfo;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountConsume;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountDetail;
+import com.catt.wfx.repository.entity.customerMgr.CusAllot;
+import com.catt.wfx.repository.entity.customerMgr.CusAllotRel;
+import com.catt.wfx.repository.entity.customerMgr.CusContact;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.entity.customerMgr.CusInvoice;
+import com.catt.wfx.repository.entity.customerMgr.CusShop;
+import com.catt.wfx.repository.entity.productMgr.ProductShop;
+import com.catt.wfx.repository.form.customerMgr.CusInfoForm;
+import com.catt.wfx.service.base.customerMgr.CusAccountConsumeBaseService;
+import com.catt.wfx.service.base.customerMgr.CusAllotBaseService;
+import com.catt.wfx.service.base.customerMgr.CusAllotRelBaseService;
+import com.catt.wfx.service.base.customerMgr.CusContactBaseService;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.base.customerMgr.CusInvoiceBaseService;
+import com.catt.wfx.service.base.customerMgr.CusShopBaseService;
+import com.catt.wfx.service.base.productMgr.ProductShopBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementOrderDetailBaseService;
+import com.catt.wfx.service.customerMgr.AgentInfoService;
+import com.catt.wfx.service.customerMgr.CusInfoService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import util.ShareCodeUtil;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 用户信息接口实现
+ * 作者：邹佳
+ * 时间：2017-02-27
+ */
+@Service("cusInfoServiceImpl")
+public class CusInfoServiceImpl implements CusInfoService {
+
+    // 用户信息服务接口
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    // 团队信息表服务接口
+    @Resource(name = "cusAllotBaseServiceImpl")
+    private CusAllotBaseService cusAllotBaseService;
+
+    // 用户团队关联表服务接口
+    @Resource(name = "cusAllotRelBaseServiceImpl")
+    private CusAllotRelBaseService cusAllotRelBaseService;
+
+    // 账户信息服务接口
+    @Resource(name = "cusAccountConsumeBaseServiceImpl")
+    private CusAccountConsumeBaseService cusAccountConsumeBaseService;
+
+    // 店铺信息表服务接口
+    @Resource(name = "cusShopBaseServiceImpl")
+    private CusShopBaseService cusShopBaseService;
+
+    // 订单结算统计服务接口
+    @Resource(name = "settlementOrderDetailBaseServiceImpl")
+    private SettlementOrderDetailBaseService settlementOrderDetailBaseService;
+
+    // 店主商品服务接口
+    @Resource(name = "productShopBaseServiceImpl")
+    private ProductShopBaseService productShopBaseService;
+
+    @Resource
+    private SeqUtilDao seqUtilDao;
+
+    // 用户信息Dao接口
+    @Resource(name = "cusInfoDaoImpl")
+    private CusInfoDao cusInfoDao;
+
+    // 用户代金券信息Dao接口
+    @Resource(name = "couponCusDaoImpl")
+    private CouponCusDao couponCusDao;
+
+    // 用户收货信息Dao接口
+    @Resource(name = "cusContactBaseServiceImpl")
+    private CusContactBaseService cusContactBaseService;
+
+    // 用户发票信息Dao接口
+    @Resource(name = "cusInvoiceBaseServiceImpl")
+    private CusInvoiceBaseService cusInvoiceBaseService;
+
+    // 用户订单信息
+    @Resource(name = "cusOrderDaoImpl")
+    private CusOrderDao cusOrderDao;
+
+    //用户交易记录
+    @Resource(name = "cusAccountDetailDaoImpl")
+    private CusAccountDetailDao cusAccountDetailDao;
+    //代理商服务
+    @Resource(name = "agentInfoServiceImpl")
+    private AgentInfoService agentInfoService;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+
+    /**
+     * 新增主管
+     *
+     * @param cusInfo     用户信息
+     * @param createdId   创建人员标识
+     * @param createdName 创建人员名称
+     */
+    @Override
+    @Transactional
+    public void addDirector(CusInfo cusInfo, Long createdId, String createdName) {
+        long num = cusInfoBaseService.count(Filter.eq("account", cusInfo.getMobile()),
+                Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        if (num > 0) {
+            throw BaseException.errorByErrInfo("账号已存在");
+        }
+
+        // 保存用户信息
+        cusInfo.setPwd(DigestUtils.md5Hex("888888"));
+        cusInfo.setAccount(cusInfo.getMobile());
+        cusInfo.setType(CusInfo.Type.Director.getValue());
+        cusInfo.setStatus(CusInfo.Status.NORMALUSE.getValue());
+        cusInfo.setDelFlag(PubEnum.YesOrNoEnum.NO.getValue());
+        String seqName = "S_INVITATION_NO";
+        Integer curVal = seqUtilDao.getSeq(seqName);
+        cusInfo.setInvitationNo(ShareCodeUtil.toSerialCode(curVal).toUpperCase());
+        cusInfo.setCreatedId(createdId);
+        cusInfo.setCreatedName(createdName);
+        cusInfoBaseService.save(cusInfo);
+
+        // 用户标识
+        Long cusId = cusInfo.getId();
+
+        // 保存团队信息
+        CusAllot cusAllot = new CusAllot();
+        cusAllot.setLeaderId(cusId);
+        cusAllot.setAllotName(cusInfo.getName());
+        cusAllot.setStaffNum(NumberUtil.LONG_ONE);
+        cusAllot.setCreatedId(createdId);
+        cusAllot.setCreatedName(createdName);
+        cusAllotBaseService.save(cusAllot);
+
+        // 保存用户团队关联信息,将新增的主管与自己的团队关联起来
+        CusAllotRel rel = new CusAllotRel();
+        rel.setCusId(cusId);
+        rel.setTeamId(cusAllot.getId());
+        rel.setCreatedId(createdId);
+        rel.setCreatedName(createdName);
+        cusAllotRelBaseService.save(rel);
+
+        // 添加账户信息记录
+        CusAccountConsume cusAccountConsume = new CusAccountConsume();
+        cusAccountConsume.setCusId(cusId);
+        cusAccountConsume.setApplyMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsume.setGetMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsume.setGiveMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsume.setRemainderMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsume.setSalesMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsume.setTotalMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsume.setCreatedId(createdId);
+        cusAccountConsume.setCreatedName(createdName);
+        cusAccountConsumeBaseService.save(cusAccountConsume);
+
+        //保存店铺信息
+        CusShop cusShop = new CusShop();
+        cusShop.setCusId(cusId);
+        cusShop.setStatus(CusShop.Status.Normal.getValue());
+        cusShop.setOpenTime(new Date());
+        cusShop.setOrderNum(NumberUtil.INTEGER_ZERO);
+        cusShop.setOrderMoney(NumberUtil.DOUBLE_ZERO);
+        cusShop.setCreatedId(createdId);
+        cusShop.setCreatedName(createdName);
+        cusShopBaseService.save(cusShop);
+    }
+
+    /**
+     * 修改主管
+     *
+     * @param cusInfo
+     */
+    @Override
+    public void updateDirector(CusInfo cusInfo) {
+        long num = cusInfoBaseService.count(Filter.eq("account", cusInfo.getMobile()),
+                Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()), Filter.ne("id", cusInfo.getId()));
+        if (num > 0) {
+            throw BaseException.errorByErrInfo("账号已存在");
+        }
+
+        CusInfo info = cusInfoBaseService.find(cusInfo.getId());
+        info.setName(cusInfo.getName());
+        info.setAccount(cusInfo.getMobile());
+        info.setMobile(cusInfo.getMobile());
+        cusInfoBaseService.update(info);
+    }
+
+    /**
+     * 获取主管管理分页数据
+     *
+     * @param cusInfoForm
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getPageDirector(CusInfoForm cusInfoForm, Pageable pageable) {
+        return cusInfoDao.getPageDirector(cusInfoForm, pageable);
+    }
+
+    /**
+     * 获取店主管理分页数据
+     *
+     * @param cusInfoForm
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getPageShopOwner(CusInfoForm cusInfoForm, Pageable pageable) {
+        Page<Map> page = cusInfoDao.getPageShopOwner(cusInfoForm, pageable);
+        if (CollectionUtil.isNotEmpty(page.getContent())) {
+            List<Map> list = page.getContent();
+            enumMgrService.transformEnum(list,
+                    new ArrayList<EnumTransformData>() {
+                        {
+                            add(new EnumTransformData("T_CUS_INFO",
+                                    "I_AGENT_TYPE", "type",
+                                    "typeName"));
+                        }
+                    });
+            page.setContent(list);
+        }
+        return page;
+    }
+
+    /**
+     * 获取主管详情
+     *
+     * @param cusId
+     * @return
+     */
+    @Override
+    public Map getDirectorDetail(Long cusId) {
+        Map map = new HashMap<>();
+        CusInfo cusInfo = cusInfoBaseService.find(cusId);
+        map.put("id", cusInfo.getId());
+        map.put("name", cusInfo.getName());
+        map.put("mobile", cusInfo.getMobile());
+        map.put("account", cusInfo.getAccount());
+        map.put("status", cusInfo.getStatus());
+
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("leaderId", cusId));
+        List<CusAllot> list = cusAllotBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(list)) {
+            CusAllot cusAllot = list.get(0);
+            map.put("cusAllotId", cusAllot.getId());
+            map.put("staffNum", cusAllot.getStaffNum());
+            map.put("selectDate", cusAllot.getCreateDate()); // 选拔时间，取团队的创建时间即可
+        }
+
+        // 团队销售金额
+        map.put("teamSaleAmount", settlementOrderDetailBaseService.getTeamSaleMoney(cusId));
+        return map;
+    }
+
+    /**
+     * 获取店主详情
+     *
+     * @param cusId
+     * @return
+     */
+    @Override
+    public Map getShopOwnerDetail(Long cusId) {
+        Map map = new HashMap<>();
+        CusInfo cusInfo = cusInfoBaseService.find(cusId);
+
+        AgentInfo agentInfo = agentInfoService.findAgengInfoByCusId(cusId);
+        map.put("id", cusInfo.getId());
+        map.put("name", cusInfo.getName());
+        map.put("mobile", cusInfo.getMobile());
+        map.put("type", cusInfo.getType());
+
+        if (agentInfo != null) {
+            map.put("agentSite", agentInfo.getSite());
+        }
+
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", cusId));
+        List<CusShop> shops = cusShopBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(shops)) {
+            CusShop cusShop = shops.get(0);
+            map.put("openTime", cusShop.getOpenTime());
+            map.put("expireTime", cusShop.getExpireTime());
+            map.put("shopName", cusShop.getShopName());
+            map.put("shopDesc", cusShop.getShopDesc());
+
+            // 店铺上架商品数
+            long productNum = productShopBaseService.count(Filter.eq("shopId", cusShop.getId()), Filter.eq("status", ProductShop.Status.NORMALUSE.getValue()));
+            map.put("productNum", productNum);
+        }
+
+        List<CusAllotRel> rels = cusAllotRelBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(rels)) {
+            CusAllot cusAllot = cusAllotBaseService.find(rels.get(0).getTeamId());
+            map.put("directorName", cusInfoBaseService.find(cusAllot.getLeaderId()).getName()); // 所属主管
+        }
+        enumMgrService.transformEnum(map,
+                new ArrayList<EnumTransformData>() {
+                    {
+                        add(new EnumTransformData("T_CUS_INFO",
+                                "I_AGENT_TYPE", "type",
+                                "typeName"));
+                    }
+                });
+
+
+        long num = cusInfoBaseService.count(Filter.like("invitationPath","/"+cusId));
+        map.put("teamStaffNum", num);
+
+        return map;
+    }
+
+    /**
+     * 分配主管
+     *
+     * @param cusId       店主标识
+     * @param leaderId    主管标识
+     * @param createdId   创建人员标识
+     * @param createdName 创建人员名称
+     */
+    @Override
+    @Transactional
+    public void selectDirector(Long cusId, Long leaderId, Long createdId, String createdName) {
+        // 查找店主之前的用户团队关联信息，并解除关联
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", cusId));
+        List<CusAllotRel> rels = cusAllotRelBaseService.findList(null, filters, null);
+        if (CollectionUtil.isNotEmpty(rels)) {
+            for (CusAllotRel rel : rels) {
+                // 将此店主之前所属的团队人数减1
+                CusAllot cusAllot = cusAllotBaseService.find(rel.getTeamId());
+                cusAllot.setStaffNum(cusAllot.getStaffNum() - 1);
+                cusAllotBaseService.update(cusAllot);
+
+                // 解除关联关系
+                cusAllotRelBaseService.delete(rel);
+            }
+        }
+
+        // 重新建立关联关系
+        filters.clear();
+        filters.add(Filter.eq("leaderId", leaderId));
+        List<CusAllot> list = cusAllotBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(list)) {
+            // 将重新分配后的团队人数加1
+            CusAllot cusAllot = list.get(0);
+            cusAllot.setStaffNum(cusAllot.getStaffNum() + 1);
+            cusAllotBaseService.update(cusAllot);
+
+            // 新建关联关系
+            CusAllotRel rel = new CusAllotRel();
+            rel.setTeamId(cusAllot.getId());
+            rel.setCusId(cusId);
+            rel.setCreatedId(createdId);
+            rel.setCreatedName(createdName);
+            cusAllotRelBaseService.save(rel);
+        }
+
+    }
+
+
+    /**
+     * 店主选拔为主管
+     *
+     * @param cusId       店主标识
+     * @param createdId   创建人员标识
+     * @param createdName 创建人员名称
+     */
+    @Override
+    @Transactional
+    public void toBeDirector(Long cusId, Long createdId, String createdName) {
+        // 更新用户类型为，3-主管&店主
+        CusInfo cusInfo = cusInfoBaseService.find(cusId);
+        if (CusInfo.Type.Director.getValue() == cusInfo.getType()) {
+            throw BaseException.errorByErrInfo("此店主已有主管身份，不可重复选拔为主管");
+        }
+        cusInfo.setType(CusInfo.Type.Director.getValue());
+        cusInfoBaseService.update(cusInfo);
+
+        // 店铺到期时间设置为空，主管店铺无限期
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", cusId));
+        List<CusShop> shops = cusShopBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(shops)) {
+            CusShop cusShop = shops.get(0);
+            cusShop.setExpireTime(null);
+            cusShopBaseService.update(cusShop);
+        }
+
+        // 查找店主之前的用户团队关联信息，并解除关联
+        List<CusAllotRel> rels = cusAllotRelBaseService.findList(null, filters, null);
+        if (CollectionUtil.isNotEmpty(rels)) {
+            for (CusAllotRel rel : rels) {
+                // 将此店主之前所属的团队人数减1
+                CusAllot cusAllot = cusAllotBaseService.find(rel.getTeamId());
+                cusAllot.setStaffNum(cusAllot.getStaffNum() - 1);
+                cusAllotBaseService.update(cusAllot);
+
+                // 解除关联关系
+                cusAllotRelBaseService.delete(rel);
+            }
+        }
+
+        // 保存团队信息
+        CusAllot cusAllot = new CusAllot();
+        cusAllot.setLeaderId(cusId);
+        cusAllot.setAllotName(cusInfo.getName());
+        cusAllot.setStaffNum(NumberUtil.LONG_ONE);
+        cusAllot.setCreatedId(createdId);
+        cusAllot.setCreatedName(createdName);
+        cusAllotBaseService.save(cusAllot);
+
+        // 保存用户团队关联信息,将店主与自己的团队关联起来
+        CusAllotRel rel = new CusAllotRel();
+        rel.setCusId(cusId);
+        rel.setTeamId(cusAllot.getId());
+        rel.setCreatedId(createdId);
+        rel.setCreatedName(createdName);
+        cusAllotRelBaseService.save(rel);
+    }
+
+    /**
+     * 获取团队名单
+     *
+     * @param cusAllotId 团队标识
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getTeamStaffs(Long cusAllotId, Pageable pageable) {
+        return cusInfoDao.getTeamStaffs(cusAllotId, pageable);
+    }
+
+
+// 会员、账户=====================================================================================================================
+
+    /**
+     * 获取会员管理分页数据
+     *
+     * @param cusInfoForm
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getPageMember(CusInfoForm cusInfoForm, Pageable pageable) {
+        return cusInfoDao.getPageMember(cusInfoForm, pageable);
+    }
+
+    /**
+     * 获取账户管理分页数据
+     *
+     * @param cusInfoForm
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getPageAccount(CusInfoForm cusInfoForm, Pageable pageable) {
+        return cusInfoDao.getPageAccount(cusInfoForm, pageable);
+    }
+
+    /**
+     * 获取会员详情
+     *
+     * @param cusId
+     * @return
+     */
+    @Override
+    public Map getMemberDetail(Long cusId) {
+        Map<String, Object> result = new HashMap<>();
+        if (StringUtil.checkObj(cusId)) {
+            CusInfo cusInfo = cusInfoBaseService.find(cusId);
+            //基本信息
+            result.put("id", cusInfo.getId());
+            result.put("name", cusInfo.getName());
+            result.put("mobile", cusInfo.getMobile());
+            result.put("createDate", DateUtil.format(cusInfo.getCreateDate(), "yyyy-MM-dd HH:mm:ss"));
+            result.put("status", cusInfo.getStatus());
+            result.put("statusName",
+                    cusInfo.getStatus() == CusInfo.Status.NORMALUSE.getValue() ? CusInfo.Status.NORMALUSE.getName() : CusInfo.Status.DISABLE.getName());
+
+            //代金券信息
+            Map coupon = couponCusDao.getCouponTotal(cusInfo.getId());
+            if (coupon != null && !coupon.isEmpty()) {
+                result.put("couponNum", coupon.get("totalNum") != null ? coupon.get("totalNum") : 0);
+                result.put("couponMoney", coupon.get("totalMoney") != null ? coupon.get("totalMoney") : 0);
+            }
+
+            //收货地址
+            List<Filter> addressFilters = new ArrayList<>();
+            addressFilters.add(Filter.eq("cusId", cusInfo.getId()));
+            List<CusContact> address = cusContactBaseService.findList(null, addressFilters, null);
+            result.put("address", address);
+            //发票信息
+            List<Filter> invoiceFilter = new ArrayList<>();
+            invoiceFilter.add(Filter.eq("cusId", cusInfo.getId()));
+            List<CusInvoice> invoices = cusInvoiceBaseService.findList(null, invoiceFilter, null);
+            result.put("invoices", invoices);
+            //消费信息
+            Map orders = cusOrderDao.getOrderTotal(cusInfo.getId());
+            if (orders != null && !orders.isEmpty()) {
+                result.put("orderNum", orders.get("totalNum") != null ? orders.get("totalNum") : 0);
+                result.put("orderMoney", orders.get("totalMoney") != null ? orders.get("totalMoney") : 0);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 获取账户详情
+     *
+     * @param cusId
+     * @return
+     */
+    @Override
+    public Map getAccountDetail(Long cusId) {
+        Map<String, Object> result = new HashMap<>();
+        if (StringUtil.checkObj(cusId)) {
+            //基本信息
+            CusInfo cusInfo = cusInfoBaseService.find(cusId);
+            result.put("id", cusInfo.getId());
+            result.put("typeName", CusInfo.Type.getEnum(cusInfo.getType()).getName());
+            result.put("name", cusInfo.getName());
+            result.put("mobile", cusInfo.getMobile());
+            //账户信息
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("cusId", cusId));
+            List<CusAccountConsume> accounts = cusAccountConsumeBaseService.findList(null, filters, null);
+            if (accounts != null && accounts.size() > 0) {
+                CusAccountConsume account = accounts.get(0);
+                result.put("remainderMoney", account.getRemainderMoney() != null ? account.getRemainderMoney() : 0.0D);//余额
+                result.put("totalMoney", account.getTotalMoney() != null ? account.getTotalMoney() : 0.0D);//总额
+                result.put("unAcceptMoney", account.getUnAcceptMoney() != null ? account.getUnAcceptMoney() : 0.0D);//未到账
+            }
+            //代金券信息
+            Map coupon = couponCusDao.getCouponTotal(cusInfo.getId());
+            if (coupon != null && !coupon.isEmpty()) {
+                result.put("couponNum", coupon.get("totalNum") != null ? coupon.get("totalNum") : 0);
+                result.put("couponMoney", coupon.get("totalMoney") != null ? coupon.get("totalMoney") : 0);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 获取账户详情-交易记录 分页数据
+     *
+     * @param cusId
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getPageAccountOrder(Long cusId, Pageable pageable) {
+        Page<Map> page = cusAccountDetailDao.findTransactionRecord(cusId, null, null, null, pageable);
+        List<Map> list = page.getContent();
+        if (list != null && list.size() > 0) {
+            for (Map m : list) {
+                Integer type = MapUtil.getInteger(m, "type");
+                m.put("type", CusAccountDetail.Type.getEnum(type).getName());//交易类型
+                m.put("time", m.get("createDate"));
+            }
+        }
+        return page;
+    }
+
+    /**
+     * 获取账户详情-代金券记录 分页数据
+     *
+     * @param cusId
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getPageAccountCoupon(Long cusId, Pageable pageable) {
+        Page<Map> page = couponCusDao.getCusCouponPage(cusId, pageable);
+        List<Map> list = page.getContent();
+        if (list != null && list.size() > 0) {
+            //类型； 领取、使用、失效
+            for (Map m : list) {
+                Integer isUse = MapUtil.getInteger(m, "isUse");//是否使用
+                Date invalidTime = MapUtil.getObject(m, "invalidTime") != null ? (Date) MapUtil.getObject(m, "invalidTime") : null;//失效时间
+                if (isUse == 1) {
+                    m.put("type", "使用");
+                    m.put("time", m.get("useTime"));
+                } else {
+                    Date now = new Date();
+                    if (now.getTime() >= invalidTime.getTime()) {
+                        m.put("type", "失效");
+                        m.put("time", m.get("invalidTime"));
+                    } else {
+                        m.put("type", "领取");
+                        m.put("time", m.get("receiveTime"));
+                    }
+                }
+            }
+        }
+        return page;
+    }
+
+    /**
+     * 获取店主邀请人员树
+     *
+     * @param cusId 店主标识
+     * @return
+     */
+    public Map getTreePage(Long cusId) {
+        Map result = new HashMap<>();
+        result.put("total", 0);
+        result.put("rows", new ArrayList<>());
+
+        List<Map> dataListMap = cusInfoDao.getTreePage(cusId);
+
+        if(CollectionUtil.isEmpty(dataListMap)){
+            return result;
+        }
+
+
+//        String path = "";
+
+        for (Map cusInfo : dataListMap) {
+            String invitationPath = MapUtil.getString(cusInfo, "invitationPath");
+            Long id = MapUtil.getLong(cusInfo, "id");
+
+            //判断姓名是否存在
+            if (StringUtil.isBlank(MapUtil.getString(cusInfo, "name"))) {
+                cusInfo.put("name", MapUtil.getString(cusInfo, "account"));
+            }
+
+            //判断邀请标识是否等于店主标识（相等则设此数据的父标识为null）
+            if (!cusId.equals(MapUtil.getLong(cusInfo, "invitationId"))) {
+                cusInfo.put("_parentId", MapUtil.getLong(cusInfo, "invitationId"));
+            } else {
+                cusInfo.put("_parentId", null);
+            }
+            //邀请人数
+           long num = cusInfoBaseService.count(Filter.like("invitationPath","/"+id));
+
+//            path = path+invitationPath;
+
+//            for (Map map : dataListMap) {
+//                String invitationPath2 = MapUtil.getString(map, "invitationPath");
+//                if (StringUtil.isNotBlank(invitationPath)) {
+//                    if (invitationPath2.contains(id.toString())) {
+//                        num = num + 1;
+//                    }
+//                }
+//            }
+//
+            cusInfo.put("teamStaffNum", num);
+
+        }
+
+
+//        for (Map cusInfo : dataListMap) {
+//            Long id = MapUtil.getLong(cusInfo, "id");
+//            int num = (path.length() - path.replace(id.toString(), "").length())/18;
+//
+//            cusInfo.put("teamStaffNum", num);
+//        }
+
+
+        result.put("total", dataListMap.size());
+        result.put("rows", dataListMap);
+
+        return result;
+    }
+}

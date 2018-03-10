@@ -1,0 +1,232 @@
+package com.catt.wfx.repository.entity.orderMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 订单支付实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:34
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_CUS_ORDER_PAY")
+public class CusOrderPay extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 单据标识
+	 */
+	private Long orderId;
+	/**
+	 * 客户标识
+	 */
+	private Long cusId;
+	/**
+	 * 客户名称
+	 */
+	private String cusName;
+	/**
+	 * 信用额度使用
+	 */
+	private Double creditMoney;
+	/**
+	 * 余额使用
+	 */
+	private Double rechargeMoney;
+	/**
+	 * 在线支付方式<p><br>
+	 * 1-微信 2-支付宝
+	 */
+	private Integer payType;
+	/**
+	 * 在线支付金额
+	 */
+	private Double payMoney;
+	/**
+	 * 在线支付交易号<p><br>
+	 * 支付交易号，与支付模块的订单号对应
+	 */
+	private String tradeNo;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+
+	@Column(name = "I_ORDER_ID")
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
+	@Column(name = "I_CUS_ID")
+	public Long getCusId() {
+		return cusId;
+	}
+
+	public void setCusId(Long cusId) {
+		this.cusId = cusId;
+	}
+
+	@Column(name = "S_CUS_NAME", length = 32)
+	public String getCusName() {
+		return cusName;
+	}
+
+	public void setCusName(String cusName) {
+		this.cusName = cusName;
+	}
+
+	@Column(name = "I_CREDIT_MONEY")
+	public Double getCreditMoney() {
+		return creditMoney;
+	}
+
+	public void setCreditMoney(Double creditMoney) {
+		this.creditMoney = creditMoney;
+	}
+
+	@Column(name = "I_RECHARGE_MONEY")
+	public Double getRechargeMoney() {
+		return rechargeMoney;
+	}
+
+	public void setRechargeMoney(Double rechargeMoney) {
+		this.rechargeMoney = rechargeMoney;
+	}
+
+	@Column(name = "I_PAY_TYPE")
+	public Integer getPayType() {
+		return payType;
+	}
+
+	public void setPayType(Integer payType) {
+		this.payType = payType;
+	}
+
+	@Column(name = "I_PAY_MONEY")
+	public Double getPayMoney() {
+		return payMoney;
+	}
+
+	public void setPayMoney(Double payMoney) {
+		this.payMoney = payMoney;
+	}
+
+	@Column(name = "S_TRADE_NO", length = 64)
+	public String getTradeNo() {
+		return tradeNo;
+	}
+
+	public void setTradeNo(String tradeNo) {
+		this.tradeNo = tradeNo;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+    /**
+     * 在线支付方式<p><br>
+     * 1-微信公众号支付  2-微信app支付 2-余额
+     */
+    public enum PayType {
+
+        /**
+         * 微信公众号支付
+         */
+        WeChatPublic(1, "微信公众号支付"),
+		/**
+		 * 微信app支付
+		 */
+        WeChatApp(2, "微信app支付");
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        PayType(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static PayType getEnum(int value) {
+            PayType[] source = PayType.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+
+    }
+
+}
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>project-hypnus</artifactId>
+        <groupId>com.catt</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>project-hypnus-admin</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>project-hypnus-admin</name>
+    <url>http://maven.apache.org</url>
+
+    <modules>
+        <!--  接口定义 后台管理-->
+        <module>project-hypnus-service</module>
+        <!-- 业务操作jvm后台 后台管理-->
+        <module>project-hypnus-service-impl</module>
+        <!-- 后台管理 -->
+        <module>project-hypnus-web-admin</module>
+    </modules>
+</project>

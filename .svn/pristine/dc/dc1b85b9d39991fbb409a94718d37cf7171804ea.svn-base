@@ -1,0 +1,134 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>购物车</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/huiyuanfuwu.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/gouwuche.css"/>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/cart/index.js"></script>
+</head>
+<style type="text/css">
+    .hideLi{display: none}
+    .biaotiLeft{font-size:12px}
+    .guige{font-size:12px}
+    .numBer h2{ font-size:12px; color:#aaa; float:left; height:16px; line-height:20px; overflow:hidden;}
+    .yuanjia2{ font-size:12px; color:#999; height:26px; line-height:26px; float:right; text-decoration:line-through;
+        margin:35px 10px 0px 0px;}
+</style>
+<body style="background:#f2f2f2;">
+<div style="height:47px;"></div>
+<div class="top header">
+    <button class="top-left" onClick="window.history.go(-1);">
+        <img class="top_btn_back" src="${path}/resources/images/top_btn_back.png">
+    </button>
+    <button class="top-right-text indexPage" id="edit">编辑</button>
+    <button class="top-right-text editPage" id="sure" style="display: none;">确定</button>
+    <h1>购物车</h1>
+</div>
+
+<div id="dataList"></div>
+
+<div style="height:50px;"></div>
+<div class="singleBtn zhifuBottom">
+    <p class="priceText">￥<span class="textPink priceNum" id="productAmount">0</span></p>
+    <button class="zhifuBtn" id="settle">去结算</button>
+</div>
+
+<!--选择规格-->
+<div class="shareDiv xw_guigeDiv" >
+    <div class="guigeDiv xw_guige">
+        <span class="close xw_close"><img src="${path}/resources/images/ico_close.png" width="20" height="20"></span>
+        <table class="guigeTab">
+            <tr>
+                <td>
+                    <div class="price">
+                        ￥<span id="salesPrice">--</span>
+                        <br>
+                        <span class="yuanjia" id="costPrice"></span>
+                    </div>
+                    <div class="numBer">
+                        <div class="floatLeft" style="line-height:30px; color:#999;">数量：</div>
+                        <span id="numSub">
+                            <img src="${path}/resources/images/ico_minus.png" width="14" height="2" style=" margin-top:12px;">
+                        </span>
+                        <input id="productNum" type="number" class="num" value="1" >
+                        <span id="numAdd">
+                            <img src="${path}/resources/images/ico_plus.png" width="14" height="14" style=" margin-top:5px;">
+                        </span>
+                        <h2 id="stockNum">（库存0件）</h2>
+                    </div>
+                </td>
+            </tr>
+            <tbody id="specList"></tbody>
+        </table>
+        <button class="nextBtn1 xw_close" id="confirmSepc">确&nbsp;&nbsp;&nbsp;&nbsp;定</button>
+    </div>
+</div>
+
+</body>
+</html>
+<script type="text/html" id="template_dataList">
+    {{each content as item i}}
+    <div class="goodType productDataDiv" data-value-index="{{i}}" data-value-isValid="{{item.isValid}}">
+        <div class="goodsList" style="margin:0;">
+            <div class="goods">
+                <a class="checkbox checkbox02 xw_radio {{item.checked}}"></a>
+                <h2 class="indexPage">
+                    <span class="biaotiLeft">{{item.productName}}</span>
+                    <span class="biaotiRight">￥{{item.salesPrice}}</span>
+                    {{if item.isActivity == 1}}
+                    <font class="yuanjia2">￥{{item.costPrice}}</font></h4>
+                    {{/if}}
+                </h2>
+
+                <div class="bianji editPage delBtn" style="display: none;">
+                    <font class="content">删除</font>
+                </div>
+
+                <img class="gouwuchePic" src="{{item.headPath}}">
+                {{if item.stockNum <= 0 || item.isValid == 2 || item.stockNum < item.num}}
+                <span class="shixiao" id="isValid{{i}}">失效</span>
+                {{/if}}
+                <span class="guige indexPage">规格：{{item.specDesc}}</span>
+                <span class="shuliang indexPage" id="num{{i}}">X{{item.num}}</span>
+
+                <div class="goodHide editPage" style="display: none">
+                    <h3>
+                        <div class="buyNum">
+                            <span class="ico_minus"></span>
+                            <input class="numInput" value="{{item.num}}" type="number" {{item.isValid == 2 ? 'readonly' : ''}}/>
+                            <span class="ico_plus"></span>
+                        </div>
+                    </h3>
+                </div>
+                <h4 class="editPage" style="display: none">
+                    <div class="cangkuDown xw_guigeBt">
+                        <img class="cangkuDownIco" src="${path}/resources/images/login_btn_down.png">
+                        <font class="cangkuName">{{item.specDesc}}</font>
+                    </div>
+                </h4>
+
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+
+<script type="text/html" id="template_specList">
+    {{each content as item i}}
+    <tr>
+        <td>选择{{item.name}}：</td>
+    </tr>
+    <tr>
+        <th>
+            <ul class="sizeUl xw_sizeUl">
+                {{each item.detail as detail j}}
+                <li class="specLi nothing" id="{{i}}spec{{j}}">{{detail}}</li>
+                {{/each}}
+            </ul>
+        </th>
+    </tr>
+    {{/each}}
+</script>

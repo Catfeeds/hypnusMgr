@@ -1,0 +1,253 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'dataGridHelp', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar, dataGridHelp) {
+        var $productTb = null;
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+
+                    $productTb = $('#productTb');
+                    var params = {}; //搜索条件
+                    //=========分页初始化start============
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+
+                    // 初始化数据列表
+                    EventHandler.search({pageNo:1, pageSize: 9});
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $productTb.dataGridHelp({
+                        multSelectBtns: [
+                            {btn: $("#btnDelete"), fn: EventHandler.btnDelete}
+                        ],
+                        singleSelectBtns: [
+                            {btn: $("#btnEdit"), fn: EventHandler.btnEdit},
+                            {btn: $("#btnRelease"), fn: EventHandler.btnRelease},
+                            {btn: $("#btnStop"), fn: EventHandler.btnStop},
+                            {btn: $("#btnRecovery"), fn: EventHandler.btnRecovery},
+                            {btn: $("#btnCancel"), fn: EventHandler.btnCancel}
+                        ]
+                    });
+
+                    //查询事件
+                    $('#btnSearch').click(function () {
+                        // 初始化数据列表
+                        EventHandler.search({pageNo:1, pageSize: 9});
+                    });
+
+                    //重置事件
+                    $('#btnClean').click(function () {
+                        $('#name').val('');
+                    });
+
+                    //特卖状态选择
+                    $(".xw_select").click(function(){
+                        $(".xw_select").removeClass("selectTabs_on");
+                        $(this).addClass("selectTabs_on");
+                        var status = $(this).attr("data-value");
+                        EventHandler.search({pageNo : 1, pageSize : 9, status: status})
+                    })
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                search: function (params) {
+                    params.name = $('#name').val();
+                    params.timeStatus = $(".selectTabs_on").attr("data-value");
+                    DataHandler.findPage(params, function (backData) {
+                        var content = backData.content;
+                        for(var i = 0; i < content.length; i++){
+                            var data = content[i];
+                            data.productNum = data.productNum ? data.productNum : 0;
+                            data.actsaleNum = data.actsaleNum ? data.actsaleNum : 0;
+                            data.actsaleRealnum = data.actsaleRealnum ? data.actsaleRealnum : 0;
+                        }
+                        var html = template('listTemp', {content: content});
+                        $('#list').html(html);
+                        //重新设置数据时调用渲染列表方法
+                        $productTb.dataGridHelp("renderList", content);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        $(window).triggerHandler('resize');
+                    });
+                },
+
+                /**
+                 * 删除
+                 */
+                btnDelete: function () {
+                    //获取勾选的数据
+                    var aId = [];
+                    var data = $productTb.dataGridHelp("getSelected");
+                    for (var o in data) {
+                        aId.push(data[o].id);
+                    }
+                    msgBox.confirm({
+                        title: '提示',
+                        msg: '确认删除所选活动?',
+                        callback: function (btnType) {
+                            if (btnType == 'ok') {
+                                DataHandler.btnDelete({ids: aId.join(',')}, function (backData) {
+                                    if (backData.type == 'success') {
+                                        msgBox.tips("操作成功");
+                                        //刷新列表
+                                        EventHandler.search({pageNo:1, pageSize:9});
+                                    }
+                                });
+                            }
+                        }
+                    });
+                },
+                //暂停
+                btnStop: function () {
+                    //获取勾选的数据
+                    var data = $productTb.dataGridHelp("getSelected")[0];
+                    if(data.status != 1){
+                        msgBox.tips("请勾选一条已发布的活动")
+                        return;
+                    }
+                    DataHandler.updateStatus({id: data.id, status: 2}, function (backData) {
+                        if (backData.type == 'success') {
+                            msgBox.tips("操作成功");
+                            //刷新列表
+                            EventHandler.search({pageNo:1, pageSize:9});
+                        }
+                    });
+                },
+                //取消
+                btnCancel: function () {
+                    //获取勾选的数据
+                    var data = $productTb.dataGridHelp("getSelected")[0];
+                    if(data.status != 1 && data.status != 2){
+                        msgBox.tips("请勾选一条已发布或已暂停的活动");
+                        return;
+                    }
+                    DataHandler.updateStatus({id: data.id, status: 3}, function (backData) {
+                        if (backData.type == 'success') {
+                            msgBox.tips("操作成功");
+                            //刷新列表
+                            EventHandler.search({pageNo:1, pageSize:9});
+                        }
+                    });
+                },
+                //恢复
+                btnRecovery: function () {
+                    //获取勾选的数据
+                    var data = $productTb.dataGridHelp("getSelected")[0];
+                    if(data.status != 2){
+                        msgBox.tips("请勾选一条已暂停的活动");
+                        return;
+                    }
+                    DataHandler.updateStatus({id: data.id, status: 1}, function (backData) {
+                        if (backData.type == 'success') {
+                            msgBox.tips("操作成功");
+                            //刷新列表
+                            EventHandler.search({pageNo:1, pageSize:9});
+                        }
+                    });
+                },
+                //发布
+                btnRelease: function () {
+                    //获取勾选的数据
+                    var data = $productTb.dataGridHelp("getSelected")[0];
+                    if(data.status != 0){
+                        msgBox.tips("请勾选一条未发布的活动");
+                        return;
+                    }
+                    if(data.productNum == 0){
+                        msgBox.tips("请添加活动商品后再发布");
+                        return;
+                    }
+                    DataHandler.updateStatus({id: data.id, status: 1}, function (backData) {
+                        if (backData.type == 'success') {
+                            msgBox.tips("操作成功");
+                            //刷新列表
+                            EventHandler.search({pageNo:1, pageSize:9});
+                        }
+                    });
+                },
+                /**
+                 * 修改
+                 */
+                btnEdit: function () {
+                    //获取勾选的数据
+                    var data = $productTb.dataGridHelp("getSelected")[0];
+                    if(data.status == 3){
+                        msgBox.tips("不能修改已取消的活动");
+                        return;
+                    }
+                    if(data.status == 1){
+                        msgBox.tips("请暂停后再修改");
+                        return;
+                    }
+                    window.location.href = path + '/admin/specialSale/edit/' + data.id;
+                }
+
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取商品信息列表
+                 * @param params
+                 * @param callback
+                 */
+                findPage: function (params, callback) {
+                    $.post(path + '/admin/specialSale/findActivityPage', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+                /**
+                 * 修改状态
+                 * @param param
+                 * @param callback
+                 */
+                updateStatus: function (param, callback) {
+                    $.post(path + '/admin/specialSale/updateStatus', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+                /**
+                 * 删除商品
+                 * @param params  商品标识集和
+                 * @param callback
+                 */
+                btnDelete: function (params, callback) {
+                    $.post(path + '/admin/specialSale/delete', params, function (backData) {
+                        callback(backData);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

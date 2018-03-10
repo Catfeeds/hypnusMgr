@@ -1,0 +1,155 @@
+package com.catt.wfx.web.controller.admin.statisti;
+
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.controller.BaseController;
+import com.catt.wfx.repository.data.comEnum.DateDimension;
+import com.catt.wfx.service.settlementMgr.SettlementBusinessService;
+import com.catt.wfx.service.statisti.OrderStatistiService;
+import com.catt.wfx.web.controller.util.ExcelImportExportUtil;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单统计控制器
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/3/30
+ */
+@Controller("orderStatistiController")
+@RequestMapping(value = "/admin/statisti/order")
+public class OrderStatistiController extends BaseController {
+
+    // 订单统计服务接口
+    @Resource(name = "orderStatistiServiceImpl")
+    private OrderStatistiService orderStatistiService;
+
+    // 订单统计服务接口
+    @Resource(name = "settlementBusinessServiceImpl")
+    private SettlementBusinessService settlementBusinessService;
+
+    /**
+     * 跳转到统计首页
+     */
+    @RequestMapping(value = "/index.html")
+    public String toIndex(Model model) {
+        Date now = new Date();
+        Date monthFirstDateTime = DateUtil.getMonthFirstDateTime(now);
+        model.addAttribute("createDateDay", DateUtil.format(monthFirstDateTime, DateUtil.yyyyMMdd));
+        model.addAttribute("endDateDay", DateUtil.format(now, DateUtil.yyyyMMdd));
+        model.addAttribute("createDateMonth", DateUtil.format(DateUtil.getCurrYearFirst(), "yyyy-MM"));
+        model.addAttribute("endDateMonth", DateUtil.format(now, "yyyy-MM"));
+
+        return "/admin/statisti/order/index";
+    }
+
+    /**
+     * 跳转到厂家订单统计首页
+     */
+    @RequestMapping(value = "/orderOfFactory.html")
+    public String toOrderOfFactory(Model model) {
+        return "/admin/statisti/orderOfFactory/index";
+    }
+
+    /**
+     * 跳转导出页面
+     */
+    @RequestMapping(value = "/export.html", method = RequestMethod.GET)
+    public ModelAndView toDelivery(String factoryIds) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("factoryIds", factoryIds);
+        modelAndView.setViewName("/admin/statisti/orderOfFactory/export");
+        return modelAndView;
+    }
+
+    /**
+     * 获取统计时间范围内的订单金额与订单数量
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @param dateDimension   统计周期
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/getAmountNum"}, method = RequestMethod.POST)
+    public Map getAmountNum(Date startCreateDate, Date endCreateDate, DateDimension dateDimension) {
+        if (dateDimension.equals(DateDimension.MONTH)) {
+            endCreateDate = DateUtil.getMonthLastDateTime(endCreateDate);
+        }
+        return orderStatistiService.getAmountNum(startCreateDate, endCreateDate);
+    }
+
+    /**
+     * 获取订单金额统计情况
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @param dateDimension   统计周期
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/getOrderAmountStat"}, method = RequestMethod.POST)
+    public List<Map> getOrderAmountStat(Date startCreateDate, Date endCreateDate, DateDimension dateDimension) {
+        if (dateDimension.equals(DateDimension.MONTH)) {
+            endCreateDate = DateUtil.getMonthLastDateTime(endCreateDate);
+        }
+        return orderStatistiService.getOrderAmountStat(startCreateDate, endCreateDate, dateDimension);
+    }
+
+    /**
+     * 厂家订单统计
+     *
+     * @param factoryName 厂家名称
+     * @param factoryId   厂家标识
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/statisticsOfOrder"}, method = RequestMethod.POST)
+    public List<Map> statisticsOfOrder(String factoryName, Long factoryId) {
+        return settlementBusinessService.statisticsOfOrder(factoryId, factoryName);
+    }
+
+    /**
+     * 导出
+     *
+     * @param response     response
+     * @param factoryIdStr 厂家标识 字符串 "1,2,..."
+     * @param factoryName  厂家名称
+     * @param startDate    开始日期
+     * @param endDate      结束日期
+     * @throws Exception
+     */
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @ResponseBody
+    public void export(HttpServletResponse response, String factoryIdStr, String factoryName, Date startDate, Date endDate) throws IOException {
+
+        String[] factoryId={};
+        if (StringUtil.checkStr(factoryIdStr)) {
+            factoryId = factoryIdStr.split(",");
+        }
+        List<Map> list = settlementBusinessService.statisticsOfOrderDetail(factoryId, factoryName, startDate, endDate);
+        Map<String, Object> params = new HashMap<>();
+        params.put("items", list);
+        String templatePath; //模板路径
+        String fileName; //导出的文件名
+        templatePath = "excel/【01】厂家订单明细模板.btl";
+        fileName = "厂家订单明细.xls";
+        ExcelImportExportUtil.export(fileName, templatePath, params, response);
+
+    }
+
+
+}

@@ -1,0 +1,24 @@
+package com.catt.wfx.service.impl.base.productMgr;
+
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.productMgr.ProductPackageDao;
+import com.catt.wfx.repository.entity.productMgr.ProductPackage;
+import com.catt.wfx.service.base.productMgr.ProductPackageBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+@Service("productPackageBaseServiceImpl")
+public class ProductPackageBaseServiceImpl extends
+        BaseServiceImpl<ProductPackage, Long> implements ProductPackageBaseService {
+
+    @Resource(name = "productPackageDaoImpl")
+    private ProductPackageDao productPackageDao;
+
+    @Resource
+    public void setBaseDao(ProductPackageDao productPackageDao) {
+        super.setBaseDao(productPackageDao);
+    }
+
+}

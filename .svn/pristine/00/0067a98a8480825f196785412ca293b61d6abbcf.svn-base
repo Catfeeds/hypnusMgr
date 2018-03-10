@@ -1,0 +1,134 @@
+// JavaScript Document
+
+
+$(document).ready(function(){
+	
+	$(".xw_shareBt").click(function(){
+		shareFloat();
+	});
+	$(".xw_guigeBt").click(function(){
+		guigeFloat();
+	});
+	$(".xw_close").click(function(){
+		$(".xw_shareDiv").hide();
+		$(".xw_guigeDiv").hide();
+		$(".xw_share").animate({'bottom':'-250px'});
+		$(".xw_guige").animate({'bottom':'-280px'});
+	});
+	//tab切换01
+	$(".xw_top").click(function(){
+		$(this).parents(".goodsType").find('.xw_top').removeClass("lion");
+		$(this).addClass("lion");
+		var liNum = $(this).parents(".goodsType").find('.xw_top').index(this);
+		$(this).parents(".xw_big").find(".xw_detail").hide();
+		$(this).parents(".xw_big").find(".xw_detail").eq(liNum).show();
+	});
+	
+	//tab切换02
+	$(".xw_li").click(function(){
+		$(this).parents(".goodsType").find('.xw_li').removeClass("lion");
+		$(this).addClass("lion");
+		var liNum = $(this).parents(".goodsType").find('.xw_li').index(this);
+		$(this).parents(".goodsType").parents(".xw_mainBox").find(".xw_goodsList").hide();
+		$(this).parents(".goodsType").parents(".xw_mainBox").find(".xw_goodsList").eq(liNum).show();
+	});
+	//tab切换04
+	$(".xw_li").click(function(){
+		$(this).parents(".goodsType").find('.xw_li').removeClass("lion");
+		$(this).addClass("lion");
+		var liNum = $(this).parents(".goodsType").find('.xw_li').index(this);
+		$(this).parents(".goodsType").parents(".xw_mainBox").find(".xw_goodsList").hide();
+		$(this).parents(".goodsType").parents(".xw_mainBox").find(".xw_goodsList").eq(liNum).show();
+	});
+	
+	//tab切换03
+	$(".xw_wenanLi").click(function(){
+		$(this).parents(".goodsType").find('.xw_wenanLi').removeClass("lion");
+		$(this).addClass("lion");
+		var liNum = $(this).parents(".goodsType").find('.xw_wenanLi').index(this);
+		$(this).parents(".xw_detail").find(".xw_wenan").hide();
+		$(this).parents(".xw_detail").find(".xw_wenan").eq(liNum).show();
+	});
+	
+	//选择套餐
+	$(".guige").click(function(){
+		$(this).parents(".share").find(".guige").removeClass("xuanzhong");
+		$(this).addClass("xuanzhong");
+	});
+	
+	//收藏按钮
+	$(".xw_shoucang").click(function(){
+		$(this).hide();
+		$(this).siblings(".xw_shoucang_on").show(800);
+	});
+	$(".xw_shoucang_on").click(function(){
+		$(this).hide();
+		$(this).siblings(".xw_shoucang").show(800);
+	});
+	
+	//选择规格
+	$("ul.xw_sizeUl li").click(function(){
+		$(this).parents("ul.xw_sizeUl").find('li').removeClass("Up");
+		$(this).addClass("Up");
+	});
+	
+	//商品详情
+	$(".xw_shangpin").click(function(){
+		window.location.href='4-1-2shangpinxiangqing.html';
+	});
+	//特卖会场
+	$(".xw_temai img,.xw_temai h1,.xw_temai h2").click(function(){
+		window.location.href='4-4-2yurehuichang.html';
+	});
+	//拼团详情
+	$(".xw_pintuan").click(function(){
+		window.location.href='4-3-2pintuanxiangqing.html';
+	});
+	//订单详情
+	$(".xw_dingdan").click(function(){
+		window.location.href='3-2-2dingdanxiangqing.html';
+	});
+	//物流
+	$(".xw_wuliu").click(function(){
+		window.location.href='2-2-3wuliudetail.html';
+	});
+	//课堂详情
+	$(".xw_class").click(function(){
+		window.location.href='4-5-3ketangxiangqing.html';
+	});
+	
+	$(window).bind("resize",resizebind);
+});
+
+	
+/*----------浏览器重置事件--------*/
+function resizebind(){
+	//setpageSize();
+}
+
+
+function shareFloat(){
+	
+	$(".xw_shareDiv").show();
+	var shareWid = $(document).outerWidth();
+	var shareHei = $(document).outerHeight();
+	$(".xw_shareDiv").css({width:shareWid});
+	$(".xw_shareDiv").css({height:shareHei});
+	
+	$(".xw_share").animate({'bottom':'0'});
+	
+	
+}
+
+function guigeFloat(){
+	
+	$(".xw_guigeDiv").show();
+	var shareWid = $(document).outerWidth();
+	var shareHei = $(document).outerHeight();
+	$(".xw_guigeDiv").css({width:shareWid});
+	$(".xw_guigeDiv").css({height:shareHei});
+	
+	$(".xw_guige").animate({'bottom':'0'});
+	
+	
+}

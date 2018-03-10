@@ -1,0 +1,105 @@
+var paramList = [];
+var index;
+var cateId;
+seajs.use(['$', 'msgBox', 'util', 'jquery.json'],
+    function ($, msgBox, util) {
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+                    //基础信息保存
+                    $("#saveBtn").click(EventHandler.save);
+
+                    // 返回
+                    $('#cancleBtn').click(function () {
+                        msgBox.exWindow.close(0);
+                    });
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                    msgBox.exWindow.getExtraParams(function (result) {
+                        paramList = result.paramList;
+                        cateId = result.cateId;
+                        index = result.index;
+                        if(paramList != ""){
+                            $("#name").val(paramList[index].name);
+                            $("#unit").val(paramList[index].unit);
+                        }
+                    });
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 */
+                save: function () {
+                    var name = $("#name").val();
+                    if(name == ""){
+                        $("#name").focus();
+                        msgBox.tips("请输入参数名称");
+                        return;
+                    }
+                    var unit = $("#unit").val();
+                    for(var i = 0; i < paramList.length; i++){
+                        if(index == "" || index != i){
+                            if(paramList[i].name == name){
+                                $("#name").focus();
+                                msgBox.tips("请勿重复添加相同名称的参数！");
+                                return;
+                            }
+                        }
+                    }
+                    var par = {name: name, unit: unit};
+                    if(typeof(index) == "undefined"){//新增
+                        paramList[paramList.length] = par;
+                    } else{
+                        paramList[index] = par;
+                    }
+                    var param = {cateId: cateId, type: 2, attrDefineJson: $.toJSON(paramList)};
+                    DataHandler.saveCateAttr(param, function (backData) {
+                        msgBox.tips("操作成功");
+                        msgBox.exWindow.close(paramList);
+                    });
+                }
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 保存规格
+                 */
+                saveCateAttr: function (param, callback) {
+                    $.post(path + "/admin/basicConfig/productCate/saveCateAttr", param, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });

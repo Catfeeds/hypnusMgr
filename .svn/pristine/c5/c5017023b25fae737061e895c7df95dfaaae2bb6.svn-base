@@ -1,0 +1,406 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.module.pay.data.config.AbstractAccountConfig;
+import com.catt.common.module.pay.data.config.WeChatAccountConfig;
+import com.catt.common.util.ConfigUtils;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderReturnDao;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountDetail;
+import com.catt.wfx.repository.entity.customerMgr.SettlementPushRecord;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderPay;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturn;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturnLog;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+import com.catt.wfx.repository.form.customerMgr.CusAccountHandlerForm;
+import com.catt.wfx.service.base.orderMgr.CusOrderReturnBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderReturnLogBaseService;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementOrderDetailBaseService;
+import com.catt.wfx.service.cusAccount.CusAccountHandlerService;
+import com.catt.wfx.service.impl.wechatReturn.event.CreateReturnSuccessEvent;
+import com.catt.wfx.service.impl.wechatReturn.event.ReturnEventListener;
+import com.catt.wfx.service.impl.wechatReturn.event.ToReturnEvent;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:退款处理器
+ * Created by 2017-02-28  10:06.
+ * author: Zhou mingxiang
+ */
+@Service("cusOrderReturnHandler")
+public class CusOrderReturnHandler implements ReturnEventListener {
+
+    //退货单Dao接口
+    @Resource(name = "cusOrderReturnDaoImpl")
+    private CusOrderReturnDao cusOrderReturnDao;
+
+    //退货单服务接口
+    @Resource(name = "cusOrderReturnBaseServiceImpl")
+    private CusOrderReturnBaseService cusOrderReturnBaseService;
+
+    //退货单流程信息服务接口
+    @Resource(name = "cusOrderReturnLogBaseServiceImpl")
+    private CusOrderReturnLogBaseService cusOrderReturnLogBaseService;
+
+    //用户账号资金相关操作服务接口
+    @Resource(name = "cusAccountHandlerServiceImpl")
+    private CusAccountHandlerService cusAccountHandlerService;
+
+    //订单结算统计服务接口
+    @Resource(name = "settlementOrderDetailBaseServiceImpl")
+    private SettlementOrderDetailBaseService settlementOrderDetailBaseService;
+
+    // 系统全局设置服务接口
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+    private static String publicCerPath;
+    private static String appCerPath;
+    static {
+        publicCerPath = ConfigUtils.config.getProperty("wechat.public.refund.certificate");
+        appCerPath = ConfigUtils.config.getProperty("wechat.app.refund.certificate");
+    }
+
+    @Override
+    public ToReturnEvent initPayRequestParam(Map<String, String> param) {
+        Long returnId = MapUtil.getLong(param, "returnId");
+        Long operatorId = MapUtil.getLong(param, "operatorId");
+        String operatorName = MapUtil.getString(param, "operatorName");
+        Assert.notNull(returnId);
+        //退款金额
+        double returnAmount = MapUtil.getDoubleValue(param, "returnAmount", 0D);
+
+        //获取退货单对应的退货单退货明细信息
+        List<Map> mapList = cusOrderReturnDao.getReturnGoodsAndPayInfo(returnId);
+        if (mapList == null || mapList.size() == 0) {
+            throw BaseException.errorByErrInfo("该退货单不存在");
+        }
+
+        Map map = mapList.get(0);
+        Long orderId = MapUtil.getLong(map, "orderId");
+        //交易流水号
+        String tradeNo = MapUtil.getString(map, "tradeNo");
+        Long cusId = MapUtil.getLong(map, "cusId");
+        //本次退款对应的退款总金额
+        double returnTotalAmount = MapUtil.getDoubleValue(map, "returnTotalAmount");
+        Integer payType = MapUtil.getInteger(map, "payType");
+        double rechargeMoney = MapUtil.getDoubleValue(map, "rechargeMoney");
+        double payMoney = MapUtil.getDoubleValue(map, "payMoney");
+        Integer status = MapUtil.getInteger(map, "status");
+
+        if (!status.equals(CusOrderReturn.Status.PendRefund.getValue())) {
+            throw BaseException.errorByErrInfo("该退货单不能退款");
+        }
+
+        if (returnTotalAmount != returnAmount) {
+            throw BaseException.errorByErrInfo("退款金额错误");
+        }
+
+
+        //获取订单已退款金额总和
+        Map map1 = cusOrderReturnDao.getReturnTotalByOrderId(orderId);
+
+        //订单对应的已退款金额总和
+        double returnAmountSum = 0D;
+        if (map1.containsKey("returnTotalAmount")) {
+            returnAmountSum = MapUtil.getDoubleValue(map1, "returnTotalAmount");
+        }
+
+        //退款金额 = 已退款金额总和+本次退款金额
+        returnAmountSum = NumberUtil.add(returnAmountSum, returnAmount);
+
+
+        ToReturnEvent toReturnEvent = new ToReturnEvent();
+
+        //判断退款单对应的订单支付方式
+        if(StringUtil.checkObj(payType)){
+            if (payType.equals(CusOrderPay.PayType.WeChatApp.getValue())
+                    || payType.equals(CusOrderPay.PayType.WeChatPublic.getValue())){
+                //判断退款总金额是否超出支付的金额
+                if (payMoney < returnAmountSum) {
+                    throw BaseException.errorByErrInfo("退款金额错误");
+                }
+                toReturnEvent.setTotalAmount((long) (payMoney * 100)); // 单位：分
+            }
+        }else {
+            if (StringUtil.checkObj(rechargeMoney)) {
+                //判断退款总金额是否超出支付的金额
+                if (rechargeMoney < returnAmountSum) {
+                    throw BaseException.errorByErrInfo("退款金额错误");
+                }
+                toReturnEvent.setTotalAmount((long) (rechargeMoney * 100)); // 单位：分
+            }
+        }
+
+
+
+//        toReturnEvent.setTotalAmount((long) (0.1 * 100)); // 单位：分
+        toReturnEvent.setReturnAmount((long) (returnAmount * 100));
+        toReturnEvent.setRefundNo("WFX-"
+                + DateUtil.format(new Date(), "yyyyMMddHHmmssSSS")
+                + RandomStringUtils.random(3, false, true));
+        toReturnEvent.setOrderNo(tradeNo);
+        toReturnEvent.setBusinessType(param.get("businessType"));
+        //订单支付方式
+        toReturnEvent.setPayMode(payType);
+        Map<String, Object> p = new HashMap<String, Object>();
+        p.put("returnId", returnId);
+        p.put("orderId", orderId);
+        //订单支付方式
+        p.put("payType", payType);
+        p.put("returnAmount", returnAmount);
+        p.put("rechargeMoney", rechargeMoney);
+        p.put("cusId", cusId);
+        p.put("operatorId", operatorId);
+        p.put("operatorName", operatorName);
+        toReturnEvent.setBusinessParam(JsonUtils.toJson(p));
+
+        return toReturnEvent;
+    }
+
+    @Override
+    public AbstractAccountConfig specifyAccountConfig(ToReturnEvent payEvent) {
+        Integer payMode = payEvent.getPayMode();
+        Assert.notNull(payMode);
+        WeChatAccountConfig weChatAccountConfig = new WeChatAccountConfig();
+        if (payMode.equals(CusOrderPay.PayType.WeChatPublic.getValue())) {
+            String mchId = pubSetupBaseService
+                    .getSetupByCode(PubSetup.Code.wechatPubMchId);
+
+            weChatAccountConfig.setAppid(pubSetupBaseService
+                    .getSetupByCode(PubSetup.Code.wechatPubAppId));
+            weChatAccountConfig.setMch_id(mchId);
+            weChatAccountConfig.setMchId(mchId);
+            weChatAccountConfig.setSignKey(pubSetupBaseService
+                    .getSetupByCode(PubSetup.Code.wechatPubSignKey));
+            //微信公众号证书路径
+            weChatAccountConfig.setCerPath(publicCerPath);
+            //证书密码--商户ID
+            weChatAccountConfig.setCerPassword(mchId);
+        } else if (payMode.equals(CusOrderPay.PayType.WeChatApp.getValue())) {
+            String mchId = pubSetupBaseService
+                    .getSetupByCode(PubSetup.Code.wechatOpenMchId);
+
+            weChatAccountConfig.setAppid(pubSetupBaseService
+                    .getSetupByCode(PubSetup.Code.wechatOpenAppId));
+            weChatAccountConfig.setMch_id(mchId);
+            weChatAccountConfig.setMchId(mchId);
+            weChatAccountConfig.setSignKey(pubSetupBaseService
+                    .getSetupByCode(PubSetup.Code.wechatOpenSignKey));
+            //微信app证书路径
+            weChatAccountConfig.setCerPath(appCerPath);
+            //证书密码--商户ID
+            weChatAccountConfig.setCerPassword(mchId);
+        }
+
+        return weChatAccountConfig;
+    }
+
+    @Override
+    @Transactional
+    public void returnSuccess(CreateReturnSuccessEvent createReturnSuccessEvent) {
+        Map map = JsonUtils.toObject(
+                createReturnSuccessEvent.getBusinessParam(), Map.class);
+        Long returnId = MapUtil.getLong(map, "returnId");
+        Long orderId = MapUtil.getLong(map, "orderId");
+        Long cusId = MapUtil.getLong(map, "cusId");
+        Double returnAmount = MapUtil.getDouble(map, "returnAmount");
+        Integer payType = MapUtil.getInteger(map, "payType");
+        Double rechargeMoney = MapUtil.getDouble(map, "rechargeMoney");
+
+        //修改退货单信息
+        CusOrderReturn cusOrderReturn = cusOrderReturnBaseService.find(returnId);
+        cusOrderReturn.setStatus(CusOrderReturn.Status.Finish.getValue());
+        cusOrderReturnBaseService.update(cusOrderReturn);
+
+        //保存退货单流程信息
+        CusOrderReturnLog cusOrderReturnLog = new CusOrderReturnLog();
+        cusOrderReturnLog.setBill(returnId);
+        cusOrderReturnLog.setAct(CusOrderReturnLog.Act.Refund.getValue());
+        cusOrderReturnLog.setContent("退款金额已成功到账");
+//        cusOrderReturnLog.setOperatorId(cusId);
+//        cusOrderReturnLog.setOperatorName(cusName);
+        cusOrderReturnLogBaseService.save(cusOrderReturnLog);
+
+        //修改店主提成结算金额
+        Map map1 = cusOrderReturnDao.getprofitByReturnId(returnId);
+
+        List<SettlementOrderDetail> settlementOrderDetails = settlementOrderDetailBaseService.findList(1,
+                Arrays.asList(Filter.eq("orderId", orderId)), null);
+        if (settlementOrderDetails != null && settlementOrderDetails.size() > 0) {
+            SettlementOrderDetail settlementOrderDetail = settlementOrderDetails.get(0);
+
+            Double shopkeeperAmount = settlementOrderDetail.getShopkeeperAmount();
+            int num = MapUtil.getIntValue(map1, "num");//退货数量
+            int totalNum = MapUtil.getIntValue(map1, "totalNum");//购买总数量
+            double profit = MapUtil.getDoubleValue(map1, "profit");//总利润
+            double returnProfitSum = NumberUtil.mul(NumberUtil.div(profit, (double) totalNum), num); //退货该减利润
+
+            shopkeeperAmount = NumberUtil.sub(shopkeeperAmount, returnProfitSum);
+
+            settlementOrderDetail.setShopkeeperAmount(shopkeeperAmount);
+
+            //店主待收提成-
+            Long shopkeeperId = settlementOrderDetail.getShopkeeperId(); //店主标识
+            if (returnProfitSum > 0 && shopkeeperId != null) {
+                cusAccountHandlerService.handelUnAcceptMoney(shopkeeperId, -returnProfitSum, orderId, null,
+                        SettlementPushRecord.Type.ReturnUnAcceptMoney);
+            }
+
+            //退货处理五级返利
+            String rebateJson = MapUtil.getString(map1, "rebateJson");
+            if (StringUtil.checkStr(rebateJson)) {
+                List<Map> rebateList = JsonUtils.toList(rebateJson, Map.class);
+                Map rebateOneMap = rebateList.get(0);
+                Map rebateTwoMap = rebateList.get(1);
+                Map rebateThreeMap = rebateList.get(2);
+                Map rebateFourMap = rebateList.get(3);
+                Map rebateFiveMap = rebateList.get(4);
+                double returnRebateOneSum = NumberUtil.mul(MapUtil.getDouble(rebateOneMap, "i_rebate_one_price"), num);
+                double returnRebateTwoSum = NumberUtil.mul(MapUtil.getDouble(rebateTwoMap, "i_rebate_two_price"), num);
+                double returnRebateThreeSum = NumberUtil.mul(MapUtil.getDouble(rebateThreeMap, "i_rebate_three_price"), num);
+                double returnRebateFourSum = NumberUtil.mul(MapUtil.getDouble(rebateFourMap, "i_rebate_four_price"), num);
+                double returnRebateFiveSum = NumberUtil.mul(MapUtil.getDouble(rebateFiveMap, "i_rebate_five_price"), num);
+
+                String settlementRebateJson = settlementOrderDetail.getRebateJson();
+                List<Map> settlementRebateList = JsonUtils.toList(settlementRebateJson, Map.class);
+                if (returnRebateOneSum > 0) {
+                    Map rebateMap = settlementRebateList.get(0);
+                    Long rebateShopkeeperId = MapUtil.getLong(rebateMap, "i_shopkeeper_id");
+                    rebateMap.put("i_rebate_one", NumberUtil.sub(
+                            MapUtil.getDouble(rebateMap, "i_rebate_one"), returnRebateOneSum));
+                    if (rebateShopkeeperId != null) {
+                        cusAccountHandlerService.handelReciveRebateMoney(rebateShopkeeperId, -returnRebateOneSum,
+                                orderId, null, SettlementPushRecord.Type.ReturnReciveRebateMoney, 1);
+                    }
+                }
+                if (returnRebateTwoSum > 0) {
+                    Map rebateMap = settlementRebateList.get(1);
+                    Long rebateShopkeeperId = MapUtil.getLong(rebateMap, "i_shopkeeper_id");
+                    rebateMap.put("i_rebate_two", NumberUtil.sub(
+                            MapUtil.getDouble(rebateMap, "i_rebate_two"), returnRebateTwoSum));
+                    if (rebateShopkeeperId != null) {
+                        cusAccountHandlerService.handelReciveRebateMoney(rebateShopkeeperId, -returnRebateTwoSum,
+                                orderId, null, SettlementPushRecord.Type.ReturnReciveRebateMoney, 2);
+                    }
+                }
+                if (returnRebateThreeSum > 0) {
+                    Map rebateMap = settlementRebateList.get(2);
+                    Long rebateShopkeeperId = MapUtil.getLong(rebateMap, "i_shopkeeper_id");
+                    rebateMap.put("i_rebate_three", NumberUtil.sub(
+                            MapUtil.getDouble(rebateMap, "i_rebate_three"), returnRebateThreeSum));
+                    if (rebateShopkeeperId != null) {
+                        cusAccountHandlerService.handelReciveRebateMoney(rebateShopkeeperId, -returnRebateThreeSum,
+                                orderId, null, SettlementPushRecord.Type.ReturnReciveRebateMoney, 3);
+                    }
+                }
+                if (returnRebateFourSum > 0) {
+                    Map rebateMap = settlementRebateList.get(3);
+                    Long rebateShopkeeperId = MapUtil.getLong(rebateMap, "i_shopkeeper_id");
+                    rebateMap.put("i_rebate_four", NumberUtil.sub(
+                            MapUtil.getDouble(rebateMap, "i_rebate_four"), returnRebateFourSum));
+                    if (rebateShopkeeperId != null) {
+                        cusAccountHandlerService.handelReciveRebateMoney(rebateShopkeeperId, -returnRebateFourSum,
+                                orderId, null, SettlementPushRecord.Type.ReturnReciveRebateMoney, 4);
+                    }
+                }
+                if (returnRebateFiveSum > 0) {
+                    Map rebateMap = settlementRebateList.get(4);
+                    Long rebateShopkeeperId = MapUtil.getLong(rebateMap, "i_shopkeeper_id");
+                    rebateMap.put("i_rebate_five", NumberUtil.sub(
+                            MapUtil.getDouble(rebateMap, "i_rebate_five"), returnRebateFiveSum));
+                    if (rebateShopkeeperId != null) {
+                        cusAccountHandlerService.handelReciveRebateMoney(rebateShopkeeperId, -returnRebateFiveSum,
+                                orderId, null, SettlementPushRecord.Type.ReturnReciveRebateMoney, 5);
+                    }
+                }
+                settlementOrderDetail.setRebateJson(JsonUtils.toJson(settlementRebateList));
+            }
+            settlementOrderDetailBaseService.update(settlementOrderDetail);
+        }
+
+
+        //判断在线支付方式是否存在并且余额支付金额不为空，则掉用用户账号资金操作，回退账户资金
+        if (!StringUtil.checkObj(payType) && StringUtil.checkObj(rechargeMoney)) {
+            CusAccountHandlerForm cusAccountHandlerForm = new CusAccountHandlerForm();
+            cusAccountHandlerForm.setRelId(returnId + "");
+            cusAccountHandlerForm.setCusId(cusId);
+            cusAccountHandlerForm.setMoney(returnAmount);
+            cusAccountHandlerForm.setType(CusAccountDetail.Type.RemainderReturn);
+            cusAccountHandlerService.handleMoney(cusAccountHandlerForm);
+        }
+    }
+
+    public void returnFail(CreateReturnSuccessEvent createReturnSuccessEvent) {
+        Map map = JsonUtils.toObject(
+                createReturnSuccessEvent.getBusinessParam(), Map.class);
+        Long returnId = MapUtil.getLong(map, "returnId");
+//        Long cusId = MapUtil.getLong(map, "cusId");
+//        Double returnAmount = MapUtil.getDouble(map, "returnAmount");
+//        int payType = MapUtil.getIntValue(map, "payType");
+
+        //修改退货单信息
+        CusOrderReturn cusOrderReturn = cusOrderReturnBaseService.find(returnId);
+        cusOrderReturn.setStatus(CusOrderReturn.Status.RefundFail.getValue());
+        cusOrderReturnBaseService.update(cusOrderReturn);
+
+        //保存退货单流程信息
+        CusOrderReturnLog cusOrderReturnLog = new CusOrderReturnLog();
+        cusOrderReturnLog.setBill(returnId);
+        cusOrderReturnLog.setAct(CusOrderReturnLog.Act.Refund.getValue());
+        cusOrderReturnLog.setContent("退款失败");
+//        cusOrderReturnLog.setOperatorId(cusId);
+//        cusOrderReturnLog.setOperatorName(cusName);
+        cusOrderReturnLogBaseService.save(cusOrderReturnLog);
+    }
+
+
+    /**
+     * 申请退款成功
+     *
+     * @param createReturnSuccessEvent
+     */
+    public void createReturnSuccess(CreateReturnSuccessEvent createReturnSuccessEvent) {
+        Map map = JsonUtils.toObject(
+                createReturnSuccessEvent.getBusinessParam(), Map.class);
+        Long returnId = MapUtil.getLong(map, "returnId");
+        Long operatorId = MapUtil.getLong(map, "operatorId");
+        String operatorName = MapUtil.getString(map, "operatorName");
+
+        //修改退货单信息
+        CusOrderReturn cusOrderReturn = cusOrderReturnBaseService.find(returnId);
+
+        if (!cusOrderReturn.getStatus().equals(CusOrderReturn.Status.RefundIn.getValue())) {
+            cusOrderReturn.setStatus(CusOrderReturn.Status.RefundIn.getValue());
+            cusOrderReturnBaseService.update(cusOrderReturn);
+
+            //保存退货单流程信息
+            CusOrderReturnLog cusOrderReturnLog = new CusOrderReturnLog();
+            cusOrderReturnLog.setBill(returnId);
+            cusOrderReturnLog.setAct(CusOrderReturnLog.Act.Refund.getValue());
+            cusOrderReturnLog.setContent("已退款。退款金额已原路退回，请注意查收。");
+            cusOrderReturnLog.setOperatorId(operatorId);
+            cusOrderReturnLog.setOperatorName(operatorName);
+            cusOrderReturnLogBaseService.save(cusOrderReturnLog);
+        }
+
+
+    }
+}

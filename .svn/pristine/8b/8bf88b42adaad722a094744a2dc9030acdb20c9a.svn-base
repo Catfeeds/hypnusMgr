@@ -1,0 +1,110 @@
+package com.catt.wfx.repository.dao.orderMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.data.comEnum.DateDimension;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturn;
+import com.catt.wfx.repository.form.orderMgr.CusOrderReturnFrom;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 退货单Dao接口
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-02-13 17:26:35
+ */
+public interface CusOrderReturnDao extends BaseDao<CusOrderReturn, Long> {
+    /**
+     * 获取我的退货列表（分页）
+     *
+     * @param cusId    用户标识
+     * @param status   单据状态
+     * @param pageable
+     * @return
+     */
+    Page<Map> findReturnGoodsByPage(Long cusId, Integer status, Pageable pageable);
+
+    /**
+     * 获取退货单详情
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    List<Map> findReturnGoodsDetail4App(Long id);
+
+    /**
+     * 获取订单单个商品详情
+     *
+     * @param id
+     * @return
+     */
+    Map getSingleGoods(Long id);
+
+
+    /**
+     * 获取退货单详情
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    List<Map> getReturnGoodsDetail(Long id);
+
+    /**
+     * 获取退货列表
+     *
+     * @param cusOrderReturnFrom 退货from
+     * @param pageable
+     * @return
+     */
+    Page<Map> getReturnGoodsByPage(CusOrderReturnFrom cusOrderReturnFrom, Pageable pageable);
+
+    /**
+     * 获取退款相关信息（订单支付、退款详细信息）
+     *
+     * @param returnId 退货单标识
+     * @return
+     */
+    List<Map> getReturnGoodsAndPayInfo(Long returnId);
+
+    /**
+     * 获取订单对应的退货金额总和
+     *
+     * @param orderId
+     * @return
+     */
+    Map getReturnTotalByOrderId(Long orderId);
+
+    /**
+     * 获取退款订单对应的店主利润
+     *
+     * @param returnId
+     * @return
+     */
+    Map getprofitByReturnId(Long returnId);
+
+    /**
+     * 获取统计时间范围内的订单退款金额
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @param isAgent          true:只统计代理商订单 false:统计所有订单
+     * @return
+     */
+    Double getReturnAmount(Date startCreateDate, Date endCreateDate, boolean isAgent);
+
+    /**
+     * 退款金额统计
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @param type            统计周期
+     * @param isAgent         true:只统计代理商订单 false:统计所有订单
+     * @return
+     */
+    List<Map> returnAmountStat(Date startCreateDate, Date endCreateDate, DateDimension type, boolean isAgent);
+}

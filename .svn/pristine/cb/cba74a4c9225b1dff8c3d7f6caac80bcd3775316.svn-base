@@ -1,0 +1,111 @@
+package com.catt.wfx.repository.data.vo.CusOrderMgr;
+
+import java.io.Serializable;
+
+/**
+ * Description:退货vo
+ * Created by 2017-02-17  16:01.
+ * author: Zhou mingxiang
+ */
+public class CusOrderReturnVo implements Serializable {
+
+    /**
+     * 订单明细标识
+     */
+    private Long orderDetailId;
+
+    /**
+     * 退货数量
+     */
+    private Integer num;
+    /**
+     * 退货原因
+     */
+    private Long returnReason;
+    /**
+     * 退货说明
+     */
+    private String returnDesc;
+    /**
+     * 相关图片附件标识
+     * 多个以英文逗号分隔
+     */
+    private String pic;
+
+    /**
+     * 退货单标识
+     */
+    private Long returnId;
+    /**
+     * 退货物流公司
+     */
+    private Integer logisticsType;
+    /**
+     * 退货运单编号
+     */
+    private String logisticsCode;
+
+    public Long getOrderDetailId() {
+        return orderDetailId;
+    }
+
+    public void setOrderDetailId(Long orderDetailId) {
+        this.orderDetailId = orderDetailId;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+
+    public Long getReturnReason() {
+        return returnReason;
+    }
+
+    public void setReturnReason(Long returnReason) {
+        this.returnReason = returnReason;
+    }
+
+    public String getReturnDesc() {
+        return returnDesc;
+    }
+
+    public void setReturnDesc(String returnDesc) {
+        this.returnDesc = returnDesc;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public Long getReturnId() {
+        return returnId;
+    }
+
+    public void setReturnId(Long returnId) {
+        this.returnId = returnId;
+    }
+
+    public Integer getLogisticsType() {
+        return logisticsType;
+    }
+
+    public void setLogisticsType(Integer logisticsType) {
+        this.logisticsType = logisticsType;
+    }
+
+    public String getLogisticsCode() {
+        return logisticsCode;
+    }
+
+    public void setLogisticsCode(String logisticsCode) {
+        this.logisticsCode = logisticsCode;
+    }
+}

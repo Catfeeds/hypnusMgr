@@ -1,0 +1,243 @@
+package com.catt.hypnus.repository.data.comEnum;
+
+/**
+ * 登录日志类型
+ * Created by houhuateng on 2016/1/7.
+ */
+public class LoginLog {
+    /**
+     * <pre>
+     * 系统标识
+     * </pre>
+     */
+    public enum SysId {
+        /**
+         * 充值
+         */
+        admin(100l, "后台管理系统"),
+
+        /**
+         * 收银系统
+         */
+        merchant(200l, "收银系统"),
+
+        /**
+         * 手机App
+         */
+        mobile(300l, "车主手机App"),
+        /**
+         * 手机App
+         */
+        employee(400l, "加油员手机App");
+        /**
+         * 枚举值
+         */
+        private Long value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        SysId(Long value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static SysId getEnum(int value) {
+            SysId[] source = SysId.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+            //throw new Exception("枚举:\" + value + \"不支持。");
+
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public Long getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+
+    }
+
+    /**
+     * <pre>
+     * 登录状态
+     * 1登录中
+     * 2-已退出
+     *
+     * 3-登录失败
+     * </pre>
+     */
+    public enum Status {
+        /**
+         * 充值
+         */
+        InLogin(1, "登录中"),
+
+        /**
+         * 已退出
+         */
+        ReLogout(2, "已退出");
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        Status(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static Status getEnum(int value) {
+            Status[] source = Status.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+            //throw new Exception("枚举:\" + value + \"不支持。");
+
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+
+    }
+
+    /**
+     * <pre>
+     * 登陆方式
+     * 1-手机
+     * 2-PC
+     * </pre>
+     */
+    public enum Kind {
+        /**
+         * 手机
+         */
+        cellphone(1, "手机"),
+        /**
+         * pc
+         */
+        computer(2, "pc");
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        Kind(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static Kind getEnum(int value) {
+            Kind[] source = Kind.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+            //throw new Exception("枚举:\" + value + \"不支持。");
+
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+
+    }
+}

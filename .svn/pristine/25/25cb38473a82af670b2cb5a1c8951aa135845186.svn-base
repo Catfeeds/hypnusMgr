@@ -1,0 +1,507 @@
+package com.catt.wfx.repository.entity.wechatReturn;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 微信退款结果通知实体类
+ * 
+ * @author 周明祥
+ * @date 2017-03-02 15:15:26
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_WECHAT_RETURN_RESULT_NOTIFY")
+public class WechatReturnResultNotify extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * <pre>
+	 * 返回状态码
+	 * </pre>
+	 */
+	private String returnCode;
+	/**
+	 * <pre>
+	 * 返回信息
+	 * </pre>
+	 */
+	private String returnMsg;
+	/**
+	 * <pre>
+	 * 业务结果
+	 * </pre>
+	 */
+	private String resultCode;
+	/**
+	 * <pre>
+	 * 错误代码
+	 * </pre>
+	 */
+	private String errCode;
+	/**
+	 * <pre>
+	 * 错误代码描述
+	 * </pre>
+	 */
+	private String errCodeDes;
+	/**
+	 * <pre>
+	 * 公众账号ID
+	 * </pre>
+	 */
+	private String appid;
+	/**
+	 * <pre>
+	 * 商户号
+	 * </pre>
+	 */
+	private String mchId;
+	/**
+	 * <pre>
+	 * 设备号
+	 * </pre>
+	 */
+	private String deviceInfo;
+	/**
+	 * <pre>
+	 * 随机字符串
+	 * </pre>
+	 */
+	private String nonceStr;
+	/**
+	 * <pre>
+	 * 签名
+	 * </pre>
+	 */
+	private String sign;
+	/**
+	 * <pre>
+	 * 微信支付订单号
+	 * </pre>
+	 */
+	private String transactionId;
+	/**
+	 * <pre>
+	 * 商户订单号
+	 * </pre>
+	 */
+	private String outTradeNo;
+	/**
+	 * <pre>
+	 * 商户退款单号
+	 * </pre>
+	 */
+	private String outRefundNo;
+	/**
+	 * <pre>
+	 * 微信退款单号
+	 * </pre>
+	 */
+	private String refundId;
+	/**
+	 * <pre>
+	 * 退款渠道
+	 * </pre>
+	 */
+	private String refundChann;
+	/**
+	 * <pre>
+	 * 退款金额
+	 * </pre>
+	 */
+	private Integer refundFee;
+	/**
+	 * <pre>
+	 * 应结退款金额
+	 * </pre>
+	 */
+	private Integer settlementRefundFee;
+	/**
+	 * <pre>
+	 * 标价金额
+	 * </pre>
+	 */
+	private Integer totalFee;
+	/**
+	 * <pre>
+	 * 应结订单金额
+	 * </pre>
+	 */
+	private Integer  settlementTotalFee;
+	/**
+	 * <pre>
+	 * 货币种类
+	 * </pre>
+	 */
+	private String feeType;
+	/**
+	 * <pre>
+	 * 现金支付金额
+	 * </pre>
+	 */
+	private Integer cashFee;
+	/**
+	 * <pre>
+	 * 现金支付币种
+	 * </pre>
+	 */
+	private String cashFeeType;
+	/**
+	 * <pre>
+	 * 现金退款金额
+	 * </pre>
+	 */
+	private Integer cashRefundFee;
+	/**
+	 * <pre>
+	 * 代金券类型
+	 * </pre>
+	 */
+	private String couponType$n;
+	/**
+	 * <pre>
+	 * 总代金券退款金额
+	 * </pre>
+	 */
+	private Integer couponRefundFee;
+	/**
+	 * <pre>
+	 * 单个代金券退款金额
+	 * </pre>
+	 */
+	private Integer couponRefundFee$n;
+	/**
+	 * <pre>
+	 * 退款代金券使用数量
+	 * </pre>
+	 */
+	private Integer couponRefundCount;
+	/**
+	 * <pre>
+	 * 退款代金券ID
+	 * </pre>
+	 */
+	private String couponRefundId$n;
+	/**
+	 * <pre>
+	 * 用户标识
+	 * </pre>
+	 */
+	private String openid;
+	/**
+	 * <pre>
+	 * 是否关注公众账号
+	 * </pre>
+	 */
+	private String isSubscribe;
+	/**
+	 * <pre>
+	 * 商家数据包
+	 * </pre>
+	 */
+	private String attach;
+	/**
+	 * <pre>
+	 * 支付完成时间
+	 * </pre>
+	 */
+	private String timeEnd;
+
+	@Column(name = "S_RETURN_CODE", length = 16)
+	public String getReturnCode() {
+		return returnCode;
+	}
+
+	public void setReturnCode(String returnCode) {
+		this.returnCode = returnCode;
+	}
+
+	@Column(name = "S_RETURN_MSG", length = 128)
+	public String getReturnMsg() {
+		return returnMsg;
+	}
+
+	public void setReturnMsg(String returnMsg) {
+		this.returnMsg = returnMsg;
+	}
+
+	@Column(name = "S_RESULT_CODE", length = 32)
+	public String getResultCode() {
+		return resultCode;
+	}
+
+	public void setResultCode(String resultCode) {
+		this.resultCode = resultCode;
+	}
+
+	@Column(name = "S_ERR_CODE", length = 32)
+	public String getErrCode() {
+		return errCode;
+	}
+
+	public void setErrCode(String errCode) {
+		this.errCode = errCode;
+	}
+
+	@Column(name = "S_ERR_CODE_DES", length = 128)
+	public String getErrCodeDes() {
+		return errCodeDes;
+	}
+
+	public void setErrCodeDes(String errCodeDes) {
+		this.errCodeDes = errCodeDes;
+	}
+
+	@Column(name = "S_APPID", length = 32)
+	public String getAppid() {
+		return appid;
+	}
+
+	public void setAppid(String appid) {
+		this.appid = appid;
+	}
+
+	@Column(name = "S_MCH_ID", length = 32)
+	public String getMchId() {
+		return mchId;
+	}
+
+	public void setMchId(String mchId) {
+		this.mchId = mchId;
+	}
+
+	@Column(name = "S_DEVICE_INFO", length = 32)
+	public String getDeviceInfo() {
+		return deviceInfo;
+	}
+
+	public void setDeviceInfo(String deviceInfo) {
+		this.deviceInfo = deviceInfo;
+	}
+
+	@Column(name = "S_NONCE_STR", length = 32)
+	public String getNonceStr() {
+		return nonceStr;
+	}
+
+	public void setNonceStr(String nonceStr) {
+		this.nonceStr = nonceStr;
+	}
+
+	@Column(name = "S_SIGN", length = 32)
+	public String getSign() {
+		return sign;
+	}
+
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
+
+	@Column(name = "S_TRANSACTION_ID", length = 32)
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+
+	@Column(name = "S_OUT_TRADE_NO", length = 32)
+	public String getOutTradeNo() {
+		return outTradeNo;
+	}
+
+	public void setOutTradeNo(String outTradeNo) {
+		this.outTradeNo = outTradeNo;
+	}
+
+	@Column(name = "S_OUT_REFUND_NO", length = 32)
+	public String getOutRefundNo() {
+		return outRefundNo;
+	}
+
+	public void setOutRefundNo(String outRefundNo) {
+		this.outRefundNo = outRefundNo;
+	}
+
+	@Column(name = "S_REFUND_ID", length = 32)
+	public String getRefundId() {
+		return refundId;
+	}
+
+	public void setRefundId(String refundId) {
+		this.refundId = refundId;
+	}
+
+	@Column(name = "S_REFUND_CHANN", length = 32)
+	public String getRefundChann() {
+		return refundChann;
+	}
+
+	public void setRefundChann(String refundChann) {
+		this.refundChann = refundChann;
+	}
+
+	@Column(name = "I_REFUND_FEE")
+	public Integer getRefundFee() {
+		return refundFee;
+	}
+
+	public void setRefundFee(Integer refundFee) {
+		this.refundFee = refundFee;
+	}
+
+	@Column(name = "I_SETTLEMENT_REFUND_FEE")
+	public Integer getSettlementRefundFee() {
+		return settlementRefundFee;
+	}
+
+	public void setSettlementRefundFee(Integer settlementRefundFee) {
+		this.settlementRefundFee = settlementRefundFee;
+	}
+
+	@Column(name = "I_TOTAL_FEE")
+	public Integer getTotalFee() {
+		return totalFee;
+	}
+
+	public void setTotalFee(Integer totalFee) {
+		this.totalFee = totalFee;
+	}
+
+	@Column(name = "I_SETTLEMENT_TOTAL_FEE")
+	public Integer getSettlementTotalFee() {
+		return  settlementTotalFee;
+	}
+
+	public void setSettlementTotalFee(Integer  settlementTotalFee) {
+		this. settlementTotalFee =  settlementTotalFee;
+	}
+
+	@Column(name = "S_FEE_TYPE", length = 8)
+	public String getFeeType() {
+		return feeType;
+	}
+
+	public void setFeeType(String feeType) {
+		this.feeType = feeType;
+	}
+
+	@Column(name = "I_CASH_FEE")
+	public Integer getCashFee() {
+		return cashFee;
+	}
+
+	public void setCashFee(Integer cashFee) {
+		this.cashFee = cashFee;
+	}
+
+	@Column(name = "S_CASH_FEE_TYPE", length = 16)
+	public String getCashFeeType() {
+		return cashFeeType;
+	}
+
+	public void setCashFeeType(String cashFeeType) {
+		this.cashFeeType = cashFeeType;
+	}
+
+	@Column(name = "I_CASH_REFUND_FEE")
+	public Integer getCashRefundFee() {
+		return cashRefundFee;
+	}
+
+	public void setCashRefundFee(Integer cashRefundFee) {
+		this.cashRefundFee = cashRefundFee;
+	}
+
+	@Column(name = "S_COUPON_TYPE_$N")
+	public String getCouponType$n() {
+		return couponType$n;
+	}
+
+	public void setCouponType$n(String couponType$n) {
+		this.couponType$n = couponType$n;
+	}
+
+	@Column(name = "I_COUPON_REFUND_FEE")
+	public Integer getCouponRefundFee() {
+		return couponRefundFee;
+	}
+
+	public void setCouponRefundFee(Integer couponRefundFee) {
+		this.couponRefundFee = couponRefundFee;
+	}
+
+	@Column(name = "I_COUPON_REFUND_FEE_$N")
+	public Integer getCouponRefundFee$n() {
+		return couponRefundFee$n;
+	}
+
+	public void setCouponRefundFee$n(Integer couponRefundFee$n) {
+		this.couponRefundFee$n = couponRefundFee$n;
+	}
+
+	@Column(name = "I_COUPON_REFUND_COUNT")
+	public Integer getCouponRefundCount() {
+		return couponRefundCount;
+	}
+
+	public void setCouponRefundCount(Integer couponRefundCount) {
+		this.couponRefundCount = couponRefundCount;
+	}
+
+	@Column(name = "S_COUPON_REFUND_ID_$N", length = 20)
+	public String getCouponRefundId$n() {
+		return couponRefundId$n;
+	}
+
+	public void setCouponRefundId$n(String couponRefundId$n) {
+		this.couponRefundId$n = couponRefundId$n;
+	}
+
+	@Column(name = "S_OPENID", length = 128)
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
+
+	@Column(name = "S_IS_SUBSCRIBE", length = 1)
+	public String getIsSubscribe() {
+		return isSubscribe;
+	}
+
+	public void setIsSubscribe(String isSubscribe) {
+		this.isSubscribe = isSubscribe;
+	}
+
+	@Column(name = "S_ATTACH", length = 128)
+	public String getAttach() {
+		return attach;
+	}
+
+	public void setAttach(String attach) {
+		this.attach = attach;
+	}
+
+	@Column(name = "S_TIME_END", length = 14)
+	public String getTimeEnd() {
+		return timeEnd;
+	}
+
+	public void setTimeEnd(String timeEnd) {
+		this.timeEnd = timeEnd;
+	}
+
+}
+

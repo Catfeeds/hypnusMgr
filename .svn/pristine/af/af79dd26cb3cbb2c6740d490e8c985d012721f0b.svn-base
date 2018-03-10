@@ -1,0 +1,37 @@
+package com.catt.wfx.service.statisti;
+
+import com.catt.wfx.repository.data.comEnum.DateDimension;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单统计服务接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/3/30
+ */
+public interface OrderStatistiService {
+
+    /**
+     * 获取统计时间范围内的订单金额与订单数量
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @return
+     */
+    Map getAmountNum(Date startCreateDate, Date endCreateDate);
+
+    /**
+     * 获取订单金额统计情况
+     * 订单金额指实际支付金额（订单总额 - 代金券抵扣金额 - 退货金额）
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @param dateDimension   统计周期
+     */
+    List<Map> getOrderAmountStat(Date startCreateDate, Date endCreateDate, DateDimension dateDimension);
+
+}

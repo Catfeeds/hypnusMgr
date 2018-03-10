@@ -1,0 +1,170 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+        var timeTask;
+        var pageNo = 1;
+        var pageSize = 3;
+        // 数据容器
+        var container = $('#container');
+        // 初始化滚动刷新控件
+        var scrollControl = $('#scrollControl');
+        $(document.body).infinite(50);
+
+        //是否是  下拉刷新 ，false 否  ，true  是
+        var freshFlag = false;
+
+        //是否是 滚动刷新 ，false 否 ，true  是
+        var scrollFlag = false;
+
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                },
+                /** 初始化界面  */
+                initPage: function () {
+                    // 初始化数据列表
+                    EventHandler.search();
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $(document.body).pullToRefresh().on("pull-to-refresh", function () {
+                        if (freshFlag) return;
+                        pageNo = 1;
+                        freshFlag = true;
+                        EventHandler.search();
+                    });
+
+                    //滚动条事件
+                    $(window).scroll(function () {
+                        //判断滚动条是否在顶部
+                        if ($(document.body).scrollTop() == 0) {
+                            //添加下拉刷新事件
+                            $(document.body).pullToRefresh().on("pull-to-refresh", function () {
+                                if (freshFlag) return;
+                                pageNo = 1;
+                                freshFlag = true;
+                                EventHandler.search();
+                            });
+                        } else {  //滚动条不在顶部
+                            $(document.body).off();  //移除下拉刷新事件
+                        }
+                    });
+
+                    $(document.body).infinite().on("infinite", function () {
+                        if (scrollFlag) return;
+                        scrollFlag = true;
+                        EventHandler.search();
+                    });
+
+                    //tab切换
+                    $(".xw_li").click(function () {
+                        $(this).parents(".goodsType").find('.xw_li').removeClass("lion");
+                        $(this).addClass("lion");
+                        $("#status").val($(this).attr("data-values"));
+                        pageNo = 1;
+                        freshFlag = true;
+                        EventHandler.search();
+                    });
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                // 查询
+                search: function () {
+                    var params = {status: $("#status").val(), pageNo: pageNo, pageSize: pageSize};
+                    DataHandler.findPage4Wechat(params, function (data) {
+                        //如果是下拉刷新，则结束下拉刷新，并初始化滚动刷新
+                        if (freshFlag) {
+                            container.html("");
+                            $(document.body).pullToRefreshDone();
+                            freshFlag = false;
+                            $(document.body).infinite(50);
+                        }
+                        //如果是滚动刷新，则结束滚动刷新
+                        if (scrollFlag) {
+                            scrollFlag = false;
+                        }
+                        var html = template('templateList', data.content);
+                        //结尾插入数据
+                        container.append(html);
+
+                        //当数据量 大于所请求的数据量时，需要在后面加入一个滚动刷新的控件
+                        if (pageNo * pageSize < data.total) {
+                            scrollControl.hide();
+                            pageNo++;
+                        } else {
+                            $(document.body).destroyInfinite();
+                            scrollControl.show();
+                            scrollControl.empty().append("<span style='color: darkgray'>" + lastPageText + "</span>");
+                        }
+                        if (container.html() == "") {
+                            scrollControl.hide();
+                            var msg = "<center ><br/><span style='vertical-align: middle!important;color: darkgray'>" + emptyDataText + "</span></center>";
+                            container.html(msg);
+                        }
+
+                        //clearInterval(timeTask);
+                        //timeTask = window.setInterval(changeTime, 1000);
+                    });
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                findPage4Wechat: function (param, callback) {
+                    $.post(path + '/admin/wechat/activity/findPage4Wechat', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        //function changeTime() {
+        //    $(".timeSpan").each(function () {
+        //        var obj = $(this);
+        //        var timeType = parseInt(obj.attr('timeType'));
+        //        var length = parseInt(obj.attr('length'));
+        //
+        //        var myD = Math.floor(length / (1000 * 60 * 60 * 24)); //天
+        //        var myH = Math.floor(length / (1000 * 60 * 60)) % 24; //小时
+        //        var myM = Math.floor(length / (1000 * 60)) % 60; //分钟
+        //        var myS = Math.floor(length / 1000) % 60; //秒
+        //        var str = "";
+        //        if (timeType == 1) {
+        //            str = "<font>" + myD + "</font>天<font>" + myH + "</font>小时<font>" + myM + "</font>分<font>" + myS + "</font>秒后开始";
+        //        } else if (timeType == 2) {
+        //            str = "<font>" + myD + "</font>天<font>" + myH + "</font>小时<font>" + myM + "</font>分<font>" + myS + "</font>秒后结束";
+        //        }
+        //
+        //        length = length - 1000;
+        //        obj.html(str);
+        //        obj.attr('length', length);
+        //        if (length <= 0) {
+        //            window.location.href = window.location.href;
+        //        }
+        //    });
+        //}
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

@@ -1,0 +1,30 @@
+package com.catt.wfx.service;
+
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * 用户服务接口
+ */
+public interface WfxUserService {
+
+    /**
+     * 获取用户头像和名称，并缓存到会话中
+     *
+     * @param userId          用户标识
+     * @param publicAccountId 公众号标识
+     * @param openId          微信OpenId
+     * @param request         当前请求对象
+     * @return
+     */
+    CusInfo getCusPhotoAndName(Long userId, String publicAccountId, String openId, HttpServletRequest request);
+
+    /**
+     * 清除用户头像和名称缓存
+     *
+     * @param request
+     */
+    void clearCusPhotoAndNameCache(HttpServletRequest request);
+
+}

@@ -1,0 +1,96 @@
+package com.catt.wfx.service.impl.productMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.wfx.repository.entity.customerMgr.CusShop;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductShop;
+import com.catt.wfx.service.base.customerMgr.CusShopBaseService;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductShopBaseService;
+import com.catt.wfx.service.productMgr.ProductShopService;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 店主商品服务接口接口实现
+ * 作者：袁幸成
+ * 时间：2017-1-18 9:04:28
+ */
+@Service("productShopServiceImpl")
+public class ProductShopServiceImpl implements ProductShopService {
+
+    // 店主商品服务接口
+    @Resource(name = "productShopBaseServiceImpl")
+    private ProductShopBaseService productShopBaseService;
+
+    // 店铺信息表服务接口
+    @Resource(name = "cusShopBaseServiceImpl")
+    private CusShopBaseService cusShopBaseService;
+
+    // 商品信息表服务接口
+    @Resource(name = "productInfoBaseServiceImpl")
+    private ProductInfoBaseService productInfoBaseService;
+
+    /**
+     * 上架商品到店铺、下架店铺商品
+     *
+     * @param createdId   创建人
+     * @param createdName 创建人名称
+     * @param id          商品标识
+     * @param status      状态，上架或下架
+     */
+    @Override
+    public void shelves(Long createdId, String createdName, Long id, Integer status) {
+        Assert.notNull(id, "商品标识不能为空");
+
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", createdId));
+        filters.add(Filter.eq("productId", id));
+        List<ProductShop> list = productShopBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(list)) {
+            ProductShop shop = list.get(0);
+            shop.setStatus(status);
+            productShopBaseService.update(shop);
+        } else if (CollectionUtil.isEmpty(list) && status.equals(ProductShop.Status.NORMALUSE.getValue())) {
+            filters.clear();
+            filters.add(Filter.eq("cusId", createdId));
+            List<CusShop> shops = cusShopBaseService.findList(1, filters, null);
+            Long shopId = null;
+            if (CollectionUtil.isNotEmpty(shops)) {
+                shopId = shops.get(0).getId();
+            } else {
+                throw BaseException.errorByErrInfo("未找到店主店铺");
+            }
+
+            ProductShop shop = new ProductShop();
+            shop.setShopId(shopId);
+            shop.setCusId(createdId);
+            shop.setProductId(id);
+            shop.setStatus(ProductShop.Status.NORMALUSE.getValue());
+            shop.setCreatedId(createdId);
+            shop.setCreatedName(createdName);
+            productShopBaseService.save(shop);
+        }
+
+        ProductInfo productInfo = productInfoBaseService.find(id);
+        Integer shopSales = productInfo.getShopSales();
+        if (status.equals(ProductShop.Status.NORMALUSE.getValue())) { // 上架
+            shopSales = shopSales + 1;
+        } else if (status.equals(ProductShop.Status.SHELVES.getValue())) { // 下架
+            shopSales = shopSales - 1;
+            if (shopSales < 0) {
+                shopSales = 0;
+            }
+        }
+        productInfo.setShopSales(shopSales);
+        productInfoBaseService.update(productInfo);
+
+    }
+
+}

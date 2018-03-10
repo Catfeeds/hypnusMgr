@@ -1,0 +1,173 @@
+package com.catt.wfx.repository.entity.settlementMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.Date;
+
+/**
+ * 平台账户结算明细实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-23 11:38:28
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_SETTLEMENT_PLAT_DETAIL")
+public class SettlementPlatDetail extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 规则标识
+	 */
+	private Long ruleId;
+	/**
+	 * 结算单量
+	 */
+	private Integer orderNum;
+	/**
+	 * 结算订单金额
+	 */
+	private Double orderMoney;
+	/**
+	 * 提成金额
+	 */
+	private Double salesMoney;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+    /**
+     * 结算时间：年月
+     */
+    private Date settleDate;
+    /**
+     * 提成标准：每单8元/每单8%
+     */
+    private String ruleRemark;
+    /**
+     * 是否已结算
+     * 1-是 2-否
+     */
+    private Integer status;
+    /**
+     * 结算人名称
+     */
+    private String settleStaffName;
+    /**
+     * 结算单号
+     */
+    private String settleCode;
+
+	@Column(name = "I_RULE_ID")
+	public Long getRuleId() {
+		return ruleId;
+	}
+
+	public void setRuleId(Long ruleId) {
+		this.ruleId = ruleId;
+	}
+
+	@Column(name = "I_ORDER_NUM")
+	public Integer getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
+	}
+
+	@Column(name = "I_ORDER_MONEY")
+	public Double getOrderMoney() {
+		return orderMoney;
+	}
+
+	public void setOrderMoney(Double orderMoney) {
+		this.orderMoney = orderMoney;
+	}
+
+	@Column(name = "I_SALES_MONEY")
+	public Double getSalesMoney() {
+		return salesMoney;
+	}
+
+	public void setSalesMoney(Double salesMoney) {
+		this.salesMoney = salesMoney;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+    @Column(name = "D_SETTLE_DATE")
+    public Date getSettleDate() {
+        return settleDate;
+    }
+
+    public void setSettleDate(Date settleDate) {
+        this.settleDate = settleDate;
+    }
+
+    @Column(name = "S_RULE_REMARK")
+    public String getRuleRemark() {
+        return ruleRemark;
+    }
+
+    public void setRuleRemark(String ruleRemark) {
+        this.ruleRemark = ruleRemark;
+    }
+
+    @Column(name = "I_STATUS")
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    @Column(name = "S_SETTLE_STAFF_NAME")
+    public String getSettleStaffName() {
+        return settleStaffName;
+    }
+
+    public void setSettleStaffName(String settleStaffName) {
+        this.settleStaffName = settleStaffName;
+    }
+
+    @Column(name = "S_SETTLE_CODE")
+    public String getSettleCode() {
+        return settleCode;
+    }
+
+    public void setSettleCode(String settleCode) {
+        this.settleCode = settleCode;
+    }
+}
+

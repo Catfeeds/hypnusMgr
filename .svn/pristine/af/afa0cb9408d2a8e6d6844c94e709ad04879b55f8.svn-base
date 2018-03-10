@@ -1,0 +1,236 @@
+package com.catt.wfx.repository.entity.wechatReturn;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 微信退款日志实体类
+ * 
+ * @author 周明祥
+ * @date 2017-03-02 15:15:26
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_RETURN_WECHAT_ORDER_LOG")
+public class WechatReturnOrderLog extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * <pre>
+	 * 公众号ID
+	 * </pre>
+	 */
+	private String appId;
+	/**
+	 * <pre>
+	 * 商户号
+	 * </pre>
+	 */
+	private String mchId;
+	/**
+	 * <pre>
+	 * 设备号
+	 * </pre>
+	 */
+	private String deviceInfo;
+	/**
+	 * <pre>
+	 * 随机字符串
+	 * </pre>
+	 */
+	private String nonceStr;
+	/**
+	 * <pre>
+	 * 签名
+	 * </pre>
+	 */
+	private String sign;
+	/**
+	 * <pre>
+	 * 商户订单号
+	 * </pre>
+	 */
+	private String outTradeNo;
+
+	/**
+	 * 退款金额
+	 */
+	private Integer refundFee;
+	/**
+	 * <pre>
+	 * 货币类型
+	 * </pre>
+	 */
+	private String refundFeeType;
+	/**
+	 * <pre>
+	 * 总金额
+	 * </pre>
+	 */
+	private Integer totalFee;
+	/**
+	 * <pre>
+	 * 交易类型
+	 * </pre>
+	 */
+	private String tradeType;
+	/**
+	 * <pre>
+	 * 用户标识
+	 * </pre>
+	 */
+	private String openId;
+	/**
+	 * <pre>
+	 * 退款单号
+	 * </pre>
+	 */
+	private String outRefundNo;
+//	/**
+//	 * <pre>
+//	 * 退货单标识
+//	 * </pre>
+//	 */
+//	private Long retrunId;
+	/**
+	 * <pre>
+	 * 操作员
+	 * </pre>
+	 */
+	private String opUserId;
+
+	@Column(name = "S_APP_ID", length = 32)
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+	@Column(name = "S_MCH_ID", length = 32)
+	public String getMchId() {
+		return mchId;
+	}
+
+	public void setMchId(String mchId) {
+		this.mchId = mchId;
+	}
+
+	@Column(name = "S_DEVICE_INFO", length = 32)
+	public String getDeviceInfo() {
+		return deviceInfo;
+	}
+
+	public void setDeviceInfo(String deviceInfo) {
+		this.deviceInfo = deviceInfo;
+	}
+
+	@Column(name = "S_NONCE_STR", length = 32)
+	public String getNonceStr() {
+		return nonceStr;
+	}
+
+	public void setNonceStr(String nonceStr) {
+		this.nonceStr = nonceStr;
+	}
+
+	@Column(name = "S_SIGN", length = 32)
+	public String getSign() {
+		return sign;
+	}
+
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
+
+	@Column(name = "S_OUT_TRADE_NO", length = 32)
+	public String getOutTradeNo() {
+		return outTradeNo;
+	}
+
+	public void setOutTradeNo(String outTradeNo) {
+		this.outTradeNo = outTradeNo;
+	}
+
+	@Column(name = "I_REFUND_FEE")
+	public Integer getRefundFee() {
+		return refundFee;
+	}
+
+	public void setRefundFee(Integer refundFee) {
+		this.refundFee = refundFee;
+	}
+
+	@Column(name = "S_REFUND_FEE_TYPE", length = 16)
+	public String getRefundFeeType() {
+		return refundFeeType;
+	}
+
+	public void setRefundFeeType(String refundFeeType) {
+		this.refundFeeType = refundFeeType;
+	}
+
+	@Column(name = "I_TOTAL_FEE")
+	public Integer getTotalFee() {
+		return totalFee;
+	}
+
+	public void setTotalFee(Integer totalFee) {
+		this.totalFee = totalFee;
+	}
+
+	@Column(name = "S_TRADE_TYPE", length = 16)
+	public String getTradeType() {
+		return tradeType;
+	}
+
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
+	}
+
+	@Column(name = "S_OPEN_ID", length = 128)
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
+	@Column(name = "S_OUT_REFUND_NO", length = 32)
+	public String getOutRefundNo() {
+		return outRefundNo;
+	}
+
+	public void setOutRefundNo(String outRefundNo) {
+		this.outRefundNo = outRefundNo;
+	}
+
+//	@Column(name = "I_RETRUN_ID")
+//	public Long getRetrunId() {
+//		return retrunId;
+//	}
+//
+//	public void setRetrunId(Long retrunId) {
+//		this.retrunId = retrunId;
+//	}
+
+	@Column(name = "S_OP_USER_ID", length = 32)
+	public String getOpUserId() {
+		return opUserId;
+	}
+
+	public void setOpUserId(String opUserId) {
+		this.opUserId = opUserId;
+	}
+
+}
+

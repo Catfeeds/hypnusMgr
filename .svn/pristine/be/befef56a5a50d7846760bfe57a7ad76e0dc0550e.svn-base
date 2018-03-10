@@ -1,0 +1,93 @@
+package com.catt.wfx.web.controller.admin.customerMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.entity.customerMgr.CusBank;
+import com.catt.wfx.service.customerMgr.CusBankService;
+import com.catt.wfx.web.controller.pub.CommonController;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import util.CryptUtil;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * Description:银行卡绑定controller
+ * Created by 2017-02-15  11:09.
+ * author: Zhou mingxiang
+ */
+@Controller("admin.customerMgr.cusBank")
+@RequestMapping(value = "/admin/customerMgr/cusBank")
+public class CusBankController extends CommonController {
+
+    @Resource(name = "cusBankServiceImpl")
+    private CusBankService cusBankService;
+
+    /**
+     * 获取用户银行账号列表（分页）
+     *
+     * @param cusId 当前登录用户ID
+     * @param purpose 用途 可选参数，edit-编辑
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/findCusBankByPage", method = RequestMethod.GET)
+    public Page<Map> findCusBankByPage(@CurrentUser Long cusId, String purpose, Integer pageNo, Integer pageSize) {
+        Pageable pageable = new Pageable(pageNo, pageSize);
+        return cusBankService.findCusBankByPage(cusId, purpose, pageable);
+    }
+
+
+    /**
+     * 新增银行卡
+     *
+     * @param cusId 用户id
+     * @return
+     */
+    @RequestMapping(value = {"/saveCusBank"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message saveCusBank(@CurrentUser Long cusId, @RequestParam Map<String, String> param) throws Exception {
+        String bankType = MapUtil.getString(param, "bankType");
+        String branch = decrypt(MapUtil.getString(param, "branch"));  //开户支行
+        String bankAccount = decrypt(MapUtil.getString(param, "bankAccount"));  //账户名称
+        String bankCard = decrypt(MapUtil.getString(param, "bankCard"));  //银行卡号
+
+        Assert.hasText(bankType, "开户银行不能为空");
+        Assert.hasText(branch, "开户支行不能为空");
+        Assert.hasText(bankAccount, "账户名称不能为空");
+        Assert.hasText(bankCard, "银行卡号不能为空");
+
+        CusBank cusBank = new CusBank();
+        cusBank.setCusId(cusId);
+        cusBank.setBankType(Integer.valueOf(bankType));
+        cusBank.setBankAccount(CryptUtil.encryptDatabase(bankAccount));
+        cusBank.setBranch(CryptUtil.encryptDatabase(branch));
+        cusBank.setBankCard(CryptUtil.encryptDatabase(bankCard));
+        cusBankService.saveCusBank(cusBank);
+        return Message.success("");
+    }
+
+
+    /**
+     * 删除银行卡
+     *
+     * @param id 银行账号标识
+     * @return
+     */
+    @RequestMapping(value = {"/deleteCusBank"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message deleteCusBank(Long id) {
+        Assert.notNull(id, "银行账号标识不能为空");
+        cusBankService.deleteCusBank(id);
+        return Message.success("");
+    }
+
+}

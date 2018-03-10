@@ -1,0 +1,99 @@
+package com.catt.wfx.repository.dao.settlementMgr.impl;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementShopDetailDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopDetail;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRule;
+import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Repository("settlementShopDetailDaoImpl")
+public class SettlementShopDetailDaoImpl extends BaseDaoImpl<SettlementShopDetail, Long>
+		implements SettlementShopDetailDao {
+
+	/**
+	 * 获取分页补贴记录
+	 *
+	 * @param cusName    用户名称
+	 * @param rewardType 补贴类型
+	 * @param type       补贴名称
+	 * @param pageable
+	 * @return
+	 */
+	@Override
+	public Page<Map> getPage(String cusName, Integer rewardType, Integer type,Pageable pageable) {
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+		sql.append(" b.S_NAME AS \"cusName\", ");
+		sql.append(" b.S_MOBILE AS \"mobile\", ");
+		sql.append(" c.I_REWARD_TYPE AS \"rewardType\", ");
+		sql.append(" t1.I_CUS_TYPE AS \"cusType\", ");
+		sql.append(" t1.D_CREATE_DATE AS \"createDate\", ");
+		sql.append(" t1.I_TYPE AS \"type\", ");
+		sql.append(" t1.S_COUPON_ID AS \"couponIds\", ");
+		sql.append(" t1.I_GIVE_MONEY AS \"giveMoney\" ");
+		sql.append(" FROM T_SETTLEMENT_SHOP_DETAIL t1 ");
+		sql.append(" INNER JOIN T_CUS_INFO b ON t1.I_CUS_ID = b.I_ID ");
+		sql.append(" INNER JOIN T_SETTLEMENT_SHOP_RULE c ON t1.I_RULE_ID = c.I_ID ");
+		sql.append(" WHERE 1 = 1");
+
+		Map param = new HashMap<>();
+
+		if (StringUtil.checkObj(rewardType)) {
+			sql.append(" AND c.I_REWARD_TYPE = :rewardType");
+			param.put("rewardType", rewardType);
+		}
+
+		if (StringUtil.checkObj(cusName)) {
+			sql.append(" AND b.S_NAME like :cusName");
+			param.put("cusName", "%" + cusName + "%");
+		}
+
+		if (StringUtil.checkObj(type)) {
+			if (type == 0) { // 主管管理补贴
+				sql.append(" AND c.I_CUS_TYPE = :cusType");
+				param.put("cusType", SettlementShopRule.CusType.Director.getValue());
+			} else {
+				sql.append(" AND c.I_TYPE = :type");
+				param.put("type", type);
+			}
+		}
+		sql.append(" ORDER BY t1.D_CREATE_DATE DESC");
+
+		return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+	}
+
+	/**
+	 * 获取交易记录(账户管理详情-交易记录)
+	 *
+	 * @param cusId
+	 * @param pageable
+	 * @return
+	 */
+	@Override
+	public Page<Map> getSettlementShopPage(Long cusId, Pageable pageable) {
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT ");
+		sql.append(" t1.I_CUS_TYPE AS \"cusType\", ");//用户类型
+		sql.append(" t1.I_SETTLEMENT_TYPE AS \"settlementType\", ");//交易类型
+		sql.append(" t1.D_CREATE_DATE AS \"time\", ");//交易时间
+		sql.append(" t1.I_GIVE_MONEY AS \"giveMoney\", ");//奖励金额
+		sql.append(" t1.I_SALES_MONEY AS \"salesMoney\" ");//提成金额
+		sql.append(" FROM T_SETTLEMENT_SHOP_DETAIL t1 ");
+		sql.append(" WHERE 1 = 1");
+
+		Map param = new HashMap<>();
+		if (StringUtil.checkObj(cusId)) {
+			sql.append(" AND t1.I_CUS_ID = :cusId");
+			param.put("cusId", cusId);
+		}
+		sql.append(" ORDER BY t1.D_CREATE_DATE DESC");
+
+		return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+	}
+}

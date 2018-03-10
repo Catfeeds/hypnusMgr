@@ -1,0 +1,148 @@
+@charset "utf-8";
+/* CSS Document */
+
+.chartBoxLeft h2,h4,h5{
+	display:block;
+	text-align:center;}
+.chartBoxLeft h2{
+	height:48px;
+	line-height:48px;
+	margin-top:30px;
+	color:#fcfa55;
+	font-size:30px;
+	font-weight:normal;}
+.chartBoxLeft h4,h5{
+	height:20px;
+	line-height:20px;
+	color:#fdfeea;
+	font-size:12px;
+	font-weight:normal;}
+.chartBoxLeft h5{margin-top:90px;}
+.userYestoday{
+	color:#fcfa55;
+	font-size:16px;}
+.chartContainer{
+	height:252px;
+	background:#f5f5f5;
+	border-radius:0px 3px 3px 0px;}
+.chartContainerShort{
+	height:212px;
+	background:#f5f5f5;
+	border-radius:0px 3px 3px 0px;}	
+.chartBox{padding-left:160px;}
+.mainBox{
+	min-height:600px;
+	padding:10px;
+	margin-top:10px;
+	background:#f7fafc;
+	border-radius:3px;}
+/*搜索框*/
+.mainBoxTop{
+	overflow:hidden;
+	width:550px;
+	padding-top:80px;
+	margin:auto;}
+.tab{
+	overflow:hidden;}
+.eachTab{
+	float:left;
+	display:block;
+	height:28px;
+	line-height:28px;
+	padding:0px 10px;
+	margin-right:10px;
+	font-size:14px;
+	color:#f47f30;
+	cursor:pointer;}
+.selected_tag{
+	border-radius:3px;
+	color:#fff;
+	background:#f47f30;}
+.tabInput{
+	margin-top:10px;}
+.eachInput{
+	display:none;
+	float:left;
+	height:42px;
+	line-height:42px;
+	width:400px;
+	border:1px #dfdfdf solid;
+	padding-left:5px;
+	border-radius:3px;
+	font-size:16px;
+	color:#666;}
+.searchBtnXL{
+	float:left;
+	display:block;
+	height:44px;
+	line-height:44px;
+	width:105px;
+	border-radius:3px;
+	margin-left:10px;
+	padding-left:20px;
+	color:#fff;
+	font-size:18px;
+	letter-spacing:10px;
+	text-align:center;
+	background:#f47f30 url(../images/search.png) 15px 15px no-repeat;}
+.searchBtnXL:hover{background:#fa883c url(../images/search.png) 15px 15px no-repeat; cursor:pointer;}	
+.container_yuyoubaob{ height:340px; background:#f7f7f7; border-radius:5px;text-align:center;}
+/*常用菜单*/
+.mainBoxBottom{
+	min-height:300px;
+	width:900px;
+	padding:10px;
+	margin:auto;
+	margin-top:54px;
+	border:1px #edeae7 solid;
+	background:#fff;}
+.bottomBoxTop{
+	height:32px;
+	border-bottom:1px #f3f3f2 solid;
+	overflow:hidden;}
+.bottomBoxTop span{
+	display:block;
+	float:left;
+	height:32px;
+	line-height:22px;
+	padding:0px 3px;
+	line-height:32px;
+	color:#f47f30;
+	border-bottom:3px #f47f30 solid;}
+.btnDelete,.btnAdd{
+	display:block;
+	float:right;
+	height:18px;
+	line-height:18px;
+	width:40px;
+	padding-left:20px;
+	margin:3px 0px 0px 10px;
+	text-decoration:underline;
+	cursor:pointer;}
+.btnDelete{
+	color:#f47f30;
+	background:url(../images/btndelete.png) 0px 1px no-repeat;}
+.btnAdd{
+	color:#46a0d5;
+	background:url(../images/btnadd.png) 0px 1px no-repeat;}
+.bottomBoxBottom{
+	overflow:hidden;}
+.menuIcon{
+	float:left;
+	height:80px;
+	width:80px;
+	margin:10px 10px 0px 0px;
+	border-radius:20px;
+	border:1px #fedbb7 solid;
+	background:#ffe8d1;}
+.menuIcon:hover{
+	border:1px #f47f30 solid;
+	background:#ffddbc;
+	cursor:pointer;}
+.chartOptions {
+    height:22px;
+    padding:10px;
+    background: #f7f7f7;
+}
+/*公共样式修改*/	
+.searchBar{ border:none;}

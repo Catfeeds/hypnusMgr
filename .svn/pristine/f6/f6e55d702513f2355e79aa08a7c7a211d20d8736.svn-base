@@ -1,0 +1,240 @@
+/**
+ * Created by houhuateng on 2017/3/6.
+ */
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'dataGridHelp', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar, dataGridHelp) {
+        var page_size = 15;
+        var $productTb = null;
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+
+                    $productTb = $('#productTb');
+                    var params = {}; //搜索条件
+                    //=========分页初始化start============
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+
+                    // 初始化数据列表
+                    var initParams = {};
+                    initParams.pageNo = 1;
+                    initParams.pageSize = page_size;
+                    EventHandler.search(initParams);
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $productTb.dataGridHelp({
+                        singleSelectBtns: [
+                            {btn: $("#auditPass"), fn: EventHandler.auditPass},
+                            {btn: $("#auditFail"), fn: EventHandler.auditFail}
+                        ]
+                    });
+
+                    $(".xw_moreOptions").click(function(){
+                        var myText = $(this).text();
+                        if(myText == "展开更多↓"){
+                            $(".xw_hideBar").slideDown(200);
+                            $(this).text("收起↑");
+                        }
+                        else if(myText == "收起↑"){
+                            $(".xw_hideBar").slideUp(200);
+                            $(this).text("展开更多↓");
+                        }
+                        setParenHei();
+                    });
+
+                    //查询事件
+                    $('#btnSearch').click(function () {
+                        // 初始化数据列表
+                        var initParams = {};
+                        initParams.pageNo = 1;
+                        initParams.pageSize = page_size;
+                        EventHandler.search(initParams);
+                    });
+
+                    //重置事件
+                    $('#btnClean').click(function () {
+                        $('#status').val("");
+                        $('#agencyLevel').val("");
+                        $('#nickname').val("");
+                        $('#mobile').val("");
+                        $('#site').val("");
+
+                        var lis = $("#status li");
+                        $.each(lis, function(i, item){
+                            $(item).removeClass();
+                        });
+                    });
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                    var aData = [];
+                    aData.push({tabName: "t_agent_info", colName: "i_status"});//审核状态
+                    aData.push({tabName: "t_agent_info", colName: "i_agency_level"});//代理商级别
+
+                    //2代表反馈数组
+                    adminSystem.getEnumList(aData, 2, function (backData) {
+                        var aStatus = backData['T_AGENT_INFO-I_STATUS'].sEnumMapping;
+                        var aAgencyLevel = backData['T_AGENT_INFO-I_AGENCY_LEVEL'].sEnumMapping;
+
+                        var all = "<option value=''>" + "全部" + "</option>";
+                        var agencyLevelStr = all;
+                        for (var i = 0; i <aAgencyLevel.length; i++) {
+                            agencyLevelStr += "<option value=" + aAgencyLevel[i].value + ">" + aAgencyLevel[i].name + "</option>";
+                        }
+                        $('#agencyLevel').html(agencyLevelStr);
+
+                        //填充审核状态
+                        for(var i = 0, size = aStatus.length; i < size; i++){
+                            $("#status").append("<li data_value='"+aStatus[i].value+"'>"+aStatus[i].name+"</li>");
+                        }
+                        $("#status li").on("click", function(){
+                            if($(this).attr("class") == "on"){
+                                $(this).attr("class", "");
+                            }else{
+                                //var lis = $("#status li");
+                                //$.each(lis, function(i, item){
+                                //    $(item).removeClass();
+                                //});
+                                $(this).attr("class", "on");
+                            }
+
+                            EventHandler.search();
+                        });
+                    });
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                search: function (params) {
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: page_size};
+                    }
+                    var statuLis = $("#status").find("[class='on']");
+                    var status = "";
+                    if(statuLis != "" && statuLis.length > 0){
+                        $.each(statuLis, function(i, item){
+                            status += $(this).attr("data_value") + ",";
+                        });
+                        if(status.indexOf(",") != -1){
+                            status = status.substring(0, status.length - 1);
+                        }
+                    }
+                    params.status = status;
+                    //params.status = $("#status").find("[class='on']").attr("data_value");
+                    //if(typeof(params.status) == "undefined"){
+                    //    params.status = "";
+                    //}
+                    params.agencyLevel = $('#agencyLevel option:selected').val();
+                    params.nickname = $('#nickname').val();
+                    params.mobile = $('#mobile').val();
+                    params.site = $('#site').val();
+                    DataHandler.getAgentInfoList(params, function (backData) {
+                        var html = template('dataList_template', backData.content);
+                        $('#dataList').html(html);
+
+                        //重新设置数据时调用渲染列表方法
+                        $productTb.dataGridHelp("renderList", backData.content);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+                        $('#pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        $(window).triggerHandler('resize');
+                    });
+                },
+
+                /**
+                 * 通过
+                 */
+                auditPass: function () {
+                    //获取勾选的数据
+                    var aId = [];
+                    var data = $productTb.dataGridHelp("getSelected");
+                    for (var o in data) {
+                        if(data[o].status != 1){
+                            msgBox.tips("只有待审核状态的用户才可以进行审核");
+                            return;
+                        }
+                        aId.push(data[o].id);
+                    }
+                    msgBox.exWindow.open({
+                        title: '填写审核信息',
+                        url: path + "/admin/agentInfo/auditPass/" + aId[0],
+                        width: '520px',
+                        height: '380px',
+                        close: function (result) {
+                            if (result) {
+                                EventHandler.search();
+                            }
+                        }
+                    });
+                },
+
+                /**
+                 * 不通过
+                 */
+                auditFail: function () {
+                    //获取勾选的数据
+                    var aId = [];
+                    var data = $productTb.dataGridHelp("getSelected");
+                    for (var o in data) {
+                        if(data[o].status != 1){
+                            msgBox.tips("只有待审核状态的用户才可以进行审核");
+                            return;
+                        }
+                        aId.push(data[o].id);
+                    }
+                    msgBox.exWindow.open({
+                        title: '填写审核信息',
+                        url: path + "/admin/agentInfo/auditFail/" + aId[0],
+                        width: '520px',
+                        height: '340px',
+                        close: function (result) {
+                            if (result) {
+                                EventHandler.search();
+                            }
+                        }
+                    });
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取身份信息列表
+                 * @param params
+                 * @param callback
+                 */
+                getAgentInfoList: function (params, callback) {
+                    $.post(path + '/admin/agentInfo/getPage', params, function (backData) {
+                        callback(backData);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

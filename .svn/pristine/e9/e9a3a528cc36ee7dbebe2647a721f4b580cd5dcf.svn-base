@@ -1,0 +1,200 @@
+
+var _template;
+var _msgBox;
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+        _template = template;
+        _msgBox = msgBox;
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);
+
+/**
+ * 初始化处理器
+ */
+var InitHandler = function () {
+    return {
+        /** 初始化入口 */
+        init: function () {
+            this.initPage();
+            this.initData();
+            this.initEvent();
+        },
+        /** 初始化界面  */
+        initPage: function () {
+            if(type != "-1"){
+                $(".activitiestype").removeClass("on");
+                if(type == 1){
+                    var t1 = $("div").find("[name='type1']");
+                    $(t1[0]).addClass("on");
+                }else if(type == 2){
+                    var t1 = $("div").find("[name='type2']");
+                    $(t1[0]).addClass("on");
+                    $(".xw_show4").attr("style", "display:none;");
+                    $(".xw_show5").attr("style", "display:block;");
+                }
+                if(sets != "-1"){
+                    if(type == 1){
+                        EventHandler.addStep1(sets);
+                        EventHandler.addStep2();
+                    }else if(type == 2){
+                        EventHandler.addStep1();
+                        EventHandler.addStep2(sets);
+                    }else{
+                        EventHandler.addStep1();
+                        EventHandler.addStep2();
+                    }
+                }
+            }else{
+                EventHandler.addStep1();
+                EventHandler.addStep2();
+            }
+        },
+        /** 初始化事件 */
+        initEvent: function () {
+            $("#saveAll").bind("click", EventHandler.saveAll);
+        },
+
+        /** 初始化数据  */
+        initData: function () {
+
+        }
+    };
+}();
+
+/**
+ * 事件处理器
+ */
+var EventHandler = function () {
+    return {
+        //新增梯度（类型为1）
+        addStep1 : function(data){
+            if(data == undefined){
+                data = new Array();
+                data.push({
+                    orderNum : "",
+                    orderMoney : ""
+                });
+            }
+            var html = _template("template_type1", data);
+            $("#type1").append(html);
+        },
+        //新增梯度（类型为2）
+        addStep2 : function(data){
+            if(data == undefined){
+                data = new Array();
+                data.push({
+                    orderNum : "",
+                    orderMoney : ""
+                });
+            }
+            var html = _template("template_type2", data);
+            $("#type2").append(html);
+        },
+        //删除梯度（类型为1）
+        delStep1 : function(tag){
+            var parDiv = $(tag).parent().parent();
+            $(parDiv).remove();
+        },
+        //删除梯度（类型为2）
+        delStep2 : function(tag){
+            var parDiv = $(tag).parent().parent();
+            $(parDiv).remove();
+        },
+        //保存
+        saveAll : function(){
+            var typeDiv = $(".on");
+            var types = $(typeDiv).attr("rel");
+            if(types == 4){
+                types = 1;
+            }else{
+                types = 2;
+            }
+            var stepList = EventHandler.getStepList(types);
+            if(stepList == ""){
+                _msgBox.tips("请正确填写完整梯度！");
+                return;
+            }
+            var stepJson = JSON.stringify(stepList);
+            DataHandler.saveAll({type : types, stepJson : stepJson}, function(data){
+                _msgBox.tips("保存成功!");
+                location.reload();
+            });
+        },
+        //获取梯度
+        getStepList : function(types){
+            var orderNumInputs = $("#type"+types).find("input[name='orderNum"+types+"']");
+            var orderMoneyInputs = $("#type"+types).find("input[name='orderMoney"+types+"']");
+            var ons = "";
+            var oms = "";
+            orderNumInputs.each(function(){
+                ons += $(this).val() + ",";
+            });
+            orderMoneyInputs.each(function(){
+                oms += $(this).val() + ",";
+            });
+            if(ons == "" || oms == ""){
+                return "";
+            }
+            if(ons.indexOf(",") != -1){
+                ons = ons.substring(0, ons.length - 1);
+            }
+            if(oms.indexOf(",") != -1){
+                oms = oms.substring(0, oms.length - 1);
+            }
+            if(ons == "" || oms == ""){
+                return "";
+            }
+            var orderNums = ons.split(",");
+            var orderMoneys = oms.split(",");
+            var check = EventHandler.checkDateSteps(orderNums, orderMoneys);
+            if(check == -1){
+                _msgBox.tips("梯度设置有误，请重新填写!");
+                return "";
+            }
+            var result = new Array();
+            for(var i = 0; i < orderNums.length; i++){
+                result.push(orderNums[i] + "-" + orderMoneys[i]);
+            }
+            if(result.length > 0){
+                return result;
+            }else{
+                return "";
+            }
+        },
+        //检查梯度是否设置正确
+        checkDateSteps : function(orderNums, orderMoneys){
+            var orderReNum = new Array();
+            for(var i = 0; i < orderNums.length; i++){
+                //判断空
+                if(orderNums[i] == "" || orderMoneys[i] == ""){
+                    return -1;
+                }
+                //判断重复
+                var orderNum = parseInt(orderNums[i]);
+                if(orderReNum.indexOf(orderNum) != -1){
+                    return -1;
+                }
+                orderReNum.push(orderNum);
+            }
+            return 1;
+        }
+    }
+}();
+
+
+/**
+ * 数据处理器
+ */
+var DataHandler = function () {
+    return {
+        //保存
+        saveAll : function(param, callback){
+            $.post(path + "/admin/basicConfig/baseSet/platIncome/saveSet", param, function(data){
+                callback(data);
+            });
+        }
+    }
+}();

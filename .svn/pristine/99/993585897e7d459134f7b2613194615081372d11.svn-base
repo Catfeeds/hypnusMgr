@@ -1,0 +1,26 @@
+package com.catt.wfx.security.shiro.validate.impl;
+
+import com.catt.common.base.repository.entity.BaseUserEntity;
+import com.catt.common.web.security.shiro.token.ExtAuthenticationToken;
+import com.catt.common.web.security.shiro.validate.AuthenticationValidate;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.springframework.stereotype.Service;
+
+/**
+ * Description:用户类型验证
+ * date: 2016-3-3 9:59
+ * author: zou jia
+ */
+@Service("typeValidate")
+public class TypeValidate implements AuthenticationValidate {
+    @Override
+    public void validate(ExtAuthenticationToken extAuthenticationToken, BaseUserEntity baseUserEntity) {
+
+        CusInfo cusInfo = (CusInfo) baseUserEntity;
+        if (cusInfo == null || cusInfo.getStatus().equals(CusInfo.Status.DISABLE.getValue())
+                || cusInfo.getType().equals(CusInfo.Type.RegistUser.getValue())) {
+            throw new UnknownAccountException();
+        }
+    }
+}

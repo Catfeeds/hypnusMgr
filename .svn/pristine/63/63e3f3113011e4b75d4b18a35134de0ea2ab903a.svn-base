@@ -1,0 +1,189 @@
+seajs.use(['$', 'template',  'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox,  util) {
+        var activityId;
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    activityId = $("#activityId").val();
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    CoverpicHandler.init();
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                    EventHandler.loadProductList();
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                //
+                loadProductList: function(){
+                    DataHandler.findActivityProductList({activityId: activityId}, function (backData) {
+                        var html = template('template_productList', backData);
+                        $('#productList').html(html);
+                        $(window).triggerHandler('resize');
+                    });
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取活动商品列表
+                 * @param params
+                 * @param callback
+                 */
+                findActivityProductList: function (params, callback) {
+                    $.post(path + '/admin/specialSale/findActivityProductList', params, function (backData) {
+                        callback(backData);
+                    });
+                }
+            };
+        })();
+
+        /**
+        * 油站图片
+        */
+        var CoverpicHandler = (function () {
+            return {
+                /**
+                 * 计算图片宽高，进行等比例缩放，并计算居中值
+                 * @param result 图片信息
+                 * @param divWH  图片框宽高（正方形）
+                 * @returns {Array}
+                 */
+                initTempImg : function(result, divWH){
+                    var imgs = $("#panea_temp").find("img");
+                    var imgWH = [];
+                    $.each(imgs, function(i, item){
+                        var wh = {
+                            width: item.width,
+                            height: item.height
+                        };
+                        var temp;//比例值
+                        //重新等比例缩放图片
+                        if(wh.width >= wh.height){
+                            //宽长，高度需要调整，并计算好高度居中值
+                            temp = wh.width/divWH;
+                            wh.width = divWH;
+                            wh.height = wh.height/temp;
+                            var mid = (divWH - wh.height)/2;
+                            wh.mid = "margin-top: "+mid+"px; margin-bottom: "+mid+"px;";
+                        }else{
+                            //高长，宽度需要调整，并计算好宽度度居中值
+                            temp = wh.height/divWH;
+                            wh.height = divWH;
+                            wh.width = wh.width/temp;
+
+                            var mid = (divWH - wh.width)/2;
+                            wh.mid = "margin-left: "+mid+"px; margin-right: "+mid+"px;";
+                        }
+                        imgWH.push(wh);
+                    });
+                    return imgWH;
+                },
+                init: function () {
+                    $.get(path + "/admin/specialSale/getAttachments", {relId: activityId}, function (result) {
+                        var html = template("panea_temp_template", result);
+                        $("#panea_temp").html(html);
+                        setTimeout(function () {
+                            //隐藏的图片层，用于获取图片的真实宽高
+                            var wh = CoverpicHandler.initTempImg(result, 156);
+
+                            //初始化所有图片
+                            var itemContent = [];
+                            var headPath = $('#headPath').val();
+                            for (var i = 0; i < result.length; i++) {
+                                $.extend(result[i], wh[i]);
+
+                                if (headPath && headPath == result[i].id) { // 判断是否封面
+                                    itemContent.push("" +
+                                    "<div class='jd_box' style='width: 156px; height: 156px;'>" +
+                                    "<img src='" + result[i].url + "' style='width: " + result[i].width + "px; height: " + result[i].height + "px;" + result[i].mid + "' />" +
+                                        //"<img src='"  + result[i].url + "' style='width: 156px; height: 156px;' />" +
+                                    "<div class='cover' />" +
+                                    "</div>");
+                                } else {
+                                    itemContent.push("" +
+                                    "<div class='jd_box' style='width: 156px; height: 156px;'>" +
+                                    "<img src='" + result[i].url + "' style='width: " + result[i].width + "px; height: " + result[i].height + "px;" + result[i].mid + "' />" +
+                                        //"<img src='"  + result[i].url + "' style='width: 156px; height: 156px;' />" +
+                                    "</div>");
+                                }
+                            }
+
+                            var canshowNum = ($("div.imgDiv").outerWidth() - 86) / 230;
+                            canshowNum = Math.floor(canshowNum);
+                            //初始化面板对象
+                            panel = new BasePanel('#panea', {
+                                /**面板可视范围内显示的元素个数，如果展开后，
+                                 * 则是disItem = disItem * expanRow*/
+                                disItem: canshowNum,
+                                /**显示面板宽度*/
+                                /**面板里需要承载的html内容*/
+                                contentHtml: itemContent,
+                                /**是否显示展开按钮*/
+                                isExpan: false,
+                                /**是否自动展开*/
+                                isAutoExpan: false,
+                                /**展开后显示的行数*/
+                                expanRows: 1,
+                                /**箭头位置：top：顶部；middle：中间*/
+                                arrowAlign: 'middle',
+                                /**面板移动完成后事件*/
+                                onmoveend: function (pageNo) {
+                                }
+                            });
+                        }, 500);
+                    });
+                }
+            }
+        })();
+
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });
+
+function addSepcStr(arr){
+    for(var i = 0; i < arr.length; i++){
+        var spec = $.evalJSON(arr[i].specJson);
+        var str = "";
+        for(var o in spec){
+            str += "_" + spec[o];
+        }
+        arr[i].specStr = str.substr(1);
+    }
+}
+
+//金额验证
+function testMoney(ob){
+    if (!ob.value.match(/^[0-9]+(.[0-9]{0,2})?$/)) ob.value = ob.t_value; else ob.t_value = ob.value;
+    if (ob.value.match(/^[0-9]+(.[0-9]{0,2})?$/)) ob.o_value = ob.value;
+    if(ob.value == 'undefined'){
+        ob.value = '';
+    }
+}
+
+//正整数验证
+function testPositiveNumber(ob){
+    if(ob.value.length==1){ob.value=ob.value.replace(/[^1-9]/g,'')}else{ob.value=ob.value.replace(/\D/g,'')}
+    if(ob.value == 'undefined'){
+        ob.value = '';
+    }
+}

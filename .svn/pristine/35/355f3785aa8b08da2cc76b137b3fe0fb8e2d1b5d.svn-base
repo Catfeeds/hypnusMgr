@@ -1,0 +1,213 @@
+package com.catt.wfx.service.impl.base.settlementMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.couponMgr.CouponCus;
+import com.catt.wfx.repository.entity.couponMgr.CouponInfo;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountDetail;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopDetail;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRule;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRuleDetail;
+import com.catt.wfx.repository.form.customerMgr.CusAccountHandlerForm;
+import com.catt.wfx.repository.form.settlementMgr.BusinessHandlerBackData;
+import com.catt.wfx.repository.form.settlementMgr.BusinessHandlerForm;
+import com.catt.wfx.service.base.couponMgr.CouponCusBaseService;
+import com.catt.wfx.service.base.couponMgr.CouponInfoBaseService;
+import com.catt.wfx.service.base.settlementMgr.*;
+import com.catt.wfx.service.cusAccount.CusAccountHandlerService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 商家账户信息相关操作服务接口实现
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-2-16 15:39:26
+ */
+@Service("businessHandlerServiceImpl")
+public class BusinessHandlerServiceImpl implements BusinessHandlerService {
+
+    // 店主/主管规则服务
+    @Resource(name = "settlementShopRuleBaseServiceImpl")
+    private SettlementShopRuleBaseService ruleBaseService;
+
+    // 店主/主管规则详情服务
+    @Resource(name = "settlementShopRuleDetailBaseServiceImpl")
+    private SettlementShopRuleDetailBaseService ruleDetailBaseService;
+
+    // 代金券信息服务
+    @Resource(name = "couponInfoBaseServiceImpl")
+    private CouponInfoBaseService couponInfoBaseService;
+
+    // 用户代金券服务
+    @Resource(name = "couponCusBaseServiceImpl")
+    private CouponCusBaseService couponCusBaseService;
+
+    // 商家账户信息服务
+    @Resource(name = "settlementBusinessBaseServiceImpl")
+    private SettlementBusinessBaseService settlementBusinessBaseService;
+
+    // 用户账号资金相关操作服务
+    @Resource(name = "cusAccountHandlerServiceImpl")
+    private CusAccountHandlerService cusAccountHandlerService;
+
+    // 账户结算明细服务
+    @Resource(name = "settlementShopDetailBaseServiceImpl")
+    private SettlementShopDetailBaseService settlementShopDetailBaseService;
+
+    /**
+     * LOG
+     */
+    private final static org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(BusinessHandlerServiceImpl.class);
+
+    /**
+     * 补贴规则结算
+     *
+     * @param form
+     * @return
+     */
+    @Override
+    @Transactional
+    public BusinessHandlerBackData ruleSettlement(BusinessHandlerForm form) {
+        BusinessHandlerBackData backData = new BusinessHandlerBackData();
+
+        Long cusId = form.getCusId(); // 用户标识
+        Long ruleId = form.getRuleId(); // 规则标识
+        Double saleMoney = form.getSaleMoney(); // 销售金额，店主销售奖励或者主管管理奖励时必填
+        LOG.info("商家账户信息相关操作入参：{}", JsonUtils.toJson(form));
+
+        if (ruleId == null) {
+            LOG.info("无匹配的补贴规则");
+            return backData;
+        }
+
+        SettlementShopRule rule = ruleBaseService.find(ruleId);
+        // 获取规则对应的规则明细
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("ruleId", ruleId));
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.desc("salesStart"));
+        List<SettlementShopRuleDetail> ruleDetails = ruleDetailBaseService.findList(null, filters, orders);
+        SettlementShopRuleDetail ruleDetail = null;
+
+        if (SettlementShopRule.CusType.Shopkeeper.getValue().equals(rule.getCusType())
+                && (SettlementShopRule.Type.Register.getValue().equals(rule.getType()) ||
+                SettlementShopRule.Type.Invite.getValue().equals(rule.getType()))) { // 店主注册或邀请
+            if (CollectionUtil.isNotEmpty(ruleDetails)) {
+                ruleDetail = ruleDetails.get(0);
+            }
+        } else if (SettlementShopRule.CusType.Director.getValue().equals(rule.getCusType())
+                || (SettlementShopRule.CusType.Shopkeeper.getValue().equals(rule.getCusType())
+                && SettlementShopRule.Type.Sale.getValue().equals(rule.getType()))) {  // 主管管理或店主销售
+            for (SettlementShopRuleDetail detail : ruleDetails) {
+                if (saleMoney >= detail.getSalesStart()) { // 销售金额满足达到梯度
+                    ruleDetail = detail;
+                    break;
+                }
+            }
+        }
+
+        if (ruleDetail == null) {
+            LOG.info("规则：{}，查询不到满足条件的规则明细");
+            return backData;
+        }
+
+        // 初始化枚举值定义
+        CouponCus.Source couponSource = CouponCus.Source.ShopkeeperRegisterBonus; // 代金券来源，默认店主注册
+        CusAccountDetail.Type type = CusAccountDetail.Type.ShopkeeperRegisterBonus; // 交易类型，默认店主注册
+        SettlementShopDetail.SettlementType settlementType = SettlementShopDetail.SettlementType.RegisterBonus; // 交易类型，默认店主注册
+
+        if (SettlementShopRule.CusType.Shopkeeper.getValue().equals(rule.getCusType())) { // 店主
+            if (SettlementShopRule.Type.Register.getValue().equals(rule.getType())) { // 店主注册
+                couponSource = CouponCus.Source.ShopkeeperRegisterBonus;
+                type = CusAccountDetail.Type.ShopkeeperRegisterBonus;
+                settlementType = SettlementShopDetail.SettlementType.RegisterBonus;
+            } else if (SettlementShopRule.Type.Invite.getValue().equals(rule.getType())) { // 店主邀请
+                couponSource = CouponCus.Source.ShopkeeperInviteBonus;
+                type = CusAccountDetail.Type.ShopkeeperInviteBonus;
+                settlementType = SettlementShopDetail.SettlementType.InviteBonus;
+            } else if (SettlementShopRule.Type.Sale.getValue().equals(rule.getType())) { // 店主销售
+                couponSource = CouponCus.Source.ShopkeeperSaleBonus;
+                type = CusAccountDetail.Type.ShopkeeperSaleBonus;
+                settlementType = SettlementShopDetail.SettlementType.SaleBonus;
+            }
+        } else if (SettlementShopRule.CusType.Director.getValue().equals(rule.getCusType())) {  // 主管
+            couponSource = CouponCus.Source.LeaderMgrBonus;
+            type = CusAccountDetail.Type.LeaderMgrBonus;
+            settlementType = SettlementShopDetail.SettlementType.SaleBonus;
+        }
+
+        // 增加账户结算明细
+        SettlementShopDetail settlementShopDetail = new SettlementShopDetail();
+        settlementShopDetail.setCusId(cusId);
+        settlementShopDetail.setCusType(rule.getCusType()); // 客户类型
+        settlementShopDetail.setSettlementType(settlementType.getValue()); // 交易类型
+        settlementShopDetail.setRuleId(ruleId);
+        settlementShopDetail.setType(rule.getType());
+        settlementShopDetail.setCouponId(ruleDetail.getCouponId());
+        settlementShopDetail.setGiveMoney(ruleDetail.getRewardMoney());
+        settlementShopDetailBaseService.save(settlementShopDetail);
+        Long settlementShopDetailId = settlementShopDetail.getId();
+
+        if (SettlementShopRule.RewardType.Voucher.getValue().equals(ruleDetail.getRewardType())) { // 代金券
+            String couponIdStrs = ruleDetail.getCouponId(); // 代金券标识，多个以英文逗号分割
+            String[] couponIds = couponIdStrs.split(",");
+
+            Date receiveTime = new Date(); // 领取时间
+            Double totalFaceValue = NumberUtil.DOUBLE_ZERO; // 代金券总面额
+            Integer voucherNum = NumberUtil.INTEGER_ZERO; // 代金券数量
+            for (String couponIdStr : couponIds) {
+                CouponInfo couponInfo = couponInfoBaseService.find(Long.parseLong(couponIdStr));
+                //新增用户代金券
+                CouponCus couponCus = new CouponCus();
+                couponCus.setCusId(cusId);
+                couponCus.setCouponId(couponInfo.getId());
+                couponCus.setFaceValue(couponInfo.getFaceValue());
+                couponCus.setReceiveTime(receiveTime);
+                couponCus.setInvalidTime(DateUtil.addDays(receiveTime, couponInfo.getLimitDate())); // 失效时间 = 领取时间 + 有效时长
+                couponCus.setIsUse(PubEnum.YesOrNoEnum.NO.getValue());
+                couponCus.setSource(couponSource.getValue());
+                couponCusBaseService.save(couponCus);
+
+                //修改代金券发送数量
+                couponInfo.setSendNum(couponInfo.getSendNum() + 1); //发送数量
+                couponInfoBaseService.update(couponInfo);
+
+                totalFaceValue = NumberUtil.moneyAdd(couponInfo.getFaceValue(), totalFaceValue);
+                voucherNum += 1;
+            }
+            SettlementBusiness settlementBusiness = settlementBusinessBaseService.findSettlementBusiness4SelfSupport();
+            settlementBusiness.setVoucherNum(settlementBusiness.getVoucherNum() + voucherNum);
+            settlementBusiness.setVoucherMoney(NumberUtil.moneyAdd(settlementBusiness.getVoucherMoney(), totalFaceValue));
+            settlementBusinessBaseService.update(settlementBusiness);
+
+        } else if (SettlementShopRule.RewardType.Cash.getValue().equals(ruleDetail.getRewardType())) { // 现金
+            // 用户账号资金操作
+            Double rewardMoney = ruleDetail.getRewardMoney();
+            CusAccountHandlerForm cusAccountHandlerForm = new CusAccountHandlerForm(cusId, rewardMoney, type,
+                    settlementShopDetailId.toString());
+            cusAccountHandlerService.handleMoney(cusAccountHandlerForm);
+
+            SettlementBusiness settlementBusiness = settlementBusinessBaseService.findSettlementBusiness4SelfSupport();
+            settlementBusiness.setGiveMoney(NumberUtil.moneyAdd(settlementBusiness.getGiveMoney(), rewardMoney));
+            settlementBusinessBaseService.update(settlementBusiness);
+        }
+
+        backData.setShopDetailId(settlementShopDetailId);
+        return backData;
+    }
+
+}

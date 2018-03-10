@@ -1,0 +1,179 @@
+package com.catt.wfx.web.controller.guest.wechat;
+
+import com.catt.wfx.util.WeChatLocationCacheUtil;
+import com.catt.wfx.web.service.MessageHandlerService;
+import com.catt.common.module.wechat.pojo.EnumConstants;
+import com.catt.common.module.wechat.pojo.request.EventLocationMessage;
+import com.catt.common.module.wechat.pojo.request.EventMessage;
+import com.catt.common.module.wechat.pojo.request.EventSubscribeMessage;
+import com.catt.common.module.wechat.pojo.request.RequestMessage;
+import com.catt.common.module.wechat.pojo.response.ResponseMessage;
+import com.catt.common.module.wechat.pojo.response.ResponseTextMessage;
+import com.catt.common.module.wechat.service.api.js.JsTicketService;
+import com.catt.common.module.wechat.web.controller.base.AbstractWeChatBaseController;
+import com.catt.common.module.wechat.web.service.WxDESService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
+import static com.catt.wfx.web.controller.guest.wechat.WeChatIndexController.CTRL_NAME;
+
+/**
+ * @author Zhang zhongtao
+ * @version Ver 1.0
+ * @since JDK V1.8
+ */
+@Controller(CTRL_NAME)
+public class WeChatIndexController extends AbstractWeChatBaseController {
+    public static final String CTRL_NAME = "weChatIndexController";
+
+    @Resource(name = "wxApiJsTicketServiceImpl")
+    private JsTicketService jsTicketService;
+
+    @Resource(name = "messageHandlerServiceImpl")
+    private MessageHandlerService messageHandlerService;
+
+//    @Resource(name = "pubSetupBaseServiceImpl")
+//    private PubSetupBaseService pubSetupBaseService;
+
+    @Autowired
+    private WeChatLocationCacheUtil weChatLocationCacheUtil;
+
+    @Override
+    protected WxDESService initWxDESService() {
+        return getWxDESService();
+    }
+
+    @RequestMapping(value = {"/jsApi/ticket"}, method = RequestMethod.GET)
+    public Map getJsticket(String publicAccountId, HttpServletRequest request) {
+        String url = request.getRequestURL().append("?").append(request.getQueryString()).toString();
+        return jsTicketService.signature(publicAccountId, url);
+    }
+
+    /**
+     * 关注/取消关注事件
+     *
+     * @param message 关注/取消关注消息
+     * @return 消息响应
+     */
+    @Override
+    public ResponseMessage messageHandler(EventSubscribeMessage message) {
+        logger.debug(message.getEvent().getDesc());
+
+        String txtMsg = "感谢您的光临，很高兴为您服务！";
+
+//        PubSetup byCode = null;
+
+        switch (message.getEvent()) {
+            case subscribe:
+                messageHandlerService.subscribe(message.getFromUserName(), message.getPublicAccountId());
+//                byCode = pubSetupBaseService.findByCode(PubSetup.Code.wechatSubscribe);
+                break;
+            case unsubscribe:
+                messageHandlerService.unSubscribe(message.getFromUserName(), message.getPublicAccountId());
+//                byCode = pubSetupBaseService.findByCode(PubSetup.Code.wechatUnSubscribe);
+                break;
+            default:
+                break;
+        }
+
+//        if (byCode != null) {
+//            txtMsg = byCode.getName();
+//        }
+
+        ResponseTextMessage responseMessage = new ResponseTextMessage();
+        responseMessage.setMsgType(EnumConstants.MsgType.text);
+        responseMessage.setContent(txtMsg);
+        return responseMessage;
+    }
+
+    private ResponseMessage builderEventNews(EventMessage message) {
+        ResponseTextMessage responseMessage = new ResponseTextMessage();
+        responseMessage.setMsgType(EnumConstants.MsgType.text);
+        responseMessage.setContent(message.getEvent().getDesc() + "，消息");
+        return responseMessage;
+    }
+    //
+    private ResponseMessage builderRequestNews(RequestMessage message) {
+        ResponseTextMessage responseTextMessage = new ResponseTextMessage();
+        responseTextMessage.setMsgType(EnumConstants.MsgType.text);
+        responseTextMessage.setContent(message.getMsgType().getDesc() + "，消息");
+        return responseTextMessage;
+    }
+    //
+    @Override
+    public ResponseMessage messageHandler(EventLocationMessage message) {
+        ResponseMessage responseMessage = builderEventNews(message);
+        String content = message.getLatitude() + "," + message.getLongitude();
+        ResponseTextMessage responseTextMessage = (ResponseTextMessage) responseMessage;
+        Map<String, String> map = weChatLocationCacheUtil.put(message.getPublicAccountId(), message.getFromUserName(), message.getLatitude()+"", message.getLongitude()+"");
+//        responseTextMessage.setContent(responseTextMessage.getContent() + ",你的经纬度:" + content);
+        return null;
+    }
+//
+//    @Override
+//    public ResponseMessage messageHandler(EventMenuMessage message) {
+//        ResponseMessage responseMessage = builderEventNews(message);
+//        return responseMessage;
+//    }
+//
+//    @Override
+//    public ResponseMessage messageHandler(EventScanQRCodesMessage message) {
+//        ResponseMessage responseMessage = builderEventNews(message);
+//        return responseMessage;
+//    }
+//
+//    @Override
+//    public ResponseMessage messageHandler(EventSubscribeMessage message) {
+//        ResponseMessage responseMessage = builderEventNews(message);
+//        return responseMessage;
+//    }
+//
+//    @Override
+//    public ResponseMessage messageHandler(EventViewMessage message) {
+//        ResponseMessage responseMessage = builderEventNews(message);
+//        return responseMessage;
+//    }
+//
+//    @Override
+//    public ResponseMessage messageHandler(ImageMessage message) {
+//        ResponseMessage responseMessage = builderRequestNews(message);
+//        return responseMessage;
+//    }
+//
+//    @Override
+//    public ResponseMessage messageHandler(LinkMessage message) {
+//        ResponseMessage responseMessage = builderRequestNews(message);
+//        return responseMessage;
+//    }
+//
+//    @Override
+//    public ResponseMessage messageHandler(LocationMessage message) {
+//        ResponseMessage responseMessage = builderRequestNews(message);
+//        return responseMessage;
+//    }
+//
+//    @Override
+//    public ResponseMessage messageHandler(TextMessage message) {
+//        ResponseMessage responseMessage = builderRequestNews(message);
+//        return responseMessage;
+//    }
+//
+//    @Override
+//    public ResponseMessage messageHandler(VideoMessage message) {
+//        ResponseMessage responseMessage = builderRequestNews(message);
+//        return responseMessage;
+//    }
+//
+//    @Override
+//    public ResponseMessage messageHandler(VoiceMessage message) {
+//        ResponseMessage responseMessage = builderRequestNews(message);
+//        return responseMessage;
+//    }
+}

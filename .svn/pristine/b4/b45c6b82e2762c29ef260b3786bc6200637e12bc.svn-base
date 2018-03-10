@@ -1,0 +1,86 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderDetailDao;
+import com.catt.wfx.service.orderMgr.CusOrderDetailService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单详情服务接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-2-21 16:25:14
+ * @version V1.0
+ */
+@Service("cusOrderDetailServiceImpl")
+public class CusOrderDetailServiceImpl implements CusOrderDetailService {
+
+    //订单详情Dao
+    @Resource(name = "cusOrderDetailDaoImpl")
+    private CusOrderDetailDao cusOrderDetailDao;
+
+    //公共配置服务
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+
+    //公共配置服务
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    @Override
+    public List<Map> findDetailByOrderId(Long orderId) {
+        List<Map> productList = cusOrderDetailDao.findDetailByOrderId(orderId);
+        //获取图片访问地址
+        String filePath = pubConfigService.getFilePath();
+        for (Map product : productList){
+            this.putSpecDesc(product);
+            this.putRealFilePath(filePath, product, "headPath");
+        }
+        return productList;
+    }
+
+
+    /**
+     * 设置完整的文件路径(用于实体只保存附件表标识)
+     * @param filePath 文件访问地址（http://localhost:8080/wfxMgr/attachment）
+     * @param target 目标map
+     * @param key 保存附件表标识的字段名称
+     */
+    private void putRealFilePath(String filePath, Map target, String key) {
+        Long attachmentId = MapUtil.getLong(target, key);
+        if (attachmentId != null){
+            Attachment attachment = attachmentBaseService.find(attachmentId);
+            target.put(key, filePath + attachment.getPath());
+        }
+    }
+
+    /**
+     * 增加规格描述
+     * @param product 商品
+     */
+    private void putSpecDesc(Map product) {
+        String specJson = MapUtil.getString(product, "specJson");
+        String specDesc = "";
+        if (StringUtil.checkObj(specJson)){
+            Map<String, String> spec = JsonUtils.toObject(specJson, Map.class);
+            for (String key : spec.keySet()) {
+                specDesc += "_" + spec.get(key);
+            }
+            if (specDesc.length() > 0){
+                specDesc = specDesc.substring(1);
+            }
+        }
+        product.put("specDesc", specDesc);
+    }
+
+}

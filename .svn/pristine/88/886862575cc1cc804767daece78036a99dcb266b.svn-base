@@ -1,0 +1,14 @@
+package com.catt.wfx.service.impl.couponMgr;
+
+import com.catt.wfx.service.base.couponMgr.CouponRangeBaseService;
+import com.catt.wfx.service.couponMgr.CouponRangeService;
+import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
+
+@Service("couponRangeServiceImpl")
+public class CouponRangeServiceImpl implements CouponRangeService {
+
+    @Resource(name = "couponRangeBaseServiceImpl")
+    private CouponRangeBaseService couponRangeBaseService;
+
+}

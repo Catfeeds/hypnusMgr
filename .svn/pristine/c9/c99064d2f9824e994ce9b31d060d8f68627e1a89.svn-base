@@ -1,0 +1,158 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/1/6
+  Time: 14:22
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule2.jsp" %>
+    <title>特卖管理</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/addActivities.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/huodong.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/flipsnap.css"/>
+    <script type="text/javascript" src="${path}/resources/sea-modules/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script src="${path}/resources/admin/common/temDataGrid.js"></script>
+    <script type="text/javascript" src="${path}/resources/js/flipsnap.js"></script>
+    <script type="text/javascript" src="${path}/resources/js/common_ctr.js"></script>
+    <script type="text/javascript" src="${path}/resources/admin/js/specialSale/config.js"></script>
+    <script src="${path}/resources/admin/js/specialSale/addEdit.js" type="text/javascript"></script>
+</head>
+
+<body class="bg-gray-light">
+<section class="content-header">
+    <!-- 面包屑 -->
+    <ol class="breadcrumb">
+        <li><a><i class="fa fa-home"></i>主页</a></li>
+        <li><a href="${path}/admin//specialSale/index.html">特卖管理</a></li>
+        <c:if test="${entity.id != null}">
+            <li class="active">修改</li>
+        </c:if>
+        <c:if test="${entity.id == null}">
+            <li class="active">新增</li>
+        </c:if>
+    </ol>
+    <!-- /.面包屑 -->
+</section>
+<section class="content">
+    <div class="box box-solid">
+        <%--<div class="box-header with-border">--%>
+        <h1 class="tittle">基本信息</h1></span>
+        <%--</div>--%>
+        <div class="box-body">
+            <form id="dataForm" class="form-horizontal">
+                <input type="hidden" name="id" id="id" value="${entity.id}"/>
+                <input type="hidden" name="headPath" id="headPath" value="${entity.coverPath}"/>
+                <textarea style="display: none" id="descTemp">${entity.desc}</textarea>
+                <div class="form-group">
+                    <label for="name" class="control-label col-md-2 area">活动名称<font color="red">*</font>：</label>
+
+                    <div class="col-md-5 area">
+                        <input type="text" class="form-control" id="name" name="name" value="${entity.name}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="startTime" class="control-label col-md-2 area">活动时间<font color="red">*</font>：</label>
+                    <div class="col-md-2 area">
+                        <input type="text" class="form-control" id="startTime" name="startTime"
+                               value="<fmt:formatDate value="${entity.startTime}" pattern="yyyy-MM-dd HH:mm"/>"
+                               style="background:url(${path}/resources/images/ico_date.png) no-repeat right center #fff;"
+                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',
+                               minDate:'%y-%M-%d',maxDate:'#F{$dp.$D(\'endTime\')}'})"/>
+                    </div>
+
+                    <label for="endTime" class="control-label col-md-1 area">至</label>
+                    <div class="col-md-2 area">
+                        <input type="text" class="form-control" id="endTime" name="endTime"
+                               value="<fmt:formatDate value="${entity.endTime}" pattern="yyyy-MM-dd HH:mm"/>"
+                               style="background:url(${path}/resources/images/ico_date.png) no-repeat right center #fff;"
+                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',
+                               minDate:'#F{$dp.$D(\'startTime\') || %y-%M-%d}'})"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="box box-solid">
+        <h1 class="tittle">活动描述</h1>
+
+        <div class="userDetailMain">
+            <textarea name="desc" id="desc" style="width:100%;height:300px;"></textarea>
+        </div>
+    </div>
+    <div class="box box-solid">
+        <h1 class="tittle">
+            <span class="btnGrey" id="btn_coverpic_del">删除</span>
+            <span class="btnRed" id="btn_coverpic_save">上传图片</span>
+            <span class="btnRed" id="btn_coverpic_add">设为封面</span>上传图片活动图片<font style="color:grey;">(建议图片长宽比为: <font id="picRatio"></font>)</font>
+        </h1>
+
+        <div class="imgDiv">
+            <ul class="in_imgDiv" id='panea'></ul>
+        </div>
+        <div id='panea_temp' style="display: none;"></div>
+    </div>
+    <c:if test="${entity.id != null}">
+    <div class="box box-solid">
+        <h1 class="tittle">
+            <span class="btnGrey" id="btnDel">删除</span>
+            <span class="btnRed" id="btnEdit">修改</span>
+            <span class="btnRed" id="btnAdd">添加</span>添加活动商品
+        </h1>
+        <div class="box-body no-padding" style="min-height:100px">
+            <table class="datalistTable no">
+                <tr>
+                    <th width="40"><div class="tickAll xw_tickAll"></div></th>
+                    <th>商品名称</th>
+                    <th>分类</th>
+                    <th>剩余数量</th>
+                    <th>已销售</th>
+                </tr>
+                <tbody id="productList"></tbody>
+
+            </table>
+        </div>
+    </div>
+    </c:if>
+    <!-- 操作按钮 -->
+    <div class="box box-solid">
+        <div class="box-body">
+            <p class="pull-right">
+                <button type="button" id="submit" class="btn bg-maroon btn-sm" data-loading-text="Loading...">
+                    &nbsp;&nbsp;保&nbsp;&nbsp;存&nbsp;&nbsp;</button>
+                <a onclick="history.go(-1);" class="btn bg-gray btn-sm">&nbsp;&nbsp;取&nbsp;&nbsp;消&nbsp;&nbsp;</a>
+            </p>
+        </div>
+    </div>
+    <!-- /.操作按钮 -->
+    </div>
+    </div>
+</section>
+</body>
+
+<script type="text/html" id="template_productList">
+    {{each}}
+    <tr>
+        <td>
+            <span class="tick xw_tick"></span>
+            <input type="hidden" name="productId" value="{{$value.productId}}" param="param">
+            <input type="hidden" name="relId" value="{{$value.relId}}" param="param">
+        </td>
+        <td><span class="textBlue">{{$value.zhName}}</span></td>
+        <td><span class="borderRed">{{$value.cateName}}</span></td>
+        <td>{{$value.actsaleNum - $value.actsaleRealnum}}</td>
+        <td>{{$value.actsaleRealnum}}</td>
+    </tr>
+    {{/each}}
+</script>
+<script type="text/html" id="panea_temp_template">
+    {{each}}
+    <img src='{{$value.url}}' />
+    {{/each}}
+</script>
+</html>
+

@@ -1,0 +1,338 @@
+package com.catt.wfx.service.impl.settlementMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementShopRuleDao;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementShopRuleDetailDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.couponMgr.CouponInfo;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlan;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRule;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRuleDetail;
+import com.catt.wfx.repository.form.productMgr.RuleForm;
+import com.catt.wfx.service.base.couponMgr.CouponInfoBaseService;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementPlanBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementShopRuleBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementShopRuleDetailBaseService;
+import com.catt.wfx.service.settlementMgr.SettlementShopRuleService;
+import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 店主/主管规则服务接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/2/10
+ */
+@Service("settlementShopRuleServiceImpl")
+public class SettlementShopRuleServiceImpl implements SettlementShopRuleService {
+
+    @Resource(name = "settlementShopRuleBaseServiceImpl")
+    private SettlementShopRuleBaseService ruleBaseService;
+
+    @Resource(name = "settlementShopRuleDetailBaseServiceImpl")
+    private SettlementShopRuleDetailBaseService ruleDetailBaseService;
+
+    @Resource(name = "couponInfoBaseServiceImpl")
+    private CouponInfoBaseService couponInfoBaseService;
+
+    @Resource(name = "settlementShopRuleDaoImpl")
+    private SettlementShopRuleDao ruleDao;
+
+    // 系统全局设置服务接口
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+    // 店主/主管结算计划表服务接口
+    @Resource(name = "settlementPlanBaseServiceImpl")
+    private SettlementPlanBaseService settlementPlanBaseService;
+
+    @Resource(name = "settlementShopRuleDetailDaoImpl")
+    private SettlementShopRuleDetailDao settlementShopRuleDetailDao;
+
+    /**
+     * 保存店主/主管规则
+     *
+     * @param rule
+     * @param detailJson
+     */
+    @Override
+    @Transactional
+    public void save(SettlementShopRule rule, String detailJson) {
+        if (rule.getStatus() == PubEnum.YesOrNoEnum.YES.getValue() && !ruleDao.checkRule(rule)) {
+            throw BaseException.errorByErrInfo("补贴时间与已有补贴冲突");
+        }
+
+        List<SettlementShopRuleDetail> details = JsonUtils.toList(detailJson, SettlementShopRuleDetail.class);
+        Long ruleId = rule.getId();
+        if (StringUtil.checkObj(ruleId)) { // 修改
+            // 修改规则
+            SettlementShopRule settlementShopRule = ruleBaseService.find(ruleId);
+            Assert.notNull(settlementShopRule, "非法规则操作");
+            if (new Date().after(settlementShopRule.getStartTime())) {
+                throw BaseException.errorByErrInfo("此规则已生效并在使用中，不能再操作");
+            }
+
+            settlementShopRule.setType(rule.getType());
+            settlementShopRule.setStartTime(rule.getStartTime());
+            settlementShopRule.setEndTime(rule.getEndTime());
+            settlementShopRule.setStatus(rule.getStatus());
+            settlementShopRule.setCycle(rule.getCycle());
+            settlementShopRule.setLength(rule.getLength());
+            settlementShopRule.setRewardType(rule.getRewardType());
+            ruleBaseService.update(settlementShopRule);
+
+            // 删除规则对应的规则详情
+            settlementShopRuleDetailDao.deleteDetailByRuleId(ruleId);
+
+        } else { // 新增
+            SettlementShopRule ruleDb = ruleBaseService.save(rule);
+            ruleId = ruleDb.getId();
+        }
+
+        // 新增规则详情
+        for (SettlementShopRuleDetail detail : details) {
+            detail.setRuleId(ruleId);
+            detail.setCreatedId(rule.getCreatedId());
+            detail.setCreatedName(rule.getCreatedName());
+        }
+        ruleDetailBaseService.saveOrUpdate(details);
+
+        // 保存结算计划
+        this.saveSettlementPlan(ruleId);
+    }
+
+    /**
+     * 获取规则明细
+     *
+     * @param ruleId 规则标识
+     * @return
+     */
+    @Override
+    public Map getDetail(Long ruleId) {
+        SettlementShopRule rule = ruleBaseService.find(ruleId);
+        Map result = new HashMap<>();
+        result.put("rule", rule);
+
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("ruleId", ruleId));
+        List<SettlementShopRuleDetail> details = ruleDetailBaseService.findList(null, filters, null);
+        if (CollectionUtil.isNotEmpty(details)) {
+            List<Map> detailResult = new ArrayList<Map>();
+
+            if (SettlementShopRule.RewardType.Voucher.getValue().equals(rule.getRewardType())) { // 代金券
+                for (SettlementShopRuleDetail detail : details) {
+                    Map map = new HashMap<>();
+                    map.put("salesStart", detail.getSalesStart());
+                    List<Map> coupons = new ArrayList<>();
+
+                    String couponIdStrs = detail.getCouponId(); // 代金券标识，多个以英文逗号分割
+                    String[] couponIds = couponIdStrs.split(",");
+                    for (String couponIdStr : couponIds) {
+                        Long couponId = Long.parseLong(couponIdStr);
+                        CouponInfo info = couponInfoBaseService.find(couponId);
+                        Map couponMap = new HashMap<>();
+                        couponMap.put("couponId", info.getId());
+                        couponMap.put("couponName", info.getCouponName());
+                        couponMap.put("faceValue", info.getFaceValue());
+                        couponMap.put("limitDate", info.getLimitDate());
+                        coupons.add(couponMap);
+                    }
+                    map.put("coupons", coupons);
+                    detailResult.add(map);
+                }
+            } else if (SettlementShopRule.RewardType.Cash.getValue().equals(rule.getRewardType())) { // 现金
+                for (SettlementShopRuleDetail detail : details) {
+                    Map map = new HashMap<>();
+                    map.put("salesStart", detail.getSalesStart());
+                    map.put("rewardMoney", detail.getRewardMoney());
+                    detailResult.add(map);
+                }
+            }
+
+            result.put("details", detailResult);
+        }
+
+        return result;
+    }
+
+    /**
+     * 禁用
+     *
+     * @param ruleIds 规则标识数组
+     */
+    @Override
+    @Transactional
+    public void disable(Long[] ruleIds) {
+        List<SettlementShopRule> rules = ruleBaseService.findList(ruleIds);
+        for (SettlementShopRule rule : rules){
+            rule.setStatus(PubEnum.YesOrNoEnum.NO.getValue());
+            rule.setStopTime(new Date());
+        }
+        ruleBaseService.saveOrUpdate(rules);
+
+//        // 清空规则之前的结算计划（禁用时不能删除，因为使用中的可能已执行过了）
+//        this.deleteSettlementPlanByRuleId(rule.getId());
+    }
+
+    /**
+     * 启用
+     *
+     * @param ruleId 规则标识
+     */
+    @Override
+    @Transactional
+    public void enable(Long ruleId) {
+        SettlementShopRule rule = ruleBaseService.find(ruleId);
+        if (!ruleDao.checkRule(rule)) {
+            throw BaseException.errorByErrInfo("补贴时间与已有补贴冲突");
+        }
+        rule.setStatus(PubEnum.YesOrNoEnum.YES.getValue());
+        ruleBaseService.update(rule);
+
+//        // 保存结算计划（保存时才保存结算计划）
+//        this.saveSettlementPlan(ruleId);
+    }
+
+    /**
+     * 获取规则列表
+     *
+     * @param form     补贴规则表单
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getRulePage(RuleForm form, Pageable pageable) {
+        return ruleDao.getRulePage(form, pageable);
+    }
+
+    /**
+     * 删除规则
+     *
+     * @param ids 规则标识
+     */
+    @Override
+    @Transactional
+    public void delete(Long[] ids) {
+        List<SettlementShopRule> list = ruleBaseService.findList(ids);
+        for (SettlementShopRule rule : list) {
+            if (new Date().after(rule.getStartTime())) {
+                throw BaseException.errorByErrInfo("此规则已生效并在使用中，不能再操作");
+            }
+            ruleBaseService.delete(rule.getId());
+
+            // 删除规则对应的规则详情
+            List<Filter> filters = new ArrayList<Filter>();
+            filters.add(Filter.eq("ruleId", rule.getId()));
+            List<SettlementShopRuleDetail> details = ruleDetailBaseService.findList(null, filters, null);
+            if (CollectionUtil.isNotEmpty(details)) {
+                for (SettlementShopRuleDetail detail : details) {
+                    ruleDetailBaseService.delete(detail.getId());
+                }
+            }
+
+            // 清空规则之前的结算计划
+            this.deleteSettlementPlanByRuleId(rule.getId());
+        }
+    }
+
+    /**
+     * 保存结算计划
+     *
+     * @param ruleId
+     */
+    private void saveSettlementPlan(Long ruleId) {
+        // 清空规则之前的结算计划
+        this.deleteSettlementPlanByRuleId(ruleId);
+
+        SettlementShopRule rule = ruleBaseService.find(ruleId);
+        // 新增店主销售或者主管管理补贴时，添加结算计划数据
+        if (SettlementShopRule.CusType.Director.getValue().equals(rule.getCusType())
+                || SettlementShopRule.Type.Sale.getValue().equals(rule.getType())) {
+            // 重新生成结算计划
+            List<SettlementPlan> plans = getPlans(rule.getStartTime(), rule.getEndTime(), rule.getLength());
+            for (SettlementPlan plan : plans) {
+                plan.setTaskType(rule.getCusType());
+                plan.setTaskId(ruleId);
+            }
+            settlementPlanBaseService.saveOrUpdate(plans);
+        }
+    }
+
+    /**
+     * 通过规则标识清空规则对应的结算计划
+     *
+     * @param ruleId
+     */
+    private void deleteSettlementPlanByRuleId(Long ruleId) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("taskId", ruleId));
+        List<SettlementPlan> list = settlementPlanBaseService.findList(null, filters, null);
+        if (CollectionUtil.isNotEmpty(list)) {
+            for (SettlementPlan plan : list) {
+                settlementPlanBaseService.delete(plan);
+            }
+        }
+    }
+
+    /**
+     * 获取结算计划
+     *
+     * @param startDate 有效开始时间
+     * @param endDate   有效截止时间
+     * @param length    结算周期
+     * @return
+     */
+    private List<SettlementPlan> getPlans(Date startDate, Date endDate, Integer length) {
+        // 补贴奖励结算跨天数
+        Integer settlementDays = Integer.parseInt(pubSetupBaseService.getSetupByCode(PubSetup.Code.settlementDays));
+
+        List<SettlementPlan> plans = new ArrayList<>();
+        Calendar c = Calendar.getInstance();
+        c.setTime(startDate);
+
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+        c1.setTime(startDate);
+        c2.setTime(endDate);
+        while (c1.compareTo(c2) <= 0) {
+            SettlementPlan plan = new SettlementPlan();
+
+            c1.add(Calendar.DAY_OF_MONTH, length);
+            if (c1.compareTo(c2) <= 0) { // c1日期在c2之前或c1与c2相等
+                plan.setBeginTime(c.getTime());
+                plan.setEndTime(DateUtils.addDays(c1.getTime(), -1));
+                c.add(Calendar.DAY_OF_MONTH, length);
+            } else if (c1.compareTo(c2) > 0) { // c1日期在c2之后
+                plan.setBeginTime(c.getTime());
+                plan.setEndTime(c2.getTime());
+            }
+            plan.setDay(length);
+            plan.setRunDate(DateUtils.addDays(plan.getEndTime(), settlementDays));
+            plan.setRunState(SettlementPlan.RunState.ToDo.getValue());
+            plans.add(plan);
+        }
+
+        return plans;
+    }
+
+
+}

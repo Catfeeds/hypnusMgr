@@ -1,0 +1,72 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <%@include file="/common/headModule.jsp" %>
+    <title>代金券管理</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
+    <script src="${path}/resources/js/member.js" type="text/javascript"></script>
+    <script src="${path}/resources/admin/common/temDataGrid.js"></script>
+
+    <script src="${path}/resources/admin/js/couponMgr/checkCoupon.js"></script>
+</head>
+<body>
+<div class="wrapper" style="min-height:500px;">
+    <div class="searchDiv" style="margin:0;">
+        <div class="searchBar" style="margin:0;">
+            <div class="searchBox">
+                <span class="searchName">代金券名称：</span>
+                <input id="couponName" class="searchInputText" value="请输入代金券名称"
+                       onblur="if(this.value=='') {this.value='请输入代金券名称'};"
+                       onfocus="if(this.value=='请输入代金券名称'){this.value=''};this.onmouseout=''" style="width:130px;"/>
+            </div>
+            <span class="btnGrey" style="margin-left:5px;" id="resetBtn">重置</span>
+            <span class="btnRed" id="searchBtn">查询</span>
+
+        </div>
+    </div>
+    <input type="hidden" id="rangeType" value="${rangeType}"/>
+    <div class="userDetail" style="border:1px solid #e6e6e6;">
+        <table class="datalistTable no">
+            <thead>
+            <th width="40px">
+                <div class="tickAll xw_tickAll"></div>
+            </th>
+            <th>代金券名称</th>
+            <th>面值（元）</th>
+            <th>有效期</th>
+            </thead>
+            <tbody id="dataList">
+            </tbody>
+        </table>
+        <!--页码-->
+        <div class="pageBar" id="pageBar"></div>
+    </div>
+
+    <!-------->
+    <div class="popBtDiv">
+        <ul>
+            <li><a class="btnGrey" style=" margin-left:10px;" id="cancleBtn">返&nbsp;&nbsp;回</a></li>
+            <li><a class="btnRed" id="checkBtn">选&nbsp;&nbsp;择</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+
+<script type="text/html" id="template_dataList">
+    {{each}}
+    <tr>
+        <td><span class="tick xw_tick"></span></td>
+        <td><span class="textBlue">{{$value.couponName}}</span></td>
+        <td><span class="textRed">{{$value.faceValue}}</span></td>
+        <td>{{$value.limitDate}}天</td>
+        <input type="hidden" name="id" value="{{$value.id}}" param="param">
+        <input type="hidden" name="couponName" value="{{$value.couponName}}" param="param">
+        <input type="hidden" name="faceValue" value="{{$value.faceValue}}" param="param">
+        <input type="hidden" name="limitDate" value="{{$value.limitDate}}" param="param">
+    </tr>
+    {{/each}}
+</script>
+</html>

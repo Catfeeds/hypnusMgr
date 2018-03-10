@@ -1,0 +1,29 @@
+package com.catt.wfx.service.customerMgr;
+
+
+import java.util.Map;
+
+/**
+ * 用户实名认证服务接口
+ * 
+ * @author chen chusheng
+ * @date 2017-03-08 15:56:06
+ * @version V1.0
+ */
+public interface CusCertificationService {
+
+    /**
+     * 获取认证信息
+     * @param purpose 获取内容
+     * @param cusId 用户ID
+     * @return
+     */
+    Map getDetail(String purpose, Long cusId);
+
+    /**
+     * 提交实名认证申请
+     * @param params
+     * @return
+     */
+    void apply(Map<String, Object> params);
+}

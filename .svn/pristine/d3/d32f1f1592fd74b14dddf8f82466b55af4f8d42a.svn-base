@@ -1,0 +1,260 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    //退货单单标识
+                    var id = $('#id').val();
+                    if (id) {
+                        EventHandler.getReturnGoodsDetail();
+                    }
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+                    //审核
+                    $('#examineReturn').click(function () {
+                        //退货单单标识
+                        var id = $('#id').val();
+                        var status = $('#status').val();
+                            if (status == "1") {
+                                msgBox.exWindow.open({
+                                    title: '审核',
+                                    url: path + "/admin/orderMgr/cusOrderReturn/examine.html?id=" + id,
+                                    width: '500px',
+                                    height: '360px',
+                                    close: function (result) {
+                                        if (result) {
+                                            EventHandler.getReturnGoodsDetail();
+                                        }
+                                    }
+                                });
+                            } else {
+                                msgBox.tips("该退货单已审核");
+                                return;
+                            }
+
+                    });
+                    //收到退货
+                    $('#receiveGoods').click(function () {
+                       var status =  $('#status').val();
+
+                        if(status == "3"){
+                            //获取勾选的数据
+                            var aId = [];
+                            aId.push($('#id').val());
+
+                            msgBox.confirm({
+                                title: '收到退货',
+                                msg: '确定已收到用户的退货?',
+                                callback: function (btnType) {
+                                    if (btnType == 'ok') {
+                                        DataHandler.receiveGoods({
+                                            id: aId.join(',')
+                                        }, function (backData) {
+                                            if (backData.type == 'success') {
+                                                msgBox.tips("操作成功");
+                                                EventHandler.getReturnGoodsDetail();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }else{
+                            msgBox.tips("该退货单没有待收的货物")
+                        }
+
+                    });
+
+                    //退款
+                    $('#refund').click(function () {
+                        var id = $('#id').val();
+                        var status = $('#status').val();
+                            if (status == "4") {
+                                msgBox.exWindow.open({
+                                    title: '退款',
+                                    url: path + "/admin/orderMgr/cusOrderReturn/refund.html?id=" + id,
+                                    width: '500px',
+                                    height: '220px',
+                                    close: function (result) {
+                                        if (result) {
+                                            EventHandler.getReturnGoodsDetail();
+                                        }
+                                    }
+                                });
+                            } else {
+                                msgBox.tips("该退货单不能退款");
+                                return;
+                            }
+
+                    });
+
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+
+                //获取退货单信息
+                getReturnGoodsDetail: function () {
+                    DataHandler.getReturnGoodsDetail({
+                        id: $('#id').val()
+                    }, function (returnGoodsDetail) {
+                        if (returnGoodsDetail) {
+                            $('#returnCode').html(returnGoodsDetail.returnCode);
+                            $('#createDate').html(returnGoodsDetail.createDate);
+                            $('#orderCode').html(returnGoodsDetail.orderCode);
+                            $('#statusName').html(returnGoodsDetail.statusName);
+                            $('#status').val(returnGoodsDetail.status);
+                            $('#cusName').html(returnGoodsDetail.cusName);
+                            $('#cusMobile').html(returnGoodsDetail.cusMobile);
+                            $('#returnDesc').html(returnGoodsDetail.returnDesc);
+
+                            //判断是否审核
+                            if(returnGoodsDetail.auditResult){
+                                $('#auditResultName').html(returnGoodsDetail.auditResultName);
+                                $('#auditDesc').html(returnGoodsDetail.auditDesc);
+                            }else{
+                                $('#auditResultName').html("--");
+                                $('#auditDesc').html("--");
+                            }
+
+                            //商品信息列表
+                            var productList = returnGoodsDetail.productList;
+
+                            if(productList.length>0){
+                                var totalPayAmount = 0;
+                                var num = 0;
+                                for (var o in productList){
+                                    totalPayAmount = parseFloat(totalPayAmount)+parseFloat(productList[o].totalPayAmount);
+                                    num = parseInt(num)+parseInt(productList[0].num)
+                                }
+                                $('#num').html(num);
+                                $('#totalPayAmount').html(totalPayAmount);
+
+
+                                for (var o in productList){
+                                    var specDesc = productList[o].specDesc;
+                                    specDesc=specDesc.replace(/\"/g,"");
+                                    specDesc=specDesc.replace(/{/g,"").replace(/}/g,"");
+                                    productList[o].specDesc = specDesc;
+                                }
+
+                                var html = template('listTemp', productList);
+                                $('#list').html(html);
+                            }
+
+
+                            //处理进度列表
+                            var returnLogList = returnGoodsDetail.returnLogList;
+
+                            if (returnLogList.length > 0) {
+                                var html1 = template('logListTemp', returnLogList);
+                                $('#logList').html(html1);
+
+                            }
+
+                            //加载相关图片
+                            if (returnGoodsDetail.picList.length > 0) {
+                                CoverpicHandler.init(returnGoodsDetail.picList)
+                            }
+                        }
+
+                        setParenHei();
+                });
+               },
+                examineReturn: function (){
+
+                }
+            };
+        })();
+/** 数据处理器 */
+var DataHandler = (function () {
+    return {
+        /**
+         * 获取订单信息详情
+         * @param params
+         * @param callback
+         */
+        getReturnGoodsDetail: function (params, callback) {
+            $.post(path + '/admin/orderMgr/cusOrderReturn/getReturnGoodsDetail', params, function (backData) {
+                callback(backData);
+            });
+        },
+
+        /**
+         * 收到退货
+         * @param params  退货标识集合
+         * @param callback
+         */
+        receiveGoods: function (params, callback) {
+            $.post(path + '/admin/orderMgr/cusOrderReturn/receiveGoods', params, function (backData) {
+                callback(backData);
+            });
+        }
+    };
+})();
+
+/**
+ * 油站图片
+ */
+var CoverpicHandler = (function () {
+    return {
+        init: function (picList) {
+            //初始化所有图片
+            var itemContent = [];
+            for (var i = 0; i < picList.length; i++) {
+                itemContent.push("" +
+                    "<div class='jd_box'>" +
+                    "<img class='pic1' src='" + picList[i] + "' style='width: 100%; height: 100%;' />" +
+                        //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + result[i].fileName + "</div>" +
+                    "</div>");
+            }
+
+            var canshowNum = ($("div.imgDiv").outerWidth() - 86) / 230;
+            canshowNum = Math.floor(canshowNum);
+            //初始化面板对象
+            panel = new BasePanel('#panea', {
+                /**面板可视范围内显示的元素个数，如果展开后，
+                 * 则是disItem = disItem * expanRow*/
+                disItem: canshowNum,
+                /**显示面板宽度*/
+                /**面板里需要承载的html内容*/
+                contentHtml: itemContent,
+                /**是否显示展开按钮*/
+                isExpan: false,
+                /**是否自动展开*/
+                isAutoExpan: false,
+                /**展开后显示的行数*/
+                expanRows: 1,
+                /**箭头位置：top：顶部；middle：中间*/
+                arrowAlign: 'middle',
+                /**面板移动完成后事件*/
+                onmoveend: function (pageNo) {
+                }
+            });
+
+
+        }
+    }
+})();
+
+/** 页面入口 */
+$(function () {
+    InitHandler.init();
+});
+})
+;

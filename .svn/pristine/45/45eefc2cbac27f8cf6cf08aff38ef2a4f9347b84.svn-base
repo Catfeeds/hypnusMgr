@@ -1,0 +1,68 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.customerMgr.CusCartService;
+import org.junit.Test;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:
+ * Created by 2017-02-13
+ * author: yuanxingcheng
+ */
+public class CusCartServiceImplTest extends SpringTest{
+
+    //购物车服务
+    @Resource(name = "cusCartServiceImpl")
+    public CusCartService cusCartService;
+
+    /**
+     * 获取购物车商品列表（APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testFindAll() throws Exception {
+        List<Map> list = cusCartService.findAll(1L, null);
+        System.out.print("##############"+list);
+    }
+
+    /**
+     * 新增/修改购物车（APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testSaveCart() throws Exception {
+        cusCartService.saveCart(1L, "测试", null, 524112366137245696L, 5, null);
+        Assert.isTrue(true);
+    }
+
+    /**
+     * 删除购物车（APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testDeleteCart() throws Exception {
+        cusCartService.deleteCart(1L, 525105620223787008L);
+        Assert.isTrue(true);
+    }
+
+    /**
+     *  创建订单-初始化界面（APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetDataByCartToOrder() throws Exception {
+        Long[] cartIds = {525582681753255936l,525586741239742464l};
+        Map<String, Object> map = cusCartService.getDataByCartToOrder(1L, cartIds);
+        System.out.print("##############" + map);
+    }
+
+}

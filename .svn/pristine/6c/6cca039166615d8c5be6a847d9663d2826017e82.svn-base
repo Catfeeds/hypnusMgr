@@ -1,0 +1,58 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Chen ZhiYuan
+  Date: 2015/6/123
+--%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+
+<!DOCTYPE html >
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>选择商品</title>
+    <%@include file="/common/headModule.jsp" %>
+
+    <link rel="stylesheet" type="text/css" href="${path}/resources/safeMgr/css/shijianchanpin.css"/>
+    <link rel="stylesheet" href="${path}/resources/safeMgr/css/public.css" type="text/css"/>
+    <link rel="stylesheet" href="${path}/resources/safeMgr/css/user.css" type="text/css"/>
+    <script type="text/javascript" src="${path}/resources/safeMgr/js/pagecommon_ctr.js"></script>
+    <script type="text/javascript" src="${path}/resources/admin/js/productMgr/package/selectProduct.js"></script>
+</head>
+
+<body>
+<div class="pageMain" style="min-height: 100px;">
+    <div class="leftMain">
+        <div class="objBoxContB" style=" margin-bottom:0px;">
+            <div class="objBoxContBBody" style="background:#fff; padding:0px 0px 0;">
+                <div class="searchBar" style="position: relative; z-index: 3;">
+                    <span class="spanName">商品名称：</span>
+                    <div class="mohusearch" style="float: left; margin-left: 3px; margin-top: 3px;">
+                        <input id="zhName" class="searchSimpleInputb xw_searchInput" style="width: 120px" type="text">
+                    </div>
+                    <span class="spanName">分类：</span>
+                    <input type="hidden" id="cateId">
+                    <div class="mohusearch" style="float: left; margin-left: 3px; margin-top: 3px;">
+                        <input id="cateName" class="searchSimpleInputb xw_searchInput" type="text" readonly
+                               style="cursor: pointer;width:120px;background:url(${path}/resources/images/plus.png)
+                                       no-repeat right center #fff;" />
+
+                    </div>
+                    <ul class="toolBarList" style="margin-left:5px">
+                        <li><a href="javascript:void(0)" id="search">查询</a></li>
+                        <li><a href="javascript:void(0)" id="reset">重置</a></li>
+                        <li><a href="javascript:void(0)" id="select">选择</a></li>
+                        <li><a href="javascript:void(0)" id="cancel">返回</a></li>
+                    </ul>
+                </div>
+
+                <div class="datalistMain" style=" padding:0; overflow:hidden;">
+                    <table id="tableModule" iconCls="icon-save" pagination="true" rownumbers="false"
+                           style="width:100%;"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

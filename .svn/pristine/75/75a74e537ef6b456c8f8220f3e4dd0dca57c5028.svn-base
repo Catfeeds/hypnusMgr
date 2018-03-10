@@ -1,0 +1,48 @@
+package com.catt.wfx.repository.dao.specialSale;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.specialSale.ActivityInfo;
+
+import java.util.Map;
+
+/**
+ * 活动信息表Dao接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017-03-08 16:18:02
+ */
+public interface ActivityInfoDao extends BaseDao<ActivityInfo, Long> {
+
+    /**
+     * 获取特卖列表(微信商城接口)
+     *
+     * @param status   活动状态，1-进行中，2-未开始
+     * @param pageable
+     * @return
+     */
+    Page<Map> findPage4Wechat(Integer status, Pageable pageable);
+
+    /**
+     * 获取特卖商品(微信商城接口)
+     *
+     * @param id       活动标识
+     * @param pageable
+     * @return
+     */
+    Page<Map> getActivityProducts(Long id, Pageable pageable);
+
+    /**
+     * 获取活动信息列表
+     *
+     * @param name 活动名称
+     * @param timeStatus 活动时间状态
+     * @param pageable 分页信息
+     * @return
+     */
+    Page<Map> findPage(String name, Integer timeStatus, Pageable pageable);
+
+
+}

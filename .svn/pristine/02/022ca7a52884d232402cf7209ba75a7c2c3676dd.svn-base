@@ -1,0 +1,308 @@
+package com.catt.wfx.repository.entity.wechatReturn;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.Date;
+
+/**
+ * 退款订单实体类
+ * 
+ * @author 周明祥
+ * @date 2017-03-02 15:15:26
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_WECHAT_RETURN_ORDER")
+public class WechatReturnOrder extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	/** 退款状态-退款中 */
+	public static final int STATUS_REFUNDIN = 1;
+	/** 退款状态-支付成功 */
+	public static final int STATUS_SUCCESS = 2;
+	/** 退款状态-支付失败 */
+	public static final int STATUS_FAILED = 3;
+	
+	/**
+	 * <pre>
+	 * 支付订单号
+	 * 每次请求支付都应重新生成支付号
+	 * </pre>
+	 */
+	private String orderNo;
+	/**
+	 * <pre>
+	 * 支付方式
+	 * 枚举类型
+	 * </pre>
+	 */
+	private Integer payMode;
+	/**
+	 * <pre>
+	 * 总金额（单位：分）
+	 * </pre>
+	 */
+	private Long totalAmount;
+	/**
+	 * <pre>
+	 * 业务类型
+	 * 业务类型用于过滤后台支付事件处理器。
+	 * </pre>
+	 */
+	private String businessType;
+	/**
+	 * <pre>
+	 * 业务关联标识
+	 * 用于和业务数据关联
+	 * </pre>
+	 */
+	private String businessRel;
+	/**
+	 * <pre>
+	 * 业务参数（回调参数）
+	 * 业务参数用于在支付事件中传递业务数据。
+	 * </pre>
+	 */
+	private String businessParam;
+	/**
+	 * <pre>
+	 * 支付状态
+	 * 1-退款中，2-退款成功，3-退款失败
+	 * </pre>
+	 */
+	private Integer status;
+	/**
+	 * <pre>
+	 * 退款时间
+	 * 退款成功时有效
+	 * </pre>
+	 */
+	private Date returnTime;
+	/**
+	 * <pre>
+	 * 归档时间
+	 * </pre>
+	 */
+	private Date closeTime;
+	/**
+	 * <pre>
+	 * 归档方式
+	 * 1-后台查询
+	 * </pre>
+	 */
+	private Integer closeType;
+	/**
+	 * <pre>
+	 * 退款金额
+	 * </pre>
+	 */
+	private long returnAmount;
+	/**
+	 * <pre>
+	 * 退款单号
+	 * </pre>
+	 */
+	private String refundNo;
+
+	/**
+	 * <pre>
+	 * 退货单标识
+	 * </pre>
+	 */
+	private Long returnId;
+
+
+	@Column(name = "S_ORDER_NO", length = 64)
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
+
+	@Column(name = "I_PAY_MODE")
+	public Integer getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(Integer payMode) {
+		this.payMode = payMode;
+	}
+
+	@Column(name = "I_TOTAL_AMOUNT")
+	public Long getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Long totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	@Column(name = "S_BUSINESS_TYPE", length = 128)
+	public String getBusinessType() {
+		return businessType;
+	}
+
+	public void setBusinessType(String businessType) {
+		this.businessType = businessType;
+	}
+
+	@Column(name = "S_BUSINESS_REL", length = 64)
+	public String getBusinessRel() {
+		return businessRel;
+	}
+
+	public void setBusinessRel(String businessRel) {
+		this.businessRel = businessRel;
+	}
+
+	@Column(name = "S_BUSINESS_PARAM", length = 512)
+	public String getBusinessParam() {
+		return businessParam;
+	}
+
+	public void setBusinessParam(String businessParam) {
+		this.businessParam = businessParam;
+	}
+
+	@Column(name = "I_STATUS")
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	@Column(name = "D_RETURN_TIME")
+	public Date getReturnTime() {
+		return returnTime;
+	}
+
+	public void setReturnTime(Date returnTime) {
+		this.returnTime = returnTime;
+	}
+
+	@Column(name = "D_CLOSE_TIME")
+	public Date getCloseTime() {
+		return closeTime;
+	}
+
+	public void setCloseTime(Date closeTime) {
+		this.closeTime = closeTime;
+	}
+
+	@Column(name = "I_CLOSE_TYPE")
+	public Integer getCloseType() {
+		return closeType;
+	}
+
+	public void setCloseType(Integer closeType) {
+		this.closeType = closeType;
+	}
+
+	@Column(name = "I_RETURN_AMOUNT")
+	public long getReturnAmount() {
+		return returnAmount;
+	}
+
+	public void setReturnAmount(long returnAmount) {
+		this.returnAmount = returnAmount;
+	}
+
+	@Column(name = "S_REFUND_NO", length = 32)
+	public String getRefundNo() {
+		return refundNo;
+	}
+
+	public void setRefundNo(String refundNo) {
+		this.refundNo = refundNo;
+	}
+
+	@Column(name = "I_RETURN_ID")
+	public Long getReturnId() {
+		return returnId;
+	}
+
+	public void setReturnId(Long returnId) {
+		this.returnId = returnId;
+	}
+
+	/**
+	 * 在线支付方式<p><br>
+	 * 1-微信 2-余额
+	 */
+	public enum PayType {
+
+		/**
+		 * 微信
+		 */
+		WeChat(1, "微信"),
+		/**
+		 * 余额
+		 */
+		Balance(2, "余额");
+		/**
+		 * 枚举值
+		 */
+		private Integer value;
+
+		/**
+		 * 枚举中文
+		 */
+		private String name;
+
+		/**
+		 * 构造方法
+		 *
+		 * @param value 枚举值
+		 * @param name  枚举中文
+		 */
+		PayType(Integer value, String name) {
+			this.value = value;
+			this.name = name;
+		}
+
+		/**
+		 * 由数字得是否多实例枚举对象
+		 *
+		 * @param value 枚举值
+		 * @return 返回中文
+		 */
+		public static PayType getEnum(int value) {
+			PayType[] source = PayType.values();
+			for (int i = 0; i < source.length; i++) {
+				if (source[i].getValue() == value) {
+					return source[i];
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * 取值
+		 *
+		 * @return 返回枚举值
+		 */
+		public int getValue() {
+			return this.value;
+		}
+
+		/**
+		 * 取中文名称
+		 *
+		 * @return 返回枚举中文
+		 */
+		public String getName() {
+			return this.name;
+		}
+
+	}
+}
+

@@ -1,0 +1,54 @@
+package com.catt.wfx.service.basicConfig;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.entity.customerMgr.FactoryInfo;
+import com.catt.wfx.repository.form.customerMgr.FactoryInfoFrom;
+
+import java.util.Map;
+
+/**
+ * Description:厂家管理服务
+ * Created by 2017-10-20  14:39.
+ * author: Zhou mingxiang
+ */
+public interface FactoryInfoService {
+
+    /**
+     * 获取厂家信息列表
+     *
+     * @param factoryName 厂家名称
+     * @param pageable    分页
+     * @return
+     */
+    Page<Map> getFactoryInfoByPage(String factoryName, Pageable pageable);
+
+    /**
+     * 获取厂家信息
+     *
+     * @param id 厂家标识
+     * @return
+     */
+    FactoryInfo getFactoryInfoById(Long id);
+
+    /**
+     * 保存厂家信息
+     *
+     * @param factoryInfoFrom 厂家信息From
+     */
+    void save(FactoryInfoFrom factoryInfoFrom);
+
+    /**
+     * 修改厂家信息
+     *
+     * @param factoryInfoFrom 厂家信息From
+     */
+    void update(FactoryInfoFrom factoryInfoFrom);
+
+    /**
+     * 删除厂家信息
+     *
+     * @param ids 厂家标识集合
+     */
+    void delete(Long[] ids);
+}

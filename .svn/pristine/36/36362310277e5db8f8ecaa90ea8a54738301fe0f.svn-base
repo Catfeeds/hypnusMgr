@@ -1,0 +1,53 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/3/20
+  Time: 14:54
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>邀请好友</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/shezhi.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <!--手机观看保持比例-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+</head>
+
+<body style="background:#fff;">
+<div style="height:47px; background:#fff;"></div>
+<%--<div class="top header">--%>
+    <%--<button class="top-left" onClick="window.location='6-1-0shezhi.html';"><img class="top_btn_back" src="images/top_btn_back.png"></button>--%>
+    <%--<h1>邀请好友</h1>--%>
+<%--</div>--%>
+<img class="yaoqingPic" src="${path}/resources/images/yaoqing_pic.png">
+<p class="yaoqingma">邀请码：<span class="textRed">${entity.invitationNo}</span></p>
+<c:if test="${entity.rewardType == null}">
+    <p class="guize">邀请规则：<font class="textGray">将链接分享给好友，邀请好友开店吧。
+        </font></p>
+
+</c:if>
+<c:if test="${entity.rewardType != null}">
+    <p class="guize">邀请规则：<font class="textGray">将链接分享给好友，好友成功开店后，您将获得
+        <c:if test="${entity.rewardType == 1}">
+            ${entity.faceValue}元代金券
+        </c:if>
+        <c:if test="${entity.rewardType == 2}">
+            ${entity.rewardMoney}现金奖励
+        </c:if>
+        。</font></p>
+</c:if>
+
+
+<%--<div class="bottomBtnBox">--%>
+    <%--<!--<button onClick="window.location='addkaipiao.html';">新增开票信息</button>-->--%>
+    <%--<button onClick="window.location='6-1-3kaidiansongli.html';">邀&nbsp;请&nbsp;小&nbsp;伙&nbsp;伴</button>--%>
+<%--</div>--%>
+
+
+</body>
+</html>
+

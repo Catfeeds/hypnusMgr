@@ -1,0 +1,435 @@
+package com.catt.wfx.repository.dao.orderMgr.impl;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderReturnDao;
+import com.catt.wfx.repository.data.comEnum.DateDimension;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturn;
+import com.catt.wfx.repository.form.orderMgr.CusOrderReturnFrom;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 退货单Dao接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:35
+ * @version V1.0
+ */
+@Repository("cusOrderReturnDaoImpl")
+public class CusOrderReturnDaoImpl extends BaseDaoImpl<CusOrderReturn, Long>
+		implements CusOrderReturnDao {
+	/**
+	 * 获取我的退货列表（分页）
+	 *
+	 * @param cusId    用户标识
+	 * @param status   单据状态
+	 * @param pageable
+	 * @return
+	 */
+	public Page<Map> findReturnGoodsByPage(Long cusId, Integer status, Pageable pageable){
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+		sql.append(" t1.I_ID AS \"id\", ");
+		sql.append(" t1.S_RETURN_CODE AS \"returnCode\", ");
+		sql.append(" t1.I_RETURN_TOTAL_AMOUNT AS \"returnTotalAmount\", ");
+		sql.append(" t1.I_STATUS AS \"status\", ");
+		sql.append(" t1.D_CREATE_DATE AS \"createDate\", ");
+		sql.append(" t1.S_RETURN_REASON AS \"returnReason\", ");
+		sql.append(" t1.I_ORDER_ID AS \"orderId\", ");
+		sql.append(" t1.S_ORDER_CODE AS \"orderCode\", ");
+		sql.append(" t2.S_PRODUCT_NAME AS \"productName\", ");
+		sql.append(" t2.S_SPEC_JSON AS \"specDesc\", ");
+		sql.append(" t2.S_HEAD_PATH AS \"headPath\", ");
+		sql.append(" t2.I_PRICE AS \"price\", ");
+		sql.append(" t2.I_NUM AS \"num\" ");
+		sql.append(" FROM T_CUS_ORDER_RETURN t1");
+		sql.append(" LEFT JOIN T_CUS_ORDER_RETURN_DETAIL t2 ON t1.I_ID = t2.I_RETURN_ID");
+		sql.append(" WHERE 1=1 ");
+		Map param = new HashMap<>();
+
+		if(StringUtil.checkObj(cusId)){
+			sql.append(" AND t1.I_CUS_ID = :cusId");
+			param.put("cusId", cusId);
+		}
+
+		if(StringUtil.checkObj(status)){
+			sql.append(" AND t1.I_STATUS = :status");
+			param.put("status", status);
+		}
+
+		sql.append(" ORDER BY t1.D_CREATE_DATE DESC");
+		return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+	}
+
+
+	/**
+	 * 获取退货单详情(APP)
+	 *
+	 * @param id 退货单标识
+	 * @return
+	 */
+	public List<Map> findReturnGoodsDetail4App(Long id){
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+		sql.append(" t1.I_ID AS \"id\", ");
+		sql.append(" t1.S_RETURN_CODE AS \"returnCode\", ");
+		sql.append(" t1.I_RETURN_TOTAL_AMOUNT AS \"returnTotalAmount\", ");
+		sql.append(" t1.I_STATUS AS \"status\", ");
+		sql.append(" t1.D_CREATE_DATE AS \"createDate\", ");
+		sql.append(" t1.S_RETURN_REASON AS \"returnReason\", ");
+		sql.append(" t1.I_AUDIT_RESULT AS \"auditResult\", ");
+		sql.append(" t1.S_AUDIT_DESC AS \"auditDesc\", ");
+		sql.append(" t1.I_ORDER_ID AS \"orderId\", ");
+		sql.append(" t1.S_ORDER_CODE AS \"orderCode\", ");
+		sql.append(" t1.S_RETURN_DESC AS \"returnDesc\", ");
+		sql.append(" t1.S_LOGISTICS_CODE AS \"logisticsCode\", ");
+		sql.append(" t1.I_LOGISTICS_TYPE AS \"logisticsType\", ");
+		sql.append(" t1.I_CUS_ID AS \"cusId\", ");
+		sql.append(" t2.I_ORDER_DETAIL_ID AS \"orderDetailId\", ");
+		sql.append(" t2.S_PRODUCT_NAME AS \"productName\", ");
+		sql.append(" t2.S_SPEC_JSON AS \"specDesc\", ");
+		sql.append(" t2.S_HEAD_PATH AS \"headPath\", ");
+		sql.append(" t2.I_PRICE AS \"price\", ");
+		sql.append(" t2.I_NUM AS \"num\" ");
+		sql.append(" FROM T_CUS_ORDER_RETURN t1");
+		sql.append(" LEFT JOIN T_CUS_ORDER_RETURN_DETAIL t2 ON t1.I_ID = t2.I_RETURN_ID");
+		sql.append(" WHERE 1=1 ");
+		Map param = new HashMap<>();
+
+		if(StringUtil.checkObj(id)){
+			sql.append(" AND t1.I_ID = :id");
+			param.put("id", id);
+		}
+
+		return this.findListBySql(sql.toString(), param, Map.class);
+	}
+
+	@Override
+	public Map getSingleGoods(Long id) {
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+		sql.append(" t.S_PRODUCT_NAME AS \"productName\", ");
+		sql.append(" t.I_SALES_PRICE AS \"salesPrice\", ");
+		sql.append(" t.I_NUM AS \"num\", ");
+		sql.append(" t.I_ID AS \"id\", ");
+		sql.append(" t.I_PROFIT AS \"profit\", ");
+		sql.append(" t.S_HEAD_PATH AS \"headPath\" ");
+		sql.append(" FROM T_CUS_ORDER_DETAIL t ");
+		sql.append(" WHERE 1=1 ");
+
+		Map param = new HashMap<>();
+
+		if (StringUtil.checkObj(id)) {
+			sql.append(" AND t.I_ID = :id");
+			param.put("id", id);
+		}
+		List<Map> list = this.findListBySql(sql.toString(), param, Map.class);
+		if (list.size() > 0){
+			return list.get(0);
+		}
+		return null;
+	}
+
+
+	/**
+	 * 获取退货单详情
+	 *
+	 * @param id 退货单标识
+	 * @return
+	 */
+	public List<Map> getReturnGoodsDetail(Long id){
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+		sql.append(" t1.I_ID AS \"id\", ");
+		sql.append(" t1.S_RETURN_CODE AS \"returnCode\", ");
+		sql.append(" t1.I_RETURN_TOTAL_AMOUNT AS \"returnTotalAmount\", ");
+		sql.append(" t1.I_STATUS AS \"status\", ");
+		sql.append(" t1.D_CREATE_DATE AS \"createDate\", ");
+		sql.append(" t1.S_RETURN_REASON AS \"returnReason\", ");
+		sql.append(" t1.I_AUDIT_RESULT AS \"auditResult\", ");
+		sql.append(" t1.S_AUDIT_DESC AS \"auditDesc\", ");
+		sql.append(" t1.I_ORDER_ID AS \"orderId\", ");
+		sql.append(" t1.S_ORDER_CODE AS \"orderCode\", ");
+		sql.append(" t1.S_RETURN_DESC AS \"returnDesc\", ");
+		sql.append(" t1.S_LOGISTICS_CODE AS \"logisticsCode\", ");
+		sql.append(" t1.I_LOGISTICS_TYPE AS \"logisticsType\", ");
+		sql.append(" t2.S_NAME AS \"cusName\", ");
+		sql.append(" t2.S_MOBILE AS \"cusMobile\" ");
+		sql.append(" FROM T_CUS_ORDER_RETURN t1");
+		sql.append(" LEFT JOIN T_CUS_INFO t2 ON t1.I_CUS_ID = t2.I_ID");
+		sql.append(" WHERE 1=1 ");
+		Map param = new HashMap<>();
+
+		if(StringUtil.checkObj(id)){
+			sql.append(" AND t1.I_ID = :id");
+			param.put("id", id);
+		}
+
+		return this.findListBySql(sql.toString(), param, Map.class);
+	}
+
+	/**
+	 * 获取退货列表
+	 *
+	 * @param cusOrderReturnFrom   退货from
+	 * @param pageable
+	 * @return
+	 */
+	public Page<Map> getReturnGoodsByPage(CusOrderReturnFrom cusOrderReturnFrom, Pageable pageable){
+		String returnUser = cusOrderReturnFrom.getReturnUser();
+		Integer status = cusOrderReturnFrom.getStatus();
+		Date startTime  = cusOrderReturnFrom.getStartTime();
+		Date endTime = cusOrderReturnFrom.getEndTime();
+		Long factoryId = cusOrderReturnFrom.getFactoryId();
+
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+		sql.append(" t1.I_ID AS \"id\", ");
+		sql.append(" t1.S_RETURN_CODE AS \"returnCode\", ");
+		sql.append(" t1.I_RETURN_TOTAL_AMOUNT AS \"returnTotalAmount\", ");
+		sql.append(" t1.I_STATUS AS \"status\", ");
+		sql.append(" t1.D_CREATE_DATE AS \"createDate\", ");
+		sql.append(" t2.S_PRODUCT_NAME AS \"productName\", ");
+		sql.append(" t2.S_SPEC_JSON AS \"specDesc\", ");
+		sql.append(" t2.I_NUM AS \"num\", ");
+		sql.append(" t3.S_NAME AS \"name\", ");
+		sql.append(" t3.S_MOBILE AS \"mobile\" ");
+		sql.append(" FROM T_CUS_ORDER_RETURN t1");
+		sql.append(" LEFT JOIN T_CUS_ORDER_RETURN_DETAIL t2 ON t1.I_ID = t2.I_RETURN_ID");
+		sql.append(" LEFT JOIN T_CUS_INFO t3 ON t1.I_CUS_ID = t3.I_ID");
+		sql.append(" WHERE 1=1 ");
+		Map param = new HashMap<>();
+
+		//查询用户昵称或者手机号
+		if (StringUtil.isNotBlank(returnUser)) {
+			sql.append(" AND (t3.S_NAME like (:returnUser)");
+			sql.append(" OR t3.S_MOBILE like (:returnUser))");
+			param.put("returnUser", returnUser + "%");
+		}
+		if(StringUtil.checkObj(status)){
+			sql.append(" AND t1.I_STATUS = :status");
+			param.put("status", status);
+		}
+		if (StringUtil.checkObj(startTime)) {
+			sql.append(" AND t1.D_CREATE_DATE >= :startTime");
+			param.put("startTime", startTime);
+		}
+
+		if (StringUtil.checkObj(endTime)) {
+			sql.append(" AND t1.D_CREATE_DATE <= :endTime");
+			param.put("endTime", endTime);
+		}
+
+		if (factoryId != null){
+			sql.append(" AND t2.I_FACTORY_ID = :factoryId");
+			param.put("factoryId", factoryId);
+		}
+
+		sql.append(" ORDER BY t1.D_CREATE_DATE DESC");
+		return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+	}
+
+	/**
+	 * 获取退款相关信息（订单支付、退款详细信息）
+	 *
+	 * @param returnId 退货单标识
+	 * @return
+	 */
+	 public List<Map> getReturnGoodsAndPayInfo(Long returnId){
+		 StringBuffer sql = new StringBuffer();
+		 sql.append(" SELECT ");
+		 sql.append(" t1.I_ID AS \"id\", ");
+		 sql.append(" t1.I_ORDER_ID AS \"orderId\", ");
+		 sql.append(" t1.I_STATUS AS \"status\", ");
+		 sql.append(" t1.I_CUS_ID AS \"cusId\", ");
+		 sql.append(" t1.I_RETURN_TOTAL_AMOUNT AS \"returnTotalAmount\", ");
+		 sql.append(" t3.S_TRADE_NO AS \"tradeNo\", ");
+		 sql.append(" t3.I_PAY_TYPE AS \"payType\", ");
+		 sql.append(" t3.I_RECHARGE_MONEY AS \"rechargeMoney\", ");
+		 sql.append(" t3.I_PAY_MONEY AS \"payMoney\" ");
+		 sql.append(" FROM T_CUS_ORDER_RETURN t1");
+		 sql.append(" LEFT JOIN T_CUS_ORDER_PAY t3 ON t1.I_ORDER_ID = t3.I_ORDER_ID");
+		 sql.append(" WHERE 1=1 ");
+		 Map param = new HashMap<>();
+
+		 if(StringUtil.checkObj(returnId)){
+			 sql.append(" AND t1.I_ID = :returnId");
+			 param.put("returnId", returnId);
+		 }
+		 return this.findListBySql(sql.toString(), param, Map.class);
+	 }
+
+	/**
+	 * 获取订单对应的退货金额总和
+	 *
+	 * @param orderId
+	 * @return
+	 */
+	public Map getReturnTotalByOrderId(Long orderId){
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+		sql.append(" SUM(t1.I_RETURN_TOTAL_AMOUNT) AS \"returnTotalAmount\" ");
+		sql.append(" FROM T_CUS_ORDER_RETURN t1");
+		sql.append(" WHERE 1=1 ");
+		Map param = new HashMap<>();
+
+		if(StringUtil.checkObj(orderId)){
+			sql.append(" AND t1.I_ORDER_ID = :orderId");
+			param.put("orderId", orderId);
+		}
+
+		sql.append(" AND t1.I_STATUS = :status");
+		param.put("status", CusOrderReturn.Status.Finish.getValue());
+
+		List<Map> mapList = this.findListBySql(sql.toString(), param, Map.class);
+
+		Map map = new HashMap<>();
+		if(mapList != null && mapList.size()>0){
+			map = mapList.get(0);
+		}
+		return map;
+	}
+
+
+	/**
+	 * 获取退款订单对应的店主利润
+	 *
+	 * @param returnId
+	 * @return
+	 */
+	public Map getprofitByReturnId(Long returnId){
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+		sql.append(" t2.I_NUM AS \"num\", ");
+        sql.append(" t3.I_NUM AS \"totalNum\", ");
+        sql.append(" t3.I_PROFIT AS \"profit\", ");
+        sql.append(" t3.S_REBATE_JSON AS \"rebateJson\" ");
+        sql.append(" FROM T_CUS_ORDER_RETURN_DETAIL t2 ");
+		sql.append(" LEFT JOIN T_CUS_ORDER_DETAIL t3 ON t2.I_ORDER_DETAIL_ID = t3.I_ID");
+		sql.append(" WHERE 1=1 ");
+		Map param = new HashMap<>();
+		if(StringUtil.checkObj(returnId)){
+			sql.append(" AND t2.I_RETURN_ID = :returnId");
+			param.put("returnId", returnId);
+		}
+		List<Map> mapList = this.findListBySql(sql.toString(), param, Map.class);
+
+		Map map = new HashMap<>();
+		if(mapList != null && mapList.size()>0){
+			map = mapList.get(0);
+		}
+		return map;
+	}
+
+	/**
+	 * 获取统计时间范围内的订单退款金额
+	 *
+	 * @param startCreateDate 统计开始时间
+	 * @param endCreateDate   统计结束时间
+	 * @param isAgent          true:只统计代理商订单 false:统计所有订单
+     * @return
+	 */
+	@Override
+	public Double getReturnAmount(Date startCreateDate, Date endCreateDate, boolean isAgent) {
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT");
+		sql.append(" IFNULL(SUM(t.I_RETURN_TOTAL_AMOUNT), 0) AS \"returnAmount\"");
+		sql.append(" FROM T_CUS_ORDER_RETURN t");
+		sql.append(" INNER JOIN T_CUS_ORDER t1 ON t.I_ORDER_ID = t1.I_ID");
+		sql.append(" WHERE t.I_DEL_FLAG = :delFlag");
+		sql.append(" AND t.I_STATUS = :status");
+		sql.append(" AND t1.D_CREATE_DATE >= :startDate");
+		sql.append(" AND t1.D_CREATE_DATE <= :endDate");
+
+		Map param = new HashMap<>();
+		param.put("delFlag", PubEnum.YesOrNoEnum.NO.getValue());
+		param.put("status", CusOrderReturn.Status.Finish.getValue());
+		param.put("startDate", startCreateDate);
+		param.put("endDate", endCreateDate);
+
+
+        if (isAgent){
+            sql.append(" AND t1.I_ORDER_TYPE = :orderType ");
+            param.put("orderType", CusOrder.OrderType.Distribution.getValue());
+        }
+
+		List<Map> list = this.findListBySql(sql.toString(), param, Map.class);
+		if (CollectionUtil.isNotEmpty(list)) {
+			return MapUtil.getDouble(list.get(0), "returnAmount");
+		}
+
+		return NumberUtil.DOUBLE_ZERO;
+	}
+
+	/**
+	 * 退款金额统计
+	 *
+	 * @param startCreateDate 统计开始时间
+	 * @param endCreateDate   统计结束时间
+	 * @param type            统计周期
+	 * @param isAgent       true:只统计代理商订单 false:统计所有订单
+     * @return
+	 */
+	@Override
+	public List<Map> returnAmountStat(Date startCreateDate, Date endCreateDate, DateDimension type, boolean isAgent) {
+		StringBuilder sql = new StringBuilder();
+		Map params = new HashMap<>();
+		params.put("delFlag", PubEnum.YesOrNoEnum.NO.getValue());
+		params.put("status", CusOrderReturn.Status.Finish.getValue());
+		params.put("startCreateDate", startCreateDate);
+		params.put("endCreateDate", endCreateDate);
+
+		switch (type) {
+			case DAY:
+				sql.append(" SELECT");
+				sql.append(" DATE_FORMAT(t1.D_CREATE_DATE, '%Y-%m-%d') AS time,"); // 统计日期
+				sql.append(" IFNULL(SUM(t.I_RETURN_TOTAL_AMOUNT), 0) AS \"returnAmount\""); // 退款金额
+				sql.append(" FROM T_CUS_ORDER_RETURN t");
+				sql.append(" INNER JOIN T_CUS_ORDER t1 ON t.I_ORDER_ID = t1.I_ID");
+				sql.append(" WHERE t.I_DEL_FLAG = :delFlag");
+				sql.append(" AND t.I_STATUS = :status");
+				sql.append(" AND t1.D_CREATE_DATE >= :startCreateDate");
+				sql.append(" AND t1.D_CREATE_DATE <= :endCreateDate");
+                if (isAgent){
+                    sql.append(" AND t1.I_ORDER_TYPE = :orderType ");
+                    params.put("orderType", CusOrder.OrderType.Distribution.getValue());
+                }
+				sql.append(" GROUP BY DATE_FORMAT(t1.D_CREATE_DATE, '%Y-%m-%d')");
+				break;
+			case MONTH:
+				sql.append(" SELECT");
+				sql.append(" DATE_FORMAT(t1.D_CREATE_DATE, '%Y%m') AS time,"); // 统计日期
+				sql.append(" IFNULL(SUM(t.I_RETURN_TOTAL_AMOUNT), 0) AS \"returnAmount\""); // 退款金额
+				sql.append(" FROM T_CUS_ORDER_RETURN t");
+				sql.append(" INNER JOIN T_CUS_ORDER t1 ON t.I_ORDER_ID = t1.I_ID");
+				sql.append(" WHERE t.I_DEL_FLAG = :delFlag");
+				sql.append(" AND t.I_STATUS = :status");
+				sql.append(" AND t1.D_CREATE_DATE >= :startCreateDate");
+				sql.append(" AND t1.D_CREATE_DATE <= :endCreateDate");
+                if (isAgent){
+                    sql.append(" AND t1.I_ORDER_TYPE = :orderType ");
+                    params.put("orderType", CusOrder.OrderType.Distribution.getValue());
+                }
+				sql.append(" GROUP BY DATE_FORMAT(t1.D_CREATE_DATE, '%Y%m')");
+				break;
+			case YEAR:
+				break;
+			default:
+				break;
+		}
+
+		return this.findListBySql(sql.toString(), params, Map.class);
+	}
+}

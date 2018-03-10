@@ -1,0 +1,19 @@
+package com.catt.wfx.repository.dao.settlementMgr.impl;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementPushRecordDao;
+import com.catt.wfx.repository.entity.customerMgr.SettlementPushRecord;
+import org.springframework.stereotype.Repository;
+
+/**
+ * 提成/返利结算记录表Dao接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-08-22 15:12:48
+ * @version V1.0
+ */
+@Repository("settlementPushRecordDaoImpl")
+public class SettlementPushRecordDaoImpl extends BaseDaoImpl<SettlementPushRecord, Long>
+		implements SettlementPushRecordDao {
+
+}

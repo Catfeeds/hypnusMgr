@@ -1,0 +1,69 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                },
+
+
+                /** 初始化界面  */
+                initPage: function () {
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $("#extracts").click(function(){
+                        EventHandler.extracts();
+                    });
+
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                //打款
+                extracts : function(){
+                    var status = $("#status").val();
+                    var id = $("#id").val();
+                    if(status != 1){
+                        msgBox.tips("已打款完成，不能再打款");
+                        return;
+                    }
+                    msgBox.exWindow.open({
+                        title: '打款',
+                        url: path + "/admin/extractOrder/extract/" + id,
+                        width: '600px',
+                        height: '370px',
+                        close: function (result) {
+                            if (result) {
+                                window.location.href = path + "/admin/extractOrder/index";
+                            }
+                        }
+                    });
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

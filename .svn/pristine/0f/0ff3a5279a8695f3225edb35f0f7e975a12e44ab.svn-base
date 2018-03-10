@@ -1,0 +1,72 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: xiazanyi
+  Date: 2017/3/8
+  Time: 下午4:12
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>收货地址</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/dizhi.css"/>
+    <%--<script type="text/javascript" src="${path}/resources/js/public.js"></script>--%>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/personal/addressList.js?ver=123"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+</head>
+
+<body ontouchstart>
+    <%--下拉刷新控件--%>
+    <div id="containDiv" style="background:#f2f2f2;height: 100%;overflow: auto;width: 100%" class="kd-weui-refresh-container kd-overflow-auto">
+        <div class="weui-pull-to-refresh-layer">
+            <div class="pull-to-refresh-arrow"></div> <!-- 上下拉动的时候显示的箭头 -->
+            <div class="pull-to-refresh-preloader"></div> <!-- 正在刷新的菊花 -->
+            <div class="down">下拉刷新</div><!-- 下拉过程显示的文案 -->
+            <div class="up">释放刷新</div><!-- 下拉超过50px显示的文案 -->
+            <div class="refresh">正在刷新...</div><!-- 正在刷新时显示的文案 -->
+        </div>
+        <div class="dizhiBox">
+            <ul id="container">
+
+            </ul>
+        </div>
+        <%--滚动刷新控件--%>
+        <div class="weui-infinite-scroll" id="scrollControl">
+            <div class="infinite-preloader"></div><!-- 菊花 -->
+            正在加载... <!-- 文案，可以自行修改 -->
+        </div>
+        <div style="height:60px;"></div>
+    </div>
+    <div class="bottom">
+        <button class="nextBtn1" onClick="window.location='${path}/admin/wechat/personal/cusContact/addAddress.html?shopId=${shopId}';">新增收货地址</button>
+    </div>
+
+
+<%--列表显示模板--%>
+<script id="templateList" type="text/html">
+    {{each content as item idx}}
+    <li>
+        <div class="dizhiMsg" data-id="{{item.id}}">
+            <p class="dizhiText"><span class="textBlue">{{item.recipients}}</span>&nbsp;&nbsp;{{item.tel}}</p>
+            <p class="dizhiText">{{item.provinceName + ' ' + item.cityName + ' '+ item.regionName + ' ' + item.address}}</p>
+        </div>
+        <div class="dizhiBtn">
+            <%--<img class="morenSelect"  src="${path}/resources/images/zhifu_img_selected.png">--%>
+            {{if item.isDefault==1 }}<div class="morenSetting xw_selectMoren" data-id="{{item.id}}"><img class="morenSelect" src="${path}/resources/images/chanpin_img_selected.png"><font>设为默认地址</font></div>{{/if}}
+            {{if item.isDefault==2 }}<div class="morenSetting xw_selectMoren" data-id="{{item.id}}"><img class="morenSelect" src="${path}/resources/images/chanpin_img_select1.png"><font>设为默认地址</font></div>{{/if}}
+                <div class="bianjiBox">
+                <font onclick="window.location.href ='${path}/admin/wechat/personal/cusContact/editAddress.html?id={{item.id}}&shopId=${shopId}'"><img class="bianjiImg" src="${path}/resources/images/wode_img_edit.png">编辑</font>
+                <font class="deleteBtn" data-id="{{item.id}}"><img class="bianjiImg" src="${path}/resources/images/wode_img_delete.png">删除</font>
+            </div>
+        </div>
+    </li>
+    {{/each}}
+</script>
+</body>
+</html>
+
+

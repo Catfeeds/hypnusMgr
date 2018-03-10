@@ -1,0 +1,1446 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Zhou mingxiang
+  Date: 15-12-1
+  Time: 下午4:50
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page language="java" pageEncoding="utf-8" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>微分销移动端接口</title>
+    <script type="text/javascript">
+        var rasPostFun;
+        var _attachment;
+
+        seajs.use(['$', 'msgBox', 'validate', 'base64', 'util', 'rsa', 'attachment', 'cookie', 'jquery.json'], function ($, msgBox, validate, base64, util, rsa, attachment) {
+            _attachment = attachment;
+            var DataHandler = function () {
+                return {
+                    /**
+                     * 获取RAS加密数据
+                     * @param param
+                     * @param callback
+                     */
+                    getRasKey: function (callback) {
+                        $.post(path + '/pub/common/getRasKey', null, function (backData) {
+                            callback(backData);
+                        });
+                    }
+                }
+            }();
+
+            var EventHandler = function () {
+                return {
+                    /**
+                     * 获取RAS加密数据
+                     * @param obj 点击事件对象
+                     * @param url 请求连接
+                     */
+                    rasPost: function (obj, url) {
+                        $('#show').html('');
+                        /**
+                         * 加密传输密码数据
+                         */
+                        DataHandler.getRasKey(function (backData) {
+                            var modulus = backData.result.modulus;
+                            var exponent = backData.result.exponent;
+                            var rsaKey = new rsa.RSAKey();
+                            rsaKey.setPublic(base64.b64tohex(modulus), base64.b64tohex(exponent));
+                            var param = {};
+                            var inputs = $(obj).parent("td").children("input");
+                            $.each(inputs, function (i, item) {
+                                if ($(item).attr("isRas") == 1) { // 需要进行Ras加密
+                                    param[$(item).attr("name")] = base64.hex2b64(rsaKey.encrypt($(item).val()));
+                                } else {
+                                    param[$(item).attr("name")] = $(item).val();
+                                }
+                            });
+                            $.post(path + url, param, function (backData) {
+                                msgBox.tips(backData.type);
+                                $('#show').html(JSON.stringify(backData));
+                            });
+                        });
+                    }
+                }
+            }();
+
+            rasPostFun = EventHandler.rasPost;
+        });
+
+        /**
+         * GET方式调用
+         * @param url
+         */
+        function commonGet(url) {
+            $('#show').html('');
+            $.get(path + url, null, function (backData) {
+                $('#show').html(JSON.stringify(backData));
+            });
+        }
+        /**
+         * GET方式（带参数）调用
+         * @param url
+         */
+        function commonGetWithParam(obj, url) {
+            $('#show').html('');
+            var param = {};
+            var inputs = $(obj).parent("td").children("input");
+            $.each(inputs, function (i, item) {
+                param[$(item).attr("name")] = $(item).val();
+            });
+            $.get(path + url, param, function (backData) {
+                $('#show').html(JSON.stringify(backData));
+            });
+        }
+        /**
+         * 上传
+         */
+        function upload(obj, inputId) {
+            var param = {
+                //scene: "T_HOMEPAGE_BANNER", //场景化标识
+                isDB: 1, // 是否保存到数据库
+                limitType: "image" //limitType默认不传就不限制,支持：image/file/media
+            };
+            _attachment.uploadFile(function (backParam) {
+                $(obj).parent("td").children("input[name=" + inputId + "]").val(backParam[0].attachmentId);
+            }, param);
+        }
+
+    </script>
+</head>
+<body>
+<strong>微分销移动端接口测试：</strong>
+<br/><br/>
+<table id="mytable" width="100%" border="1">
+    <tbody>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" align='center'>
+            <strong>子模块</strong><br>
+        </td>
+        <td width="10%" bgcolor="#c0c0c0" align='center'><strong>中文名称</strong><br></td>
+        <td width="10%" bgcolor="#c0c0c0" align='center'><strong>英文名称</strong><br></td>
+        <td align='center' width="90%" bgcolor="#c0c0c0">
+            <strong>功能操作</strong>
+        </td>
+    </tr>
+    <!----------------------------------------------公共模块------------------------------------------------------------------------->
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan="5">
+            <strong>公共模块</strong><br>
+        </td>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>系统管理</strong><br>
+        </td>
+        <td width='20%'>
+            <a href="${path}/login">登陆</a>&nbsp; |&nbsp; <a href="${path}/logout">登出</a>
+        </td>
+        <td width='20%'>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取枚举列表</strong><br>
+        </td>
+        <td width='40%'>
+            /pub/enumMgr/find(String enumTblName, String enumColName)[入参以英文逗号分割]
+        </td>
+        <td width='20%'>
+            枚举表名：<input name="enumTblName"/>
+            <br/>
+            字段名：<input name="enumColName"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/pub/enumMgr/find')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>获取基础数据最新版本号</strong><br>
+        </td>
+        <td width="20%">
+            /guest/baseData/getLatestVersion
+        </td>
+        <td colspan="1">
+            <button onClick="commonGet( '/guest/baseData/getLatestVersion')">点击测试</button>
+            &nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>获取最新省市区数据</strong><br>
+        </td>
+        <td width="20%">
+            /guest/baseData/getAllWithCitiesAndCounty
+        </td>
+        <td colspan="1">
+            <button onClick="commonGet( '/guest/baseData/getAllWithCitiesAndCounty')">点击测试</button>
+            &nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>获取图片最佳长宽比</strong><br>
+        </td>
+        <td width="20%">
+            /pub/getPicRatio
+        </td>
+        <td colspan="1">
+            <button onClick="commonGet( '/pub/getPicRatio')">点击测试</button>
+            &nbsp;
+        </td>
+    </tr>
+    <!----------------------------------------------登录注册------------------------------------------------------------------------->
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='7'>
+            <strong>登录注册</strong><br>
+        </td>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>登录-获取动态RSA公钥</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/common/publicKey
+        </td>
+        <td width='20%'>
+            <button onClick="commonGet('/guest/common/publicKey')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>获取短信验证码</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/sms/send?type=register(String mobileNo)【入参，RSA加密，固定公钥加密】
+        </td>
+        <td width='20%'>
+            手机号码：<input name="mobileNo" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/guest/sms/send?type=register')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>注册（无需购买套餐）</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/customerMgr/cusInfo/regisonCusInfo(String mobileNo, String pwd, String captcha, String invitationNo)【入参，RSA加密，固定公钥加密】
+        </td>
+
+        <td width='20%'>
+            手机号码：<input name="account" isRas="1"/>
+            <br/>
+            密码：<input name="pwd" isRas="1"/>
+            <br/>
+            验证码：<input name="captcha" isRas="1"/>
+            <br/>
+            邀请码(选填，不加密)：<input name="invitationNo" />
+            <br/>
+            <button onClick="rasPostFun(this, '/guest/customerMgr/cusInfo/regisonCusInfo')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>注册-获取开店设置</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/customerMgr/cusInfo/getOpenStoreSet
+        </td>
+
+        <td width='20%'>
+            <button onClick="commonGet('/guest/customerMgr/cusInfo/getOpenStoreSet')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>注册（需要购买套餐）-获取套餐详情</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/customerMgr/cusInfo/getPackageDetail
+        </td>
+
+        <td width='20%'>
+            <button onClick="commonGet('/guest/customerMgr/cusInfo/getPackageDetail')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>注册（需要购买套餐）-购买套餐下单</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/customerMgr/cusInfo/order4BuyPackage(CusOrder cusOrder)
+        </td>
+
+        <td width='20%'>
+            收货人：<input name="recipientName" /><br/>
+            手机号码：<input name="recipientTel" /><br/>
+            所属省份编码：<input name="provinceId" /><br/>
+            所属省份名称：<input name="provinceName" /><br/>
+            所属城市编码：<input name="cityId" /><br/>
+            所属城市名称：<input name="cityName" /><br/>
+            所属区/县编码：<input name="regionId" /><br/>
+            所属区/县名称：<input name="regionName" /><br/>
+            详细地址：<input name="recipientAddress" /><br/>
+            <button onClick="rasPostFun(this, '/guest/customerMgr/cusInfo/order4BuyPackage')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>注册（需要购买套餐）-验证手机</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/customerMgr/cusInfo/checkMobile4Register(String mobileNo, String captcha)
+        </td>
+
+        <td width='20%'>
+            手机号码：<input name="mobileNo"  isRas="1"/><br/>
+            验证码：<input name="captcha"  isRas="1"/><br/>
+            <button onClick="rasPostFun(this, '/guest/customerMgr/cusInfo/checkMobile4Register')">点击测试</button>
+        </td>
+    </tr>
+
+    <!----------------------------------------------个人中心------------------------------------------------------------------------->
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='31'>
+            <strong>个人中心</strong><br>
+        </td>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>获取登录用户基本信息</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/cusInfo/findLoginCusInfo
+        </td>
+        <td width='20%'>
+            <button onClick="commonGet('/admin/customerMgr/cusInfo/findLoginCusInfo')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>获取店铺信息</strong><br>
+        </td>
+        <td width="20%">
+            /admin/customerMgr/cusShop/findCusShop
+        </td>
+        <td colspan="1">
+            <button onClick="commonGet('/admin/customerMgr/cusShop/findCusShop')">
+                点击测试
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>修改登录用户头像</strong><br>
+        </td>
+        <td width="20%">
+            /admin/customerMgr/cusInfo/modifyPhoto(Long photoId)
+        </td>
+        <td colspan="1">
+            头像对应附件ID：<input name="photo"/>
+            <button onclick="upload(this, 'photo')">上传头像</button>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusInfo/modifyPhoto')">
+                点击测试
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>修改登录用户昵称</strong><br>
+        </td>
+        <td width="20%">
+            /admin/customerMgr/cusInfo/modifyName(String name)
+        </td>
+        <td colspan="1">
+            用户昵称：<input name="name"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusInfo/modifyName')">
+                点击测试
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>修改店铺背景图片</strong><br>
+        </td>
+        <td width="20%">
+            /admin/customerMgr/cusSho/modifyShopBgUrl(Long backgroundUrl)
+        </td>
+        <td colspan="1">
+            背景图片对应附件ID：<input name="backgroundUrl"/>
+            <button onclick="upload(this, 'backgroundUrl')">上传背景图片</button>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusShop/modifyShopBgUrl')">
+                点击测试
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>新增银行卡</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/productMgr/cusBank/saveCusBank(String bankType, String branch, String bankAccount, String bankCard)【入参，RSA加密，固定公钥加密】
+        </td>
+
+        <td width='20%'>
+            开户银行(不加密)：<input name="bankType" />
+            <br/>
+            开户支行：<input name="branch" isRas="1"/>
+            <br/>
+            账户名称：<input name="bankAccount" isRas="1"/>
+            <br/>
+            银行卡号：<input name="bankCard" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusBank/saveCusBank')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>删除银行卡</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/productMgr/cusBank/deleteCusBank(Long id)
+        </td>
+
+        <td width='20%'>
+            银行账号标识：<input name="id" />
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusBank/deleteCusBank')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取用户银行账号列表（分页）</strong><br>
+        </td>
+        <td width="20%">
+            /admin/productMgr/cusBank/findCusBankByPage(Integer pageNo, Integer pageSize)
+        </td>
+        <td width='20%'>
+            用途(可选参数，edit-编辑)：<input name="purpose"/>
+            <br/>
+            页码：<input name="pageNo"/>
+            <br/>
+            每页记录数：<input name="pageSize"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/customerMgr/cusBank/findCusBankByPage')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>获取我的账户信息</strong><br>
+        </td>
+        <td width="20%">
+            /admin/productMgr/cusAccount/findCusAccount(Integer unsettleMoneyInResult)
+        </td>
+        <td colspan="1">
+            结果是否返回待到账收益（可选，1-返回，其他-不返回）：<input name="unsettleMoneyInResult"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/customerMgr/cusAccount/findCusAccount')">
+                点击测试
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取交易记录列表（分页）</strong><br>
+        </td>
+        <td width="20%">
+            /admin/customerMgr/cusAccount/findTransactionRecord(Integer type,Date createDateBegin, Date createDateEnd, Integer pageNo, Integer pageSize)
+        </td>
+        <td width='20%'>
+            交易类型：<input name="type"/>
+            <br/>
+            交易起始时间：<input name="createDateBegin"/>
+            <br/>
+            交易结束时间：<input name="createDateEnd"/>
+            <br/>
+            页码：<input name="pageNo"/>
+            <br/>
+            每页记录数：<input name="pageSize"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/customerMgr/cusAccount/findTransactionRecord')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取(用户)代金券列表（分页）</strong><br>
+        </td>
+        <td width="20%">
+            /admin/customerMgr/cusInfo/findCusCoupon(Integer status, Integer pageNo, Integer pageSize)
+        </td>
+        <td width='20%'>
+            状态：<input name="status"/>
+            <br/>
+            页码：<input name="pageNo"/>
+            <br/>
+            每页记录数：<input name="pageSize"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/customerMgr/cusInfo/findCusCoupon')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>修改登录密码</strong><br>
+        </td>
+        <td width="20%">
+            /admin/customerMgr/cusInfo/modifyPassword(@CurrentUser Long cusId, String oldPassword, String newPassword)
+        </td>
+        <td colspan="1">
+            旧密码：<input name="oldPassword" type="password" isRas="1"/>
+            <br/>
+            新密码：<input name="newPassword" type="password" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusInfo/modifyPassword')">
+                点击测试
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>忘记密码-获取短信验证码</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/sms/send?type=forgetPwd(String mobileNo)【入参，RSA加密，固定公钥加密】
+        </td>
+        <td width='20%'>
+            手机号码：<input name="mobileNo" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/guest/sms/send?type=forgetPwd')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>忘记密码-验证身份</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/customerMgr/cusInfo/forgetPwdValidate(String mobileNo, String captcha)【入参，RSA加密，固定公钥加密】
+        </td>
+        <td width='20%'>
+            手机号码：<input name="mobileNo" isRas="1"/><br>
+            短信验证码：<input name="captcha" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/guest/customerMgr/cusInfo/forgetPwdValidate')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>忘记密码-重置密码</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/customerMgr/cusInfo/forgetPwdReset(String password)【入参，RSA加密，固定公钥加密】
+        </td>
+        <td width='20%'>
+            新密码：<input name="password" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/guest/customerMgr/cusInfo/forgetPwdReset')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>修改支付密码</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/cusInfo/modifyPayPwd
+        </td>
+        <td width='20%'>
+            旧密码：<input name="oldPassword" isRas="1"/><br>
+            新密码：<input name="newPassword" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusInfo/modifyPayPwd')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>忘记支付密码-获取短信验证码</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/sms/send?type=setPayPwd
+        </td>
+        <td width='20%'>
+            <br/>
+            <button onClick="rasPostFun(this, '/guest/sms/send?type=setPayPwd')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>忘记支付密码-验证身份</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/cusInfo/setPayPwdValidate
+        </td>
+        <td width='20%'>
+            验证码：<input name="captcha" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusInfo/setPayPwdValidate')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>忘记支付密码-重置密码</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/cusInfo/setPayPwd
+        </td>
+        <td width='20%'>
+            密码：<input name="password" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusInfo/setPayPwd')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>修改手机号码-获取原号码短信验证码</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/sms/send?type=modifyMobile
+        </td>
+        <td width='20%'>
+            <button onClick="rasPostFun(this, '/guest/sms/send?type=modifyMobile')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>修改手机号码-验证身份</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/cusInfo/modifyMobileValidate
+        </td>
+        <td width='20%'>
+            验证方式：<input name="type"/>（1-短信验证码，2-原登录密码）<br>
+            短信验证码：<input name="captcha" isRas="1"/><br>
+            原登录密码：<input name="oldPassword" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusInfo/modifyMobileValidate')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>修改手机号码-获取新号码短信验证码</strong><br>
+        </td>
+        <td width='20%'>
+            /guest/sms/send?type=modifyMobile
+        </td>
+        <td width='20%'>
+            手机号码：<input name="mobileNo" isRas="1"/><br>
+            <button onClick="rasPostFun(this, '/guest/sms/send?type=modifyMobile')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>修改手机号码-设置新号码</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/cusInfo/modifyMobile
+        </td>
+        <td width='20%'>
+            手机号码：<input name="mobileNo" isRas="1"/><br>
+            验证码：<input name="captcha" isRas="1"/><br>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusInfo/modifyMobile')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取收货地址列表（分页）</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/cusContact/getCusContactByPage
+        </td>
+        <td width='20%'>
+            地址标识：<input name="id"/><br>
+            收货人：<input name="recipients"/><br>
+            是否默认：<input name="isDefault"/><br>
+            <button onClick="commonGetWithParam(this, '/admin/customerMgr/cusContact/getCusContactByPage')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>新增/编辑收货地址</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/cusContact/saveOrUpdate
+        </td>
+        <td width='20%'>
+            地址标识：<input name="id"/><br>
+            收货人：<input name="recipients" isRas="1"/><br>
+            手机号码：<input name="tel" isRas="1"/><br>
+            所属省份编码：<input name="provinceId"/><br>
+            所属省份名称：<input name="provinceName"/><br>
+            所属城市编码：<input name="cityId"/><br>
+            所属城市名称：<input name="cityName"/><br>
+            所属区/县编码：<input name="regionId"/><br>
+            所属区/县名称：<input name="regionName"/><br>
+            详细地址：<input name="address"  isRas="1"/><br>
+            是否默认：<input name="isDefault"/><br>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusContact/saveOrUpdate')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>删除收货地址</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/cusContact/delete
+        </td>
+        <td width='20%'>
+            地址标识：<input name="id"/><br>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusContact/delete')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>设置默认收货地址</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/cusContact/setDefaultContact
+        </td>
+        <td width='20%'>
+            地址标识：<input name="id"/><br>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusContact/setDefaultContact')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取我的收益统计（分页）</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/cusAccount/getMyIncome
+        </td>
+        <td width='20%'>
+            页码：<input name="pageNo"/><br>
+            每页数：<input name="pageSize"/><br>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/cusAccount/getMyIncome')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>获取我的业绩</strong><br>
+        </td>
+        <td width="20%">
+            /admin/customerMgr/cusInfo/getMyAchievement
+        </td>
+        <td colspan="1">
+            <button onClick="commonGet('/admin/customerMgr/cusInfo/getMyAchievement')">
+                点击测试
+            </button>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>提交代理商申请</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/agentInfo/applyAgent
+        </td>
+        <td width='20%'>
+            代理商级别：<input name="agencyLevel"/><br>
+            所属省份编码：<input name="provinceId"/><br>
+            所属省份名称：<input name="provinceName"/><br>
+            所属城市编码：<input name="cityId"/><br>
+            所属城市名称：<input name="cityName"/><br>
+            所属区/县编码：<input name="regionId"/><br>
+            所属区/县名称：<input name="regionName"/><br>
+            申请备注：<input name="applyRemark"/><br>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/agentInfo/applyAgent')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取代理商申请信息</strong><br>
+        </td>
+        <td width='20%'>
+            /admin/customerMgr/agentInfo/getAgentInfo
+        </td>
+        <td width='20%'>
+            <button onClick="rasPostFun(this, '/admin/customerMgr/agentInfo/getAgentInfo')">点击测试</button>
+        </td>
+    </tr>
+
+    <!----------------------------------------------商品模块------------------------------------------------------------------------->
+    <td width="10%" bgcolor="#c0c0c0" rowspan="12">
+        <strong>商品模块</strong><br>
+    <td width="10%" bgcolor="#c0c0c0">
+        <strong>获取精选商品列表（分页）</strong><br>
+    </td>
+    <td width="20%">
+        /admin/productMgr/productInfo/findProductInfoByPage
+    </td>
+    <td width='20%'>
+        分类标签：<input name="cateId"/>
+        <br/>
+        店铺已上架：<input name="isInShop"/>
+        <br/>
+        商品名称：<input name="zhName"/>
+        <br/>
+        页码：<input name="pageNo"/>
+        <br/>
+        每页记录数：<input name="pageSize"/>
+        <br/>
+        使用类型：<input name="useType"/>
+        <br/>
+        <button onClick="commonGetWithParam(this, '/admin/productMgr/productInfo/findProductInfoByPage')">点击测试</button>
+        &nbsp;
+    </td>
+    </td>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取商品详情</strong><br>
+        </td>
+        <td width="20%">
+            /admin/productMgr/productInfo/findProductInfoDetail
+        </td>
+        <td width='20%'>
+            商品标识：<input name="id"/>
+            <br/>
+            使用类型：<input name="useType"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/productMgr/productInfo/findProductInfoDetail')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取所有商品类型列表</strong><br>
+        </td>
+        <td width="20%">
+            /admin/productMgr/productInfo/getAllCate
+        </td>
+        <td width='20%'>
+            <button onClick="commonGetWithParam(this, '/admin/productMgr/productInfo/getAllCate')">点击测试</button>
+            &nbsp;
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取商品文案列表</strong><br>
+        </td>
+        <td width="20%">
+            /admin/productMgr/productDocument/getProductDocumentByPage
+        </td>
+        <td width='20%'>
+            商品标识：<input name="productId"/><br/>
+            文案类型：<input name="type"/><br/>
+            <button onClick="commonGetWithParam(this, '/admin/productMgr/productDocument/getProductDocumentByPage')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>新增用户文案</strong><br>
+        </td>
+        <td width="20%">
+            /admin/productMgr/productDocument/save
+        </td>
+        <td width='20%'>
+            商品标识：<input name="productId"/><br/>
+            文案内容：<input name="desc"/><br/>
+            文案图片附件标识：<input name="path"/><br/>
+            <button onClick="rasPostFun(this, '/admin/productMgr/productDocument/save')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>删除用户文案</strong><br>
+        </td>
+        <td width="20%">
+            /admin/productMgr/productDocument/delete
+        </td>
+        <td width='20%'>
+            文案标识：<input name="id"/><br/>
+            <button onClick="rasPostFun(this, '/admin/productMgr/productDocument/delete')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>上架商品到店铺</strong><br>
+        </td>
+        <td width="20%">
+            /admin/productMgr/productShop/shelves
+        </td>
+        <td width='20%'>
+            商品标识：<input name="id"/><br/>
+            <button onClick="rasPostFun(this, '/admin/productMgr/productShop/shelves')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>下架店铺商品</strong><br>
+        </td>
+        <td width="20%">
+            /admin/productMgr/productShop/offShelves
+        </td>
+        <td width='20%'>
+            商品标识：<input name="id"/><br/>
+            <button onClick="rasPostFun(this, '/admin/productMgr/productShop/offShelves')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取特卖活动列表（分页）</strong><br>
+        </td>
+        <td width="20%">
+            /admin/activity/findPage
+        </td>
+        <td width='20%'>
+            活动状态(1-进行中，2-未开始)：<input name="status"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/activity/findPage')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取特卖活动详情</strong><br>
+        </td>
+        <td width="20%">
+            /admin/activity/getDetail
+        </td>
+        <td width='20%'>
+            活动标识：<input name="id"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/activity/getDetail')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取特卖活动商品列表（分页）</strong><br>
+        </td>
+        <td width="20%">
+            /admin/activity/getActivityProducts
+        </td>
+        <td width='20%'>
+            活动标识：<input name="id"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/activity/getActivityProducts')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取商品分享短链接</strong><br>
+        </td>
+        <td width="20%">
+            /admin/productMgr/productInfo/getWXProductDetailUrl
+        </td>
+        <td width='20%'>
+            商品标识：<input name="productId"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/productMgr/productInfo/getWXProductDetailUrl')">点击测试</button>
+        </td>
+    </tr>
+
+   <!------------------------------------购物------------------------------------------------------------------------->
+    <td width="10%" bgcolor="#c0c0c0" rowspan="24">
+        <strong>购物模块</strong><br>
+    <td width="10%" bgcolor="#c0c0c0">
+        <strong>获取商品规格列表</strong><br>
+    </td>
+    <td width="20%">
+        /admin/productMgr/productInfo/findSpecAndPrice(Long id, Integer useType)
+    </td>
+    <td width='20%'>
+        商品标识：<input name="id"/>
+        <br/>
+        使用类型：<input name="useType"/>
+        <br/>
+        <button onClick="commonGetWithParam(this,  '/admin/productMgr/productInfo/findSpecAndPrice')">点击测试</button>
+    </td>
+    </td>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取购物车商品列表</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusCart/findAll(Integer useType)
+        </td>
+        <td width='20%'>
+            使用类型：<input name="useType"/>
+            <br/>
+            <button onClick="commonGetWithParam(this,  '/admin/cusCart/findAll')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>新增购物车商品</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusCart/save(Long priceId, Integer num, Integer useType)
+        </td>
+        <td width='20%'>
+            商品价格标识：<input name="priceId"/>
+            <br/>
+            购买数量：<input name="num"/>
+            <br/>
+            使用类型：<input name="useType"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/cusCart/save')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>修改购物车商品</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusCart/save(Long id, Long priceId, Integer num, Integer useType)
+        </td>
+        <td width='20%'>
+            购物车标识：<input name="id"/>
+            <br/>
+            商品价格标识：<input name="priceId"/>
+            <br/>
+            购买数量：<input name="num"/>
+            <br/>
+            使用类型：<input name="useType"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/cusCart/save')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>删除购物车商品</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusCart/delete(Long id)
+        </td>
+        <td width='20%'>
+            购物车标识：<input name="id"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/cusCart/delete')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>创建订单-初始化界面</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusCart/getDataByCartToOrder(Long[] cartIds)
+        </td>
+        <td width='20%'>
+            购物车标识：<input name="cartIds"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/cusCart/getDataByCartToOrder')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>创建订单-可用代金券列表（分页）</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusOrder/getUsableCoupon(Long[] cartIds, Integer pageNo, Integer pageSize)
+        </td>
+        <td width='20%'>
+            购物车标识：<input name="cartIds"/>
+            <br/>
+            页码：<input name="pageNo"/>
+            <br/>
+            每页记录数：<input name="pageSize"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/cusOrder/getUsableCoupon')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>创建订单</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusOrder/create(Long[] cartIds, Long contactId, Long cusCouponId)
+        </td>
+        <td width='20%'>
+            购物车标识：<input name="cartIds"/>
+            <br/>
+            收货地址标识：<input name="contactId"/>
+            <br/>
+            用户代金券标识：<input name="cusCouponId"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/cusOrder/create')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取订单基本信息</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusOrder/findOrderInfo(Long id)
+        </td>
+        <td width='20%'>
+            订单标识：<input name="id"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/cusOrder/findOrderInfo')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>修改订单收货地址</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusOrder/modifyOrderContact(Long orderId, Long contactId)
+        </td>
+        <td width='20%'>
+            订单标识：<input name="orderId"/>
+            <br/>
+            收货地址标识：<input name="contactId"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/cusOrder/modifyOrderContact')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>支付订单-余额支付</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusOrder/pay(Long orderId, String payPwd)
+        </td>
+        <td width='20%'>
+            订单标识：<input name="orderId"/>
+            <br/>
+            支付密码：<input name="payPwd" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/cusOrder/pay')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan='1'>
+            <strong>店铺续费（无需购买套餐）</strong><br>
+        </td>
+        <td width="20%">
+            /admin/customerMgr/cusShop/shopRenewals()
+        </td>
+        <td colspan="1">
+            <button onClick="rasPostFun(this,'/admin/customerMgr/cusShop/shopRenewals')">
+                点击测试
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取我的订单列表（分页）</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusOrder/findMyOrderPage(Integer[] orderStatus, Integer pageNo, Integer pageSize)
+        </td>
+        <td width='20%'>
+            订单状态：<input name="orderStatus"/>
+            <br/>
+            页码：<input name="pageNo"/>
+            <br/>
+            每页记录数：<input name="pageSize"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/cusOrder/findMyOrderPage')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取店铺订单列表（分页）</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusOrder/findShopOrderPage(Integer[] orderStatus, Integer pageNo, Integer pageSize)
+        </td>
+        <td width='20%'>
+            订单状态：<input name="orderStatus"/>
+            <br/>
+            页码：<input name="pageNo"/>
+            <br/>
+            每页记录数：<input name="pageSize"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/cusOrder/findShopOrderPage')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取订单详细信息</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusOrder/findOrderDetail(Long id)
+        </td>
+        <td width='20%'>
+            订单标识：<input name="id"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/cusOrder/findOrderDetail')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>取消订单</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusOrder/cancelCusOrder(Long orderId)
+        </td>
+        <td width='20%'>
+            订单标识：<input name="orderId"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/cusOrder/cancelCusOrder')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>申请退货</strong><br>
+        </td>
+        <td width="20%">
+            /admin/shopMgr/cusOrderReturn/applyReturnGoods(Long orderDetailId, Integer num,Long returnReason, String returnDesc)
+        </td>
+        <td width='20%'>
+            订单明细标识：<input name="orderDetailId"/>
+            <br/>
+            退货数量：<input name="num"/>
+            <br/>
+            退货原因：<input name="returnReason"/>
+            <br/>
+            退货说明：<input name="returnDesc"/>
+            <br/>
+            相关图片附件标识(多个以英文逗号分隔)：<input name="pic"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/shopMgr/cusOrderReturn/applyReturnGoods')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取我的退货列表（分页）</strong><br>
+        </td>
+        <td width="20%">
+            /admin/shopMgr/cusOrderReturn/findReturnGoodsByPage(Integer status, Integer pageNo, Integer pageSize)
+        </td>
+        <td width='20%'>
+            单据状态：<input name="status"/>
+            <br/>
+            页码：<input name="pageNo"/>
+            <br/>
+            每页记录数：<input name="pageSize"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/shopMgr/cusOrderReturn/findReturnGoodsByPage')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取退货单详情</strong><br>
+        </td>
+        <td width="20%">
+            /admin/shopMgr/cusOrderReturn/findReturnGoodsDetail(Long id）
+        </td>
+        <td width='20%'>
+            退货单标识：<input name="id"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/shopMgr/cusOrderReturn/findReturnGoodsDetail')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取退货单流程信息列表</strong><br>
+        </td>
+        <td width="20%">
+            /admin/shopMgr/cusOrderReturn/findCusOrderReturnLogByList（Long id）
+        </td>
+        <td width='20%'>
+            退货单标识：<input name="id"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/shopMgr/cusOrderReturn/findCusOrderReturnLogByList')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>提交退货单快递单号</strong><br>
+        </td>
+        <td width="20%">
+            /admin/shopMgr/cusOrderReturn/submitReturnNum(Long returnId, Integer logisticsType, String logisticsCode)
+        </td>
+        <td width='20%'>
+            退货单标识：<input name="returnId"/>
+            <br/>
+            退货物流公司：<input name="logisticsType"/>
+            <br/>
+            退货运单编号：<input name="logisticsCode"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/shopMgr/cusOrderReturn/submitReturnNum')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>店铺续费（需要购买套餐）-创建订单-初始化界面</strong><br>
+        </td>
+        <td width="20%">
+            /admin/customerMgr/cusShop/renewInit
+        </td>
+        <td width='20%'>
+            <button onClick="commonGetWithParam(this, '/admin/customerMgr/cusShop/renewInit')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>店铺续费（需要购买套餐）-创建订单</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusOrder/create4ShopRenew
+        </td>
+        <td width='20%'>
+            收货地址标识：<input name="contactId"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/cusOrder/create4ShopRenew')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>店铺续费（需要购买套餐）支付订单-余额支付</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusOrder/payByRemainderMoney4Renew
+        </td>
+        <td width='20%'>
+            订单标识：<input name="orderId"/>
+            支付密码：<input name="payPwd" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/cusOrder/payByRemainderMoney4Renew')">点击测试</button>
+        </td>
+    </tr>
+
+    <%-- 提现接口 --%>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan="3">
+            <strong>提现</strong><br>
+        </td>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>申请提现</strong><br>
+        </td>
+        <td width="20%">
+            /admin/extractOrder/applyExtract
+        </td>
+        <td width='20%'>
+            提现金额：<input name="money"/>
+            <br/>
+            开户银行(使用枚举值)：<input name="bankType"/>
+            <br/>
+            开户支行：<input name="branch" isRas="1"/>
+            <br/>
+            账户名称：<input name="bankAccount" isRas="1"/>
+            <br/>
+            银行卡号：<input name="bankCard" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/extractOrder/applyExtract')">点击测试</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取提现记录列表（分页)</strong><br>
+        </td>
+        <td width="20%">
+            /admin/extractOrder/getPageForApp
+        </td>
+        <td width='20%'>
+            提现操作记录标识：<input name="id"/>
+            <br/>
+            页码：<input name="pageNo"/>
+            <br/>
+            每页记录数：<input name="pageSize"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/extractOrder/getPageForApp')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取提现进度列表</strong><br>
+        </td>
+        <td width="20%">
+            /admin/extractOrder/getStepsForApp
+        </td>
+        <td width='20%'>
+            提现操作记录标识：<input name="id"/>
+            <br/>
+            <button onClick="commonGetWithParam(this, '/admin/extractOrder/getStepsForApp')">点击测试</button>
+        </td>
+    </tr>
+
+    <%-- 身份信息认证接口 --%>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0" rowspan="3">
+            <strong>身份信息认证</strong><br>
+        </td>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>获取实名认证信息</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusCertification/getDetail
+        </td>
+        <td width='20%'>
+            用途：<input name="purpose"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/cusCertification/getDetail')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>提交实名认证信息-获取短信验证码</strong><br>
+        </td>
+        <td width="20%">
+            /guest/sms/send?type=applyIdentify
+        </td>
+        <td width='20%'>
+            手机号：<input name="mobileNo" isRas="1"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/guest/sms/send?type=applyIdentify')">点击测试</button>
+        </td>
+    </tr>
+    <tr>
+        <td width="10%" bgcolor="#c0c0c0">
+            <strong>提交实名认证信息</strong><br>
+        </td>
+        <td width="20%">
+            /admin/cusCertification/apply
+        </td>
+        <td width='20%'>
+            真实姓名：<input name="realName" isRas="1"/>
+            <br/>
+            身份证号码：<input name="idCard" isRas="1"/>
+            <br/>
+            电话号码：<input name="mobile" isRas="1"/>
+            <br/>
+            短信验证码：<input name="captcha" isRas="1"/>
+            <br/>
+            持证照片附件标识：<input name="holdphotoId"/>
+            <br/>
+            身份证正面附件标识：<input name="cardpositiveId"/>
+            <br/>
+            身份证反面附件标识：<input name="cardinverseId"/>
+            <br/>
+            <button onClick="rasPostFun(this, '/admin/cusCertification/apply')">点击测试</button>
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+<textarea id="show" name="show" cols="120" rows="15"></textarea>
+</body>
+</html>

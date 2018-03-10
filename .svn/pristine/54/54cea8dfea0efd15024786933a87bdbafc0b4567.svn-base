@@ -1,0 +1,34 @@
+package com.catt.wfx.service.impl.base.settlementMgr;
+
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementOrderDetailDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+import com.catt.wfx.service.base.settlementMgr.SettlementOrderDetailBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+@Service("settlementOrderDetailBaseServiceImpl")
+public class SettlementOrderDetailBaseServiceImpl extends
+        BaseServiceImpl<SettlementOrderDetail, Long> implements SettlementOrderDetailBaseService {
+
+    @Resource(name = "settlementOrderDetailDaoImpl")
+    private SettlementOrderDetailDao settlementOrderDetailDao;
+
+    @Resource
+    public void setBaseDao(SettlementOrderDetailDao settlementOrderDetailDao) {
+        super.setBaseDao(settlementOrderDetailDao);
+    }
+
+    /**
+     * 获取主管团队销售金额
+     *
+     * @param cusId 主管标识
+     * @return
+     */
+    @Override
+    public Double getTeamSaleMoney(Long cusId) {
+        return settlementOrderDetailDao.getTeamSaleMoney(cusId);
+    }
+}

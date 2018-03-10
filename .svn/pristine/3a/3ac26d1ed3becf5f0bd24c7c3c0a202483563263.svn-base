@@ -1,0 +1,257 @@
+package com.catt.wfx.service.impl.wechatReturn;
+
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.pay.data.config.WeChatAccountConfig;
+import com.catt.common.module.pay.weChatSDK.common.Configure;
+import com.catt.common.module.pay.weChatSDK.common.RandomStringGenerator;
+import com.catt.common.module.pay.weChatSDK.common.XMLParser;
+import com.catt.common.util.bean.BeanUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.util.spring.SpringUtils;
+import com.catt.wfx.repository.entity.wechatReturn.OrderReturnReqData;
+import com.catt.wfx.repository.entity.wechatReturn.QueryReturnReqData;
+import com.catt.wfx.repository.entity.wechatReturn.QueryWechatReturnResult;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrder;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrderLog;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnResultNotify;
+import com.catt.wfx.service.base.wechatReturn.QueryWechatReturnResultBaseService;
+import com.catt.wfx.service.base.wechatReturn.WechatReturnOrderBaseService;
+import com.catt.wfx.service.base.wechatReturn.WechatReturnOrderLogBaseService;
+import com.catt.wfx.service.base.wechatReturn.WechatReturnResultNotifyBaseService;
+import com.catt.wfx.service.impl.wechatReturn.event.CreateReturnSuccessEvent;
+import com.catt.wfx.service.impl.wechatReturn.event.ReturnEventListener;
+import com.catt.wfx.service.impl.wechatReturn.event.ToReturnEvent;
+import com.catt.wfx.service.impl.wechatReturn.event.WeChatReturnUtil;
+import com.catt.wfx.service.impl.wechatReturn.service.ReturnMoneyService;
+import com.catt.wfx.service.impl.wechatReturn.service.ReturnQueryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:微信退款
+ * Created by 2017-03-01  9:44.
+ * author: Zhou mingxiang
+ */
+public abstract class WechatReturnMoney extends AbstractReturnService<WeChatAccountConfig> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WechatReturnMoney.class);
+
+    @Resource(name = "wechatReturnResultNotifyBaseServiceImpl")
+    private WechatReturnResultNotifyBaseService wechatReturnResultNotifyBaseService;
+
+    @Resource(name = "returnWechatOrderLogBaseServiceImpl")
+    private WechatReturnOrderLogBaseService returnWechatOrderLogBaseService;
+
+    @Resource(name = "queryWechatReturnResultBaseServiceImpl")
+    private QueryWechatReturnResultBaseService queryWechatReturnResultBaseService;
+
+    @Resource(name = "wechatReturnOrderBaseServiceImpl")
+    private WechatReturnOrderBaseService wechatReturnOrderBaseService;
+
+    /***
+     * 申请退款
+     *
+     * @return 退款结果
+     */
+    @Transactional
+    protected void wechatReturnMoney(Map<String, String> oriParam, WechatReturnOrder wechatReturnOrder) {
+        LOG.info("Refund is processing...");
+        ToReturnEvent returnEvent = new ToReturnEvent();
+        if (StringUtil.checkObj(wechatReturnOrder)) {
+            BeanUtil.copyProperties(returnEvent, wechatReturnOrder);
+        } else {
+            // 获取支付事件
+            returnEvent = createReturnEvent(oriParam);
+        }
+        String out_trade_no = returnEvent.getOrderNo();
+        long total_fee = returnEvent.getTotalAmount();
+        long refund_fee = returnEvent.getReturnAmount();
+        String out_refund_no = returnEvent.getRefundNo();
+
+        // 获取商户配置
+        WeChatAccountConfig weChatAppAccountConfig = getAccountConfig(returnEvent);
+
+        String appid = weChatAppAccountConfig.getAppid();
+        String mch_id = weChatAppAccountConfig.getMch_id();
+        String cerPassword = weChatAppAccountConfig.getCerPassword();
+        String cerPath = weChatAppAccountConfig.getCerPath();
+        String key = weChatAppAccountConfig.getSignKey();
+
+        //设置退款所需证书信息
+        Configure.setCertLocalPath(cerPath);
+        Configure.setCertPassword(cerPassword);
+
+        Map<String, String> param = new HashMap<String, String>();
+        param.put("appid", appid);
+        param.put("mch_id", mch_id);
+        param.put("nonce_str", RandomStringGenerator.getRandomStringByLength(30));
+        param.put("out_trade_no", out_trade_no);
+        param.put("total_fee", String.valueOf(total_fee));
+        param.put("refund_fee", String.valueOf(refund_fee));
+        param.put("out_refund_no", out_refund_no);
+        param.put("op_user_id", mch_id);
+        OrderReturnReqData orderReturnReqData = WeChatReturnUtil.getFullReturnParam(param, key);
+        ReturnMoneyService returnService = null;
+        try {
+//            new HttpsRequest(cerPath, cerPassword);
+            returnService = new ReturnMoneyService();
+            String result = returnService.request(orderReturnReqData);
+            Map<String, Object> resultMap = XMLParser.getMapFromXML(result);
+            LOG.info("微信退款返回数据： result:" + resultMap.toString());
+            String return_code = (String) resultMap.get("return_code");
+            if (StringUtil.equals(return_code, WeChatReturnUtil.WECHAT_DEAL_SUCCESS)) {
+                if (WeChatReturnUtil.verifyResult(resultMap, key)) {
+
+
+                    //保存微信退款日志
+                    WechatReturnOrderLog returnWechatOrderLog = new WechatReturnOrderLog();
+                    WechatReturnOrderLog returnWechatOrderLog1 = returnWechatOrderLogBaseService.getWechatReturnOrderLog(out_refund_no);
+                    if (null == returnWechatOrderLog1) {
+                        returnWechatOrderLog = WeChatReturnUtil.getBeanFromReturnBean(orderReturnReqData);
+                    } else {
+                        returnWechatOrderLog.setId(returnWechatOrderLog1.getId());
+                    }
+                    returnWechatOrderLogBaseService.saveOrUpdate(returnWechatOrderLog);
+
+
+                    //保存微信退款结果通知
+                    WechatReturnResultNotify wechatReturnResultNotify = new WechatReturnResultNotify();
+                    WechatReturnResultNotify wechatReturnResultNotify1 = wechatReturnResultNotifyBaseService.getWechatReturnResultNotify(out_refund_no);
+                    if (null == wechatReturnResultNotify1) {
+                        wechatReturnResultNotify = WeChatReturnUtil.getWechatReturnResultNotifyBean(resultMap);
+                    } else {
+                        wechatReturnResultNotify.setId(wechatReturnResultNotify1.getId());
+                    }
+
+                    wechatReturnResultNotifyBaseService.saveOrUpdate(wechatReturnResultNotify);
+
+                    //申请退款成功
+                    createReturnSuccess(returnEvent);
+
+
+                } else {
+                    throw new RuntimeException("微信退款结果校验失败！");
+                }
+
+            } else {
+                throw new RuntimeException("微信退款失败！");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("微信退款接口出错", e);
+        }
+
+
+    }
+
+
+    /***
+     * 查询退款
+     *
+     * @return 退款结果
+     */
+    @Transactional
+    protected void wechatQueryReturn(Map<String, String> oriParam, WechatReturnOrder wechatReturnOrder) {
+        LOG.info("QueryReturn is processing...");
+        ToReturnEvent toReturnEvent = new ToReturnEvent();
+        BeanUtil.copyProperties(toReturnEvent, wechatReturnOrder);
+
+
+        // 获取商户配置
+        WeChatAccountConfig weChatAppAccountConfig = getAccountConfig(toReturnEvent);
+        String cerPassword = weChatAppAccountConfig.getCerPassword();
+        String cerPath = weChatAppAccountConfig.getCerPath();
+
+
+        //设置退款所需证书信息
+        Configure.setCertLocalPath(cerPath);
+        Configure.setCertPassword(cerPassword);
+
+        String key = weChatAppAccountConfig.getSignKey();
+        String out_refund_no = oriParam.get("out_refund_no");
+        QueryReturnReqData queryReturnReqData = WeChatReturnUtil.getQueryReturnParam(oriParam, key);
+
+
+
+        try {
+            ReturnQueryService returnQueryService =  new ReturnQueryService();
+            String result = returnQueryService.request(queryReturnReqData);
+            Map<String, Object> resultMap = XMLParser.getMapFromXML(result);
+            LOG.info("查询微信退款返回数据： result:" + resultMap.toString());
+            String return_code = (String) resultMap.get("return_code");
+            String refund_status_$n = null;
+            if (StringUtil.equals(return_code, WeChatReturnUtil.WECHAT_DEAL_SUCCESS)) {
+                if (WeChatReturnUtil.verifyResult(resultMap, key)) {
+
+                    //将查询微信退款接口返回的数据转为微信查询退款结果实体
+                    QueryWechatReturnResult queryWechatReturnResultBean = WeChatReturnUtil.getQueryWechatReturnResultBean(resultMap);
+
+
+                    //根据退款单号查询微信查询退款结果，看是否已经有保存对应数据
+                    List<Filter> filters = new ArrayList<Filter>();
+                    filters.add(Filter.eq("outRefundNo$n", out_refund_no));
+                    List<QueryWechatReturnResult> queryWechatReturnResults = queryWechatReturnResultBaseService.findList(null, filters, null);
+
+
+                    QueryWechatReturnResult queryWechatReturnResult = new QueryWechatReturnResult();
+
+                    //修改原有数据
+                    if (queryWechatReturnResults != null && queryWechatReturnResults.size() > 0) {
+                        queryWechatReturnResult = queryWechatReturnResults.get(0);
+                        queryWechatReturnResultBean.setId(queryWechatReturnResult.getId());
+
+                        BeanUtil.copyProperties(queryWechatReturnResult, queryWechatReturnResultBean);
+                    }
+
+                    queryWechatReturnResult = queryWechatReturnResultBean;
+                    //保存微信查询退款结果
+                    queryWechatReturnResultBaseService.saveOrUpdate(queryWechatReturnResult);
+
+                    refund_status_$n = queryWechatReturnResultBean.getRefundStatus$n();
+
+                    if(StringUtil.isNotBlank(refund_status_$n)){
+
+                        ReturnEventListener listener = SpringUtils.getBean(toReturnEvent
+                                .getBusinessType());
+                        //退款成功
+                        if(StringUtil.equals(QueryWechatReturnResult.WECHAT_DEAL_SUCCESS, refund_status_$n)
+                                || StringUtil.equals(QueryWechatReturnResult.WECHAT_DEAL_REFUNDCLOSE, refund_status_$n)){
+                            wechatReturnOrder.setStatus(WechatReturnOrder.STATUS_SUCCESS);
+                            listener.returnSuccess(new CreateReturnSuccessEvent(toReturnEvent));
+
+                        }else if(StringUtil.equals(QueryWechatReturnResult.WECHAT_DEAL_NOTSURE, refund_status_$n)){ //未确定
+                            this.wechatReturnMoney(oriParam, wechatReturnOrder);
+                        }else if(StringUtil.equals(QueryWechatReturnResult.WECHAT_DEAL_PROCESSING, refund_status_$n)){//处理中
+
+                        }else if(StringUtil.equals(QueryWechatReturnResult.WECHAT_DEAL_CHANGE, refund_status_$n)
+                                || StringUtil.equals(QueryWechatReturnResult.WECHAT_DEAL_FAIL, refund_status_$n)){//失败
+                            wechatReturnOrder.setStatus(WechatReturnOrder.STATUS_FAILED);
+
+                            listener.returnFail(new CreateReturnSuccessEvent(toReturnEvent));
+                        }
+                        wechatReturnOrderBaseService.update(wechatReturnOrder);
+
+                    }
+
+                } else {
+                    throw new RuntimeException("查询微信退款结果校验失败！");
+                }
+
+            } else {
+                throw new RuntimeException("查询微信退款失败！");
+            }
+//            return refund_status_$n;
+        } catch (Exception e) {
+            throw new RuntimeException("查询微信退款接口出错", e);
+        }
+
+    }
+
+}

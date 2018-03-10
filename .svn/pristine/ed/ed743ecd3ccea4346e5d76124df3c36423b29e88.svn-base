@@ -1,0 +1,237 @@
+package com.catt.wfx.service.impl.settlementMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusAllotDao;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderDetailDao;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementOrderDetailDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.SettlementPushRecord;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderDetail;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+import com.catt.wfx.service.base.orderMgr.CusOrderDetailBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementBusinessBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementOrderDetailBaseService;
+import com.catt.wfx.service.cusAccount.CusAccountHandlerService;
+import com.catt.wfx.service.settlementMgr.SettlementOrderDetailService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单结算统计服务
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-2-21 9:00:47
+ */
+@Service("settlementOrderDetailServiceImpl")
+public class SettlementOrderDetailServiceImpl implements SettlementOrderDetailService {
+
+    //用户订单服务
+    @Resource(name = "settlementOrderDetailBaseServiceImpl")
+    private SettlementOrderDetailBaseService settlementOrderDetailBaseService;
+
+    //商家账户信息服务
+    @Resource(name = "settlementBusinessBaseServiceImpl")
+    private SettlementBusinessBaseService settlementBusinessBaseService;
+
+    //用户订单明细DAO
+    @Resource(name = "cusOrderDetailDaoImpl")
+    private CusOrderDetailDao cusOrderDetailDao;
+
+    //团队信息DAO
+    @Resource(name = "cusAllotDaoImpl")
+    private CusAllotDao cusAllotDao;
+
+    // 订单结算统计Dao接口
+    @Resource(name = "settlementOrderDetailDaoImpl")
+    private SettlementOrderDetailDao settlementOrderDetailDao;
+
+    //用户账号资金相关操作服务接口
+    @Resource(name = "cusAccountHandlerServiceImpl")
+    private CusAccountHandlerService cusAccountHandlerService;
+
+    //用户订单明细服务
+    @Resource(name = "cusOrderDetailBaseServiceImpl")
+    private CusOrderDetailBaseService cusOrderDetailBaseService;
+
+    @Override
+    public void addSettlementOrderDetail(CusOrder cusOrder, SettlementOrderDetail.PayType payType) {
+        Long orderId = cusOrder.getId();
+        Long shopkeeperId = cusOrder.getShopkeeperId();
+//        Map<String, Object> cusOrderDetail = cusOrderDetailDao.getAmount(cusOrder.getId());
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("orderId", orderId));
+        List<CusOrderDetail> cusOrderDetails = cusOrderDetailBaseService.findList(null, filters, null);
+
+        //五级返利金额
+        Double profitSum = 0.0;
+        Double rebateOneSum = 0.0;
+        Double rebateTwoSum = 0.0;
+        Double rebateThreeSum = 0.0;
+        Double rebateFourSum = 0.0;
+        Double rebateFiveSum = 0.0;
+        //五级返利店主
+        Long rebateOneShopkeeperId = null;
+        Long rebateTwoShopkeeperId = null;
+        Long rebateThreeShopkeeperId = null;
+        Long rebateFourShopkeeperId = null;
+        Long rebateFiveShopkeeperId = null;
+
+        for (CusOrderDetail cusOrderDetail : cusOrderDetails) {
+            Double profit = cusOrderDetail.getProfit() == null ? 0.0 : cusOrderDetail.getProfit();
+            profitSum = NumberUtil.add(profitSum, profit);
+            String rebateJson = cusOrderDetail.getRebateJson();
+            if (StringUtil.checkStr(rebateJson)) {
+                List<Map> rebateList = JsonUtils.toList(rebateJson, Map.class);
+                Map rebateOneMap = rebateList.get(0);
+                Map rebateTwoMap = rebateList.get(1);
+                Map rebateThreeMap = rebateList.get(2);
+                Map rebateFourMap = rebateList.get(3);
+                Map rebateFiveMap = rebateList.get(4);
+                rebateOneSum = NumberUtil.add(rebateOneSum, MapUtil.getDouble(rebateOneMap, "i_rebate_one"));
+                rebateTwoSum = NumberUtil.add(rebateTwoSum, MapUtil.getDouble(rebateTwoMap, "i_rebate_two"));
+                rebateThreeSum = NumberUtil.add(rebateThreeSum, MapUtil.getDouble(rebateThreeMap, "i_rebate_three"));
+                rebateFourSum = NumberUtil.add(rebateFourSum, MapUtil.getDouble(rebateFourMap, "i_rebate_four"));
+                rebateFiveSum = NumberUtil.add(rebateFiveSum, MapUtil.getDouble(rebateFiveMap, "i_rebate_five"));
+                rebateOneShopkeeperId = MapUtil.getLong(rebateOneMap, "i_shopkeeper_id");
+                rebateTwoShopkeeperId = MapUtil.getLong(rebateTwoMap, "i_shopkeeper_id");
+                rebateThreeShopkeeperId = MapUtil.getLong(rebateThreeMap, "i_shopkeeper_id");
+                rebateFourShopkeeperId = MapUtil.getLong(rebateFourMap, "i_shopkeeper_id");
+                rebateFiveShopkeeperId = MapUtil.getLong(rebateFiveMap, "i_shopkeeper_id");
+            }
+        }
+
+        Double productAmount = cusOrder.getProductAmount();
+        Double couponMoney = cusOrder.getCouponMoney();
+        SettlementOrderDetail settlementOrderDetail = new SettlementOrderDetail();
+        settlementOrderDetail.setOrderType(cusOrder.getOrderType()); //订单类型
+//        settlementOrderDetail.setFactoryId();
+        settlementOrderDetail.setOrderId(cusOrder.getId());
+        settlementOrderDetail.setOrderCode(cusOrder.getOrderCode());
+        settlementOrderDetail.setOrderStatus(cusOrder.getOrderStatus());
+        settlementOrderDetail.setProductAmount(productAmount);
+        settlementOrderDetail.setCouponMoney(couponMoney);
+        settlementOrderDetail.setLogisticsCost(cusOrder.getLogisticsCost());
+        settlementOrderDetail.setTotalAmount(cusOrder.getTotalAmount());
+        settlementOrderDetail.setTotalPayAmount(cusOrder.getTotalPayAmount());
+        settlementOrderDetail.setShopkeeperId(shopkeeperId);
+        settlementOrderDetail.setShopId(cusOrder.getShopId());
+        settlementOrderDetail.setLeaderId(cusAllotDao.getLeaderIdByShopkeeperId(shopkeeperId));
+        settlementOrderDetail.setOrderTime(cusOrder.getCreateDate());
+        settlementOrderDetail.setShopkeeperAmount(profitSum);//店主结算金额
+//        settlementOrderDetail.setLeaderAmount();//主管结算金额
+//        settlementOrderDetail.setPlatAmount();//平台结算金额
+//        settlementOrderDetail.setLogisticsAmount();//物流结算金额
+        settlementOrderDetail.setShopkeeperSettlement(PubEnum.YesOrNoEnum.NO.getValue());
+        settlementOrderDetail.setLeaderSettlement(PubEnum.YesOrNoEnum.NO.getValue());
+        settlementOrderDetail.setPlatSettlement(PubEnum.YesOrNoEnum.NO.getValue());
+        settlementOrderDetail.setLogisticsSettlement(PubEnum.YesOrNoEnum.NO.getValue());
+        settlementOrderDetail.setShopGiveSettle(PubEnum.YesOrNoEnum.NO.getValue());
+        settlementOrderDetail.setLeaderGiveSettle(PubEnum.YesOrNoEnum.NO.getValue());
+//        settlementOrderDetail.setShopDetailId(null);
+//        settlementOrderDetail.setPlatDetailId(null);
+//        settlementOrderDetail.setLeaderDetailId(null);
+        settlementOrderDetail.setPayType(payType.getValue());
+        settlementOrderDetail.setCreatedId(cusOrder.getCreatedId());
+        settlementOrderDetail.setCreatedName(cusOrder.getCreatedName());
+
+        if (rebateOneSum > 0) { //厂家返利
+            List<Map> rebateList = new ArrayList<>();
+            rebateList.add(this.createRebateMap("i_rebate_one", rebateOneSum, rebateOneShopkeeperId));
+            rebateList.add(this.createRebateMap("i_rebate_two", rebateTwoSum, rebateTwoShopkeeperId));
+            rebateList.add(this.createRebateMap("i_rebate_three", rebateThreeSum, rebateThreeShopkeeperId));
+            rebateList.add(this.createRebateMap("i_rebate_four", rebateFourSum, rebateFourShopkeeperId));
+            rebateList.add(this.createRebateMap("i_rebate_five", rebateFiveSum, rebateFiveShopkeeperId));
+            settlementOrderDetail.setRebateJson(JsonUtils.toJson(rebateList));
+        }
+        settlementOrderDetailBaseService.save(settlementOrderDetail);
+
+        //修改商家账户信息的订单量、销售额等
+        SettlementBusiness settlementBusiness = settlementBusinessBaseService.findSettlementBusiness(1L); //TODO 厂家标识
+        settlementBusiness.setTotalNum(settlementBusiness.getTotalNum() + 1);
+        settlementBusiness.setTotalMoney(NumberUtil.moneyAdd(settlementBusiness.getTotalMoney(), productAmount));
+        if (couponMoney != null && couponMoney > 0){
+            settlementBusiness.setVoucherUseNum(settlementBusiness.getVoucherUseNum() + 1);
+            settlementBusiness.setVoucherUseMoney(NumberUtil.moneyAdd(settlementBusiness.getVoucherUseMoney(), couponMoney));
+        }
+        settlementBusinessBaseService.update(settlementBusiness);
+
+        //店主待收提成+
+        Double shopkeeperAmount = settlementOrderDetail.getShopkeeperAmount();
+        if (shopkeeperId != null && shopkeeperAmount != null){
+            cusAccountHandlerService.handelUnAcceptMoney(shopkeeperId, shopkeeperAmount, orderId, null,
+                    SettlementPushRecord.Type.AddUnAcceptMoney);
+        }
+        if (rebateOneSum > 0 && rebateOneShopkeeperId != null) { //一级返利
+            cusAccountHandlerService.handelReciveRebateMoney(rebateOneShopkeeperId, rebateOneSum, orderId, null,
+                    SettlementPushRecord.Type.AddReciveRebateMoney, 1);
+        }
+        if (rebateTwoSum > 0 && rebateTwoShopkeeperId != null) { //二级返利
+            cusAccountHandlerService.handelReciveRebateMoney(rebateTwoShopkeeperId, rebateTwoSum, orderId, null,
+                    SettlementPushRecord.Type.AddReciveRebateMoney, 2);
+        }
+
+        if (rebateThreeSum > 0 && rebateThreeShopkeeperId != null) { //三级返利
+            cusAccountHandlerService.handelReciveRebateMoney(rebateThreeShopkeeperId, rebateThreeSum, orderId, null,
+                    SettlementPushRecord.Type.AddReciveRebateMoney, 3);
+        }
+
+        if (rebateFourSum > 0 && rebateFourShopkeeperId != null) { //四级返利
+            cusAccountHandlerService.handelReciveRebateMoney(rebateFourShopkeeperId, rebateFourSum, orderId, null,
+                    SettlementPushRecord.Type.AddReciveRebateMoney, 4);
+        }
+
+        if (rebateFiveSum > 0 && rebateFiveShopkeeperId != null) { //五级返利
+            cusAccountHandlerService.handelReciveRebateMoney(rebateFiveShopkeeperId, rebateFiveSum, orderId, null,
+                    SettlementPushRecord.Type.AddReciveRebateMoney, 5);
+        }
+    }
+
+    /**
+     * 创建返利map
+     *
+     * @param rebateColumnName   返利金额字段名
+     * @param rebateMoney        返利金额
+     * @param rebateShopkeeperId 返利店主标识
+     * @return
+     */
+    private Map createRebateMap(String rebateColumnName, Double rebateMoney, Long rebateShopkeeperId) {
+        Map rebateMap = new HashMap<>();
+        rebateMap.put(rebateColumnName, rebateMoney);//返利总价
+        rebateMap.put("i_shopkeeper_id", rebateShopkeeperId);//返利店主id
+        return rebateMap;
+    }
+
+    /**
+     * 获取主管团队销售订单数
+     *
+     * @param cusId 主管标识
+     * @return
+     */
+    @Override
+    public Integer getTeamOrderNum(Long cusId) {
+        return settlementOrderDetailDao.getTeamOrderNum(cusId);
+    }
+
+    /**
+     * 获取主管团队销售金额
+     *
+     * @param cusId 主管标识
+     * @return
+     */
+    @Override
+    public Double getTeamSaleMoney(Long cusId) {
+        return settlementOrderDetailDao.getTeamSaleMoney(cusId);
+    }
+}

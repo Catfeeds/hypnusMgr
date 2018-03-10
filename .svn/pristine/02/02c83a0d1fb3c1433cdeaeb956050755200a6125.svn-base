@@ -1,0 +1,338 @@
+package com.catt.wfx.web.controller.admin.productMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.module.security.pojo.security.ExtPrincipal;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.security.shiro.SecurityUtil;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.FactoryInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductAttr;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.service.base.productMgr.ProductAttrBaseService;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPriceBaseService;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import com.catt.wfx.service.basicConfig.FactoryInfoService;
+import com.catt.wfx.service.productMgr.ProductPriceService;
+import com.catt.wfx.service.productMgr.ProductService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商品发布控制器
+ * 作者：袁幸成
+ * 时间：2017-1-11 9:26:20
+ */
+@RequestMapping({"/admin/productMgr/publish"})
+@Controller("productPublishController")
+public class ProductPublishController extends BaseController{
+
+    //商品服务
+    @Resource(name = "productInfoBaseServiceImpl")
+    public ProductInfoBaseService productInfoBaseService;
+
+    //商品服务
+    @Resource(name = "productServiceImpl")
+    public ProductService productService;
+
+    //商品价格定义服务
+    @Resource(name = "productPriceBaseServiceImpl")
+    ProductPriceBaseService productPriceBaseService;
+
+    //商品价格定义服务
+    @Resource(name = "productPriceServiceImpl")
+    ProductPriceService productPriceService;
+
+    //商品扩展服务接口
+    @Resource(name = "productAttrBaseServiceImpl")
+    ProductAttrBaseService productAttrBaseService;
+
+    //系统全局设置服务接口
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+    //厂家服务
+    @Resource(name = "factoryInfoServiceImpl")
+    private FactoryInfoService factoryInfoService;
+
+    /**
+     * 跳转到商品发布列表页
+     * @return
+     */
+    @RequestMapping(value = "/index.html")
+    public String index(){
+        return "/admin/productMgr/publish/index";
+    }
+
+    /**
+     * 跳转到商品发布详情页
+     * @return
+     */
+    @RequestMapping(value = "/detail/{id}")
+    public String detail(@PathVariable("id") Long id, Model model){
+        model.addAttribute("id", id);
+        model.addAttribute("entity", productService.getProductInfoAndAttr(id));
+        return "/admin/productMgr/publish/detail";
+    }
+
+    /**
+     * 跳转到商品发布-选择商品页
+     * @return
+     */
+    @RequestMapping(value = "/selectProduct.html")
+    public String selectProduct(){
+        return "/admin/productMgr/publish/selectProduct";
+    }
+
+    /**
+     * 跳转到商品发布/修改页
+     * @return
+     */
+    @RequestMapping(value = "/addEdit/{id}")
+    public String addEdit(@PathVariable("id") Long id, Model model){
+        model.addAttribute("id", id);
+        model.addAttribute("entity", productService.getProductInfoAndAttr(id));
+        return "/admin/productMgr/publish/addEdit";
+    }
+
+    /**
+     * 跳转到排序页
+     * @return
+     */
+    @RequestMapping(value = "/sort.html")
+    public String toSort(Long[] ids, Model model){
+        model.addAttribute("products", productInfoBaseService.findList(ids));
+        return "/admin/productMgr/publish/sort";
+    }
+
+    /**
+     * 跳转到补货页
+     * @return
+     */
+    @RequestMapping(value = "/fill/{id}")
+    public String toFill(@PathVariable("id") Long id, Model model){
+        model.addAttribute("id", id);
+        return "/admin/productMgr/publish/fill";
+    }
+
+    /**
+     * 分页查询
+     * @param pageable 分页参数
+     * @param zhName 商品名称
+     * @param cateId 分类标识
+     * @param status 销售状态
+     * @param minStockNum 库存数量<=minStockNum
+     * @return
+     */
+    @RequestMapping(value = "/findPage", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> findPage(Pageable pageable, String zhName, Long cateId, Integer status, Integer minStockNum, @CurrentUser("id") Long userId){
+        ExtPrincipal principal = SecurityUtil.getPrincipal();
+        Long factoryId = null;
+        if(principal != null){
+            String factoryIdStr = principal.getDeptShortName();
+            if(StringUtil.isNotBlank(factoryIdStr)){
+                factoryId = Long.parseLong(factoryIdStr);
+            }else{
+                return new Page<>();//当前用户不存在厂家，返回空列表
+            }
+            FactoryInfo factory = factoryInfoService.getFactoryInfoById(factoryId);
+            if(factory == null || (Integer.compare(factory.getDelFlag(), PubEnum.YesOrNoEnum.YES.getValue()) == 0)){
+                return new Page<>();//当前用户厂家已被删除，返回空列表
+            }
+            Long defaultFactoryId = Long.parseLong(pubSetupBaseService.getSetupByCode(PubSetup.Code.selfSupport));
+            if(Long.compare(defaultFactoryId, factoryId) == 0){//自营
+                factoryId = null;
+            }
+        }else{
+            return new Page<>();//当前用户不存在厂家，返回空列表
+        }
+        return productService.findPageWithSaleInfoByFactoryId(pageable, zhName, cateId, status, minStockNum, factoryId);
+    }
+
+    /**
+     * 获取商品规格及价格
+     * @param productId 分类标识
+     * @return
+     */
+    @RequestMapping(value = "/getSpecAndPrice", method = RequestMethod.POST)
+    @ResponseBody
+    public Map getSpecAndPrice(Long productId){
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("productId", productId));
+        List<ProductPrice> prices = productPriceBaseService.findList(null, filters, null);
+        Map map = new HashMap<>();
+        map.put("prices", prices);
+        List<ProductAttr> attrs = productAttrBaseService.findList(1, filters, null);
+        if (attrs.size() == 0){
+            throw BaseException.errorByErrInfo("商品规格不存在");
+        }
+        map.put("priceList", prices);
+        String specJson = attrs.get(0).getSpecJson();
+        List<Map> specList = JsonUtils.toList(specJson, Map.class);
+        List<List<String>> dimvalue = new ArrayList<List<String>>();
+        List<String> colNames = new ArrayList<>();
+        int size = specList.size();
+        for (int i = 0; i < size; i++){
+            Map spec = specList.get(i);
+            colNames.add(MapUtil.getString(spec, "name"));
+            dimvalue.add((List<String>) spec.get("detail"));
+        }
+        List<List<String>> result = new ArrayList<List<String>>();
+        this.cartRun(dimvalue, result, 0, new ArrayList<String>());
+        map.put("specList", result);
+        map.put("colNames", colNames);
+        return map;
+    }
+
+    /**
+     * 保存商品类型
+     * @param userId 操作人标识
+     * @param userName 操作人名称
+     * @param productId 商品标识
+     * @param pricesJson 商品价格定义json字符串
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public Message save(@CurrentUser Long userId, @CurrentUser("name") String userName,
+                            Long productId, String pricesJson){
+        Assert.notNull(productId);
+        List<ProductPrice> priceList = JsonUtils.toList(pricesJson, ProductPrice.class);
+        for (ProductPrice productPrice : priceList){
+            productPrice.setProductId(productId);
+            productPrice.setCreatedId(userId);
+            productPrice.setCreatedName(userName);
+        }
+        productPriceService.savePrices(productId, priceList);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 上架/下架
+     * @param ids 商品标识数组
+     * @param status 状态
+     * @return
+     */
+    @RequestMapping(value = "/updateStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public Message updateStatus(Long[] ids, Integer status){
+        Assert.isTrue(status == ProductInfo.Status.OnSale.getValue() || status == ProductInfo.Status.NoSale.getValue());
+        productService.updateStatus(ids, status);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 保存排序
+     * @param ids 商品标识数组
+     * @param sortNums 商品排序号数组
+     * @return
+     */
+    @RequestMapping(value = "/saveSortNum", method = RequestMethod.POST)
+    @ResponseBody
+    public Message saveSeq(Long[] ids, Integer[] sortNums){
+        Assert.isTrue(ids.length == sortNums.length);
+        int size = ids.length;
+        List<ProductInfo> list = new ArrayList<>();
+        for (int i = 0; i < size; i++){
+            ProductInfo productInfo = productInfoBaseService.find(ids[i]);
+            productInfo.setSeq(sortNums[i]);
+            list.add(productInfo);
+        }
+        productInfoBaseService.saveOrUpdate(list);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 保存补货数量
+     * @param ids 商品价格定义标识数组
+     * @param addNums 补货数量数组
+     * @return
+     */
+    @RequestMapping(value = "/saveFillNum", method = RequestMethod.POST)
+    @ResponseBody
+    public Message saveFillNum(Long[] ids, Integer[] addNums){
+        Assert.isTrue(ids.length == addNums.length);
+        int size = ids.length;
+        List<ProductPrice> list = new ArrayList<>();
+        for (int i = 0; i < size; i++){
+            ProductPrice productPrice = productPriceBaseService.find(ids[i]);
+            productPrice.setStockNum(addNums[i] + productPrice.getStockNum());
+            list.add(productPrice);
+        }
+        productPriceBaseService.saveOrUpdate(list);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 笛卡尔积运算
+     * @param dimvalue 目标集合
+     * @param result 结果集合
+     * @param layer 下标
+     * @param data data
+     */
+    private static void cartRun(List<List<String>> dimvalue, List<List<String>> result, int layer, List<String> data) {
+        //大于一个集合时：
+        if (layer < dimvalue.size() - 1) {
+            //大于一个集合时，第一个集合为空
+            if (dimvalue.get(layer).size() == 0)
+                cartRun(dimvalue, result, layer + 1, data);
+            else {
+                for (int i = 0; i < dimvalue.get(layer).size(); i++) {
+                    List<String> temp = copy(data);
+                    temp.add(dimvalue.get(layer).get(i));
+//                    data.add(dimvalue.get(layer).get(i));
+                    cartRun(dimvalue, result, layer + 1, temp);
+                }
+            }
+        }
+        //只有一个集合时：
+        else if (layer == dimvalue.size() - 1) {
+            //只有一个集合，且集合中没有元素
+            if (dimvalue.get(layer).size() == 0)
+                result.add(data);
+                //只有一个集合，且集合中有元素时：其笛卡尔积就是这个集合元素本身
+            else {
+                for (int i = 0; i < dimvalue.get(layer).size(); i++) {
+                    List<String> temp = copy(data);
+                    temp.add(dimvalue.get(layer).get(i));
+                    result.add(temp);
+                }
+            }
+        }
+    }
+
+    /**
+     * 复制
+     * @param data 数据集合
+     * @return
+     */
+    private static List<String> copy(List<String> data) {
+        List<String> list = new ArrayList<>();
+        for(String str : data){
+            list.add(str);
+        }
+        return list;
+    }
+}

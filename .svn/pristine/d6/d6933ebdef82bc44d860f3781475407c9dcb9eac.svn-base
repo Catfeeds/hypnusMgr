@@ -1,0 +1,85 @@
+package com.catt.wfx.service.productMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.data.vo.productMgr.ProductDocumentVo;
+
+import java.util.Map;
+
+/**
+ * Description:商品文案管理接口
+ * Created by 2017-02-06  10:24.
+ * author: Zhou mingxiang
+ */
+public interface ProductDocumentService {
+    /**
+     * 获取商品文案列表
+     *
+     * @param zhName   商品名称
+     * @param cateId   分类标识
+     * @param pageable
+     * @return
+     */
+    Page<Map> getProductDocumentByPage(String zhName, Long cateId, Pageable pageable);
+
+    /**
+     * 获取商品文案详情列表
+     *
+     * @param productId 商品标识
+     * @param type      文案类型
+     * @param status    文案状态
+     * @param pageable
+     * @return
+     */
+    Page<Map> getDocumentDetailByPage(Long productId, Integer type, Integer status, Pageable pageable);
+
+    /**
+     * 获取商品文案信息
+     *
+     * @param id 商品文案标识
+     * @return
+     */
+    Map getProductDocument(Long id);
+
+    /**
+     * 删除商品文案
+     *
+     * @param ids 商品文案标识
+     */
+    void delete(Long[] ids);
+
+
+    /**
+     * 修改商品文案信息
+     *
+     * @param productDocumentVo 商品文案vo
+     * @param coverpic          图片信息
+     */
+    void update(ProductDocumentVo productDocumentVo, String coverpic);
+
+    /**
+     * 保存商品文案信息
+     *
+     * @param id                文案创建人员标识
+     * @param name              文案创建人员名称
+     * @param productDocumentVo 商品文案vo
+     * @param coverpic          图片信息
+     */
+    void save(Long id, String name,
+              ProductDocumentVo productDocumentVo, String coverpic);
+
+    /**
+     * 审核商品文案
+     *
+     * @param ids         商品文案标识
+     * @param trueOrFalse 判断是否通过
+     */
+    void copyAudit(Long[] ids, boolean trueOrFalse);
+
+    /**
+     * 店主上传文案转为官方文案
+     *
+     * @param ids 商品文案标识集合
+     */
+    void copyOfficial(Long[] ids);
+}

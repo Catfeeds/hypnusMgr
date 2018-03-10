@@ -1,0 +1,344 @@
+package com.catt.wfx.repository.entity.settlementMgr;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+/**
+ * 账户结算明细实体类
+ * 
+ * @author 邹佳
+ * @date 2017-02-09 10:30:50
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_SETTLEMENT_SHOP_DETAIL")
+public class SettlementShopDetail extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * <pre>
+	 * 用户标识
+	 * </pre>
+	 */
+	private Long cusId;
+	/**
+	 * <pre>
+	 * 客户类型
+	 * 1-店主
+	 * 2-主管
+	 * </pre>
+	 */
+	private Integer cusType;
+	/**
+	 * <pre>
+	 * 交易类型
+     * 1-店主提成  2-主管提成  3-注册奖励 4-邀请奖励 5-销售奖励
+	 * </pre>
+	 */
+	private Integer settlementType;
+	/**
+	 * <pre>
+	 * 规则标识
+	 * </pre>
+	 */
+	private Long ruleId;
+	/**
+	 * <pre>
+	 * 规则类型
+	 * 1-注册
+	 * 2-邀请
+	 * 3-销售
+	 * </pre>
+	 */
+	private Integer type;
+	/**
+	 * <pre>
+	 * 代金券标识
+	 * 多个以英文逗号分隔
+	 * </pre>
+	 */
+	private String couponId;
+	/**
+	 * <pre>
+	 * 赠送金额
+	 * </pre>
+	 */
+	private Double giveMoney;
+	/**
+	 * <pre>
+	 * 销售提成金额
+	 * </pre>
+	 */
+	private Double salesMoney;
+	/**
+	 * <pre>
+	 * 创建人员标识
+	 * 创建人员标识
+	 * </pre>
+	 */
+	private Long createdId;
+	/**
+	 * <pre>
+	 * 创建人员名称
+	 * 创建人员名称
+	 * </pre>
+	 */
+	private String createdName;
+
+	@Column(name = "I_CUS_ID")
+	public Long getCusId() {
+		return cusId;
+	}
+
+	public void setCusId(Long cusId) {
+		this.cusId = cusId;
+	}
+
+	@Column(name = "I_CUS_TYPE")
+	public Integer getCusType() {
+		return cusType;
+	}
+
+	public void setCusType(Integer cusType) {
+		this.cusType = cusType;
+	}
+
+	@Column(name = "I_SETTLEMENT_TYPE")
+	public Integer getSettlementType() {
+		return settlementType;
+	}
+
+	public void setSettlementType(Integer settlementType) {
+		this.settlementType = settlementType;
+	}
+
+	@Column(name = "I_RULE_ID")
+	public Long getRuleId() {
+		return ruleId;
+	}
+
+	public void setRuleId(Long ruleId) {
+		this.ruleId = ruleId;
+	}
+
+	@Column(name = "I_TYPE")
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	@Column(name = "S_COUPON_ID", length = 1000)
+	public String getCouponId() {
+		return couponId;
+	}
+
+	public void setCouponId(String couponId) {
+		this.couponId = couponId;
+	}
+
+	@Column(name = "I_GIVE_MONEY")
+	public Double getGiveMoney() {
+		return giveMoney;
+	}
+
+	public void setGiveMoney(Double giveMoney) {
+		this.giveMoney = giveMoney;
+	}
+
+	@Column(name = "I_SALES_MONEY")
+	public Double getSalesMoney() {
+		return salesMoney;
+	}
+
+	public void setSalesMoney(Double salesMoney) {
+		this.salesMoney = salesMoney;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+    /**
+     * 客户类型
+     * 1-店主 2-主管
+     */
+    public enum CusType {
+
+        /**
+         * 店主
+         */
+        Shopkeeper(1, "店主"),
+
+        /**
+         * 主管
+         */
+        Leader(2, "主管");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        CusType(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static CusType getEnum(int value) {
+            CusType[] source = CusType.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+    }
+
+    /**
+     * 交易类型
+     * 1-店主提成  2-主管提成  3-注册奖励 4-邀请奖励 5-销售奖励
+     */
+    public enum SettlementType {
+
+        /**
+         * 店主提成
+         */
+        ShopkeeperCommissions(1, "店主提成"),
+
+        /**
+         * 主管提成
+         */
+        LeaderCommissions(2, "主管提成"),
+        /**
+         * 注册奖励
+         */
+        RegisterBonus(3, "注册奖励"),
+
+        /**
+         * 邀请奖励
+         */
+        InviteBonus(4, "邀请奖励"),
+
+        /**
+         * 销售奖励
+         */
+        SaleBonus(5, "销售奖励");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        SettlementType(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static SettlementType getEnum(int value) {
+            SettlementType[] source = SettlementType.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+    }
+
+}
+

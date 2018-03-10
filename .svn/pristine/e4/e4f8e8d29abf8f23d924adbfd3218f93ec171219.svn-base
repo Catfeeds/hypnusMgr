@@ -1,0 +1,161 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>商品详情</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/shangpinxiangqing.css"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+
+    <%--<script type="text/javascript" src="${path}/resources/js/jingxuan.js"></script>--%>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/product/detail.js"></script>
+    <script type="text/javascript">
+        var appId = '${appId}';
+        var timestamp = '${timestamp}';
+        var nonceStr = '${nonceStr}';
+        var signature = '${signature}';
+        var headPath = '${headPath}';
+        var zhName = '${zhName}';
+    </script>
+    <style>
+        .introductDiv{ background:#fff;}
+        .introductDiv img{ width:100%;vertical-align: top;}
+    </style>
+</head>
+
+<body class="xw_big">
+<div style="height:47px;"></div>
+<div class="top header" style="border-bottom:1px solid #e5e5e5;">
+    <button class="top-left" onClick="javascript:history.back(-1);"><img class="top_btn_back"
+                                                                         src="${path}/resources/images/top_btn_back.png">
+    </button>
+    <button class="top-right" onClick="window.location='${path}/index?shopId=${shopId}';"><img class="top_btn_back"
+                                                                                               src="${path}/resources/images/icon_my.png">
+    </button>
+    <table class="goodsType" style="width:60%; height:47px; margin-left:20%; border:none;">
+        <tr>
+            <td>
+                <a class="xw_top" style="height:45px; line-height:45px;">商品详情</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<input type="hidden" value="${id}" id="id">
+<input type="hidden" value="${from}" id="from">
+<div class="xw_detail">
+    <div class="topBox">
+        <div class="swiper-container" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+            <div class="swiper-wrapper">
+                <c:forEach items="${picPathList}" var="pic">
+                    <div class="swiper-slide">
+                        <div style="background:#f3f3f3;">
+                            <img class="pic" src="${pic}">
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+        <h1>${zhName}</h1>
+        <h2>
+            <span class="floatLeft">￥${salesPrice}
+            <c:if test="${costPrice!=null}">
+                <font class="yuanjia">￥${costPrice}</font>
+            </c:if>
+            </span>
+            <span class="kucun">库存：${totalStockNum}件  </span>
+        </h2>
+    </div>
+    <div class="mainBox xw_mainBox">
+        <table class="goodsType">
+            <tr>
+                <td>
+                    <a class="lion xw_li">商品详情</a>
+                </td>
+                <td>
+                    <a class="xw_li">商品参数</a>
+                </td>
+                <td>
+                    <a class="xw_li">购买须知</a>
+                </td>
+            </tr>
+        </table>
+        <div class="introductDiv xw_goodsList">
+            <%--<img src="${path}/resources/images/puntuan_bg_xiangqing.png" width="100%">--%>
+            ${introduce}
+        </div>
+        <div class="detailText xw_goodsList" style="display:none;">
+            <c:forEach items="${attrJson}" var="attr">
+                <h1><span>${attr.name}<c:if test="${attr.unit != ''}">(${attr.unit})</c:if>：</span>${attr.value}</h1>
+            </c:forEach>
+        </div>
+        <div class="detailText xw_goodsList" style="display:none;">
+            <h2>1.秋季养生食材有哪些</h2>
+            <p>
+                秋天吃莲藕具有多种食疗效果。现代科学分析，莲藕含有大量铁质，具有补血作用。丰富的维生素C、抗氧化物、多醣和多酚类则可达到抗癌效果。以中医来说，生熟藕各具不同效果，莲藕生吃性味甘寒，可清热凉血；煮熟後性味温平，有助健脾胃。</p>
+            <h2>2.冬天进补吃什么最好冬天进补吃什么最好冬天进补吃什么最好冬天进补吃什么最好</h2>
+            <p>
+                中医学认为，冬季为闭藏”之季。由于阳气潜伏，阴气盛极，万物生机闭藏，人体新陈代谢缓慢，生理功能处于抑制、降低状态，此时若用药物对人体进补的话，药物的补益作用往往有推波逐浪之势，可促进人体功能活动，增进脏腑活力。</p>
+        </div>
+    </div>
+    <div style="height:60px;"></div>
+    <div class="bottom">
+        <button class="gouwuche" onClick="window.location='${path}/admin/wechat/cusCart/index.html?shopId=${shopId}'">
+            <img src="${path}/resources/images/ico_gouwuche.png" width="25px" height="25px">购物车
+        </button>
+        <button class="add xw_guigeBt">加入购物车</button>
+        <button class="up" id="buyNow">立即购买</button>
+    </div>
+</div>
+
+
+<!--选择规格-->
+<div class="shareDiv xw_guigeDiv">
+    <div class="guigeDiv xw_guige">
+        <span class="close xw_close"><img src="${path}/resources/images/ico_close.png" width="20" height="20"></span>
+        <table class="guigeTab" style="margin-top:40px;">
+            <tr>
+                <td>
+                    <div class="price" id="productPrice">￥0</div>
+                    <div class="numBer">
+                        <div class="floatLeft" style="line-height:30px; color:#999;">数量：</div>
+                        <span id="numSub">
+                            <img src="${path}/resources/images/ico_minus.png" width="14" height="2"
+                                 style=" margin-top:12px;">
+                        </span>
+                        <input id="productNum" type="number" class="num" value="1">
+                        <span id="numAdd">
+                            <img src="${path}/resources/images/ico_plus.png" width="14" height="14"
+                                 style=" margin-top:5px;">
+                        </span>
+                        <h2 id="stockNum">（库存0件）</h2>
+                    </div>
+                </td>
+            </tr>
+            <tbody id="specList"></tbody>
+        </table>
+        <button class="nextBtn1" id="confirmSepc">确&nbsp;&nbsp;&nbsp;&nbsp;定</button>
+    </div>
+</div>
+
+<script type="text/html" id="template_specList">
+    {{each content as item i}}
+    <tr>
+        <td>选择{{item.name}}：</td>
+    </tr>
+    <tr>
+        <th>
+            <ul class="sizeUl xw_sizeUl">
+                {{each item.detail as detail j}}
+                <li class="specLi nothing" id="{{i}}spec{{j}}">{{detail}}</li>
+                {{/each}}
+            </ul>
+        </th>
+    </tr>
+    {{/each}}
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+var _msgBox = {};
+var _util = {};
+var isRootUrl = true;
+/**
+ * 页面入口
+ */
+seajs.use(['$', 'msgBox', 'template', 'easyuiDatagrid', 'select', 'util', 'jquery.json'],
+    function($, msgBox, template, easyuiDatagrid, select, util) {
+        _msgBox = msgBox;
+        _util = util;
+        $(function(){
+            InitHandler.init();
+        });
+    });
+
+/**
+ * 初始化处理器
+ */
+var InitHandler = function() {
+    return {
+        init : function(){
+            EventHandler.init();
+        }
+    };
+}();
+/**
+ * 事件处理器
+ */
+var EventHandler = function(){
+    return {
+        //绑定按钮事件
+        init : function(){
+            EventHandler.initDatagrid();
+            $(".datagrid-header-check").find("input").attr("disabled","disabled");
+            $("#reset").bind("click",EventHandler.reset);
+            $("#search").bind("click", function(){
+                $('#tableModule').treegrid('reload');
+            });
+            $("#select").bind("click",EventHandler.select);
+            $('#cateName').click(EventHandler.getCate);
+            $("#cancel").bind("click", function(){
+                _msgBox.exWindow.close();
+            });
+        },
+        select: function(){
+            var selectRows = $("#tableModule").treegrid("getChecked");
+            if(selectRows.length == 0){
+                _msgBox.warn("请至少勾选一行数据");
+                return;
+            }
+            for(var o in selectRows){
+                selectRows[o].priceId = selectRows[o].id;
+            }
+            _msgBox.exWindow.close($.toJSON(selectRows));
+        },
+        //分类选择
+        getCate: function(){
+            _msgBox.exWindow.open({
+                title: '商品分类',
+                url: path + "/admin/productInfo/productClass.html",
+                width: '40%',
+                height: '73%',
+                close: function (result) {
+                    if (result) {
+                        var param = $.evalJSON(result)
+                        var cateId = param.id;
+                        var name = param.name;
+                        $('#cateName').val(name);
+                        $('#cateId').val(cateId);
+                    }
+                }
+            });
+        },
+        //初始化表格
+        initDatagrid : function(){
+            $('#tableModule').treegrid({
+                url : path + '/admin/productMgr/package/findPublishPage',
+                height : "480",
+                idField:'id',//必须要有此属性以及对应的字段，对应字段的值必须保证唯一
+                treeField:'zhName',
+                method: 'post',
+                pageSize : 10,
+                loadMsg: false,
+                checkOnSelect : false,
+                selectOnCheck : false,
+                singleSelect : true,
+                loadFilter: function(data){
+                    if(data.total){
+                        isRootUrl = true;
+                        var param = {};
+                        param.total = data.total;
+                        param.rows = data.content;
+                        return param;
+                    }else{
+                        isRootUrl = false;
+                        return data;
+                    }
+                },
+                onBeforeLoad : function(row){
+                    if(row){
+                        $(this).treegrid('options').url = path + "/admin/productMgr/package/findSpecList/" + row.id;
+                    }else{
+                        $(this).treegrid('options').url = path + '/admin/productMgr/package/findPublishPage?zhName='
+                        + $("#zhName").val() + "&cateId=" + $("#cateId").val();
+                    }
+                },
+                onCheck : function(index, note){
+                    var par = $('#tableModule').treegrid('getParent', note.id);
+                    if(par == null){
+                        setTimeout(function(){
+                            $('#tableModule').treegrid('uncheckRow', index);
+                        }, 50)
+                    }
+                },
+                columns:[[
+                    //{field:'ck',checkbox:true},
+                    {field:'zhName',title:'商品名称',align:'left',halign:'center',width:"150px",
+                        formatter: function(value,row,index){
+                            if (isRootUrl){
+                                return value;
+                            } else {
+                                return $('#tableModule').treegrid('getParent', row.id).zhName;
+                            }
+                        }
+                    },
+                    {field:'cateName',title:'分类',align:'center',halign:'center',width:"100px",
+                        formatter: function(value,row,index){
+                            if (isRootUrl){
+                                return value;
+                            } else {
+                                return $('#tableModule').treegrid('getParent', row.id).cateName;
+                            }
+                        }
+                    },
+                    {field:'specJson',title:'规格',align:'center',width:"298px",
+                        formatter: function(value,row,index){
+                            if (isRootUrl){
+                                return "";
+                            } else {
+                                var spec = $.evalJSON(value);
+                                var str = "";
+                                for(var o in spec){
+                                    str += "_" + spec[o];
+                                }
+                                return str.substr(1);
+                            }
+                        }
+                    },
+                    {field:'salesPrice',title:'售价（元）',align:'center',width:"100px",
+                        formatter: function(value,row,index){
+                            if (isRootUrl){
+                                return "";
+                            } else {
+                                return value;
+                            }
+                        }
+                    },
+                    {field:'stockNum',title:'库存',align:'center',width:"100px",
+                        formatter: function(value,row,index){
+                            if (isRootUrl){
+                                return "";
+                            } else {
+                                return value;
+                            }
+                        }
+                    },
+                    {field:'id',title:'id',hidden:true}
+                ]]
+            });
+        },
+        reset : function(){
+            $('#zhName').val("");
+            $('#cateName').val("");
+            $('#cateId').val("");
+        }
+    }
+}();
+
+/**
+ * 数据处理器
+ */
+var DataHandler = function(){
+    return {
+    };
+}();
+

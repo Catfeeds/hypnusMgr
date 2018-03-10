@@ -1,0 +1,9 @@
+[
+  {
+    "errKey": "EXP.SAFELOCK.FAIL",
+    "errCode": "7000000",
+    "errInfo": "安全校验不通过",
+    "errLevel": "error",
+    "errSolveDesc": ""
+  }
+]

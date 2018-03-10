@@ -1,0 +1,171 @@
+package com.catt.wfx.repository.entity.basicConfig;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 平台收益设置实体
+ * 
+ * @author chen chusheng
+ * @date 2017-02-06 14:09:15
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "t_plat_income_set")
+public class PlatIncomeSet extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+
+	/**
+	 * 奖励类型<p><br>
+	 * 1、按订单金额百分比;2、按固定金额
+	 */
+	private Integer type;
+	/**
+	 * 订单个数<p><br>
+	 * 订单数满足数量后，按提取额度提取
+	 */
+	private Integer orderNum;
+	/**
+	 * 订单提取额度<p><br>
+	 * 平台提取金额
+	 * type = 1: 订单金额的 n %
+	 * type = 2: 每笔订单提取 n 元
+	 */
+	private Double orderMoney;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+
+	@Column(name = "i_type")
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	@Column(name = "i_order_num")
+	public Integer getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
+	}
+
+	@Column(name = "i_order_money")
+	public Double getOrderMoney() {
+		return orderMoney;
+	}
+
+	public void setOrderMoney(Double orderMoney) {
+		this.orderMoney = orderMoney;
+	}
+
+	@Column(name = "i_created_id")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "s_created_name", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+    /**
+     * 奖励类型<p><br>
+     * 1、按订单金额百分比;2、按固定金额
+     */
+    public enum Type {
+
+        /**
+         * 按订单金额百分比
+         */
+        AmountPercent(1, "按订单金额百分比"),
+
+        /**
+         * 按固定金额
+         */
+        FixedAmount(2, "按固定金额");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        Type(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static Type getEnum(int value) {
+            Type[] source = Type.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+    }
+
+}
+

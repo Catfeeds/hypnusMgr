@@ -1,0 +1,153 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusAccountDetailDao;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementOrderDetailDao;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountConsume;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountDetail;
+import com.catt.wfx.service.base.customerMgr.CusAccountConsumeBaseService;
+import com.catt.wfx.service.customerMgr.CusAccountService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:用户账户服务接口实现
+ * Created by 2017-02-15  14:18.
+ * author: Zhou mingxiang
+ */
+@Service("cusAccountServiceImpl")
+public class CusAccountServiceImpl implements CusAccountService {
+
+    @Resource(name = "cusAccountConsumeBaseServiceImpl")
+    private CusAccountConsumeBaseService cusAccountConsumeBaseService;
+
+    @Resource(name = "settlementOrderDetailDaoImpl")
+    private SettlementOrderDetailDao settlementOrderDetailDao;
+
+    //账户明细记录Dao接口
+    @Resource(name = "cusAccountDetailDaoImpl")
+    private CusAccountDetailDao cusAccountDetailDao;
+
+    //交易方向---1-增加
+    private static final Integer ONE = 1;
+    //交易方向---2-减少
+    private static final Integer TWO = 2;
+
+    /**
+     * 获取我的账户信息(APP)
+     *
+     * @param cusId                 当前登录用户ID
+     * @param unsettleMoneyInResult 是否返回待到账收益
+     * @return
+     */
+    public Map findCusAccount(Long cusId, Integer unsettleMoneyInResult) {
+        Map map = new HashMap<>();
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("cusId", cusId));
+        List<CusAccountConsume> cusAccountConsumeList = cusAccountConsumeBaseService.findList(1, filters, null);
+        if(cusAccountConsumeList != null && cusAccountConsumeList.size()>0){
+            for (CusAccountConsume cusAccountConsume : cusAccountConsumeList){
+                map.put("giveMoney",  NumberUtil.format(cusAccountConsume.getGiveMoney(), RoundingMode.FLOOR));
+                map.put("salesMoney", NumberUtil.format(cusAccountConsume.getSalesMoney(), RoundingMode.FLOOR));
+                map.put("totalMoney", NumberUtil.format(cusAccountConsume.getTotalMoney(), RoundingMode.FLOOR));
+                map.put("getMoney",  NumberUtil.format(cusAccountConsume.getGetMoney(), RoundingMode.FLOOR));
+                map.put("remainderMoney", NumberUtil.format(cusAccountConsume.getRemainderMoney(), RoundingMode.FLOOR));
+            }
+        }
+
+        //获取待到账金额
+        if(StringUtil.checkObj(unsettleMoneyInResult) && unsettleMoneyInResult.equals(1)){
+          List<Map> mapList =  settlementOrderDetailDao.findUnsettleMoney(cusId);
+            if (mapList!=null && mapList.size()>0){
+                map.put("unsettleMoney", NumberUtil.format(MapUtil.getDouble(mapList.get(0),"unsettleMoney"), RoundingMode.FLOOR) );
+            }else{
+                map.put("unsettleMoney", 0.0);
+            }
+        }
+
+
+        return map;
+    }
+
+
+    /**
+     *获取交易记录列表（分页）(APP)
+     *
+     * @param cusId           当前登录用户ID
+     * @param type            交易类型
+     * @param createDateBegin 交易起始时间
+     * @param createDateEnd   交易结束时间
+     * @param pageable
+     * @return
+     */
+    public Page<Map> findTransactionRecord(Long cusId, String type, Date createDateBegin,
+
+                                           Date createDateEnd, Pageable pageable) {
+        List<Long> types = new ArrayList<>();
+        if (StringUtil.isNotBlank(type)) {
+            String[] ary = type.split(",");
+            for (int i = 0, len = ary.length; i < len; i++) {
+                types.add(Long.valueOf(ary[i]));
+            }
+
+        }
+
+        Page<Map> mapPage = cusAccountDetailDao.findTransactionRecord(cusId, types, createDateBegin, createDateEnd, pageable);
+        List<Map> mapList = mapPage.getContent();
+        if (mapList != null && mapList.size() > 0) {
+            //账户交易方向---为增加的交易类型
+            Map<Integer, Boolean> add = new HashMap<Integer, Boolean>();
+            add.put(CusAccountDetail.Type.RemainderReturn.getValue(), true);
+            add.put(CusAccountDetail.Type.SalesCommissions.getValue(), true);
+            add.put(CusAccountDetail.Type.CusRegisterBonus.getValue(), true);
+            add.put(CusAccountDetail.Type.ShopkeeperRegisterBonus.getValue(), true);
+            add.put(CusAccountDetail.Type.ShopkeeperInviteBonus.getValue(), true);
+            add.put(CusAccountDetail.Type.ShopkeeperSaleBonus.getValue(), true);
+            add.put(CusAccountDetail.Type.LeaderMgrBonus.getValue(), true);
+
+            //账户交易方向类型---为减少的交易类型
+            Map<Integer, Boolean> reduce = new HashMap<Integer, Boolean>();
+            reduce.put(CusAccountDetail.Type.RemainderConsume.getValue(), true);
+            reduce.put(CusAccountDetail.Type.Withdrawals.getValue(), true);
+
+            for (Map map : mapList) {
+                Integer accountType = MapUtil.getInteger(map, "type");
+                map.put("typeName", CusAccountDetail.Type.getEnum(accountType).getName());
+                map.put("direction", "");
+
+                if (add.containsKey(accountType) && add.get(accountType)) {
+                    map.put("direction", ONE);
+                } else if (reduce.containsKey(accountType) && reduce.get(accountType)) {
+                    map.put("direction", TWO);
+                }
+            }
+        }
+        mapPage.setContent(mapList);
+        return mapPage;
+    }
+
+    /**
+     * 获取我的收益统计(分页)
+     *
+     * @param cusId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public Page<Map> getMyIncomeStatistics(Long cusId, Integer pageNo, Integer pageSize) {
+        return cusAccountDetailDao.getMyIncomeStatistics(cusId, pageNo, pageSize);
+    }
+}

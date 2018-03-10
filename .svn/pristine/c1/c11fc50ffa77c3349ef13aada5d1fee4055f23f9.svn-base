@@ -1,0 +1,108 @@
+package com.catt.wfx.service.impl.base.pub;
+
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.common.util.bean.BeanUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.util.spring.SpringUtils;
+import com.catt.wfx.repository.dao.pub.PubSetupBaseDao;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.repository.entity.pub.PubSetup.Code;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import util.CryptUtil;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * 系统全局设置服务接口实现
+ *
+ * @author 纪建宏
+ * @version V1.0
+ * @date 2015-11-19 11:26:28
+ */
+@Service("pubSetupBaseServiceImpl")
+public class PubSetupBaseServiceImpl extends BaseServiceImpl<PubSetup, String>
+		implements PubSetupBaseService {
+
+	@Resource(name = "pubSetupBaseDaoImpl")
+	private PubSetupBaseDao pubSetupBaseDao;
+
+	@Resource
+	public void setBaseDao(PubSetupBaseDao pubSetupBaseDao) {
+		super.setBaseDao(pubSetupBaseDao);
+	}
+
+	@Override
+	public PubSetup findByCode(Code code) {
+		PubSetupBaseServiceImpl service = SpringUtils
+				.getBean("pubSetupBaseServiceImpl");
+		return service.findByCode(code.getName());
+	}
+
+
+	@Cacheable(value = "pubSetupCache", key = "#code")
+	public PubSetup findByCode(String code) {
+		List<PubSetup> setupList = this.findList(1,
+				Arrays.asList(Filter.eq("code", code)), null);
+		if (setupList.size() > 0) {
+			PubSetup setup = setupList.get(0);
+
+	         Code codeEnum = Code.getEnum(code);
+			if (codeEnum != null && codeEnum.isEncrypted()) {
+				// 对于加密的配置则出库解密
+				PubSetup newSetup = new PubSetup(); // 防止修改后被框架提交到数据库
+				BeanUtil.copyProperties(newSetup, setup);
+				setup = newSetup;
+
+				setup.setValue(CryptUtil.decryptDatabase(setup.getValue()));
+			}
+
+			return setup;
+		}
+
+		return null;
+	}
+
+	@Override
+	@CacheEvict(value = "pubSetupCache", key = "#entity.code")
+	public PubSetup update(PubSetup entity) {
+		PubSetup sourceSetup = entity;
+
+		Code code = Code.getEnum(entity.getCode());
+		if (code != null && code.isEncrypted()) {
+			// 对于加密的配置则加密入库
+			entity = new PubSetup();
+			BeanUtil.copyProperties(entity, sourceSetup);
+			entity.setValue(CryptUtil.encryptDatabase(entity.getValue()));
+		}
+		super.saveOrUpdate(entity);
+
+		return sourceSetup;
+	}
+
+	@Override
+	public String getSetupByCode(Code code) {
+		PubSetup setup = findByCode(code);
+		if (setup != null && StringUtil.isNotBlank(setup.getValue())) {
+			return setup.getValue();
+		}
+
+		return code.getDefaultValue();
+	}
+
+	@Override
+	public Integer getIntegerSetupByCode(Code code) {
+		return Integer.valueOf(this.getSetupByCode(code));
+	}
+
+	@Override
+	public Double getDoubleSetupByCode(Code code) {
+		return Double.valueOf(this.getSetupByCode(code));
+	}
+}

@@ -1,0 +1,59 @@
+package com.catt.wfx.service;
+
+import java.util.List;
+
+/**
+ * <pre>
+ *     阿里云短信平台
+ * 登录、注册时，发送、校验短信服务类
+ * 注：某些方法会进行缓存便于短信验证码校验
+ * @author : yuangxingcheng
+ * @version : Ver 1.0
+ * date: 2017-1-5 15:25:20
+ * </pre>
+ */
+public interface AliYunSmsService {
+    /**
+     * 发送登录短信验证码
+     *
+     * @param mobileNo 手机号码
+     * @param contentTemplate 短信模板
+     * @return String code验证码
+     */
+    String sendLoginSms(String mobileNo, String contentTemplate);
+
+    /**
+     * 登录短信验证
+     *
+     * @param mobileNo 手机号码
+     * @param code     短信验证码
+     * @param contentTemplate 短信模板
+     * @return true：验证通过；false：验证失败；
+     */
+    boolean loginMobileNoCheck(String mobileNo, String code, String contentTemplate);
+
+    /**
+     * 清理短信缓存，类似标记，空方法即可
+     *
+     * @param mobileNo 手机号码
+     */
+    void clearLoginSms(String mobileNo);
+
+    /**
+     * 发送短信
+     * @param mobileNo 手机号码
+     * @param templateCode 短信模板的模板CODE
+     * @param paramString 短信模板中的变量
+     * @param loginSceneEnum
+     */
+    void sendSms(String mobileNo, String templateCode, String paramString, String loginSceneEnum);
+
+    /**
+     * 发送短信
+     * @param mobileNos 手机号码集合
+     * @param templateCode 短信模板的模板CODE
+     * @param paramString 短信模板中的变量
+     * @param loginSceneEnum
+     */
+    void sendSms(List<String> mobileNos, String templateCode, String paramString, String loginSceneEnum);
+}

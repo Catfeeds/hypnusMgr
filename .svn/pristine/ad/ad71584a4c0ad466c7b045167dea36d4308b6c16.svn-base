@@ -1,0 +1,49 @@
+package com.catt.wfx.repository.dao.productMgr;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.productMgr.ProductDocument;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商品文案Dao接口
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-01-09 11:37:12
+ */
+public interface ProductDocumentDao extends BaseDao<ProductDocument, Long> {
+    /**
+     * 获取商品文案列表
+     *
+     * @param productInfoIds 商品标识集合
+     * @return
+     */
+    List<Map> getProductDocumentByPage(List<Long> productInfoIds);
+
+    /**
+     * 获取商品文案详情列表
+     *
+     * @param productId 商品标识
+     * @param status    文案状态
+     * @param pageable
+     * @return
+     */
+    Page<Map> getDocumentDetailByPage(Long productId, Integer type, Integer status, Pageable pageable);
+
+    /**
+     * 获取商品文案列表
+     *
+     * @param cusId     用户标识
+     * @param productId 商品标识
+     * @param type      文案类型
+     * @param status    文案状态
+     * @param pageable
+     * @return
+     */
+    Page<Map> getProductDocumentByPage(Long cusId, Long productId, Integer type, Integer status, Pageable pageable);
+}

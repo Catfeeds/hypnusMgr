@@ -1,0 +1,152 @@
+package com.catt.wfx.repository.entity.couponMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 代金券使用规则实体类
+ * 
+ * @author chen chusheng
+ * @date 2017-01-16 11:10:41
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_COUPON_RULE")
+public class CouponRule extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 代金券标识别
+	 */
+	private Long couponId;
+	/**
+	 * 商品种类标识<p><br>
+	 * 商品种类标识
+	 */
+	private Long cateId;
+	/**
+	 * 商品种类名称<p><br>
+	 * 商品种类名称
+	 */
+	private String cateName;
+	/**
+	 * 商品标识<p><br>
+	 * 商品标识
+	 */
+	private Long productId;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+	/**
+	 * 创建时间<p><br>
+	 * 创建时间
+	 */
+//	private Date createdTime;
+	/**
+	 * 修改时间<p><br>
+	 * 修改时间
+	 */
+//	private Date modifyTime;
+	/**
+	 * 备注<p><br>
+	 * 备注
+	 */
+	private String remark;
+
+	@Column(name = "I_COUPON_ID")
+	public Long getCouponId() {
+		return couponId;
+	}
+
+	public void setCouponId(Long couponId) {
+		this.couponId = couponId;
+	}
+
+	@Column(name = "I_CATE_ID")
+	public Long getCateId() {
+		return cateId;
+	}
+
+	public void setCateId(Long cateId) {
+		this.cateId = cateId;
+	}
+
+	@Column(name = "S_CATE_NAME", length = 128)
+	public String getCateName() {
+		return cateName;
+	}
+
+	public void setCateName(String cateName) {
+		this.cateName = cateName;
+	}
+
+	@Column(name = "I_PRODUCT_ID")
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+//	@Column(name = "d_modify_time")
+//	public Date getModifyTime() {
+//		return modifyTime;
+//	}
+//
+//	public void setModifyTime(Date modifyTime) {
+//		this.modifyTime = modifyTime;
+//	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+//	@Column(name = "d_created_time")
+//	public Date getCreatedTime() {
+//		return createdTime;
+//	}
+//
+//	public void setCreatedTime(Date createdTime) {
+//		this.createdTime = createdTime;
+//	}
+
+	@Column(name = "S_REMARK", length = 1024)
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+}
+

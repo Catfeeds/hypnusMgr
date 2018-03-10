@@ -1,0 +1,138 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'dataGridHelp', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar, dataGridHelp) {
+        var $dataTb;
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    $dataTb = $('#dataTb');
+
+                    var params = {}; //搜索条件
+                    //=========分页初始化start============
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+
+                    EventHandler.search();
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $dataTb.dataGridHelp({
+                        multSelectBtns: [
+                            {btn: $("#settle"), fn: EventHandler.settle}
+                        ]
+                    });
+
+                    $(".xw_select").click(function(){
+                        $(".xw_select").removeClass("selectTabs_on");
+                        $(this).addClass("selectTabs_on");
+                        EventHandler.search();
+                    })
+
+                    $("#reset").click(EventHandler.reset);
+
+                    $("#export").click(EventHandler.exportExcel);
+
+                    $("#search").click(function(){
+                        EventHandler.search();
+                    });
+
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                // 查询
+                search: function (params) {
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: 15};
+                    }
+                    params.status = $(".selectTabs_on").attr("data-value");
+                    params.startDate = $("#startDate").val();
+                    params.endDate = $("#endDate").val();
+                    DataHandler.search(params, function (backData) {
+                        var html = template('listTemp', backData.content);
+                        $('#list').html(html);
+
+                        //重新设置数据时调用渲染列表方法
+                        $dataTb.dataGridHelp("renderList", backData.content);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+
+                        $(window).triggerHandler('resize');
+                    });
+                },
+                settle: function(){
+                    //获取勾选的数据
+                    var aId = [];
+                    var data = $dataTb.dataGridHelp("getSelected");
+                    for (var o in data) {
+                        if(data[o].status == 1){
+                            msgBox.tips("请选择未结算的数据");
+                            return;
+                        }
+                        aId.push(data[o].id);
+                    }
+                    msgBox.exWindow.open({
+                        title: '结算',
+                        width: '350px',
+                        height: '200px',
+                        url: path + "/admin/perforMgr/platPerfor/settle.html",
+                        extraParams:{platDetailIds : aId},
+                        close: function (data) {
+                            if (data) {
+                                EventHandler.search();
+                            }
+                        }
+                    });
+                },
+                reset: function(){
+                    $("#startDate").val("");
+                    $("#endDate").val("");
+                },
+                exportExcel: function(){
+                    location.href = path + '/admin/perforMgr/platPerfor/exportExcel/平台提成账单.xlsx';
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/perforMgr/platPerfor/findPage', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

@@ -1,0 +1,61 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/*.topBg{position:absolute; top:0; left:0; width:100%;z-index:1; }
+.top .top-left{ z-index:99;}
+.top h1{position:absolute; z-index:59; border-bottom:none; color:#fff;}
+.top .top-right{ z-index:29;}
+.headPic{position:absolute; top:50px; z-index:29;}
+*/
+
+.top-right{float:right;position:absolute;width:38px;height:38px;top:6px;right:8px;font-size:18px;color:#FFF; z-index:999;}
+.top-right img{width:30px; height:30px;}
+.top-right02{float:right;position:absolute;width:38px;height:38px;top:6px;right:14%;font-size:18px;color:#FFF; z-index:997;}
+.top-right02 img{width:30px; height:30px;}
+.top-right:hover{opacity:0.7;}
+.top-right_send{float:right; position:absolute; width:100px; height:40px; top:4px; right:5px; font-size:18px; color:#fff; text-align:center; line-height:40px; background:#8bcc46;}
+
+
+/*-------个人首页-------*/
+.personal_jieshao{width:100%; height:110px; padding-left:24%; padding-right:5%; background: url(../images/my_pic_bg.png) center center no-repeat #fff ; border-bottom:1px solid #e5e5e5;}
+.personal_jieshao th{width:60px;}
+.personal_jieshao p{overflow:hidden; width:136px; margin:0 auto;}
+.personal_jieshao h4{text-align:left; color:#e5e5e5; font-size:12px; line-height:20px;}
+.personal_jieshao span{float:right; color:#fff; font-size:12px; line-height:24px;}
+.personal_jieshao span:hover{opacity:0.7;}
+.personal_touxiang{width:80px; height:80px;}
+.personal_star{ margin-left:4px; margin-top:4px; float:left;}
+.personal_top h1{width:100%; font-size:18px;color:#323232;margin:0px auto; line-height:46px; text-align:center; border-bottom:1px solid #e5e5e5;position:absolute; z-index:99; border-bottom:none; color:#fff;}
+.personal_touxiang{width:80px; height:80px;}
+.personal_jieshao h3{text-align:center; color:#333; font-size:18px; letter-spacing:2px; line-height:24px; color:#fff;}
+.personal_jieshao font{color:#666; font-size:12px; line-height:24px; text-align:center; color:#fff; }
+
+
+/*九宫格*/
+.personal{  position:relative;}
+.indexTabs{ width:96%; border-bottom:1px solid #e5e5e5; background:#fff; position:absolute; top:195px; left:0px; margin:0px 2%; border-radius:5px; box-shadow:0px 2px 1px #adadad;}
+.indexTabs tr td{ padding:10px 0; position:relative; text-align:center; cursor:pointer;}
+.indexTabs tr td h2{font-size:12px; color:#646464; text-align:center;}
+.timeMain{font-size:16px; color:#ffe327; text-align:right; letter-spacing:1px; display:inline-block; float:right;}
+
+
+
+/*九宫格*/
+.indexTabs1 tr td{ padding:15px 0px; position:relative; text-align:center; cursor:pointer;}
+.indexTabs1 tr td h2{font-size:12px; color:#646464; text-align:center;}
+.timeMain{font-size:16px; color:#ffe327; text-align:right; letter-spacing:1px; display:inline-block; float:right;}
+.indexTabs1{width:92%;  border-top:1px solid #e5e5e5; background:#fff; margin:0px 4%;}
+.indexTabs2{width:92%;   border-top:1px solid #e5e5e5; background:#fff; margin-top:10px; margin:0px 4%;}
+.indexTabs2 tr td{ padding:15px 0; position:relative; text-align:center; cursor:pointer;}
+.indexTabs2 tr td h2{font-size:12px; color:#646464; text-align:center;}
+.indexTabs2 img{ width:28px; height:28px;}
+
+.dianpuguanli{ background:#fff;  margin-top:13%; border-bottom:1px solid #e5e5e5;}
+.shangpin{background:#fff; margin-top:10px;  border-bottom:1px solid #e5e5e5;}
+.dianpuIc{  width:25px; float:left; padding-right:10px; margin-top:4px;}
+.tow{ margin-top:10px;}
+.indexTabs1 img{ width:28px; height:28px;}
+
+.myIcon{ width:40%;}
+.biaoti{ float:left; width:100%; font-size:15px; line-height:40px; letter-spacing:1px; color:#666; background:#fff;  border-top:1px solid #e5e5e5; padding-left:20px;}

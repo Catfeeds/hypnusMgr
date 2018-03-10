@@ -1,0 +1,307 @@
+package com.catt.wfx.repository.entity.specialSale;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+/**
+ * 商品活动关联表实体类
+ * 
+ * @author 邹佳
+ * @date 2017-03-08 16:18:02
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_ACTIVITY_PRODUCT_REL")
+public class ActivityProductRel extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * <pre>
+	 * 活动标识
+	 * </pre>
+	 */
+	private Long actId;
+	/**
+	 * <pre>
+	 * 商品标识
+	 * 商品标识
+	 * </pre>
+	 */
+	private Long productId;
+	/**
+	 * <pre>
+	 * 套餐商品价格标识
+	 * </pre>
+	 */
+	private Long priceId;
+	/**
+	 * <pre>
+	 * 商品原价
+	 * 厂家不打折的价格
+	 * </pre>
+	 */
+	private Double costPrice;
+	/**
+	 * <pre>
+	 * 商品销售价
+	 * 厂家打折后的价格
+	 * </pre>
+	 */
+	private Double salesPrice;
+	/**
+	 * <pre>
+	 * 总代利润
+	 * </pre>
+	 */
+	private Double generalAgent;
+	/**
+	 * <pre>
+	 * 区代利润
+	 * </pre>
+	 */
+	private Double regionalAgent;
+	/**
+	 * <pre>
+	 * 省代利润
+	 * </pre>
+	 */
+	private Double provincialAgent;
+	/**
+	 * <pre>
+	 * 市代利润
+	 * </pre>
+	 */
+	private Double cityAgent;
+	/**
+	 * <pre>
+	 * 店主利润
+	 * </pre>
+	 */
+	private Double profit;
+	/**
+	 * <pre>
+	 * 活动数量
+	 * </pre>
+	 */
+	private Integer actsaleNum;
+	/**
+	 * <pre>
+	 * 活动销售数量
+	 * </pre>
+	 */
+	private Integer actsaleRealnum;
+	/**
+	 * <pre>
+	 * 创建人员标识
+	 * 创建人员标识
+	 * </pre>
+	 */
+	private Long createdId;
+	/**
+	 * <pre>
+	 * 创建人员名称
+	 * 创建人员名称
+	 * </pre>
+	 */
+	private String createdName;
+    /**
+     * 一级返利
+     */
+    private Double rebateOne;
+    /**
+     * 二级返利
+     */
+    private Double rebateTwo;
+    /**
+     * 三级返利
+     */
+    private Double rebateThree;
+    /**
+     * 四级返利
+     */
+    private Double rebateFour;
+    /**
+     * 五级返利
+     */
+    private Double rebateFive;
+
+	@Column(name = "I_ACT_ID")
+	public Long getActId() {
+		return actId;
+	}
+
+	public void setActId(Long actId) {
+		this.actId = actId;
+	}
+
+	@Column(name = "I_PRODUCT_ID")
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	@Column(name = "I_PRICE_ID")
+	public Long getPriceId() {
+		return priceId;
+	}
+
+	public void setPriceId(Long priceId) {
+		this.priceId = priceId;
+	}
+
+	@Column(name = "I_COST_PRICE")
+	public Double getCostPrice() {
+		return costPrice;
+	}
+
+	public void setCostPrice(Double costPrice) {
+		this.costPrice = costPrice;
+	}
+
+	@Column(name = "I_SALES_PRICE")
+	public Double getSalesPrice() {
+		return salesPrice;
+	}
+
+	public void setSalesPrice(Double salesPrice) {
+		this.salesPrice = salesPrice;
+	}
+
+	@Column(name = "I_GENERAL_AGENT")
+	public Double getGeneralAgent() {
+		return generalAgent;
+	}
+
+	public void setGeneralAgent(Double generalAgent) {
+		this.generalAgent = generalAgent;
+	}
+
+	@Column(name = "I_REGIONAL_AGENT")
+	public Double getRegionalAgent() {
+		return regionalAgent;
+	}
+
+	public void setRegionalAgent(Double regionalAgent) {
+		this.regionalAgent = regionalAgent;
+	}
+
+	@Column(name = "I_PROVINCIAL_AGENT")
+	public Double getProvincialAgent() {
+		return provincialAgent;
+	}
+
+	public void setProvincialAgent(Double provincialAgent) {
+		this.provincialAgent = provincialAgent;
+	}
+
+	@Column(name = "I_CITY_AGENT")
+	public Double getCityAgent() {
+		return cityAgent;
+	}
+
+	public void setCityAgent(Double cityAgent) {
+		this.cityAgent = cityAgent;
+	}
+
+	@Column(name = "I_PROFIT")
+	public Double getProfit() {
+		return profit;
+	}
+
+	public void setProfit(Double profit) {
+		this.profit = profit;
+	}
+
+	@Column(name = "I_ACTSALE_NUM")
+	public Integer getActsaleNum() {
+		return actsaleNum;
+	}
+
+	public void setActsaleNum(Integer actsaleNum) {
+		this.actsaleNum = actsaleNum;
+	}
+
+	@Column(name = "I_ACTSALE_REALNUM")
+	public Integer getActsaleRealnum() {
+		return actsaleRealnum;
+	}
+
+	public void setActsaleRealnum(Integer actsaleRealnum) {
+		this.actsaleRealnum = actsaleRealnum;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+    @Column(name = "I_REBATE_ONE")
+    public Double getRebateOne() {
+        return rebateOne;
+    }
+
+    public void setRebateOne(Double rebateOne) {
+        this.rebateOne = rebateOne;
+    }
+
+    @Column(name = "I_REBATE_TWO")
+    public Double getRebateTwo() {
+        return rebateTwo;
+    }
+
+    public void setRebateTwo(Double rebateTwo) {
+        this.rebateTwo = rebateTwo;
+    }
+
+    @Column(name = "I_REBATE_THREE")
+    public Double getRebateThree() {
+        return rebateThree;
+    }
+
+    public void setRebateThree(Double rebateThree) {
+        this.rebateThree = rebateThree;
+    }
+
+    @Column(name = "I_REBATE_FOUR")
+    public Double getRebateFour() {
+        return rebateFour;
+    }
+
+    public void setRebateFour(Double rebateFour) {
+        this.rebateFour = rebateFour;
+    }
+
+    @Column(name = "I_REBATE_FIVE")
+    public Double getRebateFive() {
+        return rebateFive;
+    }
+
+    public void setRebateFive(Double rebateFive) {
+        this.rebateFive = rebateFive;
+    }
+
+}
+

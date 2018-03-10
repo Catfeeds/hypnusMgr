@@ -1,0 +1,40 @@
+package com.catt.wfx.security.web.security.shiro.validate.impl;
+
+import com.catt.common.base.repository.entity.BaseUserEntity;
+import com.catt.common.module.security.repository.entity.LogLogin;
+import com.catt.common.module.security.service.LogLoginService;
+import com.catt.common.web.WebUtil;
+import com.catt.common.web.security.shiro.token.ExtAuthenticationToken;
+import com.catt.common.web.security.shiro.validate.UpdateLog;
+import com.catt.wfx.repository.data.comEnum.LoginLog;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Date;
+
+/**
+ * 登陆成功后更新登陆信息  - CusInfo
+ *
+ * @author houhuateng
+ */
+@Service("updateLogStaffManage")
+public class UpdateLogStaff implements UpdateLog {
+
+    @Resource(name = "logLoginServiceImpl")
+    private LogLoginService logLoginService;
+
+    @Override
+    public void record(ExtAuthenticationToken token, BaseUserEntity user) {
+        //登录日志
+        LogLogin logLogin = new LogLogin();
+        logLogin.setSysId(LoginLog.SysId.mobile.getValue());
+        logLogin.setAccount(token.getUsername());
+        logLogin.setSessionId(WebUtil.getSession().getId());
+        logLogin.setBrowserType(token.getsBrowserType()); //浏览器版本
+        logLogin.setLoginIp(token.getHost()); //登录ip
+        logLogin.setKind(LoginLog.Kind.cellphone.getValue()); //登录方式
+        logLogin.setStatus(LoginLog.Status.InLogin.getValue()); //登录状态
+        logLogin.setLoginTime(new Date()); //登录时间
+        logLoginService.save(logLogin);
+    }
+}

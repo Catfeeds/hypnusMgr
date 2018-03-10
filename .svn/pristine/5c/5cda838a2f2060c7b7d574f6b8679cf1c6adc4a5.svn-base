@@ -1,0 +1,64 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*reset*/
+body, h1, h2, h3, h4, h5, h6, hr, p,
+blockquote,dl, dt, dd, ul, ol, li,
+pre,form, fieldset, iframe, legend, button, input, textarea,th, td,img{
+  border:none;
+  margin: 0;
+  padding: 0;
+}
+body,h1, h2, h3, h4, h5, h6, button, input, select, textarea {
+	font-family:"微软雅黑";
+}
+body{background:#ebebeb;}
+ul, ol { display:block; list-style: none;}
+li { display:block;}
+img{ border:0px;}
+table { border-collapse: collapse; border-spacing: 0; }
+/*头部*/
+.top{
+	height:47px;
+	background:#393a3e;}
+.top h1{width:100%;font-size:20px;color:#FFF; font-weight:normal;margin:0px auto; padding-top:10px;text-align:center;}
+.top .top-left{float:left;position:absolute;width:38px;height:38px;top:6px;left:2%;font-size:18px;color:#FFF; background:transparent;}
+.top .top-left:hover{opacity:0.7;}
+.top .top-right{float:right;position:absolute;width:38px;height:38px;top:6px;right:5px;font-size:18px;color:#FFF; background:transparent;}
+.top .top-right img{width:24px; height:24px;}
+.top .top-right02{float:right;position:absolute;width:38px;height:38px;top:6px;right:12%;font-size:18px;color:#FFF;}
+.top .top-right02 img{width:24px; height:24px;}
+.top .top-right:hover{opacity:0.7;}
+.top .top-right_send{float:right; position:absolute; width:100px; height:40px; top:4px; right:5px; font-size:18px; color:#fff; text-align:center; line-height:40px; background:#8bcc46;}
+/*微信底部导航*/
+.bottombar {
+	position: fixed;
+	height: 50px;
+	width:100%;
+	bottom:0px;
+	border-top: 1px solid #d7d7d7;
+	background: #ffffff;
+	z-index: 100;}
+.keyboard {
+	display: block;
+	position:absolute;
+	left: 0px;
+	top: 0px;
+	width: 13%;
+	height: 50px;
+	line-height: 50px;
+	border-right: 1px solid #d7d7d7;
+	text-align: center;}
+.menuTable{
+	position:absolute;
+	left: 13%;
+	width:87%;
+	height:50px;
+	border-spacing:0px;}
+.menuTable td{
+	height:50px;
+	line-height:50px;
+	border-right:1px solid #d7d7d7;
+	text-align:center; 
+	cursor:pointer}
+.menuTable td:hover{color:#ff4d4d;}

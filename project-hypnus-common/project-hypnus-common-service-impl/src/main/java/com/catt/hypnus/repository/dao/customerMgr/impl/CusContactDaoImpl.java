@@ -1,0 +1,73 @@
+package com.catt.hypnus.repository.dao.customerMgr.impl;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.hypnus.repository.dao.customerMgr.CusContactDao;
+import com.catt.hypnus.repository.entity.customerMgr.CusContact;
+import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 收货地址Dao接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-13 16:15:31
+ * @version V1.0
+ */
+@Repository("cusContactDaoImpl")
+public class CusContactDaoImpl extends BaseDaoImpl<CusContact, Long>
+		implements CusContactDao {
+
+	/**
+	 * 获取收货地址列表（分页）
+	 *
+	 * @param cusId     客户标识
+	 * @param id        地址标识
+	 * @param isDefault 是否默认
+	 * @param recipients 收货人
+	 * @param pageable
+	 * @return
+	 */
+	@Override
+	public Page<Map> getCusContactByPage(Long cusId, Long id, Integer isDefault,  String recipients, Pageable pageable) {
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+		sql.append(" t.I_ID AS \" id\", ");
+		sql.append(" t.S_ADDRESS AS \" address\", ");
+		sql.append(" t.S_CITY_ID AS \" cityId\", ");
+		sql.append(" t.S_CITY_NAME AS \" cityName\", ");
+		sql.append(" t.I_IS_DEFAULT AS \" isDefault\", ");
+		sql.append(" t.S_PROVINCE_ID AS \" provinceId\", ");
+		sql.append(" t.S_PROVINCE_NAME AS \" provinceName\", ");
+		sql.append(" t.S_RECIPIENTS AS \" recipients\", ");
+		sql.append(" t.S_REGION_ID AS \" regionId\", ");
+		sql.append(" t.S_REGION_NAME AS \" regionName\", ");
+		sql.append(" t.S_TEL AS \" tel\"");
+		sql.append(" FROM T_CUS_CONTACT t");
+		sql.append(" WHERE 1 = 1 AND t.I_CUS_ID = :cusId");
+
+		Map param = new HashMap<>();
+		param.put("cusId", cusId);
+		if (StringUtil.checkObj(id)) {
+			sql.append(" AND t.I_ID = :id");
+			param.put("id", id);
+		}
+
+		if (StringUtil.checkObj(isDefault)) {
+			sql.append(" AND t.I_IS_DEFAULT = :isDefault");
+			param.put("isDefault", isDefault);
+		}
+
+		if(StringUtil.isNotBlank(recipients)){
+			sql.append(" AND t.S_RECIPIENTS LIKE :recipients");
+			param.put("recipients", "%"+recipients+"%");
+		}
+
+		return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+	}
+
+}

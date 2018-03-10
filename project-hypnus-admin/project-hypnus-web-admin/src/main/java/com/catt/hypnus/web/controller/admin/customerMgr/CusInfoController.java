@@ -1,0 +1,274 @@
+package com.catt.hypnus.web.controller.admin.customerMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.hypnus.repository.data.comEnum.PubEnum;
+import com.catt.hypnus.repository.entity.customerMgr.CusInfo;
+import com.catt.hypnus.repository.form.customerMgr.CusInfoForm;
+import com.catt.hypnus.service.base.customerMgr.CusInfoBaseService;
+import com.catt.hypnus.service.customerMgr.CusInfoService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 用户信息控制器
+ * 作者：邹佳
+ * 时间：2017-02-27
+ */
+@Controller("admin.CusInfoController")
+@RequestMapping(value = "/admin/cusInfo")
+public class CusInfoController extends BaseController {
+
+    // 用户信息接口
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    // 用户信息接口
+    @Resource(name = "cusInfoServiceImpl")
+    private CusInfoService cusInfoService;
+
+    /**
+     * 店主管理
+     */
+    @RequestMapping(value = {"/shopkeeper/index.html"}, method = RequestMethod.GET)
+    public String toShopkeeperIndex() {
+        return "/admin/customerMgr/shopkeeper/index";
+    }
+
+    /**
+     * 主管管理
+     */
+    @RequestMapping(value = {"/director/index.html"}, method = RequestMethod.GET)
+    public String toDirectorIndex() {
+        return "/admin/customerMgr/director/index";
+    }
+
+    /**
+     * 勾选主管页面
+     */
+    @RequestMapping(value = {"/director/toCheckDirector.html"}, method = RequestMethod.GET)
+    public String toCheckDirector() {
+        return "/admin/customerMgr/director/checkDirector";
+    }
+
+
+    /**
+     * 店主详情
+     */
+    @RequestMapping(value = {"/shopkeeper/detail.html"}, method = RequestMethod.GET)
+    public String getShopOwnerDetail(Long cusId, Model model) {
+        if (StringUtil.checkObj(cusId)) {
+            model.addAllAttributes(cusInfoService.getShopOwnerDetail(cusId));
+        }
+        return "/admin/customerMgr/shopkeeper/detail";
+    }
+
+    /**
+     * 主管详情
+     */
+    @RequestMapping(value = {"/director/detail.html"}, method = RequestMethod.GET)
+    public String getDirectorDetail(Long cusId, Model model) {
+        if (StringUtil.checkObj(cusId)) {
+            model.addAllAttributes(cusInfoService.getDirectorDetail(cusId));
+        }
+        return "/admin/customerMgr/director/detail";
+    }
+
+    /**
+     * 新增或编辑主管页面
+     */
+    @RequestMapping(value = {"/director/addEdit.html"}, method = RequestMethod.GET)
+    public String toDirectorAddEdit(Long cusId, Model model) {
+        if (StringUtil.checkObj(cusId)) {
+            CusInfo cusInfo = cusInfoBaseService.find(cusId);
+            model.addAttribute("id", cusId);
+            model.addAttribute("name", cusInfo.getName());
+            model.addAttribute("mobile", cusInfo.getMobile());
+        }
+        return "/admin/customerMgr/director/addEdit";
+    }
+
+    /**
+     * 获取店主管理分页数据
+     *
+     * @param cusInfoForm
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/getPageShopOwner"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getPageShopOwner(CusInfoForm cusInfoForm, Pageable pageable) {
+        return cusInfoService.getPageShopOwner(cusInfoForm, pageable);
+    }
+
+    /**
+     * 获取主管管理分页数据
+     *
+     * @param cusInfoForm
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/getPageDirector"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getPageDirector(CusInfoForm cusInfoForm, Pageable pageable) {
+        return cusInfoService.getPageDirector(cusInfoForm, pageable);
+    }
+
+    /**
+     * 获取团队名单
+     *
+     * @param cusAllotId 团队标识
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/getTeamStaffs"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getTeamStaffs(Long cusAllotId, Pageable pageable) {
+        return cusInfoService.getTeamStaffs(cusAllotId, pageable);
+    }
+
+    /**
+     * 新增主管
+     *
+     * @param cusInfo     用户信息
+     * @param createdId   创建人员标识
+     * @param createdName 创建人员名称
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/addEditDirector"}, method = RequestMethod.POST)
+    public Message addDirector(CusInfo cusInfo, @CurrentUser Long createdId, @CurrentUser("name") String createdName) {
+        if (StringUtil.checkObj(cusInfo.getId())) {
+            cusInfoService.updateDirector(cusInfo);
+        } else {
+            cusInfoService.addDirector(cusInfo, createdId, createdName);
+        }
+        return Message.success("");
+    }
+
+    /**
+     * 分配主管
+     *
+     * @param cusId       店主标识
+     * @param leaderId    主管标识
+     * @param createdId   创建人员标识
+     * @param createdName 创建人员名称
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/selectDirector"}, method = RequestMethod.POST)
+    public Message selectDirector(Long cusId, Long leaderId, @CurrentUser Long createdId, @CurrentUser("name") String createdName) {
+        cusInfoService.selectDirector(cusId, leaderId, createdId, createdName);
+        return Message.success("");
+    }
+
+    /**
+     * 店主选拔为主管
+     *
+     * @param cusId       店主标识
+     * @param createdId   创建人员标识
+     * @param createdName 创建人员名称
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/toBeDirector"}, method = RequestMethod.POST)
+    public Message toBeDirector(Long cusId, @CurrentUser Long createdId, @CurrentUser("name") String createdName) {
+        cusInfoService.toBeDirector(cusId, createdId, createdName);
+        return Message.success("");
+    }
+
+    /**
+     * 删除主管
+     *
+     * @param ids 主管标识集合
+     * @return
+     */
+    @RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message delete(Long[] ids) {
+        for (Long id : ids) {
+            CusInfo cusInfo = cusInfoBaseService.find(id);
+            cusInfo.setDelFlag(PubEnum.YesOrNoEnum.YES.getValue());
+            cusInfoBaseService.update(cusInfo);
+        }
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 解除禁用（店主、主管）
+     *
+     * @param ids 店主、主管标识集合
+     * @return
+     */
+    @RequestMapping(value = {"/enable"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message enable(Long[] ids) {
+        for (Long id : ids) {
+            CusInfo cusInfo = cusInfoBaseService.find(id);
+            cusInfo.setStatus(CusInfo.Status.NORMALUSE.getValue());
+            cusInfoBaseService.update(cusInfo);
+        }
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 禁用（店主、主管）
+     *
+     * @param ids 店主、主管标识集合
+     * @return
+     */
+    @RequestMapping(value = {"/disable"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message disable(Long[] ids) {
+        for (Long id : ids) {
+            CusInfo cusInfo = cusInfoBaseService.find(id);
+            cusInfo.setStatus(CusInfo.Status.DISABLE.getValue());
+            cusInfoBaseService.update(cusInfo);
+        }
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 查看团队名单
+     */
+    @RequestMapping(value = {"/director/toTeamStaffs.html"}, method = RequestMethod.GET)
+    public String toTeamStaffs(@RequestParam Map param, Model model) {
+        model.addAllAttributes(param);
+        return "/admin/customerMgr/director/teamStaff";
+    }
+
+    /**
+     * 查看团队名单
+     */
+    @RequestMapping(value = {"/shopkeeper/toShopTeamStaffs.html"}, method = RequestMethod.GET)
+    public String toShopTeamStaffs(Long cusId, String name, Integer teamStaffNum, Model model) {
+        Map map = new HashMap<>();
+        map.put("cusId",cusId);
+        map.put("name",name);
+        map.put("teamStaffNum",teamStaffNum);
+        model.addAllAttributes(map);
+        return "/admin/customerMgr/shopkeeper/toShopTeamStaffs";
+    }
+
+    /**
+     * 获取清单树
+     *
+     * @param cusId  店主标识
+     * @return
+     */
+    @RequestMapping(value = "/getTreePage")
+    @ResponseBody
+    public Map getTreePage(Long cusId) {
+        return cusInfoService.getTreePage(cusId);
+    }
+
+}

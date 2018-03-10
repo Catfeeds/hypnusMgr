@@ -1,0 +1,101 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    //加载快递logo
+                    EventHandler.loadLogo();
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $("#close").click(function () {
+                        msgBox.exWindow.close();
+                    });
+                    var logisticsCode = $("#logisticsCode").val();
+                    //$(".code").JsBarcode(logisticsCode);
+                    //条形码生成插件
+                    JsBarcode(".code", logisticsCode, {
+                        format: "CODE128",//选择要使用的条形码类型
+                        width: 5,//设置条之间的宽度
+                        height: 120,//高度
+                        displayValue: false,//是否在条形码下方显示文字
+                        text: "456",//覆盖显示的文本
+                        fontOptions: "bold italic",//使文字加粗体或变斜体
+                        font: "fantasy",//设置文本的字体
+                        textAlign: "left",//设置文本的水平对齐方式
+                        textPosition: "top",//设置文本的垂直位置
+                        textMargin: 5,//设置条形码和文本之间的间距
+                        fontSize: 15,//设置文本的大小
+                        background: "",//设置条形码的背景
+                        lineColor: "",//设置条和文本的颜色。
+                        margin: 0//设置条形码周围的空白边距
+                    });
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                loadLogo: function () {
+                    var logisticsType = $("#logisticsType").val();
+                    var url = "";
+                    switch (parseInt(logisticsType)) {
+                        case 1: //ems
+                            url = "/resources/images/ems.jpg";
+                            break;
+                        case 2:
+                            url = "/resources/images/shunfeng.jpg";
+                            break;
+                        case 3: //ems
+                            url = "/resources/images/yuantong.jpg";
+                            break;
+                        case 4:
+                            url = "/resources/images/lianbang.jpg";
+                            break;
+                        case 5: //ems
+                            url = "/resources/images/tiantian.jpg";
+                            break;
+                        case 6:
+                            url = "/resources/images/shentong.jpg";
+                            break;
+                        case 7: //ems
+                            url = "/resources/images/yunda.jpg";
+                            break;
+                        case 8:
+                            url = "/resources/images/huitong.jpg";
+                            break;
+                        case 9: //ems
+                            url = "/resources/images/zhongtong.jpg";
+                            break;
+                        case 10:
+                            url = "/resources/images/zhaijisong.jpg";
+                            break;
+                        default:
+                            break;
+                    }
+                    $(".logo").attr("src", path + url);
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {};
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

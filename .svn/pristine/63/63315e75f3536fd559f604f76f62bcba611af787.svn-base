@@ -1,0 +1,60 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.entity.customerMgr.CusBank;
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.customerMgr.CusBankService;
+import org.junit.Test;
+import util.CryptUtil;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * Description:银行卡绑定单元测试
+ * Created by 2017-02-15  14:12.
+ * author: Zhou mingxiang
+ */
+public class CusBankServiceImplTest extends SpringTest {
+    @Resource(name = "cusBankServiceImpl")
+    private CusBankService cusBankService;
+
+
+    /**
+     * 获取用户银行账号列表
+     * @throws Exception
+     */
+    @Test
+    public void testFindCusBankByPage() throws Exception {
+        Long cusId = 1L;
+        String purpose = "edit";
+        Pageable pageable = new Pageable();
+        Page<Map> mapPage = cusBankService.findCusBankByPage(cusId,purpose, pageable);
+        System.out.print("#########" + mapPage);
+    }
+
+    /**
+     * 新增银行卡
+     * @throws Exception
+     */
+    @Test
+    public void testSaveCusBank() throws Exception {
+        CusBank cusBank = new CusBank();
+        cusBank.setCusId(1L);
+        cusBank.setBankType(Integer.valueOf(1));
+        cusBank.setBankAccount(CryptUtil.encryptDatabase("aaaaaaaaa"));
+        cusBank.setBranch(CryptUtil.encryptDatabase("aaaaaaaaa"));
+        cusBank.setBankCard(CryptUtil.encryptDatabase("63520155248885458"));
+        cusBankService.saveCusBank(cusBank);
+    }
+
+    /**
+     * 删除银行卡
+     * @throws Exception
+     */
+    @Test
+    public void testDeleteCusBank() throws Exception {
+        cusBankService.deleteCusBank(1L);
+    }
+}

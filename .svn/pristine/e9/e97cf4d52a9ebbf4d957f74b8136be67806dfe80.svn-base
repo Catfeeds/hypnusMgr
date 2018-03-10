@@ -1,0 +1,350 @@
+package com.catt.wfx.repository.dao.couponMgr.impl;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.couponMgr.CouponCusDao;
+import com.catt.wfx.repository.entity.couponMgr.CouponCus;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.form.couponMgr.CouponCusFrom;
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Repository("couponCusDaoImpl")
+public class CouponCusDaoImpl extends BaseDaoImpl<CouponCus, Long>
+		implements CouponCusDao {
+
+    /**
+     * 获取用户列表
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public Page getCusPageList(Map<String, Object> param) {
+        Integer rangeType = MapUtil.getInteger(param, "rangeType");
+        List<Integer> types = null;
+        //1-注册用户    2-店主    3-主管   4-主管&店主
+        switch (rangeType) {
+            case 1://所有
+                types = null;
+                break;
+            case 2://主管
+                types = new ArrayList<Integer>(){{
+                    add(CusInfo.Type.Director.getValue());
+                }};
+                break;
+            case 3://店主
+                types =  new ArrayList<Integer>(){{
+                    add(CusInfo.Type.ShopOwner.getValue());
+                }};
+                break;
+            case 4://注册用户
+                types = new ArrayList<Integer>(){{add(CusInfo.Type.RegistUser.getValue());}};
+                break;
+            default:
+                types = null;
+                break;
+        }
+        String name = MapUtil.getString(param, "cusName");
+        String tel = MapUtil.getString(param, "cusTel");
+        String startTime = MapUtil.getString(param, "startTime");
+        String endTime = MapUtil.getString(param, "endTime");
+        Integer pageNo = MapUtil.getInteger(param, "pageNo");
+        Integer pageSize = MapUtil.getInteger(param, "pageSize");
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select ");
+        sql.append(" t.I_ID as \"id\", ");
+        sql.append(" t.S_NAME as \"weixNickname\", ");
+        sql.append(" t.s_mobile as \"mobile\", ");
+        sql.append(" t.i_type as \"type\", ");
+        sql.append(" t.d_create_date as \"createdTime\" ");
+        sql.append(" from t_cus_info t ");
+        sql.append(" where t.I_DEL_FLAG = 2");
+        Map<String, Object> params = new HashMap<>();
+        if (StringUtil.checkObj(name)) {
+            sql.append(" and t.S_NAME like :name");
+            params.put("name", "%" + name + "%");
+        }
+        if (StringUtil.checkObj(tel)) {
+            sql.append(" and t.s_mobile = :tel");
+            params.put("tel", tel);
+        }
+        if (StringUtil.checkObj(startTime)) {
+            sql.append(" and t.d_create_date >= :start");
+            params.put("start", startTime);
+        }
+        if (StringUtil.checkObj(endTime)) {
+            sql.append(" and t.d_create_date <= :end");
+            params.put("end", endTime);
+        }
+        if (types != null) {
+            sql.append(" and t.i_type in (:types)");
+            params.put("types", types);
+        }
+        Pageable pageable = new Pageable();
+        pageable.setPageNo(pageNo);
+        pageable.setPageSize(pageSize);
+        return this.findPageBySql(sql.toString(), params, pageable, Map.class);
+    }
+
+    /**
+     * 获取用户代金券数量和总金额
+     *
+     * @param cusId
+     * @return
+     */
+    @Override
+    public Map getCouponTotal(Long cusId) {
+        if(StringUtil.checkObj(cusId)) {
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT ");
+            sql.append(" COUNT(t.I_ID) as \"totalNum\", ");//代金券数量
+            sql.append(" SUM(t.I_FACE_VALUE) as \"totalMoney\" ");//代金券总金额
+            sql.append(" FROM T_COUPON_CUS t");
+            sql.append(" WHERE t.I_CUS_ID = " + cusId);
+
+            List<Map> result = this.findListBySql(sql.toString(), null, Map.class);
+            if(result != null && result.size() > 0){
+                return result.get(0);
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * 获取用户代金券列表（分页）（APP）
+     *
+     * @param cusId    用户标识
+     * @param status   状态
+     * @param pageable
+     * @return
+     */
+    public Page<Map> findCusCoupon(Long cusId, Integer status, Pageable pageable) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_COUPON_ID AS \"id\", ");
+        sql.append(" t1.I_FACE_VALUE AS \"faceValue\", ");
+        sql.append(" t1.D_INVALID_TIME AS \"invalidTime\", ");
+        sql.append(" t2.S_COUPON_NAME AS \"couponName\", ");
+        sql.append(" t2.S_TYPE_LIMIT_DESC AS \"typeLimitDesc\", ");
+        sql.append(" t2.I_MONEY_LIMIT AS \"moneyLimit\", ");
+        sql.append(" t2.I_ORDER_MONEY AS \"orderMoney\" ");
+        sql.append(" FROM T_COUPON_CUS t1");
+        sql.append(" LEFT JOIN T_COUPON_INFO t2 ON t1.I_COUPON_ID = t2.I_ID");
+        sql.append(" WHERE 1=1");
+
+
+        Map param = new HashMap<>();
+        if (StringUtil.checkObj(cusId)) {
+            sql.append(" AND t1.I_CUS_ID = :cusId");
+            param.put("cusId", cusId);
+        }
+
+        if (StringUtil.checkObj(status)) {
+            if(status.equals(CouponCus.ISUSE_OVERDUE)){
+                sql.append(" AND t1.I_IS_USE = :isUse");
+                param.put("isUse", CouponCus.ISUSE_NOT_USE);
+
+                sql.append(" AND t1.D_INVALID_TIME < :nowDate");
+                param.put("nowDate", new Date());
+            }else  if (status.equals(CouponCus.ISUSE_NOT_USE)){
+                sql.append(" AND t1.I_IS_USE = :status");
+                param.put("status", status);
+
+                sql.append(" AND t1.D_INVALID_TIME >= :nowDate");
+                param.put("nowDate", new Date());
+            } else {
+                sql.append(" AND t1.I_IS_USE = :status");
+                param.put("status", status);
+            }
+
+        }
+
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    /**
+     * 获取用户代金券列表（分页）（账户管理详情）
+     *
+     * @param cusId
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getCusCouponPage(Long cusId, Pageable pageable) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_COUPON_ID AS \"id\", ");
+        sql.append(" t1.I_FACE_VALUE AS \"faceValue\", ");
+        sql.append(" t1.D_CREATE_DATE AS \"createDate\", ");
+        sql.append(" t2.S_COUPON_NAME AS \"couponName\", ");
+        sql.append(" t1.I_IS_USE AS \"isUse\", ");//是否使用
+        sql.append(" t1.D_USE_TIME AS \"useTime\", ");//使用时间
+        sql.append(" t1.D_RECEIVE_TIME AS \"receiveTime\", ");//领取时间
+        sql.append(" t1.D_INVALID_TIME AS \"invalidTime\" ");//失效时间
+        sql.append(" FROM T_COUPON_CUS t1");
+        sql.append(" LEFT JOIN T_COUPON_INFO t2 ON t1.I_COUPON_ID = t2.I_ID");
+        sql.append(" WHERE 1=1");
+
+        Map param = new HashMap<>();
+        if (StringUtil.checkObj(cusId)) {
+            sql.append(" AND t1.I_CUS_ID = :cusId");
+            param.put("cusId", cusId);
+        }
+
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    /**
+     * 获取代金券领取记录
+     *
+     * @param couponCusFrom
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getCouponRecordByPage(CouponCusFrom couponCusFrom, Pageable pageable){
+        String couponName = couponCusFrom.getCouponName();
+        String cusName = couponCusFrom.getCusName();
+        String mobile = couponCusFrom.getMobile();
+        Date startTime = couponCusFrom.getStartTime();
+        Date endTime = couponCusFrom.getEndTime();
+        Integer isUse = couponCusFrom.getIsUse();
+
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_FACE_VALUE AS \"faceValue\", ");
+        sql.append(" t1.D_RECEIVE_TIME AS \"receiveTime\", ");
+        sql.append(" t1.D_INVALID_TIME AS \"invalidTime\", ");
+        sql.append(" t1.I_IS_USE AS \"isUse\", ");//是否使用
+        sql.append(" t2.S_NAME AS \"cusName\", ");
+        sql.append(" t2.S_MOBILE AS \"mobile\", ");
+        sql.append(" t3.S_COUPON_NAME AS \"couponName\"");
+        sql.append(" FROM T_COUPON_CUS t1");
+        sql.append(" LEFT JOIN T_CUS_INFO t2 ON t1.I_CUS_ID = t2.I_ID");
+        sql.append(" LEFT JOIN T_COUPON_INFO t3 ON t1.I_COUPON_ID = t3.I_ID");
+        sql.append(" WHERE 1=1");
+
+        Map param = new HashMap<>();
+        if (StringUtil.isNotBlank(couponName)) {
+            sql.append(" AND t3.S_COUPON_NAME like (:couponName)");
+            param.put("couponName", couponName+"%");
+        }
+
+        if (StringUtil.isNotBlank(cusName)) {
+            sql.append(" AND t2.S_NAME like (:cusName)");
+            param.put("cusName", cusName+"%");
+        }
+
+        if (StringUtil.isNotBlank(mobile)) {
+            sql.append(" AND t2.S_MOBILE like (:mobile)");
+            param.put("mobile", mobile+"%");
+        }
+
+        if (StringUtil.checkObj(startTime)) {
+            sql.append(" AND t1.D_RECEIVE_TIME >=:startTime");
+            param.put("startTime", startTime);
+        }
+
+        if (StringUtil.checkObj(endTime)) {
+            sql.append(" AND t1.D_RECEIVE_TIME <=:endTime");
+            param.put("endTime", endTime);
+        }
+
+
+        if (StringUtil.checkObj(isUse)){
+            if(isUse.equals(CouponCus.ISUSE_OVERDUE)){
+                sql.append(" AND t1.I_IS_USE = :isUse");
+                param.put("isUse", CouponCus.ISUSE_NOT_USE);
+
+                sql.append(" AND t1.D_INVALID_TIME < :nowDate");
+                param.put("nowDate", new Date());
+
+            }else if (isUse.equals(CouponCus.ISUSE_NOT_USE)){
+                sql.append(" AND t1.I_IS_USE = :isUse");
+                param.put("isUse", isUse);
+
+                sql.append(" AND t1.D_INVALID_TIME >= :nowDate");
+                param.put("nowDate", new Date());
+            }else {
+                sql.append(" AND t1.I_IS_USE = :isUse");
+                param.put("isUse", isUse);
+            }
+
+        }
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+     }
+
+
+    /**
+     * 获取主管代金券数量和金额
+     *
+     * @param cusIds 主管标识集合
+     * @return
+     */
+    public List<Map> getCouPonCus(List<Long> cusIds){
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_CUS_ID AS \"cusId\", ");
+        sql.append(" COUNT(t1.I_ID) AS \"couponNum\", ");
+        sql.append(" SUM(t1.I_FACE_VALUE) AS \"faceValue\" ");
+        sql.append(" FROM T_COUPON_CUS t1 ");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+        sql.append(" AND t1.I_CUS_ID IN (:cusIds)");
+        param.put("cusIds",  cusIds);
+
+        sql.append(" GROUP BY t1.I_CUS_ID");
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    /**
+     * 获取代金券数量和金额
+     *
+     * @param isUse 代金券状态
+     * @return
+     */
+    public List<Map> getTotalCoupon(Integer isUse){
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_SOURCE AS \"source\",");
+        sql.append(" SUM(t1.I_FACE_VALUE) AS \"totalFaceValue\",");
+        sql.append(" COUNT(t1.I_ID) AS \"totalCouponNum\"");
+        sql.append(" FROM T_COUPON_CUS t1");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+        if (StringUtil.checkObj(isUse)){
+            if(isUse.equals(CouponCus.ISUSE_OVERDUE)){
+                sql.append(" AND t1.I_IS_USE = :isUse");
+                param.put("isUse", CouponCus.ISUSE_NOT_USE);
+
+                sql.append(" AND t1.D_INVALID_TIME < :nowDate");
+                param.put("nowDate", new Date());
+
+            }else if (isUse.equals(CouponCus.ISUSE_NOT_USE)){
+                sql.append(" AND t1.I_IS_USE = :isUse");
+                param.put("isUse", isUse);
+
+                sql.append(" AND t1.D_INVALID_TIME >= :nowDate");
+                param.put("nowDate", new Date());
+            }else {
+                sql.append(" AND t1.I_IS_USE = :isUse");
+                param.put("isUse", isUse);
+            }
+
+        }
+        sql.append(" GROUP BY t1.I_SOURCE");
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+}

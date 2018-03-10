@@ -1,0 +1,64 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="org.apache.shiro.web.util.WebUtils" %>
+<%@ page import="org.apache.shiro.web.util.SavedRequest" %>
+<%
+    // 登录成功跳转页面，默认首页
+    String successUrl = request.getContextPath() + "?shopId=";
+    if(request.getParameter("shopId") != null){
+        successUrl += request.getParameter("shopId");
+    }
+
+    SavedRequest savedRequest = WebUtils.getSavedRequest(request);
+    if (savedRequest != null){
+        // 如果有原始访问页面，则使用原始访问页面
+        successUrl = savedRequest.getRequestUrl();
+    }
+
+    System.out.println("登录成功后跳转页面【" + successUrl + "】");
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <shiro:authenticated>
+        <% response.sendRedirect(request.getContextPath()); %>
+    </shiro:authenticated>
+    <title>绑定手机号</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/bangding.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/denglu.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/zhucexinxi.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+
+    <script type="text/javascript" src="${path}/resources/js/jquery.timers-1.2.js"></script>
+    <script type="text/javascript" src="${path}/resources/js/login.js"></script>
+    <script type="text/javascript">
+        var successUrl = '<%=successUrl%>';
+    </script>
+</head>
+
+<body style="background:#fff;">
+    <form id="form" onsubmit="return false;">
+        <input type="hidden" id="rememberMe" name="rememberMe" value="true"/>
+        <div class="tishi">首次登陆微分销需绑定手机号</div>
+        <div class="loginList">
+            <div class="loginItem">
+                <span class="itemTitle06">手机号:</span>
+                <div class="inputBox">
+                    <input id="username" name="username" class="loginInput2" placeholder="请输入手机号码">
+                </div>
+            </div>
+            <div class="loginItem">
+                <span class="itemTitle06">验证码:</span>
+                <div class="inputBox">
+                    <input class="loginInput" id="captcha" name="captcha" placeholder="请输入验证码">
+                    <p id="captchaBtn">获取验证码</p>
+                </div>
+            </div>
+        </div>
+        <div style="height:60px;"></div>
+        <div class="bottomBtnBox">
+            <button type="submit" class="xw_menu">提&nbsp;交</button>
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,127 @@
+@charset "utf-8";
+/* CSS Document */
+.wrapperCanshu{
+	position:relative;
+	margin-top:10px;
+	padding:0px 15px 15px 190px;}
+.canshuLeft{
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:180px;
+	min-height:664px;
+	border:1px #ececec solid;
+	background:#fff;}
+.canshuLeft02{
+	position:absolute;
+	top:0px;
+	left:10px;
+	width:180px;
+	min-height:712px;
+	border:1px #ececec solid;
+	background:#fff;}
+.contentBox{
+	background:#fff;}
+.contentTitle{
+	height:28px;
+	padding:10px;}
+.guigeListHigh{
+	height:260px;
+	overflow:auto;
+	scroll-x:none;
+	background:#fff;}
+/*普通列表*/
+.tableStyle{
+	width:100%;
+	font-size:12px;
+	text-align:center;
+	background:#fff;}
+.tableStyle th{
+	height:28px;
+	line-height:28px;
+	border-bottom:1px #f3f3f3 solid;
+	background:#f9f9f9;}
+.tableStyle tr:nth-of-type(odd){background:#f7f7f7;}
+
+.tableStyle tr:hover{background:#fffad4;}
+.tableStyle td{
+	height:38px;
+	line-height:38px;
+	border-bottom:1px #f3f3f3 solid;}
+tr.new td{
+	height:38px;
+	line-height:38px;
+	background:#FFF1DA;
+	border-bottom:1px #FCE3BB solid;}
+.tableStyle tr.on td{
+	color:#e1356d;
+	font-weight:bold;
+	font-size:14px;
+	background:#ffe9ed;}
+.tableStyle tr.on td:first-child{
+	color:#e1356d;
+	font-weight:bold;
+	font-size:14px;
+	background:#ffe9ed url(../images/listthis.png) 10px center no-repeat;}
+.canAdd,.canDel{
+	float:left;
+	height:32px;
+	line-height:32px;
+	width:50px;
+	border-radius:3px;
+	margin-top:-3px;
+	margin-right:5px;
+	color:#fff;
+	letter-spacing:3px;
+	font-size:14px;
+	text-align:center;
+	cursor:pointer;
+	}
+.canAdd{
+	background:#e1356d;}
+.canAdd:hover{background:#f03b76;}
+.canDel{
+	margin-right:0px;
+	background:#aaaaa9;}
+/*增删改小按钮*/
+.listBtn{
+	display:block;
+	float:right;
+	margin-top:-3px;}
+.listBtn li{
+	display:block;
+	float:right;
+	height:32px;
+	line-height:32px;
+	width:32px;
+	border-radius:5px;
+	margin-left:5px;
+	cursor:pointer;}
+.listBtn li.add{
+	background:#f47f30 url(../images/listBtn.png) no-repeat left top;
+	}
+.listBtn li.edit{
+	background:#f47f30 url(../images/listBtn.png) no-repeat left bottom;
+	}
+.listBtn li.delete{
+	background:#aaaaa9 url(../images/listBtn.png) no-repeat left -32px;
+	}
+/*常用菜单*/
+.mainBoxBottom{
+	min-height:300px;
+	width:900px;
+	padding:10px;
+	margin:auto;
+	margin-top:54px;
+	border:1px #edeae7 solid;
+	background:#fff;}
+/*-----------------------------------------------------------*/
+/*公共样式修改*/	
+.xw_dingdanLink td{ cursor:pointer;}
+.xw_youjiaLink td{ cursor:pointer;}
+.btnOrange,.btnOrangeWide,.btnGray,.btnBlue{margin-top: -3px;}
+.tick,.tickAll{
+	margin-left: 10px;}
+.tickAll{
+	margin-top:0px;}
+.searchBar{ border:none;}

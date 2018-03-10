@@ -1,0 +1,117 @@
+package com.catt.wfx.repository.entity.productMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 文案流程信息实体类
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-01-09 11:37:12
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_PRODUCT_DOCUMENT_LOG")
+public class ProductDocumentLog extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+
+    /**
+     * <pre>
+     * 单据标识
+     * </pre>
+     */
+    private Long bill;
+    /**
+     * <pre>
+     * 操作环节
+     * </pre>
+     */
+    private String act;
+    /**
+     * <pre>
+     * 操作内容
+     * </pre>
+     */
+    private String content;
+    /**
+     * <pre>
+     * 操作人员标识
+     * </pre>
+     */
+    private Long operatorId;
+    /**
+     * <pre>
+     * 操作人员名称
+     * </pre>
+     */
+    private String operatorName;
+    /**
+     * <pre>
+     * 备注
+     * </pre>
+     */
+    private String remark;
+
+    @Column(name = "I_BILL")
+    public Long getBill() {
+        return bill;
+    }
+
+    public void setBill(Long bill) {
+        this.bill = bill;
+    }
+
+    @Column(name = "S_ACT", length = 128)
+    public String getAct() {
+        return act;
+    }
+
+    public void setAct(String act) {
+        this.act = act;
+    }
+
+    @Column(name = "S_CONTENT", length = 512)
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    @Column(name = "I_OPERATOR_ID")
+    public Long getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(Long operatorId) {
+        this.operatorId = operatorId;
+    }
+
+    @Column(name = "S_OPERATOR_NAME", length = 32)
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
+
+    @Column(name = "S_REMARK", length = 1024)
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+}
+

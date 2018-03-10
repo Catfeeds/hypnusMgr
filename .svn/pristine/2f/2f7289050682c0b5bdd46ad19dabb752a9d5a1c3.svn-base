@@ -1,0 +1,16 @@
+package com.catt.wfx.repository.dao.pub;
+
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+
+/**
+ * 系统全局设置Dao接口
+ *
+ * @author 纪建宏
+ * @version V1.0
+ * @date 2015-11-19 11:26:28
+ */
+public interface PubSetupBaseDao extends BaseDao<PubSetup, String> {
+
+}

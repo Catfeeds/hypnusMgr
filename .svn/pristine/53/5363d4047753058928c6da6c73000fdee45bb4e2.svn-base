@@ -1,0 +1,162 @@
+package com.catt.wfx.web.controller.guest.sms;
+
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.ConfigUtils;
+import com.catt.common.util.crypto.RSAUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.wfx.service.LoginSmsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Calendar;
+
+/**
+ * <pre>
+ *
+ * @author : Zhang zhongtao
+ * @version : Ver 1.0
+ * </pre>
+ */
+@RestController
+@RequestMapping("/guest/sms")
+public class SmsController extends BaseController {
+    /**
+     * 日志
+     */
+    static Logger logger = LoggerFactory.getLogger(SmsController.class);
+
+    /**
+     * 发送短信时间key
+     */
+    public static final String LOGIN_SEND_SMS_TIME = "login_send_sms_time";
+    /**
+     * 毫秒数
+     */
+    static final Integer TIME_SECONDS = 1000;
+    /**
+     * 每分钟的秒数
+     */
+    static final Integer TIME_MIN_SECONDS = 60;
+
+    /**
+     * 私钥
+     */
+    static PrivateKey privateKey;
+
+
+    @Resource(name = "loginSmsServiceImpl")
+    private LoginSmsService loginSmsService;
+
+    /**
+     * 私钥Base64文本
+     */
+    @Value("${system.rsa.key.private}")
+    private String priKey;
+
+
+    public String getPriKey() {
+        return priKey;
+    }
+
+    public void setPriKey(String priKey) {
+        this.priKey = priKey;
+    }
+
+    /**
+     * 手机号码根据私钥解密
+     *
+     * @param mobileNo 使用公钥加密的手机号码
+     * @return String 机密后的手机号码
+     */
+    private String deMobileNo(String mobileNo) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+
+        if (privateKey == null) {
+            privateKey = RSAUtils.genPrivateKey(getPriKey());
+        }
+
+        mobileNo = RSAUtils.decrypt(privateKey, mobileNo);
+        return mobileNo;
+
+    }
+
+    /**
+     * 登录或注册短信验证码
+     *
+     * @param mobileNo Base64公钥文本加密的手机号码
+     * @param session  会话
+     * @return Message 结果消息
+     * @throws NoSuchAlgorithmException 异常
+     * @throws IOException              异常
+     * @throws InvalidKeySpecException  异常
+     */
+    @RequestMapping(value = "/send", method = RequestMethod.POST)
+    public Message sendSms(@RequestParam(value = "mobileNo", required = true) String mobileNo, HttpSession session) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+        return sendSmsPublic(mobileNo, session, ConfigUtils.config.getProperty("config.sms.login.template.content"), true);
+    }
+
+    /**
+     *
+     * 忘记密码短信验证码
+     *
+     * @param mobileNo Base64公钥文本加密的手机号码
+     * @param session  会话
+     * @return Message 结果消息
+     * @throws NoSuchAlgorithmException 异常
+     * @throws IOException              异常
+     * @throws InvalidKeySpecException  异常
+     */
+    @RequestMapping(value = "/forgetPwd", method = RequestMethod.POST)
+    public Message forgetPwd(@RequestParam(value = "mobileNo", required = true) String mobileNo, HttpSession session) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+        return sendSmsPublic(mobileNo, session, ConfigUtils.config.getProperty("config.sms.forgetPwd.template.content"), true);
+    }
+
+
+    /**
+     * 发送短信公共部分
+     * 每分钟只能发送一次，频繁发送则提示异常
+     *
+     * @param mobileNo
+     * @param session
+     * @param template
+     * @param flag     是否需要解密手机号
+     * @return
+     */
+    private Message sendSmsPublic(String mobileNo, HttpSession session, String template, boolean flag) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+        Assert.hasLength(mobileNo);
+        if (flag) {
+            mobileNo = deMobileNo(mobileNo);
+        }
+
+        Assert.hasLength(mobileNo);
+
+        Long timeInMillis = Calendar.getInstance().getTimeInMillis();
+        Long timeInMillisSession = (Long) session.getAttribute(LOGIN_SEND_SMS_TIME);
+
+        if (timeInMillisSession != null && (((timeInMillis - timeInMillisSession) / TIME_SECONDS) < TIME_MIN_SECONDS)) {
+            throw BaseException.errorByErrInfo("非法调用！");
+        }
+
+        session.setAttribute(LOGIN_SEND_SMS_TIME, timeInMillis);
+
+        //清理缓存
+        loginSmsService.clearLoginSms(mobileNo);
+        session.setAttribute(LOGIN_SEND_SMS_TIME, Calendar.getInstance().getTimeInMillis());
+        //发送短信
+        loginSmsService.sendLoginSms(mobileNo, template);
+        return Message.success(StringUtil.EMPTY);
+    }
+}

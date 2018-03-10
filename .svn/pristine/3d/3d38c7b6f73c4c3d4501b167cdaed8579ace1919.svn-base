@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{ border:0px; padding:0px; margin:0px; font-family:"微软雅黑", Arial;}
+.textGrey{color:#666;}
+
+.container{ position:relative; padding:0px 5%;  background:#fff;}
+.pic{display:block; width:100%; z-index:1; padding-top:20px;}
+.container h1{position:absolute; top:20px; color:#fff;  left:10%; font-size:24px; letter-spacing:1px; text-shadow:#a69865 3px 2px 1px; z-index:5;}
+.guanyuContent{font-size:14px; text-align:left; color:#333; line-height:20px; letter-spacing:1px; margin:0px; margin-top:4px; padding:0px;}
+.nextBtn1{background:#f47f30 ;color:#fff; width:100%; height:50px; font-size:18px; margin-top:20px; position:fixed; bottom:0px; z-index:100; overflow:hidden; font-family:"微软雅黑", Arial; letter-spacing:2px;}
+.nextBtnBianjia{background:#f47f30 ;color:#fff; width:60px;; height:30px; border-radius:4px; font-size:12px;float:right; font-family:"微软雅黑", Arial; }

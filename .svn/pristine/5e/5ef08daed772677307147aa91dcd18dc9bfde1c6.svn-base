@@ -1,0 +1,107 @@
+package com.catt.wfx.service.impl.wechatReturn;
+
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.module.pay.data.config.AbstractAccountConfig;
+import com.catt.common.util.bean.BeanUtil;
+import com.catt.common.util.spring.SpringUtils;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrder;
+import com.catt.wfx.service.base.wechatReturn.WechatReturnOrderBaseService;
+import com.catt.wfx.service.impl.wechatReturn.event.CreateReturnSuccessEvent;
+import com.catt.wfx.service.impl.wechatReturn.event.ReturnEventListener;
+import com.catt.wfx.service.impl.wechatReturn.event.ToReturnEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * 抽象支付服务
+ * 
+ * @author 纪建宏
+ *
+ */
+public abstract class AbstractReturnService<T extends AbstractAccountConfig>
+		implements ReturnService<T> {
+
+	private static final Logger LOG = LoggerFactory
+			.getLogger(com.catt.common.module.pay.service.impl.AbstractPayService.class);
+	/**
+	 * 异常编码-重复支付
+	 */
+	private static final String RETURN_EXCEPTION_CODE_REPAY = "EXP.RETURN.REPAY";
+
+	@Resource
+	private WechatReturnOrderBaseService wechatReturnOrderBaseService;
+
+	/**
+	 * 构建退款事件
+	 * 
+	 * @param param
+	 *            原始请求参数
+	 * @return
+	 */
+	protected ToReturnEvent createReturnEvent(Map<String, String> param) {
+		LOG.info("请求退款，原始参数【" + param + "】");
+
+		// 业务类型（支付事件处理器bean名称）
+		String businessType = param.get("businessType");
+		Assert.hasText(businessType);
+		ReturnEventListener listener = SpringUtils.getBean(businessType);
+		Assert.notNull(listener);
+
+		ToReturnEvent toReturnEvent = listener.initPayRequestParam(param);
+		LOG.info("请求退款，退款参数【" + toReturnEvent + "】");
+		toReturnEvent.validate();
+
+		// 重复退款校验
+		if (wechatReturnOrderBaseService.getReturnOrderByRefundNo(toReturnEvent.getRefundNo()) != null) {
+			throw BaseException.error(RETURN_EXCEPTION_CODE_REPAY);
+		}
+
+//		// 建单
+		WechatReturnOrder wechatReturnOrder = new WechatReturnOrder();
+		BeanUtil.copyProperties(wechatReturnOrder, toReturnEvent);
+
+		wechatReturnOrder.setStatus(WechatReturnOrder.STATUS_REFUNDIN);
+		wechatReturnOrderBaseService.save(wechatReturnOrder);
+
+		return toReturnEvent;
+	}
+
+	public T getAccountConfig(ToReturnEvent toReturnEvent) {
+		ReturnEventListener listener = SpringUtils.getBean(toReturnEvent
+				.getBusinessType());
+		AbstractAccountConfig accountConfig = listener
+				.specifyAccountConfig(toReturnEvent);
+		if (accountConfig == null) {
+			throw new RuntimeException("商户账号未配置");
+		}
+
+		try {
+			@SuppressWarnings("unchecked")
+			T config = (T) accountConfig;
+			return config;
+		} catch (Exception e) {
+			throw new RuntimeException("商户账号配置有误");
+		}
+	}
+
+	/**
+	 * 申请退款成功
+	 *
+	 * @param toReturnEvent
+     */
+	protected void createReturnSuccess(ToReturnEvent toReturnEvent) {
+		LOG.info("请求退款成功，原始参数【" + toReturnEvent + "】");
+
+		// 广播申请退款成功事件
+		CreateReturnSuccessEvent createReturnSuccessEvent = new CreateReturnSuccessEvent(toReturnEvent);
+		ReturnEventListener listener = SpringUtils.getBean(toReturnEvent
+				.getBusinessType());
+		listener.createReturnSuccess(createReturnSuccessEvent);
+
+	}
+
+}

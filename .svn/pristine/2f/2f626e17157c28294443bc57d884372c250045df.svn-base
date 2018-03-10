@@ -1,0 +1,117 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    // 初始化数据列表
+                    EventHandler.search();
+                },
+
+
+                /** 初始化界面  */
+                initPage: function () {
+                    var params = {}; //搜索条件
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $('#search').click(function () {
+                        EventHandler.search();
+                    });
+
+                    $('#reset').click(function () {
+                        EventHandler.reset();
+                    });
+                    $(".sortDiv").click(function () {
+                        var orderValue = $(this).attr("data-value");
+                        $('.sortDiv').attr("data-value", 0);
+                        $('.sortImg').attr("src", path + "/resources/images/icon_rank00.png");
+                        if (parseInt(orderValue) == 0 || parseInt(orderValue) == 1){
+                            orderValue++;
+                        } else if (parseInt(orderValue) == 2) {
+                            orderValue = 0;
+                        }
+                        $(this).attr("data-value", orderValue);
+                        $(this).children('img').attr("src", path + "/resources/images/icon_rank0" + orderValue + ".png");
+                        EventHandler.search();
+                    });
+
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                // 查询
+                search: function (params) {
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: 15};
+                    }
+                    params.name = $("#name").val();
+                    params.mobile = $("#mobile").val();
+                    params.remainderMoneyOrder = $("#remainderMoneyOrder").attr("data-value");
+                    params.totalMoneyOrder = $("#totalMoneyOrder").attr("data-value");
+                    params.unAcceptMoneyOrder = $("#unAcceptMoneyOrder").attr("data-value");
+                    params.reciveRebateMoneyOrder = $("#reciveRebateMoneyOrder").attr("data-value");
+                    params.couponCountOrder = $("#couponCountOrder").attr("data-value");
+
+                    DataHandler.search(params, function (backData) {
+                        var html = template('template_dataList', backData.content);
+                        $('#dataList').html(html);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        setParenHei();
+                    });
+                },
+                //重置
+                reset: function () {
+                    $("#name").val("");
+                    $("#mobile").val("");
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/memberAccount/account/getPage', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

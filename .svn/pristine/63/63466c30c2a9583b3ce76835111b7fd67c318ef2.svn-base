@@ -1,0 +1,116 @@
+@charset "utf-8";
+/* CSS Document */
+
+.goodsList{ margin:10px 0;}
+.goodsList h1{ position:relative;}
+.goods{ position:relative; padding:0 10px 0px 40px; background:#fff; border-bottom:1px dashed #efefef; }
+.goodsList .goods:last-child{ border-bottom:none;}
+.goodTip{ color:#646464;}
+.biaotiRight{ position:absolute; top:16px; right:20px; color:#ff4d4d; font-size:14px; line-height:24px; font-weight:900; }
+.biaotiLeft{ position:absolute; top:16px; left:110px; width:45%; height:20px; line-height:20px; font-size:16px; color:#1a1a1a; letter-spacing:1px;}
+.goods h3{ position:absolute; top:20px; left:120px; font-size:15px; color:#666;}
+.goodsMsg{font-size:14px; color:#969696; margin-bottom:6px;}
+.goodType{ background:#fff; height:110px;border-bottom:1px solid #ccc;}
+.buyNum{ position:absolute; top:0px; left:0px; border:1px solid #c4c4c4; width:104px; height:28px;}
+.gouwuchePic{ width:64px;  position:absolute; top:20px; left:40px;}
+.goods h4{ position:absolute; top:45px; left:120px; margin-top:6px; font-size:15px; color:#999;}
+
+
+
+.bianjiTitle{line-height:50px;}
+
+.buyNum span{ display:block; width:26px; height:28px; float:left; cursor:pointer;}
+span.ico_minus{ border-right:1px solid #c4c4c4; background:url(../images/ico_minus.png) no-repeat center center #f5f5f5;}
+span.ico_plus{ border-left:1px solid #c4c4c4; background:url(../images/ico_plus.png) no-repeat center center #f5f5f5;}
+.buyNum input{ width:40px; height:16px; border:none; background:none; line-height:20px; color:#555; font-size:14px; float:left; padding:5px; text-align:center;}
+
+.cangkuDown{ border:1px solid #c4c4c4; width:104px; height:28px; float:right; margin-top:10px; position:relative;}
+.cangkuName{font-size:14px; color:#646464; margin-left:10px; line-height:28px;}
+.cangkuDownIco{position:absolute; top:7px; right:6px; width:14px; height:14px;}
+.cangkuList{width:104px; border:1px solid #c4c4c4; position:absolute; top:28px; right:-1px; z-index:200; background:#fff;}
+.cangkuList li{height:40px; line-height:40px; font-size:14px; color:#646464; border-bottom:1px solid #e5e5e5; padding-left:10px;}
+.cangkuList li:hover{color:#f13d2e; cursor:pointer;}
+.cangkuList{display:none;}
+
+.slideUpTip{float:right; margin-top:12px; font-size:14px; color:#646464; margin-right:10px;}
+.slideUpTip img{width:16px; height:16px; float:left; margin-right:4px; margin-top:1px;}
+.slideImg02{display:none;}
+
+/*底部浮动*/
+.baomingList{background:#fff; margin-top:10px;}
+.baodaoTip{position:absolute; right:0; top:0; font-size:12px; border-radius:4px; padding:2px 4px; letter-spacing:1px;}
+.zhifuBottom{position:fixed; bottom:0; left:0; right:0; height:50px; overflow:hidden; background:#fff; box-shadow:0 -1px 6px #b7b7b7;}
+.baomingNum{float:right; line-height:40px; margin-right:20px;}
+.priceText{float:left; font-size:14px; color:#646464; line-height:50px; padding-left:20px; letter-spacing:1px;}
+.priceNum{font-size:28px; font-weight:bold;}
+.zhifuBtn{float:right; width:120px; font-size:16px; letter-spacing:1px; line-height:50px; background:#ff4d4d; color:#fff;}
+.textpriceNum{ float:left;width:120px; margin-top:6px; height:35px; line-height:30px; border:1px solid #efefef;; background:#f9f9f9; font-size:18px; font-weight:bold; color:#f13d2e;}
+
+.zhifu button{ width:90px; height:35px; line-height:30px; text-align:center; display:block; border-radius:5px; float:right; font-size:16px; letter-spacing:1px;}
+.delete{ margin:7px 2% 0 0; border:1px solid #e5e5e5; background:#f7f7f7; display:block; color:#969696;}
+.delete:hover{background:#f2f2f2;}
+/*.share{ border:1px solid #f47f30; background:#f8bc94; display:block; margin:7px 10px 0 0;}*/
+.share{ border:1px solid #e5e5e5; background:#f7f7f7; display:block; margin:7px 10px 0 0; color:#969696;}
+.share:hover{background:#f2f2f2;}
+
+/*勾选*/
+a.checkbox{ width:18px; height:18px; display:block; cursor:pointer;/*background:url(../images/check.png) no-repeat center center;*/ border:1px solid #bbb; border-radius:30px; position:absolute; top:9px; left:10px;}
+a.checkbox02{position:absolute; top:45px; left:10px;}
+a.checkboxAll{position:absolute; top:15px; left:10px;}
+/*a.checkbox:hover{background:url(../images/zhifu_img_selected.png) no-repeat center center; border:1px solid #ea3c34;}*/
+a.checked{background:url(../images/zhifu_img_selected.png) no-repeat center center; border:1px solid #ea3c34;}
+.tickAll{ padding-left:35px; color:#323232; font-size:15px; position:relative; float:left; height:50px; line-height:50px;}
+
+/*我的运单*/
+.imgCall{position:absolute; right:0px; top:10px; width:25px;}
+
+.top-right-text{ position:absolute;width:50px;height:38px;top:6px;right:8px;font-size:15px;color:#ff4d4d; }
+
+.cangkuDown{ border:1px solid #c4c4c4; width:105px; height:28px; float:right; margin-top:10px; position:relative;}
+.cangkuName{font-size:14px; color:#646464; margin-left:10px; line-height:28px;}
+.cangkuDownIco{position:absolute; top:7px; right:6px; width:14px; height:14px;}
+.cangkuList{width:70px; border:1px solid #c4c4c4; position:absolute; top:28px; right:-1px; z-index:200; background:#fff;}
+.cangkuList li{height:30px; line-height:30px; font-size:14px; color:#646464; border-bottom:1px solid #e5e5e5; padding-left:10px;}
+.cangkuList li:hover{color:#f13d2e; cursor:pointer;}
+.cangkuList{display:none;}
+.guige{ position:absolute; top:66px; left:110px; color:#999;}
+.shuliang{ position:absolute; top:66px; right:20px; color:#4d4d4d;}
+.bianji{ position:absolute; right:0px; top:0px; background:#ff4d4d; width:60px; height:110px; text-align:center;}
+.content{color:#fff; line-height:110px; font-size:14px;	 }
+
+/*-----浮动规格框-----*/
+.shareDiv{ background:url(../images/bg_float.png) repeat; position:absolute; top:0; left:0; z-index:998; display:none;}
+span.close{ display:block; width:24px; height:24px; position:absolute; top:0; right:0; cursor:pointer; padding:6px;}
+.guigeDiv{ width:92%; padding:0 4%; height:290px; background:#fff; border-top:3px solid #ff4d4d; position:fixed; bottom:-200px; left:0; z-index:999;}
+table.guigeTab{ margin-top:30px;}
+table.guigeTab td,table.guigeTab th{ font-size:12px; padding-bottom:10px;}
+table.guigeTab td{ color:#888;}
+table.guigeTab th{ font-weight:normal;}
+ul.sizeUl{ height:30px;}
+ul.sizeUl li{ height:30px; line-height:30px; padding:0 10px; font-size:12px; color:#333; border:1px solid #e8e8e8; float:left; margin-left:10px; border-radius:5px; cursor:pointer;}
+ul.sizeUl li.Up{ border:1px solid #ff4d4d; color:#fff; background:#ff4d4d}
+ul.sizeUl li.nothing{ border:1px dashed #e6e6e6; color:#c0c0c0; background:#fff;}
+
+.numBer{ float:right; width:150px; margin-top:5px;}
+.numBer input.num{ float:left; width:30px; height:25px; line-height:25px; font-size:12px; color:#000; text-align:center; border:1px solid #efefef; margin-right:5px; padding:0 5px;}
+.numBer span{ width:25px; height:25px; float:left; margin-right:5px; text-align:center; border:1px solid #efefef; cursor:pointer;}
+.price{ max-width:110px; float:left; font-size:22px; color:#ff4d4d; font-weight:bold; float:left; line-height:22px; overflow:hidden;}
+
+a.checkbox{ width:18px; height:18px; display:block; cursor:pointer;/*background:url(../images/check.png) no-repeat center center;*/ border:1px solid #e2e2e2; border-radius:30px; position:absolute;  }
+.nextBtn1{background:#ff4d4d ;color:#fff; width:100%; height:46px; font-size:18px; margin-top:20px; position:fixed; bottom:0px; left:0; z-index:100; overflow:hidden; font-family:"微软雅黑", Arial; letter-spacing:2px;}
+/*---*/
+table{ border-collapse:collapse; width:100%;}
+.floatLeft{ float:left;}
+.floatRight{ float:right;}
+.textRed{ color:#ff4d4d;}
+.bgRed{ background:#fa4b89;}
+.bgYellow{ background:#ff934b;}
+.bgBlue{ background:#4bb2fa;}
+
+
+.shixiao{ width:36px; text-align:center; position:absolute; top:20px; left:40px; color:#fff; background:#bfbfbf; border-radius:5px; }
+.numBer h2{ font-size:12px; color:#aaa; float:left; height:16px; line-height:20px; overflow:hidden;}
+.yuanjia{ font-size:12px; color:#999; text-decoration:line-through; font-weight:normal; margin-left:10px;}
+.active h4 span{ color:#ff4d4d; padding-right:8px; font-size:18px;} 
+
+

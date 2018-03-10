@@ -1,0 +1,99 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+        var pageNo = 1;
+        var pageSize = 5;
+        // 数据容器
+        var container = $('#container');
+        // 初始化滚动刷新控件
+        var scrollControl = $('#scrollControl');
+        $(document.body).infinite(50);
+
+        //是否是 滚动刷新 ，false 否 ，true  是
+        var scrollFlag = false;
+
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                },
+                /** 初始化界面  */
+                initPage: function () {
+                    $(".swiper-container").swiper({mode: 'horizontal'});
+
+                    // 初始化数据列表
+                    EventHandler.search();
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $(document.body).infinite().on("infinite", function () {
+                        if (scrollFlag) return;
+                        scrollFlag = true;
+                        EventHandler.search();
+                    });
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                // 查询
+                search: function () {
+                    var params = {pageNo: pageNo, pageSize: pageSize, id: $("#id").val()};
+                    DataHandler.getActivityProducts(params, function (data) {
+                        //如果是滚动刷新，则结束滚动刷新
+                        if (scrollFlag) {
+                            scrollFlag = false;
+                        }
+                        var html = template('templateList', data.content);
+                        //结尾插入数据
+                        container.append(html);
+
+                        //当数据量 大于所请求的数据量时，需要在后面加入一个滚动刷新的控件
+                        if (pageNo * pageSize < data.total) {
+                            scrollControl.hide();
+                            pageNo++;
+                        } else {
+                            $(document.body).destroyInfinite();
+                            scrollControl.show();
+                            scrollControl.empty().append("<span style='color: darkgray'>" + lastPageText + "</span>");
+                        }
+                        if (container.html() == "") {
+                            scrollControl.hide();
+                            var msg = "<center ><br/><span style='vertical-align: middle!important;color: darkgray'>" + emptyDataText + "</span></center>";
+                            container.html(msg);
+                        }
+                    });
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                getActivityProducts: function (param, callback) {
+                    $.post(path + '/admin/wechat/activity/getActivityProducts', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

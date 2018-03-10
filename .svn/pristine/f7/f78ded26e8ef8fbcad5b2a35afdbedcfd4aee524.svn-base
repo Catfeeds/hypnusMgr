@@ -1,0 +1,92 @@
+package com.catt.wfx.service.impl;
+
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.wechat.repository.entity.WeChatUser;
+import com.catt.common.module.wechat.service.WeChatUserService;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.service.WfxUserService;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * 用户服务实现类
+ */
+@Service("wfxUserServiceImpl")
+public class WfxUserServiceImpl implements WfxUserService {
+
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+    //附件服务
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+    @Resource
+    private WeChatUserService weChatUserService;
+    /**
+     * 公共配置服务
+     */
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    @Override
+    public CusInfo getCusPhotoAndName(Long userId, String publicAccountId, String openId, HttpServletRequest request) {
+        CusInfo tempCus = new CusInfo();
+
+        String staffName = (String) request.getSession().getAttribute("staffName");
+        String staffImagePath = (String) request.getSession().getAttribute("staffImagePath");
+
+        // 优先从会话中获取名称和头像
+        if (StringUtil.isBlank(staffName) || StringUtil.isBlank(staffImagePath)) {
+            // 从用户表获取名称和头像
+            CusInfo cusInfo = cusInfoBaseService.find(userId);
+
+            if (StringUtil.isNotBlank(cusInfo.getName())) {
+                staffName = cusInfo.getName();
+            }
+
+            Attachment photo = attachmentBaseService.getFile(cusInfo.getId(), "T_CUS_INFO", "S_PHOTO");
+            if (photo != null && StringUtil.isNotBlank(photo.getPath())) {
+                staffImagePath = pubConfigService.getFilePath() + photo.getPath();
+            }
+
+            if ((StringUtil.isBlank(staffName) || StringUtil.isBlank(staffImagePath)) && StringUtil.isNotBlank(openId)) {
+                // 从微信用户表获取名称和头像
+                WeChatUser weChatUser = weChatUserService.getByOpenIdAndPublicAccountId(openId, publicAccountId);
+                if (weChatUser != null) {
+                    if (StringUtil.isBlank(staffName)) {
+                        staffName = weChatUser.getNickName();
+                    }
+
+                    if (StringUtil.isBlank(staffImagePath) && StringUtil.isNotBlank(weChatUser.getHeadImgUrl())) {
+                        staffImagePath = weChatUser.getHeadImgUrl();
+                    }
+                }
+            }
+
+            if (StringUtil.isBlank(staffImagePath)) {
+                // 找不到头像，则使用默认头像
+                staffImagePath = request.getContextPath() + "/resources/images/menber_img_menber01.png";
+            }
+
+            // 将名称和头像缓存到session里，防止每次进首页都执行一堆逻辑
+            request.getSession().setAttribute("staffName", staffName);
+            request.getSession().setAttribute("staffImagePath", staffImagePath);
+        }
+
+        tempCus.setName(staffName);
+        tempCus.setPhoto(staffImagePath);
+
+        return tempCus;
+    }
+
+    public void clearCusPhotoAndNameCache(HttpServletRequest request) {
+        request.getSession().setAttribute("staffName", null);
+        request.getSession().setAttribute("staffImagePath", null);
+    }
+
+}

@@ -1,0 +1,10 @@
+package com.catt.wfx.returnQuery.service;
+
+/**
+ * Description:查询退款接口
+ * Created by 2017-03-03  9:26.
+ * author: Zhou mingxiang
+ */
+public interface QueryReturnService {
+    void queryReturn();
+}

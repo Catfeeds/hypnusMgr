@@ -1,0 +1,73 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <%@include file="/common/headModule2.jsp" %>
+<title>发送代金券</title>
+<link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="${path}/resources/css/quan.css"/>
+<script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
+<script src="${path}/resources/admin/common/temDataGrid.js"></script>
+
+<script src="${path}/resources/admin/js/couponMgr/sendCoupon.js"></script>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="positionNow">
+    	<a>主页 &gt; </a><a>代金券管理</a> &gt; <a style="color:#ff4d4d;">发送代金券</a>
+    </div>
+    <div class="addActivities">
+        <div class="userDetail">
+        <h1 class="tittle">发送代金券</h1>
+            <div class="userDetailMain">
+                <input id="couponId" value="${entity.id}" type="hidden" />
+                <input id="rangeType" value="${entity.rangeType}" type="hidden" />
+                <div class="eachLine">
+                	<div class="lineText">要发送的代金券为：</div>
+                    ${entity.couponName}
+              </div>
+                <div class="eachLine">
+                    <div class="lineText">发送范围为：</div>
+                    ${entity.rangeTypeName}
+              </div>
+            	<div>
+            	  <div class="xw_show4">
+                        <div class="eachLine">请选择发送用户：
+                          <span class="btnGrey" style="margin-left:6px;" id="deleteCus">删除</span>
+                          <span class="btnRed" style="margin-left:6px;" id="selectCus">选择</span>
+                        </div>
+                        <table class="datalistTable tuihuoList">
+                            <thead>
+                                <th width="40px"><div class="tickAll xw_tickAll"></div></th>
+                                <th>会员昵称</th>
+                                <th>手机号</th>
+                                <th>注册时间</th>
+                            </thead>
+                            <tbody id="dataList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="saveBar" style="height: 45px;">
+        	<span class="btnRed" id="sendCoupon">确定发送</span>
+        	<span class="btnGrey" onclick="history.go(-1);">取消</span>
+        </div> 
+    </div>
+</div>
+</body>
+<script type="text/html" id="template_dataList">
+    {{each}}
+    <tr>
+        <input name="cusId" param="param" value="{{$value.cusId}}" type="hidden" />
+        <td><span class="tick xw_tick"></span></td>
+        <td><span class="textBlue">{{$value.cusName}}</span></td>
+        <td>{{$value.mobile}}</td>
+        <td>{{$value.createdTime}}</td>
+    </tr>
+    {{/each}}
+</script>
+</html>

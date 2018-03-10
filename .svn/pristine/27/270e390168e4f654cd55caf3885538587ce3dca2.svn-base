@@ -1,0 +1,29 @@
+package com.catt.wfx.security.web.security.shiro.validate.impl;
+
+import com.catt.common.base.repository.entity.BaseUserEntity;
+import com.catt.common.web.security.shiro.token.ExtAuthenticationToken;
+import com.catt.common.web.security.shiro.validate.AuthenticationValidate;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import org.apache.shiro.authc.DisabledAccountException;
+import org.springframework.stereotype.Service;
+
+/**
+ * <pre>
+ * 检查当前用户是否已经被删除
+ * @author : Zhang zhongtao
+ * @version : Ver 1.0
+ * </pre>
+ */
+@Service("cusInfoValidate")
+public class CusInfoValidate implements AuthenticationValidate {
+
+    @Override
+    public void validate(ExtAuthenticationToken extAuthenticationToken, BaseUserEntity baseUserEntity) {
+        CusInfo cusInfo = (CusInfo) baseUserEntity;
+
+        if (cusInfo.getStatus() == CusInfo.Status.DISABLE.getValue().intValue()) {
+            throw new DisabledAccountException();
+        }
+
+    }
+}

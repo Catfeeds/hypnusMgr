@@ -1,0 +1,30 @@
+package com.catt.wfx.service.impl.base.customerMgr;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.customerMgr.CusShopDao;
+import com.catt.wfx.repository.entity.customerMgr.CusShop;
+import com.catt.wfx.service.base.customerMgr.CusShopBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+/**
+ * 店铺信息表服务接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-13 16:15:30
+ * @version V1.0
+ */
+@Service("cusShopBaseServiceImpl")
+public class CusShopBaseServiceImpl extends
+	BaseServiceImpl<CusShop, Long> implements CusShopBaseService {
+
+	@Resource(name = "cusShopDaoImpl")
+	private CusShopDao cusShopDao;
+
+	@Resource
+	public void setBaseDao(CusShopDao cusShopDao) {
+		super.setBaseDao(cusShopDao);
+	}
+
+}

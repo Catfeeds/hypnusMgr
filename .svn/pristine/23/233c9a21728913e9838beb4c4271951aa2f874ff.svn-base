@@ -1,0 +1,30 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*考试电子阅卷*/
+.textMain{background:#fff; margin-top:10px; border:1px solid #e5e5e5; overflow:hidden; padding:10px;}
+.textLeft{background:#f7f7f7; float:left;overflow-y:scroll;overflow-x:hidden;}
+.textLeft ul li{border-bottom:1px dotted #ccc; line-height:30px; overflow:hidden; width:180px; padding:4px 10px; overflow:hidden;}
+.textLeft ul li:hover{background:#fffce5; color:#fb8a37; cursor:pointer;}
+.textLeft ul li font{float:left;}
+.textlistTitle{font-size:14px; color:#323232; line-height:36px; padding-left:10px; font-size:12px;}
+.textlistTitle span{color:#f05918; font-weight:bold; padding:0 2px;}
+.textRight{padding:0 10px; padding-left:230px;}
+.textrightTitle{line-height:30px; overflow:hidden; border-bottom:1px dotted #ccc;}
+.textNum table{width:100%; border-collapse:collapse; margin-top:10px; border:1px solid #e5e5e5; height:90px; overflow:scroll; background:#f7f7f7;}
+.textNum table tr th{border:1px dashed #e5e5e5; line-height:30px; padding:0 10px; width:20%;}
+.textNum table tr th:hover{background:#fffce5; color:#fb8a37; cursor:pointer;}
+.textNum font{margin-left:4px; line-height:30px; font-size:12px;font-weight:normal; float:left;}
+.textrightQA{margin-top:10px; background:#f7f7f7; border:1px solid #e5e5e5; border-radius:4px;}
+.QAbox{background:#fff; padding:0 10px; padding-bottom:10px;}
+.textrightQA h3{border-bottom:1px solid #e5e5e5; line-height:30px; font-size:14px; color:#323232; padding:0 10px; letter-spacing:1px;}
+.textrightQA p{line-height:24px; font-size:14px; color:#5c91a6;}
+.textrightQA p.QAtitle{color:#323232;}
+.textrightQA span{background:#f05918; color:#fff; padding:0 4px; font-size:12px; border-radius:2px;}
+.textrightQA font{color:#5c91a6; font-size:14px; line-height:24px; letter-spacing:1px;}
+.textrightBottom{margin-top:10px; padding:10px; border:1px solid #e5e5e5; overflow:hidden;}
+
+/*打分*/
+.textGrade{color:#f05918; float:right; font-size:14px; font-weight:normal; background:#fcebe3; height:20px; line-height:20px; margin-top:5px; padding:0 4px;}
+.text_on{background:#fffce5; color:#fb8a37;}
+.text_read{background:#fcf2ed;}

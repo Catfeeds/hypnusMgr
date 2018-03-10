@@ -1,0 +1,181 @@
+package com.catt.wfx.service.impl.statisti;
+
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderReturnDao;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementOrderDetailDao;
+import com.catt.wfx.repository.data.comEnum.DateDimension;
+import com.catt.wfx.service.statisti.OrderStatistiService;
+import org.springframework.stereotype.Service;
+import util.StatUtil;
+
+import javax.annotation.Resource;
+import java.util.*;
+
+/**
+ * 订单统计服务接口实现
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/3/30
+ */
+@Service("orderStatistiServiceImpl")
+public class OrderStatistiServiceImpl implements OrderStatistiService {
+
+    // 最多展示天数
+    private static final int SHOW_DAYS = 30;
+
+    // 最多展示月数
+    private static final int SHOW_MONTHS = 12;
+
+    // 退货单Dao接口
+    @Resource(name = "cusOrderReturnDaoImpl")
+    private CusOrderReturnDao cusOrderReturnDao;
+
+    // 订单结算统计Dao接口
+    @Resource(name = "settlementOrderDetailDaoImpl")
+    private SettlementOrderDetailDao settlementOrderDetailDao;
+
+    /**
+     * 获取统计时间范围内的订单金额与订单数量
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @return
+     */
+    @Override
+    public Map getAmountNum(Date startCreateDate, Date endCreateDate) {
+        boolean isAgent = false; //true:只统计代理商订单 false:统计所有订单
+        // 获取统计时间范围内的订单金额与订单数量
+        Map amountNum = settlementOrderDetailDao.getAmountNum(startCreateDate, endCreateDate, isAgent);
+        Double num = MapUtil.getDouble(amountNum, "num");
+        Double amount = MapUtil.getDouble(amountNum, "amount");
+
+        // 获取统计时间范围内的订单退款金额
+        Double returnAmount = cusOrderReturnDao.getReturnAmount(startCreateDate, endCreateDate, isAgent);
+
+        Map map = new HashMap<>();
+        map.put("num", num);
+        amount = NumberUtil.format(NumberUtil.sub(amount, returnAmount));// 实际支付金额  = 订单金额 - 退款金额
+        map.put("amount", amount);
+
+
+        //统计代理商订单金额、数量
+        isAgent = true;
+        // 获取统计时间范围内的订单金额与订单数量
+        Map agentAmountNum = settlementOrderDetailDao.getAmountNum(startCreateDate, endCreateDate, isAgent);
+        Double agentNum = MapUtil.getDouble(agentAmountNum, "num");
+        Double agentAmount = MapUtil.getDouble(agentAmountNum, "amount");
+
+        // 获取统计时间范围内的订单退款金额
+        Double agentReturnAmount = cusOrderReturnDao.getReturnAmount(startCreateDate, endCreateDate, isAgent);
+
+        map.put("agentNum", agentNum);
+        agentAmount = NumberUtil.format(NumberUtil.sub(agentAmount, agentReturnAmount));// 实际支付金额  = 订单金额 - 退款金额
+        map.put("agentAmount", agentAmount);
+
+        // 统计普通订单金额、数量
+        map.put("commonNum", num - agentNum);
+        map.put("commonAmount", NumberUtil.sub(amount, agentAmount));
+        return map;
+    }
+
+    /**
+     * 获取订单金额统计情况
+     * 订单金额指实际支付金额（订单总额 - 代金券抵扣金额 - 退货金额）
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @param dateDimension   统计周期
+     */
+    @Override
+    public List<Map> getOrderAmountStat(Date startCreateDate, Date endCreateDate, DateDimension dateDimension) {
+        // 方法返回数据
+        List<Map> resultList = new ArrayList<>();
+
+        // 获取统计时间横坐标
+        List<String> statTime = StatUtil.getStatTime(startCreateDate, endCreateDate, dateDimension, SHOW_DAYS, SHOW_MONTHS);
+
+        boolean isAgent = false; //true:只统计代理商订单 false:统计所有订单
+
+        // 获取订单金额统计数据
+        List<Map> amountStat = settlementOrderDetailDao.amountStat(startCreateDate, endCreateDate, dateDimension, isAgent);
+
+        // 获取退款金额统计数据
+        List<Map> returnAmountStat = cusOrderReturnDao.returnAmountStat(startCreateDate, endCreateDate, dateDimension, isAgent);
+
+
+//        isAgent = true; //true:只统计代理商订单 false:统计所有订单
+//        // 获取代理商订单金额统计数据
+//        List<Map> agentAmountStat = settlementOrderDetailDao.amountStat(startCreateDate, endCreateDate,
+//                dateDimension, isAgent);
+//
+//        // 获取代理商退款金额统计数据
+//        List<Map> agentReturnAmountStat = cusOrderReturnDao.returnAmountStat(startCreateDate, endCreateDate,
+//                dateDimension, isAgent);
+
+        for (String time : statTime) {
+            Map map = new HashMap<>();
+            map.put("time", time);
+            Double amount = NumberUtil.DOUBLE_ZERO;
+            Integer num = NumberUtil.INTEGER_ZERO;
+//            Double agentAmount = NumberUtil.DOUBLE_ZERO;
+//            Integer agentNum = NumberUtil.INTEGER_ZERO;
+
+            // 往结果集中加入订单金额
+            if (CollectionUtil.isNotEmpty(amountStat)) {
+                for (Map amountMap : amountStat) {
+                    if (time.equals(MapUtil.getString(amountMap, "time"))) {
+                        amount = NumberUtil.format(MapUtil.getDouble(amountMap, "amount"));
+                        num = MapUtil.getInteger(amountMap, "num");
+                        break;
+                    }
+                }
+            }
+
+            // 把结果集中的订单金额减去退款金额
+            if (CollectionUtil.isNotEmpty(returnAmountStat)) {
+                for (Map returnAmountMap : returnAmountStat) {
+                    if (time.equals(MapUtil.getString(returnAmountMap, "time"))) {
+                        amount = NumberUtil.format(NumberUtil.sub(amount, MapUtil.getDouble(returnAmountMap, "returnAmount")));
+                        break;
+                    }
+                }
+            }
+//            // 往结果集中加入订单金额
+//            if (CollectionUtil.isNotEmpty(agentAmountStat)) {
+//                for (Map agentAmountMap : agentAmountStat) {
+//                    if (time.equals(MapUtil.getString(agentAmountMap, "time"))) {
+//                        agentAmount = NumberUtil.format(MapUtil.getDouble(agentAmountMap, "amount"));
+//                        agentNum = MapUtil.getInteger(agentAmountMap, "num");
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            // 把结果集中的订单金额减去退款金额
+//            if (CollectionUtil.isNotEmpty(agentReturnAmountStat)) {
+//                for (Map agentReturnAmountMap : agentReturnAmountStat) {
+//                    if (time.equals(MapUtil.getString(agentReturnAmountMap, "time"))) {
+//                        agentAmount = NumberUtil.format(NumberUtil.sub(agentAmount, MapUtil.getDouble(agentReturnAmountMap, "returnAmount")));
+//                        break;
+//                    }
+//                }
+//            }
+
+            map.put("amount", amount);
+//            map.put("commonAmount", NumberUtil.sub(amount, agentAmount));
+//            map.put("agentAmount", agentAmount);
+//
+            map.put("num", num);
+//            map.put("commonNum", num - agentNum);
+//            map.put("agentNum", agentNum);
+            resultList.add(map);
+        }
+
+        return resultList;
+    }
+
+
+}

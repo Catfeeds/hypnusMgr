@@ -1,0 +1,38 @@
+package com.catt.wfx.service.settlementMgr;
+
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+
+/**
+ * 订单结算统计服务接口
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-2-21 9:00:47
+ */
+public interface SettlementOrderDetailService {
+
+    /**
+     * 新增订单结算统计、修改商家账户信息的订单量、销售额等（非套餐）
+     * 订单支付完成后就同步到该表
+     * @param cusOrder 订单
+     * @param payType 支付方式：1-在线支付  2-余额支付
+     */
+    void addSettlementOrderDetail(CusOrder cusOrder, SettlementOrderDetail.PayType payType);
+
+    /**
+     * 获取主管团队销售金额
+     *
+     * @param cusId 主管标识
+     * @return
+     */
+    Double getTeamSaleMoney(Long cusId);
+
+    /**
+     * 获取主管团队销售订单数
+     *
+     * @param cusId 主管标识
+     * @return
+     */
+    Integer getTeamOrderNum(Long cusId);
+}

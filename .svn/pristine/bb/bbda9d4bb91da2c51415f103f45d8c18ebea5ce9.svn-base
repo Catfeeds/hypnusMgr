@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd"
+       default-lazy-init="true">
+
+    <!-- 公共配置服务 -->
+    <bean id="pubConfigServiceImpl" name="pubConfigServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/pubConfigServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.pub.PubConfigService"/>
+    </bean>
+
+    <!-- 系统全局设置服务设置 -->
+    <bean id="pubSetupBaseServiceImpl" name="pubSetupBaseServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/pubSetupBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.pub.PubSetupBaseService"/>
+    </bean>
+
+    <!-- 用户信息服务 -->
+    <bean id="cusInfoServiceImpl" name="cusInfoServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusInfoServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.customerMgr.CusInfoService"/>
+    </bean>
+
+    <!-- 用户信息服务 -->
+    <bean id="cusInfoBaseServiceImpl" name="cusInfoBaseServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusInfoBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.customerMgr.CusInfoBaseService"/>
+    </bean>
+
+    <!-- 购物车信息服务 -->
+    <bean id="cusCartServiceImpl" name="cusCartServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusCartServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.customerMgr.CusCartService"/>
+    </bean>
+
+    <!--商品管理服务设置 -->
+    <bean id="productServiceImpl" name="productServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/productServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.productMgr.ProductService"/>
+    </bean>
+
+    <!--订单服务 -->
+    <bean id="cusOrderServiceImpl" name="cusOrderServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusOrderServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.orderMgr.CusOrderService"/>
+    </bean>
+
+    <!--用户代金券服务 -->
+    <bean id="couponCusServiceImpl" name="couponCusServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/couponCusServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.couponMgr.CouponCusService"/>
+    </bean>
+
+    <!-- 收货地址服务 -->
+    <bean id="cusContactServiceImpl" name="cusContactServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusContactServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.customerMgr.CusContactService"/>
+    </bean>
+
+    <!-- 收货地址基础服务 -->
+    <bean id="cusContactBaseServiceImpl" name="cusContactBaseServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusContactBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.customerMgr.CusContactBaseService"/>
+    </bean>
+    <!-- 店铺信息表服务 -->
+    <bean id="cusShopBaseServiceImpl" name="cusShopBaseServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusShopBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.customerMgr.CusShopBaseService"/>
+    </bean>
+
+    <!-- 商品分类服务 -->
+    <bean id="productCateBaseServiceImpl" name="productCateBaseServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/productCateBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.productMgr.ProductCateBaseService"/>
+    </bean>
+
+    <!--退货管理服务 -->
+    <bean id="cusOrderReturnServiceImpl" name="cusOrderReturnServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusOrderReturnServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.orderMgr.CusOrderReturnService"/>
+    </bean>
+
+    <!--活动信息表服务 -->
+    <bean id="activityInfoServiceImpl" name="activityInfoServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/activityInfoServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.specialSale.ActivityInfoService"/>
+    </bean>
+
+    <!-- 店主/主管规则服务接口 -->
+    <bean id="settlementShopRuleServiceImpl" name="settlementShopRuleServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/settlementShopRuleServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.settlementMgr.SettlementShopRuleService"/>
+    </bean>
+
+
+    <!--开店套餐服务 -->
+    <bean id="productPackageServiceImpl" name="productPackageServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/productPackageServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.productMgr.ProductPackageService"/>
+    </bean>
+</beans>

@@ -1,0 +1,14 @@
+[
+  {
+    "errKey": "EXP.SAFELOCK.FAIL",
+    "errCode": "7000000",
+    "errInfo": "安全校验不通过",
+    "errLevel": "error",
+    "errSolveDesc": ""
+  }, {
+    "errKey": "EXP.RETURN.REPAY",
+    "errCode": "2701",
+    "errInfo": "该退款单已经退款或正在退款中",
+    "errLevel": "warn"
+  }
+]

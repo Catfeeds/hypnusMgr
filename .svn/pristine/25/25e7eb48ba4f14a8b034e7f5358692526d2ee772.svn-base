@@ -1,0 +1,147 @@
+package com.catt.wfx.repository.dao.settlementMgr.impl;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementShopRuleDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRule;
+import com.catt.wfx.repository.form.productMgr.RuleForm;
+import org.springframework.stereotype.Repository;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Repository("settlementShopRuleDaoImpl")
+public class SettlementShopRuleDaoImpl extends BaseDaoImpl<SettlementShopRule, Long>
+        implements SettlementShopRuleDao {
+
+    /**
+     * 获取规则列表
+     *
+     * @param form
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getRulePage(RuleForm form, Pageable pageable) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"id\", ");
+        sql.append(" t1.D_START_TIME AS \"startTime\", ");
+        sql.append(" t1.D_END_TIME AS \"endTime\", ");
+        sql.append(" t1.D_CREATE_DATE AS \"createDate\", ");
+        sql.append(" t1.I_STATUS AS \"status\", ");
+        sql.append(" t1.I_TYPE AS \"type\", ");
+        sql.append(" t1.I_REWARD_TYPE AS \"rewardType\", ");
+        sql.append(" t1.I_LENGTH AS \"length\", ");
+        sql.append(" t1.I_CYCLE AS \"cycle\" ");
+        sql.append(" FROM T_SETTLEMENT_SHOP_RULE t1 ");
+        sql.append(" WHERE 1 = 1");
+        sql.append(" AND t1.I_CUS_TYPE = :cusType");
+
+        Map param = new HashMap<>();
+        param.put("cusType", form.getCusType());
+
+        if (StringUtil.checkObj(form.getType())) {
+            sql.append(" AND t1.I_TYPE in (:type)");
+            param.put("type", Arrays.asList(form.getType().split(",")));
+        }
+
+        if (StringUtil.checkObj(form.getRewardType())) {
+            sql.append(" AND t1.I_REWARD_TYPE = :rewardType");
+            param.put("rewardType", form.getRewardType());
+        }
+
+        if (StringUtil.checkObj(form.getStatus())) {
+            sql.append(" AND t1.I_STATUS = :status");
+            param.put("status", form.getStatus());
+        }
+        sql.append(" ORDER BY D_CREATE_DATE DESC");
+
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    /**
+     * 检查规则时间是否合法
+     *
+     * @param rule
+     * @return
+     */
+    @Override
+    public boolean checkRule(SettlementShopRule rule) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT a.I_ID as id");
+        sql.append(" FROM T_SETTLEMENT_SHOP_RULE a ");
+        sql.append(" WHERE 1 = 1 ");
+        sql.append(" AND a.I_CUS_TYPE = :cusType ");
+        sql.append(" AND a.I_STATUS = :status ");
+        sql.append(" AND (TO_DAYS(a.D_START_TIME) BETWEEN TO_DAYS(:startTime) AND TO_DAYS(:endTime)");
+        sql.append(" OR TO_DAYS(:startTime) BETWEEN TO_DAYS(a.D_START_TIME) AND TO_DAYS(a.D_END_TIME))");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("cusType", rule.getCusType());
+        params.put("status", PubEnum.YesOrNoEnum.YES.getValue());//已启用
+        params.put("startTime", rule.getStartTime());
+        params.put("endTime", rule.getEndTime());
+
+        if (StringUtil.checkObj(rule.getId())) {
+            sql.append(" AND a.I_ID <> :ruleId ");
+            params.put("ruleId", rule.getId());
+        }
+        if (StringUtil.checkObj(rule.getType())) {
+            sql.append(" AND a.I_TYPE = :type");
+            params.put("type", rule.getType());
+        }
+
+        List<Map> list = this.findListBySql(sql.toString(), params, Map.class);
+        if (CollectionUtil.isNotEmpty(list)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 获取店主补贴规则信息
+     *
+     * @param type 规则类型
+     * @return
+     */
+    public List<Map> findShopRule(Integer type){
+        Date now = new Date();
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_REWARD_TYPE AS \"rewardType\", ");
+        sql.append(" t2.I_REWARD_MONEY AS \"rewardMoney\", ");
+        sql.append(" t2.S_COUPON_ID AS \"couponId\" ");
+        sql.append(" FROM T_SETTLEMENT_SHOP_RULE t1 ");
+        sql.append(" INNER JOIN T_SETTLEMENT_SHOP_RULE_DETAIL t2 ON t1.I_ID = t2.I_RULE_ID");
+        sql.append(" WHERE 1 = 1");
+        sql.append(" AND t1.I_CUS_TYPE = :cusType");
+        sql.append(" AND t1.I_STATUS = :status");
+        sql.append(" AND t1.D_START_TIME <= :startTime");
+        sql.append(" AND t1.D_END_TIME >= :endTime");
+
+        Map param = new HashMap<>();
+
+        param.put("cusType", SettlementShopRule.CusType.Shopkeeper.getValue());
+        param.put("status", PubEnum.YesOrNoEnum.YES.getValue());
+        param.put("startTime", now);
+        param.put("endTime", now);
+
+        if (StringUtil.checkObj(type)) {
+            sql.append(" AND t1.I_TYPE = :type");
+            param.put("type", type);
+        }
+
+        return this.findListBySql(sql.toString(), param, Map.class);
+
+
+
+    }
+}

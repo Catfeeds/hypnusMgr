@@ -1,0 +1,122 @@
+seajs.use(['$', 'msgBox', 'util', 'jquery.json'],
+    function ($, msgBox, util) {
+        var isLevel1 = false;
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $("#searchBtn").click(function () {
+                        var cateId = $("#cate").attr('data-values');
+                        if (!cateId){
+                            cateId = '';
+                        }
+                        var productName = $("#productName").val();
+                        //msgBox.exWindow.close($.toJSON({cateId: cateId, productName: productName}));
+                        window.location.href = path + '/admin/wechat/product/index.html?shopId=' + shopId + '&productName=' + productName + '&cateId=' + cateId;
+                    });
+
+                    $("#cate").select({
+                        title: "选择分类",
+                        autoClose: false,
+                        items: [],
+                        onChange: function () {
+                            if (isLevel1) { // 一级分类才去查询二级分类，二级分类则不做操作
+                                EventHandler.getLevelCate($("#cate").attr('data-values'));
+                            }
+                        },
+                        onOpen: function () {
+                            if (!isLevel1) { // 当打开选择窗为二级分类时，将数据替换为一级分类，以便重新选择分类
+                                EventHandler.getLevelCate();
+                            }
+                        }
+                    });
+
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                    EventHandler.getLevelCate();
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                /**
+                 * 获取一级分类
+                 */
+                getLevelCate: function (parentId) {
+                    if (parentId) {
+                        DataHandler.getLevel2Cate({parentId: parentId}, function (backData) {
+                            EventHandler.updateSelect(backData, false);
+                        });
+                    } else {
+                        DataHandler.getLevel1Cate({}, function (backData) {
+                            EventHandler.updateSelect(backData, true);
+                        });
+                    }
+                },
+                updateSelect: function (cateData, flag) {
+                    if (cateData.length > 0) {
+                        isLevel1 = flag;
+                        var datas = [];
+                        $.each(cateData, function (i, item) {
+                            var cate = {};
+                            cate.title = item.name;
+                            cate.value = item.id;
+                            datas.push(cate);
+                            return
+                        });
+                        $("#cate").select("update", {items: datas});
+                    }
+                }
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取一级分类
+                 * @param params
+                 * @param callback
+                 */
+                getLevel1Cate: function (params, callback) {
+                    $.post(path + "/admin/wechat/product/getLevel1Cate", params, function (result) {
+                        callback(result);
+                    });
+                },
+                /**
+                 * 获取二级分类
+                 * @param params
+                 * @param callback
+                 */
+                getLevel2Cate: function (params, callback) {
+                    $.post(path + "/admin/wechat/product/getLevel2Cate", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });

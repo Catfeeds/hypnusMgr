@@ -1,0 +1,232 @@
+package com.catt.wfx.web.controller.admin.productMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductPackage;
+import com.catt.wfx.repository.form.productMgr.ProductForm;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.productMgr.ProductPackageService;
+import com.catt.wfx.service.productMgr.ProductPriceService;
+import com.catt.wfx.service.productMgr.ProductService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 开店套餐控制器
+ * 作者：袁幸成
+ * 时间：2017-1-18 8:57:02
+ */
+@RequestMapping({"/admin/productMgr/package"})
+@Controller("productPackageController")
+public class ProductPackageController extends BaseController {
+
+    //商品服务
+    @Resource(name = "productInfoBaseServiceImpl")
+    public ProductInfoBaseService productInfoBaseService;
+
+    //商品服务
+    @Resource(name = "productServiceImpl")
+    public ProductService productService;
+
+    //商品价格定义服务
+    @Resource(name = "productPriceServiceImpl")
+    ProductPriceService productPriceService;
+
+    //开店套餐服务接口
+    @Resource(name = "productPackageServiceImpl")
+    ProductPackageService productPackageService;
+
+    /**
+     * 跳转到开店套餐列表页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/index.html")
+    public String index() {
+        return "/admin/productMgr/package/index";
+    }
+
+    /**
+     * 跳转到开店套餐详情页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/detail/{id}")
+    public String detail(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("entity", productInfoBaseService.find(id));
+        model.addAttribute("packagePrice", productPriceService.findPackagePrice(id));
+        return "/admin/productMgr/package/detail";
+    }
+
+    /**
+     * 跳转到开店套餐-选择商品页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/selectProduct.html")
+    public String selectProduct() {
+        return "/admin/productMgr/package/selectProduct";
+    }
+
+    /**
+     * 跳转到开店套餐新增/修改页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/addEdit/{id}")
+    public String addEdit(@PathVariable("id") Long id, Model model) {
+        if (id != 0) { //修改
+            model.addAttribute("entity", productInfoBaseService.find(id));
+            model.addAttribute("packagePrice", productPriceService.findPackagePrice(id));
+        }
+        return "/admin/productMgr/package/addEdit";
+    }
+
+    /**
+     * 跳转到补货页
+     * @return
+     */
+    @RequestMapping(value = "/fill/{id}")
+    public String toFill(@PathVariable("id") Long id, Model model){
+        model.addAttribute("id", id);
+        return "/admin/productMgr/package/fill";
+    }
+
+    /**
+     * 获取发布的商品信息列表
+     *
+     * @param productForm 查询表单
+     * @param page        页码
+     * @param rows        每页行数
+     * @return
+     */
+    @RequestMapping(value = {"/findPublishPage"})
+    @ResponseBody
+    public Page<Map> findPublishPage(ProductForm productForm, Integer page, Integer rows) {
+        return productService.findPublishPage(productForm, new Pageable(page, rows));
+    }
+
+    /**
+     * 查询商品的规格-价格列表
+     *
+     * @param productId 商品标识
+     * @return
+     */
+    @RequestMapping(value = {"/findSpecList/{productId}"})
+    @ResponseBody
+    public List<Map> findSpecList(@PathVariable("productId") Long productId) {
+        Assert.notNull(productId);
+        return productPriceService.findListByProductId(productId);
+    }
+
+    /**
+     * 获取套餐信息列表
+     *
+     * @param pageable 分页参数
+     * @param zhName   套餐名称
+     * @param status   销售状态
+     * @return
+     */
+    @RequestMapping(value = "/findPage", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> findPage(Pageable pageable, String zhName, Integer status) {
+        return productService.findPackagePage(pageable, zhName, status);
+    }
+
+
+    /**
+     * 保存商品类型
+     *
+     * @param userId      操作人标识
+     * @param userName    操作人名称
+     * @param productInfo 套餐
+     * @param coverpic    套餐图片json字符串
+     * @param packageJson  套餐详情json字符串
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public Message save(@CurrentUser Long userId, @CurrentUser("name") String userName,
+                        ProductInfo productInfo, String coverpic, String packageJson) {
+        productInfo.setCateId(userId);
+        productInfo.setCreatedName(userName);
+        List<ProductPackage> packageList = JsonUtils.toList(packageJson, ProductPackage.class);
+        productService.savePackage(productInfo, coverpic, packageList);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 上架/下架
+     *
+     * @param id    商品标识
+     * @param status 状态
+     * @return
+     */
+    @RequestMapping(value = "/updateStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public Message updateStatus(Long id, Integer status) {
+        ProductInfo productInfo = productInfoBaseService.find(id);
+        if (status == ProductInfo.Status.OnSale.getValue()){ //上架
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("type", ProductInfo.Type.Package.getValue()));
+            filters.add(Filter.eq("status", ProductInfo.Status.OnSale.getValue()));
+            List<ProductInfo> productInfos = productInfoBaseService.findList(null, filters, null);
+            for (ProductInfo product : productInfos){
+                product.setStatus(ProductInfo.Status.NoSale.getValue());
+            }
+            productInfoBaseService.saveOrUpdate(productInfos);
+
+            productInfo.setShelveTime(new Date());
+        } else if(status == ProductInfo.Status.NoSale.getValue()) { //下架
+
+        } else {
+            return ERROR_MSG;
+        }
+        productInfo.setStatus(status);
+        productInfoBaseService.update(productInfo);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 删除
+     *
+     * @param ids 套餐商品标识数组
+     * @return
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Message delete(Long[] ids) {
+        productService.deletePackage(ids);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 获取套餐商品
+     *
+     * @param id 套餐商品标识
+     * @return
+     */
+    @RequestMapping(value = "/getPackageProduct", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Map> getPackageProduct(Long id) {
+        return productPackageService.getPackageRelPrice(id);
+    }
+
+}

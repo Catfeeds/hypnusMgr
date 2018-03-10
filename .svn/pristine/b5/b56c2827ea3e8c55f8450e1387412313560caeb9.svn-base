@@ -1,0 +1,223 @@
+var countyLength = 0;
+var cityLength = 0;
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+                    $("#save").click(function () {
+                        EventHandler.save();
+                    });
+
+                    $("#cancel").click(function () {
+                        msgBox.exWindow.close();
+                    });
+
+                    $("#agencyLevels").find("li").on("click", function(){
+                        var lis = $("#agencyLevels").find("li");
+                        $.each(lis, function(i, item){
+                            $(item).removeClass("on");
+                        });
+                        $(this).addClass("on");
+
+                        if($(this).html() == "省级"){
+                            $("#agencyLevel").val(2);
+                            $("#province_div").attr("style", "display:block;");
+                            $("#city_div").attr("style", "display:none;");
+                            $("#region_div").attr("style", "display:none;");
+                        }else if($(this).html() == "市级"){
+                            $("#agencyLevel").val(3);
+                            $("#province_div").attr("style", "display:block;");
+                            $("#city_div").attr("style", "display:block;");
+                            $("#region_div").attr("style", "display:none;");
+                        }else if($(this).html() == "区级"){
+                            $("#agencyLevel").val(4);
+                            $("#province_div").attr("style", "display:block;");
+                            $("#city_div").attr("style", "display:block;");
+                            $("#region_div").attr("style", "display:block;");
+                        }else{
+                            $("#agencyLevel").val(1);
+                            $("#province_div").attr("style", "display:none;");
+                            $("#city_div").attr("style", "display:none;");
+                            $("#region_div").attr("style", "display:none;");
+                        }
+                    });
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                    EventHandler.provinceSel();
+                    var provinceId =  $("#province").attr("data-value-id");
+                    var cityId =  $("#city").attr("data-value-id");
+                    if(provinceId != ""){
+                        EventHandler.citySel(provinceId);
+                        if(cityId != ""){
+                            EventHandler.countySel(cityId);
+                        }
+                    }
+
+                    var agencyLevel = $("#agencyLevel").val();
+                    if(agencyLevel == 2){
+                        $("#province_div").attr("style", "display:block;");
+                        $("#city_div").attr("style", "display:none;");
+                        $("#region_div").attr("style", "display:none;");
+                    }else if(agencyLevel == 3){
+                        $("#province_div").attr("style", "display:block;");
+                        $("#city_div").attr("style", "display:block;");
+                        $("#region_div").attr("style", "display:none;");
+                    }else if(agencyLevel == 4){
+                        $("#province_div").attr("style", "display:block;");
+                        $("#city_div").attr("style", "display:block;");
+                        $("#region_div").attr("style", "display:block;");
+                    }else{
+                        $("#agencyLevel").val(1);
+                        $("#province_div").attr("style", "display:none;");
+                        $("#city_div").attr("style", "display:none;");
+                        $("#region_div").attr("style", "display:none;");
+                    }
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                save: function(){
+                    var provinceId =  $("#province").attr("data-value-id");
+                    var provinceName =  $("#province").val();
+                    var cityId =  $("#city").attr("data-value-id");
+                    var cityName =  $("#city").val();
+                    var countyId =  $("#county").attr("data-value-id");
+                    var countyName =  $("#county").val();
+
+                    var agencyLevel = $("#agencyLevel").val();
+                    if(agencyLevel != 1 && provinceId == ""){//非总代理，都需要选择省份
+                        msgBox.tips("请选择选择省");
+                        return;
+                    }
+                    if(cityLength == 0){//市、区代理，都需要选择市
+                        cityName = "";
+                    }else if((agencyLevel == 3 || agencyLevel == 4) && cityId == ""){
+                        msgBox.tips("请选择选择市");
+                        return;
+                    }
+                    if(cityLength == 0 || countyLength == 0){//区代理，需要选择区
+                        countyName = "";
+                    }else if(agencyLevel == 4 && countyId == ""){
+                        msgBox.tips("请选择选择区");
+                        return;
+                    }
+                    if(agencyLevel < 4){//总、省、市代理，不需要区选择
+                        countyId = "";
+                        countyName = "";
+                    }
+                    if(agencyLevel < 3){//总、省代理，不需要市区选择
+                        cityId = "";
+                        cityName = "";
+                    }
+                    if(agencyLevel < 2){//总代理，不需要省市区选择
+                        provinceId = "";
+                        provinceName = "";
+                    }
+                    var param = {};
+                    param.agencyLevel = agencyLevel;
+                    param.id = $('#id').val();
+                    param.status = 2;//1待审核、2通过、3不通过
+                    param.provinceId = provinceId;
+                    param.provinceName = provinceName;
+                    param.cityId = cityId;
+                    param.cityName = cityName;
+                    param.regionId = countyId;
+                    param.regionName = countyName;
+                    DataHandler.save(param, function (result) {
+                        msgBox.tips("操作成功", 1, function () {
+                            msgBox.exWindow.close($.toJSON(result));
+                        });
+                    });
+                },
+                //省
+                provinceSel : function(resetFlag){
+                    $.get(path + '/address/province', null, function (backData) {
+                        var html = template('template_dataList', backData);
+                        $('#provinceSel').html(html);
+                        EventHandler.initSlideEnum();
+                    });
+                },
+                //市
+                citySel : function(provinceId){
+                    $.get(path + '/address/city/' + provinceId, null, function (backData) {
+                        cityLength = backData.length;
+                        var html = template('template_dataList', backData);
+                        $('#citySel').html(html);
+                        EventHandler.initSlideEnum();
+                    });
+                },
+                //区
+                countySel : function(cityId){
+                    $.get(path + '/address/county/' + cityId, null, function (backData) {
+                        countyLength = backData.length;
+                        var html = template('template_dataList', backData);
+                        $('#countySel').html(html);
+                        EventHandler.initSlideEnum();
+                    });
+                },
+                //下拉菜单事件初始化
+                initSlideEnum: function(){
+                    $("input.xw_input").click(function(){
+                        $(this).parents("div.xw_searchBox").find("ul.xw_choice").slideDown();
+                    });
+                    $("div.xw_searchBox").mouseleave(function(){
+                        $("ul.xw_choice").slideUp();
+                    });
+                    $(".xw_choice li").click(function(){
+                        var changeText = $(this).text();
+                        var changeValue = $(this).attr("data-value-id");
+                        $(this).parents("div.xw_searchBox").find(".xw_input").val(changeText);
+                        $(this).parents("div.xw_searchBox").find(".xw_input").attr("data-value-id", changeValue);
+                        $("ul.xw_choice").slideUp(100);
+                        if($(this).parent().attr("id") == "provinceSel"){
+                            $("#city").val("选择市");
+                            $("#city").attr("data-value-id", "");
+                            $("#county").val("选择区");
+                            $("#county").attr("data-value-id", "");
+                            EventHandler.citySel(changeValue);
+                        }else if($(this).parent().attr("id") == "citySel"){
+                            $("#county").val("选择区");
+                            $("#county").attr("data-value-id", "");
+                            EventHandler.countySel(changeValue);
+                        }
+                    })
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 * @param params
+                 * @param callback
+                 */
+                save: function (params, callback) {
+                    $.post(path + "/admin/agentInfo/audit", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

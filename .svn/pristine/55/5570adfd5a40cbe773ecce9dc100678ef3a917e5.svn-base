@@ -1,0 +1,335 @@
+package com.catt.wfx.repository.entity.productMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 商品文案实体类
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-01-09 11:37:12
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_PRODUCT_DOCUMENT")
+public class ProductDocument extends BaseEntity {
+    /**
+     * 用于从附件表获取附件
+     */
+    public static final String TABLE_NAME = "T_PRODUCT_DOCUMENT";
+    public static final String COVER_PIC = "S_PATH";
+    private static final long serialVersionUID = 1L;
+
+
+    /**
+     * <pre>
+     * 用户标识
+     * </pre>
+     */
+    private Long cusId;
+    /**
+     * <pre>
+     * 商品标识
+     * </pre>
+     */
+    private Long productId;
+    /**
+     * <pre>
+     * 文案编号
+     * </pre>
+     */
+    private String docCode;
+    /**
+     * <pre>
+     * 文案状态
+     * 1-待提交
+     *  2-已发布
+     * </pre>
+     * @see Status
+     */
+    private Integer status;
+
+    /**
+     * <pre>
+     * 文案类型
+     * 1-官方文案
+     *  2-用户文案
+     * </pre>
+     * @see Type
+     */
+    private Integer type;
+    /**
+     * <pre>
+     * 文案内容
+     * </pre>
+     */
+    private String desc;
+    /**
+     * <pre>
+     * 文案图片
+     * </pre>
+     */
+    private String path;
+
+    /**
+     * <pre>
+     * 创建人员标识
+     * </pre>
+     */
+    private Long createdId;
+    /**
+     * <pre>
+     * 创建人员名称
+     * </pre>
+     */
+    private String createdName;
+
+    /**
+     * <pre>
+     * 备注
+     * </pre>
+     */
+    private String remark;
+
+    @Column(name = "I_CUS_ID")
+    public Long getCusId() {
+        return cusId;
+    }
+
+    public void setCusId(Long cusId) {
+        this.cusId = cusId;
+    }
+
+    @Column(name = "I_PRODUCT_ID")
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    @Column(name = "S_DOC_CODE", length = 64)
+    public String getDocCode() {
+        return docCode;
+    }
+
+    public void setDocCode(String docCode) {
+        this.docCode = docCode;
+    }
+
+    @Column(name = "I_STATUS")
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    @Column(name = "I_TYPE")
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    @Column(name = "S_DESC", length = 1024)
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    @Column(name = "S_PATH", length = 128)
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+
+    @Column(name = "I_CREATED_ID")
+    public Long getCreatedId() {
+        return createdId;
+    }
+
+    public void setCreatedId(Long createdId) {
+        this.createdId = createdId;
+    }
+
+    @Column(name = "S_CREATED_NAME", length = 32)
+    public String getCreatedName() {
+        return createdName;
+    }
+
+    public void setCreatedName(String createdName) {
+        this.createdName = createdName;
+    }
+
+
+    @Column(name = "S_REMARK", length = 1024)
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    /**
+     * 商品文案状态枚举
+     */
+    public enum Status {
+
+        /**
+         * 未发布
+         */
+        Audit(1, "未发布"),
+
+        /**
+         * 已发布
+         */
+        Adopt(2, "已发布");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        Status(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static Status getEnum(int value) {
+            Status[] source = Status.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+
+    }
+    /**
+     * 商品文案类型枚举
+     */
+    public enum Type {
+
+        /**
+         * 官方文案
+         */
+        OfficialCopy(1, "官方文案"),
+
+
+        /**
+         * 用户文案
+         */
+        UserCopy(2, "用户文案");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        Type(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static Type getEnum(int value) {
+            Type[] source = Type.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+
+    }
+}
+

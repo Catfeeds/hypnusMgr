@@ -1,0 +1,83 @@
+/**
+ * Created by xiazanyi on 2017/3/9.
+ */
+define('admin/wechat/personal/personal', ['$', 'msgBox', 'template', 'adminSystem', 'uploader'], function (require, exports, module) {
+        var $ = require('$');
+        var template = require('template');
+        var msgBox = require('msgBox');
+        var adminSystem = require('adminSystem');
+        var Uploader = require('uploader');
+
+        function Personal() {
+        }
+
+        /**
+         * 初始化
+         */
+        Personal.prototype.init = function () {
+            var self = this;
+            self.bindEvent();
+            self.initPicsUploader();
+
+            $.post(path + "/admin/wechat/personal/getCusPhotoAndName?v=" + new Date().getTime(), null, function (data) {
+                if(data){
+                    $("#headImage").attr("src", data.photo);
+                    $("#userName").html(data.name);
+                }
+            });
+        };
+
+
+        /**
+         * 事件绑定
+         */
+        Personal.prototype.bindEvent = function () {
+            var self = this;
+
+
+        };
+
+        /**
+         * 初始化相关图片上传组件
+         */
+        Personal.prototype.initPicsUploader = function () {
+            var self = this;
+            // 创建文件上传组件
+            self.picsUploader = new Uploader({
+                server: path + '/attachment/fileUpload.json', //上传服务地址
+                pickerSelector: '#headerImage', //选择文件按钮选择器
+                multiplePick: false, //默认：false，是否支持多选
+                autoUpload: true, //默认：false，是否选择后自动上传
+                formData: {
+                    isDB: 1 // 上传文件时保存数据到附件表
+                }, //默认：{}，上传附带其他表单参数
+                fileFieldId: 'files', //默认：file，文件域名称
+                fileSingleSizeLimit: undefined, //默认：undefined，单文件大小限制
+                onValidateError: function (errorType, errorMsg) {
+                    msgBox.warn("图片校验失败");
+                }, //文件校验不通过事件
+                onFileUploadError: function (file, errorCode) {
+                    msgBox.warn("图片上传失败");
+                }, //文件上传出错事件
+                onFileUploadSuccess: function (file, response) {
+                    if (response.type == 'success') {
+                        var attachment = response.result[0];
+                        $.post(path+"/admin/wechat/personal/modifyPhoto",{photo:attachment.attachmentId},function(){
+                            $('#headImage').attr("src",attachment.url);
+                            msgBox.tips("头像修改成功！");
+                        });
+                    }
+                }//文件上传成功事件
+            });
+
+        };
+
+        module.exports = new Personal();
+    }
+);
+
+seajs.use(['$', 'admin/wechat/personal/personal'], function ($, personal) {
+    $(function () {
+        personal.init();
+    });
+});

@@ -1,0 +1,65 @@
+package com.catt.wfx.service.perforMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlatDetail;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 平台提成账单服务接口
+ * 作者：袁幸成
+ * 时间：2017-3-29 11:15:55
+ */
+public interface PlatPerforService {
+
+    /**
+     * 查询平台提成账单列表
+     *
+     * @param startDate  开始时间
+     * @param endDate  结束时间
+     * @param status  结算状态
+     * @param pageable 分页参数
+     * @return
+     */
+    Page<SettlementPlatDetail> findPage(Date startDate, Date endDate, Integer status, Pageable pageable);
+
+    /**
+     * 查询平台提成月份明细列表
+     *
+     * @param platDetailId  平台结算明细标识
+     * @param pageable 分页参数
+     * @return
+     */
+    Page<Map> findMonthDetailPage(Long platDetailId, Pageable pageable);
+
+    /**
+     * 查询平台账户结算明细
+     * @param platDetailId 结算明细标识
+     * @return
+     */
+    SettlementPlatDetail findSettlementPlatDetail(Long platDetailId);
+
+    /**
+     * 结算平台提成（平台提现）
+     *
+     * @param platDetailIds  平台结算明细标识数组
+     * @param staffName 结算人
+     * @param code 流水号
+     * @return
+     */
+    void settle(Long[] platDetailIds, String staffName, String code);
+
+    /**
+     * 查询平台提成账单列表
+     *
+     * @param startDate  开始时间
+     * @param endDate  结束时间
+     * @param status  结算状态
+     * @return
+     */
+    List<SettlementPlatDetail> findList(Date startDate, Date endDate, Integer status);
+
+}

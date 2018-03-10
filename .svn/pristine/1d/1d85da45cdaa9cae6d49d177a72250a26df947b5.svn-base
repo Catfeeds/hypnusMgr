@@ -1,0 +1,30 @@
+// JavaScript Document
+
+
+$(document).ready(function(){
+	
+	//tab切换01
+	$(".xw_top").click(function(){
+		$(this).parents(".goodsType").find('.xw_top').removeClass("lion");
+		$(this).addClass("lion");
+		var liNum = $(this).parents(".goodsType").find('.xw_top').index(this);
+		$(this).parents(".xw_big").find(".xw_detail").hide();
+		$(this).parents(".xw_big").find(".xw_detail").eq(liNum).show();
+	});
+	
+	//收藏按钮
+	$(".xw_shoucang").click(function(){
+		$(this).hide();
+		$(".xw_shoucang_on").show();
+	});
+	$(".xw_shoucang_on").click(function(){
+		$(this).hide();
+		$(".xw_shoucang").show();
+	});
+	//课堂详情
+	$(".classImg").click(function(){
+		window.location.href='4-5-3ketangxiangqing.html';
+	});
+});
+
+	

@@ -1,0 +1,29 @@
+package com.catt.wfx.service.settlementMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商家账户信息服务接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/2/10
+ */
+public interface SettlementBusinessService {
+
+    /**
+     * 厂家订单统计
+     * @return
+     */
+    List<Map> statisticsOfOrder(Long factoryId, String factoryName);
+
+     List<Map> statisticsOfOrderDetail(Long factoryId, String factoryName, Date startDate, Date endDate);
+
+
+    }

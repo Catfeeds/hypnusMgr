@@ -1,0 +1,85 @@
+package com.catt.wfx.web.controller.admin.extractOrder;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.service.extractOrder.ExtractOrderService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * 提现控制器
+ * 作者：陈楚笙
+ * 时间：2017-03-03
+ */
+@Controller("extractOrderController")
+@RequestMapping(value = "/admin/extractOrder")
+public class ExtractOrderController extends BaseController {
+
+    //提现服务接口
+    @Resource(name = "extractOrderServiceImpl")
+    private ExtractOrderService extractOrderService;
+
+
+    /**
+     * 提现管理
+     */
+    @RequestMapping(value = "/index")
+    public String toIndex() {
+        return "/admin/extractOrder/index";
+    }
+
+    /**
+     * 提现详情
+     */
+    @RequestMapping(value = "/detail/{id}")
+    public String toDetail(@PathVariable Long id, Model model) {
+        Map<String, Object> detail = extractOrderService.getAllDetail(id);
+        model.addAttribute("entity", detail.get("entity"));//基本信息
+        model.addAttribute("bankCard", detail.get("bankCard"));//银行卡信息
+        model.addAttribute("extract", detail.get("extract"));//打款信息
+        return "/admin/extractOrder/detail";
+    }
+
+    /**
+     * 打款页面
+     */
+    @RequestMapping(value = "/extract/{id}")
+    public String toExtract(@PathVariable Long id, Model model) {
+
+        return "/admin/extractOrder/remittance";
+    }
+
+    /**
+     * 打款
+     */
+    @RequestMapping(value = "/remittance")
+    @ResponseBody
+    public Message remittance(@RequestParam Map<String, Object> params, @CurrentUser("id") Long userId, @CurrentUser("name") String userName) {
+        params.put("userId", userId);
+        params.put("userName", userName);
+        extractOrderService.remittance(params);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 获取提现管理分页数据
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/getPage")
+    @ResponseBody
+    public Page<Map> getPage(@RequestParam Map<String, Object> params) {
+        return extractOrderService.getPage(params);
+    }
+
+}

@@ -1,0 +1,162 @@
+package com.catt.wfx.web.controller.admin.customerMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.form.customerMgr.CusInfoForm;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.customerMgr.CusInfoService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * 会员、账户信息控制器
+ * 作者：陈楚笙
+ * 时间：2017-03-02
+ */
+@Controller("admin.memberAccountController")
+@RequestMapping(value = "/admin/memberAccount")
+public class MemberAccountController extends BaseController {
+
+    // 用户信息接口
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    // 用户信息接口
+    @Resource(name = "cusInfoServiceImpl")
+    private CusInfoService cusInfoService;
+
+    /**
+     * 会员管理
+     */
+    @RequestMapping(value = "/member/index")
+    public String toMemberIndex() {
+        return "/admin/customerMgr/member/index";
+    }
+
+    /**
+     * 账户管理
+     */
+    @RequestMapping(value = "/account/index")
+    public String toAccountIndex() {
+        return "/admin/customerMgr/account/index";
+    }
+
+    /**
+     * 会员详情
+     */
+    @RequestMapping(value = "/member/detail")
+    public String getMemberDetail(Long cusId, Model model) {
+        if (StringUtil.checkObj(cusId)) {
+            model.addAllAttributes(cusInfoService.getMemberDetail(cusId));
+        }
+        return "/admin/customerMgr/member/detail";
+    }
+
+    /**
+     * 账户详情
+     */
+    @RequestMapping(value = "/account/detail")
+    public String getAccountDetail(Long cusId, Model model) {
+        if (StringUtil.checkObj(cusId)) {
+            model.addAllAttributes(cusInfoService.getAccountDetail(cusId));
+        }
+        return "/admin/customerMgr/account/detail";
+    }
+
+    /**
+     * 获取会员管理分页数据
+     *
+     * @param cusInfoForm
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/member/getPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getPageMember(CusInfoForm cusInfoForm, Pageable pageable) {
+        return cusInfoService.getPageMember(cusInfoForm, pageable);
+    }
+
+    /**
+     * 获取账户管理分页数据
+     *
+     * @param cusInfoForm
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/account/getPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getPageAccount(CusInfoForm cusInfoForm, Pageable pageable) {
+        return cusInfoService.getPageAccount(cusInfoForm, pageable);
+    }
+
+    /**
+     * 获取账户详情-交易记录 分页数据
+     *
+     * @param cusId
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/account/order/getPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getPageAccountOrder(Long cusId, Pageable pageable) {
+        return cusInfoService.getPageAccountOrder(cusId, pageable);
+    }
+
+    /**
+     * 获取账户详情-代金券记录 分页数据
+     *
+     * @param cusId
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/account/coupon/getPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getPageAccountCoupon(Long cusId, Pageable pageable) {
+        return cusInfoService.getPageAccountCoupon(cusId, pageable);
+    }
+
+    /**
+     * 解除禁用（会员）
+     *
+     * @param ids 会员标识集合
+     * @return
+     */
+    @RequestMapping(value = "/member/enable")
+    @ResponseBody
+    public Message enable(Long[] ids) {
+        for (Long id : ids) {
+            CusInfo cusInfo = cusInfoBaseService.find(id);
+            cusInfo.setStatus(CusInfo.Status.NORMALUSE.getValue());
+            cusInfoBaseService.update(cusInfo);
+        }
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 禁用（会员）
+     *
+     * @param ids 会员标识集合
+     * @return
+     */
+    @RequestMapping(value = "/member/disable")
+    @ResponseBody
+    public Message disable(Long[] ids) {
+        for (Long id : ids) {
+            CusInfo cusInfo = cusInfoBaseService.find(id);
+            cusInfo.setStatus(CusInfo.Status.DISABLE.getValue());
+            cusInfoBaseService.update(cusInfo);
+        }
+        return SUCCESS_MSG;
+    }
+
+}

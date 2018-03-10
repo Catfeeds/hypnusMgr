@@ -1,0 +1,191 @@
+package com.catt.wfx.service.impl.wechatReturn.event;
+
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.spring.SpringUtils;
+import org.springframework.util.Assert;
+
+import java.io.Serializable;
+import java.util.Map;
+
+/**
+ * 待退款事件
+ * 
+ * @author 纪建宏
+ *
+ */
+public class ToReturnEvent implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	//微信支付单号和订单号2选一， 一般使用订单号（即实际支付保存的交易流水号）
+	/**
+	 * 微信支付单号（交易号）
+	 */
+	private String transactionId;
+	/**
+	 * 订单号（交易号）
+	 */
+	private String orderNo;
+	/**
+	 * 退款单号
+	 */
+	private String refundNo;
+	/**
+	 * 订单支付类型
+	 */
+	private Integer payMode;
+
+	/**
+	 * 订单支付金额（单位：分）
+	 */
+	private long totalAmount;
+
+	/**
+	 * 退款金额（单位：分）
+	 */
+	private long returnAmount;
+	/**
+	 * 超时时限（单位：分钟）
+	 */
+	private Integer timeout;
+	/**
+	 * 业务类型
+	 */
+	private String businessType;
+	/**
+	 * 业务关联标识
+	 */
+	private String businessRel;
+	/**
+	 * 业务参数（回传参数）
+	 */
+	private String businessParam;
+	/**
+	 * 额外参数
+	 * <pre>
+	 * 【京东网关支付】
+	 * bizReturnUrl - 可选，支付操作后跳转地址
+	 * bankCode - 可选，指定支付银行编码，具体值参考京东文档
+	 * 【支付宝刷卡支付】
+	 * authCode - 必传，支付宝条码
+	 * 【微信刷卡支付】
+	 * authCode - 必传，微信条码
+	 * </pre>
+	 */
+	private Map<String, String> additionalParam;
+
+	/**
+	 * 校验数据
+	 */
+	public void validate() {
+		// 业务类型（支付事件处理器bean名称）
+		Assert.hasText(businessType);
+		ReturnEventListener listener = SpringUtils.getBean(businessType);
+		Assert.notNull(listener);
+		// 订单号（交易号）
+		Assert.hasText(orderNo);
+//		// 商品标题
+//		Assert.hasText(title);
+//		// 商品详情
+//		Assert.hasText(detail);
+		// 总金额（单位：分）
+		Assert.isTrue(totalAmount > 0);
+		//退款金额（单位：分）
+		Assert.isTrue(returnAmount > 0);
+//		Assert.notNull(timeout);
+//		Assert.isTrue(timeout > 0);
+	}
+
+	@Override
+	public String toString() {
+		return JsonUtils.toJson(this);
+	}
+
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
+
+	public Integer getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(Integer payMode) {
+		this.payMode = payMode;
+	}
+
+	public long getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(long totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public Integer getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(Integer timeout) {
+		this.timeout = timeout;
+	}
+
+	public String getBusinessType() {
+		return businessType;
+	}
+
+	public void setBusinessType(String businessType) {
+		this.businessType = businessType;
+	}
+
+	public String getBusinessRel() {
+		return businessRel;
+	}
+
+	public void setBusinessRel(String businessRel) {
+		this.businessRel = businessRel;
+	}
+
+	public String getBusinessParam() {
+		return businessParam;
+	}
+
+	public void setBusinessParam(String businessParam) {
+		this.businessParam = businessParam;
+	}
+
+	public Map<String, String> getAdditionalParam() {
+		return additionalParam;
+	}
+
+	public void setAdditionalParam(Map<String, String> additionalParam) {
+		this.additionalParam = additionalParam;
+	}
+
+	public long getReturnAmount() {
+		return returnAmount;
+	}
+
+	public void setReturnAmount(long returnAmount) {
+		this.returnAmount = returnAmount;
+	}
+
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+
+	public String getRefundNo() {
+		return refundNo;
+	}
+
+	public void setRefundNo(String refundNo) {
+		this.refundNo = refundNo;
+	}
+}

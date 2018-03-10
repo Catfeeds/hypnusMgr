@@ -1,0 +1,42 @@
+<%@ page language="java" pageEncoding="utf-8" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>微分销APP登录测试</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/login.css"/>
+    <script type="text/javascript" src="${path}/resources/js/login.js"></script>
+</head>
+<body>
+<div class="loginDiv">
+    <div class="loginCenter">
+        <div class="loginMainCenter">
+            <form id="loginForm">
+                <div class="loginForm">
+                    <ul class="inputboxULTab xw_inputboxULTab">
+                        <li class="lion">会员登录</li>
+                    </ul>
+                    <input type="hidden" name="modulus" value="${modulus}"/>
+                    <input type="hidden" name="exponent" value="${exponent}"/>
+                    <input type="hidden" name="captchaId" value="${captchaId}"/>
+                    <input type="hidden" name="rememberMe" value="false"/>
+                    <input type="hidden" id="enPassword" name="enPassword" value=""/>
+                    <ul class="mainUl">
+                        <li>
+                            <input id="username" name="username" type="text" class="ico_user"/>
+                        </li>
+                        <li>
+                            <input id="password" name="password" type="password" class="ico_passsword"/>
+                        </li>
+                        <li>
+                            <a class="mainLink xw_mainLink" id="login">登 录</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

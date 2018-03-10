@@ -1,0 +1,50 @@
+package com.catt.wfx.web.controller.wechat;
+
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.service.WfxUserService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+
+@Controller("IndexController")
+public class IndexController {
+
+    @Resource(name = "wfxUserServiceImpl")
+    private WfxUserService wfxUserService;
+
+    /**
+     * 跳转首页
+     */
+    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
+    public String toIndexPage(@CurrentUser Long userId, @CurrentUser("publicAccountId") String publicAccountId
+            , @CurrentUser("openId") String openId, Long shopId, Model model, HttpServletRequest request) {
+        Assert.notNull(userId);
+        model.addAttribute("shopId", shopId);
+
+        return "/index";
+    }
+
+    /**
+     * 获取登录用户的头像和名称
+     * @param userId 用户标识
+     * @param publicAccountId 公众号标识
+     * @param openId
+     * @param request
+     * @return
+     */
+    @RequestMapping("/admin/wechat/personal/getCusPhotoAndName")
+    @ResponseBody
+    public CusInfo getCusPhotoAndName(@CurrentUser Long userId, @CurrentUser("publicAccountId") String publicAccountId
+            , @CurrentUser("openId") String openId, HttpServletRequest request) {
+        return wfxUserService.getCusPhotoAndName(userId, publicAccountId, openId, request);
+    }
+
+}

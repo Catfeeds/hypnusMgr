@@ -1,0 +1,102 @@
+package com.catt.wfx.repository.dao.customerMgr.impl;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.wfx.repository.dao.customerMgr.CusCartDao;
+import com.catt.wfx.repository.entity.customerMgr.CusCart;
+import org.springframework.stereotype.Repository;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 购物车信息Dao接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-10 08:50:22
+ * @version V1.0
+ */
+@Repository("cusCartDaoImpl")
+public class CusCartDaoImpl extends BaseDaoImpl<CusCart, Long>
+		implements CusCartDao {
+
+    @Override
+    public List<Map> findAll(Long cusId, Integer useType) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ID AS \"id\", ");
+        sql.append(" a.I_CATE_ID AS \"cateId\", ");
+        sql.append(" a.S_CATE_NAME AS \"cateName\", ");
+        sql.append(" a.I_PRODUCT_ID AS \"productId\", ");
+        sql.append(" a.S_PRODUCT_NAME AS \"productName\", ");
+        sql.append(" a.S_CODE AS \"code\", ");
+        sql.append(" a.S_BAR_CODE AS \"barCode\", ");
+        sql.append(" a.I_NUM AS \"num\", ");
+        sql.append(" a.I_PRICE_ID AS \"priceId\", ");
+        sql.append(" a.S_HEAD_PATH AS \"headPath\", ");
+        sql.append(" a.I_USE_TYPE AS \"useType\", ");
+        sql.append(" b.S_SPEC_JSON AS \"specJson\", ");
+        sql.append(" b.I_COST_PRICE AS \"costPrice\", ");
+        sql.append(" b.I_SALES_PRICE AS \"salesPrice\", ");
+        sql.append(" b.I_GENERAL_AGENT AS \"generalAgent\", ");
+        sql.append(" b.I_PROVINCIAL_AGENT AS \"provincialAgent\", ");
+        sql.append(" b.I_CITY_AGENT AS \"cityAgent\", ");
+        sql.append(" b.I_REGIONAL_AGENT AS \"regionalAgent\", ");
+        sql.append(" b.I_STOCK_NUM AS \"stockNum\" ");
+
+        sql.append(" FROM T_CUS_CART a ");
+        sql.append(" JOIN T_PRODUCT_PRICE b on a.I_PRICE_ID = b.I_ID ");
+        sql.append(" WHERE a.I_CUS_ID = " + cusId);
+
+        Map<String, Object> params = new HashMap<>();
+        if (useType != null){
+            sql.append(" AND a.I_USE_TYPE = :useType ");
+            params.put("useType", useType);
+        }
+        sql.append(" ORDER BY a.D_CREATE_DATE DESC ");
+        return this.findListBySql(sql.toString(), params, Map.class);
+    }
+
+    @Override
+    public List<Map> findProductByCartIds(Long[] cartIds) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ID AS \"id\", ");
+        sql.append(" a.I_CATE_ID AS \"cateId\", ");
+        sql.append(" a.S_CATE_NAME AS \"cateName\", ");
+        sql.append(" a.I_PRODUCT_ID AS \"productId\", ");
+        sql.append(" a.S_PRODUCT_NAME AS \"productName\", ");
+        sql.append(" a.S_CODE AS \"code\", ");
+        sql.append(" a.S_BAR_CODE AS \"barCode\", ");
+        sql.append(" a.I_NUM AS \"num\", ");
+        sql.append(" a.I_PRICE_ID AS \"priceId\", ");
+        sql.append(" a.S_HEAD_PATH AS \"headPath\", ");
+        sql.append(" a.I_USE_TYPE AS \"useType\", ");
+        sql.append(" a.I_FACTORY_ID AS \"factoryId\", ");
+        sql.append(" b.S_SPEC_JSON AS \"specJson\", ");
+        sql.append(" b.I_COST_PRICE AS \"costPrice\", ");
+        sql.append(" b.I_SALES_PRICE AS \"salesPrice\", ");
+        sql.append(" b.I_GENERAL_AGENT AS \"generalAgent\", ");
+        sql.append(" b.I_PROVINCIAL_AGENT AS \"provincialAgent\", ");
+        sql.append(" b.I_CITY_AGENT AS \"cityAgent\", ");
+        sql.append(" b.I_REGIONAL_AGENT AS \"regionalAgent\", ");
+        sql.append(" b.I_PROFIT AS \"profit\", ");
+        sql.append(" b.I_STOCK_NUM AS \"stockNum\", ");
+
+        //一至五级厂家返利
+        sql.append(" b.I_REBATE_ONE AS \"rebateOne\", ");
+        sql.append(" b.I_REBATE_TWO AS \"rebateTwo\", ");
+        sql.append(" b.I_REBATE_THREE AS \"rebateThree\", ");
+        sql.append(" b.I_REBATE_FOUR AS \"rebateFour\", ");
+        sql.append(" b.I_REBATE_FIVE AS \"rebateFive\" ");
+
+        sql.append(" FROM T_CUS_CART a ");
+        sql.append(" LEFT JOIN T_PRODUCT_PRICE b on a.I_PRICE_ID = b.I_ID ");
+        sql.append(" WHERE a.I_ID in (:cartIds) ");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("cartIds", Arrays.asList(cartIds));
+        return this.findListBySql(sql.toString(), params, Map.class);
+    }
+}

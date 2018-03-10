@@ -1,0 +1,73 @@
+<%--
+微信端公共头文件,包含adminLTE框架
+注:由于adminLTE使用的bootstrap框架默认将所有元素的box-sizing设置为border-box,有时会导致非bootstrap界面布局错乱。
+如果想临时取消bootstrap的box-sizing设置,需在页面定义样式进行覆盖:
+
+* {
+-webkit-box-sizing: content-box;
+-moz-box-sizing: content-box;
+box-sizing: content-box;
+}
+
+*代表整个页面的元素均不采用bootstrap的设置,如果只是局部调整,可以将*改为相关元素的选择器
+--%>
+
+<%@ page language="java" pageEncoding="utf-8" %>
+<%-- 引用基础头文件 --%>
+<%@include file="/common/headModule.jsp" %>
+
+<!--当前系统使用的皮肤-->
+<%--<c:set var="systemSkin" value="skin-blue-light"/>--%>
+<%--<c:set var="systemSkin" value="skin-red-light"/>--%>
+<c:set var="systemSkin" value="skin-cars-light"/>
+<%--<c:set var="systemSkin" value="skin-black-light"/>--%>
+<%--<c:set var="systemSkin" value="skin-cars"/>--%>
+<%--<c:set var="systemSkin" value="skin-blue"/>--%>
+<c:set var="systemBgClass" value="bg-gray-light"/>
+
+<link rel="stylesheet" href="${path}/resources/AdminLTE/bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="${path}/resources/AdminLTE/font-awesome/4.6.3/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="${path}/resources/AdminLTE/ionicons/2.0.1/css/ionicons.min.css">
+<!-- bootstrap datepicker -->
+<link rel="stylesheet" href="${path}/resources/AdminLTE/plugins/datepicker/datepicker3.css">
+<link rel="stylesheet"
+      href="${path}/resources/AdminLTE/plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css"
+      media="screen">
+<link rel="stylesheet" href="${path}/resources/AdminLTE/plugins/iCheck/all.css">
+<link rel="stylesheet" href="${path}/resources/AdminLTE/plugins/iCheck/square/orange.css">
+<link rel="stylesheet" href="${path}/resources/AdminLTE/plugins/select2/select2.min.css">
+<%--<link rel="stylesheet" href="${path}/resources/AdminLTE/dist/css/AdminLTE.min.css">--%>
+<link rel="stylesheet" href="${path}/resources/AdminLTE/dist/css/EXT_AdminLTE.min.css">
+<%--<link rel="stylesheet" href="${path}/resources/AdminLTE/dist/css/skins/_all-skins.css">--%>
+<%--<link rel="stylesheet" href="${path}/resources/AdminLTE/dist/css/skins/skin-cars.css">--%>
+<link rel="stylesheet" href="${path}/resources/AdminLTE/dist/css/skins/${systemSkin}.css">
+<%--<link rel="stylesheet" href="${path}/resources/AdminLTE/dist/css/skins/skin-aaa.css">--%>
+<%--<link rel="stylesheet" href="${path}/resources/AdminLTE/dist/css/skins/skin-blue-light.css">--%>
+
+<!--项目自定义样式-->
+<link rel="stylesheet" href="${path}/resources/css/application.css">
+
+<script src="${path}/resources/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+<script src="${path}/resources/AdminLTE/dist/js/app.min.js"></script>
+<!-- bootstrap datepicker -->
+<script src="${path}/resources/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="${path}/resources/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="${path}/resources/AdminLTE/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
+<script src="${path}/resources/AdminLTE/plugins/select2/select2.full.min.js"></script>
+<script src="${path}/resources/AdminLTE/plugins/select2/i18n/zh-CN.js"></script>
+<script src="${path}/resources/AdminLTE/plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"
+        charset="UTF-8"></script>
+<script src="${path}/resources/AdminLTE/plugins/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"
+        charset="UTF-8"></script>
+
+<script type="text/javascript">
+    seajs.use(['$'], function ($) {
+        $(document).ready(function () {
+            $.fn.select2.defaults.set("language", "zh-CN");
+            $.fn.datepicker.defaults.language = 'zh-CN';
+            $.fn.datetimepicker.defaults.language = 'zh-CN';
+        });
+    });
+</script>

@@ -1,0 +1,61 @@
+package com.catt.wfx.security.web.security.shiro.validate.impl;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.repository.entity.BaseUserEntity;
+import com.catt.common.util.ConfigUtils;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.spring.SpringUtils;
+import com.catt.common.web.security.shiro.token.ExtAuthenticationToken;
+import com.catt.common.web.security.shiro.validate.ObtainUserData;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.service.AliYunSmsService;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.customerMgr.CusInfoService;
+import org.apache.shiro.authc.pam.UnsupportedTokenException;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 登录时获取用户信息
+ */
+@Service("obtainDataCusInfo")
+public class ObtainCusInfo implements ObtainUserData {
+
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    @Resource(name = "cusInfoServiceImpl")
+    private CusInfoService cusInfoService;
+
+    @Override
+    public <T extends BaseUserEntity> T getUser(ExtAuthenticationToken token) {
+        // 获取短信服务
+//        AliYunSmsService loginSmsService = SpringUtils.getBean("aliYunSmsServiceImpl");
+
+        // 对应手机号码
+        String unionId = MapUtil.getString(token.getAllParams(), "unionId");
+
+//        if (token.isCaptcha() && !loginSmsService.loginMobileNoCheck(mobileNo, token.getCaptcha(), ConfigUtils.config.getProperty("register"))) {
+//            // 需要验证码且验证不通过
+//            throw new UnsupportedTokenException();
+//        }
+
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("weixId", unionId));
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        List<CusInfo> list = cusInfoBaseService.findList(1, filters, null);
+
+        CusInfo cusInfo;
+        if (list == null || list.size() == 0) {
+            cusInfo = cusInfoService.registAccountByUnionidId(unionId, null);
+        } else {
+            cusInfo = list.get(0);
+        }
+        return (T) cusInfo;
+    }
+
+}

@@ -1,0 +1,204 @@
+
+var countyLength = 0;
+var cityLength = 0;
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initData();
+                    this.initEvent();
+                },
+                /** 初始化界面  */
+                initPage: function () {
+
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $("#saveDays").bind("click", EventHandler.saveDay);
+                    $("#saveAddress").bind("click", EventHandler.saveAddress);
+                },
+
+                /** 初始化数据  */
+                initData: function () {
+                    EventHandler.provinceSel();
+                    var provinceId =  $("#province").attr("data-value-id");
+                    var cityId =  $("#city").attr("data-value-id");
+                    if(provinceId != ""){
+                        EventHandler.citySel(provinceId);
+                        if(cityId != ""){
+                            EventHandler.countySel(cityId);
+                        }
+                    }
+                }
+            };
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                //保存时间
+                saveDay : function(){
+                    var days = $("#refundDays").val();
+                    if(days == ""){
+                        msgBox.tips("请输入退货时间！");
+                        return;
+                    }
+                    if (!EventHandler.isPositive(days)) {
+                        msgBox.tips("退货时间只能是正整数");
+                        return;
+                    }
+                    DataHandler.saveDay({refundDays : days}, function(data){
+                        msgBox.tips("保存成功！");
+                    });
+                },
+                //保存地址
+                saveAddress : function(){
+                    var provinceId =  $("#province").attr("data-value-id");
+                    var provinceName =  $("#province").val();
+                    var cityId =  $("#city").attr("data-value-id");
+                    var cityName =  $("#city").val();
+                    var countyId =  $("#county").attr("data-value-id");
+                    var countyName =  $("#county").val();
+                    var address = $("#address").val();
+                    var phone = $("#phone").val();
+                    var ontact = $("#ontact").val();
+                    if(phone == ""){
+                        msgBox.tips("请输入联系电话");
+                        $("#phone").focus();
+                        return;
+                    }
+                    if(ontact == ""){
+                        msgBox.tips("请输入联系人");
+                        $("#ontact").focus();
+                        return;
+                    }
+                    if(provinceId == ""){
+                        msgBox.tips("请选择选择省");
+                        return;
+                    }
+                    if(cityLength == 0){
+                        cityName = "";
+                    }else if(cityId == ""){
+                        msgBox.tips("请选择选择市");
+                        return;
+                    }
+                    if(cityLength == 0 || countyLength == 0){
+                        countyName = "";
+                    }else if(countyId == ""){
+                        msgBox.tips("请选择选择区");
+                        return;
+                    }
+                    if(address == ""){
+                        msgBox.tips("请输入详细地址");
+                        $("#address").focus();
+                        return;
+                    }
+                    var param = {};
+                    param.provinceId = provinceId;
+                    param.provinceName = provinceName;
+                    param.cityId = cityId;
+                    param.cityName = cityName;
+                    param.regionId = countyId;
+                    param.regionName = countyName;
+                    param.address = address;
+                    param.phone = phone;
+                    param.ontact = ontact;
+                    DataHandler.saveAddress(param, function(data){
+                        msgBox.tips("保存成功！");
+                    });
+                },
+                //省
+                provinceSel : function(resetFlag){
+                    $.get(path + '/address/province', null, function (backData) {
+                        var html = template('template_dataList', backData);
+                        $('#provinceSel').html(html);
+                        EventHandler.initSlideEnum();
+                    });
+                },
+                //市
+                citySel : function(provinceId){
+                    $.get(path + '/address/city/' + provinceId, null, function (backData) {
+                        cityLength = backData.length;
+                        var html = template('template_dataList', backData);
+                        $('#citySel').html(html);
+                        EventHandler.initSlideEnum();
+                    });
+                },
+                //区
+                countySel : function(cityId){
+                    $.get(path + '/address/county/' + cityId, null, function (backData) {
+                        countyLength = backData.length;
+                        var html = template('template_dataList', backData);
+                        $('#countySel').html(html);
+                        EventHandler.initSlideEnum();
+                    });
+                },
+                //下拉菜单事件初始化
+                initSlideEnum: function(){
+                    $("input.xw_input").click(function(){
+                        $(this).parents("div.xw_searchBox").find("ul.xw_choice").slideDown();
+                    });
+                    $("div.xw_searchBox").mouseleave(function(){
+                        $("ul.xw_choice").slideUp();
+                    })
+                    $(".xw_choice li").click(function(){
+                        var changeText = $(this).text();
+                        var changeValue = $(this).attr("data-value-id");
+                        $(this).parents("div.xw_searchBox").find(".xw_input").val(changeText);
+                        $(this).parents("div.xw_searchBox").find(".xw_input").attr("data-value-id", changeValue);
+                        $("ul.xw_choice").slideUp(100);
+                        if($(this).parent().attr("id") == "provinceSel"){
+                            $("#city").val("选择市");
+                            $("#city").attr("data-value-id", "");
+                            $("#county").val("选择区");
+                            $("#county").attr("data-value-id", "");
+                            EventHandler.citySel(changeValue);
+                        }else if($(this).parent().attr("id") == "citySel"){
+                            $("#county").val("选择区");
+                            $("#county").attr("data-value-id", "");
+                            EventHandler.countySel(changeValue);
+                        }
+                    })
+                },
+                // 正整数验证
+                isPositive: function (s) {
+                    var reg = /^[0-9]*[1-9][0-9]*$/;
+                    return reg.test(s)
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                //保存时间
+                saveDay : function(param, callback){
+                    $.post(path + "/admin/basicConfig/baseSet/refunds/saveDate", param, function(data){
+                        callback(data);
+                    });
+                },
+                //保存地址
+                saveAddress : function(param, callback){
+                    $.post(path + "/admin/basicConfig/baseSet/refunds/saveAddress", param, function(data){
+                        callback(data);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

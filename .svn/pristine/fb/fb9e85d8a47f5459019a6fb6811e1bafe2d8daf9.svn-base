@@ -1,0 +1,23 @@
+package com.catt.wfx.service.orderMgr;
+
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单详情服务接口
+ * 
+ * @author 袁幸成
+ * @date 2017-2-21 16:25:33
+ * @version V1.0
+ */
+public interface CusOrderDetailService {
+
+    /**
+     * 查询订单详情
+     * @param orderId 订单标识
+     * @return
+     */
+    List<Map> findDetailByOrderId(Long orderId);
+
+}

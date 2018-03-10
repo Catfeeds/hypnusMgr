@@ -1,0 +1,136 @@
+<%--
+  User: Luojiawei
+  Date: 17/3/6
+  Time: 上午10:50
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>我的订单</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/wodedingdan.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/admin/wechat/order/order.css"/>
+    <style type="text/css">
+        <%-- 不加这个样式在页面加载后，滚动条无效 --%>
+        .weui-pull-to-refresh-layer .pull-to-refresh-arrow {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+    </style>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/order/index.js"></script>
+</head>
+
+<body style="background:#f2f2f2;">
+<div style="height:47px;"></div>
+<div class="top header">
+    <button class="top-left" onClick="window.location='${path}/index?shopId=${shopId}';">
+        <img class="top_btn_back"
+             src="${path}/resources/images/top_btn_back.png">
+    </button>
+    <button class="top-right" onClick="">
+        <img class="top_btn_back"
+             src="${path}/resources/images/dingdan_ic_sousuo.png">
+    </button>
+    <h1>我的订单</h1>
+</div>
+
+<table class="goodsType">
+    <tr>
+        <td>
+            <a class="lion xw_li">全部</a>
+        </td>
+        <td>
+            <a class="xw_li">待支付</a>
+        </td>
+        <td>
+            <a class="xw_li">待发货</a>
+        </td>
+        <td>
+            <a class="xw_li">待收货</a>
+        </td>
+        <td>
+            <a class="xw_li">已收货</a>
+        </td>
+    </tr>
+</table>
+<div id="list-parent" style="overflow: hidden">
+    <div id="list-card" class="kd-weui-refresh-container kd-overflow-auto">
+        <%--下拉刷新控件--%>
+        <div class="weui-pull-to-refresh-layer">
+            <div class="pull-to-refresh-arrow"></div> <!-- 上下拉动的时候显示的箭头 -->
+            <div class="pull-to-refresh-preloader"></div> <!-- 正在刷新的菊花 -->
+            <div class="down">下拉刷新</div><!-- 下拉过程显示的文案 -->
+            <div class="up">释放刷新</div><!-- 下拉超过50px显示的文案 -->
+            <div class="refresh">正在刷新...</div><!-- 正在刷新时显示的文案 -->
+        </div>
+
+        <%--列表显示容器--%>
+        <div id="container">
+        </div>
+
+        <%--滚动刷新控件--%>
+        <div class="weui-infinite-scroll">
+        </div>
+    </div>
+</div>
+
+<%--列表显示模板--%>
+<script id="templateList" type="text/html">
+    {{each content as item idx}}
+    <div class="white-card"
+         onclick="window.location.href='${path}/admin/wechat/cusOrder/detail.html?id={{item.id}}&shopId=${shopId}'">
+        <div class="weui-row">
+            <div class="weui-col-70">
+                <span class="blue-text">{{item.orderCode}}</span>
+            </div>
+            <div class="weui-col-30" style="text-align: right;">
+                <span style="color: #ff252a;">{{item.orderStatusName}}</span>
+            </div>
+        </div>
+
+        {{each item.productList as product}}
+        <div class=" grey-card-margin">
+            <div class="weui-row weui-no-gutter">
+                <div class="weui-col-33" style="text-align: center">
+                    <img style="max-width:80px;width: auto;height: 80px;"
+                         src="{{product.headPath}}">
+                    <%--src="${path}/resources/images/gouwuche_pic.png">--%>
+                </div>
+                <div class="weui-col-66">
+                    <p style="color: #3a3a3a;font-size: 13px">{{product.productName}}</p>
+                    <p style="color: #747474;margin: 10px 0px 10px 0px">规格：{{product.specDesc}}</p>
+                    <p style="color: #747474;"><strong>￥{{product.salesPrice}}</strong>&nbsp;&nbsp;x{{product.num}}</p>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+        <p style="border-bottom: #dcdcdc 1px solid;
+        color: #747474;
+        text-align: right;
+        padding: 5px 0px 5px 0px;
+        font-size: 12px">
+            合计：<font class="textPink">￥{{item.totalAmount}}</font>元
+            &nbsp;&nbsp;&nbsp; (含运费￥{{item.logisticsCost}}元)
+        </p>
+        <div style="text-align: right;margin-top: 10px">
+            <%--订单状态为待支付--%>
+            {{if item.orderStatus == 1}}
+            <button class="list-btn topay" current="{{item.id}}">去支付</button>
+            {{/if}}
+            <%--可取消订单--%>
+            {{if item.canCancel == 1}}
+            <button class="list-btn cancel" current="{{item.id}}">取消订单</button>
+            {{/if}}
+            <button {{!item.logisticsCode ? 'disabled' : ''}} class="list-btn check" currentLogisticsType="{{item.logisticsType}}" currentLogisticsCode="{{item.logisticsCode}}">查看物流</button>
+        </div>
+    </div>
+    {{/each}}
+</script>
+</body>
+</html>

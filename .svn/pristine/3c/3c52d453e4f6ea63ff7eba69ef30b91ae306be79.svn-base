@@ -1,0 +1,15 @@
+package com.catt.wfx.repository.dao.couponMgr;
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.couponMgr.CouponRule;
+
+/**
+ * 代金券使用规则Dao接口
+ * 
+ * @author chen chusheng
+ * @date 2017-01-16 11:10:41
+ * @version V1.0
+ */
+public interface CouponRuleDao extends BaseDao<CouponRule, Long> {
+
+}

@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*头部*/
+.top{
+	height:47px;
+	background:#393a3e;}
+.top h2{width:100%;font-size:20px;color:#FFF; font-weight:normal;margin:0px auto; padding-top:10px;text-align:center;}
+.top .top-left1{float:left;position:absolute;width:38px;height:38px;top:6px;left:2%;font-size:18px;color:#FFF; background:transparent;}
+.top .top-left1:hover{opacity:0.7;}
+.top .top-right{float:right;position:absolute;width:38px;height:38px;top:6px;right:5px;font-size:18px;color:#FFF; background:transparent;}
+.top .top-right1 img{width:24px; height:24px;}
+.top .top-right02{float:right;position:absolute;width:38px;height:38px;top:6px;right:12%;font-size:18px;color:#FFF;}
+.top .top-right02 img{width:24px; height:24px;}
+.top .top-right:hover{opacity:0.7;}
+.top .top-right_send{float:right; position:absolute; width:100px; height:40px; top:4px; right:5px; font-size:18px; color:#fff; text-align:center; line-height:40px; background:#8bcc46;}
+
+.tishi{ padding:0px 20px; height:30px; line-height:30px; background:#f2f2f2; color:#808080;}
+
+

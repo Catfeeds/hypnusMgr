@@ -1,0 +1,36 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/3/13
+  Time: 15:14
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>用户协议</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/fuwutiaokuan.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <!--手机观看保持比例-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+</head>
+
+<body>
+<div style="height:47px;"></div>
+<%--<div class="top header">--%>
+    <%--<button class="top-left" onClick="window.location='0-5shezhimima.html';"><img class="top_btn_back" src="images/top_btn_back.png"></button>--%>
+    <%--<h1>用户协议</h1>--%>
+<%--</div>--%>
+<div class="tiaokuanbody">
+	<span class="tiaokuan">
+    	欢迎使用xx有限公司（“本公司”）发布提供的微分销APP。本服务协议（“本协议”）适用于用户使用微分销APP”提供的所有网络服务。用户在注册过程中点击“同意”按钮即表示用户完全接受“本协议”项下的全部条款。
+    </span>
+</div>
+<%--<div class="bottom">--%>
+    <%--<button class="nextBtn1 xw_shareBt" onClick="window.location='0-4quedingdingdan.html';" >同&nbsp;意</button>--%>
+<%--</div>--%>
+
+</body>
+</html>

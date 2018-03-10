@@ -1,0 +1,23 @@
+package com.catt.wfx.service.base.settlementMgr;
+
+
+import com.catt.wfx.repository.form.settlementMgr.BusinessHandlerBackData;
+import com.catt.wfx.repository.form.settlementMgr.BusinessHandlerForm;
+
+/**
+ * 商家账户信息相关操作服务接口
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2016-9-18 15:23:05
+ */
+public interface BusinessHandlerService {
+
+    /**
+     * 补贴规则结算
+     *
+     * @param form
+     * @return
+     */
+    BusinessHandlerBackData ruleSettlement(BusinessHandlerForm form);
+}

@@ -1,0 +1,145 @@
+package com.catt.wfx.web.controller.admin.orderMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.entity.basicConfig.RefundsSet;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLogistics;
+import com.catt.wfx.repository.form.orderMgr.CusOrderFrom;
+import com.catt.wfx.service.basicConfig.RefundsSetService;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * Description:订单controller
+ * Created by 2017-02-22  10:16.
+ * author: Zhou mingxiang
+ */
+@Controller("admin.orderMgr.cusOrderController")
+@RequestMapping(value = "/admin/orderMgr/cusOrder")
+public class CusOrderController extends BaseController {
+
+    //订单信息表服务接口
+    @Resource(name = "cusOrderServiceImpl")
+    private CusOrderService cusOrderService;
+
+    //订单信息表服务接口
+    @Resource(name = "refundsSetServiceImpl")
+    private RefundsSetService refundsSetService;
+
+
+    /**
+     * 跳转订单管理首页
+     */
+    @RequestMapping(value = "/index.html", method = RequestMethod.GET)
+    public String toIndex(Long shopkeeperId, Model model) {
+        model.addAttribute("shopkeeperId",shopkeeperId);
+        return "/admin/orderMgr/order/index";
+    }
+
+    /**
+     * 跳转订单详情页面
+     */
+    @RequestMapping(value = "/detail.html", method = RequestMethod.GET)
+    public String toDetail() {
+        return "/admin/orderMgr/order/detail";
+    }
+
+    /**
+     * 跳转发货页面
+     */
+    @RequestMapping(value = "/delivery.html", method = RequestMethod.GET)
+    public String toDelivery() {
+        return "/admin/orderMgr/order/delivery";
+    }
+
+    /**
+     * 跳转打印小票页面
+     */
+    @RequestMapping(value = "/printBill.html", method = RequestMethod.GET)
+    public String toPrintBill(Long id, Model model) {
+        Map map = cusOrderService.getCusOrderDetail(id);
+        RefundsSet refund = refundsSetService.getRefundsSet();
+        Map product=cusOrderService.getFirstCusOrderDetail(id);
+        model.addAttribute("refund", refund);
+        model.addAttribute("entity", map);
+        model.addAttribute("product", product.get("productName"));
+        return "/admin/orderMgr/order/printBill";
+    }
+
+    /**
+     * 获取订单信息列表
+     *
+     * @param cusOrderFrom
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = "/getCusOrderByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getCusOrderByPage(CusOrderFrom cusOrderFrom, Pageable pageable) {
+        return cusOrderService.getCusOrderByPage(cusOrderFrom, pageable);
+    }
+
+    /**
+     * 获取订单信息详情
+     *
+     * @param id 订单标识
+     * @return
+     */
+    @RequestMapping(value = {"/getCusOrderDetail"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Map getCusOrderDetail(Long id) {
+        return cusOrderService.getCusOrderDetail(id);
+    }
+
+    /**
+     * 发货
+     *
+     * @param cusId         当前登录人员标识
+     * @param cusName       当前登录人员名称
+     * @param orderId       订单标识
+     * @return
+     */
+    @RequestMapping(value = {"/deliverGoods"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message deliverGoods(@CurrentUser Long cusId, @CurrentUser("name") String cusName,
+                                Long orderId, CusOrderLogistics cusOrderLogistics) {
+
+        cusOrderService.deliverGoods(cusId, cusName, orderId, cusOrderLogistics);
+        return SUCCESS_MSG;
+    }
+
+
+    /**
+     * 跳转订单管理首页(带入用户ID查找)
+     */
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String toIndexForCus(Long cusId, Model model) {
+        model.addAttribute("cusId", cusId);
+        return "/admin/orderMgr/order/index";
+    }
+
+    /**
+     * 确认收货
+     *
+     * @param ids 订单标识集合
+     * @return
+     */
+    //TODO 该方法在接入物流相关信息时删除
+    @RequestMapping(value = {"/confirmDeliver"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message confirmDeliver(@CurrentUser Long cusId, @CurrentUser("name") String cusName, Long[] ids) {
+        cusOrderService.confirmDeliver(cusId, cusName, ids);
+        return SUCCESS_MSG;
+    }
+
+}

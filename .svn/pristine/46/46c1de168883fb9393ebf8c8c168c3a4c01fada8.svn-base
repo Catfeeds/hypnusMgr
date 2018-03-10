@@ -1,0 +1,61 @@
+package com.catt.wfx.service.customerMgr;
+
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 购物车信息服务接口
+ * 
+ * @author 袁幸成
+ * @date 2017-02-10 08:50:22
+ * @version V1.0
+ */
+public interface CusCartService{
+
+    /**
+     * 新增/修改购物车
+     * @param cusId 客户标识
+     * @param cusName 客户名称
+     * @param id 购物车标识
+     * @param priceId 商品价格标识
+     * @param num 购买数量
+     * @param useType 使用类型 1-普通（默认）  2-进货清单
+     */
+    Long saveCart(Long cusId, String cusName, Long id, Long priceId, Integer num, Integer useType);
+
+    /**
+     * 删除购物车
+     * @param cusId 客户标识
+     * @param id 购物车标识
+     */
+    void deleteCart(Long cusId, Long id);
+
+
+    /**
+     * 获取购物车商品列表
+     * @param cusId 用户标识
+     * @param useType 使用类型 1-普通（默认）  2-进货清单
+     * @return
+     */
+    List<Map> findAll(Long cusId, Integer useType);
+
+    /**
+     * 创建订单-初始化界面
+     * @param cusId 客户标识
+     * @param cartIds 购物车标识
+     * @return
+     */
+    Map<String, Object> getDataByCartToOrder(Long cusId, Long[] cartIds);
+
+
+    /**
+     * 立即购买，跳转到确认订单页面前保存购物车
+     *
+     * @param cusId 客户标识
+     * @param cusName 客户名称
+     * @param priceId 商品价格标识
+     * @param num 购买数量
+     */
+    Long saveCart4BuyNow(Long cusId, String cusName, Long priceId, Integer num);
+}

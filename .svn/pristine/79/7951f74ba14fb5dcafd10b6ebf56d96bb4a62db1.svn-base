@@ -1,0 +1,28 @@
+package com.catt.wfx.repository.form.customerMgr;
+
+
+import java.io.Serializable;
+
+/**
+ * 用户账号资金相关操作返回的参数，需要返回什么参数，在下面加
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-2-16 15:14:11
+ */
+public class CusAccountHandlerBackData implements Serializable {
+
+    /**
+     * 账户明细记录标识
+     */
+    private Long accountDetailId;
+
+    public Long getAccountDetailId() {
+        return accountDetailId;
+    }
+
+    public void setAccountDetailId(Long accountDetailId) {
+        this.accountDetailId = accountDetailId;
+    }
+
+}

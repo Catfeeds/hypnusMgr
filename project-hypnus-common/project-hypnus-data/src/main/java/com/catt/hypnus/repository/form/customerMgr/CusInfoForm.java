@@ -1,0 +1,186 @@
+package com.catt.hypnus.repository.form.customerMgr;
+
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 用户管理form表单数据
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017-2-16 15:14:02
+ */
+public class CusInfoForm implements Serializable {
+
+    /**
+     * 昵称
+     */
+    private String name;
+
+    /**
+     * 手机号码
+     */
+    private String mobile;
+
+    /**
+     * 注册或选拔开始时间
+     */
+    private Date startDate;
+
+    /**
+     * 注册或选拔结束时间
+     */
+    private Date endDate;
+
+    /**
+     * 用户状态
+     */
+    private Integer status;
+
+    /**
+     * 类型
+     */
+    private List<Integer> type;
+
+    /**
+     * 账户余额排序
+     */
+    private Integer  remainderMoneyOrder;
+
+    /**
+     * 累计总金额排序
+     */
+    private Integer  totalMoneyOrder;
+
+    /**
+     * 未到账提成排序
+     */
+    private Integer  unAcceptMoneyOrder;
+
+    /**
+     * 未到账返利排序
+     */
+    private Integer  reciveRebateMoneyOrder;
+
+    /**
+     * 代金券数排序
+     */
+    private Integer  couponCountOrder;
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public List<Integer> getType() {
+        return type;
+    }
+
+    public void setType(List<Integer> type) {
+        this.type = type;
+    }
+
+    public Integer getRemainderMoneyOrder() {
+        return remainderMoneyOrder;
+    }
+
+    public void setRemainderMoneyOrder(Integer remainderMoneyOrder) {
+        this.remainderMoneyOrder = remainderMoneyOrder;
+    }
+
+    public Integer getTotalMoneyOrder() {
+        return totalMoneyOrder;
+    }
+
+    public void setTotalMoneyOrder(Integer totalMoneyOrder) {
+        this.totalMoneyOrder = totalMoneyOrder;
+    }
+
+    public Integer getUnAcceptMoneyOrder() {
+        return unAcceptMoneyOrder;
+    }
+
+    public void setUnAcceptMoneyOrder(Integer unAcceptMoneyOrder) {
+        this.unAcceptMoneyOrder = unAcceptMoneyOrder;
+    }
+
+    public Integer getReciveRebateMoneyOrder() {
+        return reciveRebateMoneyOrder;
+    }
+
+    public void setReciveRebateMoneyOrder(Integer reciveRebateMoneyOrder) {
+        this.reciveRebateMoneyOrder = reciveRebateMoneyOrder;
+    }
+
+    public Integer getCouponCountOrder() {
+        return couponCountOrder;
+    }
+
+    public void setCouponCountOrder(Integer couponCountOrder) {
+        this.couponCountOrder = couponCountOrder;
+    }
+
+    /**
+     * 排序
+     * 0-未知 1-正序 2-倒序
+     */
+    public enum Sorting {
+        /* 0-未知 */
+        UNKNOWN("未知"),
+        /* 1-正序 */
+        ASC("正序"),
+        /* 2-倒序 */
+        DESC("倒序");
+
+        private String text;
+
+        Sorting(String text) {
+            this.text = text;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+    }
+}

@@ -1,0 +1,128 @@
+var dataList = [];
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    //增加
+                    $("#save").click(EventHandler.save);
+                    $("#cancel").click(function(){
+                        msgBox.exWindow.close();
+                    });
+
+                    $("#dataList").on('keyup afterpaste', '.money', function(){
+                        testNumber(this);
+                    });
+                    $("#dataList").on('keyup afterpaste', '.posNum', function(){
+                        testPositiveNumber(this);
+                    });
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                    EventHandler.loadPackageProduct();
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                loadPackageProduct: function(){
+                    var params = {id : $("#id").val()};
+                    DataHandler.getPackageProduct(params, function (backData) {
+                        dataList = backData;
+                        addSepcStr(dataList);
+                        var html = template('template_dataList', {content: dataList});
+                        $('#dataList').html(html);
+                        //$("#contentFrame", window.parent.document).css("height", $("body").css("height"));
+                    });
+                },
+                /**
+                 * 保存
+                 */
+                save: function () {
+                    var ids = [];
+                    var addNums = [];
+                    var inputs = $(".posNum");
+                    for(var i = 0; i < inputs.length; i++){
+                        var addNum = $(inputs[i]).val();
+                        if(addNum != ""){
+                            var id = $(inputs[i]).attr("data-value-id");
+                            ids[ids.length] = id;
+                            addNums[addNums.length] = addNum;
+                        }
+                    }
+                    if(addNums.length == 0){
+                        msgBox.tips("至少要填写一行数据");
+                        return;
+                    }
+                    var params = {ids: ids.join(","), addNums: addNums.join(",")};
+                    DataHandler.save(params, function (backData) {
+                        msgBox.tips("保存成功");
+                        msgBox.exWindow.close(1);
+                    });
+                }
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 * @param params
+                 * @param callback
+                 */
+                save: function (params, callback) {
+                    $.post(path + "/admin/productMgr/publish/saveFillNum", params, function (result) {
+                        callback(result);
+                    });
+                },
+                getPackageProduct: function (params, callback) {
+                    $.post(path + "/admin/productMgr/package/getPackageProduct", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });
+//正整数验证
+function testPositiveNumber(ob){
+    if(ob.value.length==1){ob.value=ob.value.replace(/[^1-9]/g,'')}else{ob.value=ob.value.replace(/\D/g,'')}
+    if(ob.value == 'undefined'){
+        ob.value = '';
+    }
+}
+
+function addSepcStr(arr){
+    for(var i = 0; i < arr.length; i++){
+        var spec = $.evalJSON(arr[i].specJson);
+        var str = "";
+        for(var o in spec){
+            str += "_" + spec[o];
+        }
+        arr[i].specStr = str.substr(1);
+    }
+}

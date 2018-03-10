@@ -1,0 +1,560 @@
+package com.catt.hypnus.service.impl.base.pub;
+
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.common.module.security.repository.dao.StaffDao;
+import com.catt.common.module.security.repository.entity.Dept;
+import com.catt.common.module.security.repository.entity.Right;
+import com.catt.common.module.security.repository.entity.Role;
+import com.catt.common.module.security.repository.entity.Staff;
+import com.catt.common.module.security.service.DeptService;
+import com.catt.common.module.security.service.RightService;
+import com.catt.common.module.security.service.RoleService;
+import com.catt.common.module.security.service.impl.StaffServiceImpl;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.hypnus.repository.dao.pub.SafeMgrDao;
+import com.catt.hypnus.service.base.pub.SafeMgrBaseService;
+import org.apache.poi.ss.formula.functions.T;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * 系统管理服务层实现类
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2015年12月2日 15:06:33
+ */
+@Service("safeMgrBaseServiceImpl")
+public class SafeMgrBaseServiceImpl extends BaseServiceImpl<T, Long> implements SafeMgrBaseService {
+
+    @Resource(name = "staffServiceImpl")
+    private StaffServiceImpl staffService;
+
+    @Resource(name = "deptServiceImpl")
+    private DeptService deptService;
+
+    @Resource(name = "roleServiceImpl")
+    private RoleService roleService;
+
+    @Resource(name = "safeMgrDaoImpl")
+    private SafeMgrDao safeMgrDao;
+
+    @Resource(name = "staffDaoImpl")
+    private StaffDao staffDao;
+
+    @Resource(name = "rightServiceImpl")
+    private RightService rightService;
+
+    @Override
+    public List<Staff> getStaffsByDeptAndRole(Long roleId, Long deptId) {
+        List<Staff> staffs = new ArrayList<Staff>();
+        Role role = roleService.find(roleId);
+        Dept dept = deptService.find(deptId);
+        if (role != null && dept != null) {
+            Set<Staff> staffsRole = role.getStaffs();
+            Set<Staff> staffsDept = dept.getStaffs();
+            for (Staff staff : staffsDept) {
+                if (staffsRole.contains(staff) && !staff.getIsDel()) {
+                    staffs.add(staff);
+                }
+            }
+        }
+        return staffs;
+    }
+
+    @Override
+    public List<Staff> getStaffsByRole(Long roleId) {
+        List<Staff> staffs = new ArrayList<Staff>();
+        Role role = roleService.find(roleId);
+        Set<Staff> staffsRole = role.getStaffs();
+        for (Staff staff : staffsRole) {
+            if (!staff.getIsDel()) {
+                staffs.add(staff);
+            }
+        }
+        return staffs;
+    }
+
+    @Override
+    public List<Map> getTreeList(Long id, String path) {
+        List<Filter> filters = new ArrayList<Filter>();
+        List<Order> orders = new ArrayList<Order>();
+        orders.add(Order.asc("seq"));
+        filters.add(Filter.eq("isDel", 0));
+        boolean init = false;
+        if (id == null || id == -1) {
+            filters.add(Filter.isNull("parent"));
+            init = true;
+        } else {
+            filters.add(Filter.eq("parent", id));
+        }
+        List<Dept> list = deptService.findList(null, filters, orders);
+        List<Map> listMap = new ArrayList<Map>();
+        for (Dept dept : list) {
+            Map temp = beanToMap(dept, path, true);
+            if (init) {
+                Set<Dept> set = dept.getChildren();
+                List<Map> children = new ArrayList<Map>();
+                for (Dept child : set) {
+                    if (!child.getIsDel()) {
+                        children.add(beanToMap(child, path, false));
+                    }
+                }
+                temp.put("children", children);
+            }
+            listMap.add(temp);
+        }
+        return listMap;
+    }
+
+    @Override
+    public List<Map> getAsyncTreeList(Map<String, Object> param, String path, Long userId) {
+        Long id = MapUtil.getLong(param, "id");
+        String limit = MapUtil.getString(param, "limit");
+        if (StringUtil.checkObj(limit)) {
+            if (id == null) {
+                Staff staff = staffService.find(userId);
+                Dept deptTemp = staff.getDept();
+                String deptPath = deptTemp.getPath();
+                //非一级节点的只能选择其所在的二级节点及以下
+                if (deptPath.split("/").length >= 3) {
+                    Long deptId = deptTemp.getId();
+                    if (deptPath.split("/").length >= 4) {
+                        deptId = Long.parseLong(deptPath.split("/")[3]);
+                    }
+                    Dept dept = deptService.find(deptId);
+                    Map map = beanToMap(dept, path, false);
+                    List<Map> listMap = new ArrayList<Map>();
+                    listMap.add(map);
+                    return listMap;
+                }
+            }
+        }
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("isDel", 0));
+        List<Order> orders = new ArrayList<Order>();
+        orders.add(Order.asc("seq"));
+        boolean init = false;
+        if (id == null || id == -1) {
+            filters.add(Filter.isNull("parent"));
+            init = true;
+        } else {
+            filters.add(Filter.eq("parent", id));
+        }
+        List<Dept> list = deptService.findList(null, filters, orders);
+        List<Map> listMap = new ArrayList<Map>();
+        for (Dept dept : list) {
+            Map temp = beanToMap(dept, path, true);
+            if (init) {
+                Set<Dept> set = dept.getChildren();
+                List<Map> children = new ArrayList<Map>();
+                for (Dept child : set) {
+                    if (!child.getIsDel()) {
+                        children.add(beanToMap(child, path, false));
+                    }
+                }
+                temp.put("children", children);
+            }
+            listMap.add(temp);
+//            listMap.add(beanToMap(dept, path, false));
+        }
+        return listMap;
+    }
+
+    private Map beanToMap(Dept dept, String path, boolean isOpen) {
+        Long pId = dept.getParent() == null ? -1 : dept.getParent().getId();
+        Map<String, Object> temp = new HashMap<String, Object>();
+        temp.put("open", isOpen);
+        temp.put("id", dept.getId());
+        temp.put("name", dept.getName());
+//        temp.put("name", dept.getShortName());
+        Set<Dept> set = dept.getChildren();
+        boolean isParent = false;
+        for (Dept child : set) {
+            if (!child.getIsDel()) {
+                isParent = true;
+                break;
+            }
+        }
+        temp.put("isParent", isParent);
+        temp.put("remark", dept.getRemark());
+        temp.put("code", dept.getCode());
+        temp.put("typeName", dept.getTypeName());
+        temp.put("path", dept.getPath());
+        temp.put("levelName", dept.getLevelName());
+        temp.put("pId", pId);
+        temp.put("iconOpen", path + "/resources/ztree/zTreeStyle/img/diy/1_open.png");
+        temp.put("iconClose", path + "/resources/ztree/zTreeStyle/img/diy/1_close.png");
+        return temp;
+    }
+
+
+    @Override
+    public void delRoleRight(Map<String, Object> param) {
+        Long roleId = MapUtil.getLong(param, "roleId");
+        Role role = roleService.find(roleId);
+        Set<Right> rightSet = role.getRights();
+        String[] idsArr = MapUtil.getString(param, "ids").split(",");
+        List<Right> rightList = new ArrayList<Right>();
+        for (int i = 0; i < idsArr.length; i++) {
+            Long id = Long.parseLong(idsArr[i]);
+            rightList.add(rightService.find(id));
+        }
+        for (Right right : rightList) {
+            if (rightSet.contains(right)) {
+                String targetPath = right.getPath() + right.getId() + "/";
+                Set<Right> delRights = new HashSet<>();
+                delRights.add(right);
+                for (Right child : rightSet) {
+                    String childPath = child.getPath();
+                    if (childPath.contains(targetPath)) {
+                        delRights.add(child);
+                    }
+                }
+                rightSet.removeAll(delRights);
+            }
+        }
+        role.setRights(rightSet);
+        roleService.update(role);
+    }
+
+    @Override
+    public void delRoleStaff(Long roleId, Long[] staffIds) {
+        safeMgrDao.delRoleStaff(roleId, staffIds);
+    }
+
+    @Override
+    public Page<Map> findPageByDeptOrRole(Map<String, Object> param) {
+        return safeMgrDao.findPageByDeptOrRole(param);
+    }
+
+    @Override
+    public String getPathNameByPathId(String pathIds, Long selfDeptId) {
+        StringBuffer sb = new StringBuffer();
+
+        if (StringUtil.isNotBlank(pathIds)) {
+            String[] pathIdArray = pathIds.split("/");
+
+            if (pathIdArray != null && pathIdArray.length > 1) {
+                List<Long> ids = new ArrayList<>();
+                for (int i = 1; i < pathIdArray.length; i++) {
+                    ids.add(Long.valueOf(pathIdArray[i]));
+                }
+
+                ids.add(selfDeptId);
+
+                List<Filter> filters = new ArrayList<>();
+                filters.add(Filter.in("id", ids));
+
+                List<Order> orders = new ArrayList<Order>();
+                orders.add(Order.asc("path"));
+
+                List<Dept> depts = deptService.findList(null, filters, orders);
+                if (CollectionUtil.isNotEmpty(depts)) {
+
+                    for (Dept dept : depts) {
+                        sb.append("/" + dept.getShortName());
+                    }
+                }
+            }
+
+        }
+
+        return sb.toString();
+    }
+
+
+    @Override
+    public List<Right> getRoleRight(Long staffId) {
+        Staff staff = staffDao.find(staffId);
+        Set<Role> roles = staff.getRoles();
+        if (roles == null) {
+            return null;
+        }
+        Set<Right> rightSet = new HashSet<Right>();
+        for (Role role : roles) {
+            rightSet.addAll(role.getRights());
+        }
+        return new ArrayList<Right>(rightSet);
+    }
+
+    @Override
+    public List<Right> getRoleMenuRight(Long userId) {
+        Set<Right> rightSet = null;
+        Staff staff = staffDao.find(userId);
+        Set<Role> roles = staff.getRoles();
+        if (roles == null) {
+            return null;
+        }
+        rightSet = new HashSet<Right>();
+        for (Role role : roles) {
+            rightSet.addAll(role.getRights());
+        }
+        List<Right> notMenuRights = new ArrayList<>();
+        for (Right right : rightSet) {
+            if (right.getType() != 1) {
+                notMenuRights.add(right);
+            }
+        }
+        rightSet.removeAll(notMenuRights);
+        List<Right> rights = buildTree(rightSet);
+        Collections.sort(rights, new Comparator<Right>() {
+            public int compare(Right arg0, Right arg1) {
+                return arg0.getSeq().compareTo(arg1.getSeq());
+            }
+        });
+        return rights;
+    }
+
+    /**
+     * 构建树结构
+     *
+     * @param rights
+     * @return
+     */
+    private List<Right> buildTree(Set<Right> rights) {
+        List<Right> tree = new ArrayList<Right>();
+        List<Right> list = new ArrayList<Right>();
+        Iterator<Right> it = rights.iterator();
+        while (it.hasNext()) {
+            Right right = it.next();
+            right.setChildren(null);
+            list.add(right);
+        }
+        it = list.iterator();
+        while (it.hasNext()) {
+            Right right = it.next();
+            if (right == null) {
+                continue;
+            }
+            setChildren(right, list);
+        }
+        it = list.iterator();
+        while (it.hasNext()) {
+            Right right = it.next();
+            if (right != null) {
+                tree.add(right);
+            }
+        }
+        return tree;
+    }
+
+    /**
+     * 设置当前节点的子节点
+     *
+     * @param right
+     * @param rights
+     */
+    private void setChildren(Right right, List<Right> rights) {
+        Long id = right.getId();
+        for (int i = 0, s = rights.size(); i < s; i++) {
+            Right temp = rights.get(i);
+            if (temp == null) {
+                continue;
+            }
+            Long pid = (temp.getParent() != null ? temp.getParent().getId() : null);
+            // 临时节点的父节点id与当前节点相等，则为当前节点的子节点
+            if (id != null && id == pid) {
+                // 递归设置子节点
+                setChildren(temp, rights);
+                if (right.getChildren() == null) {
+                    right.setChildren(new HashSet<Right>());
+                }
+                right.getChildren().add(temp);
+                rights.set(i, null);
+            }
+        }
+    }
+
+    @Override
+    public Map<String, Object> getRightTree(Long id, Long roleId) {
+        /************** 过滤条件 ********************************/
+        List<Filter> filters = new ArrayList<Filter>();
+        if (id == null || id == -1) {
+            filters.add(new Filter("parent", Filter.Operator.isNull, ""));
+        } else {
+            filters.add(new Filter("parent", Filter.Operator.eq, id));
+        }
+        List<Order> orders = new ArrayList<Order>();
+        orders.add(Order.asc("seq"));
+        List<Right> rightList = rightService.findList(null, filters, orders);
+        Set<Right> rightSet = null;
+        if (roleId != null) {
+            Role role = roleService.find(roleId);
+            if (role == null) {
+                rightSet = new HashSet<Right>();
+            } else {
+                rightSet = role.getRights();
+            }
+        }
+        List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
+        List<Right> roleRightList = new ArrayList<Right>();
+        if (rightSet != null) {
+            for (Right right : rightList) {
+                if (rightSet.contains(right)) {
+                    roleRightList.add(right);
+                }
+            }
+            rightList = roleRightList;
+        }
+        for (Right right : rightList) {
+            int childSize = right.getChildren().size();
+            Map<String, Object> temp = new HashMap<String, Object>();
+            temp.put("id", right.getId());
+            temp.put("name", right.getName());
+            temp.put("url", right.getUrl());
+            temp.put("seq", right.getSeq());
+            temp.put("type", right.getType());
+            temp.put("permission", right.getPermission());
+            temp.put("remark", right.getRemark());
+            temp.put("isEnabled", right.getIsEnabled());
+            // 如果该节点包含子节点，则state为closed，否则为open
+            temp.put("state", childSize == 0 ? "open" : "closed");
+            maps.add(temp);
+        }
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("content", maps);
+        return result;
+    }
+
+    @Override
+    public int deleteRole(Long id) {
+        String sql = "SELECT * FROM T_HR_ROLE_REL_RIGHT WHERE I_ROLE_ID = " + id;
+        if (safeMgrDao.countBySql(sql, null) != 0) {
+            return 1;
+        }
+        String sql2 = "SELECT * FROM T_HR_STAFF_REL_ROLE WHERE I_ROLE_ID = " + id;
+        if (safeMgrDao.countBySql(sql2, null) != 0) {
+            return 2;
+        }
+        roleService.delete(id);
+        return 0;
+    }
+
+
+    @Override
+    public List<Map> asyncRoleTreeList(Long id) {
+        List<Filter> filters = new ArrayList<Filter>();
+        List<Order> orders = new ArrayList<Order>();
+        orders.add(Order.asc("createDate"));
+        boolean init = false;
+        if (id == null || id == -1) {
+            filters.add(Filter.isNull("parent"));
+            init = true;
+        } else {
+            filters.add(Filter.eq("parent", id));
+        }
+        List<Role> list = roleService.findList(null, filters, orders);
+        List<Map> listMap = new ArrayList<Map>();
+        for (Role role : list) {
+            Map temp = new HashMap<>();
+            temp.put("isParent", role.getChildren().size() != 0);
+            temp.put("remark", role.getRemark());
+            temp.put("name", role.getName());
+            temp.put("id", role.getId());
+            temp.put("pId", id == null ? -1 : id);
+            listMap.add(temp);
+        }
+        if(init){
+            Map father = new HashMap<>();
+            father.put("id", -1);
+            father.put("open", true);
+            father.put("name", "角色树");
+            father.put("isParent", true);
+            father.put("children", listMap);
+            List<Map> fatherList = new ArrayList<Map>();
+            fatherList.add(father);
+            return fatherList;
+        }
+        return listMap;
+    }
+
+    @Override
+    public Page<Map> getEnumGroup(Map<String, Object> param) {
+        Integer pageNo = MapUtil.getInteger(param, "pageNo", 1);
+        Integer pageSize = MapUtil.getInteger(param, "pageSize", 20);
+        String tblName = MapUtil.getString(param, "tblName");
+        String colName = MapUtil.getString(param, "colName");
+        Map<String, Object> params = new HashMap<>();
+        String sql = "select * from ( SELECT DISTINCT a.S_ENUM_TBL_NAME as 'enumTblName', a.S_ENUM_COL_NAME as 'enumColName' FROM T_WHS_ENUM_TBL a where 1=1 ";
+        if(StringUtil.checkObj(tblName)){
+            sql += " and S_ENUM_TBL_NAME like :tblName";
+            params.put("tblName", "%" + tblName + "%");
+        }
+        if(StringUtil.checkObj(colName)){
+            sql += " and S_ENUM_COL_NAME like :colName";
+            params.put("colName", "%" + colName + "%");
+        }
+        sql += ") t";
+        Page<Map> pageMap = safeMgrDao.findPageBySql(sql, params, new Pageable(pageNo, pageSize), Map.class);
+        List<Map> listMap = new ArrayList<>();
+        int begin = -(pageNo-1) * pageSize - 1;
+        for(Map temp : pageMap.getContent()){
+            temp.put("id", begin--);
+            temp.put("state", "closed");
+            listMap.add(temp);
+        }
+        pageMap.setContent(listMap);
+        return  pageMap;
+    }
+
+    @Override
+    public boolean canSignBack(Staff staff) {
+        staff = staffService.find(staff.getId());
+        Role role = roleService.find(145L);//普通管理员
+        if(role == null){
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("name", "普通管理员"));
+            List<Role> roles = roleService.findList(1, filters, null);
+            role = roles.size() != 0 ? roles.get(0) : null;
+        }
+        if(role == null){
+            return true;
+        }else {
+            return staff.getRoles().contains(role);
+        }
+    }
+
+    @Override
+    public Role findRoleByCode(String code) {
+        if(StringUtil.checkObj(code)){
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("code", code));
+            List<Role> roles = roleService.findList(1, filters, null);
+            if(roles.size() >= 1){
+                return roles.get(0);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean checkRoleContainsStaffByCode(String code, Staff staff) {
+        if(StringUtil.checkObj(code)){
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("code", code));
+            List<Role> roles = roleService.findList(1, filters, null);
+            if(roles.size() >= 1){
+                return roles.get(0).getStaffs().contains(staff);
+            }
+        }
+        return false;
+    }
+}

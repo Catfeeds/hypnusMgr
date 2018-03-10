@@ -1,0 +1,61 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/*---*/
+table{ border-collapse:collapse; width:100%;}
+.floatLeft{ float:left;}
+.floatRight{ float:right;}
+.textRed{ color:#ff4d4d;}
+.bgRed{ background:#fa4b89;}
+.bgYellow{ background:#ff934b;}
+.bgBlue{ background:#4bb2fa;}
+
+
+/*-------头部-------*/
+.head{ height:47px; position:fixed; top:0; left:0; width:100%; z-index:999; background:#fff; border-bottom:1px solid #dcdcdc;}
+.top-left{ position:absolute;width:38px;height:38px;top:6px;left:0%;font-size:18px;color:#FFF;}
+.top-left img{width:26px; height:26px;}
+
+.top-right{ position:absolute;width:38px;height:38px;top:6px;right:8px;font-size:18px;color:#FFF; }
+.top-right-text{ position:absolute;width:50px;height:38px;top:6px;right:8px;font-size:15px;color:#fff; }
+.top-right img{width:30px; height:30px;}
+.top-right02{ position:absolute;width:38px;height:38px;top:6px;right:52px;font-size:18px;color:#FFF;}
+.top-right02 img{width:30px; height:30px;}
+.top-right03{ position:absolute;width:38px;height:38px;top:6px;right:94px;font-size:18px;color:#FFF;}
+.top-right03 img{width:30px; height:30px;}
+.top-right:hover{opacity:0.7;}
+.top-right_send{float:right; position:absolute; width:100px; height:40px; top:4px; right:5px; font-size:18px; color:#fff; text-align:center; line-height:40px; background:#8bcc46;}
+.head h1{width:100%; font-size:18px;color:#323232;margin:0px auto; line-height:46px; text-align:center; border-bottom:1px solid #e5e5e5;position:absolute;  border-bottom:none; color:#222;}
+
+/*------提现记录-----*/
+.tixianjilu{}
+.tixianDiv{ border-bottom:1px solid #e5e5e5; background:#fff; height:90px; padding:5px 20px; margin-bottom:8px; cursor:pointer;}
+.tixianDiv h1{ height:30px; line-height:30px; color:#333; letter-spacing:1px; font-size:14px;}
+.tixianDiv h1 font{ color:#fa4b89;}
+span.jindu{ width:60px; height:22px; line-height:22px; text-align:center; color:#fff; font-size:12px; border-radius:8px; display:block; float:left; margin-top:3px;}
+
+
+
+/*------提现详情-----*/
+.tixian{}
+.card{ padding:10px 5%;}
+.card img{ width:100%;}
+.detail{}
+.detail h1{ height:30px; line-height:30px; font-size:14px; color:#222; background:#fff; padding:0 3%;}
+.detail h1 font{ font-size:16px; color:#fa4b89;}
+.data{ position:relative; padding:10px 10px 0 50px; background:#fff;}
+.line{ position:absolute; top:0; left:8px; width:15px; height:72px; border-right:1px solid #ccc;}
+.point{ position:absolute; top:22px; left:18px; width:11px; height:11px; background:#ccc; border-radius:15px;}
+.lineTop{ position:absolute; top:20px; left:8px; width:15px; height:60px; border-right:1px solid #ccc;}
+.pointTop{ position:absolute; top:16px; left:13px; width:20px; height:20px;}
+.when{ border-bottom:1px solid #e5e5e5; padding-bottom:10px;}
+.when h3{ height:30px; line-height:30px; color:#fa4b89; font-size:17px;}
+.when h4{ height:20px; line-height:20px; color:#999; font-size:12px;}
+.when span{ width:60px; height:22px; line-height:20px; text-align:center; color:#fff; font-size:14px; border-radius:8px; display:block; float:right; margin-top:3px;}
+
+
+/*------提现说明-----*/
+.tixianshuoming{}
+.tixianshuoming p{ padding:10px 10px 0 10px; font-size:12px; color:#999; text-indent:24px;}
+.tixianshuoming p font{ color:#666; font-weight:bold;}

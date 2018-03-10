@@ -1,0 +1,59 @@
+package com.catt.wfx.web.controller.guest;
+
+import com.catt.common.base.service.security.RSAService;
+import com.catt.common.util.crypto.RSAUtils;
+import com.catt.common.web.controller.BaseController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Map;
+
+/**
+ * Created by houhuateng on 2016/3/25.
+ */
+@RequestMapping("/guest/appPage")
+@Controller("AppPageController")
+public class AppPageController extends BaseController {
+    /**
+     * 私钥Base64文本
+     */
+    @Value("${system.rsa.key.public}")
+    private String pubKey;
+    @Resource(name = "rsaWebServiceImpl")
+    private RSAService rsaService;
+
+    /**
+     * 获取固定RSA公钥
+     *
+     * @return
+     */
+    @RequestMapping(value = "/key", method = RequestMethod.GET)
+    @ResponseBody
+    public Map getKey(Model model) {
+        PublicKey publicKey = null;
+        try {
+            publicKey = RSAUtils.genPublicKey(pubKey);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+
+        RSAPublicKey rsaPublicKey = (RSAPublicKey) publicKey;
+        Map map = rsaService.getModulusAndExponent(rsaPublicKey);
+        return map;
+    }
+
+}

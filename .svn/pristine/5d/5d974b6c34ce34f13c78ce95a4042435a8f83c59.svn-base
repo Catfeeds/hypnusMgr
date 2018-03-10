@@ -1,0 +1,125 @@
+package com.catt.wfx.repository.dao.productMgr.impl;
+
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductPriceDao;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+import org.springframework.stereotype.Repository;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Repository("productPriceDaoImpl")
+public class ProductPriceDaoImpl extends BaseDaoImpl<ProductPrice, Long>
+        implements ProductPriceDao {
+
+    @Override
+    public void deleteByProductId(Long productId) {
+        String sql = "DELETE FROM T_PRODUCT_PRICE WHERE I_PRODUCT_ID = :productId ";
+        Map<String, Object> params = new HashMap<>();
+        params.put("productId", productId);
+        this.executeUpdateBySql(sql, params);
+    }
+
+    @Override
+    public List<Map> findListByProductId(Long productId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ID AS \"id\", ");
+        sql.append(" a.I_PRODUCT_ID AS \"productId\", ");
+        sql.append(" a.S_SPEC_JSON AS \"specJson\", ");
+        sql.append(" a.I_SALES_PRICE AS \"salesPrice\", ");
+        sql.append(" a.I_COST_PRICE AS \"costPrice\", ");
+        sql.append(" a.I_GENERAL_AGENT AS \"generalAgent\", ");
+        sql.append(" a.I_PROVINCIAL_AGENT AS \"provincialAgent\", ");
+        sql.append(" a.I_CITY_AGENT AS \"cityAgent\", ");
+        sql.append(" a.I_REGIONAL_AGENT AS \"regionalAgent\", ");
+        sql.append(" a.I_PROFIT AS \"profit\", ");
+        sql.append(" a.I_STOCK_NUM AS \"stockNum\", ");
+        sql.append(" b.S_ZH_NAME AS \"zhName\" ");
+        sql.append(" FROM T_PRODUCT_PRICE a ");
+        sql.append(" LEFT JOIN T_PRODUCT_INFO b ON a.I_PRODUCT_ID = b.I_ID ");
+        sql.append(" WHERE 1=1 ");
+        sql.append(" AND a.I_PRODUCT_ID = " + productId);
+        Map param = new HashMap<>();
+        param.put("productId", productId);
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    /**
+     * 获取商品对应的价格信息
+     *
+     * @param productIds 商品标识集合
+     * @return
+     */
+     public List<Map> findProductPriceByProductId(List<Long> productIds){
+         StringBuffer sql = new StringBuffer();
+         sql.append(" SELECT ");
+         sql.append(" t1.I_PRODUCT_ID AS \"productId\", ");
+         sql.append(" MIN(t1.I_SALES_PRICE)AS \"salesPrice\", ");
+         sql.append(" MIN(t1.I_GENERAL_AGENT) AS \"generalAgent\", ");
+         sql.append(" MIN(t1.I_PROVINCIAL_AGENT) AS \"provincialAgent\", ");
+         sql.append(" MIN(t1.I_CITY_AGENT) AS \"cityAgent\", ");
+         sql.append(" MIN(t1.I_REGIONAL_AGENT) AS \"regionalAgent\", ");
+//         sql.append(" MAX(t1.I_PROFIT) AS \"profit\", ");
+         sql.append(" SUM(t1.I_STOCK_NUM) AS \"totalStockNum\" ");
+         sql.append(" FROM T_PRODUCT_PRICE t1 ");
+         sql.append(" WHERE 1=1 ");
+         sql.append(" AND t1.I_PRODUCT_ID IN (:productIds)");
+         Map param = new HashMap<>();
+         param.put("productIds", productIds);
+
+         sql.append("GROUP by t1.I_PRODUCT_ID");
+         return this.findListBySql(sql.toString(), param, Map.class);
+
+
+     }
+
+    @Override
+    public List<Map> findList4Activity(Long activityId, Long productId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ID AS \"priceId\", ");
+        sql.append(" a.I_PRODUCT_ID AS \"productId\", ");
+        sql.append(" a.S_SPEC_JSON AS \"specJson\", ");
+        sql.append(" a.I_SALES_PRICE AS \"salesPrice\", ");
+//        sql.append(" a.I_COST_PRICE AS \"costPrice\", ");
+        sql.append(" a.I_PROFIT AS \"profit\", ");
+        sql.append(" a.I_STOCK_NUM AS \"stockNum\", ");
+        sql.append(" b.I_ID AS \"id\", ");//特卖数量
+        sql.append(" b.I_ACTSALE_NUM AS \"actsaleNum\", ");//特卖数量
+        sql.append(" b.I_ACTSALE_REALNUM AS \"actsaleRealnum\", ");//特卖销售数量
+        sql.append(" b.I_PROFIT AS \"actProfit\", ");//特卖利润
+        sql.append(" b.I_SALES_PRICE AS \"actSalesPrice\", ");//特卖价格
+        sql.append(" a.I_REBATE_ONE AS \"rebateOne_pro\", ");//商品一级返利
+        sql.append(" a.I_REBATE_TWO AS \"rebateTwo_pro\", ");//商品二级返利
+        sql.append(" a.I_REBATE_THREE AS \"rebateThree_pro\", ");//商品三级返利
+        sql.append(" a.I_REBATE_FOUR AS \"rebateFour_pro\", ");//商品四级返利
+        sql.append(" a.I_REBATE_FIVE AS \"rebateFive_pro\", ");//商品五级返利
+        sql.append(" b.I_REBATE_ONE AS \"rebateOne_spe\", ");//特卖一级返利
+        sql.append(" b.I_REBATE_TWO AS \"rebateTwo_spe\", ");//特卖二级返利
+        sql.append(" b.I_REBATE_THREE AS \"rebateThree_spe\", ");//特卖三级返利
+        sql.append(" b.I_REBATE_FOUR AS \"rebateFour_spe\", ");//特卖四级返利
+        sql.append(" b.I_REBATE_FIVE AS \"rebateFive_spe\" ");//特卖五级返利
+        sql.append(" FROM T_PRODUCT_PRICE a ");
+        sql.append(" LEFT JOIN T_ACTIVITY_PRODUCT_REL b ON a.I_ID = b.I_PRICE_ID ");
+        sql.append(" AND b.I_ACT_ID = " + activityId);
+        sql.append(" WHERE 1=1 ");
+        sql.append(" AND a.I_PRODUCT_ID = " + productId);
+        List<Map> list = this.findListBySql(sql.toString(), null, Map.class);
+
+        //根据规格排序
+        Collections.sort(list, new Comparator<Map>() {
+            public int compare(Map o1, Map o2) {
+                String str1 = MapUtil.getString(o1, "specJson", "");
+                String str2 = MapUtil.getString(o2, "specJson", "");
+                return str1.compareTo(str2);
+            }
+        });
+        return list;
+    }
+}

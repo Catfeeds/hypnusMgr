@@ -1,0 +1,48 @@
+package com.catt.wfx.service.cusAccount;
+
+
+import com.catt.wfx.repository.entity.customerMgr.SettlementPushRecord;
+import com.catt.wfx.repository.form.customerMgr.CusAccountHandlerBackData;
+import com.catt.wfx.repository.form.customerMgr.CusAccountHandlerForm;
+
+/**
+ * 用户账号资金相关操作服务接口
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2016-9-18 15:23:05
+ */
+public interface CusAccountHandlerService {
+
+
+    /**
+     * 用户账号资金操作
+     *
+     * @param cusAccountHandlerForm 用户账号资金操作参数实体
+     */
+    CusAccountHandlerBackData handleMoney(CusAccountHandlerForm cusAccountHandlerForm);
+
+    /**
+     * 处理用户账号待收提成
+     *
+     * @param cusId           用户标识
+     * @param money           相关金额 （支付成功+、退货-、提成到账后-）
+     * @param orderId         订单标识
+     * @param accountDetailId 账户明细记录标识（类型提成到账才不为空）
+     * @param type            操作类型（1-店主待收提成(+)（支付成功后操作） 3-店主提成到账 5-店主待收退货）
+     */
+    void handelUnAcceptMoney(Long cusId, Double money, Long orderId, Long accountDetailId, SettlementPushRecord.Type type);
+
+    /**
+     * 处理用户账号厂家返利未到账
+     *
+     * @param cusId           用户标识
+     * @param money           相关金额 （支付成功+、退货-、提成到账后-）
+     * @param orderId         订单标识
+     * @param accountDetailId 账户明细记录标识（类型提成到账才不为空）
+     * @param type            操作类型 （2-厂家返利待收(+)（支付成功后操作）4-厂家返利到账 6-厂家待收提成退货）
+     */
+    void handelReciveRebateMoney(Long cusId, Double money, Long orderId, Long accountDetailId,
+                                 SettlementPushRecord.Type type, Integer rebateLevel);
+
+}

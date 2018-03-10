@@ -1,0 +1,20 @@
+package com.catt.wfx.service.pub;
+
+/**
+ * URL相关服务接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/4/6
+ */
+public interface UrlService {
+
+    /**
+     * 获取微信商城商品详情链接
+     *
+     * @param cusId     用户标识
+     * @param productId 商品标识
+     * @return
+     */
+    String getWXProductDetailUrl(Long cusId, Long productId);
+}

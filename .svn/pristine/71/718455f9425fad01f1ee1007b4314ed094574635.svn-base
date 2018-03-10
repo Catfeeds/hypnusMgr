@@ -1,0 +1,164 @@
+package com.catt.wfx.service.impl.pub;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.util.net.HttpUtil;
+import com.catt.wfx.repository.entity.customerMgr.CusShop;
+import com.catt.wfx.service.base.customerMgr.CusShopBaseService;
+import com.catt.wfx.service.pub.UrlService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * URL相关服务接口实现
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/4/6
+ */
+@Service("urlServiceImpl")
+public class UrlServiceImpl implements UrlService {
+
+    // 店铺信息表服务
+    @Resource(name = "cusShopBaseServiceImpl")
+    private CusShopBaseService cusShopBaseService;
+
+    /**
+     * 微信商城域名地址
+     */
+    @Value("${wechat.domain.url}")
+    private String wechatUrl;
+
+    /**
+     * 微信商城域名地址
+     */
+    @Value("${convert.url.baidu}")
+    private String convertUrlBaidu;
+
+    /**
+     * 微信商城域名地址
+     */
+    @Value("${convert.url.50r}")
+    private String convertUrl50r;
+
+    /**
+     * 获取微信商城商品详情链接
+     * 成功生成短网址，则返回短网址，如无法生成，则返回长网址
+     *
+     * @param cusId     用户标识
+     * @param productId 商品标识
+     * @return
+     */
+    @Override
+    @Cacheable(value = "wxProductDetailUrCache", key = "#productId + ',' + #cusId")
+    public String getWXProductDetailUrl(Long cusId, Long productId) {
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("cusId", cusId));
+        List<CusShop> list = cusShopBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(list)) {
+            Long shopId = list.get(0).getId(); // 店铺标识
+            String url = wechatUrl + "/admin/wechat/product/detail.html?id=" + productId + "&shopId=" + shopId;
+            String shortUrl = "";
+
+            try {
+                shortUrl = getShortUrlByBaidu(url);
+                if (StringUtil.isNotEmpty(shortUrl)) {
+                    return shortUrl;
+                }
+
+                shortUrl = getShortUrlBy50r(url);
+                if (StringUtil.isNotEmpty(shortUrl)) {
+                    return shortUrl;
+                }
+            } catch (Exception e) { // 如发生异常则，返回原始长链接地址
+                return url;
+            }
+
+            // 如都无法转换，返回原始长链接地址
+            return url;
+        } else {
+            throw BaseException.errorByErrInfo("店主店铺不存在");
+        }
+
+    }
+
+    /**
+     * 生成短网址
+     * 请求：向http://dwz.cn/create.php发送post请求，发送数据包括url=长网址
+     * 返回：json格式的数据
+     * status!=0 出错，查看err_msg获得错误信息（UTF-8编码）
+     * 成功，返回生成的短网址 tinyurl字段
+     *
+     * @return
+     * @throws Exception
+     */
+    public String getShortUrlByBaidu(String url) throws Exception {
+        url = URLEncoder.encode(url, "UTF-8");
+        String result = HttpUtil.post(convertUrlBaidu, "url=" + url);
+
+        Map map = JsonUtils.toObject(result, Map.class);
+        Integer status = MapUtil.getInteger(map, "status", -1);
+        if (status == 0) {
+            return MapUtil.getString(map, "tinyurl");
+        }
+
+        return "";
+    }
+
+    /**
+     * 生成短网址
+     * 请求：向http://50r.cn/urls/add.json发送get请求，发送数据包括url=长网址
+     * 返回：json格式的数据
+     * error为空时成功，返回生成的短网址url字段
+     *
+     * @return
+     * @throws Exception
+     */
+    public String getShortUrlBy50r(String url) throws Exception {
+        url = URLEncoder.encode(url, "UTF-8");
+        String result = HttpUtil.get(convertUrl50r + "?url=" + url);
+
+        Map map = JsonUtils.toObject(result, Map.class);
+        String error = MapUtil.getString(map, "error");
+        if (StringUtil.isEmpty(error)) {
+            return MapUtil.getString(map, "url");
+        }
+
+        return "";
+    }
+
+    public String getWechatUrl() {
+        return wechatUrl;
+    }
+
+    public void setWechatUrl(String wechatUrl) {
+        this.wechatUrl = wechatUrl;
+    }
+
+    public String getConvertUrl50r() {
+        return convertUrl50r;
+    }
+
+    public void setConvertUrl50r(String convertUrl50r) {
+        this.convertUrl50r = convertUrl50r;
+    }
+
+    public String getConvertUrlBaidu() {
+        return convertUrlBaidu;
+    }
+
+    public void setConvertUrlBaidu(String convertUrlBaidu) {
+        this.convertUrlBaidu = convertUrlBaidu;
+    }
+}

@@ -1,0 +1,66 @@
+package com.catt.wfx.web.controller.admin.wechat;
+
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.WebUtil;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import com.catt.wfx.web.controller.pub.CommonController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * Description:微信支付页面管理
+ * date: 2016年6月15日 15:36:10
+ * author: 袁幸成
+ */
+@Controller
+@RequestMapping("/admin/wechat/weChatPay")
+public class WeChatPayController extends CommonController {
+
+    //订单服务
+    @Resource(name = "cusOrderServiceImpl")
+    public CusOrderService cusOrderService;
+
+    /**
+     * 支付页面
+     *
+     * @param cusId   用户标识
+     * @param model   model
+     * @param shopId  店铺标识
+     * @param orderId 订单标识
+     * @return
+     */
+    @RequestMapping(value = "/pay.html", method = RequestMethod.GET)
+    public String toPay(@CurrentUser Long cusId, Model model, Long shopId, Long orderId, HttpServletRequest request) {
+        Assert.notNull(orderId);
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("cusId", cusId);
+        System.out.println(StringUtil.getIpAddr(request));
+        System.out.println(StringUtil.getIpAddr(WebUtil.getRequest()));
+
+        model.addAttribute("entity", cusOrderService.findOrderInfo(orderId));
+        return "/admin/wechat/order/pay";
+    }
+
+    /**
+     * 跳转支付成功页面
+     *
+     * @return
+     */
+    @RequestMapping(value = "/payOrder.html", method = RequestMethod.GET)
+    public String payOrder(Long orderId, String pwd, String mobileNo, String invitationNo,  @CurrentUser("unionId") String unionId, Model model) throws Exception {
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("passWord", pwd);
+        model.addAttribute("mobileNo", mobileNo);
+        model.addAttribute("invitationNo", invitationNo);
+        model.addAttribute("unionId", encrypt(unionId));
+        return  "/admin/wechat/customerMgr/payOrder";
+    }
+}

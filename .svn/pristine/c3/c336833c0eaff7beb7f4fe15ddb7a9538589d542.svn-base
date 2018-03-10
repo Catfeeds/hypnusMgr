@@ -1,0 +1,43 @@
+package com.catt.wfx.service.productMgr;
+
+
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商品价格定义服务接口
+ * 作者：袁幸成
+ * 时间：2017-1-9 16:33:34
+ */
+public interface ProductPriceService {
+
+    /**
+     * 删除商品关联的价格定义
+     * @param productId 商品标识
+     */
+    void deleteByProductId(Long productId);
+
+    /**
+     * 保存商品关联的价格定义
+     * @param productId 商品标识
+     * @param priceList 价格定义集合
+     */
+    void savePrices(Long productId, List<ProductPrice> priceList);
+
+    /**
+     * 查询商品价格列表
+     * @param productId 商品标识
+     * @return
+     */
+    List<Map> findListByProductId(Long productId);
+
+    /**
+     * 获取套餐价格
+     * @param packageProid 套餐标识
+     * @return
+     */
+    ProductPrice findPackagePrice(Long packageProid);
+}
+

@@ -1,0 +1,92 @@
+package com.catt.wfx.web.controller.admin.customerMgr;
+
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.web.Message;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.entity.customerMgr.CusContact;
+import com.catt.wfx.service.customerMgr.CusContactService;
+import com.catt.wfx.web.controller.pub.CommonController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+
+/**
+ * Description:收货地址控制器
+ * Created by 2017-02-15  9:48.
+ * author: 邹佳
+ */
+@Controller("admin.customerMgr.cusContactController")
+@RequestMapping(value = "/admin/customerMgr/cusContact")
+public class CusContactController extends CommonController {
+
+    // 收货地址服务接口实现
+    @Resource(name = "cusContactServiceImpl")
+    private CusContactService cusContactService;
+
+    /**
+     * 获取收货地址列表（分页）
+     *
+     * @param cusId     客户标识
+     * @param id        地址标识
+     * @param isDefault 是否默认
+     * @param pageable
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getCusContactByPage", method = RequestMethod.GET)
+    public Message getCusContactByPage(@CurrentUser Long cusId, Long id, Integer isDefault, Pageable pageable) {
+        return Message.success("").addResult(cusContactService.getCusContactByPage(cusId, id, isDefault, pageable));
+    }
+
+    /**
+     * 新增/编辑收货地址
+     *
+     * @param cusContact
+     */
+    @ResponseBody
+    @RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
+    public Message saveOrUpdate(@CurrentUser Long createdId, @CurrentUser("name") String createdName, CusContact cusContact) throws Exception {
+        String recipients = decrypt(cusContact.getRecipients());
+        String address = decrypt(cusContact.getAddress());
+        String tel = decrypt(cusContact.getTel());
+        cusContact.setRecipients(recipients);
+        cusContact.setAddress(address);
+        cusContact.setTel(tel);
+        cusContact.setCusId(createdId);
+        cusContact.setCreatedId(createdId);
+        cusContact.setCreatedName(createdName);
+
+        cusContactService.saveOrUpdate(cusContact);
+        return Message.success("");
+    }
+
+    /**
+     * 删除收货地址
+     *
+     * @param id 地址标识
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public Message delete(Long id) {
+        cusContactService.delete(id);
+        return Message.success("");
+    }
+
+    /**
+     * 删除收货地址
+     *
+     * @param id 地址标识
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/setDefaultContact", method = RequestMethod.POST)
+    public Message setDefaultContact(@CurrentUser Long cusId, Long id) {
+        cusContactService.setDefaultContact(id, cusId);
+        return Message.success("");
+    }
+
+}

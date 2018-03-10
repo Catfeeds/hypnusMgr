@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:cache="http://www.springframework.org/schema/cache"
+        xmlns:task="http://www.springframework.org/schema/task"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.1.xsd
+	http://www.springframework.org/schema/cache
+	http://www.springframework.org/schema/cache/spring-cache-4.1.xsd
+	http://www.springframework.org/schema/task
+	http://www.springframework.org/schema/task/spring-task-4.1.xsd"
+        default-lazy-init="true">
+
+    <context:property-placeholder location="classpath*:/system.properties,classpath:/config.properties" ignore-resource-not-found="true"
+                                  ignore-unresolvable="true"/>
+
+
+    <!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
+    <context:component-scan base-package="com.catt.common,com.catt.hypnus">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+
+    <!-- 资源文件加载 -->
+    <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+              <value>classpath:config.properties</value>
+                <value>classpath:system.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <cache:annotation-driven cache-manager="cacheManager"/>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass" value="java.lang.System"/>
+        <property name="targetMethod" value="setProperty"/>
+        <property name="arguments">
+            <list>
+                <value>system.project_name</value>
+                <value>${system.project_name}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:/ehcache.xml"/>
+        <property name="shared" value="true"/>
+    </bean>
+
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehCacheManager"/>
+    </bean>
+
+    <!-- 资源文件 -->
+    <!-- bean的名称必须定义为messageSource  -->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="cacheSeconds" value="${message.cache_seconds}"/>
+        <property name="useCodeAsDefaultMessage" value="true"/>
+        <property name="basenames">
+            <list>
+                <value>classpath:language/message</value>
+                <value>classpath:org/hibernate/validator/ValidationMessages</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 国际化配置 -->
+    <!-- org.springframework.web.servlet.i18n.CookieLocaleResolver -->
+    <!-- org.springframework.web.servlet.i18n.SessionLocaleResolver -->
+    <!-- org.springframework.web.servlet.i18n.FixedLocaleResolver -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="cookieName" value="language"/>
+        <property name="cookieMaxAge" value="94608000"/>
+        <property name="defaultLocale" value="${locale}"/>
+    </bean>
+
+    <!-- 验证码生成器 -->
+    <bean id="fastHashMapCaptchaStore" class="com.octo.captcha.service.captchastore.FastHashMapCaptchaStore"/>
+    <bean id="captchaEngineEx" class=" com.catt.common.service.validator.CaptchaEngine"/>
+    <bean id="imageCaptchaService" class="com.octo.captcha.service.image.DefaultManageableImageCaptchaService">
+        <constructor-arg type="com.octo.captcha.service.captchastore.CaptchaStore" index="0">
+            <ref bean="fastHashMapCaptchaStore"/>
+        </constructor-arg>
+        <constructor-arg type="com.octo.captcha.engine.CaptchaEngine" index="1">
+            <ref bean="captchaEngineEx"/>
+        </constructor-arg>
+        <!--默认生成的图片180秒过期 , 可另行设置-->
+        <constructor-arg index="2">
+            <value>180</value>
+        </constructor-arg>
+        <constructor-arg index="3">
+            <value>100000</value>
+        </constructor-arg>
+        <constructor-arg index="4">
+            <value>75000</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="jsonDataMapper" name="jsonDataMapper" class="com.catt.common.util.json.JsonDataMapping">
+        <constructor-arg>
+            <value>true</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="${task.core_pool_size}"/>
+        <property name="maxPoolSize" value="${task.max_pool_size}"/>
+        <property name="queueCapacity" value="${task.queue_capacity}"/>
+        <property name="keepAliveSeconds" value="${task.keep_alive_seconds}"/>
+    </bean>
+
+    <task:annotation-driven/>
+
+</beans>

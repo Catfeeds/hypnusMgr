@@ -1,0 +1,43 @@
+package com.catt.wfx.web.service.impl;
+
+import com.catt.common.module.wechat.repository.entity.WeChatUserRefBis;
+import com.catt.common.module.wechat.service.WeChatUserRefBisService;
+import com.catt.common.module.wechat.service.WeChatUserService;
+import com.catt.wfx.web.service.MessageHandlerService;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Objects;
+
+/**
+ * @author Zhang zhongtao
+ * @version Ver 1.0
+ * @since JDK V1.8
+ */
+@Service(value = "messageHandlerServiceImpl")
+public class MessageHandlerServiceImpl implements MessageHandlerService {
+    @Resource(name = "weChatUserServiceImpl")
+    private WeChatUserService weChatUserService;
+
+    @Resource(name = "weChatUserRefBizServiceImpl")
+    private WeChatUserRefBisService weChatUserRefBisService;
+
+    @Override
+    @Async
+    public void subscribe(String openId, String publicAccountId) {
+        weChatUserService.subscribe(openId, publicAccountId);
+    }
+
+    @Override
+    @Async
+    public void saveRef(String openId, String publicAccountId, String unionId, String bisId) {
+        weChatUserRefBisService.save(openId, publicAccountId, Objects.toString(bisId), WeChatUserRefBis.BisType.CUS);
+    }
+
+    @Override
+    @Async
+    public void unSubscribe(String openId, String publicAccountId) {
+        weChatUserService.unSubscribe(openId, publicAccountId);
+    }
+}

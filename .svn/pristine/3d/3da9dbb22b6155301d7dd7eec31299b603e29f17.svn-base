@@ -1,0 +1,130 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'dataGridHelp', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar, dataGridHelp) {
+        var $orderTb = null;
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    $orderTb = $('#orderTb');
+                    var params = {}; //搜索条件
+
+                    EventHandler.search();
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $orderTb.dataGridHelp();
+
+                    $(".xw_select").click(function () {
+                        $(".xw_select").removeClass("selectTabs_on");
+                        $(this).addClass("selectTabs_on");
+                        EventHandler.search({pageNo: 1, pageSize: 15})
+                    })
+                    //单选类型
+                    $(".xw_optionUl li").click(function () {
+                        $(".xw_optionUl li").removeClass("on");
+                        $(this).addClass("on");
+                        EventHandler.search();
+                    })
+                    $('#reset').click(EventHandler.reset);
+                    $('#btnExport').click(EventHandler.btnExport);
+                    $('#search').click(function () {
+                        EventHandler.search();
+                    });
+
+
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                // 查询
+                search: function () {
+                    $(".xw_tickAll").removeClass("tickOn");
+
+                    // if (typeof(params) == "undefined") {
+                    //     params = {pageNo: 1, pageSize: 15};
+                    // }
+                    var params={};
+                    params.factoryName = $("#factoryName").val();
+                    // if ($("#startTime").val()) {
+                    //     params.startTime = $("#startTime").val() + " 00:00:00";
+                    // }
+                    // if ($("#endTime").val()) {
+                    //     params.endTime = $("#endTime").val() + " 23:59:59";
+                    // }
+
+                    DataHandler.search(params, function (backData) {
+                        var html = template('listTemp', backData);
+                        $('#list').html(html);
+
+                        //重新设置数据时调用渲染列表方法
+                        $orderTb.dataGridHelp("renderList", backData.content);
+                        //
+                        // var page = params.pageNo;
+                        // var pageSize = params.pageSize;
+                        //
+                        // $('#pageBar').pageBar({
+                        //     total: backData.total,
+                        //     pageNumber: page,
+                        //     pageSize: pageSize
+                        // });
+                        $(window).triggerHandler('resize');
+                    });
+                },
+                /**
+                 * 导出
+                 * @param type
+                 */
+                btnExport: function () {
+                    var factoryId='';
+                    window.location.href = path + "/admin/statisti/order/export?factoryId="+factoryId;
+                },
+                //重置
+                reset: function () {
+                    $('#factoryName').val("");
+                    $("#startTime").val("");
+                    $("#endTime").val("");
+                },
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/statisti/order/statisticsOfOrder', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 确认收货
+                 * @param params  订单标识集合
+                 * @param callback
+                 */
+                confirmDeliver: function (params, callback) {
+                    $.post(path + '/admin/orderMgr/cusOrder/confirmDeliver', params, function (backData) {
+                        callback(backData);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

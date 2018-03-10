@@ -1,0 +1,94 @@
+package com.catt.wfx.web.controller.admin.customerMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.entity.customerMgr.AgentInfo;
+import com.catt.wfx.service.base.customerMgr.AgentInfoBaseService;
+import com.catt.wfx.service.customerMgr.AgentInfoService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * 代理商控制器
+ * 作者：陈楚笙
+ * 时间：2017-04-14
+ */
+@Controller("admin.agentInfoController")
+@RequestMapping(value = "/admin/agentInfo")
+public class AgentInfoController extends BaseController {
+
+    @Resource(name = "agentInfoServiceImpl")
+    private AgentInfoService agentInfoService;
+
+    @Resource(name = "agentInfoBaseServiceImpl")
+    private AgentInfoBaseService agentInfoBaseService;
+
+    /**
+     * 主页
+     */
+    @RequestMapping(value = "/index")
+    public String toIndex() {
+        return "/admin/customerMgr/agentInfo/index";
+    }
+
+
+    /**
+     * 获取分页数据
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = {"/getPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getPage(@RequestParam Map<String, Object> params, Pageable pageable) {
+        return agentInfoService.getPage(params, pageable);
+    }
+
+    /**
+     * 审核通过页面
+     */
+    @RequestMapping(value = "/auditPass/{id}")
+    public String toAuditPass(@PathVariable Long id, Model model) {
+        model.addAttribute("id", id);
+        if(id != null) {
+            AgentInfo entity = agentInfoBaseService.find(id);
+            model.addAttribute("entity", entity);
+        }
+        return "/admin/customerMgr/agentInfo/auditPass";
+    }
+
+    /**
+     * 审核不通过页面
+     */
+    @RequestMapping(value = "/auditFail/{id}")
+    public String toAuditFail(@PathVariable Long id, Model model) {
+        model.addAttribute("id", id);
+        return "/admin/customerMgr/agentInfo/auditFail";
+    }
+
+    /**
+     * 审核
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/audit")
+    @ResponseBody
+    public Message audit(@RequestParam Map<String, Object> params, @CurrentUser("id") Long id) {
+        params.put("userId", id);
+        agentInfoService.audit(params);
+        return SUCCESS_MSG;
+    }
+
+}

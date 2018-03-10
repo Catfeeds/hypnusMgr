@@ -1,0 +1,15 @@
+package com.catt.wfx.service.base.settlementMgr;
+
+import com.catt.common.base.service.BaseService;
+import com.catt.wfx.repository.entity.customerMgr.SettlementPushRecord;
+
+/**
+ * 提成/返利结算记录表服务接口
+ * 
+ * @author 袁幸成
+ * @date 2017-08-22 15:12:48
+ * @version V1.0
+ */
+public interface SettlementPushRecordBaseService extends BaseService<SettlementPushRecord, Long> {
+
+}

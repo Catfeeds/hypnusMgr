@@ -1,0 +1,30 @@
+package com.catt.wfx.service.impl.base.settlementMgr;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementPlanDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlan;
+import com.catt.wfx.service.base.settlementMgr.SettlementPlanBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+/**
+ * 店主/主管结算计划表服务接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-23 11:38:28
+ * @version V1.0
+ */
+@Service("settlementPlanBaseServiceImpl")
+public class SettlementPlanBaseServiceImpl extends
+	BaseServiceImpl<SettlementPlan, Long> implements SettlementPlanBaseService {
+
+	@Resource(name = "settlementPlanDaoImpl")
+	private SettlementPlanDao settlementPlanDao;
+
+	@Resource
+	public void setBaseDao(SettlementPlanDao settlementPlanDao) {
+		super.setBaseDao(settlementPlanDao);
+	}
+
+}

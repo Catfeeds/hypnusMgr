@@ -1,0 +1,42 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>商品查询</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/shangpinxiangqing.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+
+    <script type="text/javascript" src="${path}/resources/js/jingxuan.js"></script>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/product/search.js"></script>
+</head>
+
+<body style="background-color:#f2f2f2;">
+
+<%--
+<div style="height:47px;"></div>
+<div class="head">
+    <button class="top-left" onClick="javascript:history.back(-1);">
+        <img class="top_btn_back" src="${path}/resources/images/top_btn_back.png">
+    </button>
+    <h1>选择分类</h1>
+</div>
+--%>
+
+<div class="shousuo">
+    <span class="shousuoleft">商品名称</span>
+    <input class="searchInputText" id="productName"/>
+    <span class="shousuoleft" style="padding-top: 20px">商品分类</span>
+    <input class="searchInputText" style="margin-top: 20px" id="cate"/>
+</div>
+<input type="hidden" id="cateId">
+<div class="fenlei">
+    <button class="nextBtn1 xw_close" id="searchBtn">
+        搜&nbsp;&nbsp;&nbsp;&nbsp;索
+    </button>
+</div>
+</body>
+</html>

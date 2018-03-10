@@ -1,0 +1,265 @@
+<!DOCTYPE module PUBLIC
+        "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+        "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <property name="severity" value="error"/>
+
+    <!-- 文件长度不超过1500行 -->
+    <module name="FileLength">
+        <property name="max" value="1500" />
+    </module>
+
+    <!-- 禁止使用System.out.println -->
+    <module name="RegexpSingleline">
+        <property name="format" value="(System\.out\.(print|println)|FetchType\.EAGER)" />
+    </module>
+
+    <module name="TreeWalker">
+        <!-- javadoc的检查 -->
+        <!-- 检查所有的interface和class -->
+        <module name="JavadocType">
+            <property name="allowUnknownTags" value="true"/>
+        </module>
+
+        <!-- 命名方面的检查 -->
+        <!-- 局部的final变量，包括catch中的参数的检查 -->
+        <module name="LocalFinalVariableName" />
+        <!-- 局部的非final型的变量，包括catch中的参数的检查 -->
+        <module name="LocalVariableName" />
+        <!-- 包名的检查-->
+        <module name="PackageName"/>
+        <!-- 仅仅是static型的变量（不包括static final型）的检查 -->
+        <module name="StaticVariableName" />
+        <!-- 类型(Class或Interface)名的检查 -->
+        <module name="TypeName" />
+        <!-- 非static型变量的检查 -->
+        <module name="MemberName" />
+        <!-- 方法名的检查 -->
+        <module name="MethodName" />
+        <!-- 方法的参数名 -->
+        <module name="ParameterName " />
+        <!-- 常量名的检查 -->
+        <module name="ConstantName" />
+        <!-- 没用的import检查，比如：1.没有被用到2.重复的3.import java.lang的4.import 与该类在同一个package的 -->
+        <module name="UnusedImports" />
+
+        <!-- 长度方面的检查 -->
+        <!-- 每行不超过160个字-->
+        <module name="LineLength">
+            <property name="max" value="160" />
+            <property name="severity" value="warning"/>
+        </module>
+        <!-- 方法不超过150行 -->
+        <module name="MethodLength">
+            <property name="tokens" value="METHOD_DEF" />
+            <property name="max" value="150" />
+        </module>
+        <!-- 方法的参数个数不超过5个。 并且不对构造方法进行检查-->
+        <module name="ParameterNumber">
+            <property name="max" value="5" />
+            <property name="tokens" value="METHOD_DEF" />
+        </module>
+
+        <!-- 逗号与for语句元素间必须有空格 -->
+        <module name="WhitespaceAfter">
+            <!--<property name="tokens" value="COMMA"/>-->
+            <property name="severity" value="error"/>
+        </module>
+
+        <!-- 除.外的二元运算符前后须有空格 -->
+        <module name="WhitespaceAround">
+            <property name="tokens" value="ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR,BSR_ASSIGN, BXOR_ASSIGN, DIV, DIV_ASSIGN, EQUAL, GE, GT, LAND, LE, LOR, LT, MINUS, MINUS_ASSIGN, MOD, MOD_ASSIGN, NOT_EQUAL, PLUS, PLUS_ASSIGN, SL, SL_ASSIGN, SR, SR_ASSIGN, STAR, STAR_ASSIGN, TYPE_EXTENSION_AND"/>
+            <property name="allowEmptyConstructors" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- 一元运算符在变量后的自增、自减，和.前不能有空格 -->
+        <module name="NoWhitespaceBefore">
+            <property name="tokens" value="DOT, POST_DEC, POST_INC"/>
+            <property name="allowLineBreaks" value="true"/>
+        </module>
+
+        <!-- 一元运算符变量前的自增、自减,.(点)、!(非)、-(负)、+(正)后不能有空格 -->
+        <module name="NoWhitespaceAfter">
+            <property name="tokens" value="DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS"/>
+            <property name="allowLineBreaks" value="true"/>
+        </module>
+
+        <!-- 没有default分支的switch语句 -->
+        <module name="MissingSwitchDefault">
+        </module>
+
+        <!-- if或else下只有一条语句也必须使用大括号 -->
+        <module name="NeedBraces">
+            <property name="severity" value="warning"/>
+            <property name="tokens" value="LITERAL_IF, LITERAL_ELSE"/>
+        </module>
+
+        <!-- 空格检查 -->
+        <!-- 允许方法名后紧跟左边圆括号"(" -->
+        <module name="MethodParamPad">
+            <!--<property name="option" value="space"/>-->
+        </module>
+        <!-- 在类型转换时，不允许左圆括号右边有空格，也不允许与右圆括号左边有空格 -->
+        <module name="TypecastParenPad" />
+        <module name="LeftCurly">
+            <property name="option" value="eol"/>
+
+            <!--<property name="tokens" value="CLASS_DEF,INTERFACE_DEF"/>-->
+        </module>
+        <!--
+            右边的 } 必须和代码在同一行
+            if(true) {
+            } else if() { //正确
+            }
+            else { //错误
+            }
+        -->
+        <module name="RightCurly">
+
+        </module>
+
+        <!-- 类名必须以大写字母开头，只允许包含数字、字母 -->
+        <module name="TypeName">
+            <property name="format"
+                      value="^[A-Z][a-zA-Z0-9]*$"/>
+            <property name="tokens"
+                      value="CLASS_DEF"/>
+        </module>
+
+        <!-- 接口以I开头，之后首字母大写,不允许特殊符号 -->
+        <module name="TypeName">
+            <property name="format"
+                      value="^[A-Z][a-zA-Z0-9]*$"/>
+            <property name="tokens"
+                      value="INTERFACE_DEF"/>
+        </module>
+
+        <!-- 抽象类以Abstract开头，Abstract后首字母大写
+         抽象类只允许包含数字、字母和下划线，以Abstract开头，Abstract后首字母大写，不能以下划线结尾
+         -->
+        <module name="AbstractClassName">
+            <property name="format"
+                      value="^Abstract[A-Z][a-zA-Z0-9]*(_*[a-zA-Z0-9]+)*$"/>
+            <property name="ignoreModifier" value="true"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- 方法名只允许包含字母和数字，且首字母小写 -->
+        <module name="MethodName">
+            <property name="format"
+                      value="^[a-z][a-zA-Z0-9]*$"/>
+        </module>
+
+        <!-- 常量(static&final)只能包含大写字母、数字与下划线，必须以大写字母开头，不能以下划线结尾-->
+        <module name="ConstantName">
+            <property name="format"
+                      value="^[A-Z][A-Z0-9]*(_*[A-Z0-9]+)*$"/>
+        </module>
+
+        <!-- 非static变量，必须以小写字母开头，只允许包含字母、数字与下划线，不能以下划线结尾-->
+        <module name="MemberName">
+            <property name="format"
+                      value="^[a-z][A-Za-z0-9]*(_*[A-Za-z0-9]+)*$"/>
+        </module>
+
+        <!-- 关键字 -->
+        <!--
+            每个关键字都有正确的出现顺序。比如 public static final XXX 是对一个常量的声明。如果使用 static
+            public final 就是错误的
+        -->
+        <module name="ModifierOrder" />
+
+        <!-- static变量，必须以小写字母开头，只允许包含字母、数字与下划线，不能以下划线结尾 -->
+        <module name="StaticVariableName">
+            <property name="format"
+                      value="^[a-z][A-Za-z0-9]*(_*[A-Za-z0-9]+)*$"/>
+        </module>
+
+        <!-- 方法内参数，必须以小写字母开头，只允许包含字母、数字与下划线，不能以下划线结尾 -->
+        <module name="ParameterName">
+            <property name="format"
+                      value="^[a-z][A-Za-z0-9]*(_*[A-Za-z0-9]+)*$"/>
+        </module>
+
+         <!--单类型导入，禁止带*号的导入 - {0}.-->
+        <module name="AvoidStarImport">
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- 多余的关键字 -->
+        <module name="RedundantModifier">
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- 对区域的检查 -->
+        <!-- 不能出现空白区域 -->
+        <module name="EmptyBlock" />
+        <!-- 所有区域都要使用大括号 -->
+        <module name="NeedBraces" />
+        <!-- 多余的括号 -->
+        <module name="AvoidNestedBlocks">
+            <property name="allowInSwitchCase" value="true" />
+        </module>
+
+        <!-- 编码方面的检查 -->
+        <!-- 不许出现空语句 -->
+        <module name="EmptyStatement" />
+        <!-- 不允许魔法数 -->
+        <module name="MagicNumber">
+            <property name="tokens" value="NUM_DOUBLE, NUM_INT" />
+            <!--忽略注解上的数字-->
+            <property name="ignoreAnnotation" value="true"/>
+            <!--忽略字段上的数字-->
+            <property name="ignoreFieldDeclaration" value="true"/>
+        </module>
+
+        <!-- String的比较不能用!= 和 == -->
+        <module name="StringLiteralEquality" />
+        <!-- if最多嵌套3层 -->
+        <module name="NestedIfDepth">
+            <property name="max" value="3" />
+        </module>
+        <!-- try最多被嵌套2层 -->
+        <module name="NestedTryDepth">
+            <property name="max" value="2" />
+        </module>
+        <!-- clone方法必须调用了super.clone() -->
+        <module name="SuperClone" />
+        <!-- finalize 必须调用了super.finalize() -->
+        <module name="SuperFinalize" />
+        <!-- 不能catch java.lang.Exception -->
+        <module name="IllegalCatch">
+            <property name="illegalClassNames" value="java.lang.Exception" />
+        </module>
+        <!-- 确保一个类有package声明 -->
+        <module name="PackageDeclaration" />
+        <!-- 一个方法中最多有3个return -->
+        <module name="ReturnCount">
+            <property name="max" value="3" />
+            <property name="format" value="^$" />
+        </module>
+        <!--
+            根据 Sun 编码规范， class 或 interface 中的顺序如下： 1.class 声明。首先是 public,
+            然后是protected , 然后是 package level （不包括access modifier ） 最后是private .
+            (多个class放在一个java文件中的情况） 2.变量声明。 首先是 public, 然后是protected然后是 package
+            level （不包括access modifier ） 最后是private . (多个class放在一个java文件中的情况）
+            3.构造函数 4.方法
+        -->
+        <module name="DeclarationOrder" />
+        <!-- 同一行不能有多个声明 -->
+        <module name="MultipleVariableDeclarations" />
+        <!-- 不必要的圆括号 -->
+        <module name="UnnecessaryParentheses" />
+
+        <!-- 杂项 -->
+
+        <!-- 检查并确保所有的常量中的L都是大写的。因为小写的字母l跟数字1太象了 -->
+        <module name="UpperEll" />
+        <!-- 检查数组类型的定义是String[] args，而不是String args[] -->
+        <module name="ArrayTypeStyle" />
+        <!-- 检查java代码的缩进 默认配置：基本缩进 4个空格，新行的大括号：0。新行的case 4个空格 -->
+        <!--<module name="Indentation" />-->
+    </module>
+</module>

@@ -1,0 +1,37 @@
+package com.catt.wfx.repository.dao.settlementMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopDetail;
+
+import java.util.Map;
+
+/**
+ * 账户结算明细Dao接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017-02-09 10:30:50
+ */
+public interface SettlementShopDetailDao extends BaseDao<SettlementShopDetail, Long> {
+
+    /**
+     * 获取分页补贴记录
+     *
+     * @param cusName    用户名称
+     * @param rewardType 补贴类型
+     * @param type       补贴名称
+     * @param pageable
+     * @return
+     */
+    Page<Map> getPage(String cusName, Integer rewardType, Integer type, Pageable pageable);
+
+    /**
+     * 获取交易记录(账户管理详情-交易记录)
+     * @param cusId
+     * @param pageable
+     * @return
+     */
+    Page<Map> getSettlementShopPage(Long cusId, Pageable pageable);
+}

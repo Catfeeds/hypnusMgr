@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    
+    <bean id="payResultQueryServiceImpl" class="com.catt.common.module.pay.service.impl.PayResultQueryServiceImpl" />
+
+    <!-- 数据库支付查询任务 -->
+    <bean id="dbQueryJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="payResultQueryServiceImpl" />
+        </property>
+        <property name="targetMethod">
+            <value>execQueryDBPay</value>
+        </property>
+    </bean>
+    
+    <!-- 关闭超时支付订单任务 -->
+    <bean id="closeTimeoutPayOrderJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="payResultQueryServiceImpl" />
+        </property>
+        <property name="targetMethod">
+            <value>execCloseTimeoutPay</value>
+        </property>
+    </bean>
+
+	<!-- 数据库支付查询触发器 -->
+    <bean id="dbQueryTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="dbQueryJobDetail" />
+		<property name="startDelay" value="10000" />
+		<property name="repeatInterval" value="3600000" /><!-- 每1h触发 -->
+	</bean>
+	
+	<!-- 关闭超时支付订单触发器 -->
+    <bean id="closeTimeoutPayOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="closeTimeoutPayOrderJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0 0 * * ?</value><!-- 每天0点整触发 -->
+        </property>
+    </bean>
+
+    <!--
+		调度作业
+		如果lazy-init='false',则容器启动时就会执行调度程序;否则需要实例化该bean才能执行调度程序
+	-->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+        <property name="triggers">
+            <list>
+                <!-- 数据库支付查询任务 -->
+                <ref local="dbQueryTrigger" />
+                <!-- 关闭超时支付订单任务 -->
+                <ref local="closeTimeoutPayOrderTrigger" />
+            </list>
+        </property>
+    </bean>
+
+</beans>

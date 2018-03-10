@@ -1,0 +1,81 @@
+package com.catt.wfx.service.specialSale;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.entity.specialSale.ActivityInfo;
+import com.catt.wfx.repository.entity.specialSale.ActivityProductRel;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 活动信息表服务接口
+ * 
+ * @author 袁幸成
+ * @date 2017-03-07 17:02:01
+ * @version V1.0
+ */
+public interface ActivityInfoService {
+
+    /**
+     * 保存活动
+     * @param activityInfo 活动
+     * @param coverpic 活动图片
+     * @return
+     */
+    Long saveActivity(ActivityInfo activityInfo, String coverpic);
+
+    /**
+     * 获取活动信息列表
+     *
+     * @param name 活动名称
+     * @param timeStatus 活动状态
+     * @param pageable 分页信息
+     * @return
+     */
+    Page<Map> findActivityPage(String name, Integer timeStatus, Pageable pageable);
+
+    /**
+     * 获取活动商品列表
+     *
+     * @param activityId 活动标识
+     * @return
+     */
+    List<Map> findActivityProductList(Long activityId);
+
+    /**
+     * 获取商品列表（排除已选商品、时间冲突的活动商品）
+     * @param activityId 活动标识
+     * @param zhName 商品名称
+     * @param cateId 商品分类
+     * @param pageable 分页参数
+     * @return
+     */
+    Page<Map> findProductPage(Long activityId, String zhName, Long cateId, Pageable pageable);
+
+    /**
+     * 查询活动商品规格价格
+     * @param activityId 活动标识
+     * @param productId 商品标识
+     * @return
+     */
+    List<Map> getSpecAndPrice(Long activityId, Long productId);
+
+    /**
+     * 保存商品活动关联列表
+     * @param activityId 活动标识
+     * @param productId 商品标识
+     * @param activityProductRelList 商品活动关联列表
+     * @return
+     */
+    void saveActProRelList(Long activityId, Long productId, List<ActivityProductRel> activityProductRelList);
+
+    /**
+     * 更新活动状态
+     * @param id 活动标识
+     * @param status 活动状态
+     */
+    void updateStatus(Long id, Integer status);
+
+}

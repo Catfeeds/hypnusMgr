@@ -1,0 +1,107 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/1/6
+  Time: 14:21
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>主管补贴设置</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/user_list.css" rel="stylesheet"/>
+
+    <script src="${path}/resources/js/member.js" type="text/javascript"></script>
+    <script src="${path}/resources/admin/common/temDataGrid.js"></script>
+    <script src="${path}/resources/admin/js/subsidyMgr/director/index.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="positionNow">主页 &gt; <a>主管补贴设置</a></div>
+    <div class="searchBar">
+        <div class="searchBox">
+            <span class="searchName">奖励类型：</span>
+            <div class="moreDrop xw_moreDrop">
+                <input class="searchInputSelect xw_searchInput" id="rewardTypeName" type="text"/>
+                <input id="rewardType" type="hidden" class="hiddenValue"/>
+                <div class="searchDoult xw_searchDoult">
+                    <div class="jieguo">
+                        <ul class="jieguolist">
+                            <li data-value="">全部</li>
+                            <li data-value="1">代金券</li>
+                            <li data-value="2">现金</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="searchBox">
+            <span class="searchName">是否生效：</span>
+            <div class="moreDrop xw_moreDrop">
+                <input class="searchInputSelect xw_searchInput" id="statusName" type="text"/>
+                <input id="status" type="hidden" class="hiddenValue"/>
+                <div class="searchDoult xw_searchDoult">
+                    <div class="jieguo">
+                        <ul class="jieguolist">
+                            <li data-value="">全部</li>
+                            <li data-value="1">是</li>
+                            <li data-value="2">否</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="btnGrey" style="margin-left:5px;"  id="reset">重置</span>
+        <span class="btnRed" id="search">查询</span>
+    </div>
+    <div class="resultBar">
+        <div class="selectBox"><span class="btnGrey" style="margin-left:6px;" id="del">删除</span>
+            <span class="btnGrey" style="margin-left:6px;" id="disable">禁用</span>
+            <span class="btnRed" style="margin-left:6px;" id="enable">启用</span>
+            <span class="btnRed" style="margin-left:6px;" id="edit">修改</span>
+            <span class="btnRed"  id="add">新增</span>
+        </div>
+    <div class="userDetail" style="margin-top: 38px">
+        <table class="datalistTable no">
+            <tr>
+                <th width="40">
+                    <div class="tickAll xw_tickAll"></div>
+                </th>
+                <th>补贴名称</th>
+                <th>有效时间段</th>
+                <th>结算周期</th>
+                <th>奖励类型</th>
+                <th>是否生效</th>
+                <th>添加时间</th>
+            </tr>
+            <tbody id="dataList"></tbody>
+        </table>
+    </div>
+        <div class="pageBar" id="pageBar">
+</div>
+</div>
+
+<script type="text/html" id="template_dataList">
+    {{each}}
+    <tr>
+        <td><span class="tick xw_tick"></span></td>
+        <td>主管管理补贴</td>
+        <td>{{$value.startTime.substring(0,10)}}到{{$value.endTime.substring(0,10)}}</td>
+        <td>{{if $value.cycle == 1}}即时{{else}}{{$value.length}}天{{/if}}</td>
+        <td><span class="borderRed">{{if $value.rewardType == 1}}代金券{{else if $value.rewardType == 2}}现金{{/if}}</span>
+        </td>
+        <td>{{if $value.status == 1}}<span class="bgBlue">是</span>{{else if $value.status == 2}}<span
+                class="bgRed">否</span>{{/if}}
+        </td>
+        <td>{{$value.createDate}}</td>
+        <input type="hidden" name="id" value="{{$value.id}}" param="param">
+        <input type="hidden" name="status" value="{{$value.status}}" param="param">
+        <input type="hidden" name="startTime" value="{{$value.startTime}}" param="param">
+    </tr>
+    {{/each}}
+</script>
+</body>
+</html>

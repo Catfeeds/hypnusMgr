@@ -1,0 +1,101 @@
+package com.catt.wfx.web.controller.pub;
+
+import com.catt.common.base.service.security.RSAService;
+import com.catt.common.util.crypto.RSAUtils;
+import com.catt.common.web.Message;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Map;
+
+/**
+ * 系统通用控制器
+ * 作者：邹佳
+ * 时间：2016-07-15
+ */
+@RequestMapping({"/pub/common"})
+@Controller("admin.commonController")
+public class CommonController {
+
+    /**
+     * 私钥Base64文本
+     */
+    private static String pubKey;
+
+    /**
+     * 私钥Base64文本
+     */
+    private static String priKey;
+
+    /**
+     * RSA加密服务
+     */
+    @Resource(name = "rsaWebServiceImpl")
+    private RSAService rsaService;
+
+    /**
+     * 获取RAS加密相关参数
+     */
+    @RequestMapping(value = {"/getRasKey"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message getRasKey() {
+        PublicKey publicKey = null;
+        try {
+            publicKey = RSAUtils.genPublicKey(pubKey);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        RSAPublicKey rsaPublicKey = (RSAPublicKey) publicKey;
+        Map map = rsaService.getModulusAndExponent(rsaPublicKey);
+
+        return Message.success("").addResult(map);
+    }
+
+    /**
+     * RSA解密
+     *
+     * @param data
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     * @throws InvalidKeySpecException
+     */
+    public static String decrypt(String data) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+        PrivateKey privateKey = RSAUtils.genPrivateKey(priKey);
+        return RSAUtils.decrypt(privateKey, data);
+    }
+    /**
+     * RSA加密
+     *
+     * @param data
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     * @throws InvalidKeySpecException
+     */
+    public static String encrypt(String data) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+        PublicKey publicKey = RSAUtils.genPublicKey(pubKey);
+        return RSAUtils.encrypt(publicKey, data);
+    }
+
+    @Value("${system.rsa.key.private}")
+    public void setPriKey(String priKey) {
+        CommonController.priKey = priKey;
+    }
+
+    @Value("${system.rsa.key.public}")
+    public void setPubKey(String pubKey) {
+        CommonController.pubKey = pubKey;
+    }
+}

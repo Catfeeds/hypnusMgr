@@ -1,0 +1,317 @@
+package com.catt.wfx.service.impl.specialSale;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductInfoDao;
+import com.catt.wfx.repository.dao.productMgr.ProductPriceDao;
+import com.catt.wfx.repository.dao.specialSale.ActivityInfoDao;
+import com.catt.wfx.repository.dao.specialSale.ActivityProductRelDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+import com.catt.wfx.repository.entity.specialSale.ActivityInfo;
+import com.catt.wfx.repository.entity.specialSale.ActivityProductRel;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPriceBaseService;
+import com.catt.wfx.service.base.specialSale.ActivityInfoBaseService;
+import com.catt.wfx.service.base.specialSale.ActivityProductRelBaseService;
+import com.catt.wfx.service.pub.PubConfigService;
+import com.catt.wfx.service.specialSale.ActivityInfoService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * 活动信息表服务接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-03-08 17:02:01
+ * @version V1.0
+ */
+@Service("activityInfoServiceImpl")
+public class ActivityInfoServiceImpl implements ActivityInfoService {
+
+    //活动信息服务
+    @Resource(name = "activityInfoBaseServiceImpl")
+    private ActivityInfoBaseService activityInfoBaseService;
+
+    //活动信息Dao
+    @Resource(name = "activityInfoDaoImpl")
+    private ActivityInfoDao activityInfoDao;
+
+    //商品活动关联表Dao
+    @Resource(name = "activityProductRelDaoImpl")
+    private ActivityProductRelDao activityProductRelDao;
+
+    //商品Dao
+    @Resource(name = "productInfoDaoImpl")
+    private ProductInfoDao productInfoDao;
+
+    //商品价格Dao
+    @Resource(name = "productPriceDaoImpl")
+    ProductPriceDao productPriceDao;
+
+    //附件表服务
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    //商品活动关联表服务
+    @Resource(name = "activityProductRelBaseServiceImpl")
+    private ActivityProductRelBaseService activityProductRelBaseService;
+
+    //公共配置服务
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    //商品信息表服务
+    @Resource(name = "productInfoBaseServiceImpl")
+    ProductInfoBaseService productInfoBaseService;
+
+    //商品价格服务
+    @Resource(name = "productPriceBaseServiceImpl")
+    ProductPriceBaseService productPriceBaseService;
+
+    @Override
+    @Transactional
+    public Long saveActivity(ActivityInfo activityInfo, String coverpic) {
+        Long id = activityInfo.getId();
+        if (id == null){
+            activityInfo.setStatus(ActivityInfo.Status.Unreleased.getValue());
+            activityInfoBaseService.save(activityInfo);
+            id = activityInfo.getId();
+        } else {
+            Date startTime = activityInfo.getStartTime();
+            Date endTime = activityInfo.getEndTime();
+//
+            ActivityInfo old = activityInfoBaseService.find(id);
+            //活动时间变化要验证（同一时间可以有多个活动，但同一时间的同一个商品不能存在多个活动）
+            if (!DateUtil.isSameDay(startTime, old.getStartTime()) || !DateUtil.isSameDay(endTime, old.getEndTime())){
+                List<Map> productList = activityProductRelDao.findActivityProductList(id);
+                for (Map product : productList){
+                    Long productId = MapUtil.getLong(product, "productId");
+                    if (activityProductRelDao.countProduct(id, startTime, endTime, productId) > 0){
+                        String productName = MapUtil.getString(product, "zhName");
+                        throw BaseException.errorByErrInfo("商品【" + productName + "】已存在其他活动");
+                    }
+                }
+            }
+            old.setName(activityInfo.getName());
+            old.setDesc(activityInfo.getDesc());
+            old.setCoverPath(activityInfo.getCoverPath());
+            old.setStartTime(startTime);
+            old.setEndTime(endTime);
+            activityInfoBaseService.update(old);
+        }
+        //保存商品图片
+        this.saveFiles(id, coverpic);
+        return id;
+    }
+
+    @Override
+    public Page<Map> findActivityPage(String name, Integer timeStatus, Pageable pageable) {
+        Page<Map> actPage = activityInfoDao.findPage(name, timeStatus, pageable);
+        if (actPage.getContent().size() > 0){
+            List<Long> actIds = new ArrayList<>();
+            //获取图片访问地址
+            String filePath = pubConfigService.getFilePath();
+            for (Map actMap : actPage.getContent()){
+                actIds.add(MapUtil.getLong(actMap, "id"));
+                this.putRealFilePath(filePath, actMap, "coverPath");
+            }
+            List<Map> relList = activityProductRelDao.countActivityProduct(actIds);
+            for (Map actMap : actPage.getContent()){
+                for (Map relMap : relList){
+                    if (MapUtil.getLongValue(actMap, "id") == MapUtil.getLongValue(relMap, "actId")){
+                        actMap.putAll(relMap);
+                        break;
+                    }
+                }
+            }
+        }
+        return actPage;
+    }
+
+    /**
+     * 设置完整的文件访问路径(用于实体只保存附件表标识)
+     * @param filePath 文件访问地址（http://localhost:8080/wfxMgr/attachment）
+     * @param target 目标map
+     * @param key 保存附件表标识的字段名称
+     */
+    private void putRealFilePath(String filePath, Map target, String key) {
+        Long attachmentId = MapUtil.getLong(target, key);
+        if (attachmentId != null){
+            Attachment attachment = attachmentBaseService.find(attachmentId);
+            target.put(key, filePath + attachment.getPath());
+        }
+    }
+
+    @Override
+    public List<Map> findActivityProductList(Long activityId) {
+        return activityProductRelDao.findActivityProductList(activityId);
+    }
+
+    @Override
+    public Page<Map> findProductPage(Long activityId, String zhName, Long cateId, Pageable pageable) {
+        List<Map> list = activityProductRelDao.findActivityProductList(activityId);
+        List<Long> activityProductIds = new ArrayList<>();
+        for (Map map : list){
+            activityProductIds.add(MapUtil.getLong(map, "productId"));
+        }
+        return productInfoDao.findActivitySelectProductPage(activityProductIds, zhName, cateId, pageable);
+    }
+
+    @Override
+    public List<Map> getSpecAndPrice(Long activityId, Long productId) {
+        return productPriceDao.findList4Activity(activityId, productId);
+    }
+
+    @Override
+    @Transactional
+    public void saveActProRelList(Long activityId, Long productId, List<ActivityProductRel> activityProductRelList) {
+        ActivityInfo activityInfo = activityInfoBaseService.find(activityId);
+        //验证（同一时间可以有多个活动，但同一时间的同一个商品不能存在多个活动）
+        Date startTime = activityInfo.getStartTime();
+        Date endTime = activityInfo.getEndTime();
+        if (activityProductRelDao.countProduct(activityId, startTime, endTime, productId) > 0){
+            ProductInfo productInfo = productInfoDao.find(productId);
+            throw BaseException.errorByErrInfo("商品【" + productInfo.getZhName() + "】已存在其他活动");
+        }
+
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("actId", activityId));
+        filters.add(Filter.eq("productId", productId));
+        List<ActivityProductRel> oldRelList = activityProductRelBaseService.findList(null, filters, null);
+
+        for (ActivityProductRel activityProductRel : activityProductRelList){
+            activityProductRel.setActId(activityId);
+            activityProductRel.setProductId(productId);
+            activityProductRel.setActsaleRealnum(0);
+
+            Long id = activityProductRel.getId();
+            if (id != null){ //修改
+                Iterator<ActivityProductRel> iterator = oldRelList.iterator();
+                while (iterator.hasNext()){
+                    ActivityProductRel oldRel = iterator.next();
+                    if (oldRel.getId().equals(id)){
+                        activityProductRel.setActsaleRealnum(oldRel.getActsaleRealnum());
+                        oldRelList.remove(oldRel);
+                        break;
+                    }
+                }
+            }
+        }
+
+        for (ActivityProductRel oldRel : oldRelList){
+            activityProductRelBaseService.delete(oldRel);
+        }
+        activityProductRelBaseService.saveOrUpdate(activityProductRelList);
+    }
+
+    @Override
+    @Transactional
+    public void updateStatus(Long id, Integer status) {
+        ActivityInfo activityInfo = activityInfoBaseService.find(id);
+        Integer preStatus = activityInfo.getStatus();
+        if (status == ActivityInfo.Status.Released.getValue()){ //未发布/暂停-->已发布
+            if (preStatus != ActivityInfo.Status.Unreleased.getValue()
+                    && preStatus != ActivityInfo.Status.Paused.getValue()){
+                throw BaseException.errorByErrInfo("非法操作");
+            }
+        } else if (status == ActivityInfo.Status.Paused.getValue()){//已发布-->已暂停
+            if (preStatus != ActivityInfo.Status.Released.getValue()){
+                throw BaseException.errorByErrInfo("非法操作");
+            }
+        } else if (status == ActivityInfo.Status.Canceled.getValue()){//已发布/已暂停-->已取消
+            if (preStatus != ActivityInfo.Status.Released.getValue()
+                    && preStatus != ActivityInfo.Status.Paused.getValue()){
+                throw BaseException.errorByErrInfo("非法操作");
+            }
+        } else {
+            throw BaseException.errorByErrInfo("非法操作");
+        }
+
+        if (status == ActivityInfo.Status.Released.getValue()){//发布后更新关联表的价格
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("actId", id));
+            List<ActivityProductRel> relList = activityProductRelBaseService.findList(null, filters, null);
+            int size = relList.size();
+            Long[] priceIds = new Long[size];
+            Set<Long> productIds = new HashSet<>();
+            for (int i = 0; i < size; i++){
+                ActivityProductRel rel = relList.get(i);
+                priceIds[i] = rel.getPriceId();
+                productIds.add(rel.getProductId());
+            }
+            List<ProductInfo> productInfos = productInfoBaseService.findList(productIds.toArray(new Long[productIds.size()]));
+            for (ProductInfo productInfo : productInfos){
+                if (productInfo.getDelFlag() == PubEnum.YesOrNoEnum.YES.getValue()){
+                    throw BaseException.errorByErrInfo("商品【{0}】已删除", productInfo.getZhName());
+                }
+                if (productInfo.getStatus() != ProductInfo.Status.OnSale.getValue()){
+                    throw BaseException.errorByErrInfo("商品【{0}】未上架", productInfo.getZhName());
+                }
+            }
+            List<ProductPrice> productPrices = productPriceBaseService.findList(priceIds);
+            for (ActivityProductRel rel : relList){
+                boolean isExist = false; //活动商品规格是否被删除了
+                for (ProductPrice productPrice : productPrices){
+                    if (rel.getPriceId().equals(productPrice.getId())){
+                        isExist = true;
+                        rel.setCostPrice(productPrice.getSalesPrice());
+                        rel.setGeneralAgent(productPrice.getGeneralAgent());
+                        rel.setProvincialAgent(productPrice.getProvincialAgent());
+                        rel.setCityAgent(productPrice.getCityAgent());
+                        rel.setGeneralAgent(productPrice.getGeneralAgent());
+                    }
+                }
+                if (!isExist){
+                    String productName = "";
+                    for (ProductInfo productInfo : productInfos){
+                        if (rel.getProductId().equals(productInfo.getId())){
+                            productName = productInfo.getZhName();
+                            break;
+                        }
+                    }
+                    throw BaseException.errorByErrInfo("商品【{0}】规格有改动，请修改活动商品后再发布", productName);
+                }
+            }
+            activityProductRelBaseService.saveOrUpdate(relList);
+        }
+        activityInfo.setStatus(status);
+        activityInfoBaseService.update(activityInfo);
+    }
+
+    /**
+     * 保存图片信息
+     *
+     * @param productId 产品标识
+     * @param coverpic  图片地址
+     */
+    private void saveFiles(Long productId, String coverpic) {
+        if (StringUtil.isNotBlank(coverpic)) {
+            List<Map> list = JsonUtils.toList(coverpic, Map.class);
+            List<Long> list1 = new ArrayList<Long>();
+            for (Map map : list) {
+                list1.add(MapUtil.getLongValue(map, "attachmentId"));
+            }
+            attachmentBaseService.saveFiles(list1, productId, ActivityInfo.TABLE_NAME, ActivityInfo.PIC_PATH);
+        }
+    }
+
+}

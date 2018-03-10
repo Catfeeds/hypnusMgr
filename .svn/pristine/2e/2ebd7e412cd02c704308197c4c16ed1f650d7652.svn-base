@@ -1,0 +1,45 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/6/16
+  Time: 14:35
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>完成</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/zhifuchenggong.css"/>
+    <!--<script type="text/javascript" src="js/tongjicharts02.js"></script>-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+</head>
+
+<body>
+<spring:eval expression="@configProperties['platform.name']" var="platformName"/>
+<spring:eval expression="@configProperties['platform.default.op.model']" var="platformOpModel"/>
+<div style="height:47px;"></div>
+<div class="top header">
+    <button class="top-left" onClick="window.history.go(-1)"><img class="top_btn_back" src="${path}/resources/images/top_btn_back.png"></button>
+    <h1>完成</h1>
+</div>
+<div class="neirong">
+    <img  class="pic" src="${path}/resources/images/pic_zhifu_ok.png">
+    <p>您已成为${platformName}的${platformOpModel}了,快去下载${platformOpModel}APP管理自己的店铺吧.</p>
+</div>
+<div class="xiazai">
+    <img class="icon" src="${path}/resources/images/logo_app.png">
+    <div class="bottomBtnBox1">
+        <button onClick="window.location='${androidUrl}'">点击下载APP</button>
+    </div>
+</div>
+<!--<div class="bottomBtnBox">
+	<!--<button onClick="window.location='addkaipiao.html';">新增开票信息</button>-->
+<!-- <button onClick="window.location='0-1login.html';">返&nbsp;回&nbsp;登&nbsp;录</button>
+</div>-->
+</body>
+</html>

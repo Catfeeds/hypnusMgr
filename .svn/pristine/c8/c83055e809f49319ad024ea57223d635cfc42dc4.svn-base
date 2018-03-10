@@ -1,0 +1,42 @@
+package com.catt.wfx.service.specialSale;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+
+import java.util.Map;
+
+/**
+ * 活动信息表服务接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/2/10
+ */
+public interface ActivityInfoService {
+
+    /**
+     * 获取特卖列表(微信商城接口)
+     *
+     * @param status   活动状态，1-进行中，2-未开始
+     * @param pageable
+     * @return
+     */
+    Page<Map> findPage4Wechat(Integer status, Pageable pageable);
+
+    /**
+     * 获取特卖详情
+     *
+     * @param id
+     * @return
+     */
+    Map getDetail4Wechat(Long id);
+
+    /**
+     * 获取特卖商品(微信商城接口)
+     *
+     * @param id       活动标识
+     * @param pageable
+     * @return
+     */
+    Page<Map> getActivityProducts(Long id, Pageable pageable);
+}

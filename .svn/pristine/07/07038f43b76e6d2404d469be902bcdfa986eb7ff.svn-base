@@ -1,0 +1,153 @@
+seajs.use(['$', 'msgBox', 'base64', 'util', 'rsa'],
+    function ($, msgBox, base64, util, rsa) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                },
+                /** 初始化界面  */
+                initPage: function () {
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $("#sendMsg").click(function () {
+                        EventHandler.sendMsg();
+                    });
+
+                    $("#commitBtn").click(function () {
+                        EventHandler.modifyMobile();
+                    });
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                // 发送短信验证码
+                sendMsg: function () {
+                    var mobileNo = $("#mobileNo").val().trim();
+                    if (!mobileNo) {
+                        msgBox.tips("手机号码不能为空");
+                        return;
+                    }
+                    var reg = /^1[0-9]{10}$/;
+                    var flag = reg.test(mobileNo);
+                    if (!flag) {
+                        msgBox.tips("请填写正确的手机号码");
+                        return;
+                    }
+                    DataHandler.getRasKey(null, function (backData) {
+                        var modulus = backData.result.modulus;
+                        var exponent = backData.result.exponent;
+                        var rsaKey = new rsa.RSAKey();
+                        rsaKey.setPublic(base64.b64tohex(modulus), base64.b64tohex(exponent));
+                        mobileNo = base64.hex2b64(rsaKey.encrypt(mobileNo));
+
+                        DataHandler.sendMsg({mobileNo: mobileNo}, function (backData) {
+                            if (backData.type == 'success') {
+                                EventHandler.countDown();
+                            } else {
+                                msgBox.tips(backData.content);
+                            }
+                        });
+                    });
+                },
+                // 设置新号码
+                modifyMobile: function () {
+                    var mobileNo = $("#mobileNo").val().trim();
+                    if (!mobileNo) {
+                        msgBox.tips("手机号码不能为空");
+                        return;
+                    }
+                    var captcha = $("#captcha").val().trim();
+                    if (!captcha) {
+                        msgBox.tips("验证码不能为空");
+                        return;
+                    }
+                    DataHandler.getRasKey(null, function (backData) {
+                        var modulus = backData.result.modulus;
+                        var exponent = backData.result.exponent;
+                        var rsaKey = new rsa.RSAKey();
+                        rsaKey.setPublic(base64.b64tohex(modulus), base64.b64tohex(exponent));
+                        mobileNo = base64.hex2b64(rsaKey.encrypt(mobileNo));
+                        captcha = base64.hex2b64(rsaKey.encrypt(captcha));
+
+                        DataHandler.modifyMobile({mobileNo: mobileNo, captcha: captcha}, function (backData) {
+                            if (backData.type == 'success') {
+                                msgBox.tips("手机号修改成功", 1, function () {
+                                    window.location.href = path + '/admin/wechat/personal/index.html?shopId=' + shopId;
+                                });
+                            } else {
+                                msgBox.tips(backData.content);
+                            }
+                        });
+                    });
+                },
+                /** 获取短信验证码倒计时 */
+                countDown: function () {
+                    $("#sendMsg").hide();
+                    $("#sendMsgTime").show();
+                    var count = 60;
+                    $("#sendMsgTime").html(count + "秒");
+
+                    var countdown = setInterval(CountDown, 1000);
+
+                    function CountDown() {
+                        $("#sendMsgTime").html(count + "秒");
+                        if (count == 0) {
+                            $("#sendMsg").show();
+                            $("#sendMsgTime").hide();
+                            clearInterval(countdown);
+                        }
+                        count--;
+                    }
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 加密传输密码数据
+                 */
+                getRasKey: function (param, callback) {
+                    $.post(path + '/pub/common/getRasKey', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+                /**
+                 * 发送短信验证码
+                 */
+                sendMsg: function (param, callback) {
+                    $.post(path + '/guest/sms/send?type=modifyMobile', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+                /**
+                 * 设置新号码
+                 */
+                modifyMobile: function (param, callback) {
+                    $.post(path + '/admin/wechat/personal/modifyMobile/modifyMobile', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

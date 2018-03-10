@@ -1,0 +1,108 @@
+package com.catt.wfx.service.impl;
+
+import com.catt.common.module.sms.service.LogService;
+import com.catt.common.module.sms.service.SmsService;
+import com.catt.common.util.spring.SpringUtils;
+import com.catt.wfx.service.AliYunSmsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Pachage: com.catt.wfx.service.impl
+ * Description:阿里云短信接口实现
+ * date: 2017-1-5 15:25:20
+ * author: yuangxingcheng
+ */
+@Service("aliYunSmsServiceImpl")
+public class AliYunSmsServiceImpl implements AliYunSmsService {
+
+    /**
+     * 日志
+     */
+    private static Logger logger = LoggerFactory.getLogger(AliYunSmsServiceImpl.class);
+
+    /**
+     * 服务名称
+     */
+    public static final String SERVICE_NAME = "aliYunSmsServiceImpl";
+
+    /**
+     * 缓存块名称
+     */
+    private static final String CACHE_LOGIN_NAME = "loginSmsCache";
+
+    /**
+     * 6位短信验证码
+     */
+    private static final Integer CODE_SIZE = 1000000;
+
+    @Resource(name = "commonModuleSmsLogServiceImpl")
+    private LogService logService;
+
+    @Resource(name = "commonModuleSmsServiceImpl")
+    private SmsService smsService;
+
+    /**
+     * 生成6位短信验证码
+     *
+     * @return String 6位短信验证码
+     */
+    private String buildCode() {
+        //短信验证码随机生成6位数
+        return String.valueOf(Math.round(Math.random() * CODE_SIZE));
+    }
+
+    @Override
+    @Cacheable(value = CACHE_LOGIN_NAME, key = "#mobileNo")
+    public String sendLoginSms(String mobileNo, String contentTemplate) {
+        //短信验证码随机生成6位数
+        String code = buildCode();
+        logger.info("短信验证码:{}", code);
+        try {
+            //调用短信发送模块发送短信
+            String paramString = "{\"code\":\"" + code + "\"}";
+            this.sendSms(mobileNo, contentTemplate, paramString, "");
+        } catch (Exception e) {
+            logger.error("sendLoginSms", e);
+        }
+        return code;
+    }
+
+    @Override
+    public boolean loginMobileNoCheck(String mobileNo, String code, String contentTemplate) {
+        AliYunSmsService aliYunSmsService = SpringUtils.getBean(SERVICE_NAME);
+        String cacheCode = aliYunSmsService.sendLoginSms(mobileNo, contentTemplate);
+        Boolean isTrue = code.equalsIgnoreCase(cacheCode);
+
+        //校验通过后，清理缓存
+        if (isTrue) {
+            this.clearLoginSms(mobileNo);
+        }
+        return isTrue;
+    }
+
+    @Override
+    @CacheEvict(value = CACHE_LOGIN_NAME, key = "#mobileNo")
+    public void clearLoginSms(String mobileNo) {
+        logger.warn("清理手机:{},登录短信缓存", mobileNo);
+    }
+
+    @Override
+    public void sendSms(String mobileNo, String templateCode, String paramString, String loginSceneEnum) {
+        List<String> mobileNos = new ArrayList<>();
+        mobileNos.add(mobileNo);
+        this.sendSms(mobileNos, templateCode, paramString, loginSceneEnum);
+    }
+
+    @Override
+    public void sendSms(List<String> mobileNos, String templateCode, String paramString, String loginSceneEnum) {
+        smsService.sendSms(mobileNos, paramString, templateCode);
+    }
+}

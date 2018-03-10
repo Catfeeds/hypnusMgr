@@ -1,0 +1,34 @@
+// JavaScript Document
+
+
+$(document).ready(function(){
+
+	
+	//tab切换
+	$(".xw_li").click(function(){
+		$(this).parents(".goodsType").find('.xw_li').removeClass("lion");
+		$(this).addClass("lion");
+//		var liNum = $(this).parents(".goodsType").find('.xw_li').index(this);
+//		$(this).parents(".goodsType").parents(".xw_mainBox").find(".xw_goodsList").hide();
+//		$(this).parents(".goodsType").parents(".xw_mainBox").find(".xw_goodsList").eq(liNum).show();
+	});
+	
+	//拼团详情
+	$(".xw_goodsList .ptDiv").click(function(){
+		window.location.href='4-3-2pintuanxiangqing.html';
+	});
+	//特卖会场
+	$(".saleDiv").click(function(){
+		window.location.href='4-4-2yurehuichang.html';
+	});
+
+	$(window).bind("resize",resizebind);
+});
+
+	
+/*----------浏览器重置事件--------*/
+function resizebind(){
+	//setpageSize();
+}
+
+

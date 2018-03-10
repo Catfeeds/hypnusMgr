@@ -1,0 +1,11 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+
+
+.list{ background:#fff; height:80px; padding:0px 20px; border-bottom:1px solid #e5e5e5;}
+.listPic{ border:1px solid #e5e5e5; width:60px; border-radius:5px; margin:10px 10px 0px 0px ; float:left;}
+.listBiaoti{ font-weight:normal;  font-size:16px;  padding:10px 0px 4px 0px; color:#000;}
+.listNei{ font-weight:normal;  font-size:14px; color:#666; line-height:16px;  }

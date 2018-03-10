@@ -1,0 +1,272 @@
+package com.catt.wfx.repository.entity.couponMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 代金券信息实体类
+ * 
+ * @author chen chusheng
+ * @date 2017-01-16 11:10:40
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_COUPON_INFO")
+public class CouponInfo extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+
+	public static final Integer STATUS_PUBLISH = 1;//已发布
+	public static final Integer STATUS_NOT_PUBLISH = 2;//未发布
+
+	public static final Integer TYPELIMIT_YES = 1;//商品类型限制 是
+	public static final Integer TYPELIMIT_NO = 1;//商品类型限制 否
+
+	public static final String TYPELIMIT_DESC = "全场通用";//商品类型限制描述
+
+	
+	/**
+	 * 厂家标识
+	 */
+	private Long factoryId;
+	/**
+	 * 代金券名称
+	 */
+	private String couponName;
+	/**
+	 * 状态<p><br>
+	 * 1-已发布<br>
+	 * 2-未发布
+	 */
+	private Integer status;
+	/**
+	 * 面值
+	 */
+	private Double faceValue;
+	/**
+	 * 商品类型限制<p><br>
+	 * 1-是<br>
+	 * 2-否
+	 */
+	private Integer typeLimit;
+
+	/**
+	 * 商品类型限制描述<p><br>
+	 */
+	private String typeLimitDesc;
+	/**
+	 * 使用金额限制<p><br>
+	 * 1-是<br>
+	 * 2-否
+	 */
+	private Integer moneyLimit;
+	/**
+	 * 金额额度<p><br>
+	 * 订单额度满多少才能使用
+	 */
+	private Double orderMoney;
+	/**
+	 * 有效时长<p><br>
+	 * 单位为天
+	 */
+	private Integer limitDate;
+	/**
+	 * 发放数量
+	 */
+	private Integer sendNum;
+	/**
+	 * 使用数量
+	 */
+	private Integer useNum;
+	/**
+	 * 删除标识<p><br>
+	 * 1-是<br>
+	 * 2-否
+	 */
+	private Integer delFlag;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+	/**
+	 * 创建时间<p><br>
+	 * 创建时间
+	 */
+//	private Date createdTime;
+	/**
+	 * 修改时间<p><br>
+	 * 修改时间
+	 */
+//	private Date modifyTime;
+	/**
+	 * 备注<p><br>
+	 * 备注
+	 */
+	private String remark;
+
+	@Column(name = "I_FACTORY_ID")
+	public Long getFactoryId() {
+		return factoryId;
+	}
+
+	public void setFactoryId(Long factoryId) {
+		this.factoryId = factoryId;
+	}
+
+	@Column(name = "S_COUPON_NAME", length = 128)
+	public String getCouponName() {
+		return couponName;
+	}
+
+	public void setCouponName(String couponName) {
+		this.couponName = couponName;
+	}
+
+	@Column(name = "I_STATUS")
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	@Column(name = "I_FACE_VALUE")
+	public Double getFaceValue() {
+		return faceValue;
+	}
+
+	public void setFaceValue(Double faceValue) {
+		this.faceValue = faceValue;
+	}
+
+	@Column(name = "I_TYPE_LIMIT")
+	public Integer getTypeLimit() {
+		return typeLimit;
+	}
+
+	public void setTypeLimit(Integer typeLimit) {
+		this.typeLimit = typeLimit;
+	}
+
+    @Column(name = "S_TYPE_LIMIT_DESC", length = 128)
+	public String getTypeLimitDesc() {
+		return typeLimitDesc;
+	}
+
+	public void setTypeLimitDesc(String typeLimitDesc) {
+		this.typeLimitDesc = typeLimitDesc;
+	}
+
+	@Column(name = "I_MONEY_LIMIT")
+	public Integer getMoneyLimit() {
+		return moneyLimit;
+	}
+
+	public void setMoneyLimit(Integer moneyLimit) {
+		this.moneyLimit = moneyLimit;
+	}
+
+	@Column(name = "I_ORDER_MONEY")
+	public Double getOrderMoney() {
+		return orderMoney;
+	}
+
+	public void setOrderMoney(Double orderMoney) {
+		this.orderMoney = orderMoney;
+	}
+
+	@Column(name = "I_LIMIT_DATE")
+	public Integer getLimitDate() {
+		return limitDate;
+	}
+
+	public void setLimitDate(Integer limitDate) {
+		this.limitDate = limitDate;
+	}
+
+	@Column(name = "I_SEND_NUM")
+	public Integer getSendNum() {
+		return sendNum;
+	}
+
+	public void setSendNum(Integer sendNum) {
+		this.sendNum = sendNum;
+	}
+
+	@Column(name = "I_USE_NUM")
+	public Integer getUseNum() {
+		return useNum;
+	}
+
+	public void setUseNum(Integer useNum) {
+		this.useNum = useNum;
+	}
+
+	@Column(name = "I_DEL_FLAG")
+	public Integer getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(Integer delFlag) {
+		this.delFlag = delFlag;
+	}
+
+//	@Column(name = "d_modify_time")
+//	public Date getModifyTime() {
+//		return modifyTime;
+//	}
+//
+//	public void setModifyTime(Date modifyTime) {
+//		this.modifyTime = modifyTime;
+//	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+//	@Column(name = "d_created_time")
+//	public Date getCreatedTime() {
+//		return createdTime;
+//	}
+//
+//	public void setCreatedTime(Date createdTime) {
+//		this.createdTime = createdTime;
+//	}
+
+	@Column(name = "S_REMARK", length = 1024)
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+}
+

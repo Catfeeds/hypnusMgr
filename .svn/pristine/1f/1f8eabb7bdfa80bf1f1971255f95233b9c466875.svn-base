@@ -1,0 +1,39 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>修改手机号</title>
+    <link rel="stylesheet" href="${path}/resources/css/public.css">
+    <link rel="stylesheet" href="${path}/resources/css/gerenxinxi.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/personal/modifyMobile/useMobile.js"></script>
+</head>
+
+<body style="background:#fff;">
+<%--<div style="height:47px;"></div>
+<div class="top header">
+    <button class="top-left" onClick="javascript:history.back(-1);"><img class="top_btn_back" src="${path}/resources/images/top_btn_back.png"></button>
+    <h1>修改手机号</h1>
+</div>--%>
+<div class="neirongTop">
+    <h2>发送验证码短信到</h2>
+    <h1>${mobile}</h1>
+</div>
+<div class="neirongBottom">
+    <p>验证码</p>
+    <div class="inputBox">
+        <input class="timeBtn" placeholder="请输入验证码" id="captcha">
+    </div>
+    <a id="sendMsg">发送验证码</a>
+    <a id="sendMsgTime" style="background:#b8b4b4;display: none">60秒</a>
+</div>
+<div class="bottomBtnBox">
+    <button id="commitBtn">提交</button>
+</div>
+
+
+</body>
+</html>

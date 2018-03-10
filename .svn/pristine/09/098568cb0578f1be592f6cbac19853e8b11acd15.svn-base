@@ -1,0 +1,43 @@
+package com.catt.wfx.service.impl.wechatReturn.service;
+
+import com.catt.common.module.pay.weChatSDK.common.Configure;
+import com.catt.common.module.pay.weChatSDK.common.HttpsRequest;
+import com.catt.common.module.pay.weChatSDK.service.BaseService;
+import com.catt.wfx.repository.entity.wechatReturn.OrderReturnReqData;
+
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+
+/**
+ * Description:
+ * Created by 2017-03-01  11:47.
+ * author: Zhou mingxiang
+ */
+public class ReturnMoneyService extends BaseService {
+
+
+    public ReturnMoneyService() throws UnrecoverableKeyException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        super(Configure.REFUND_API, new HttpsRequest(true));
+    }
+
+    /**
+     * 申请退款
+     * @param orderReturnReqData 这个数据对象里面包含了API要求提交的各种数据字段
+     * @return API返回的数据
+     * @throws Exception
+     */
+    public String request( OrderReturnReqData orderReturnReqData) throws Exception {
+
+        //--------------------------------------------------------------------
+        //发送HTTPS的Post请求到API地址
+        //--------------------------------------------------------------------
+        String responseString = sendPost(orderReturnReqData);
+
+        return responseString;
+    }
+
+}
+

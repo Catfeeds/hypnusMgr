@@ -1,0 +1,143 @@
+package com.catt.wfx.job;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.express.data.Constats;
+import com.catt.common.module.express.repository.entity.ExpressLog;
+import com.catt.common.module.express.service.ExpressLogService;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLogistics;
+import com.catt.wfx.service.base.orderMgr.CusOrderLogisticsBaseService;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * 扫描已签收的物流单据，修改订单状态
+ *
+ * @author Zhang zhongtao
+ * @version 1.0.0.20170721
+ * @since JDK V1.8
+ */
+@Component("scanExpressOrderJob")
+@Lazy(false)
+public class ScanExpressOrderJob implements InitializingBean {
+    private Logger logger = LoggerFactory.getLogger(ScanExpressOrderJob.class);
+
+    private static final Long OP_USER_ID = 1L;
+    private static final String OP_USER_NAME = "admin[定时任务定期进行收货]";
+
+    @Resource(name = "cusOrderServiceImpl")
+    private CusOrderService cusOrderService;
+
+    @Resource(name = "expressLogServiceImpl")
+    private ExpressLogService expressLogService;
+
+    @Resource(name = "cusOrderLogisticsBaseServiceImpl")
+    private CusOrderLogisticsBaseService cusOrderLogisticsBaseService;
+
+    @Scheduled(cron = "${task.scanExpressOrderJob.cron}")
+    public void run() {
+        Integer completeCount = 0;
+        logger.info("自动收货任务开始运行...");
+
+        List<ExpressLog> logs = getExpressLogsSign();
+
+        if (CollectionUtil.isEmpty(logs)) {
+            logger.info("自动收货任务完成！ 没有满足签收条件的快递单数据！");
+            return;
+        }
+
+        List<Long> ids = new ArrayList<>();
+
+        logs.forEach(expressLog -> {
+            List<Long> orderIds = getOrderIdByExpress(expressLog);
+
+            if (CollectionUtil.isNotEmpty(orderIds)) {
+                ids.addAll(orderIds);
+                expressLog.setSync(true);
+            }
+        });
+
+        if (CollectionUtil.isEmpty(ids)) {
+            logger.info("自动收货任务完成！ 没有满足确认收货的订单数据！");
+            return;
+        }
+
+        //确认收货
+        cusOrderService.confirmDeliver(OP_USER_ID, OP_USER_NAME, ids.toArray(new Long[ids.size()]));
+
+        //查找状态已经改变的数据
+        List<ExpressLog> modifies = logs.parallelStream().filter(ExpressLog::getSync).collect(Collectors.toList());
+
+        if (CollectionUtil.isNotEmpty(modifies)) {
+            expressLogService.saveOrUpdate(modifies);
+            completeCount = modifies.size();
+        }
+
+        logger.info("自动收货任务完成，修改单据数：{}！", completeCount);
+    }
+
+    /**
+     * 根据快递查找订单ID
+     *
+     * @param expressLog 快递信息
+     * @return Long 订单ID
+     */
+    private List<Long> getOrderIdByExpress(ExpressLog expressLog) {
+
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("logisticsType", expressLog.getExCom().ordinal()));
+        filters.add(Filter.eq("logisticsCode", expressLog.getExCode()));
+        filters.add(Filter.ne("status", CusOrderLogistics.Status.ReceivedGoods.getValue()));
+
+        //需要考虑一个物流信息对应多条订单的情况，所以一个物流查询出来的订单是集合
+        List<CusOrderLogistics> list = cusOrderLogisticsBaseService.findList(null, filters, null);
+
+        List<Long> collect = list.stream().mapToLong(CusOrderLogistics::getOrderId).boxed().collect(Collectors.toList());
+
+        return collect;
+    }
+
+    /**
+     * 获取2个月未同步且已经签收的快递数据
+     *
+     * @return list
+     */
+    private List<ExpressLog> getExpressLogsSign() {
+        List<Filter> filters = new ArrayList<>();
+        //6个月内有效的快递数据
+        LocalDateTime validTime = LocalDateTime.now().toLocalDate().atStartOfDay().minusMonths(6);
+
+        //6个月内
+        filters.add(Filter.dge("createDate", DateUtil.toDate(validTime)));
+        //签收状态
+        filters.add(Filter.eq("state", Constats.ExState.Sign));
+        //未同步
+        filters.add(Filter.eq("sync", false));
+
+        List<ExpressLog> list = expressLogService.findList(null, null, filters, null);
+
+        return list;
+    }
+
+    /**
+     * 默认Spring启动完成后，调用此方法
+     *
+     * @throws Exception
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+//        run();
+    }
+}

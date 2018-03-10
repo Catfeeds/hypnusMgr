@@ -1,0 +1,326 @@
+package com.catt.hypnus.web.controller.pub;
+
+import com.catt.common.base.pojo.message.MessageConstants;
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.module.enumMgr.repository.entity.TWhsEnum;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.*;
+import java.util.regex.Pattern;
+
+
+/**
+ * <pre>
+ * Description: 枚举管理类
+ * Author: Zhang zhongtao
+ * Version:
+ * Since: Ver 1.1
+ * Date: 2014-11-15 12:20
+ * </pre>
+ */
+@RequestMapping(value = "/pub/enumMgr")
+@Controller(value = "enumMgrController")
+public class EnumMgrController extends BaseController {
+
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+    /**
+     * 跳转到枚举管理树形页面
+     *
+     * @returnO
+     */
+    @RequestMapping(value = "/tree")
+    public String indexTree() {
+        return "/admin/system/enumMgr/treeList";
+    }
+
+    /**
+     * 跳转到枚举管理新增或编辑页面
+     *
+     * @param param
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/addEdit", method = RequestMethod.GET)
+    public String addEditView(@RequestParam Map<String, Object> param, Model model) {
+        Long id = MapUtil.getLong(param, "id");
+        if (id != null) {
+            TWhsEnum obj = enumMgrService.find(id);
+            model.addAttribute("id", id);
+            model.addAttribute("entity", obj);
+        } else {
+            TWhsEnum tWhsEnum = new TWhsEnum();
+            tWhsEnum.setSEnumTblName(MapUtil.getString(param, "enumTblName"));
+            tWhsEnum.setSEnumColName(MapUtil.getString(param, "enumColName"));
+            model.addAttribute("entity", tWhsEnum);
+        }
+        return "/admin/system/enumMgr/addEdit";
+    }
+
+
+    /**
+     * 跳转到枚举管理详情页面
+     *
+     * @param id
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public String view(@PathVariable("id") Long id, Model model) {
+        TWhsEnum obj = enumMgrService.find(id);
+        model.addAttribute("id", id);
+        model.addAttribute("entity", obj);
+        return "/admin/system/enumMgr/view";
+    }
+
+    /**
+     * 枚举管理新增或修改操作
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/save")
+    @ResponseBody
+    public Message save(TWhsEnum param) {
+        if (!isValid(param)) {
+            return ERROR_MSG;
+        }
+
+        enumMgrService.saveOrUpdate(param);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 枚举管理删除操作
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public Message delete(@PathVariable("id") long id) {
+        TWhsEnum tWhsEnum = enumMgrService.find(id);
+        enumMgrService.delete(tWhsEnum);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 枚举管理查询子节点操作，list列表
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/childrenList", method = {RequestMethod.POST})
+    @ResponseBody
+    public Message childrenList(@RequestParam Map<String, Object> param) {
+        final String sEnumTblName = MapUtil.getString(param, "enumTblName");
+        final String sEnumColName = MapUtil.getString(param, "enumColName");
+        ArrayList<Filter> filters = new ArrayList<Filter>();
+        if (sEnumTblName != null && !sEnumTblName.isEmpty()) {
+            filters.add(Filter.eq("SEnumTblName", sEnumTblName));
+        }
+        if (sEnumColName != null && !sEnumColName.isEmpty()) {
+            filters.add(Filter.eq("SEnumColName", sEnumColName));
+        }
+        List<TWhsEnum> list = enumMgrService.findList(null, filters, null);
+        return SUCCESS_MSG.addResult(list);
+    }
+
+    /**
+     * 查询枚举
+     *
+     * @param tabName 表名
+     * @param colName 字段名
+     * @return
+     */
+    @RequestMapping("/find")
+    @ResponseBody
+    public List<TWhsEnum> find(final String tabName, final String colName) {
+        Assert.hasLength(tabName);
+
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("SEnumTblName", tabName));
+        filters.add(Filter.eq("SEnumColName", colName));
+        filters.add(Filter.eq("isEnabled", 1));
+
+        List<Order> orders = new ArrayList<Order>();
+        orders.add(new Order("id", Order.Direction.asc));
+
+        List<TWhsEnum> enums = enumMgrService.findList(null, filters, orders);
+
+        return enums;
+    }
+
+    /**
+     * 获取枚举表中某个字段的所有枚举集合
+     *
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/getEnumMeaning/{tableName}/{colName}")
+    @ResponseBody
+    public List<Map<String, String>> getEnumMeaningV2(@PathVariable String tableName, @PathVariable String colName) throws Exception {
+        List<Map<String, String>> enumList = new ArrayList();
+
+        Map e = new HashMap();
+        e.put("sEnumTblName", tableName);
+        e.put("sEnumColName", colName);
+
+        List<TWhsEnum> list = enumMgrService.findEnumList(e, tableName + "_" + colName).getContent();
+
+        for (TWhsEnum tWhsEnum : list) {
+            Map emumMap = new HashMap();
+            emumMap.put("value", tWhsEnum.getIEnumValue());
+            emumMap.put("text", tWhsEnum.getSEnumName());
+            enumList.add(emumMap);
+        }
+
+        return enumList;
+    }
+
+    /**
+     * 查询枚举
+     *
+     * @param whsEnum 枚举获取参数（json字符串，有三种入参方式）
+     *                ① 表名-列名,表名-列名,表名-列名,..... 字符串，可单个批量查询
+     *                或
+     *                ② {tabName : 表名, colName : 列名}  Object转换的json字符串，此入参只能查询单个枚举
+     *                或
+     *                ③ [{tabName : 表名, colName : 列名}, {tabName : 表名, colName : 列名}  Array转换的json字符串，可单个批量查询
+     *                ...]
+     * @param type    返回值类型 1-对象，2-数组
+     * @return 返回格式 {
+     * type : 结果
+     * content : 说明
+     * result : {
+     * 表名-列名 : {
+     * sEnumTblName 表名
+     * sEnumColName 列名
+     * sEnumCNName  枚举中文名
+     * sEnumMapping 枚举内容
+     * 当type = 1或不传时 返回对象
+     * { value : name, value : name, ...}
+     * 当type = 2时 返回数组
+     * [ {value,name}, {value,name}, ...]
+     * <p>
+     * }
+     * }
+     * }
+     */
+    @RequestMapping("/findEnumListBusi")
+    @ResponseBody
+    public Message findEnumListBusi(final String whsEnum, Integer type) {
+        Assert.hasLength(whsEnum);
+
+        if (!StringUtil.checkObj(type)) {
+            type = 1;
+        } else if (type != 1 && type != 2) {
+            return new Message(MessageConstants.Type.warn, "查询参数有误");
+        }
+
+        List<Map> queryList;
+        Object jsonData = JsonUtils.toObject(whsEnum, Object.class);
+        if (jsonData.getClass().equals(LinkedHashMap.class)) {
+            queryList = new ArrayList<Map>();
+            queryList.add((Map) jsonData);
+        } else if (jsonData.getClass().equals(ArrayList.class)) {
+            queryList = (List<Map>) jsonData;
+        } else if (jsonData.getClass().equals(String.class) && Pattern.matches("^(\\w+-\\w+,)*\\w+-\\w+$", StringUtil.toString(jsonData).trim())) {
+            queryList = new ArrayList<Map>();
+            String[] enumArray = StringUtil.toString(jsonData).split(",");
+            for (String item : enumArray) {
+                Map queryEnum = new HashMap();
+                queryEnum.put("tabName", item.split("-")[0]);
+                queryEnum.put("colName", item.split("-")[1]);
+                queryList.add(queryEnum);
+            }
+        } else {
+            return new Message(MessageConstants.Type.warn, "查询参数有误");
+        }
+
+        // 返回结果集
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        // 将查询按表名归类
+        Map<String, List<String>> enumParam = new HashMap<String, List<String>>();
+        for (Map item : queryList) {
+            String tabName = StringUtil.toString(item.get("tabName"));
+            String colName = StringUtil.toString(item.get("colName"));
+            List<String> cols;
+            if (enumParam.get(tabName) == null) {
+                cols = new ArrayList<String>();
+                enumParam.put(tabName, cols);
+            } else {
+                cols = enumParam.get(tabName);
+            }
+            cols.add(colName);
+            resultMap.put(tabName + "-" + colName, null);
+        }
+
+        Map<String, Object> enumMap = new HashMap<String, Object>();
+        Iterator<String> tempIter = enumParam.keySet().iterator();
+        while (tempIter.hasNext()) {
+            final String tabName = tempIter.next();
+            final List<String> colNames = enumParam.get(tabName);
+            ArrayList<Filter> filters = new ArrayList<Filter>();
+            filters.add(Filter.eq("SEnumTblName", tabName));
+            filters.add(Filter.in("SEnumColName", colNames.toArray(new String[colNames.size()])));
+            filters.add(Filter.eq("isEnabled", 1));
+
+            List<Order> orders = new ArrayList<Order>();
+            orders.add(Order.asc("SEnumTblName"));
+            orders.add(Order.asc("SEnumColName"));
+            orders.add(Order.asc("IEnumValue"));
+
+            List<TWhsEnum> list = enumMgrService.findList(null, filters, orders);
+            for (final TWhsEnum item : list) {
+                String key = item.getSEnumTblName() + "-" + item.getSEnumColName();
+                Map<String, Object> keyMap;
+                if (enumMap.get(key) == null) {
+                    keyMap = new HashMap<String, Object>();
+                    keyMap.put("sEnumTblName", item.getSEnumTblName());
+                    keyMap.put("sEnumCNName", item.getSEnumCNName());
+                    keyMap.put("sEnumColName", item.getSEnumColName());
+                    if (type == 1) {
+                        // 对象
+                        keyMap.put("sEnumMapping", new LinkedHashMap<String, String>());
+                    } else {
+                        // 数组
+                        keyMap.put("sEnumMapping", new ArrayList<Map>());
+                    }
+                    enumMap.put(key, keyMap);
+                } else {
+                    keyMap = (HashMap<String, Object>) enumMap.get(key);
+                }
+                if (type == 1) {
+                    // 对象
+                    ((HashMap<String, String>) keyMap.get("sEnumMapping"))
+                            .put(item.getIEnumValue() + "", item.getSEnumName());
+                } else {
+                    // 数组
+                    ((ArrayList<Map<String, String>>) keyMap.get("sEnumMapping"))
+                            .add(new HashMap() {{
+                                put("value", item.getIEnumValue());
+                                put("name", item.getSEnumName());
+                            }});
+                }
+            }
+        }
+        resultMap.putAll(enumMap);
+
+        Message message = new Message(MessageConstants.Type.success, "查询成功").addResult(resultMap);
+        return message;
+    }
+}

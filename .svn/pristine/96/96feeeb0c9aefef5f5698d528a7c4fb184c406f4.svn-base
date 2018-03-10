@@ -1,0 +1,227 @@
+package com.catt.wfx.repository.entity.customerMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 团队信息表实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-13 16:15:31
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_CUS_ALLOT")
+public class CusAllot extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 厂家标识
+	 */
+	private Long factoryId;
+	/**
+	 * 厂家名称
+	 */
+	private String factoryName;
+	/**
+	 * 代理商标识<p><br>
+	 * 当为空时，团队直属于厂家。
+	 */
+	private Long agentId;
+	/**
+	 * 代理商名称<p><br>
+	 * 当为空时，团队直属于厂家。
+	 */
+	private String agentName;
+	/**
+	 * 主管标识
+	 */
+	private Long leaderId;
+	/**
+	 * 主管名称
+	 */
+	private String leaderName;
+	/**
+	 * 团队级别<p><br>
+	 * 1-一级 2-二级 3-三级
+	 */
+	private Integer level;
+	/**
+	 * 团队名称
+	 */
+	private String allotName;
+	/**
+	 * 团队人数
+	 */
+	private Long staffNum;
+	/**
+	 * 团队订单数
+	 */
+	private Integer orderNum;
+	/**
+	 * 团队销售金额
+	 */
+	private Double salesMoney;
+	/**
+	 * 上级标识
+	 */
+	private Long upId;
+	/**
+	 * 团队路径
+	 */
+	private String path;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+
+	@Column(name = "I_FACTORY_ID")
+	public Long getFactoryId() {
+		return factoryId;
+	}
+
+	public void setFactoryId(Long factoryId) {
+		this.factoryId = factoryId;
+	}
+
+	@Column(name = "S_FACTORY_NAME", length = 128)
+	public String getFactoryName() {
+		return factoryName;
+	}
+
+	public void setFactoryName(String factoryName) {
+		this.factoryName = factoryName;
+	}
+
+	@Column(name = "I_AGENT_ID")
+	public Long getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(Long agentId) {
+		this.agentId = agentId;
+	}
+
+	@Column(name = "S_AGENT_NAME", length = 128)
+	public String getAgentName() {
+		return agentName;
+	}
+
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
+	@Column(name = "I_LEADER_ID")
+	public Long getLeaderId() {
+		return leaderId;
+	}
+
+	public void setLeaderId(Long leaderId) {
+		this.leaderId = leaderId;
+	}
+
+	@Column(name = "S_LEADER_NAME", length = 32)
+	public String getLeaderName() {
+		return leaderName;
+	}
+
+	public void setLeaderName(String leaderName) {
+		this.leaderName = leaderName;
+	}
+
+	@Column(name = "I_LEVEL")
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+
+	@Column(name = "S_ALLOT_NAME", length = 128)
+	public String getAllotName() {
+		return allotName;
+	}
+
+	public void setAllotName(String allotName) {
+		this.allotName = allotName;
+	}
+
+	@Column(name = "I_STAFF_NUM")
+	public Long getStaffNum() {
+		return staffNum;
+	}
+
+	public void setStaffNum(Long staffNum) {
+		this.staffNum = staffNum;
+	}
+
+	@Column(name = "I_ORDER_NUM")
+	public Integer getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
+	}
+
+	@Column(name = "I_SALES_MONEY")
+	public Double getSalesMoney() {
+		return salesMoney;
+	}
+
+	public void setSalesMoney(Double salesMoney) {
+		this.salesMoney = salesMoney;
+	}
+
+	@Column(name = "I_UP_ID")
+	public Long getUpId() {
+		return upId;
+	}
+
+	public void setUpId(Long upId) {
+		this.upId = upId;
+	}
+
+	@Column(name = "S_PATH", length = 128)
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+}
+

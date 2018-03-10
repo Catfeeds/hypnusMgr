@@ -1,0 +1,85 @@
+seajs.use(['$', 'msgBox', 'base64', 'util', 'rsa'],
+    function ($, msgBox, base64, util, rsa) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                },
+                /** 初始化界面  */
+                initPage: function () {
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $("#commitBtn").click(function () {
+                        EventHandler.modifyMobileValidate();
+                    });
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                // 验证身份
+                modifyMobileValidate: function () {
+                    var oldPassword = $("#oldPassword").val().trim();
+                    if (!oldPassword) {
+                        msgBox.tips("登录密码不能为空");
+                        return;
+                    }
+                    DataHandler.getRasKey(null, function(backData){
+                        var modulus = backData.result.modulus;
+                        var exponent = backData.result.exponent;
+                        var rsaKey = new rsa.RSAKey();
+                        rsaKey.setPublic(base64.b64tohex(modulus), base64.b64tohex(exponent));
+                        oldPassword = base64.hex2b64(rsaKey.encrypt(oldPassword));
+
+                        DataHandler.modifyMobileValidate({oldPassword: oldPassword, type: 2}, function (backData) {
+                            if (backData.type == 'success') {
+                                window.location.href = path + '/admin/wechat/personal/modifyMobile/modify.html?shopId=' + shopId;
+                            } else {
+                                msgBox.tips(backData.content);
+                            }
+                        });
+                    });
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 加密传输密码数据
+                 */
+                getRasKey: function (param, callback) {
+                    $.post(path + '/pub/common/getRasKey', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+                /**
+                 * 验证身份
+                 */
+                modifyMobileValidate: function (param, callback) {
+                    $.post(path + '/admin/wechat/personal/modifyMobile/modifyMobileValidate', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

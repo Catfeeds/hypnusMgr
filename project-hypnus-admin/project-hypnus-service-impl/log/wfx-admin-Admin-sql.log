@@ -1,0 +1,1406 @@
+hypnus-admin 2017-10-30 15:17:43.855 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:17:43.912 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:17:43.969 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:17:44.035 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:17:44.097 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:17:45.575 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:17:45.772 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:17:50.501 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:17:50.502 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:17:50.503 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:17:50.504 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:17:50.504 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:19:37.992 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:19:38.049 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:19:38.110 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:19:38.175 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:19:38.229 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:19:39.341 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:19:39.452 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:19:44.330 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:19:44.485 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:19:44.521 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:19:44.522 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:19:44.522 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:19:44.523 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:19:44.523 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:20:50.923 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:20:50.989 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:20:51.036 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:20:51.081 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:20:51.137 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:20:52.260 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:20:52.376 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:20:57.204 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:20:57.484 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.I_TOTAL_NUM AS "totalNum",  t.I_TOTAL_MONEY AS "totalMoney",  t.I_FACTORY_ID AS "factoryId",  f.S_FACTORY_NAME AS "factoryName"  FROM t_settlement_business t  LEFT JOIN t_factory_info f ON (t.I_FACTORY_ID = f.I_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:20:57.495 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2017-10-30 15:20:57.495 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2017-10-30 15:20:57.507 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+ SELECT  t.I_ID AS "id",  t.I_TOTAL_NUM AS "totalNum",  t.I_TOTAL_MONEY AS "totalMoney",  t.I_FACTORY_ID AS "factoryId",  f.S_FACTORY_NAME AS "factoryName"  FROM t_settlement_business t  LEFT JOIN t_factory_info f ON (t.I_FACTORY_ID = f.I_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:20:57.507 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 15.86113 millis.
+ SELECT  t.I_ID AS "id",  t.I_TOTAL_NUM AS "totalNum",  t.I_TOTAL_MONEY AS "totalMoney",  t.I_FACTORY_ID AS "factoryId",  f.S_FACTORY_NAME AS "factoryName"  FROM t_settlement_business t  LEFT JOIN t_factory_info f ON (t.I_FACTORY_ID = f.I_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:20:57.507 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:20:57.511 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, I_TOTAL_NUM, I_TOTAL_MONEY, I_FACTORY_ID, S_FACTORY_NAME]
+hypnus-admin 2017-10-30 15:20:57.522 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [1, 29, 166.13, 1, 品尚酒家]
+hypnus-admin 2017-10-30 15:20:57.531 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:20:57.532 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:20:57.543 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:20:57.575 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:20:57.576 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:20:57.576 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:20:57.577 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:20:57.577 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:20:57.578 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:22:45.789 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:22:45.839 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:22:45.887 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:22:45.941 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:22:45.999 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:22:47.112 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:22:47.224 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:22:52.050 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:22:52.257 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.I_TOTAL_NUM AS "totalNum",  t.I_TOTAL_MONEY AS "totalMoney",  t.I_FACTORY_ID AS "factoryId",  f.S_FACTORY_NAME AS "factoryName"  FROM t_settlement_business t  LEFT JOIN t_factory_info f ON (t.I_FACTORY_ID = f.I_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:22:52.272 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2017-10-30 15:22:52.272 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2017-10-30 15:22:52.283 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+ SELECT  t.I_ID AS "id",  t.I_TOTAL_NUM AS "totalNum",  t.I_TOTAL_MONEY AS "totalMoney",  t.I_FACTORY_ID AS "factoryId",  f.S_FACTORY_NAME AS "factoryName"  FROM t_settlement_business t  LEFT JOIN t_factory_info f ON (t.I_FACTORY_ID = f.I_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:22:52.283 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 14.729792 millis.
+ SELECT  t.I_ID AS "id",  t.I_TOTAL_NUM AS "totalNum",  t.I_TOTAL_MONEY AS "totalMoney",  t.I_FACTORY_ID AS "factoryId",  f.S_FACTORY_NAME AS "factoryName"  FROM t_settlement_business t  LEFT JOIN t_factory_info f ON (t.I_FACTORY_ID = f.I_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:22:52.283 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:22:52.288 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, I_TOTAL_NUM, I_TOTAL_MONEY, I_FACTORY_ID, S_FACTORY_NAME]
+hypnus-admin 2017-10-30 15:22:52.298 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [1, 29, 166.13, 1, 品尚酒家]
+hypnus-admin 2017-10-30 15:22:52.307 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:22:52.307 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:22:52.309 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:22:52.329 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:22:52.329 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:22:52.329 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:22:52.329 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:22:52.330 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:22:52.330 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:23:25.756 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:23:25.811 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:23:25.856 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:23:25.912 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:23:25.986 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:23:27.085 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:23:27.194 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:23:31.838 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:23:32.026 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.I_TOTAL_NUM AS "totalNum",  t.I_TOTAL_MONEY AS "totalMoney",  t.I_FACTORY_ID AS "factoryId",  f.S_FACTORY_NAME AS "factoryName"  FROM t_settlement_business t  LEFT JOIN t_factory_info f ON (t.I_FACTORY_ID = f.I_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:23:32.036 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2017-10-30 15:23:32.036 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2017-10-30 15:23:32.195 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+ SELECT  t.I_ID AS "id",  t.I_TOTAL_NUM AS "totalNum",  t.I_TOTAL_MONEY AS "totalMoney",  t.I_FACTORY_ID AS "factoryId",  f.S_FACTORY_NAME AS "factoryName"  FROM t_settlement_business t  LEFT JOIN t_factory_info f ON (t.I_FACTORY_ID = f.I_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:23:32.195 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 161.415624 millis.
+ SELECT  t.I_ID AS "id",  t.I_TOTAL_NUM AS "totalNum",  t.I_TOTAL_MONEY AS "totalMoney",  t.I_FACTORY_ID AS "factoryId",  f.S_FACTORY_NAME AS "factoryName"  FROM t_settlement_business t  LEFT JOIN t_factory_info f ON (t.I_FACTORY_ID = f.I_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:23:32.195 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:23:32.198 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, I_TOTAL_NUM, I_TOTAL_MONEY, I_FACTORY_ID, S_FACTORY_NAME]
+hypnus-admin 2017-10-30 15:23:32.207 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [1, 29, 166.13, 1, 品尚酒家]
+hypnus-admin 2017-10-30 15:23:32.215 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:23:32.215 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:23:32.217 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:23:49.617 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:23:49.618 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:23:49.618 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:23:49.618 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:23:49.619 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:23:49.619 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:24:01.601 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:24:01.637 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:24:01.690 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:24:01.758 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:24:01.807 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:24:02.888 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:24:02.997 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:24:07.757 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:24:07.952 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:24:07.968 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2017-10-30 15:24:07.968 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2017-10-30 15:24:07.979 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:24:07.980 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 17.862083 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:24:07.980 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:24:07.983 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:24:07.992 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [564709504193658880, 201706021609391163, 20.0, 19.9, 1]
+hypnus-admin 2017-10-30 15:24:07.999 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [571521018653310976, 201706211116111167, 0.1, null, 1]
+hypnus-admin 2017-10-30 15:24:07.999 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [571528834562654208, 201706211147141169, 0.1, null, 1]
+hypnus-admin 2017-10-30 15:24:07.999 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [571582008350736384, 201706211518321170, 0.1, null, 1]
+hypnus-admin 2017-10-30 15:24:07.999 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [573700260371628032, 201706271135421182, 50.1, 50.0, 1]
+hypnus-admin 2017-10-30 15:24:08.000 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [573745081446563840, 201706271433481184, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:08.000 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [574475276495355904, 201706291455201190, 0.04, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:08.000 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [574478157030096896, 201706291506471192, 26.4, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:08.000 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [574479430366265344, 201706291511511193, 6.6, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:08.001 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [574495059790004224, 201706291613571195, 0.01, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:08.001 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [574874325769781248, 201706301721011201, 10.9, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:08.001 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [575852053138505728, 201707031006101205, 21.8, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:08.001 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [575865037588004864, 201707031057451206, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:08.002 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [576286485498560512, 201707041452261208, 21.8, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:08.002 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [576292177508827136, 201707041515031209, 1.5, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:08.002 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [576590102726180864, 201707051058541210, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:08.002 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [583475746626863104, 201707241100001211, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:08.002 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [585015787555651584, 201707281659341213, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:08.003 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [585007055287353344, 201707281624521212, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:08.003 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [603829315712319488, 201709181457491217, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:08.003 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [603829315712319488, 201709181457491217, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:08.003 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [604193651668549632, 201709191505331218, 0.02, 0.02, 2]
+hypnus-admin 2017-10-30 15:24:08.004 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [604209306023231488, 201709191607461219, 0.02, 0.02, 2]
+hypnus-admin 2017-10-30 15:24:08.004 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [604212471787421696, 201709191620171221, 0.02, 0.02, 2]
+hypnus-admin 2017-10-30 15:24:08.004 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [604855536789225472, 201709211055391226, 0.04, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:08.004 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [607109879601037312, 201709271613361230, 26.4, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:08.005 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [612898219617157120, 201710131534241235, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:08.005 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [614343662557462528, 201710171518041245, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:08.005 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [614351144054947840, 201710171547481246, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:08.005 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [614352006823280640, 201710171551141247, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:08.008 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:24:08.008 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:24:08.010 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:24:08.093 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:24:08.097 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  d.sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:24:08.098 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : []
+hypnus-admin 2017-10-30 15:24:08.098 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : []
+hypnus-admin 2017-10-30 15:24:08.136 [main] ERROR druid.sql.Statement - [] {conn-10005, pstmt-20001} execute error.  SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  d.sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: FUNCTION d.sum does not exist. Check the 'Function Name Parsing and Resolution' section in the Reference Manual
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:408) ~[na:1.8.0]
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.Util.getInstance(Util.java:386) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1054) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4237) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4169) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2617) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2778) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2834) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2156) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2313) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2714) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.wall.WallFilter.preparedStatement_executeQuery(WallFilter.java:609) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterAdapter.preparedStatement_executeQuery(FilterAdapter.java:1064) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeQuery(PreparedStatementProxyImpl.java:132) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:227) [druid-1.0.13.jar:1.0.13]
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.extract(ResultSetReturnImpl.java:70) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.getResultSet(Loader.java:2116) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:1899) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:1875) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doQuery(Loader.java:919) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:336) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doList(Loader.java:2611) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doList(Loader.java:2594) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.listIgnoreQueryCache(Loader.java:2423) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.list(Loader.java:2418) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.custom.CustomLoader.list(CustomLoader.java:336) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.internal.SessionImpl.listCustomQuery(SessionImpl.java:1967) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.internal.AbstractSessionImpl.list(AbstractSessionImpl.java:322) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.internal.SQLQueryImpl.list(SQLQueryImpl.java:125) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.jpa.internal.QueryImpl.list(QueryImpl.java:606) [hibernate-entitymanager-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.jpa.internal.QueryImpl.getResultList(QueryImpl.java:483) [hibernate-entitymanager-5.0.7.Final.jar:5.0.7.Final]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0]
+	at java.lang.reflect.Method.invoke(Method.java:483) ~[na:1.8.0]
+	at org.springframework.orm.jpa.SharedEntityManagerCreator$DeferredQueryInvocationHandler.invoke(SharedEntityManagerCreator.java:362) [spring-orm-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at com.sun.proxy.$Proxy82.getResultList(Unknown Source) [na:na]
+	at com.catt.common.base.repository.dao.impl.SqlBaseDaoImpl.findListBySql(SqlBaseDaoImpl.java:71) [framework-base-repository-dao-impl-0.0.1-SNAPSHOT.jar:na]
+	at CusOrderDetailDaoImpl.findOrderDetail(CusOrderDetailDaoImpl.java:45) [classes/:na]
+	at CusOrderServiceImpl.findOrderDetail(CusOrderServiceImpl.java:100) [classes/:na]
+	at CusOrderServiceImpl$$FastClassBySpringCGLIB$$38ce8171.invoke(<generated>) [spring-core-4.1.4.RELEASE.jar:na]
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204) [spring-core-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:649) [spring-aop-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at CusOrderServiceImpl$$EnhancerBySpringCGLIB$$568c8731.findOrderDetail(<generated>) [spring-core-4.1.4.RELEASE.jar:na]
+	at SettlementBusinessServiceImpl.statisticsOfOrderDetail(SettlementBusinessServiceImpl.java:56) [classes/:na]
+	at SettlementBusinessServiceImplTest.statisticsOfOrderDetail(SettlementBusinessServiceImplTest.java:35) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0]
+	at java.lang.reflect.Method.invoke(Method.java:483) ~[na:1.8.0]
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47) [junit-4.11.jar:na]
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12) [junit-4.11.jar:na]
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:44) [junit-4.11.jar:na]
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.statements.RunBeforeTestMethodCallbacks.evaluate(RunBeforeTestMethodCallbacks.java:73) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:82) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:73) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:271) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:217) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:83) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:68) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:309) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:163) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:160) [junit-4.11.jar:na]
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70) [junit-rt.jar:na]
+hypnus-admin 2017-10-30 15:24:08.142 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters.
+hypnus-admin 2017-10-30 15:24:08.142 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:24:08.169 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:24:08.170 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:24:08.170 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:24:08.170 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:24:08.171 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:24:08.171 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2017-10-30 15:24:08.171 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:24:39.881 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:24:39.933 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:24:39.971 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:24:40.014 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:24:40.155 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:24:41.222 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:24:41.332 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:24:45.914 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:24:46.106 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:24:46.118 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2017-10-30 15:24:46.118 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2017-10-30 15:24:46.138 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:24:46.139 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 23.912061 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1 
+hypnus-admin 2017-10-30 15:24:46.139 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:24:46.142 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:24:46.152 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [564709504193658880, 201706021609391163, 20.0, 19.9, 1]
+hypnus-admin 2017-10-30 15:24:46.159 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [571521018653310976, 201706211116111167, 0.1, null, 1]
+hypnus-admin 2017-10-30 15:24:46.159 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [571528834562654208, 201706211147141169, 0.1, null, 1]
+hypnus-admin 2017-10-30 15:24:46.159 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [571582008350736384, 201706211518321170, 0.1, null, 1]
+hypnus-admin 2017-10-30 15:24:46.159 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [573700260371628032, 201706271135421182, 50.1, 50.0, 1]
+hypnus-admin 2017-10-30 15:24:46.159 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [573745081446563840, 201706271433481184, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:46.160 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [574475276495355904, 201706291455201190, 0.04, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:46.160 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [574478157030096896, 201706291506471192, 26.4, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:46.160 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [574479430366265344, 201706291511511193, 6.6, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:46.160 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [574495059790004224, 201706291613571195, 0.01, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:46.161 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [574874325769781248, 201706301721011201, 10.9, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:46.161 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [575852053138505728, 201707031006101205, 21.8, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:46.161 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [575865037588004864, 201707031057451206, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:46.161 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [576286485498560512, 201707041452261208, 21.8, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:46.162 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [576292177508827136, 201707041515031209, 1.5, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:46.162 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [576590102726180864, 201707051058541210, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:46.163 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [583475746626863104, 201707241100001211, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:46.163 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [585015787555651584, 201707281659341213, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:46.163 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [585007055287353344, 201707281624521212, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:46.164 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [603829315712319488, 201709181457491217, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:46.164 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [603829315712319488, 201709181457491217, 0.02, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:46.164 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [604193651668549632, 201709191505331218, 0.02, 0.02, 2]
+hypnus-admin 2017-10-30 15:24:46.165 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [604209306023231488, 201709191607461219, 0.02, 0.02, 2]
+hypnus-admin 2017-10-30 15:24:46.165 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [604212471787421696, 201709191620171221, 0.02, 0.02, 2]
+hypnus-admin 2017-10-30 15:24:46.165 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [604855536789225472, 201709211055391226, 0.04, 0.0, 1]
+hypnus-admin 2017-10-30 15:24:46.166 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [607109879601037312, 201709271613361230, 26.4, 0.0, 2]
+hypnus-admin 2017-10-30 15:24:46.166 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [612898219617157120, 201710131534241235, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:46.166 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [614343662557462528, 201710171518041245, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:46.167 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [614351144054947840, 201710171547481246, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:46.167 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [614352006823280640, 201710171551141247, 0.01, null, 1]
+hypnus-admin 2017-10-30 15:24:46.171 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:24:46.171 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:24:46.173 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:24:46.209 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:24:46.213 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:24:46.214 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : []
+hypnus-admin 2017-10-30 15:24:46.214 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : []
+hypnus-admin 2017-10-30 15:24:46.228 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:24:46.229 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50001} query executed. 14.867885 millis.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:24:46.229 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} open
+hypnus-admin 2017-10-30 15:24:46.229 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Header: [I_ORDER_ID, S_PRODUCT_NAME, num]
+hypnus-admin 2017-10-30 15:24:46.229 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [564691280928440320, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.230 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [564696923827601408, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.230 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [564708637851779072, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.231 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [564709504193658880, 长城干红, 2]
+hypnus-admin 2017-10-30 15:24:46.231 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [569026358978543616, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.231 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [570772333749338112, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.231 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571518779469594624, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.231 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571521018653310976, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.231 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571527707439923200, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.231 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571528834562654208, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.232 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571582008350736384, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.232 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [572343449450184704, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.232 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [572344177535221760, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.232 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [572345028794384384, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.232 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573322044943368192, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.232 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573325789446012928, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.232 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573326867365363712, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.233 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573330185231794176, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.233 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573331965789339648, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.233 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573334067022397440, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.233 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573338709659746304, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.234 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573378283224170496, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.234 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573700260371628032, 路易马西尼xo酒700ml  法国原装原瓶进口, 1]
+hypnus-admin 2017-10-30 15:24:46.234 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573738301756801024, 路易马西尼xo酒700ml  法国原装原瓶进口, 1]
+hypnus-admin 2017-10-30 15:24:46.234 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573745081446563840, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.234 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573759767420338176, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.235 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [573827562266951680, 路易马西尼xo酒700ml  法国原装原瓶进口, 1]
+hypnus-admin 2017-10-30 15:24:46.235 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574034398240833536, test20170613-1, 1]
+hypnus-admin 2017-10-30 15:24:46.235 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574034446701821952, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.235 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574469247825084416, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.235 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574475276495355904, 路易马西尼xo酒700ml  法国原装原瓶进口, 2]
+hypnus-admin 2017-10-30 15:24:46.235 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574476355089989632, 1, 1]
+hypnus-admin 2017-10-30 15:24:46.235 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574478157030096896, 胶原蛋白, 4]
+hypnus-admin 2017-10-30 15:24:46.236 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574479430366265344, 胶原蛋白, 1]
+hypnus-admin 2017-10-30 15:24:46.236 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574481901482409984, 路易马西尼xo酒700ml  法国原装原瓶进口, 1]
+hypnus-admin 2017-10-30 15:24:46.236 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574495059790004224, 胶原蛋白, 1]
+hypnus-admin 2017-10-30 15:24:46.236 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574544822614884352, 路易马西尼xo酒700ml  法国原装原瓶进口, 1]
+hypnus-admin 2017-10-30 15:24:46.236 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574611940890902528, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.236 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574612315786182656, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.237 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574862686668455936, 胶原蛋白, 1]
+hypnus-admin 2017-10-30 15:24:46.237 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574863361305477120, 长城干红, 5]
+hypnus-admin 2017-10-30 15:24:46.237 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574874325769781248, 胶原蛋白, 1]
+hypnus-admin 2017-10-30 15:24:46.237 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574888248426364928, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.237 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574889745251827712, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.237 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [574919641525125120, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.238 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [575852053138505728, 胶原蛋白, 2]
+hypnus-admin 2017-10-30 15:24:46.238 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [575865037588004864, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.238 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [575917201744199680, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.238 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [575917201744199680, 路易马西尼xo酒700ml  法国原装原瓶进口, 1]
+hypnus-admin 2017-10-30 15:24:46.238 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [575917201744199680, 胶原蛋白, 5]
+hypnus-admin 2017-10-30 15:24:46.238 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [576286485498560512, 胶原蛋白, 2]
+hypnus-admin 2017-10-30 15:24:46.238 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [576292177508827136, 长城干红, 3]
+hypnus-admin 2017-10-30 15:24:46.239 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [576590102726180864, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.239 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [583475746626863104, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.240 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [585007055287353344, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.240 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [585015787555651584, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.240 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [602321013639741440, 胶原蛋白, 1]
+hypnus-admin 2017-10-30 15:24:46.240 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [603820692240072704, 胶原蛋白, 2]
+hypnus-admin 2017-10-30 15:24:46.240 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [603826396237660160, 胶原蛋白, 1]
+hypnus-admin 2017-10-30 15:24:46.241 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [603829315712319488, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.241 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [604193651668549632, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.241 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [604209306023231488, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.241 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [604210279932231680, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.241 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [604212471787421696, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.241 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [604472542207410176, 路易马西尼xo酒700ml  法国原装原瓶进口, 1]
+hypnus-admin 2017-10-30 15:24:46.242 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [604553372804055040, 长城干红, 3]
+hypnus-admin 2017-10-30 15:24:46.242 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [604553767987183616, test20170609-1, 1]
+hypnus-admin 2017-10-30 15:24:46.242 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [604557054350196736, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.242 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [604855536789225472, 长城干红, 2]
+hypnus-admin 2017-10-30 15:24:46.242 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [604925112713478144, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.243 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [606669766601474048, 胶原蛋白, 1]
+hypnus-admin 2017-10-30 15:24:46.243 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [606756543701975040, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.243 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [607109879601037312, 胶原蛋白, 4]
+hypnus-admin 2017-10-30 15:24:46.243 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [607116405875146752, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.243 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [607767500301533184, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.243 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [611749059807412224, 路易马西尼xo酒700ml  法国原装原瓶进口, 1]
+hypnus-admin 2017-10-30 15:24:46.244 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [611749059807412224, 胶原蛋白, 1]
+hypnus-admin 2017-10-30 15:24:46.244 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [612161101332742144, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.244 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [612898219617157120, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.244 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [612909221763088384, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.244 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [612910107847557120, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.244 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [612911916595019776, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.244 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [614285714363777024, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.245 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [614327003188822016, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.245 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [614333402228719616, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.245 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [614336263947812864, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.245 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [614340299178639360, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.245 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [614342000627417088, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.246 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [614343662557462528, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.246 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [614351144054947840, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.246 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [614352006823280640, 开店套餐, 1]
+hypnus-admin 2017-10-30 15:24:46.246 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [615071912564883456, 长城干红, 1]
+hypnus-admin 2017-10-30 15:24:46.246 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [615071912564883456, 胶原蛋白, 1]
+hypnus-admin 2017-10-30 15:24:46.247 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [617239101447340032, 路易马西尼xo酒700ml  法国原装原瓶进口, 1]
+hypnus-admin 2017-10-30 15:24:46.247 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} closed
+hypnus-admin 2017-10-30 15:24:46.247 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters.
+hypnus-admin 2017-10-30 15:24:46.247 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:25:58.390 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:25:58.391 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:25:58.391 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:25:58.392 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:25:58.392 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:25:58.392 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2017-10-30 15:25:58.393 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:26:17.919 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:26:17.969 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:26:18.040 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:26:18.091 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:26:18.139 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:26:19.346 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:26:19.457 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:26:24.145 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:26:24.389 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:26:24.403 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:26:24.403 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:26:24.411 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:26:24.412 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 11.112308 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:26:24.412 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:26:24.415 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:26:24.426 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:26:24.427 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:26:24.428 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:27:55.947 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:27:55.947 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:27:55.947 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:27:55.948 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:27:55.948 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:27:55.949 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:28:55.105 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:28:55.181 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:28:55.276 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:28:55.356 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:28:55.465 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:28:56.619 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:28:56.726 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:29:01.302 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:29:01.612 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:29:01.627 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:29:01.627 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:29:01.635 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:29:01.635 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 12.489043 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:29:01.635 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:29:01.639 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:29:01.651 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:29:01.651 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:29:01.653 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:29:58.528 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:29:58.528 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:29:58.528 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:29:58.529 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:29:58.529 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:29:58.530 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:36:08.642 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:36:08.683 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:36:08.749 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:36:08.793 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:36:08.845 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:36:09.877 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:36:09.992 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:36:14.744 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:36:14.989 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:36:15.002 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:36:15.002 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:36:15.021 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:36:15.022 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 22.919749 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:36:15.022 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:36:15.025 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:36:15.034 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594706940303507456, 201708241048451082, 5.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:36:15.040 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594715757846200320, 201708241123471085, 680.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:36:15.040 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594768265020964864, 201708241452261086, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:36:15.040 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594773091536601088, 201708241511361087, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:36:15.043 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:36:15.043 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:36:15.045 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:36:15.074 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:36:15.078 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:36:15.079 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : []
+hypnus-admin 2017-10-30 15:36:15.079 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : []
+hypnus-admin 2017-10-30 15:36:15.092 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:36:15.093 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50001} query executed. 14.240868 millis.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:36:15.093 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} open
+hypnus-admin 2017-10-30 15:36:15.093 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Header: [I_ORDER_ID, S_PRODUCT_NAME, num]
+hypnus-admin 2017-10-30 15:36:15.093 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [526197283541221376, 2017套餐, 1]
+hypnus-admin 2017-10-30 15:36:15.093 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [526203126252830720, 216测试套餐, 1]
+hypnus-admin 2017-10-30 15:36:15.094 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [526216610680143872, 老糊涂, 5]
+hypnus-admin 2017-10-30 15:36:15.094 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [526216610680143872, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 20]
+hypnus-admin 2017-10-30 15:36:15.094 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [528483240520974336, 216测试套餐, 1]
+hypnus-admin 2017-10-30 15:36:15.094 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [530555424693288960, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:36:15.094 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [530941392520740864, 216测试套餐, 1]
+hypnus-admin 2017-10-30 15:36:15.094 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [531639440741761024, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 24]
+hypnus-admin 2017-10-30 15:36:15.095 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533079677330259968, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:36:15.095 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533152938239983616, ADES红酒, 3]
+hypnus-admin 2017-10-30 15:36:15.095 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533514250845421568, ADES红酒, 2]
+hypnus-admin 2017-10-30 15:36:15.095 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533518446030225408, 红酒一, 1]
+hypnus-admin 2017-10-30 15:36:15.095 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533527834774208512, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:36:15.095 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533529245436084224, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.096 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533817813454815232, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 3]
+hypnus-admin 2017-10-30 15:36:15.096 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533817813454815232, 涛哥家黄酒, 8]
+hypnus-admin 2017-10-30 15:36:15.096 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533821692472983552, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.096 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533821886866391040, 红酒一, 3]
+hypnus-admin 2017-10-30 15:36:15.097 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533821932223594496, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.097 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533826720281657344, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.097 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533837301373992960, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.097 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533839129427836928, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.097 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533839531665784832, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.097 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533840400406806528, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.098 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533874366329389056, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.098 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533889067574624256, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.098 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533889243328544768, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.098 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533889856871333888, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.098 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533890342546571264, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.098 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533890839579983872, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.098 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533891468478119936, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.099 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533918631248003072, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.099 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533932562259640320, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.099 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533932961817427968, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.099 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533937933128826880, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.099 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199450084573184, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.100 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199452907339776, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.100 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199467637735424, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.100 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199478865887232, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.100 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199620142628864, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.100 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199822240972800, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.100 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534200660057391104, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.100 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535363727663300608, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.101 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535364055850811392, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.101 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535365929706455040, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.101 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535366433723383808, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.101 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535367295631884288, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.102 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535367588524326912, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.102 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535623429542379520, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.102 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535624877193822208, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.103 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535715659674288128, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.103 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535716871551320064, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.103 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535720746022862848, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.103 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535721778069110784, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.104 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535727131196391424, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.104 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535727368786935808, ADES红酒, 3]
+hypnus-admin 2017-10-30 15:36:15.104 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535727619174301696, ADES红酒, 1]
+hypnus-admin 2017-10-30 15:36:15.104 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535729102452162560, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:36:15.104 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535982395212431360, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.105 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535989901179486208, 红酒一, 1]
+hypnus-admin 2017-10-30 15:36:15.105 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535996762444267520, 酒0303, 3]
+hypnus-admin 2017-10-30 15:36:15.105 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535997261901987840, 红酒一, 1]
+hypnus-admin 2017-10-30 15:36:15.105 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535999905815068672, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.105 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536000004066639872, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.105 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536000172803489792, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.106 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536000533626880000, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.106 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536001404762849280, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.107 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536015682676981760, 酒0303, 1]
+hypnus-admin 2017-10-30 15:36:15.107 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536049765146689536, 老糊涂, 2]
+hypnus-admin 2017-10-30 15:36:15.107 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536052409927991296, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.108 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536072117360263168, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.108 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536072547758768128, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.108 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536074020416651264, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.108 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536075679536513024, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.109 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536076133641224192, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.109 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536076629529591808, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.109 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536077877691547648, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.110 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536078444153274368, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.110 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536079219466174464, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.110 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536080732976578560, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.110 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536081478686081024, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:36:15.111 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536083113936158720, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.111 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536083498658693120, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:36:15.111 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536084645725339648, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.112 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536339587362979840, 即墨老酒, 1]
+hypnus-admin 2017-10-30 15:36:15.112 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536340414169350144, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.112 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536342079689719808, ADES红酒, 1]
+hypnus-admin 2017-10-30 15:36:15.112 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536344297113387008, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.113 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536344767793987584, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.113 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536345202353242112, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.113 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536347164322824192, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.113 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536359180617908224, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.114 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536363477837545472, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.114 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536431131071873024, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.114 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536434340683317248, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.114 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536449742452817920, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.114 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536451003055079424, 红酒一, 1]
+hypnus-admin 2017-10-30 15:36:15.115 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536451273575104512, 人头马, 1]
+hypnus-admin 2017-10-30 15:36:15.115 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536452044857278464, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.115 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536457814206316544, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.116 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536461014883893248, 红酒一, 1]
+hypnus-admin 2017-10-30 15:36:15.116 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536461342337400832, 红酒一, 1]
+hypnus-admin 2017-10-30 15:36:15.116 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536461574806700032, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.116 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536462029435699200, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.117 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536462897925062656, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.117 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536463865781682176, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.117 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536465266863767552, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.117 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536701380832788480, 红酒一, 4]
+hypnus-admin 2017-10-30 15:36:15.117 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536701649473765376, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.118 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536704687198437376, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.118 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536704879834431488, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.118 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536715723519557632, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.118 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536716842765385728, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.118 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536719495578779648, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.119 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536720407869259776, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.119 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536733397121236992, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.119 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536734539242799104, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.119 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536740273498095616, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.120 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536775743145771008, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.120 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536777375724077056, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.120 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536778506437132288, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.120 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536779163470659584, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.121 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536779956529659904, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.121 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536780567815913472, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.121 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536783285229977600, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.121 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536784555974066176, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.122 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536786773234155520, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.122 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536787753166176256, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.122 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536788889394741248, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.122 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536789484692307968, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.123 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536790034729140224, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.123 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536790923799953408, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.123 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536797031109230592, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.123 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536799190286598144, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.123 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536801278991269888, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.124 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536801278991269888, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.124 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536804094057119744, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.124 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536804667103903744, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.124 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537885980766502912, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.124 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537886527556943872, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.125 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537887256938020864, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.125 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537887386743341056, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.125 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537887607812521984, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.125 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537889011969032192, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.125 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537902379228463104, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.125 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537902736591552512, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.125 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537903703294738432, ADES红酒, 1]
+hypnus-admin 2017-10-30 15:36:15.127 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538188005559500800, 即墨老酒, 1]
+hypnus-admin 2017-10-30 15:36:15.127 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538188135297712128, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.127 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538233791387271168, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.128 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538539762860949504, ADES红酒, 3]
+hypnus-admin 2017-10-30 15:36:15.128 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538539762860949504, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 4]
+hypnus-admin 2017-10-30 15:36:15.128 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538539762860949504, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.128 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538540718386315264, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.128 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538540718386315264, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.129 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538547949399965696, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.129 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538548980024344576, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.129 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538549269682978816, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.130 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538604466635538432, ADES红酒, 3]
+hypnus-admin 2017-10-30 15:36:15.130 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538604466635538432, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.130 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538883678768463872, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.130 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538887180961972224, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.130 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538909211707310080, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.131 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540396247928799232, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.131 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540396851757580288, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.131 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540430198458286080, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.131 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540431053618151424, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.131 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540437882469351424, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.131 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540444612020404224, 涛哥家黄酒, 2]
+hypnus-admin 2017-10-30 15:36:15.132 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540699588818894848, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:36:15.133 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540701740941443072, 老糊涂, 1]
+hypnus-admin 2017-10-30 15:36:15.133 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540701961423421440, 老糊涂, 1]
+hypnus-admin 2017-10-30 15:36:15.134 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540702436805836800, 老糊涂, 1]
+hypnus-admin 2017-10-30 15:36:15.134 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540702780331917312, 老糊涂, 1]
+hypnus-admin 2017-10-30 15:36:15.134 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540703500808486912, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.134 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540703644119465984, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.135 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540703856665821184, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.135 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543699209891610624, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.135 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543699772855287808, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.135 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543700563989102592, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.135 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543701243634122752, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.136 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543702195564969984, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.136 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543703493270044672, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.136 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543712132701618176, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:36:15.136 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543713685273575424, ADES红酒, 1]
+hypnus-admin 2017-10-30 15:36:15.137 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543713685273575424, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:36:15.137 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543713927238778880, 涛哥家黄酒, 2]
+hypnus-admin 2017-10-30 15:36:15.137 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543946769038311424, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.137 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543947729580064768, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:36:15.138 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543947729580064768, 中华香烟, 3]
+hypnus-admin 2017-10-30 15:36:15.138 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543960545267548160, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.138 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543968403602276352, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.138 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [544067687899201536, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.138 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [544068314918289408, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.138 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [544070069408235520, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.138 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571136095870255104, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.138 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571136545621278720, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.139 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571137577290039296, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.139 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571138707168428032, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.139 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571140118748856320, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.139 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571151907020603392, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.139 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571152391433355264, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.140 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571152683797315584, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.140 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571152942363574272, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.140 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571153531893972992, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.140 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571155716539154432, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.140 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571155931606286336, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.141 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571157191608762368, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.141 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571242208108216320, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.141 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571244858816069632, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.141 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571246940981821440, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.141 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571247741020143616, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.142 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571248542077681664, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.142 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571249025366360064, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.142 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571251331776380928, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.142 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571252741716836352, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.143 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571253110693953536, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.143 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571255872336953344, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.143 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571256683423072256, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.144 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571257125146198016, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.148 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571259361955938304, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.148 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571260291820552192, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.149 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571261785315737600, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.149 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571263239757758464, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.149 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571264509973364736, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.149 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571488900216782848, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.150 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571496152751407104, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.150 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571497276694855680, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:36:15.150 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [584913634996518912, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:36:15.150 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594706940303507456, 中华香烟, 5]
+hypnus-admin 2017-10-30 15:36:15.150 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594715757846200320, 中华香烟, 8]
+hypnus-admin 2017-10-30 15:36:15.150 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594768265020964864, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:36:15.151 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594773091536601088, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:36:15.151 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594788505322782720, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:36:15.151 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} closed
+hypnus-admin 2017-10-30 15:36:15.151 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters.
+hypnus-admin 2017-10-30 15:36:15.152 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:36:39.112 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:36:39.113 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:36:39.113 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:36:39.113 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:36:39.114 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:36:39.114 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2017-10-30 15:36:39.115 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:37:02.255 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:37:02.309 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:37:02.354 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:37:02.407 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:37:02.450 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:37:03.825 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:37:03.936 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:37:08.968 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:37:09.184 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:37:09.198 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:37:09.198 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:37:09.211 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:37:09.212 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 16.00109 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:37:09.212 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:37:09.216 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:37:09.237 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594706940303507456, 201708241048451082, 5.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:37:09.243 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594715757846200320, 201708241123471085, 680.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:37:09.243 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594768265020964864, 201708241452261086, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:37:09.243 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594773091536601088, 201708241511361087, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:37:09.246 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:37:09.246 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:37:09.248 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:37:55.501 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:37:55.507 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:37:55.507 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : []
+hypnus-admin 2017-10-30 15:37:55.507 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : []
+hypnus-admin 2017-10-30 15:37:55.527 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:37:55.527 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50001} query executed. 20.751312 millis.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:37:55.527 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} open
+hypnus-admin 2017-10-30 15:37:55.527 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Header: [I_ORDER_ID, S_PRODUCT_NAME, num]
+hypnus-admin 2017-10-30 15:37:55.528 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [526197283541221376, 2017套餐, 1]
+hypnus-admin 2017-10-30 15:37:55.528 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [526203126252830720, 216测试套餐, 1]
+hypnus-admin 2017-10-30 15:37:55.528 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [526216610680143872, 老糊涂, 5]
+hypnus-admin 2017-10-30 15:37:55.529 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [526216610680143872, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 20]
+hypnus-admin 2017-10-30 15:37:55.529 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [528483240520974336, 216测试套餐, 1]
+hypnus-admin 2017-10-30 15:37:55.530 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [530555424693288960, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:37:55.530 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [530941392520740864, 216测试套餐, 1]
+hypnus-admin 2017-10-30 15:37:55.530 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [531639440741761024, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 24]
+hypnus-admin 2017-10-30 15:37:55.531 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533079677330259968, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:37:55.531 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533152938239983616, ADES红酒, 3]
+hypnus-admin 2017-10-30 15:37:55.531 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533514250845421568, ADES红酒, 2]
+hypnus-admin 2017-10-30 15:37:55.531 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533518446030225408, 红酒一, 1]
+hypnus-admin 2017-10-30 15:37:55.532 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533527834774208512, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:37:55.532 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533529245436084224, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.532 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533817813454815232, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 3]
+hypnus-admin 2017-10-30 15:37:55.532 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533817813454815232, 涛哥家黄酒, 8]
+hypnus-admin 2017-10-30 15:37:55.533 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533821692472983552, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.533 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533821886866391040, 红酒一, 3]
+hypnus-admin 2017-10-30 15:37:55.533 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533821932223594496, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.533 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533826720281657344, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.533 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533837301373992960, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.533 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533839129427836928, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.534 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533839531665784832, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.534 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533840400406806528, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.534 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533874366329389056, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.535 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533889067574624256, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.535 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533889243328544768, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.535 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533889856871333888, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.535 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533890342546571264, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.536 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533890839579983872, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.536 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533891468478119936, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.536 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533918631248003072, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.536 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533932562259640320, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.537 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533932961817427968, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.537 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [533937933128826880, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.537 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199450084573184, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.538 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199452907339776, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.538 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199467637735424, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.538 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199478865887232, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.539 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199620142628864, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.539 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534199822240972800, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.539 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [534200660057391104, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.539 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535363727663300608, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.539 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535364055850811392, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.540 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535365929706455040, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.540 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535366433723383808, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.540 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535367295631884288, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.540 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535367588524326912, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.541 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535623429542379520, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.541 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535624877193822208, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.541 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535715659674288128, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.541 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535716871551320064, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.541 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535720746022862848, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.542 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535721778069110784, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.542 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535727131196391424, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.542 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535727368786935808, ADES红酒, 3]
+hypnus-admin 2017-10-30 15:37:55.542 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535727619174301696, ADES红酒, 1]
+hypnus-admin 2017-10-30 15:37:55.543 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535729102452162560, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:37:55.543 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535982395212431360, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.543 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535989901179486208, 红酒一, 1]
+hypnus-admin 2017-10-30 15:37:55.543 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535996762444267520, 酒0303, 3]
+hypnus-admin 2017-10-30 15:37:55.544 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535997261901987840, 红酒一, 1]
+hypnus-admin 2017-10-30 15:37:55.544 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [535999905815068672, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.544 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536000004066639872, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.544 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536000172803489792, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.545 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536000533626880000, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.545 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536001404762849280, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.545 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536015682676981760, 酒0303, 1]
+hypnus-admin 2017-10-30 15:37:55.545 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536049765146689536, 老糊涂, 2]
+hypnus-admin 2017-10-30 15:37:55.546 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536052409927991296, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.546 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536072117360263168, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.546 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536072547758768128, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.547 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536074020416651264, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.547 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536075679536513024, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.548 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536076133641224192, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.548 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536076629529591808, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.548 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536077877691547648, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.549 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536078444153274368, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.549 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536079219466174464, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.549 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536080732976578560, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.550 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536081478686081024, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:37:55.551 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536083113936158720, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.551 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536083498658693120, 中华套装系列, 1]
+hypnus-admin 2017-10-30 15:37:55.551 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536084645725339648, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.552 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536339587362979840, 即墨老酒, 1]
+hypnus-admin 2017-10-30 15:37:55.552 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536340414169350144, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.553 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536342079689719808, ADES红酒, 1]
+hypnus-admin 2017-10-30 15:37:55.553 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536344297113387008, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.553 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536344767793987584, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.553 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536345202353242112, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.554 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536347164322824192, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.554 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536359180617908224, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.554 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536363477837545472, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.554 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536431131071873024, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.554 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536434340683317248, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.554 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536449742452817920, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.555 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536451003055079424, 红酒一, 1]
+hypnus-admin 2017-10-30 15:37:55.555 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536451273575104512, 人头马, 1]
+hypnus-admin 2017-10-30 15:37:55.555 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536452044857278464, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.555 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536457814206316544, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.555 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536461014883893248, 红酒一, 1]
+hypnus-admin 2017-10-30 15:37:55.556 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536461342337400832, 红酒一, 1]
+hypnus-admin 2017-10-30 15:37:55.556 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536461574806700032, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.556 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536462029435699200, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.557 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536462897925062656, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.559 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536463865781682176, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.560 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536465266863767552, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.561 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536701380832788480, 红酒一, 4]
+hypnus-admin 2017-10-30 15:37:55.561 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536701649473765376, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.561 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536704687198437376, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.561 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536704879834431488, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.562 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536715723519557632, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.562 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536716842765385728, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.562 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536719495578779648, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.562 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536720407869259776, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.562 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536733397121236992, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.562 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536734539242799104, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.563 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536740273498095616, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.563 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536775743145771008, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.563 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536777375724077056, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.564 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536778506437132288, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.565 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536779163470659584, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.566 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536779956529659904, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.566 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536780567815913472, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.566 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536783285229977600, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.566 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536784555974066176, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.566 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536786773234155520, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.566 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536787753166176256, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.567 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536788889394741248, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.568 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536789484692307968, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.569 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536790034729140224, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.569 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536790923799953408, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.569 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536797031109230592, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.569 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536799190286598144, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.569 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536801278991269888, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.570 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536801278991269888, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.570 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536804094057119744, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.570 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [536804667103903744, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.571 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537885980766502912, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.571 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537886527556943872, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.572 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537887256938020864, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.572 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537887386743341056, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.572 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537887607812521984, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.572 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537889011969032192, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.572 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537902379228463104, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.573 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537902736591552512, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.573 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [537903703294738432, ADES红酒, 1]
+hypnus-admin 2017-10-30 15:37:55.573 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538188005559500800, 即墨老酒, 1]
+hypnus-admin 2017-10-30 15:37:55.576 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538188135297712128, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.576 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538233791387271168, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.577 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538539762860949504, ADES红酒, 3]
+hypnus-admin 2017-10-30 15:37:55.577 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538539762860949504, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 4]
+hypnus-admin 2017-10-30 15:37:55.577 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538539762860949504, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.577 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538540718386315264, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.577 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538540718386315264, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.578 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538547949399965696, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.578 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538548980024344576, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.578 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538549269682978816, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.578 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538604466635538432, ADES红酒, 3]
+hypnus-admin 2017-10-30 15:37:55.578 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538604466635538432, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.579 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538883678768463872, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.579 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538887180961972224, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.579 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [538909211707310080, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.579 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540396247928799232, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.579 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540396851757580288, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.580 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540430198458286080, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.580 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540431053618151424, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.580 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540437882469351424, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.580 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540444612020404224, 涛哥家黄酒, 2]
+hypnus-admin 2017-10-30 15:37:55.581 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540699588818894848, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:37:55.581 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540701740941443072, 老糊涂, 1]
+hypnus-admin 2017-10-30 15:37:55.582 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540701961423421440, 老糊涂, 1]
+hypnus-admin 2017-10-30 15:37:55.582 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540702436805836800, 老糊涂, 1]
+hypnus-admin 2017-10-30 15:37:55.582 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540702780331917312, 老糊涂, 1]
+hypnus-admin 2017-10-30 15:37:55.582 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540703500808486912, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.583 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540703644119465984, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.583 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [540703856665821184, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.583 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543699209891610624, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.583 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543699772855287808, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.583 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543700563989102592, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.584 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543701243634122752, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.584 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543702195564969984, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.585 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543703493270044672, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.585 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543712132701618176, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 2]
+hypnus-admin 2017-10-30 15:37:55.585 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543713685273575424, ADES红酒, 1]
+hypnus-admin 2017-10-30 15:37:55.585 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543713685273575424, 涛哥家黄酒, 1]
+hypnus-admin 2017-10-30 15:37:55.586 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543713927238778880, 涛哥家黄酒, 2]
+hypnus-admin 2017-10-30 15:37:55.586 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543946769038311424, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.587 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543947729580064768, 轩尼诗（Hennessy）洋酒 VSOP干邑白兰地, 1]
+hypnus-admin 2017-10-30 15:37:55.587 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543947729580064768, 中华香烟, 3]
+hypnus-admin 2017-10-30 15:37:55.587 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543960545267548160, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.587 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [543968403602276352, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.588 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [544067687899201536, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.588 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [544068314918289408, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.588 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [544070069408235520, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.588 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571136095870255104, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.589 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571136545621278720, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.589 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571137577290039296, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.589 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571138707168428032, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.589 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571140118748856320, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.589 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571151907020603392, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.589 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571152391433355264, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.589 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571152683797315584, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.589 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571152942363574272, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.590 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571153531893972992, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.590 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571155716539154432, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.591 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571155931606286336, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.591 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571157191608762368, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.591 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571242208108216320, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.591 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571244858816069632, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.593 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571246940981821440, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.593 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571247741020143616, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.593 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571248542077681664, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.593 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571249025366360064, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.593 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571251331776380928, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.594 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571252741716836352, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.594 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571253110693953536, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.594 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571255872336953344, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.594 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571256683423072256, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.595 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571257125146198016, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.596 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571259361955938304, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.598 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571260291820552192, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.599 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571261785315737600, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.601 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571263239757758464, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.601 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571264509973364736, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.602 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571488900216782848, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.602 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571496152751407104, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.602 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [571497276694855680, 开店套餐300年, 1]
+hypnus-admin 2017-10-30 15:37:55.602 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [584913634996518912, 中华香烟, 1]
+hypnus-admin 2017-10-30 15:37:55.604 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594706940303507456, 中华香烟, 5]
+hypnus-admin 2017-10-30 15:37:55.604 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594715757846200320, 中华香烟, 8]
+hypnus-admin 2017-10-30 15:37:55.604 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594768265020964864, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:37:55.604 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594773091536601088, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:37:55.604 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594788505322782720, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:37:55.604 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} closed
+hypnus-admin 2017-10-30 15:37:55.605 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters.
+hypnus-admin 2017-10-30 15:37:55.605 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:40:04.798 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:40:04.798 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:40:04.798 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:40:04.799 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:40:04.799 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:40:04.800 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2017-10-30 15:40:04.801 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:40:25.419 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:40:25.490 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:40:25.542 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:40:25.905 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:40:26.013 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:40:27.096 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:40:27.203 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:40:32.040 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:40:32.277 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:40:32.291 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:40:32.291 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:40:32.314 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:40:32.315 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 26.334291 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:40:32.315 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:40:32.318 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:40:32.326 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594706940303507456, 201708241048451082, 5.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:40:32.333 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594715757846200320, 201708241123471085, 680.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:40:32.334 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594768265020964864, 201708241452261086, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:40:32.334 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594773091536601088, 201708241511361087, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:40:32.338 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:40:32.339 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:40:32.341 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:40:44.257 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:40:44.258 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:40:44.258 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:40:44.258 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:40:44.259 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:40:44.259 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:42:13.119 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:42:13.237 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:42:13.301 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:42:13.561 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:42:13.604 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:42:14.725 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:42:14.838 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:42:19.709 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:42:20.012 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:42:20.027 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:42:20.027 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:42:20.066 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:42:20.066 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 42.674083 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:42:20.067 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:42:20.070 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:42:20.080 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594706940303507456, 201708241048451082, 5.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:42:20.085 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594715757846200320, 201708241123471085, 680.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:42:20.085 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594768265020964864, 201708241452261086, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:42:20.086 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594773091536601088, 201708241511361087, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:42:20.088 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:42:20.089 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:42:20.090 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:42:29.850 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:42:29.850 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:42:29.851 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:42:29.851 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:42:29.852 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:42:29.852 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:44:05.307 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:44:05.393 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:44:05.438 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:44:05.487 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:44:05.566 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:44:06.643 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:44:06.759 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:44:11.431 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:44:11.735 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:44:11.748 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:44:11.749 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:44:11.769 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:44:11.770 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 24.378125 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:44:11.770 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:44:11.774 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:44:11.808 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594706940303507456, 201708241048451082, 5.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:44:11.813 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594715757846200320, 201708241123471085, 680.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:44:11.813 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594768265020964864, 201708241452261086, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:44:11.814 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594773091536601088, 201708241511361087, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:44:11.816 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:44:11.817 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:44:11.819 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:44:18.025 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:44:18.026 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:44:18.026 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:44:18.026 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:44:18.027 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:44:18.028 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:45:01.234 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:45:01.287 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:45:01.351 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:45:01.432 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:45:01.481 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:45:02.522 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:45:02.629 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:45:07.230 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:45:07.459 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:45:07.473 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:45:07.474 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:45:07.488 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:45:07.488 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 17.756181 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:45:07.488 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:45:07.491 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:45:07.500 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594706940303507456, 201708241048451082, 5.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:45:07.505 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594715757846200320, 201708241123471085, 680.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:45:07.505 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594768265020964864, 201708241452261086, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:45:07.505 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594773091536601088, 201708241511361087, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:45:07.508 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:45:07.508 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:45:07.510 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:45:17.817 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:45:17.817 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:45:17.818 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:45:17.818 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:45:17.818 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:45:17.819 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:45:32.936 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:45:32.981 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:45:33.034 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:45:33.125 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:45:33.173 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:45:34.292 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:45:34.400 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:45:38.943 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:45:39.236 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:45:39.250 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:45:39.250 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:45:39.259 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:45:39.259 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 13.049813 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:45:39.260 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:45:39.264 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:45:39.275 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594706940303507456, 201708241048451082, 5.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:45:39.281 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594715757846200320, 201708241123471085, 680.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:45:39.282 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594768265020964864, 201708241452261086, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:45:39.282 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594773091536601088, 201708241511361087, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:45:39.285 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:45:39.285 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:45:39.286 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:47:12.687 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:47:12.688 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:47:12.688 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:47:12.688 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:47:12.689 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:47:12.689 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:47:31.197 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:47:31.261 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:47:31.413 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:47:31.493 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:47:31.558 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:47:32.697 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:47:32.810 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:47:37.517 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:47:37.750 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:47:37.763 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:47:37.764 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:47:37.819 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:47:37.819 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 59.483205 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:47:37.820 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:47:37.823 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:47:37.832 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594706940303507456, 201708241048451082, 5.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:47:37.838 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594715757846200320, 201708241123471085, 680.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:47:37.838 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594768265020964864, 201708241452261086, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:47:37.839 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594773091536601088, 201708241511361087, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:47:37.841 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:47:37.842 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:47:37.843 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:47:47.724 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:47:47.731 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d WHERE 1=1 AND d.I_ORDER_ID IN (?, ?, ?, ?) GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:47:47.732 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : [594706940303507456, 594715757846200320, 594768265020964864, 594773091536601088]
+hypnus-admin 2017-10-30 15:47:47.732 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : [BIGINT, BIGINT, BIGINT, BIGINT]
+hypnus-admin 2017-10-30 15:47:47.736 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed.
+SELECT d.I_ORDER_ID AS "orderId", d.S_PRODUCT_NAME AS "productName", SUM(d.I_NUM) AS "num"
+FROM t_cus_order_detail d
+WHERE 1 = 1
+	AND d.I_ORDER_ID IN (594706940303507456, 594715757846200320, 594768265020964864, 594773091536601088)
+GROUP BY d.I_ORDER_ID, d.I_REL_ID, d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:47:47.737 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50001} query executed. 4.896246 millis.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d WHERE 1=1 AND d.I_ORDER_ID IN (?, ?, ?, ?) GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:47:47.737 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} open
+hypnus-admin 2017-10-30 15:47:47.737 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Header: [I_ORDER_ID, S_PRODUCT_NAME, num]
+hypnus-admin 2017-10-30 15:47:47.737 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594706940303507456, 中华香烟, 5]
+hypnus-admin 2017-10-30 15:47:47.738 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594715757846200320, 中华香烟, 8]
+hypnus-admin 2017-10-30 15:47:47.738 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594768265020964864, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:47:47.738 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594773091536601088, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:47:47.738 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} closed
+hypnus-admin 2017-10-30 15:47:47.739 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters.
+hypnus-admin 2017-10-30 15:47:47.739 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:48:03.389 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:48:03.390 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:48:03.390 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:48:03.390 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:48:03.391 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:48:03.391 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2017-10-30 15:48:03.391 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:48:26.800 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:48:28.003 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:48:29.093 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:48:29.660 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:48:30.905 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:48:32.246 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:48:32.370 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:48:37.059 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:48:37.308 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:48:37.321 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:48:37.321 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:48:37.415 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:48:37.415 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 96.453009 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:48:37.416 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:48:37.418 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:48:37.445 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594706940303507456, 201708241048451082, 5.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:48:37.457 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594715757846200320, 201708241123471085, 680.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:48:37.458 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594768265020964864, 201708241452261086, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:48:37.458 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594773091536601088, 201708241511361087, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:48:37.463 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:48:37.463 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:48:37.465 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:48:41.696 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:48:41.702 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d WHERE 1=1 AND d.I_ORDER_ID IN (?, ?, ?, ?) GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:48:41.702 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : [594706940303507456, 594715757846200320, 594768265020964864, 594773091536601088]
+hypnus-admin 2017-10-30 15:48:41.702 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : [BIGINT, BIGINT, BIGINT, BIGINT]
+hypnus-admin 2017-10-30 15:48:43.885 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed.
+SELECT d.I_ORDER_ID AS "orderId", d.S_PRODUCT_NAME AS "productName", SUM(d.I_NUM) AS "num"
+FROM t_cus_order_detail d
+WHERE 1 = 1
+	AND d.I_ORDER_ID IN (594706940303507456, 594715757846200320, 594768265020964864, 594773091536601088)
+GROUP BY d.I_ORDER_ID, d.I_REL_ID, d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:48:43.885 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50001} query executed. 2183.530607 millis.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d WHERE 1=1 AND d.I_ORDER_ID IN (?, ?, ?, ?) GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:48:43.885 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} open
+hypnus-admin 2017-10-30 15:48:43.886 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Header: [I_ORDER_ID, S_PRODUCT_NAME, num]
+hypnus-admin 2017-10-30 15:48:43.909 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594706940303507456, 中华香烟, 5]
+hypnus-admin 2017-10-30 15:48:43.911 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594715757846200320, 中华香烟, 8]
+hypnus-admin 2017-10-30 15:48:43.912 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594768265020964864, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:48:43.913 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594773091536601088, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:48:43.914 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} closed
+hypnus-admin 2017-10-30 15:48:43.915 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters.
+hypnus-admin 2017-10-30 15:48:43.915 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:49:05.064 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:49:05.065 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:49:05.065 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:49:05.066 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:49:05.066 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:49:05.066 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2017-10-30 15:49:05.067 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2017-10-30 15:50:00.366 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2017-10-30 15:50:01.712 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2017-10-30 15:50:02.258 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2017-10-30 15:50:02.878 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2017-10-30 15:50:04.560 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2017-10-30 15:50:05.716 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:50:05.831 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:50:10.498 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:50:10.711 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:50:10.726 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [1]
+hypnus-admin 2017-10-30 15:50:10.726 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [BIGINT]
+hypnus-admin 2017-10-30 15:50:10.753 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed.
+SELECT t.I_ID AS "id", t.S_ORDER_CODE AS "orderCode", t.I_TOTAL_AMOUNT AS "totalAmount", s.I_COUPON_MONEY AS "couponMoney", s.I_PAY_TYPE AS "payType"
+FROM t_cus_order t
+	RIGHT JOIN t_settlement_order_detail s ON t.I_ID = s.I_ORDER_ID
+WHERE 1 = 1
+	AND t.I_FACTORY_ID = 1
+hypnus-admin 2017-10-30 15:50:10.753 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 28.821369 millis.
+ SELECT  t.I_ID AS "id",  t.S_ORDER_CODE AS "orderCode",  t.I_TOTAL_AMOUNT AS "totalAmount",  s.I_COUPON_MONEY AS "couponMoney",  s.I_PAY_TYPE AS "payType"  FROM t_cus_order t  RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID)  WHERE 1=1  AND t.I_FACTORY_ID = ?
+hypnus-admin 2017-10-30 15:50:10.753 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2017-10-30 15:50:10.756 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [I_ID, S_ORDER_CODE, I_TOTAL_AMOUNT, I_COUPON_MONEY, I_PAY_TYPE]
+hypnus-admin 2017-10-30 15:50:10.764 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594706940303507456, 201708241048451082, 5.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:50:10.770 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594715757846200320, 201708241123471085, 680.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:50:10.770 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594768265020964864, 201708241452261086, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:50:10.770 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [594773091536601088, 201708241511361087, 200.0, 0.0, 2]
+hypnus-admin 2017-10-30 15:50:10.774 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2017-10-30 15:50:10.774 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters.
+hypnus-admin 2017-10-30 15:50:10.776 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:50:10.806 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2017-10-30 15:50:10.810 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d WHERE 1=1 AND d.I_ORDER_ID IN (?, ?, ?, ?) GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:50:10.810 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : [594706940303507456, 594715757846200320, 594768265020964864, 594773091536601088]
+hypnus-admin 2017-10-30 15:50:10.810 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : [BIGINT, BIGINT, BIGINT, BIGINT]
+hypnus-admin 2017-10-30 15:50:10.819 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed.
+SELECT d.I_ORDER_ID AS "orderId", d.S_PRODUCT_NAME AS "productName", SUM(d.I_NUM) AS "num"
+FROM t_cus_order_detail d
+WHERE 1 = 1
+	AND d.I_ORDER_ID IN (594706940303507456, 594715757846200320, 594768265020964864, 594773091536601088)
+GROUP BY d.I_ORDER_ID, d.I_REL_ID, d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:50:10.819 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50001} query executed. 9.262979 millis.
+ SELECT  d.I_ORDER_ID AS "orderId",  d.S_PRODUCT_NAME AS "productName",  sum(d.I_NUM) AS "num"  FROM t_cus_order_detail d WHERE 1=1 AND d.I_ORDER_ID IN (?, ?, ?, ?) GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME
+hypnus-admin 2017-10-30 15:50:10.819 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} open
+hypnus-admin 2017-10-30 15:50:10.819 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Header: [I_ORDER_ID, S_PRODUCT_NAME, num]
+hypnus-admin 2017-10-30 15:50:10.820 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594706940303507456, 中华香烟, 5]
+hypnus-admin 2017-10-30 15:50:10.820 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594715757846200320, 中华香烟, 8]
+hypnus-admin 2017-10-30 15:50:10.820 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594768265020964864, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:50:10.820 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [594773091536601088, 中华香烟, 2]
+hypnus-admin 2017-10-30 15:50:10.821 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} closed
+hypnus-admin 2017-10-30 15:50:10.821 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters.
+hypnus-admin 2017-10-30 15:50:10.821 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2017-10-30 15:51:54.996 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2017-10-30 15:51:54.997 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2017-10-30 15:51:54.997 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2017-10-30 15:51:54.997 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2017-10-30 15:51:54.998 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2017-10-30 15:51:54.998 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2017-10-30 15:51:54.999 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed

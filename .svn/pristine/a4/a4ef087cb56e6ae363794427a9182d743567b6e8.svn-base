@@ -1,0 +1,13 @@
+package com.catt.wfx.service.extractOrder;
+
+
+/**
+ * 提现流程信息服务接口
+ * 
+ * @author chen chusheng
+ * @date 2017-03-03 16:59:32
+ * @version V1.0
+ */
+public interface ExtractOrderLogService{
+
+}

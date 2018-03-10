@@ -1,0 +1,508 @@
+package com.catt.wfx.repository.dao.productMgr.impl;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductInfoDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductShop;
+import com.catt.wfx.repository.form.productMgr.ProductForm;
+import com.catt.wfx.repository.form.productMgr.ProductFromApp;
+import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Repository("productInfoDaoImpl")
+public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long>
+        implements ProductInfoDao {
+
+    //销售中
+    private static int ON_SALE = 21;
+    //已售罄
+    private static int SALE_OVER = 22;
+    //未发布
+    private static int ToPublish = 23;
+
+    /**
+     * 获取商品信息列表
+     *
+     * @param productForm
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getProductInfoByPage(ProductForm productForm, Pageable pageable) {
+        String zhName = productForm.getZhName();
+        Long cateId = productForm.getCateId();
+        Integer status = productForm.getStatus();
+        Integer type = productForm.getType();
+        if (type == null) {
+            type = ProductInfo.Type.Single.getValue();
+        }
+
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"id\", ");
+        sql.append(" t1.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" t1.S_CATE_NAME AS \"cateName\", ");
+        sql.append(" t1.D_CREATE_DATE AS \"createDate\" ");
+        sql.append(" FROM T_PRODUCT_INFO t1 ");
+        sql.append(" WHERE t1.I_DEL_FLAG = " + PubEnum.YesOrNoEnum.NO.getValue());
+        sql.append(" AND t1.I_TYPE = " + type);
+
+        Map param = new HashMap<>();
+
+        if (StringUtil.isNotBlank(zhName)) {
+            sql.append(" AND t1.S_ZH_NAME like (:zhName)");
+            param.put("zhName", zhName + "%");
+        }
+
+        if (StringUtil.checkObj(cateId)) {
+            sql.append(" AND t1.I_CATE_ID = :cateId");
+            param.put("cateId", cateId);
+        }
+        if (status != null) {
+            sql.append(" AND t1.I_STATUS = :status ");
+            param.put("status", status);
+        }
+        sql.append(" ORDER BY D_CREATE_DATE DESC");
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    @Override
+    public Page<Map> findPageWithSaleInfo(Pageable pageable, String zhName, Long cateId, Integer status, Integer minStockNum) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.shopSales AS \"shopSales\", ");
+        sql.append(" t1.stockNum AS \"stockNum\", ");
+        sql.append(" t1.saleNum AS \"saleNum\", ");
+        sql.append(" t2.I_ID AS \"id\", ");
+        sql.append(" t2.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" t2.S_CATE_NAME AS \"cateName\", ");
+        sql.append(" t2.I_SEQ AS \"seq\", ");
+        sql.append(" t2.I_STATUS AS \"status\", ");
+        sql.append(" t2.D_SHELVE_TIME AS \"shelveTime\" ");
+        sql.append(" FROM ");
+
+        sql.append(" ( SELECT  ");
+        sql.append(" a.I_ID AS \"id\", ");
+        sql.append(" a.I_SHOP_SALES AS \"shopSales\", ");
+        sql.append(" SUM(b.I_STOCK_NUM) AS \"stockNum\", ");
+        sql.append(" SUM(b.I_SALE_NUM) AS \"saleNum\" ");
+        sql.append(" FROM T_PRODUCT_INFO a ");
+        sql.append(" LEFT JOIN T_PRODUCT_PRICE b on a.I_ID = b.I_PRODUCT_ID ");
+        sql.append(" WHERE 1=1 ");
+        sql.append(" AND a.I_TYPE = " + ProductInfo.Type.Single.getValue());
+        sql.append(" AND a.I_DEL_FLAG = " + PubEnum.YesOrNoEnum.NO.getValue());
+        Map param = new HashMap<>();
+        if (StringUtil.isNotBlank(zhName)) {
+            sql.append(" AND a.S_ZH_NAME like :zhName ");
+            param.put("zhName", "%" + zhName + "%");
+        }
+        if (StringUtil.checkObj(cateId)) {
+            sql.append(" AND a.I_CATE_ID = :cateId");
+            param.put("cateId", cateId);
+        }
+        String temp = " HAVING 1=1 ";
+        if (status == null) {
+//            sql.append(" AND a.I_STATUS <> " + ProductInfo.Status.ToPublish.getValue());
+        } else if (status == ProductInfo.Status.NoSale.getValue()) {//已下架
+            sql.append(" AND a.I_STATUS = :status ");
+            param.put("status", status);
+        } else if (status == ON_SALE) {//销售中
+            sql.append(" AND a.I_STATUS = " + ProductInfo.Status.OnSale.getValue());
+            temp += " AND SUM(b.I_STOCK_NUM) > 0 ";
+        } else if (status == SALE_OVER) {//已售罄
+            sql.append(" AND a.I_STATUS = " + ProductInfo.Status.OnSale.getValue());
+            temp += " AND SUM(b.I_STOCK_NUM) = 0 ";
+        } else if (status == ToPublish) {//未发布
+            sql.append(" AND a.I_STATUS = " + ProductInfo.Status.ToPublish.getValue());
+        }
+        if(minStockNum != null){
+            temp += " AND SUM(b.I_STOCK_NUM) < :minStockNum";
+            param.put("minStockNum", minStockNum);
+        }
+        sql.append(" GROUP BY a.I_ID,a.I_SHOP_SALES ");
+        sql.append(temp);
+        sql.append(" ORDER BY IFNULL(a.I_SEQ, 9999999) ASC, a.D_SHELVE_TIME DESC, a.I_STATUS DESC"); //升序&&null排后面
+
+        sql.append(" ) AS t1  ");
+
+        sql.append(" LEFT JOIN T_PRODUCT_INFO t2 ON t1.id = t2.I_ID  ");
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    public Page<Map> findPageWithSaleInfoByFactoryId(Pageable pageable, String zhName, Long cateId, Integer status, Integer minStockNum, Long factoryId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.shopSales AS \"shopSales\", ");
+        sql.append(" t1.stockNum AS \"stockNum\", ");
+        sql.append(" t1.saleNum AS \"saleNum\", ");
+        sql.append(" t2.I_ID AS \"id\", ");
+        sql.append(" t2.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" t2.S_CATE_NAME AS \"cateName\", ");
+        sql.append(" t2.I_SEQ AS \"seq\", ");
+        sql.append(" t2.I_STATUS AS \"status\", ");
+        sql.append(" t2.D_SHELVE_TIME AS \"shelveTime\", ");
+        sql.append(" t3.S_FACTORY_NAME as \"factoryName\" ");//厂家名称++++++++++++
+        sql.append(" FROM ");
+
+        sql.append(" ( SELECT  ");
+        sql.append(" a.I_ID AS \"id\", ");
+        sql.append(" a.I_FACTORY_ID as \"factoryId\", ");//厂家id++++++++++
+        sql.append(" a.I_SHOP_SALES AS \"shopSales\", ");
+        sql.append(" SUM(b.I_STOCK_NUM) AS \"stockNum\", ");
+        sql.append(" SUM(b.I_SALE_NUM) AS \"saleNum\" ");
+        sql.append(" FROM T_PRODUCT_INFO a ");
+        sql.append(" LEFT JOIN T_PRODUCT_PRICE b on a.I_ID = b.I_PRODUCT_ID ");
+        sql.append(" WHERE 1=1 ");
+        sql.append(" AND a.I_TYPE = " + ProductInfo.Type.Single.getValue());
+        sql.append(" AND a.I_DEL_FLAG = " + PubEnum.YesOrNoEnum.NO.getValue());
+        Map param = new HashMap<>();
+        if (StringUtil.isNotBlank(zhName)) {
+            sql.append(" AND a.S_ZH_NAME like :zhName ");
+            param.put("zhName", "%" + zhName + "%");
+        }
+        if (StringUtil.checkObj(cateId)) {
+            sql.append(" AND a.I_CATE_ID = :cateId");
+            param.put("cateId", cateId);
+        }
+        String temp = " HAVING 1=1 ";
+        if (status == null) {
+//            sql.append(" AND a.I_STATUS <> " + ProductInfo.Status.ToPublish.getValue());
+        } else if (status == ProductInfo.Status.NoSale.getValue()) {//已下架
+            sql.append(" AND a.I_STATUS = :status ");
+            param.put("status", status);
+        } else if (status == ON_SALE) {//销售中
+            sql.append(" AND a.I_STATUS = " + ProductInfo.Status.OnSale.getValue());
+            temp += " AND SUM(b.I_STOCK_NUM) > 0 ";
+        } else if (status == SALE_OVER) {//已售罄
+            sql.append(" AND a.I_STATUS = " + ProductInfo.Status.OnSale.getValue());
+            temp += " AND SUM(b.I_STOCK_NUM) = 0 ";
+        } else if (status == ToPublish) {//未发布
+            sql.append(" AND a.I_STATUS = " + ProductInfo.Status.ToPublish.getValue());
+        }
+        if(minStockNum != null){
+            temp += " AND SUM(b.I_STOCK_NUM) < :minStockNum";
+            param.put("minStockNum", minStockNum);
+        }
+        sql.append(" GROUP BY a.I_ID,a.I_SHOP_SALES ");
+        sql.append(temp);
+        sql.append(" ORDER BY IFNULL(a.I_SEQ, 9999999) ASC, a.D_SHELVE_TIME DESC, a.I_STATUS DESC"); //升序&&null排后面
+
+        sql.append(" ) AS t1  ");
+
+        sql.append(" LEFT JOIN T_PRODUCT_INFO t2 ON t1.id = t2.I_ID  ");
+        //厂家++++++++++++++++
+        sql.append(" LEFT JOIN T_FACTORY_INFO t3 ON t1.factoryId = t3.I_ID ");
+        if(factoryId != null){
+            sql.append(" WHERE t1.factoryId = :factoryId ");
+            param.put("factoryId", factoryId);
+        }
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    @Override
+    public Page<Map> findPackagePage(Pageable pageable, String zhName, Integer status) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ID AS \"id\", ");
+        sql.append(" a.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" a.S_CATE_NAME AS \"cateName\", ");
+        sql.append(" a.I_STATUS AS \"status\", ");
+        sql.append(" a.D_SHELVE_TIME AS \"shelveTime\", ");
+        sql.append(" MIN(c.I_STOCK_NUM) AS \"stockNum\" ");
+        sql.append(" FROM T_PRODUCT_INFO a ");
+        sql.append(" LEFT JOIN T_PRODUCT_PACKAGE b ON a.I_ID = b.I_PACKAGE_PROID ");
+        sql.append(" LEFT JOIN T_PRODUCT_PRICE c ON b.I_PRICE_ID = c.I_ID ");
+        sql.append(" WHERE a.I_DEL_FLAG = " + PubEnum.YesOrNoEnum.NO.getValue());
+        sql.append(" AND a.I_TYPE = " + ProductInfo.Type.Package.getValue());
+
+        Map param = new HashMap<>();
+        if (StringUtil.isNotBlank(zhName)) {
+            sql.append(" AND a.S_ZH_NAME like (:zhName)");
+            param.put("zhName", zhName + "%");
+        }
+        String temp = "";
+        if (status != null) {
+            if (status == ProductInfo.Status.NoSale.getValue()) {//已下架
+                sql.append(" AND a.I_STATUS = :status ");
+                param.put("status", status);
+            } else if (status == ON_SALE) {//销售中
+                sql.append(" AND a.I_STATUS = " + ProductInfo.Status.OnSale.getValue());
+                temp = " HAVING MIN(c.I_STOCK_NUM) > 0 ";
+            } else if (status == SALE_OVER) {//已售罄
+                sql.append(" AND a.I_STATUS = " + ProductInfo.Status.OnSale.getValue());
+                temp = " HAVING MIN(c.I_STOCK_NUM) = 0 ";
+            }
+        }
+        sql.append(" GROUP BY a.I_ID,a.S_ZH_NAME, a.S_CATE_NAME,a.I_STATUS,a.D_SHELVE_TIME ");
+        sql.append(temp);
+        sql.append(" ORDER BY a.D_CREATE_DATE DESC");
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    @Override
+    public Page<Map> findPublishPage(ProductForm productForm, Pageable pageable) {
+        String zhName = productForm.getZhName();
+        Long cateId = productForm.getCateId();
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" 'closed' AS \"state\", "); //树形节点关闭状态
+        sql.append(" t1.I_ID AS \"id\", ");
+        sql.append(" t1.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" t1.S_CATE_NAME AS \"cateName\" ");
+        sql.append(" FROM T_PRODUCT_INFO t1 ");
+        sql.append(" WHERE t1.I_DEL_FLAG = " + PubEnum.YesOrNoEnum.NO.getValue());
+        sql.append(" AND t1.I_FACTORY_ID = :factoryId ");//自营过滤+++++++++++++++++++++++++++++++++++++++++++++++++++
+        sql.append(" AND t1.I_TYPE = " + ProductInfo.Type.Single.getValue());
+        sql.append(" AND t1.I_STATUS <> " + ProductInfo.Status.ToPublish.getValue());
+
+        Map param = new HashMap<>();
+        param.put("factoryId", productForm.getSelfSellFactoryId());//自营的factoryId+++++++++++++++++++++++++++++++++++++++++++++++++++
+        if (StringUtil.isNotBlank(zhName)) {
+            sql.append(" AND t1.S_ZH_NAME like (:zhName)");
+            param.put("zhName", zhName + "%");
+        }
+        if (StringUtil.checkObj(cateId)) {
+            sql.append(" AND t1.I_CATE_ID = :cateId");
+            param.put("cateId", cateId);
+        }
+        sql.append(" ORDER BY t1.D_CREATE_DATE DESC");
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    /**
+     * 获取商品文案列表
+     *
+     * @param zhName   商品名称
+     * @param cateId   分类标识
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getProductDocumentInfo(String zhName, Long cateId, Pageable pageable) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"id\", ");
+        sql.append(" t1.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" t1.I_CATE_ID AS \"cateId\", ");
+//        sql.append(" t1.D_CREATE_DATE AS \"createDate\", ");
+        sql.append(" t1.S_CATE_NAME AS \"cateName\" ");
+        sql.append(" FROM  T_PRODUCT_INFO t1");
+        sql.append(" where t1.I_DEL_FLAG=" + PubEnum.YesOrNoEnum.NO.getValue());
+        sql.append(" AND t1.I_TYPE=" + ProductInfo.Type.Single.getValue());
+
+        Map param = new HashMap<>();
+        if (StringUtil.isNotBlank(zhName)) {
+            sql.append(" AND t1.S_ZH_NAME like :zhName");
+            param.put("zhName", zhName + "%");
+        }
+
+        if (StringUtil.checkObj(cateId)) {
+            sql.append(" AND t1.I_CATE_ID = :cateId");
+            param.put("cateId", cateId);
+        }
+
+//        if (StringUtil.checkObj(status)) {
+//            sql.append(" AND t1.I_CATE_ID = :status");
+//            param.put("status", status);
+//        }
+
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    /**
+     * 获取商品信息列表(app接口)
+     *
+     * @param productFromApp    商品信息from
+     * @param pageable
+     * @return
+     */
+    public Page<Map> findProductInfoByPage(ProductFromApp productFromApp, Pageable pageable) {
+        //用户标识
+        Long cusId = productFromApp.getCusId();
+        //分类标识集合
+        List<Long> cateList = productFromApp.getCateList();
+        //店铺是否上架
+        Integer isInShop = productFromApp.getIsInShop();
+        //商品名称
+        String zhName = productFromApp.getZhName();
+
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"id\", ");
+        sql.append(" t1.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" t1.S_BRAND_NAME AS \"brandName\", ");
+        sql.append(" t1.I_STATUS AS \"status\", ");
+        sql.append(" t1.S_CODE AS \"code\", ");
+        sql.append(" t1.S_CATE_NAME AS \"cateName\", ");
+        sql.append(" t1.I_UNIT AS \"unit\", ");
+        sql.append(" t1.S_HEAD_PATH AS \"headPath\", ");
+        sql.append(" t1.I_SHOP_SALES AS \"shopSales\", ");
+        sql.append(" (CASE WHEN t2.I_STATUS is null THEN 2 ELSE t2.I_STATUS End) AS \"isInShop\"");
+        sql.append(" FROM T_PRODUCT_INFO t1 ");
+        sql.append(" LEFT JOIN T_PRODUCT_SHOP t2 ON (t1.I_ID=t2.I_PRODUCT_ID");
+        sql.append(" AND t2.I_CUS_ID = :cusId)");
+        sql.append(" WHERE 1=1");
+
+        Map param = new HashMap<>();
+        sql.append(" AND t1.I_DEL_FLAG = :delFlag");
+        param.put("delFlag", PubEnum.YesOrNoEnum.NO.getValue());
+
+        sql.append(" AND t1.I_TYPE = :type");
+        param.put("type", ProductInfo.Type.Single.getValue());
+
+        sql.append(" AND t1.I_STATUS = :status");
+        param.put("status", ProductInfo.Status.OnSale.getValue());
+
+        param.put("cusId", cusId);
+
+        if (cateList != null && cateList.size() > 0) {
+            sql.append(" AND t1.I_CATE_ID IN (:cateList)");
+            param.put("cateList", cateList);
+        }
+
+        if (StringUtil.checkObj(zhName)) {
+            sql.append(" AND t1.S_ZH_NAME like (:zhName)");
+            param.put("zhName", zhName + "%");
+        }
+
+        //店铺商品状态
+        Integer status = ProductShop.Status.NORMALUSE.getValue();
+
+        if (StringUtil.checkObj(isInShop) && isInShop.equals(status)) {
+            sql.append(" AND t2.I_STATUS = :shopStatus");
+            param.put("shopStatus", status);
+        }
+        sql.append(" ORDER BY IFNULL(t1.I_SEQ, 9999999) ASC");
+//        sql.append(" ORDER BY IFNULL(t1.I_SEQ, 9999999) ASC");
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    /**
+     * 获取商品信息列表(微信商城接口)
+     *
+     * @param cusId    用户标识
+     * @param cateList 商品分类集合
+     * @param pageable
+     * @param productName 商品名称
+     * @return
+     */
+    @Override
+    public Page<Map> findProductInfoByPage4Wechat(Long cusId, List<Long> cateList, Pageable pageable, String productName) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"id\", ");
+        sql.append(" t1.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" t1.S_HEAD_PATH AS \"headPath\"");
+        sql.append(" FROM T_PRODUCT_INFO t1 ");
+        if (StringUtil.checkObj(cusId)) {
+            sql.append(" LEFT JOIN T_PRODUCT_SHOP t2 ON t1.I_ID = t2.I_PRODUCT_ID");
+        }
+        sql.append(" WHERE 1 = 1");
+
+        Map param = new HashMap<>();
+        sql.append(" AND t1.I_DEL_FLAG = :delFlag");
+        param.put("delFlag", PubEnum.YesOrNoEnum.NO.getValue());
+
+        sql.append(" AND t1.I_TYPE = :type");
+        param.put("type", ProductInfo.Type.Single.getValue());
+
+        sql.append(" AND t1.I_STATUS = :status");
+        param.put("status", ProductInfo.Status.OnSale.getValue());
+
+        if (cateList != null && cateList.size() > 0) {
+            sql.append(" AND t1.I_CATE_ID IN (:cateList)");
+            param.put("cateList", cateList);
+        }
+
+        if (StringUtil.checkObj(cusId)) {
+            sql.append(" AND t2.I_CUS_ID = :cusId");
+            param.put("cusId", cusId);
+
+            //店铺商品状态
+            Integer status = ProductShop.Status.NORMALUSE.getValue();
+            sql.append(" AND t2.I_STATUS = :shopStatus");
+            param.put("shopStatus", status);
+        }
+
+        if (StringUtil.checkObj(productName)) {
+            sql.append(" AND t1.S_ZH_NAME like (:productName)");
+            param.put("productName", productName + "%");
+        }
+
+        sql.append(" ORDER BY IFNULL(t1.I_SEQ, 9999999) ASC");
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    /**
+     * 获取商品详细信息(app接口)
+     *
+     * @param cusId 用户标识
+     * @param id    商品标识
+     * @return
+     */
+    public List<Map> findProductInfoDetail(Long cusId, Long id) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"id\", ");
+        sql.append(" t1.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" t1.S_BRAND_NAME AS \"brandName\", ");
+        sql.append(" t1.I_STATUS AS \"status\", ");
+        sql.append(" t1.S_CODE AS \"code\", ");
+        sql.append(" t1.S_CATE_NAME AS \"cateName\", ");
+        sql.append(" t1.I_UNIT AS \"unit\", ");
+        sql.append(" t1.S_HEAD_PATH AS \"headPath\", ");
+        sql.append(" t1.I_SHOP_SALES AS \"shopSales\", ");
+        sql.append(" t1.S_INTRODUCE AS \"introduce\", ");
+        sql.append(" (CASE WHEN t2.I_STATUS is null THEN 2 ELSE t2.I_STATUS End) AS \"isInShop\",");
+        sql.append(" t3.S_ATTR_JSON AS \"attrJson\"");
+        sql.append(" FROM T_PRODUCT_INFO t1 ");
+        sql.append(" LEFT JOIN T_PRODUCT_SHOP t2 ON t1.I_ID=t2.I_PRODUCT_ID");
+        sql.append(" AND t2.I_CUS_ID = :cusId");
+        sql.append(" LEFT JOIN T_PRODUCT_ATTR t3 ON t1.I_ID=t3.I_PRODUCT_ID");
+        sql.append(" WHERE 1=1");
+
+        Map param = new HashMap<>();
+        sql.append(" AND t1.I_ID = :id");
+        param.put("id", id);
+
+        param.put("cusId", cusId);
+
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    @Override
+    public Page<Map> findActivitySelectProductPage(List<Long> activityProductIds, String zhName, Long cateId, Pageable pageable) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"id\", ");
+        sql.append(" t1.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" t1.I_CATE_ID AS \"cateId\", ");
+        sql.append(" t1.S_CATE_NAME AS \"cateName\" ");
+        sql.append(" FROM  T_PRODUCT_INFO t1");
+        sql.append(" WHERE t1.I_DEL_FLAG=" + PubEnum.YesOrNoEnum.NO.getValue());
+        sql.append(" AND t1.I_TYPE=" + ProductInfo.Type.Single.getValue());
+        sql.append(" AND t1.I_STATUS=" + ProductInfo.Status.OnSale.getValue());
+
+        Map param = new HashMap<>();
+        if (activityProductIds != null && activityProductIds.size() > 0) {
+            sql.append(" AND t1.I_ID NOT IN (:ids)");
+            param.put("ids", activityProductIds);
+        }
+        if (StringUtil.isNotBlank(zhName)) {
+            sql.append(" AND t1.S_ZH_NAME like :zhName");
+            param.put("zhName", zhName + "%");
+        }
+
+        if (StringUtil.checkObj(cateId)) {
+            sql.append(" AND t1.I_CATE_ID = :cateId");
+            param.put("cateId", cateId);
+        }
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+}

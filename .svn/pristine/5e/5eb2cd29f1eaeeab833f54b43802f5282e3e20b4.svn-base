@@ -1,0 +1,35 @@
+package com.catt.wfx.service.settlementMgr;
+
+import java.util.Map;
+
+/**
+ * 店主/主管规则服务接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/2/10
+ */
+public interface SettlementShopRuleService {
+
+    /**
+     * 获取当前店主注册规则标识
+     *
+     * @return 规则标识
+     */
+    /**
+     * 获取当前店主注册或邀请规则
+     *
+     * @param type 1、注册，2、邀请
+     * @return 规则标识
+     */
+    Long getCurrentRule(Integer type);
+
+
+    /**
+     * 获取店主补贴规则
+     *
+     * @param type 1、注册，2、邀请
+     * @return
+     */
+    Map findShopRule(Integer type);
+}

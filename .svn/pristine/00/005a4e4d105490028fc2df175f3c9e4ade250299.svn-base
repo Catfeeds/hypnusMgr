@@ -1,0 +1,436 @@
+package com.catt.wfx.repository.entity.settlementMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.Date;
+
+/**
+ * 订单结算统计实体类
+ *
+ * @author 袁幸成
+ * @date 2017-02-21 09:33:42
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_SETTLEMENT_ORDER_DETAIL")
+public class SettlementOrderDetail extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+
+    /**
+     * 厂家标识
+     */
+    private Long factoryId;
+    /**
+     * 订单标识
+     */
+    private Long orderId;
+    /**
+     * 订单编号
+     */
+    private String orderCode;
+    /**
+     * 订单状态<p><br>
+     * 2-待发货 3-待收货 4-已收货 5-已完成当客户签收后，订单状态变为“已收货”。当订单超过退货期限，且订单相关的退货流程都结束时，才变为“已完成”。
+     */
+    private Integer orderStatus;
+    /**
+     * 商品金额
+     */
+    private Double productAmount;
+    /**
+     * 代金券抵扣金额<p><br>
+     * 代金券不能抵扣运费，且代金券抵扣金额不一定等于代金券面值
+     */
+    private Double couponMoney;
+    /**
+     * 物流费用
+     */
+    private Double logisticsCost;
+    /**
+     * 订单总额<p><br>
+     * 等于商品金额+物流金额
+     */
+    private Double totalAmount;
+    /**
+     * 订单实付金额<p><br>
+     * 订单实付金额 = 订单总额 - 代金券抵扣金额
+     */
+    private Double totalPayAmount;
+    /**
+     * 店主标识
+     */
+    private Long shopkeeperId;
+    /**
+     * 店铺标识
+     */
+    private Long shopId;
+    /**
+     * 主管标识
+     */
+    private Long leaderId;
+    /**
+     * 下单时间
+     */
+    private Date orderTime;
+    /**
+     * 店主提成结算金额
+     */
+    private Double shopkeeperAmount;
+    /**
+     * 主管提成结算金额
+     */
+    private Double leaderAmount;
+    /**
+     * 平台提成结算金额
+     */
+    private Double platAmount;
+    /**
+     * 物流提成结算金额
+     */
+    private Double logisticsAmount;
+    /**
+     * 店主提成是否结算<p><br>
+     * 1-是，2-否
+     */
+    private Integer shopkeeperSettlement;
+    /**
+     * 主管提成是否结算<p><br>
+     * 1-是，2-否
+     */
+    private Integer leaderSettlement;
+    /**
+     * 平台提成是否结算<p><br>
+     * 1-是，2-否
+     */
+    private Integer platSettlement;
+    /**
+     * 物流提成是否结算<p><br>
+     * 1-是，2-否
+     */
+    private Integer logisticsSettlement;
+    /**
+     * 店主奖励是否结算<p><br>
+     * 1-是，2-否
+     */
+    private Integer shopGiveSettle;
+    /**
+     * 主管奖励是否结算<p><br>
+     * 1-是，2-否
+     */
+    private Integer leaderGiveSettle;
+    /**
+     * 店主奖励结算明细标识
+     */
+    private Long shopDetailId;
+    /**
+     * 平台奖励结算明细标识
+     */
+    private Long platDetailId;
+    /**
+     * 主管奖励结算明细标识
+     */
+    private Long leaderDetailId;
+    /**
+     * 创建人员标识<p><br>
+     * 创建人员标识
+     */
+    private Long createdId;
+    /**
+     * 创建人员名称<p><br>
+     * 创建人员名称
+     */
+    private String createdName;
+    /**
+     * 订单类型（与订单表的保存一致）
+     * 1-注册（用户成为店主时下单）2-分销（代理商给下级代理商发货）3-零售（平台、代理商、店主销售给终端用户）
+     */
+    private Integer orderType;
+    /**
+     * 厂家返利金额
+     * Json格式：i_rebate_one_price: 返利单价，i_rebate_one：返利总价，shopkeeper_id；店主id
+     *     [{"i_rebate_one":"10","shopkeeper_id":"123"},
+             {"i_rebate_two":"21","shopkeeper_id":"456"},
+             {"i_rebate_three":"18","shopkeeper_id":""},
+             {"i_rebate_four":"0","shopkeeper_id":""},
+             {"i_rebate_five_price":"0","shopkeeper_id":""}]
+     */
+    private String rebateJson;
+
+    @Column(name = "I_FACTORY_ID")
+    public Long getFactoryId() {
+        return factoryId;
+    }
+
+    public void setFactoryId(Long factoryId) {
+        this.factoryId = factoryId;
+    }
+
+    @Column(name = "I_ORDER_ID")
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    @Column(name = "S_ORDER_CODE", length = 128)
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    @Column(name = "I_ORDER_STATUS")
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    @Column(name = "I_PRODUCT_AMOUNT")
+    public Double getProductAmount() {
+        return productAmount;
+    }
+
+    public void setProductAmount(Double productAmount) {
+        this.productAmount = productAmount;
+    }
+
+    @Column(name = "I_COUPON_MONEY")
+    public Double getCouponMoney() {
+        return couponMoney;
+    }
+
+    public void setCouponMoney(Double couponMoney) {
+        this.couponMoney = couponMoney;
+    }
+
+    @Column(name = "I_LOGISTICS_COST")
+    public Double getLogisticsCost() {
+        return logisticsCost;
+    }
+
+    public void setLogisticsCost(Double logisticsCost) {
+        this.logisticsCost = logisticsCost;
+    }
+
+    @Column(name = "I_TOTAL_AMOUNT")
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    @Column(name = "I_TOTAL_PAY_AMOUNT")
+    public Double getTotalPayAmount() {
+        return totalPayAmount;
+    }
+
+    public void setTotalPayAmount(Double totalPayAmount) {
+        this.totalPayAmount = totalPayAmount;
+    }
+
+    @Column(name = "I_SHOPKEEPER_ID")
+    public Long getShopkeeperId() {
+        return shopkeeperId;
+    }
+
+    public void setShopkeeperId(Long shopkeeperId) {
+        this.shopkeeperId = shopkeeperId;
+    }
+
+    @Column(name = "I_SHOP_ID")
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
+    }
+
+    @Column(name = "I_LEADER_ID")
+    public Long getLeaderId() {
+        return leaderId;
+    }
+
+    public void setLeaderId(Long leaderId) {
+        this.leaderId = leaderId;
+    }
+
+    @Column(name = "D_ORDER_TIME")
+    public Date getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(Date orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    @Column(name = "I_SHOPKEEPER_AMOUNT")
+    public Double getShopkeeperAmount() {
+        return shopkeeperAmount;
+    }
+
+    public void setShopkeeperAmount(Double shopkeeperAmount) {
+        this.shopkeeperAmount = shopkeeperAmount;
+    }
+
+    @Column(name = "I_LEADER_AMOUNT")
+    public Double getLeaderAmount() {
+        return leaderAmount;
+    }
+
+    public void setLeaderAmount(Double leaderAmount) {
+        this.leaderAmount = leaderAmount;
+    }
+
+    @Column(name = "I_PLAT_AMOUNT")
+    public Double getPlatAmount() {
+        return platAmount;
+    }
+
+    public void setPlatAmount(Double platAmount) {
+        this.platAmount = platAmount;
+    }
+
+    @Column(name = "I_LOGISTICS_AMOUNT")
+    public Double getLogisticsAmount() {
+        return logisticsAmount;
+    }
+
+    public void setLogisticsAmount(Double logisticsAmount) {
+        this.logisticsAmount = logisticsAmount;
+    }
+
+    @Column(name = "I_SHOPKEEPER_SETTLEMENT")
+    public Integer getShopkeeperSettlement() {
+        return shopkeeperSettlement;
+    }
+
+    public void setShopkeeperSettlement(Integer shopkeeperSettlement) {
+        this.shopkeeperSettlement = shopkeeperSettlement;
+    }
+
+    @Column(name = "I_LEADER_SETTLEMENT")
+    public Integer getLeaderSettlement() {
+        return leaderSettlement;
+    }
+
+    public void setLeaderSettlement(Integer leaderSettlement) {
+        this.leaderSettlement = leaderSettlement;
+    }
+
+    @Column(name = "I_PLAT_SETTLEMENT")
+    public Integer getPlatSettlement() {
+        return platSettlement;
+    }
+
+    public void setPlatSettlement(Integer platSettlement) {
+        this.platSettlement = platSettlement;
+    }
+
+    @Column(name = "I_LOGISTICS_SETTLEMENT")
+    public Integer getLogisticsSettlement() {
+        return logisticsSettlement;
+    }
+
+    public void setLogisticsSettlement(Integer logisticsSettlement) {
+        this.logisticsSettlement = logisticsSettlement;
+    }
+
+    @Column(name = "I_SHOP_GIVE_SETTLE")
+    public Integer getShopGiveSettle() {
+        return shopGiveSettle;
+    }
+
+    public void setShopGiveSettle(Integer shopGiveSettle) {
+        this.shopGiveSettle = shopGiveSettle;
+    }
+
+    @Column(name = "I_LEADER_GIVE_SETTLE")
+    public Integer getLeaderGiveSettle() {
+        return leaderGiveSettle;
+    }
+
+    public void setLeaderGiveSettle(Integer leaderGiveSettle) {
+        this.leaderGiveSettle = leaderGiveSettle;
+    }
+
+    @Column(name = "I_SHOP_DETAIL_ID")
+    public Long getShopDetailId() {
+        return shopDetailId;
+    }
+
+    public void setShopDetailId(Long shopDetailId) {
+        this.shopDetailId = shopDetailId;
+    }
+
+    @Column(name = "I_PLAT_DETAIL_ID")
+    public Long getPlatDetailId() {
+        return platDetailId;
+    }
+
+    public void setPlatDetailId(Long platDetailId) {
+        this.platDetailId = platDetailId;
+    }
+
+    @Column(name = "I_LEADER_DETAIL_ID")
+    public Long getLeaderDetailId() {
+        return leaderDetailId;
+    }
+
+    public void setLeaderDetailId(Long leaderDetailId) {
+        this.leaderDetailId = leaderDetailId;
+    }
+
+    @Column(name = "I_CREATED_ID")
+    public Long getCreatedId() {
+        return createdId;
+    }
+
+    public void setCreatedId(Long createdId) {
+        this.createdId = createdId;
+    }
+
+    @Column(name = "S_CREATED_NAME", length = 32)
+    public String getCreatedName() {
+        return createdName;
+    }
+
+    public void setCreatedName(String createdName) {
+        this.createdName = createdName;
+    }
+
+    @Column(name = "I_ORDER_TYPE")
+    public Integer getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(Integer orderType) {
+        this.orderType = orderType;
+    }
+
+    @Column(name = "S_REBATE_JSON", length = 1024)
+    public String getRebateJson() {
+        return rebateJson;
+    }
+
+    public void setRebateJson(String rebateJson) {
+        this.rebateJson = rebateJson;
+    }
+}
+

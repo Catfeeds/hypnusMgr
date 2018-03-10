@@ -1,0 +1,64 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*订单列表*/
+.dingdanItem{background:#fff; margin-bottom:10px; padding:0 20px;}
+.dingdanTop{overflow:hidden; padding:10px 0;}
+.dingdanNum{float:left; font-size:14px; color:#646464;}
+.dingdanState{float:right; font-size:14px; padding:1px 4px; border-radius:2px;}
+.dingdanState02{float:right; font-size:14px; padding:0px 4px; line-height:22px; border-radius:2px; margin-top:10px;}
+.dingdanContent{background:#f5f5f5; margin-top:10px; padding:0 10px;}
+.dingdanBottom{overflow:hidden;}
+.dingdanBottom p{font-size:14px; color:#646464; float:right;line-height:28px; }
+.wuliuBtn{float:right; color:#f47f30; line-height:22px; border-radius:4px; border:1px solid #f47f30; padding:0 4px; font-size:14px;}
+.dingdanzongji{text-align:right; padding:10px 0; border-top:1px solid #e5e5e5;}
+.shanpinTag02{color:#969696; line-height:20px; padding:4px 0;}
+.shanpinPrice02{font-size:16px; color:#646464;}
+.priceTotal{font-size:20px;}
+.wuliuMain{margin:10px 20px; padding-bottom:10px; border-bottom:1px dashed #e5e5e5;}
+.wuliuMain p{font-size:15px; line-height:24px; overflow:hidden;}
+.wuliudetailBtn{float:right; width:18px; height:18px;}
+.wuliudetailState{float:right; width:50px; font-size:14px; line-height:22px; border-radius:2px; text-align:center;}
+
+
+/*订单详情*/
+.dingdanShangpin{margin-top:10px;}
+
+/*物流配送*/
+.wuliList{margin-top:10px;}
+.wuliList li{position:relative; padding-bottom:10px; min-height:80px;}
+.wuliuimgLeft{position:absolute; left:0; top:4px; width:18px; z-index:4}
+.wuliuimgLeft02{position:absolute; left:0; top:-78px; width:18px; z-index:2}
+
+.wuliList h1{padding-left:30px; font-size:15px; line-height:22px;}
+.wuliList font{padding-left:30px; font-size:12px;}
+
+/*物流定位*/
+.bgMap{overflow-y:hidden;}
+.mapImg{width:100%;}
+.wuliudingwei{position:relative;}
+.wuliucarImg01{position:absolute; left:30px; top:20px; width:50px;}
+.wuliucarImg02{position:absolute; left:80px; top:40px; width:50px;}
+.wuliucarImg03{position:absolute; left:120px; top:140px; width:50px;}
+
+
+/*取消订单*/
+.commentBox{width:100%; font-size:16px; line-height:24px; color:#646464; border:none; height:160px;}
+
+.wuliutop{ height:120px; background:#fff; border-bottom:1px solid #e5e5e5;}
+.wuliutop h1{ position:relative;}
+.wuliu{ position:relative; padding:0 10px 0px 40px; height:60px; } 
+.goodTip{ color:#646464;}
+.biaotiRight{position:absolute; top:16px; right:20px;  font-size:14px; line-height:24px;}
+.wuliu h2{ position:absolute; top:20px; left:120px;  font-size:14px; height:20px; line-height:20px;color:#1a1a1a; letter-spacing:1px; padding-right:20px;}
+.wuliu h3{ position:absolute; top:44px; left:120px; font-size:14px; color:#1a1a1a; letter-spacing:1px;}
+.wuliu h4{ position:absolute; top:68px; left:120px; font-size:14px; color:#1a1a1a; letter-spacing:1px;}
+.shuliang{ font-weight:normal; color::#808080;} 
+.gouwuchePic{  position:absolute; top:10px; left:20px; height:90px;}
+.jiage{ position:absolute; top:72px; left:120px; font-size:16px; color:#333; font-weight:900;}
+.tuikuan{float:right; width:60px; color:#666; font-size:14px; width: color:#666; line-height:30px; text-align:center; border:1px solid #ccc; border-radius:5px; margin-top:10px; margin-right:20px;}
+.tuikuan1{float:right; font-size:14px; color:#666; line-height:35px; text-align:right; padding:0px 10px; border:1px solid #ccc; border-radius:5px; margin-top:7px; margin-right:20px;}
+
+
+
+

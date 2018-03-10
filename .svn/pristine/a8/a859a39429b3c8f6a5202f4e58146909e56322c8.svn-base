@@ -1,0 +1,82 @@
+package com.catt.wfx.service.impl.productMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.wfx.repository.dao.productMgr.ProductPriceDao;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPriceBaseService;
+import com.catt.wfx.service.productMgr.ProductPriceService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商品价格定义服务接口实现
+ * 作者：袁幸成
+ * 时间：2017-1-9 16:33:34
+ */
+@Service("productPriceServiceImpl")
+public class ProductPriceServiceImpl implements ProductPriceService {
+
+    @Resource(name = "productPriceBaseServiceImpl")
+    private ProductPriceBaseService productPriceBaseService;
+
+    @Resource(name = "productPriceDaoImpl")
+    private ProductPriceDao productPriceDao;
+
+    @Resource(name = "productInfoBaseServiceImpl")
+    private ProductInfoBaseService productInfoBaseService;
+
+    @Override
+    public void deleteByProductId(Long productId) {
+        productPriceDao.deleteByProductId(productId);
+    }
+
+    @Override
+    @Transactional
+    public void savePrices(Long productId, List<ProductPrice> priceList) {
+        ProductInfo productInfo = productInfoBaseService.find(productId);
+        if (productInfo.getStatus() == ProductInfo.Status.ToPublish.getValue()){
+            productInfo.setStatus(ProductInfo.Status.NoSale.getValue());
+        }
+        productInfoBaseService.update(productInfo);
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("productId", productId));
+        List<ProductPrice> oldPrices = productPriceBaseService.findList(null, filters, null);
+        List<Long> priceIds = new ArrayList<>();
+        for (ProductPrice price : priceList){
+            Long priceId = price.getId();
+            if (price.getId() != null){
+                priceIds.add(priceId);
+            }
+        }
+        for (ProductPrice oldPrice : oldPrices){
+            Long priceId = oldPrice.getId();
+            if (!priceIds.contains(priceId)){
+                productPriceBaseService.delete(oldPrice);
+            }
+        }
+        productPriceBaseService.saveOrUpdate(priceList);
+    }
+
+    @Override
+    public List<Map> findListByProductId(Long productId) {
+        return productPriceDao.findListByProductId(productId);
+    }
+
+    @Override
+    public ProductPrice findPackagePrice(Long packageProid) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("productId", packageProid));
+        List<ProductPrice> list = productPriceBaseService.findList(1, filters, null);
+        if (list.size() > 0){
+            return list.get(0);
+        }
+        return new ProductPrice();
+    }
+}

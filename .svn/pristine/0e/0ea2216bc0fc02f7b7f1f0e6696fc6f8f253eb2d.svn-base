@@ -1,0 +1,62 @@
+package com.catt.wfx.repository.dao.orderMgr;
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderDetail;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单详情Dao接口
+ *
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:34
+ * @version V1.0
+ */
+public interface CusOrderDetailDao extends BaseDao<CusOrderDetail, Long> {
+
+    /**
+     * 查询订单结算总额（店主，总代利润等要用时在加上）
+     * @param orderId 订单标识
+     * @return
+     */
+    Map<String, Object> getAmount(Long orderId);
+
+    /**
+     * 查询订单详情
+     * @param orderId 订单标识
+     * @return
+     */
+    List<Map> findDetailByOrderId(Long orderId);
+
+    /**
+     * 获取订单对应的商品数量和店主利润
+     *
+     * @param orderIds  订单标识集合
+     * @return
+     */
+    List<Map> getGoodNumAndProfit(List<Long> orderIds);
+
+    /**
+     * 获取订单对应的订单详细信息
+     *
+     * @param id  订单标识
+     * @return
+     */
+    List<Map> getCusOrderDetail(Long id);
+
+    /**
+     * 修改订单明细退货数量
+     *
+     * @param orderDetailId  订单明细标识
+     * @param num            退货数量
+     */
+    void updateReturnNum(Long orderDetailId, Integer num);
+
+    /**
+     * 统计订单优惠总额
+     * @param orderId 订单标识
+     * @return
+     */
+    double countDiscountAmount(Long orderId);
+}

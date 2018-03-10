@@ -1,0 +1,46 @@
+package com.catt.wfx.service.productMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+
+import java.util.Map;
+
+/**
+ * Description:商品文案服务接口
+ * Created by 2017-01-09  14:31.
+ * author: Zhou mingxiang
+ */
+public interface ProductDocumentService {
+
+    /**
+     * 获取商品文案列表
+     *
+     * @param cusId     用户标识
+     * @param productId 商品标识
+     * @param type      文案类型
+     * @param status    文案状态
+     * @param pageable
+     * @return
+     */
+    Page<Map> getProductDocumentByPage(Long cusId, Long productId, Integer type, Integer status, Pageable pageable);
+
+    /**
+     * 保存商品文案信息
+     *
+     * @param createdId   创建人员标识
+     * @param createdName 创建人员名称
+     * @param productId   商品标识
+     * @param desc        文案内容
+     * @param path        文案图片附件标识，多个以英文逗号分隔
+     */
+    void save(Long createdId, String createdName, Long productId, String desc, String path);
+
+
+    /**
+     * 删除商品文案
+     *
+     * @param id 商品文案标识
+     */
+    void delete(Long id);
+
+}

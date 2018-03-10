@@ -1,0 +1,92 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <%@include file="/common/headModule2.jsp" %>
+<title>退货设置</title>
+<link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="${path}/resources/css/quan.css"/>
+<link type="text/css" href="${path}/resources/css/addActivities.css" rel="stylesheet" />
+<link type="text/css" href="${path}/resources/css/dropMenu02.css" rel="stylesheet" />
+<script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
+<script type="text/javascript" src="${path}/resources/js/kyeWord.js" ></script>
+
+<script src="${path}/resources/admin/js/basicConfig/baseSet/refundsIndex.js"></script>
+</head>
+
+<body>
+<div class="wrapper">
+  <div class="positionNow">主页 &gt; <a>退货设置</a></div>
+  <div class="addActivities">
+        <div class="userDetail">
+        <h1 class="tittle">
+          <span class="btnRed" id="saveDays">保存</span>退货时间设置
+        </h1>
+            <div class="userDetailMain">
+              <div class="eachLine">
+                <div class="lineText">订单签收后</div>
+                <input class="tkinput" value="${entity.refundDays}" type="text" id="refundDays" onkeyup="clearNoNum(this)" style= "width:80px; "/>
+                <div class="lineText">天内允许退货。</div>
+              </div>
+            </div>
+            </div>
+        <div class="userDetail">
+        <h1 class="tittle">
+          <span class="btnRed" id="saveAddress">保存</span>退货地址设置</h1>
+            <div class="userDetailMain">
+              <table class="massageTable">
+                    <tr>
+                        <th><font style="color:red;">*</font>联系电话：</th>
+                        <td><input class="tkinput" type="text" id="phone" value="${entity.phone}" /></td>
+                        <th style="float: left;"><font style="color:red;">*</font>联系人：</th>
+                        <td style="float: left; width:300px;"><input class="tkinput" type="text" id="ontact" value="${entity.ontact}"/></td>
+                    </tr>
+                    <tr class="hideContent">
+                        <th><font style="color:red;">*</font>退货地址：</th>
+                        <td class="xw_xuanze">
+                            <div class="searchBox 80 xw_searchBox">
+                                <input class="searchInputSelect80 xw_input" data-value-id="${entity.provinceId}"
+                                       value="${entity.provinceName == null ? '选择省' : entity.provinceName}"  id="province" type="text" readonly/>
+                                <ul class="ulhide80 xw_choice" id="provinceSel">
+                                </ul>
+                            </div>
+                            <div class="searchBox 80 xw_searchBox">
+                                <input class="searchInputSelect80 xw_input" data-value-id="${entity.cityId}"
+                                       value="${entity.cityName == null ? '选择市' : entity.cityName}"  id="city" type="text" readonly/>
+                                <ul class="ulhide80 xw_choice" id="citySel">
+                                </ul>
+                            </div>
+                            <div class="searchBox xw_searchBox">
+                                <input class="searchInputSelect80 xw_input" data-value-id="${entity.regionId}"
+                                       value="${entity.regionName == null ? '选择区' : entity.regionName}"  id="county" type="text" readonly/>
+                                <ul class="ulhide80 xw_choice" id="countySel">
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><font style="color:red;">*</font>详细地址：</th>
+                        <td colspan="2"><input class="tkinput" type="text" value="${entity.address}" id="address" /></td>
+                    </tr>
+                </table>
+            </div>
+    </div>
+        </div>
+</div>
+</div>
+<script type="text/html" id="template_dataList">
+    {{each}}
+    <li data-value-id="{{$value.addrCode}}">{{$value.name}}</li>
+    {{/each}}
+</script>
+<script language="JavaScript" type="text/javascript">
+    function clearNoNum(obj){
+        obj.value = obj.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符
+        obj.value = obj.value.replace(/^\./g,"");     //验证第一个字符是数字而不是.
+        obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的.
+        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+    }
+</script>
+</body>
+</html>

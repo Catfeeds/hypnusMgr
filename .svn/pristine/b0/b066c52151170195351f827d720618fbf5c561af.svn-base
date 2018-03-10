@@ -1,0 +1,119 @@
+
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+                    var typeLimit = $("#typeLimit").val();
+                    var moneyLimit = $("#moneyLimit").val();
+                    if(typeLimit == 1){
+                        $("#typeLimit2").addClass("on");
+                        $("#typeLimit1").removeClass("on");
+                        $("#typeLimit1").attr("style", "display:none;");
+                        $("#chooseTypeLimit").attr("style", "display:block;");
+                    }else{
+                        $("#typeLimit2").attr("style", "display:none;");
+                        $("#typeLimit").val(2);
+                    }
+                    if(moneyLimit == 1){
+                        $("#moneyLimit2").addClass("on");
+                        $("#moneyLimit1").removeClass("on");
+                        $("#moneyLimit1").attr("style", "display:none;");
+                        $("#chooseMoneyLimit").attr("style", "display:block;");
+                    }else{
+                        $("#moneyLimit2").attr("style", "display:none;");
+                        $("#moneyLimit").val(2);
+                    }
+
+                    var rangeType = $("#rangeType").val();
+                    if(rangeType == 1){
+                        $("#rangeName").text("所有");
+                    }else if(rangeType == 2){
+                        $("#rangeName").text("主管");
+                    }else if(rangeType == 3){
+                        $("#rangeName").text("店主");
+                    }else if(rangeType == 4){
+                        $("#rangeName").text("会员");
+                    }
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    //限制选择点击事件
+                    $(".xw_activitiestype").click(function(){
+                        var clickId = $(this).attr("name");
+                        if($(this).attr("id").indexOf("2") != -1){
+                            $("#"+clickId).val(1);
+                        }else{
+                            $("#"+clickId).val(2);
+                        }
+                    });
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                    //加载商品类型列表
+                    EventHandler.loadCateList();
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                //获取选择的商品类型
+                getChooseCate : function(){
+                    var chooseTag = $("#dataList").find("div[class='guigeDiv xw_guigeDiv on']");
+                    var cateIds = "";
+                    chooseTag.each(function(){
+                        var cateId = $(this).attr("data-value");
+                        cateIds += cateId + ",";
+                    });
+                    if(cateIds.indexOf(",") != -1){
+                        cateIds = cateIds.substring(0, cateIds.length - 1);
+                    }
+                    return cateIds;
+                },
+                //加载商品类型
+                loadCateList : function(){
+                    var couponId = $("#id").val();
+                    DataHandler.getCateList({couponId : couponId}, function(data){
+                        var html = template("template_dataList", {content : data});
+                        $("#dataList").html(html);
+                        //商品规格选择
+                        $(".xw_guigeDiv").click(function(){
+                            $(this).toggleClass("on");
+                        });
+                    });
+                }
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                //获取商品类型
+                getCateList: function (params, callback) {
+                    $.post(path + "/admin/couponMgr/getProductCate", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });

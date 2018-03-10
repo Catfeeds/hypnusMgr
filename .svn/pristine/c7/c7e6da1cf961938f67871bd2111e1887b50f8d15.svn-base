@@ -1,0 +1,47 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>开店套餐设置</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/addActivities.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/huodong.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/chanpin.css" rel="stylesheet"/>
+
+    <script src="${path}/resources/admin/common/temDataGrid.js"></script>
+    <script src="${path}/resources/js/member.js"></script>
+    <script src="${path}/resources/admin/js/customerMgr/director/addEdit.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="positionNow">
+        <a>主页 &gt; </a><a href="${path}/admin/cusInfo/director/index.html">主管管理</a> &gt; <a>新增</a>
+    </div>
+    <div class="addActivities">
+        <div class="userDetail">
+            <h1 class="tittle">基本信息</h1>
+            <div class="userDetailMain">
+                <table class="massageTable">
+                    <input type="hidden" id="id" value="${id}">
+                    <tr>
+                        <th>主管名称：</th>
+                        <td>
+                            <input class="tkinput" type="text" id="name" value="${name}">
+                        </td>
+                        <th>手机号：</th>
+                        <td>
+                            <input class="tkinput" type="text" id="mobile" value="${mobile}">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="saveBar">
+            <span class="btnRed" id="save">保存</span>
+            <span class="btnGrey" onclick="window.location='${path}/admin/cusInfo/director/index.html'">取消</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

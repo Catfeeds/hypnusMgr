@@ -1,0 +1,59 @@
+package com.catt.wfx.service.customerMgr;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.entity.customerMgr.CusContact;
+
+import java.util.Map;
+
+/**
+ * 收货地址服务接口
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-02-14 09:48:42
+ */
+public interface CusContactService {
+
+    /**
+     * 获取用户默认收货地址
+     *
+     * @param cusId 用户标识
+     * @return
+     */
+    CusContact findDefaultContact(Long cusId);
+
+    /**
+     * 新增/编辑收货地址
+     *
+     * @param cusContact
+     */
+    void saveOrUpdate(CusContact cusContact);
+
+    /**
+     * 删除收货地址
+     *
+     * @param id 地址标识
+     */
+    void delete(Long id);
+
+    /**
+     * 设置默认收货地址
+     *
+     * @param id    地址标识
+     * @param cusId 客户标识
+     */
+    void setDefaultContact(Long id, Long cusId);
+
+    /**
+     * 获取收货地址列表（分页）
+     *
+     * @param cusId     客户标识
+     * @param id        地址标识
+     * @param isDefault 是否默认
+     * @param pageable
+     * @return
+     */
+    Page<Map> getCusContactByPage(Long cusId, Long id, Integer isDefault, Pageable pageable);
+}

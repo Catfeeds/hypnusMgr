@@ -1,0 +1,100 @@
+package com.catt.wfx.service.impl.settlementMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.couponMgr.CouponInfoDao;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementShopRuleDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRule;
+import com.catt.wfx.service.base.settlementMgr.SettlementShopRuleBaseService;
+import com.catt.wfx.service.settlementMgr.SettlementShopRuleService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 店主/主管规则服务接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/2/10
+ */
+@Service("settlementShopRuleServiceImpl")
+public class SettlementShopRuleServiceImpl implements SettlementShopRuleService {
+
+    @Resource(name = "settlementShopRuleBaseServiceImpl")
+    private SettlementShopRuleBaseService ruleBaseService;
+
+    @Resource(name = "settlementShopRuleDaoImpl")
+    private SettlementShopRuleDao settlementShopRuleDao;
+
+    @Resource(name = "couponInfoDaoImpl")
+    private CouponInfoDao couponInfoDao;
+
+    /**
+     * 获取当前店主注册或邀请规则
+     *
+     * @param type 1、注册，2、邀请
+     * @return 规则标识
+     */
+    @Override
+    public Long getCurrentRule(Integer type) {
+        Date now = new Date();
+        try {
+            now = DateUtil.parseDate(DateUtil.format(now, DateUtil.yyyyMMdd), DateUtil.yyyyMMdd);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusType", SettlementShopRule.CusType.Shopkeeper.getValue()));
+        filters.add(Filter.eq("status", PubEnum.YesOrNoEnum.YES.getValue()));
+        filters.add(Filter.eq("type", type));
+        filters.add(Filter.dle("startTime", now));
+        filters.add(Filter.dge("endTime", now));
+        List<SettlementShopRule> list = ruleBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(list)) {
+            return list.get(0).getId();
+        }
+        return null;
+    }
+
+    /**
+     * 获取店主补贴规则
+     *
+     * @param type 1、注册，2、邀请
+     * @return
+     */
+    public Map findShopRule(Integer type) {
+        Map map = new HashMap<>();
+        List<Map> list = settlementShopRuleDao.findShopRule(type);
+        if (CollectionUtil.isNotEmpty(list)) {
+            map =  list.get(0);
+            Integer rewardType = MapUtil.getInteger(map, "rewardType");
+            String couponId = MapUtil.getString(map, "couponId");
+            map.put("rewardType", rewardType + "");
+            map.put("faceValue", 0 + "");
+            if (rewardType.equals(SettlementShopRule.RewardType.Voucher.getValue())) {
+                List<Long> couponIds = new ArrayList<>();
+                if(StringUtil.isNotBlank(couponId)){
+                    String[] coupon = couponId.split(",");
+                    for (int i = 0, len = coupon.length; i < len; i++) {
+                        couponIds.add(Long.valueOf(coupon[i]));
+                    }
+                }
+                Map map1 = couponInfoDao.findFaceValueTotal(couponIds);
+                map.putAll(map1);
+            }
+
+        }
+        return map;
+    }
+}

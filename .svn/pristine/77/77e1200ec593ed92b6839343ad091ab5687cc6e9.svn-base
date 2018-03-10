@@ -1,0 +1,448 @@
+var id;
+seajs.use(['$', 'template', 'validate', 'msgBox', 'util', 'uEeditor', 'attachment', 'jquery.json'],
+    function ($, template, validate, msgBox, util, UE, attachment) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    id = $("#id").val();
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    // 初始化编辑器控件
+                    ue = UE.getEditor('desc', ueditor.config);
+
+                    if (id) {
+                        CoverpicHandler.initPicture();
+
+                        ue.ready(function () {
+                            // 设置编辑器的内容
+                            ue.setContent($('#descTemp').val());
+                        });
+
+                        $(window).triggerHandler('resize');
+
+                        EventHandler.loadProductList();
+                    }
+
+                    //获取图片最佳长宽比例
+                    $.post(path + "/admin/productInfo/getPicRatio", {}, function(data){
+                        if(data){
+                            var ratio = data.activityPicRatio;
+                            if(!ratio || ratio == ""){
+                                ratio = 2;
+                            }
+                            $("#picRatio").text(ratio);
+                        }
+                    });
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    //当服务器异常时，禁用的按钮给予恢复
+                    $(window.top).ajaxError(function(event,data) {
+                        $('#submit').button('reset');
+                    });
+
+                    if($("#id").val() != ""){
+                        //添加添加活动商品
+                        $("#btnAdd").click(EventHandler.addProduct);
+                        //编辑活动商品
+                        $("#btnEdit").click(EventHandler.editProduct);
+                        //删除活动商品
+                        $("#btnDel").click(EventHandler.delProduct);
+                        //动态绑定click(动态生成的html)
+                        $("#productList").on('click', '.xw_tick', templateList.check);
+                    }
+
+                    // 子表新增按钮
+                    $("#btn_coverpic_save").click(function () {
+                        CoverpicHandler.add();
+                    });
+                    // 子表删除按钮
+                    $("#btn_coverpic_del").click(function () {
+                        CoverpicHandler.del();
+
+                    });
+                    // 设置封面
+                    $("#btn_coverpic_add").click(function () {
+                        CoverpicHandler.addCoverPic();
+                    });
+
+                    //保存
+                    $('#submit').click(function () {
+                        $('#submit').button('loading');
+                        EventHandler.save();
+                    })
+
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                    var data = {
+                        name: "活动名称",
+                        startTime: "活动开始时间",
+                        endTime: "活动结束时间"
+                    };
+                    $("form#dataForm").validate({
+                        rules: {
+                            name: {required: true},
+                            startTime: {required: true},
+                            endTime: {required: true}
+                        },
+                        ignore: '.ignore',
+                        errorPlacement: function (error, element) {
+                        },
+                        invalidHandler: function (event, validator) {
+                            var tip = '';
+                            for (var i in validator.errorMap) {
+                                tip += data[i] + ":" + validator.errorMap[i] + "\n\r";
+                                msgBox.tips(data[i] + ":" + validator.errorMap[i]);
+                                $('#' + i).focus();
+                                return;
+                            }
+                        }
+                    });
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 */
+                save: function () {
+                    if ($("form#dataForm").valid()) {
+                        var params = function (list) {
+                            var map = {};
+                            $.each(list, function (i, n) {
+                                map[n.name] = n.value;
+                            });
+                            return map;
+                        }($("form#dataForm").serializeArray());
+                        params.startTime = $("#startTime").val() + ":00";
+                        params.endTime = $("#endTime").val() + ":00";
+
+                        params.desc = ue.getContent();
+                        if(params.desc == ""){
+                            $('#submit').button('reset');
+                            msgBox.tips("请填写活动描述");
+                            return;
+                        }
+                        params.coverPath = $("#headPath").val();
+                        // 图片 coverpic
+                        if ($("div.imgDiv div.jd_box").length > 0) {
+                            params.coverpic = $.toJSON(CoverpicHandler.getCoverPic());
+                        }
+
+                        DataHandler.save(params, function (backData) {
+                            $('#submit').button('reset');
+                            if (backData.type == "success") {
+                                msgBox.tips("操作成功", 1, function () {
+                                    if(id == ""){
+                                        window.location.href = path + "/admin/specialSale/edit/" + backData.result;
+                                    } else{
+                                        window.location.href = path + "/admin/specialSale/index.html";
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        $('#submit').button('reset');
+                    }
+                },
+                loadProductList: function(){
+                    $('#productList').html("");
+                    DataHandler.findActivityProductList({activityId: id}, function (backData) {
+                        var html = template('template_productList', backData);
+                        $('#productList').html(html);
+                        $(window).triggerHandler('resize');
+                    });
+                },
+                editProduct: function(){
+                    var checked = templateList.getChecked("productList", "tr");
+                    if (checked.length != 1) {
+                        msgBox.tips("请勾选一个商品再修改");
+                        return;
+                    }
+                    window.location.href = path + "/admin/specialSale/editPrice.html?activityId=" + id + "&productId=" + checked[0].productId;
+                },
+                addProduct: function(){
+                    msgBox.exWindow.open({
+                        title: '选择活动商品',
+                        url: path + "/admin/specialSale/selectProduct.html?activityId=" + id,
+                        width: '800px',
+                        height: '600px',
+                        close: function (result) {
+                            if (result) {
+                                window.location.href = path + "/admin/specialSale/editPrice.html?activityId=" + id + "&productId=" + result;
+                            }
+                        }
+                    });
+                },
+                delProduct: function(){
+                    var checked = templateList.getChecked("productList", "tr");
+                    if (checked.length == 0) {
+                        msgBox.tips("请勾选需要删除的活动商品");
+                        return;
+                    }
+                    msgBox.confirm({
+                        title : '提示',
+                        msg : '确认删除?',
+                        callback : function(btnType) {
+                            if (btnType == 'ok') {
+                                var relIds = [];
+                                for(var i = 0; i < checked.length; i++){
+                                    relIds[i] = checked[i].relId;
+                                }
+                                DataHandler.delActProductRel({relIds: relIds.join(",")}, function (backData) {
+                                    EventHandler.loadProductList();
+                                });
+                            }
+                        }
+                    })
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 删除活动商品
+                 * @param params
+                 * @param callback
+                 */
+                delActProductRel: function (params, callback) {
+                    $.post(path + '/admin/specialSale/delActProductRel', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+                /**
+                 * 获取活动商品列表
+                 * @param params
+                 * @param callback
+                 */
+                findActivityProductList: function (params, callback) {
+                    $.post(path + '/admin/specialSale/findActivityProductList', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+                /**
+                 * 保存油站
+                 * @param params
+                 * @param callback
+                 */
+                save: function (params, callback) {
+                    $.post(path + "/admin/specialSale/save", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /**
+         * 油站图片
+         */
+        var CoverpicHandler = (function () {
+            var resource = {};
+            return {
+                /**
+                 * 计算图片宽高，进行等比例缩放，并计算居中值
+                 * @param divWH  图片框宽高（正方形）
+                 * @returns {Array}
+                 */
+                initTempImg : function(divWH){
+                    var imgs = $("#panea_temp").find("img");
+                    var imgWH = [];
+                    $.each(imgs, function(i, item){
+                        var wh = {
+                            width: item.width,
+                            height: item.height
+                        };
+                        var temp;//比例值
+                        //重新等比例缩放图片
+                        if(wh.width >= wh.height){
+                            //宽长，高度需要调整，并计算好高度居中值
+                            temp = wh.width/divWH;
+                            wh.width = divWH;
+                            wh.height = wh.height/temp;
+                            var mid = (divWH - wh.height)/2;
+                            wh.mid = mid;
+                            wh.midStyle = "margin-top: "+mid+"px; margin-bottom: "+mid+"px;";
+                        }else{
+                            //高长，宽度需要调整，并计算好宽度度居中值
+                            temp = wh.height/divWH;
+                            wh.height = divWH;
+                            wh.width = wh.width/temp;
+                            var mid = (divWH - wh.width)/2;
+                            wh.mid = mid;
+                            wh.midStyle = "margin-left: "+mid+"px; margin-right: "+mid+"px;";
+                        }
+                        //拼接样式
+                        wh.style = "width: "+wh.width+"px; height: "+wh.height+"px;" + wh.midStyle ;
+                        imgWH.push(wh);
+                    });
+                    return imgWH;
+                },
+                refresh: function () {
+                    var tempList = [];
+                    for (var o in resource) {
+                        tempList.push(resource[o]);
+                    }
+                    var html = template("panea_temp_template", tempList);
+                    $("#panea_temp").html(html);
+                    //加载完图片后，延迟读取，否则可能出现未加载完成就读取的情况
+                    setTimeout(function(){
+                        var wh = CoverpicHandler.initTempImg(156);//计算等比例缩放后的宽高及居中值
+                        //初始化所有图片
+                        var itemContent = [];
+                        var headPath = $('#headPath').val();
+                        for (var i = 0; i < tempList.length; i++) {
+                            $.extend(tempList[i], wh[i]);
+                            //itemContent.push("<div class='jd_box' data-value-fileId='" + tempList[i].fileId + "' style='background:#efefef url(" + tempList[i].url + ") no-repeat center 45px'><div class='" + tempList[i].fileId + "'></div><div class='imgtick xw_tickpic'></div><div class='eachtit'>" + tempList[i].fileName + "</div></div>");
+                            if (headPath && headPath == tempList[i].attachmentId) {
+                                itemContent.push("" +
+                                "<div class='jd_box' style='width: 156px; height: 156px;' " +
+                                "data-value-fileId='" + tempList[i].fileId + "' data-value-attachmentId='" + tempList[i].attachmentId + "'>" +
+                                    //"<img class='pic1' src='" + tempList[i].url + "' style='width: 100%; height: 100%;' />" +
+                                "<img src='" + tempList[i].url + "' style='"+tempList[i].style+"' />" +
+                                "<div class='" + tempList[i].fileId + "'></div>" +
+                                "<div class='imgtick xw_tickpic'></div>" +
+                                "'<div class='cover'></div>" +
+                                    //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + tempList[i].fileName + "</div>" +
+                                "</div>");
+                            } else {
+                                itemContent.push("" +
+                                "<div class='jd_box' style='width: 156px; height: 156px;' " +
+                                "data-value-fileId='" + tempList[i].fileId + "' data-value-attachmentId='" + tempList[i].attachmentId + "'>" +
+                                    //"<img class='pic1' src='" + tempList[i].url + "' style='width: 100%; height: 100%;' />" +
+                                "<img class='pic1' src='" + tempList[i].url + "' style='"+tempList[i].style+"' />" +
+                                "<div class='" + tempList[i].fileId + "'></div>" +
+                                "<div class='imgtick xw_tickpic'></div>" +
+                                    //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + tempList[i].fileName + "</div>" +
+                                "</div>");
+                            }
+
+                        }
+
+                        var canshowNum = ($("div.imgDiv").outerWidth() - 86) / 230;
+                        canshowNum = Math.floor(canshowNum);
+                        //初始化面板对象
+                        panel = new BasePanel('#panea', {
+                            /**面板可视范围内显示的元素个数，如果展开后，
+                             * 则是disItem = disItem * expanRow*/
+                            disItem: canshowNum,
+                            /**显示面板宽度*/
+                            /**面板里需要承载的html内容*/
+                            contentHtml: itemContent,
+                            /**是否显示展开按钮*/
+                            isExpan: false,
+                            /**是否自动展开*/
+                            isAutoExpan: false,
+                            /**展开后显示的行数*/
+                            expanRows: 1,
+                            /**箭头位置：top：顶部；middle：中间*/
+                            arrowAlign: 'middle',
+                            /**面板移动完成后事件*/
+                            onmoveend: function (pageNo) {
+                            }
+                        });
+
+                        //勾选
+                        $(".xw_tickpic").click(function () {
+                            $(this).toggleClass("pictickOn");
+                        });
+                        //全选
+                        $(".xw_tickAllpic").click(function () {
+                            if ($(".xw_tickAllpic").hasClass("pictickOn")) {
+                                $(this).removeClass("pictickOn");
+                                $(".xw_tickpic").removeClass("pictickOn");
+                            }
+                            else {
+                                $(this).addClass("pictickOn");
+                                $(".xw_tickpic").addClass("pictickOn");
+                            }
+                        });
+                    },500);
+                },
+
+                //初始化加载已存在的图片
+                initPicture: function () {
+                    $.get(path + "/admin/specialSale/getAttachments", {relId: id}, function (result) {
+                        for (var i = 0, len = result.length; i < len; i++) {
+                            var param = {};
+                            param.fileId = result[i].path;
+                            param.url = result[i].url;
+                            param.attachmentId = result[i].id;
+                            resource[result[i].id] = param;
+                        }
+                        if (result.length > 0) {
+                            CoverpicHandler.refresh();
+                        }
+                        $(window).triggerHandler('resize');
+                    });
+                },
+
+                add: function () {
+                    var param = {
+                        //scene: "T_OILSTATION_COVERPIC", //场景化标识
+                        limitType: "image", //limitType默认不传就不限制,支持：image/file/media
+                        isDB: 1
+                    };
+                    attachment.uploadFile(function (result) {
+
+                        var r = result[0];
+                        if (r.code == 0) {
+                            resource[r.fileId] = r;
+                            CoverpicHandler.refresh();
+                        }
+                    }, param);
+                },
+
+                addCoverPic: function () {
+                    if ($("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").length == 1) {
+                        $("div.imgDiv div.jd_box div.cover").remove();
+                        $("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").append('<div class="cover"></div>');
+                        // 设置到商品form中
+                        $("#dataForm #headPath").val($("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").attr("data-value-attachmentId"));
+                        msgBox.tips("设置成功!");
+                    } else {
+                        msgBox.tips("请选择一个的商品图片!");
+                    }
+                },
+
+                del: function () {
+                    if ($("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").length > 0) {
+                        for (var o in resource) {
+                            if (resource[o].fileId == $("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").attr("data-value-fileId")) {
+                                // 删除图片是，判断删除的是封面图片的时候，主表的封面图字段滞空
+                                if (resource[o].attachmentId == $("#dataForm #headPath").val()) {
+                                    $("#dataForm #headPath").val('');
+                                }
+                                delete resource[o];
+                                $("div.imgDiv div.jd_box div.pictickOn").parents("div.item").remove();   //界面上移除图片
+                            }
+                        }
+                    } else {
+                        msgBox.tips("请选择删除的商品图片!");
+                    }
+                },
+
+                getCoverPic: function () {
+                    var temp = [];
+                    for (var o in resource) {
+                        temp.push(resource[o]);
+                    }
+                    return temp;
+                }
+            }
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

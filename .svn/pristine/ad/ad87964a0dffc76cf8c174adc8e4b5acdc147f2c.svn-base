@@ -1,0 +1,222 @@
+package com.catt.wfx.repository.entity.extractOrder;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 提现流程信息实体类
+ * 
+ * @author chen chusheng
+ * @date 2017-03-03 16:59:32
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "t_extract_order_log")
+public class ExtractOrderLog extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 单据标识
+	 */
+	private Long orderId;
+	/**
+	 * 操作环节<p><br>
+	 * 1-创建 2-打款  3-取消
+	 */
+	private Integer act;
+	/**
+	 * 操作内容
+	 */
+	private String content;
+	/**
+	 * 银行流水
+	 */
+	private String bankSeq;
+	/**
+	 * 操作人员标识
+	 */
+	private Long operatorId;
+	/**
+	 * 操作人员名称
+	 */
+	private String operatorName;
+	/**
+	 * 备注
+	 */
+	private String remark;
+
+	/**
+	 * 打款结果
+	 */
+	private Integer remitResult;
+	/**
+	 * 打款失败原因
+	 */
+	private String remitFailedReason;
+
+	@Column(name = "i_order_id")
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
+	@Column(name = "i_act")
+	public Integer getAct() {
+		return act;
+	}
+
+	public void setAct(Integer act) {
+		this.act = act;
+	}
+
+	@Column(name = "s_content", length = 512)
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	@Column(name = "bank_seq", length = 128)
+	public String getBankSeq() {
+		return bankSeq;
+	}
+
+	public void setBankSeq(String bankSeq) {
+		this.bankSeq = bankSeq;
+	}
+
+	@Column(name = "i_operator_id")
+	public Long getOperatorId() {
+		return operatorId;
+	}
+
+	public void setOperatorId(Long operatorId) {
+		this.operatorId = operatorId;
+	}
+
+	@Column(name = "s_operator_name", length = 32)
+	public String getOperatorName() {
+		return operatorName;
+	}
+
+	public void setOperatorName(String operatorName) {
+		this.operatorName = operatorName;
+	}
+
+	@Column(name = "s_remark", length = 1024)
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	@Column(name = "i_remit_result")
+	public Integer getRemitResult() {
+		return remitResult;
+	}
+
+	public void setRemitResult(Integer remitResult) {
+		this.remitResult = remitResult;
+	}
+
+	@Column(name = "s_remit_failed_reason")
+	public String getRemitFailedReason() {
+		return remitFailedReason;
+	}
+
+	public void setRemitFailedReason(String remitFailedReason) {
+		this.remitFailedReason = remitFailedReason;
+	}
+
+	/**
+	 * 操作环节
+	 * 1-创建  2-打款  3-取消
+	 */
+	public enum Act {
+
+		/**
+		 * 创建
+		 */
+		Create(1, "创建"),
+
+		/**
+		 * 打款
+		 */
+		Extract(2, "打款"),
+
+		/**
+		 * 取消
+		 */
+		Cancel(3, "取消");
+
+		/**
+		 * 枚举值
+		 */
+		private Integer value;
+
+		/**
+		 * 枚举中文
+		 */
+		private String name;
+
+		/**
+		 * 构造方法
+		 *
+		 * @param value 枚举值
+		 * @param name  枚举中文
+		 */
+		Act(Integer value, String name) {
+			this.value = value;
+			this.name = name;
+		}
+
+		/**
+		 * 由数字得是否多实例枚举对象
+		 *
+		 * @param value 枚举值
+		 * @return 返回中文
+		 */
+		public static Act getEnum(int value) {
+			Act[] source = Act.values();
+			for (int i = 0; i < source.length; i++) {
+				if (source[i].getValue() == value) {
+					return source[i];
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * 取值
+		 *
+		 * @return 返回枚举值
+		 */
+		public int getValue() {
+			return this.value;
+		}
+
+		/**
+		 * 取中文名称
+		 *
+		 * @return 返回枚举中文
+		 */
+		public String getName() {
+			return this.name;
+		}
+	}
+}
+

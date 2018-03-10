@@ -1,0 +1,226 @@
+package com.catt.wfx.service.impl.specialSale;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.specialSale.ActivityInfoDao;
+import com.catt.wfx.repository.entity.specialSale.ActivityInfo;
+import com.catt.wfx.repository.entity.specialSale.ActivityProductRel;
+import com.catt.wfx.service.base.specialSale.ActivityInfoBaseService;
+import com.catt.wfx.service.base.specialSale.ActivityProductRelBaseService;
+import com.catt.wfx.service.pub.PubConfigService;
+import com.catt.wfx.service.specialSale.ActivityInfoService;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 活动信息表服务
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/2/10
+ */
+@Service("activityInfoServiceImpl")
+public class ActivityInfoServiceImpl implements ActivityInfoService {
+
+    // 活动信息表Dao接口
+    @Resource(name = "activityInfoDaoImpl")
+    private ActivityInfoDao activityInfoDao;
+
+    // 附件服务
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    // 公共配置服务
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    // 活动信息表服务接口
+    @Resource(name = "activityInfoBaseServiceImpl")
+    private ActivityInfoBaseService activityInfoBaseService;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+
+    // 商品活动关联表服务接口
+    @Resource(name = "activityProductRelBaseServiceImpl")
+    private ActivityProductRelBaseService activityProductRelBaseService;
+
+    /**
+     * 获取特卖列表(微信商城接口)
+     *
+     * @param status   活动状态，1-进行中，2-未开始
+     * @param pageable
+     * @return
+     */
+    public Page<Map> findPage4Wechat(Integer status, Pageable pageable) {
+        Page<Map> mapPage = activityInfoDao.findPage4Wechat(status, pageable);
+        List<Map> mapList = mapPage.getContent();
+
+        if (CollectionUtil.isNotEmpty(mapList)) {
+            //封面图片标识集合
+            Long[] coverPathIds = new Long[mapList.size()];
+            int i = 0;
+
+            //遍历拼装数据
+            for (Map map : mapList) {
+                coverPathIds[i] = MapUtil.getLong(map, "coverPath");
+                i++;
+            }
+            //获取图片地址信息
+            List<Attachment> attachmentList = attachmentBaseService.findList(coverPathIds);
+
+            //获取图片存储地址
+            String filePath = pubConfigService.getFilePath();
+
+            for (Map map : mapList) {
+                //封面图片标识
+                Long headPath = MapUtil.getLong(map, "coverPath");
+
+                //循环遍历设置封面图片路径
+                for (Attachment attachment : attachmentList) {
+                    if (StringUtil.checkObj(headPath) && headPath.equals(attachment.getId())) {
+                        map.put("coverPath", filePath + attachment.getPath());
+                        break;
+                    }
+
+                }
+
+                // 页面活动时间提示
+                Date startTime = (Date) MapUtil.getObject(map, "startTime"); // 特卖开始时间
+                Date endTime = (Date) MapUtil.getObject(map, "endTime"); // 特卖结束时间
+                Date now = new Date();
+                if (now.before(startTime)) { // 活动还未开始，页面显示活动开始倒计时
+                    map.put("length", startTime.getTime() - now.getTime());
+                    map.put("timeType", 1);
+                } else { // 活动已经开始，页面显示活动结束倒计时
+                    map.put("length", endTime.getTime() - now.getTime());
+                    map.put("timeType", 2);
+                }
+            }
+        }
+        mapPage.setContent(mapList);
+        return mapPage;
+    }
+
+    /**
+     * 获取特卖详情
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Map getDetail4Wechat(Long id) {
+        Map map = new HashMap<>();
+        ActivityInfo activityInfo = activityInfoBaseService.find(id);
+        Assert.notNull(activityInfo);
+        map.put("id", id);
+        map.put("name", activityInfo.getName());
+        map.put("startTime", activityInfo.getStartTime());
+        map.put("endTime", activityInfo.getEndTime());
+
+        // 获取图片地址信息
+        List<Attachment> attachmentList = attachmentBaseService.getFiles(id, ActivityInfo.TABLE_NAME, ActivityInfo.PIC_PATH);
+        // 图片地址路径集合
+        List<String> picPathList = new ArrayList<String>();
+
+        // 获取图片存储地址
+        String filePath = pubConfigService.getFilePath();
+
+        for (Attachment attachment : attachmentList) {
+            String path = filePath + attachment.getPath();
+            picPathList.add(path);
+        }
+        map.put("picPathList", picPathList); // 特卖图片
+
+
+        return map;
+    }
+
+
+    /**
+     * 获取特卖商品(微信商城接口)
+     *
+     * @param id       活动标识
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getActivityProducts(Long id, Pageable pageable) {
+        Page<Map> mapPage = activityInfoDao.getActivityProducts(id, pageable);
+        List<Map> mapList = mapPage.getContent();
+
+        if (CollectionUtil.isNotEmpty(mapList)) {
+            //封面图片标识集合
+            Long[] headPathIds = new Long[mapList.size()];
+            int i = 0;
+
+            //遍历拼装数据
+            for (Map map : mapList) {
+                headPathIds[i] = MapUtil.getLong(map, "headPath");
+                i++;
+            }
+            //获取图片地址信息
+            List<Attachment> attachmentList = attachmentBaseService.findList(headPathIds);
+
+            //获取图片存储地址
+            String filePath = pubConfigService.getFilePath();
+
+            List<Filter> filters = new ArrayList<>();
+            for (Map map : mapList) {
+                //封面图片标识
+                Long headPath = MapUtil.getLong(map, "headPath");
+
+                //循环遍历设置封面图片路径
+                for (Attachment attachment : attachmentList) {
+                    if (StringUtil.checkObj(headPath) && headPath.equals(attachment.getId())) {
+                        map.put("headPath", filePath + attachment.getPath());
+                        break;
+                    }
+
+                }
+
+                //  最低销售价规格的原价
+                Long productId = MapUtil.getLong(map, "productId");
+                Double salesPrice = MapUtil.getDouble(map, "salesPrice");
+                filters.clear();
+                filters.add(Filter.eq("actId", id));
+                filters.add(Filter.eq("productId", productId));
+                filters.add(Filter.eq("salesPrice", salesPrice));
+                List<ActivityProductRel> list = activityProductRelBaseService.findList(1, filters, null);
+                if (CollectionUtil.isNotEmpty(list)) {
+                    map.put("costPrice", list.get(0).getCostPrice());
+                }
+            }
+
+            // 枚举翻译商品单位
+            enumMgrService.transformEnum(mapList,
+                    new ArrayList<EnumTransformData>() {
+                        {
+                            add(new EnumTransformData("T_PRODUCT_INFO",
+                                    "I_UNIT", "unit",
+                                    "unitName"));
+                        }
+                    });
+        }
+
+        mapPage.setContent(mapList);
+        return mapPage;
+    }
+}

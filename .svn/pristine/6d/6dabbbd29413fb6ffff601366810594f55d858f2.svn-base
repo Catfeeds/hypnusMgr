@@ -1,0 +1,42 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.customerMgr.CusInfoService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * Description:用户服务管理单元测试
+ * Created by 2017-02-10  15:11.
+ * author: Zhou mingxiang
+ */
+public class CusInfoServiceImplTest extends SpringTest {
+    // 用户服务
+    @Resource(name = "cusInfoServiceImpl")
+    private CusInfoService cusInfoService;
+
+    /**
+     * 获取登录用户基本信息（APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetLoginCusInfo4App() throws Exception {
+        Map map = cusInfoService.findLoginCusInfo(1L);
+        System.out.print("##############" + map);
+    }
+
+    /**
+     * 注册普通用户（APP）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testRegisonCusInfo4App() throws Exception {
+        cusInfoService.regisonCusInfo4App("15875302564", DigestUtils.md5Hex("888888"), "","oTYob0ukh4cDURvT2NplXKXPPLm0");
+        System.out.print("##############");
+    }
+}

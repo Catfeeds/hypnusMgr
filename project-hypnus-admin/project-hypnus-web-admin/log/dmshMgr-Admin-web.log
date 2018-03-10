@@ -1,0 +1,904 @@
+2017-11-03 15:16:37.011 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:dc6c9b09d17d479db57b786a04794331 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/login;jsessionid=1tnw0vxcbk7n11lks2994jcpwb Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:16:38.106 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:e528a3f78c634decaf597f684994ad4a 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/productInfo/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:16:38.326 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:3a2ca1c9931e4cd9ac86f716eaa59a36 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/menus.json
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:16:38.939 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:6771692da2044a7e9635ad3fff4604c4 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/productInfo/getProductInfoByPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productInfo/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:36 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:16:39.226 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:0528a284482b46ebbe9fa3395470921a 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/productMgr/publish/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:16:39.788 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:ea6c072b5a804b82abdaac096d4b301b 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/productMgr/publish/findPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productMgr/publish/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:49 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "minStockNum" : [ "" ],
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:16:43.621 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:a48b10b255ce43dab55318f5383121ae 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/statisti/order/orderOfFactory.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:16:44.120 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:4ff3cc7937b543968ca193c61b0541a9 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/statisti/order/statisticsOfOrder
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/orderOfFactory.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:12 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "factoryName" : [ "" ]
+} 
+] 
+2017-11-03 15:17:13.525 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:5d52d394451b4d05adee56ed58e651d6 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:17:15.113 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:30417175a428408e88856b485e386c30 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 
+2017-11-03 15:19:40.263 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:b775b3304b27486fad056a1576527d23 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:19:42.061 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:69488160822b4d37a25fb59b66cb5c7f 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 
+2017-11-03 15:19:54.674 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:25e502d1063f404aa22d14423d534415 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Cache-Control:max-age=0 Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/login;jsessionid=1tnw0vxcbk7n11lks2994jcpwb Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:19:54.992 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:c8486b1cc206430b8da82d351f19ce24 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/productInfo/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:19:55.145 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:ee228273242a4df98e090077cbb92e8a 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/menus.json
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:19:55.279 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:fb983f96ae164c56b972fe4aeac75f92 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/productInfo/getProductInfoByPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productInfo/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:36 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:19:55.377 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:1cbf7ce0b78648919d53e940cb734014 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/productMgr/publish/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:19:55.599 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:09961ab931f846cabfc04a999dd4a707 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/productMgr/publish/findPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productMgr/publish/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:49 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "minStockNum" : [ "" ],
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:20:11.102 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:1544d253d1c34258920eab03d8b12574 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/statisti/order/orderOfFactory.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:20:11.357 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:c0991e22b3414bd79db59b121f621e1b 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/statisti/order/statisticsOfOrder
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/orderOfFactory.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:12 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "factoryName" : [ "" ]
+} 
+] 
+2017-11-03 15:20:15.084 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:29b324caebe64a608e93f1f9ea9503a2 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:20:16.335 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:fc2aa54b630c4d1b86ec1a98da63152d 
+ sessionId:10t95vx5pq7qevanp8k355e5c  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=10t95vx5pq7qevanp8k355e5c Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 
+2017-11-03 15:20:40.699 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:3e4491f66dc44f4db20d1b4e22f788b0 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/login Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:20:40.980 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:024dd6605df24362ab359fc701516095 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productInfo/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:20:41.225 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:b9511bd4ad714167b4725f2c7d68f5fc 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/menus.json
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:20:41.296 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:8e813107b69d4bb0b98db9dbf2a23d6f 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productInfo/getProductInfoByPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productInfo/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:36 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:20:41.396 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:de9f07a9d9ba4409b57fd4bf47d2b976 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productMgr/publish/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:20:41.633 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:4d20ee3c32bc41bc8f0b4286926b6e6d 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productMgr/publish/findPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productMgr/publish/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:49 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "minStockNum" : [ "" ],
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:20:44.556 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:9149c37e0e5e438ba8b7c5a3ac47ffee 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/orderOfFactory.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:20:44.770 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:18ee33d02e1748f98a8936775c4fb754 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/statisticsOfOrder
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/orderOfFactory.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:12 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "factoryName" : [ "" ]
+} 
+] 
+2017-11-03 15:21:05.957 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:0e49564c6ef94a1db738306c339a65e7 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:21:07.276 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:8ca713aa53a14c5a8d9e2445644b97f9 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 
+2017-11-03 15:22:48.283 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:ddaaaab7a26d489689c17c6ee3e64043 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:22:49.755 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:39263c42da7941c18375045fdd5a0a51 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 
+2017-11-03 15:23:41.466 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:2a5adcb26bea4aa1b76f0c636acf8f8b 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:23:42.987 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:09ab2e1d78ee4b2c984a2bb52086ca6d 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 
+2017-11-03 15:23:53.529 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:6377910a3eb24e1590123218abb3da13 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:23:54.614 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:745949761f4243fdabae74927499ee54 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 
+2017-11-03 15:27:33.781 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:acf41ce5144347ba99d84f2588f9348c 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:27:34.886 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:f4ac8f755df14b3b8c7fd9bb952cc5a5 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 
+2017-11-03 15:27:44.575 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:7c85d3f0fda24e8696bd25d1bc3ee285 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/login Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:27:56.864 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:a132a024b10c450fb7bd227563ebee76 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Cache-Control:max-age=0 Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/login Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:27:57.112 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:e3bdd495e29e49dc97774f80a44344c0 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productInfo/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:27:57.166 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:748880972670426ea9c385622ea2e573 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/menus.json
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:27:57.301 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:d5800b39ccb445e989e8957e3661d18f 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productMgr/publish/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:27:57.350 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:99c20a31ef8243afaff3fefe188abe19 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productInfo/getProductInfoByPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productInfo/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:36 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:27:57.463 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:1e95f46c37484b1e8e8e655e91de128f 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productMgr/publish/findPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productMgr/publish/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:49 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "minStockNum" : [ "" ],
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:28:01.335 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:06bcc6960077464b975b23076dbc6596 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/orderOfFactory.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:28:01.520 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:9c5fbc0f6d394de18a4d4c0572f0d689 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/statisticsOfOrder
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/orderOfFactory.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:12 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "factoryName" : [ "" ]
+} 
+] 
+2017-11-03 15:28:05.304 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:17c5f1e196d5468e8c9a131f3a56253c 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:28:06.641 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:5bc15103d970425aaed6fa8bd448103e 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 
+2017-11-03 15:28:14.814 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:d68480cda4464df7a465a74443462f41 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Cache-Control:max-age=0 Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/login Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:28:15.242 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:1be2dbaa30754b54b9167a5b500f0fdc 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productInfo/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:28:15.314 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:6e48a4932df64398bc1df4af6056a684 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/menus.json
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:28:15.439 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:4b04b9a8d600491b8fcf2d665954ddba 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productMgr/publish/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:28:15.483 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:985079bdeccd4b3bbac309fbbcb17883 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productInfo/getProductInfoByPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productInfo/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:36 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:28:15.655 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:9860f1596bfe407c81b3f16f1f44d482 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/productMgr/publish/findPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productMgr/publish/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:49 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "minStockNum" : [ "" ],
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:28:20.460 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:6e78b84321b94a9494568d6db723de8d 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/orderOfFactory.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:28:20.642 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:ce5e151b833d430e95e48ddf9e179656 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/statisticsOfOrder
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/orderOfFactory.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:12 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "factoryName" : [ "" ]
+} 
+] 
+2017-11-03 15:28:24.553 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:2da402897ede45f382d13a0d3c591111 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:28:25.623 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:ef6ea115ddcf42509c04066ee94ee8bc 
+ sessionId:197i84b6d026t1tyhsu8ftoj8l  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=197i84b6d026t1tyhsu8ftoj8l Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 
+2017-11-03 15:28:34.878 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:0c4bb32e372048aea70ffe662bb50358 
+ sessionId:jjns7o4kh9syb1xd5puros3j  
+ requestURI:/hypnusMgr/admin/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=jjns7o4kh9syb1xd5puros3j Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/login Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:28:35.172 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:3560c3662a974c8dab4f06d64d4c1d2c 
+ sessionId:jjns7o4kh9syb1xd5puros3j  
+ requestURI:/hypnusMgr/admin/productInfo/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=jjns7o4kh9syb1xd5puros3j Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:28:35.328 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:d1e33419495346f0a1760ead973a1420 
+ sessionId:jjns7o4kh9syb1xd5puros3j  
+ requestURI:/hypnusMgr/admin/menus.json
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=jjns7o4kh9syb1xd5puros3j Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:28:35.401 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:50ddbd48f92e444599088053526bbae7 
+ sessionId:jjns7o4kh9syb1xd5puros3j  
+ requestURI:/hypnusMgr/admin/productInfo/getProductInfoByPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=jjns7o4kh9syb1xd5puros3j Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productInfo/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:36 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:28:35.490 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:46f49f9b43cd4d8d9f5e85b51be6c047 
+ sessionId:jjns7o4kh9syb1xd5puros3j  
+ requestURI:/hypnusMgr/admin/productMgr/publish/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=jjns7o4kh9syb1xd5puros3j Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:28:35.697 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:fea6b9332a114b548cf9056a466fc35b 
+ sessionId:jjns7o4kh9syb1xd5puros3j  
+ requestURI:/hypnusMgr/admin/productMgr/publish/findPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=jjns7o4kh9syb1xd5puros3j Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productMgr/publish/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:49 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "minStockNum" : [ "" ],
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:28:40.397 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:278871f2d9a145cea3c4693e32ef94b4 
+ sessionId:jjns7o4kh9syb1xd5puros3j  
+ requestURI:/hypnusMgr/admin/statisti/order/orderOfFactory.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=jjns7o4kh9syb1xd5puros3j Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:28:40.651 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:435b26bd71a84a878b09e000f5ee4483 
+ sessionId:jjns7o4kh9syb1xd5puros3j  
+ requestURI:/hypnusMgr/admin/statisti/order/statisticsOfOrder
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=jjns7o4kh9syb1xd5puros3j Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/orderOfFactory.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:12 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "factoryName" : [ "" ]
+} 
+] 
+2017-11-03 15:28:43.468 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:7f293ed75d014b5d920934423b638f56 
+ sessionId:jjns7o4kh9syb1xd5puros3j  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=jjns7o4kh9syb1xd5puros3j Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:28:44.552 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:4ecffab1871540eb808cc3e6d28d0c71 
+ sessionId:jjns7o4kh9syb1xd5puros3j  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=jjns7o4kh9syb1xd5puros3j Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 
+2017-11-03 15:29:05.633 [qtp30945730-38] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:89a0eb0ec0844b37a1266b78ab96c148 
+ sessionId:1pfhfpp5umyzr2qqumtycdego  
+ requestURI:/hypnusMgr/admin/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=1pfhfpp5umyzr2qqumtycdego Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/login;jsessionid=y124mt2tckco1jnqrhi0169h5 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:29:06.176 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:9dcc26676dd549eda42f192b5ec46c54 
+ sessionId:1pfhfpp5umyzr2qqumtycdego  
+ requestURI:/hypnusMgr/admin/productInfo/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=1pfhfpp5umyzr2qqumtycdego Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:29:06.449 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:92d39fc3bbac43dab9b829b83d000656 
+ sessionId:1pfhfpp5umyzr2qqumtycdego  
+ requestURI:/hypnusMgr/admin/menus.json
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=1pfhfpp5umyzr2qqumtycdego Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:29:06.550 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:c3289fcfee8d4a9f92b082d93acbdc56 
+ sessionId:1pfhfpp5umyzr2qqumtycdego  
+ requestURI:/hypnusMgr/admin/productInfo/getProductInfoByPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=1pfhfpp5umyzr2qqumtycdego Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productInfo/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:36 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:29:06.624 [qtp30945730-15] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:26958cd8cdd04da99833a888bb35f44a 
+ sessionId:1pfhfpp5umyzr2qqumtycdego  
+ requestURI:/hypnusMgr/admin/productMgr/publish/index.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=1pfhfpp5umyzr2qqumtycdego Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:29:07.030 [qtp30945730-20] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:d7f2bf6b3cec4b5090a26ce6e03785a3 
+ sessionId:1pfhfpp5umyzr2qqumtycdego  
+ requestURI:/hypnusMgr/admin/productMgr/publish/findPage
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=1pfhfpp5umyzr2qqumtycdego Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/productMgr/publish/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:49 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "minStockNum" : [ "" ],
+  "pageSize" : [ "15" ],
+  "zhName" : [ "" ],
+  "pageNo" : [ "1" ],
+  "cateId" : [ "" ]
+} 
+] 
+2017-11-03 15:29:09.348 [qtp30945730-16] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:1a5b622d4c8745b18461f67a9566dd4a 
+ sessionId:1pfhfpp5umyzr2qqumtycdego  
+ requestURI:/hypnusMgr/admin/statisti/order/orderOfFactory.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=1pfhfpp5umyzr2qqumtycdego Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{ } 
+] 
+2017-11-03 15:29:09.545 [qtp30945730-14] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:da420fb30f334677978b9744a9156b65 
+ sessionId:1pfhfpp5umyzr2qqumtycdego  
+ requestURI:/hypnusMgr/admin/statisti/order/statisticsOfOrder
+ requestIp:172.168.50.22  
+ requestHeaders:Origin:http://localhost:8080 Cookie:JSESSIONID=1pfhfpp5umyzr2qqumtycdego Accept:*/* X-Requested-With:XMLHttpRequest Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/orderOfFactory.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8 Content-Length:12 Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+ requestParams:{
+  "factoryName" : [ "" ]
+} 
+] 
+2017-11-03 15:29:12.279 [qtp30945730-36] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:b79b608915594e68ac8835b7a34fb0a1 
+ sessionId:1pfhfpp5umyzr2qqumtycdego  
+ requestURI:/hypnusMgr/admin/statisti/order/export.html
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=1pfhfpp5umyzr2qqumtycdego Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/index.html Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryIds" : [ "619041829991481344" ]
+} 
+] 
+2017-11-03 15:29:13.207 [qtp30945730-17] INFO  web-access - [
+ loginUserName:1,系统管理员,admin 
+ logId:a171b91447f044afa42dd69309d02af5 
+ sessionId:1pfhfpp5umyzr2qqumtycdego  
+ requestURI:/hypnusMgr/admin/statisti/order/export
+ requestIp:172.168.50.22  
+ requestHeaders:Cookie:JSESSIONID=1pfhfpp5umyzr2qqumtycdego Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8 Upgrade-Insecure-Requests:1 Connection:keep-alive User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 Referer:http://localhost:8080/hypnusMgr/admin/statisti/order/export.html?factoryIds=619041829991481344 Host:localhost:8080 Accept-Encoding:gzip, deflate, br Accept-Language:zh-CN,zh;q=0.8
+ requestParams:{
+  "factoryName" : [ "" ],
+  "factoryIdStr" : [ "619041829991481344" ],
+  "endDate" : [ "" ],
+  "startDate" : [ "" ]
+} 
+] 

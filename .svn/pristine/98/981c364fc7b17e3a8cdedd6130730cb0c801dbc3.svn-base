@@ -1,0 +1,16 @@
+package com.catt.wfx.repository.dao.productMgr;
+
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.productMgr.ProductCateAttrDefine;
+
+/**
+ * 种类扩展定义表Dao接口
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-01-09 11:37:12
+ */
+public interface ProductCateAttrDefineDao extends BaseDao<ProductCateAttrDefine, Long> {
+
+}

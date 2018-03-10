@@ -1,0 +1,104 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/10/20
+  Time: 14:06
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule2.jsp" %>
+    <title>订单列表</title>
+    <script src="${path}/resources/admin/js/basicConfig/factory/index.js" type="text/javascript"></script>
+
+</head>
+<body class="bg-gray-light">
+<section class="content-header">
+    <!-- 面包屑 -->
+    <ol class="breadcrumb" style="right: auto">
+        <li><a href="#" id="linkHome"><i class="fa fa-home"></i>主页</a></li>
+        <li class="active">厂家管理</li>
+    </ol>
+    <!-- /.面包屑 -->
+</section>
+<section class="content">
+    <div class="box box-solid">
+        <form id="form" class="form-inline">
+            <div class="box-header with-border" style="height: 50px">
+                <div class="form-group">
+                    <label for="cusName" class="control-label">厂家名称：</label>
+                    <input type="text" class="form-control" id="cusName">
+                </div>
+
+                <p class="pull-right">
+                    <button type="button" class="btn bg-maroon" id="search">&nbsp;查&nbsp;&nbsp;询&nbsp;</button>
+                    <button type="button" class="btn bg-write" id="reset">&nbsp;重&nbsp;&nbsp;置&nbsp;</button>
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <div class="box box-solid">
+        <div class="box-header with-border">
+            <h1 class="box-title">
+                <span class="box-title-split"></span>共有
+                <span id="total" class="lblCount">0</span>
+                个厂家
+            </h1>
+
+            <div class="box-tools pull-right">
+
+                <button type="button" class="btn   btn-sm bg-maroon" id="btnAddAccount">
+                    &nbsp;&nbsp;新增账号&nbsp;&nbsp;</button>
+                 <button type="button" class="btn   btn-sm bg-maroon" id="btnAdd">
+                    &nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;</button>
+
+                <button type="button" class="btn  btn-sm  bg-maroon" id="btnEdit" data-toggle="tooltip"
+                        title="请勾选一条数据">&nbsp;&nbsp;修&nbsp;&nbsp;改&nbsp;&nbsp;</button>
+
+                <button type="button" class="btn  btn-sm  bg-write" id="btnDelete" data-toggle="tooltip"
+                        title="请勾选数据">&nbsp;&nbsp;删&nbsp;&nbsp;除&nbsp;&nbsp;</button>
+                <%--<a type="button" class="btn   btn-sm bg-maroon" id="btnAdd1">--%>
+                <%--&nbsp;&nbsp;导&nbsp;&nbsp;出&nbsp;&nbsp;</a>--%>
+            </div>
+        </div>
+        <div class="box-body no-padding" style="min-height:400px">
+            <table class="table table-hover table-bordered" id="dataTb">
+                <thead>
+
+                <tr style="border-right: 1px solid #ddd">
+                    <th style="width: 20px">
+                        <input type="checkbox" check-all="true" class="minimal-red check">
+                    </th>
+                    <th>厂家名称</th>
+
+                </tr>
+                </thead>
+                <tbody id="dataList">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer">
+            <div id="pageBar"></div>
+        </div>
+    </div>
+</section>
+
+</body>
+<script type="text/html" id="template_dataList">
+    {{each}}
+    <tr>
+        <td>
+            <label>
+                <input type="checkbox" check-all="false" class="minimal-red check">
+            </label>
+        </td>
+        <td>{{$value.factoryName}}</td>
+
+    </tr>
+    {{/each}}
+</script>
+</html>

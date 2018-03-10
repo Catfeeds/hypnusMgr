@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <bean id="registry" class="org.springframework.remoting.rmi.RmiRegistryFactoryBean">
+        <property name="port" value="${rmi.registryPort}"/>
+    </bean>
+
+    <bean id="baseRmiServiceExporter" abstract="true">
+        <property name="registry" ref="registry"/>
+        <property name="servicePort" value="${rmi.servicePort}"/>
+    </bean>
+
+    <!--组织架构-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="staffServiceImpl"/>
+        <property name="serviceName" value="staffServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.StaffService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="deptServiceImpl"/>
+        <property name="serviceName" value="deptServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.DeptService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="domainServiceImpl"/>
+        <property name="serviceName" value="domainServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.DomainService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="moduleServiceImpl"/>
+        <property name="serviceName" value="moduleServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.ModuleService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="rightServiceImpl"/>
+        <property name="serviceName" value="rightServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.RightService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="roleServiceImpl"/>
+        <property name="serviceName" value="roleServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.RoleService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="rsaServiceImpl"/>
+        <property name="serviceName" value="rsaServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.base.service.security.RSAService"/>
+    </bean>
+
+    <!--枚举-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="enumMgrServiceImpl"/>
+        <property name="serviceName" value="enumMgrServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.enumMgr.service.EnumMgrService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="enumModuleMgrServiceImpl"/>
+        <property name="serviceName" value="enumModuleMgrServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.enumMgr.service.EnumModuleMgrService"/>
+    </bean>
+
+    <!-- 地址信息 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="countryServiceImpl"/>
+        <property name="serviceName" value="countryServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.CountryService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="areaServiceImpl"/>
+        <property name="serviceName" value="areaServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.AreaService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="provinceServiceImpl"/>
+        <property name="serviceName" value="provinceServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.ProvinceService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cityServiceImpl"/>
+        <property name="serviceName" value="cityServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.CityService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="countyServiceImpl"/>
+        <property name="serviceName" value="countyServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.CountyService"/>
+    </bean>
+
+    <!--异常配置信息-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="exceptionInfoCfgServiceImpl"/>
+        <property name="serviceName" value="exceptionInfoCfgServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.exception.service.ExceptionInfoCfgService"/>
+    </bean>
+
+    <!--附件模块配置信息-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="attachmentServiceImpl"/>
+        <property name="serviceName" value="attachmentServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.attachment.service.AttachmentService"/>
+    </bean>
+
+    <!--短信发送 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="commonModuleSmsServiceImpl"/>
+        <property name="serviceName" value="commonModuleSmsServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.sms.service.SmsService"/>
+    </bean>
+
+    <!--系统登录日志 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="logLoginServiceImpl"/>
+        <property name="serviceName" value="logLoginServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.LogLoginService"/>
+    </bean>
+
+    <!-- 附件服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="attachmentBaseServiceImpl"/>
+        <property name="serviceName" value="attachmentBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.attachment.service.AttachmentBaseService"/>
+    </bean>
+
+    <!--短信日志服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="commonModuleSmsLogServiceImpl"/>
+        <property name="serviceName" value="commonModuleSmsLogServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.sms.service.LogService"/>
+    </bean>
+
+    <!--=================================微信相关服务================================-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="publicAccountServiceImpl"/>
+        <property name="serviceName" value="publicAccountServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.PublicAccountService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wxApiUserServiceImpl"/>
+        <property name="serviceName" value="wxApiUserServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.api.UserService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wxApiTicketMgrServiceImpl"/>
+        <property name="serviceName" value="wxApiTicketMgrServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.api.TicketMgrService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wxApiCustomServiceImpl"/>
+        <property name="serviceName" value="wxApiCustomServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.api.CustomService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wxApiGroupServiceImpl"/>
+        <property name="serviceName" value="wxApiGroupServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.api.GroupService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wxApiMediaServiceImpl"/>
+        <property name="serviceName" value="wxApiMediaServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.api.MediaService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wxApiMenuServiceImpl"/>
+        <property name="serviceName" value="wxApiMenuServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.api.MenuService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wxApiMessageGroupSerivceImpl"/>
+        <property name="serviceName" value="wxApiMessageGroupSerivceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.api.MessageGroupSerivce"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wxApiMessageTemplateServiceImpl"/>
+        <property name="serviceName" value="wxApiMessageTemplateServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.api.MessageTemplateService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="weChatUserServiceImpl"/>
+        <property name="serviceName" value="weChatUserServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.WeChatUserService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wxPageAuthServiceImpl"/>
+        <property name="serviceName" value="wxPageAuthServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.page.auth.PageAuthService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="weChatUserRefBizServiceImpl"/>
+        <property name="serviceName" value="weChatUserRefBizServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.WeChatUserRefBisService"/>
+    </bean>
+
+    <!--js api 中的票据-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wxApiJsTicketServiceImpl"/>
+        <property name="serviceName" value="wxApiJsTicketServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.wechat.service.api.js.JsTicketService"/>
+    </bean>
+
+    <!--支付模块-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wechatAppPayServiceImpl"/>
+        <property name="serviceName" value="wechatAppPayServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.pay.service.weChatPay.WechatAppPayService"/>
+    </bean>
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wechatHFivePayServiceImpl"/>
+        <property name="serviceName" value="wechatHFivePayServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.pay.service.weChatPay.WechatHFivePayService"/>
+    </bean>
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wechatNavtivePayServiceImpl"/>
+        <property name="serviceName" value="wechatNavtivePayServiceImpl"/>
+        <property name="serviceInterface"
+                  value="com.catt.common.module.pay.service.weChatPay.WechatNavtivePayService"/>
+    </bean>
+
+    <!--快递接口-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="expressServiceImpl"/>
+        <property name="serviceName" value="expressServiceImpl"/>
+        <property name="serviceInterface"
+                  value="com.catt.common.module.express.service.ExpressService"/>
+    </bean>
+
+</beans>

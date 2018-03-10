@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+
+
+.neirong{ padding:0px 20px; height:190px; margin-bottom:20px;}
+.pic{ width:210px; margin:0 auto; padding:30px 0;}
+.neirong p{ font-size:16px; color:#333; line-height:22px; margin-bottom:50px;  letter-spacing:1px;}
+
+.bottomBtnBox button{ float:left; width:42%;}

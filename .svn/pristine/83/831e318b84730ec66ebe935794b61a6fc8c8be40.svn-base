@@ -1,0 +1,10 @@
+@charset "utf-8";
+/* CSS Document */
+
+.textps{
+	margin-left:10px;
+	padding:3px;
+	color:#666;
+	font-size:12px;
+	letter-spacing:1px;
+	background:#fffce5;}

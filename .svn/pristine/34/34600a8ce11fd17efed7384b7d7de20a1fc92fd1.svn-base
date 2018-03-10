@@ -1,0 +1,80 @@
+@charset "utf-8";
+/* CSS Document */
+
+html, body{  font-size:12px;  font-family:Tahoma 幼圆; height:100%; position:relative;}
+body {scrollbar-face-color:#DEF;scrollbar-highlight-color:#FFF;scrollbar-shadow-color:#9BC;scrollbar-3dlight-color:#ACD;scrollbar-arrow-color:#68A;scrollbar-track-color:#EEE;scroll:#DEF;}
+body{ background:#fff;}
+*{padding:0; margin:0 auto;}
+img { border:none;}
+ul{list-style:none;}
+a{text-decoration:none;}
+a:hover {text-decoration:none;}
+a:active {star:expression(this.onFocus=this.blur());}
+input{ background:transparent; border:medium none; color:#bcbcbc; vertical-align:middle;font-family:'微软雅黑'; letter-spacing:1px;}
+
+
+/**/
+//div.loginDiv{clear:both; position:absolute; left:0; top:0;width:100%;}
+div.loginDiv{clear:both; margin-top:30px;width:100%;}
+/*头部*/
+div.loginTop{ clear:both;height:100px; width:1000px; margin:0 auto;margin-bottom:10px;}
+div.logo{width:232px; height:98px;float:left; cursor:pointer;}
+/*头部END*/
+
+/*中部*/
+ul.inputboxULTab{ clear:both;height:45px; padding-top:10px;}
+ul.inputboxULTab li{ float:left; height:45px; line-height:46px; width:116px;border-bottom:1px solid #efefef; cursor:pointer;/*border-right:1px solid #efefef;*/color:#999; font-size:14px;font-family:'微软雅黑'; text-align:center;}
+/*ul.inputboxULTab li:hover{color:#21b1ed; background:#efefef;}*/
+ul.inputboxULTab li.lion{border-bottom:0px solid #efefef;color:#21b1ed; font-weight:bold;}
+
+
+div.loginCenter{ clear:both;height:520px; background: #2ab6f1;}
+div.loginMainCenter{width:370px; height:470px; margin:0 auto; padding-left:630px; background:url(../images/img_login.png) no-repeat left bottom;padding-top:50px}
+div.loginForm{ background:#fff; height:400px; width:350px;}
+div.tittle{height:50px; width:310px; line-height:50px; font-family:'微软雅黑'; font-size:16px; color:#333; float:left; margin:10px 20px 20px 20px; border-bottom:2px solid #e5e5e5;}
+a.zhuce{height:20px;width:50px; float:right; color:#FFF;font-family:'微软雅黑';font-size:18px;padding-left:40px;}
+a.zhuce:hover{ color:#F60;}
+ul.mainUl{height:245px; +height:270px; width:350px; margin-top:30px;}
+ul.mainUl li{margin:10px 20px;}
+ul.mainUl li input{width:250px; height:40px;font-family:'微软雅黑'; font-size:14px; line-height:40px; color:#aaa; border:solid 1px #e8e8e8; padding:0 5px 0 50px;}
+input.ico_user{ background:url(../images/ico_user.png) no-repeat left center;}
+input.ico_passsword{ background:url(../images/ico_password.png) no-repeat left center;}
+a.mainUlLink1{background:url(../images/checkbox.png) no-repeat scroll left 3px;color: #999;cursor: pointer; float: left;font-family: '微软雅黑';font-size: 14px; letter-spacing: 2px; padding-left: 20px; display:block; height:20px; margin:5px 0 10px 0;}
+a.mainUlLink1:hover{background:url(../images/checkboxed.png) no-repeat scroll left 3px;color:#1686dc;}
+a.dianji{background:url(../images/checkboxed.png) no-repeat scroll left 3px;color:#1686dc;}
+a.mainUlLink2{float: right;font-family: '微软雅黑';font-size: 14px; letter-spacing: 2px;color:#999;text-decoration:none; cursor:pointer; display:block; height:20px;  margin:5px 0 10px 0;}
+a.mainUlLink2:hover{color:#1686dc; text-decoration:none;}
+
+a.mainLink{background:#dd424d;clear:both;color: #FFFFFF;cursor: pointer;display: block;font-family: '微软雅黑';font-size: 20px;height: 45px;width:310px;line-height:44px;text-align: center; margin:10px 0;}
+a.mainLink:hover{background:#cc2430;}
+a.zhuceLink{ float:right;font-family: '微软雅黑';font-size: 16px; color:#0066cc; cursor:pointer;}
+
+.loginWay{ width:325px; height:45px; background:#f3f3f3; padding:15px 10px 15px 15px;}
+.loginWay h1{ font-family:"微软雅黑"; font-size:12px; color:#999; letter-spacing:1px; text-align:left;}
+table.wayIco{ float:left;}
+table.wayIco tr td img{ margin:5px; cursor:pointer;}
+
+
+div.choseRole{ padding:0 20px 0 120px; height:46px; position:relative;}
+div.choseRole h1{height:46px; line-height:48px; padding-left:5px; cursor:pointer;
+font-family:'微软雅黑'; letter-spacing:1px; font-size:16px; font-weight:normal; color:#fff;
+background:url(../images/ico_expand.png) no-repeat right center;}
+ul.choseRoleList{ position:absolute; left:120px; top:44px; width:203px; padding:10px; background:#fbfbfb; border-radius:0 0 3px 3px; display:none;}
+ul.choseRoleList li{ clear:both; height:28px; line-height:28px; padding:0 5px; border-bottom:1px dotted #ddd; cursor:pointer;
+font-family:'微软雅黑'; letter-spacing:1px; font-size:14px; font-weight:normal; color:#666;}
+ul.choseRoleList li:hover{ background-color:#efefef;}
+/*中部END*/
+
+
+
+
+/*底部*/
+
+div.bottom{ clear:both; height:20px; padding-top:20px; }
+div.bottom div{font-family:'微软雅黑'; font-size:12px; color:#999;}
+div.bottomCenter{ width:1080px; margin:0 auto;letter-spacing:1px;}
+div.bottomCenter table tr th{ border:none; width:50px; font-weight:normal;}
+div.bottomCenter table tr td{ width:70px; height:18px; border-left:1px solid #e8e8e8; text-align:center;}
+div.bottomCenter table tr td p{width:370px; margin:0 auto; text-align:center;}
+
+/*底部END*/

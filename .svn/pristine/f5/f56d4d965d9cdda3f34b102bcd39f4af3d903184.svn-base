@@ -1,0 +1,68 @@
+seajs.use(['$', 'template', 'msgBox', 'jquery.json'],
+    function ($, template, msgBox) {
+        var dataList;
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    EventHandler.search();
+                },
+
+                /** 初始化页面 */
+                initPage: function () {
+
+                },
+
+                /** 初始化事件 */
+                initEvent: function () {
+                    $("#btnBack").click(function(){
+                        msgBox.exWindow.close();
+                    });
+                    $("#dataList").on("click", 'li',  function(){
+                        var index = $(this).attr("data-value-index");
+                        msgBox.exWindow.close($.toJSON(dataList[index]));
+                    });
+
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                search: function () {
+                    DataHandler.search({pageNo: 1, pageSize: 100}, function(backData){
+                        dataList = backData.result.content;
+                        var html = template('template_dataList', {content: dataList});
+                        $('#dataList').html(html);
+                    });
+                }
+            }
+        }();
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                //查询列表
+                search: function (param, callback) {
+                    $.get(path + "/admin/wechat/personal/cusContact/getCusContactByPage", param, function(data){
+                        callback(data);
+                    });
+                }
+
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    });

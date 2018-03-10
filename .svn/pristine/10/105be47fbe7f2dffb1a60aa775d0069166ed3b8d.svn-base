@@ -1,0 +1,24 @@
+package com.catt.wfx.repository.dao.orderMgr;
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturnDetail;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 退货订单明细Dao接口
+ * 
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:35
+ * @version V1.0
+ */
+public interface CusOrderReturnDetailDao extends BaseDao<CusOrderReturnDetail, Long> {
+    /**
+     * 获取退货单对应的退货明细信息
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    List<Map> getOrderDetail(Long id);
+}

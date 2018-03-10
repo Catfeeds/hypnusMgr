@@ -1,0 +1,109 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>商品分类设置</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet" />
+    <link type="text/css" href="${path}/resources/css/fenlei.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/zTreeStyle/zTreeStyle.css">
+    <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
+    <script src="${path}/resources/ztree/jquery.ztree.all-3.5.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="${path}/resources/admin/js/basicConfig/productCate/index.js" ></script>
+
+</head>
+<body>
+<div class="wrapper">
+    <div class="positionNow">主页 &gt; <a>商品分类设置</a></div>
+    <div class="wrapperCanshu">
+        <div class="canshuLeft">
+            <h1 class="tittle">商品分类</h1>
+            <div class="contentTitle">
+                <div class="canAdd" id="addCateBtn">新增</div>
+                <div class="canAdd" id="modifyCateBtn">修改</div>
+                <div class="canDel" id="delCateBtn">删除</div>
+            </div>
+            <div class="ztreebox">
+                <ul id="tree" class="ztree">
+                    努力加载中...
+                </ul>
+            </div>
+        </div>
+        <table cellspacing="0" width="100%">
+            <tr>
+                <td width="50%"><div class="contentBox">
+                    <h1 class="tittle"> <span class="btnRed" id="addSpec">新增规格</span> 规格管理 </h1>
+                    <div class="guigeListHigh">
+                        <table class="tableStyle" cellspacing="none">
+                            <tr>
+                                <th colspan="2">规格</th>
+                            </tr>
+                            <tbody id="specList"></tbody>
+                        </table>
+                    </div>
+                </div></td>
+                <td style="padding-left:10px;" valign="top"><div class="contentBox">
+                    <h1 class="tittle"> <span class="btnRed" id="addSpecDetail">添加</span> 规格明细 </h1>
+                    <div class="guigeListHigh">
+                        <table class="datalistTable no" style="border-bottom:none;">
+                            <tbody id="specDetailList"></tbody>
+                        </table>
+                    </div>
+                </div></td>
+            </tr>
+        </table>
+        <div class="contentBox" style="margin-top:10px; min-height: 360px;max-height: 400px; overflow: auto">
+            <h1 class="tittle"> <span class="btnRed" id="addParam">新增参数</span> 参数管理 </h1>
+            <table class="tableStyle" cellspacing="none">
+                <tr>
+                    <th>参数名称</th>
+                    <th>单位</th>
+                    <th></th>
+                </tr>
+                <tbody id="paramList"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script type="text/html" id="template_specList">
+    {{each content as item i}}
+    <tr>
+        <td class="xw_brand" data-value="{{i}}">{{item.name}}</td>
+        <td width="100"><div class="deleTit" data-value="{{i}}"></div>
+            <div class="editTit" data-value="{{i}}"></div></td>
+    </tr>
+    {{/each}}
+    <%--<tr>--%>
+        <%--<td>&nbsp;</td>--%>
+        <%--<td></td>--%>
+    <%--</tr>--%>
+    <%--<td onclick="EventHandlerOut.clickBrand('{{$value.name}}', this)"><span class="biaohaospan xw_brand">{{$value.name}}</span></td>--%>
+    <%--<input name="{{$value.name}}" type="hidden" param="param"/>--%>
+</script>
+<script type="text/html" id="template_specDetailList">
+    <tr>
+        <th>{{name}}</th>
+    </tr>
+    <tr>
+        <td style="border-bottom:none;">
+            {{each content as item i}}
+            <div class="guigeDiv">{{item}}<div class="delethis" data-value="{{i}}"></div></div>
+            {{/each}}
+        </td>
+    </tr>
+</script>
+<script type="text/html" id="template_paramList">
+    {{each content as item i}}
+    <tr>
+        <td>{{item.name}}</td>
+        <td><div id="u224">
+            <p>{{item.unit}}</p>
+        </div></td>
+        <td width="100"><div class="deleTit" data-value="{{i}}"></div>
+            <div class="editTit" data-value="{{i}}"></div></td>
+    </tr>
+    {{/each}}
+</script>

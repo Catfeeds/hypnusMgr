@@ -1,0 +1,300 @@
+package com.catt.wfx.repository.entity.settlementMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.Date;
+
+/**
+ * 店主/主管结算计划表实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-23 11:43:46
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_SETTLEMENT_PLAN")
+public class SettlementPlan extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 周期开始时间
+	 */
+	private Date beginTime;
+	/**
+	 * 周期结束时间
+	 */
+	private Date endTime;
+	/**
+	 * 结算间隔（天）
+	 */
+	private Integer day;
+	/**
+	 * 任务执行日期<p><br>
+	 * 小于等于time()执行
+	 */
+	private Date runDate;
+	/**
+	 * 任务类型<p><br>
+	 * 1-店主奖励 2-主管奖励
+	 */
+	private Integer taskType;
+	/**
+	 * 任务标识
+	 */
+	private Long taskId;
+	/**
+	 * 任务执行状态<p><br>
+	 * 0-待执行 1-运行中 2-已完成 3-异常
+	 */
+	private Integer runState;
+	/**
+	 * 运行历时（秒）
+	 */
+	private Long runTime;
+	/**
+	 * 异常说明
+	 */
+	private String exception;
+
+	@Column(name = "D_BEGIN_TIME")
+	public Date getBeginTime() {
+		return beginTime;
+	}
+
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
+	}
+
+	@Column(name = "D_END_TIME")
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	@Column(name = "I_DAY")
+	public Integer getDay() {
+		return day;
+	}
+
+	public void setDay(Integer day) {
+		this.day = day;
+	}
+
+	@Column(name = "D_RUN_DATE")
+	public Date getRunDate() {
+		return runDate;
+	}
+
+	public void setRunDate(Date runDate) {
+		this.runDate = runDate;
+	}
+
+	@Column(name = "I_TASK_TYPE")
+	public Integer getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(Integer taskType) {
+		this.taskType = taskType;
+	}
+
+	@Column(name = "I_TASK_ID")
+	public Long getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(Long taskId) {
+		this.taskId = taskId;
+	}
+
+	@Column(name = "I_RUN_STATE")
+	public Integer getRunState() {
+		return runState;
+	}
+
+	public void setRunState(Integer runState) {
+		this.runState = runState;
+	}
+
+	@Column(name = "I_RUN_TIME")
+	public Long getRunTime() {
+		return runTime;
+	}
+
+	public void setRunTime(Long runTime) {
+		this.runTime = runTime;
+	}
+
+	@Column(name = "S_EXCEPTION", length = 512)
+	public String getException() {
+		return exception;
+	}
+
+	public void setException(String exception) {
+		this.exception = exception;
+	}
+
+    /**
+     * 任务类型<p><br>
+     * 1-店主奖励 2-主管奖励
+     */
+    public enum TaskType {
+
+        /**
+         * 店主奖励
+         */
+        ShopkeeperBonus(1, "店主奖励"),
+
+        /**
+         * 主管奖励
+         */
+        LeaderBonus(2, "主管奖励");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        TaskType(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static TaskType getEnum(int value) {
+            TaskType[] source = TaskType.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+    }
+
+    /**
+     * 任务执行状态<p><br>
+     * 0-待执行 1-运行中 2-已完成 3-异常
+     */
+    public enum RunState {
+        /**
+         * 待执行
+         */
+        ToDo(0, "待执行"),
+        /**
+         * 运行中
+         */
+        Doing(1, "运行中"),
+
+        /**
+         * 已完成
+         */
+        Finish(2, "已完成"),
+
+        /**
+         * 异常
+         */
+        Exception(3, "异常");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        RunState(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static RunState getEnum(int value) {
+            RunState[] source = RunState.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+    }
+
+}
+

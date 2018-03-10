@@ -1,0 +1,129 @@
+package com.catt.wfx.service.impl.perforMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementOrderDetailDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlat;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlatDetail;
+import com.catt.wfx.service.base.settlementMgr.SettlementBusinessBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementPlanBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementPlatBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementPlatDetailBaseService;
+import com.catt.wfx.service.perforMgr.PlatPerforService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 平台提成账单服务接口实现
+ * 作者：袁幸成
+ * 时间：2017-3-29 11:15:55
+ */
+@Service("platPerforServiceImpl")
+public class PlatPerforServiceImpl implements PlatPerforService {
+
+    //平台账户结算明细服务
+    @Resource(name = "settlementPlatDetailBaseServiceImpl")
+    private SettlementPlatDetailBaseService settlementPlatDetailBaseService;
+
+    //订单结算统计Dao接口
+    @Resource(name = "settlementOrderDetailDaoImpl")
+    private SettlementOrderDetailDao settlementOrderDetailDao;
+
+    //商家账户信息服务
+    @Resource(name = "settlementBusinessBaseServiceImpl")
+    private SettlementBusinessBaseService settlementBusinessBaseService;
+
+    //平台账户信息服务
+    @Resource(name = "settlementPlatBaseServiceImpl")
+    private SettlementPlatBaseService settlementPlatBaseService;
+
+    @Override
+    public Page<SettlementPlatDetail> findPage(Date startDate, Date endDate, Integer status, Pageable pageable) {
+        List<Filter> filters = new ArrayList<>();
+        if (startDate != null){
+            filters.add(Filter.dge("settleDate", startDate));
+        }
+        if (endDate != null){
+            filters.add(Filter.dle("settleDate", endDate));
+        }
+        if (status != null){
+            filters.add(Filter.eq("status", status));
+        }
+        pageable.setFilters(filters);
+        pageable.setOrderProperty("settleDate");
+        pageable.setOrderDirection(Order.Direction.desc);
+        return settlementPlatDetailBaseService.findPage(pageable);
+    }
+
+    @Override
+    public Page<Map> findMonthDetailPage(Long platDetailId, Pageable pageable) {
+        return settlementOrderDetailDao.findPageByPlatDetailId(platDetailId, pageable);
+    }
+
+    @Override
+    public SettlementPlatDetail findSettlementPlatDetail(Long platDetailId) {
+        return settlementPlatDetailBaseService.find(platDetailId);
+    }
+
+    @Override
+    public void settle(Long[] platDetailIds, String staffName, String code) {
+        List<SettlementPlatDetail> list = settlementPlatDetailBaseService.findList(platDetailIds);
+        double platGetMoney = 0.0; //平台已提现
+
+        for (SettlementPlatDetail settlementPlatDetail : list){
+            if (settlementPlatDetail.getStatus() == PubEnum.YesOrNoEnum.YES.getValue()){
+                throw BaseException.errorByErrInfo("不能重复结算");
+            }
+            settlementPlatDetail.setStatus(PubEnum.YesOrNoEnum.YES.getValue());
+            settlementPlatDetail.setSettleStaffName(staffName);
+            settlementPlatDetail.setSettleCode(code);
+
+            platGetMoney = NumberUtil.moneyAdd(settlementPlatDetail.getSalesMoney(), platGetMoney);
+        }
+
+        if (platGetMoney > 0){
+            SettlementPlat settlementPlat = settlementPlatBaseService.findSettlementPlat();
+            settlementPlat.setGetMoney(NumberUtil.moneyAdd(settlementPlat.getGetMoney(), platGetMoney)); //提现金额
+            settlementPlat.setAccountMoney(NumberUtil.moneySub(settlementPlat.getAccountMoney(), platGetMoney)); //账户金额
+            if (settlementPlat.getAccountMoney() < 0){
+                throw BaseException.errorByErrInfo("平台账号异常");
+            }
+            settlementPlatBaseService.update(settlementPlat);
+
+            SettlementBusiness settlementBusiness = settlementBusinessBaseService.findSettlementBusiness4SelfSupport();
+            settlementBusiness.setPlatGetMoney(NumberUtil.moneyAdd(settlementBusiness.getPlatGetMoney(), platGetMoney));
+            settlementBusinessBaseService.update(settlementBusiness);
+        }
+
+        settlementPlatDetailBaseService.saveOrUpdate(list);
+    }
+
+    @Override
+    public List<SettlementPlatDetail> findList(Date startDate, Date endDate, Integer status) {
+        List<Filter> filters = new ArrayList<>();
+        if (startDate != null){
+            filters.add(Filter.dge("settleDate", startDate));
+        }
+        if (endDate != null){
+            filters.add(Filter.dle("settleDate", endDate));
+        }
+        if (status != null){
+            filters.add(Filter.eq("status", status));
+        }
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.desc("settleDate"));
+        return settlementPlatDetailBaseService.findList(null, filters, orders);
+    }
+
+}

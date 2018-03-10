@@ -1,0 +1,185 @@
+package com.catt.wfx.service.impl.subsidy;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.exception.ExceptionUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.util.spring.SpringUtils;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementPlanDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlan;
+import com.catt.wfx.repository.form.settlementMgr.BusinessHandlerBackData;
+import com.catt.wfx.repository.form.settlementMgr.BusinessHandlerForm;
+import com.catt.wfx.service.base.settlementMgr.BusinessHandlerService;
+import com.catt.wfx.service.base.settlementMgr.SettlementOrderDetailBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementPlanBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementShopRuleBaseService;
+import com.catt.wfx.service.subsidy.ShopkeeperSubsidyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 店主补贴服务
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-2-20 10:26:36
+ */
+@Service("shopkeeperSubsidyServiceImpl")
+public class ShopkeeperSubsidyServiceImpl implements ShopkeeperSubsidyService {
+
+    //LOG
+    private static final Logger LOG = LoggerFactory.getLogger(LeaderSubsidyServiceImpl.class);
+
+    //订单结算统计服务
+    @Resource(name = "settlementOrderDetailBaseServiceImpl")
+    SettlementOrderDetailBaseService settlementOrderDetailBaseService;
+
+    //主管结算计划表服务
+    @Resource(name = "settlementPlanBaseServiceImpl")
+    private SettlementPlanBaseService settlementPlanBaseService;
+
+    //商家账户信息相关操作服务
+    @Resource(name = "businessHandlerServiceImpl")
+    BusinessHandlerService businessHandlerService;
+
+    //店主/主管规则服务
+    @Resource(name = "settlementShopRuleBaseServiceImpl")
+    SettlementShopRuleBaseService settlementShopRuleBaseService;
+
+    //主管结算计划表Dao
+    @Resource(name = "settlementPlanDaoImpl")
+    private SettlementPlanDao settlementPlanDao;
+
+    @Override
+    public void settleSaleReward() {
+        LOG.info("店主补贴任务开始执行。");
+        long startTimeMs = System.currentTimeMillis();
+
+        Long[] planIds = settlementPlanDao.findToRunPlan(SettlementPlan.TaskType.ShopkeeperBonus);
+        if (planIds.length == 0){
+            LOG.info("当前没有待执行的计划，店主补贴任务结束");
+            return;
+        }
+
+        List<SettlementPlan> plans = settlementPlanBaseService.findList(planIds); //待执行计划
+        for (SettlementPlan plan : plans){
+            //捕获异常时回滚
+            ShopkeeperSubsidyService shopkeeperSubsidyService = SpringUtils.getBean("shopkeeperSubsidyServiceImpl");
+            long startMs = System.currentTimeMillis();
+            try{
+                shopkeeperSubsidyService.doTask(plan);
+                plan.setRunState(SettlementPlan.RunState.Finish.getValue()); //已完成
+            }catch (Exception e){
+                plan.setRunState(SettlementPlan.RunState.Exception.getValue()); //异常
+                plan.setException(StringUtil.substring(ExceptionUtil.toString(e), 0, 500));
+                e.printStackTrace();
+            }finally {
+                long runTime = (System.currentTimeMillis() - startMs)/1000;
+                plan.setRunTime(runTime);
+                settlementPlanBaseService.update(plan);
+            }
+        }
+
+        long ms = System.currentTimeMillis() - startTimeMs;
+        LOG.info("店主补贴任务完成，花费时间" + ms + "ms");
+    }
+
+    /**
+     * 做任务
+     * 1）修改店主奖励未未结算的订单结算统计（店主奖励是否结算、店主奖励结算明细标识）
+     * 2）奖励代金券：新增用户代金券，修改代金券信息（赠送数量），修改商家账户信息（发送代金券数量、金额）
+     *    或奖励现金：修改用户账号余额、新增用户账号明细
+     * 3）新增账户结算明细
+     * @param plan 任务计划
+     */
+    @Override
+    @Transactional
+    public void doTask(SettlementPlan plan) {
+        Long ruleId = plan.getTaskId(); //规则标识
+        Date startTime = plan.getBeginTime();
+        Date endTime = plan.getEndTime();
+        //店主奖励不能结算的订单数量
+        long unSettlementOrderNum = this.findUnSettlementOrderNum(startTime, endTime);
+        plan.setException("未结算的订单数量：" + unSettlementOrderNum);
+        // 统计结算周期内已完成、店主奖励未结算的订单
+        List<SettlementOrderDetail> settlementOrderDetails = this.findSettlementOrderDetails(startTime, endTime);
+        if (settlementOrderDetails.size() > 0){
+            Map<Long, Double> shopkeeperMoney = new HashMap<>(); //店主标识-销售金额
+            for (SettlementOrderDetail settlementOrderDetail : settlementOrderDetails){
+                Long shopkeeperId = settlementOrderDetail.getShopkeeperId();
+                if (shopkeeperId != null){
+                    Double totalAmount = settlementOrderDetail.getTotalAmount();
+                    Double totalAmountAll = MapUtil.getDouble(shopkeeperMoney, shopkeeperId, 0.0);
+                    shopkeeperMoney.put(shopkeeperId, NumberUtil.add(totalAmount, totalAmountAll));
+                }
+            }
+
+            Map<Long, Long> shopkeeperDetailMap = new HashMap<>(); //店主标识-店主奖励结算明细标识
+            for (Map.Entry<Long, Double> entry : shopkeeperMoney.entrySet()) {
+                Double totalAmount = entry.getValue();
+                Long shopkeeperId = entry.getKey();
+                BusinessHandlerForm businessHandlerForm = new BusinessHandlerForm(shopkeeperId, ruleId, totalAmount);
+                BusinessHandlerBackData backData = businessHandlerService.ruleSettlement(businessHandlerForm);
+                shopkeeperDetailMap.put(shopkeeperId, backData.getShopDetailId());
+            }
+            for (SettlementOrderDetail settlementOrderDetail : settlementOrderDetails){
+                Long shopkeeperId = settlementOrderDetail.getShopkeeperId();
+                if (shopkeeperId != null){
+                    // 修改订单结算统计：店主奖励已结算、店主奖励结算明细标识
+                    settlementOrderDetail.setShopGiveSettle(PubEnum.YesOrNoEnum.YES.getValue());
+                    settlementOrderDetail.setShopDetailId(shopkeeperDetailMap.get(shopkeeperId));
+                }
+            }
+            settlementOrderDetailBaseService.saveOrUpdate(settlementOrderDetails);
+        }
+    }
+
+    /**
+     * 查询结算周期内已完成、店主奖励未结算的订单
+     * @param startTime 周期开始时间
+     * @param endTime 周期结算时间
+     * @return
+     */
+    private List<SettlementOrderDetail> findSettlementOrderDetails(Date startTime, Date endTime) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.dge("createDate", startTime));//createDate支付时间
+        filters.add(Filter.dlt("createDate", DateUtil.clearTime(DateUtil.addDays(endTime, 1))));
+        filters.add(Filter.eq("orderStatus", CusOrder.OrderStatus.Finish.getValue()));
+        filters.add(Filter.eq("orderType", CusOrder.OrderType.Retail.getValue()));
+        filters.add(Filter.eq("shopGiveSettle", PubEnum.YesOrNoEnum.NO.getValue()));
+        return settlementOrderDetailBaseService.findList(null, filters, null);
+    }
+
+    /**
+     * 统计数量：结算周期内未完成、店主奖励未结算的订单
+     * @param startTime 周期开始时间
+     * @param endTime 周期结算时间
+     * @return
+     */
+    private long findUnSettlementOrderNum(Date startTime, Date endTime) {
+        List<Integer> unFinishStatus = new ArrayList<>();
+        unFinishStatus.add(CusOrder.OrderStatus.ToDelivery.getValue());
+        unFinishStatus.add(CusOrder.OrderStatus.ToTakeDelivery.getValue());
+        unFinishStatus.add(CusOrder.OrderStatus.TakedDelivery.getValue());
+        return settlementOrderDetailBaseService.count(Filter.dge("createDate", startTime),
+                Filter.dlt("createDate", DateUtil.clearTime(DateUtil.addDays(endTime, 1))),
+                Filter.in("orderStatus", unFinishStatus),
+                Filter.eq("orderType", CusOrder.OrderType.Retail.getValue()),
+                Filter.eq("shopGiveSettle", PubEnum.YesOrNoEnum.NO.getValue()));
+    }
+
+}

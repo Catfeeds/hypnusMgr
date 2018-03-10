@@ -1,0 +1,20 @@
+package com.catt.wfx.repository.dao.settlementMgr;
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRuleDetail;
+
+/**
+ * 店主/主管规则详情Dao接口
+ * 
+ * @author 邹佳
+ * @date 2017-02-09 10:30:50
+ * @version V1.0
+ */
+public interface SettlementShopRuleDetailDao extends BaseDao<SettlementShopRuleDetail, Long> {
+
+    /**
+     * 根据规则标识删除规则详情
+     * @param ruleId 规则标识
+     */
+    void deleteDetailByRuleId(Long ruleId);
+}

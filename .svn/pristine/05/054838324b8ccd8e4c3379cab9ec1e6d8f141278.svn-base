@@ -1,0 +1,42 @@
+package com.catt.wfx.repository.dao.productMgr;
+
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.productMgr.ProductCate;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * 商品种类信息Dao接口
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-01-09 11:37:12
+ */
+public interface ProductCateDao extends BaseDao<ProductCate, Long> {
+
+    /**
+     * 逻辑删除分类及其子类
+     * @param id 分类标识
+     * @param path 分类路径
+     */
+    void deleteCate(Long id, String path);
+
+    /**
+     * 根据路径查询分类：path%
+     * @param path 路径
+     * @return
+     */
+    Set<Long> findCateIdsByPath(String path);
+
+    /**
+     *
+     * 根据分类标识获取分类标识所有子集（以及子集的子集）
+     *
+     * @param cateId 分类标识
+     * @return
+     */
+    List<Map> findProductCateById(Long cateId);
+}

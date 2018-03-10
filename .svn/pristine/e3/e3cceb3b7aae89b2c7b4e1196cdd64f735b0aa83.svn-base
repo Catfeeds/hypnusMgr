@@ -1,0 +1,55 @@
+package com.catt.wfx.service.impl.wechatReturn.event;
+
+import com.catt.common.module.pay.data.config.AbstractAccountConfig;
+
+import java.util.Map;
+
+/**
+ * 支付事件监听器接口
+ * 
+ * @author 纪建宏
+ *
+ */
+public interface ReturnEventListener {
+
+	/**
+	 * 初始化支付请求参数
+	 * 
+	 * @param param
+	 *            原始参数
+	 * @return 待支付事件
+	 */
+	ToReturnEvent initPayRequestParam(Map<String, String> param);
+
+	/**
+	 * 根据支付事件指定商户账号配置<br>
+	 * 需要根据支付类型构建对应的账号配置对象
+	 * 
+	 * @param toReturnEvent
+	 *            支付事件
+	 * @return 商户账号配置
+	 */
+	AbstractAccountConfig specifyAccountConfig(ToReturnEvent toReturnEvent);
+
+	/**
+	 * 退款成功
+	 * 
+	 * @param createReturnSuccessEvent
+	 */
+	void returnSuccess(CreateReturnSuccessEvent createReturnSuccessEvent);
+
+	/**
+	 * 退款失败
+	 *
+	 * @param createReturnSuccessEvent
+	 */
+	void returnFail(CreateReturnSuccessEvent createReturnSuccessEvent);
+
+
+	/**
+	 * 申请退款成功
+	 *
+	 * @param createReturnSuccessEvent
+     */
+	void createReturnSuccess(CreateReturnSuccessEvent createReturnSuccessEvent);
+}

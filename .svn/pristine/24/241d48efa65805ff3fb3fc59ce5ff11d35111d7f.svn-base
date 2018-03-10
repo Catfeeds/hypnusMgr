@@ -1,0 +1,48 @@
+package com.catt.wfx.repository.dao.productMgr;
+
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商品价格定义Dao接口
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-01-09 11:37:12
+ */
+public interface ProductPriceDao extends BaseDao<ProductPrice, Long> {
+
+    /**
+     * 删除商品关联的价格定义
+     * @param productId 商品标识
+     */
+    void deleteByProductId(Long productId);
+
+    /**
+     * 查询商品价格列表
+     * @param productId 商品标识
+     * @return
+     */
+    List<Map> findListByProductId(Long productId);
+
+     /**
+      * 获取商品对应的价格信息
+      *
+      * @param productIds 商品标识集合
+      * @return
+      */
+    List<Map> findProductPriceByProductId(List<Long> productIds);
+
+    /**
+     * 查询设置商品活动价格列表
+     * @param activityId
+     * @param productId
+     * @return
+     */
+    List<Map> findList4Activity(Long activityId, Long productId);
+
+}

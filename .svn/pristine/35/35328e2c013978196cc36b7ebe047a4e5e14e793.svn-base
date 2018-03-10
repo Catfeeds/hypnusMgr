@@ -1,0 +1,234 @@
+package com.catt.wfx.service.impl.statisti;
+
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.wfx.repository.dao.couponMgr.CouponCusDao;
+import com.catt.wfx.repository.dao.couponMgr.CouponInfoDao;
+import com.catt.wfx.repository.entity.couponMgr.CouponCus;
+import com.catt.wfx.service.statisti.CouponStatistiService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:代金券发放统计
+ * Created by 2017-03-28  10:24.
+ * author: Zhou mingxiang
+ */
+@Service("couponStatistiServiceImpl")
+public class CouponStatistiServiceImpl implements CouponStatistiService {
+
+    @Resource(name = "couponCusDaoImpl")
+    private CouponCusDao couponCusDao;
+
+    @Resource(name = "couponInfoDaoImpl")
+    private CouponInfoDao couponInfoDao;
+
+    /**
+     * 获取代金券发放统计信息
+     *
+     * @return
+     */
+    public Map getCouponStatisti() {
+        //获取代金券发放数量和金额
+        List<Map> totalCouponInfo = couponInfoDao.getTotalCouponInfo();
+        Map map = new HashMap<>();
+        //总发放面值
+        map.put("allFaceValue", 0);
+        //总发放数量
+        map.put("allSendNum", 0);
+
+        //未使用数量
+        map.put("notUseNum", 0);
+        //未使用面值
+        map.put("notUseFaceValue", 0);
+
+        //使用数量
+        map.put("useNum", 0);
+        //使用面值
+        map.put("useFaceValue", 0);
+
+        //过期数量
+        map.put("overdueNum", 0);
+        //过期面值
+        map.put("overFaceValue", 0);
+
+        //平台赠送数量
+        map.put("platGiveNum", 0);
+        //平台赠送面值
+        map.put("platGiveFaceValue", 0);
+
+        //店主注册奖励数量
+        map.put("shopkeeperRegisterBonusNum", 0);
+        //店主注册奖励面值
+        map.put("shopkeeperRegisterBonusFaceValue", 0);
+
+        //店主邀请奖励数量
+        map.put("shopkeeperInviteBonusNum", 0);
+        //店主邀请奖励面值
+        map.put("ShopkeeperInviteBonusFaceValue", 0);
+
+        //店主销售奖励数量
+        map.put("shopkeeperSaleBonusNum", 0);
+        //店主销售奖励面值
+        map.put("shopkeeperSaleBonusFaceValue", 0);
+
+        //主管管理奖励数量
+        map.put("leaderMgrBonusNum", 0);
+        //主管管理奖励面值
+        map.put("leaderMgrBonusFaceValue", 0);
+
+        if (CollectionUtil.isNotEmpty(totalCouponInfo)) {
+            Map map1 = totalCouponInfo.get(0);
+            map.putAll(map1);
+
+            //获取已使用代金券数量和金额
+            List<Map> useList = couponCusDao.getTotalCoupon(CouponCus.ISUSE_USE);
+            if (CollectionUtil.isNotEmpty(useList)) {
+                this.setNumAndFaceValue(useList, map, CouponCus.ISUSE_USE);
+
+            }
+            //获取未使用代金券数量和金额
+            List<Map> notUseList = couponCusDao.getTotalCoupon(CouponCus.ISUSE_NOT_USE);
+            if (CollectionUtil.isNotEmpty(notUseList)) {
+                this.setNumAndFaceValue(notUseList, map, CouponCus.ISUSE_NOT_USE);
+            }
+            //获取已过期代金券数量和金额
+            List<Map> overdueList = couponCusDao.getTotalCoupon(CouponCus.ISUSE_OVERDUE);
+            if (CollectionUtil.isNotEmpty(overdueList)) {
+                this.setNumAndFaceValue(overdueList, map, CouponCus.ISUSE_OVERDUE);
+            }
+        }
+        return map;
+    }
+
+
+    /**
+     * 整理数据，拼装相关代金券统计数据
+     *
+     * @param mapList
+     * @param map
+     * @param isUse
+     */
+    private void setNumAndFaceValue(List<Map> mapList, Map map, Integer isUse) {
+        //使用数量和面值
+        int useNum = MapUtil.getIntValue(map, "useNum", 0);
+        double useFaceValue = NumberUtil.format(MapUtil.getDoubleValue(map, "useFaceValue", 0));
+
+        //未使用数量和面值
+        int notUseNum = MapUtil.getIntValue(map, "notUseNum", 0);
+        double notUseFaceValue = NumberUtil.format(MapUtil.getDoubleValue(map, "notUseFaceValue", 0));
+
+        //过期数量和面值
+        int overdueNum = MapUtil.getIntValue(map, "overdueNum", 0);
+        double overFaceValue =NumberUtil.format(MapUtil.getDoubleValue(map, "overFaceValue", 0));
+
+        //平台赠送数量和面值
+        int platGiveNum = MapUtil.getIntValue(map, "platGiveNum", 0);
+        double platGiveFaceValue = NumberUtil.format(MapUtil.getDoubleValue(map, "platGiveFaceValue", 0));
+
+        //店主注册奖励数量和面值
+        int shopkeeperRegisterBonusNum = MapUtil.getIntValue(map, "shopkeeperRegisterBonusNum", 0);
+        double shopkeeperRegisterBonusFaceValue = NumberUtil.format(MapUtil.getDoubleValue(map, "shopkeeperRegisterBonusFaceValue", 0));
+
+        //店主邀请奖励数量和面值
+        int shopkeeperInviteBonusNum = MapUtil.getIntValue(map, "shopkeeperInviteBonusNum", 0);
+        double ShopkeeperInviteBonusFaceValue = NumberUtil.format(MapUtil.getDoubleValue(map, "ShopkeeperInviteBonusFaceValue", 0));
+
+        //店主销售奖励数量和面值
+        int shopkeeperSaleBonusNum = MapUtil.getIntValue(map, "shopkeeperSaleBonusNum");
+        double shopkeeperSaleBonusFaceValue = NumberUtil.format(MapUtil.getDoubleValue(map, "shopkeeperSaleBonusFaceValue", 0));
+
+        //主管管理奖励数量和面值
+        int leaderMgrBonusNum = MapUtil.getIntValue(map, "leaderMgrBonusNum");
+        double leaderMgrBonusFaceValue = NumberUtil.format(MapUtil.getDoubleValue(map, "leaderMgrBonusFaceValue", 0));
+
+        for (Map map1 : mapList) {
+            //代价卷来源
+            Integer source = MapUtil.getInteger(map1, "source");
+            //代金卷数量
+            int num = MapUtil.getIntValue(map1, "totalCouponNum", 0);
+            //代金券面值
+            double faceValue = MapUtil.getDoubleValue(map1, "totalFaceValue", 0);
+
+            //判断代金卷来源--设置对应来源代金卷数量和面值
+            if (source.equals(CouponCus.Source.PlatGive.getValue())) {
+                platGiveNum += num;
+                platGiveFaceValue = NumberUtil.add(platGiveFaceValue, faceValue);
+
+            } else if (source.equals(CouponCus.Source.ShopkeeperRegisterBonus.getValue())) {
+                shopkeeperRegisterBonusNum += num;
+                shopkeeperRegisterBonusFaceValue = NumberUtil.add(shopkeeperRegisterBonusFaceValue, faceValue);
+
+            } else if (source.equals(CouponCus.Source.ShopkeeperInviteBonus.getValue())) {
+                shopkeeperInviteBonusNum += num;
+                ShopkeeperInviteBonusFaceValue = NumberUtil.add(ShopkeeperInviteBonusFaceValue, faceValue);
+
+            } else if (source.equals(CouponCus.Source.ShopkeeperSaleBonus.getValue())) {
+                shopkeeperSaleBonusNum += num;
+                shopkeeperSaleBonusFaceValue = NumberUtil.add(shopkeeperSaleBonusFaceValue, faceValue);
+
+            } else if (source.equals(CouponCus.Source.LeaderMgrBonus.getValue())) {
+                leaderMgrBonusNum += num;
+                leaderMgrBonusFaceValue = NumberUtil.add(leaderMgrBonusFaceValue, faceValue);
+            }
+
+            //判断代金券状态--设置对应状态的代金券数量和面值
+            if (isUse.equals(CouponCus.ISUSE_OVERDUE)) {
+                overdueNum += num;
+                overFaceValue = NumberUtil.add(overFaceValue, faceValue);
+            } else if (isUse.equals(CouponCus.ISUSE_NOT_USE)) {
+                notUseNum += num;
+                notUseFaceValue = NumberUtil.add(notUseFaceValue, faceValue);
+            } else {
+                useNum += num;
+                useFaceValue = NumberUtil.add(useFaceValue, faceValue);
+            }
+        }
+
+
+        //未使用数量
+        map.put("notUseNum", notUseNum);
+        //未使用面值
+        map.put("notUseFaceValue", notUseFaceValue);
+
+        //使用数量
+        map.put("useNum", useNum);
+        //使用面值
+        map.put("useFaceValue", useFaceValue);
+
+        //过期数量
+        map.put("overdueNum", overdueNum);
+        //过期面值
+        map.put("overFaceValue", overFaceValue);
+
+        //平台赠送数量
+        map.put("platGiveNum", platGiveNum);
+        //平台赠送面值
+        map.put("platGiveFaceValue", platGiveFaceValue);
+
+        //店主注册奖励数量
+        map.put("shopkeeperRegisterBonusNum", shopkeeperRegisterBonusNum);
+        //店主注册奖励数量
+        map.put("shopkeeperRegisterBonusFaceValue", shopkeeperRegisterBonusFaceValue);
+
+        //店主邀请奖励数量
+        map.put("shopkeeperInviteBonusNum", shopkeeperInviteBonusNum);
+        //店主邀请奖励数量
+        map.put("ShopkeeperInviteBonusFaceValue", ShopkeeperInviteBonusFaceValue);
+
+        //店主销售奖励数量
+        map.put("shopkeeperSaleBonusNum", shopkeeperSaleBonusNum);
+        //店主销售奖励数量
+        map.put("shopkeeperSaleBonusFaceValue", shopkeeperSaleBonusFaceValue);
+
+        //主管管理奖励数量
+        map.put("leaderMgrBonusNum", leaderMgrBonusNum);
+        //主管管理奖励数量
+        map.put("leaderMgrBonusFaceValue", leaderMgrBonusFaceValue);
+    }
+}

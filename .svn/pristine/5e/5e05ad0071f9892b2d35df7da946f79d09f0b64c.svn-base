@@ -1,0 +1,80 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    // 初始化数据列表
+                    EventHandler.search();
+                },
+
+
+                /** 初始化界面  */
+                initPage: function () {
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+
+                    $('#auditCus').click(function () {
+                        EventHandler.auditCus();
+                    });
+
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                //审核
+                auditCus: function () {
+                    var status = $("#status").val();
+                    if(status != 1){
+                        msgBox.tips("只有待审核状态才可以审核");
+                        return;
+                    }
+                    var id = $("#id").val();
+                    msgBox.exWindow.open({
+                        title: '审核',
+                        url: path + "/admin/cusCertification/auditPage/" + id,
+                        width: '600px',
+                        height: '370px',
+                        close: function (result) {
+                            if (result) {
+                                window.location.href = path + "/admin/cusCertification/index";
+                            }
+                        }
+                    });
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 审核
+                 */
+                auditCus: function (param, callback) {
+                    $.post(path + '/admin/cusCertification/audit', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

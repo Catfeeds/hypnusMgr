@@ -1,0 +1,295 @@
+package com.catt.wfx.repository.entity.customerMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.Date;
+
+/**
+ * 店铺信息表实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-13 16:15:30
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_CUS_SHOP")
+public class CusShop extends BaseEntity {
+	/**
+	 * 用于从附件表获取附件
+	 */
+	public static final String TABLE_NAME = "T_CUS_SHOP";
+	public static final String BACKGROUDURL = "S_BACKGROUND_URL";
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 用户标识
+	 */
+	private Long cusId;
+	/**
+	 * 代理商标识
+	 */
+	private Long agentId;
+	/**
+	 * 店铺名称
+	 */
+	private String shopName;
+	/**
+	 * 店铺描述
+	 */
+	private String shopDesc;
+	/**
+	 * 店铺状态<p><br>
+	 * 1-正常 2-过期 3-冻结
+	 */
+	private Integer status;
+	/**
+	 * 店铺LOGO
+	 */
+	private String logoPath;
+	/**
+	 * 店铺地址
+	 */
+	private String shopUrl;
+	/**
+	 * 店铺背景
+	 */
+	private String backgroundUrl;
+	/**
+	 * 开通时间
+	 */
+	private Date openTime;
+	/**
+	 * 到期时间
+	 */
+	private Date expireTime;
+	/**
+	 * 订单总数量
+	 */
+	private Integer orderNum;
+	/**
+	 * 订单总金额
+	 */
+	private Double orderMoney;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+
+	@Column(name = "I_CUS_ID")
+	public Long getCusId() {
+		return cusId;
+	}
+
+	public void setCusId(Long cusId) {
+		this.cusId = cusId;
+	}
+
+	@Column(name = "I_AGENT_ID")
+	public Long getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(Long agentId) {
+		this.agentId = agentId;
+	}
+
+	@Column(name = "S_SHOP_NAME", length = 128)
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+
+	@Column(name = "S_SHOP_DESC", length = 1024)
+	public String getShopDesc() {
+		return shopDesc;
+	}
+
+	public void setShopDesc(String shopDesc) {
+		this.shopDesc = shopDesc;
+	}
+
+	@Column(name = "I_STATUS")
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	@Column(name = "S_LOGO_PATH", length = 256)
+	public String getLogoPath() {
+		return logoPath;
+	}
+
+	public void setLogoPath(String logoPath) {
+		this.logoPath = logoPath;
+	}
+
+	@Column(name = "S_SHOP_URL", length = 256)
+	public String getShopUrl() {
+		return shopUrl;
+	}
+
+	public void setShopUrl(String shopUrl) {
+		this.shopUrl = shopUrl;
+	}
+
+	@Column(name = "S_BACKGROUND_URL", length = 256)
+	public String getBackgroundUrl() {
+		return backgroundUrl;
+	}
+
+	public void setBackgroundUrl(String backgroundUrl) {
+		this.backgroundUrl = backgroundUrl;
+	}
+
+	@Column(name = "D_OPEN_TIME")
+	public Date getOpenTime() {
+		return openTime;
+	}
+
+	public void setOpenTime(Date openTime) {
+		this.openTime = openTime;
+	}
+
+	@Column(name = "D_EXPIRE_TIME")
+	public Date getExpireTime() {
+		return expireTime;
+	}
+
+	public void setExpireTime(Date expireTime) {
+		this.expireTime = expireTime;
+	}
+
+	@Column(name = "I_ORDER_NUM")
+	public Integer getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
+	}
+
+	@Column(name = "I_ORDER_MONEY")
+	public Double getOrderMoney() {
+		return orderMoney;
+	}
+
+	public void setOrderMoney(Double orderMoney) {
+		this.orderMoney = orderMoney;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+    /**
+     * 店铺状态枚举
+     * 1-正常 2-过期 3-冻结
+     */
+    public enum Status {
+
+        /**
+         * 正常
+         */
+        Normal(1, "正常"),
+
+        /**
+         * 过期
+         */
+        Overdue(2, "过期"),
+
+        /**
+         * 冻结
+         */
+        Freeze(3, "冻结");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        Status(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static Status getEnum(int value) {
+            Status[] source = Status.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+
+    }
+
+}
+

@@ -1,0 +1,16 @@
+package com.catt.wfx.service.base.productMgr;
+
+
+import com.catt.common.base.service.BaseService;
+import com.catt.wfx.repository.entity.productMgr.ProductDocumentLog;
+
+/**
+ * 文案流程信息服务接口
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-01-09 11:37:12
+ */
+public interface ProductDocumentLogBaseService extends BaseService<ProductDocumentLog, Long> {
+
+}

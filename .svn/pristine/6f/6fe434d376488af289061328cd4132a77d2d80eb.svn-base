@@ -1,0 +1,200 @@
+package com.catt.wfx.repository.entity.customerMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 开票信息实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-13 16:15:30
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_CUS_INVOICE")
+public class CusInvoice extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 用户标识
+	 */
+	private Long cusId;
+	/**
+	 * 开票抬头
+	 */
+	private String invoiceName;
+	/**
+	 * 开户银行
+	 */
+	private String openBank;
+	/**
+	 * 银行账户
+	 */
+	private String bankaccountName;
+	/**
+	 * 银行行号
+	 */
+	private String bankaccountNo;
+	/**
+	 * 税务登记号
+	 */
+	private String taxCertificate;
+	/**
+	 * 公司电话
+	 */
+	private String companyTel;
+	/**
+	 * 公司地址
+	 */
+	private String companyAddress;
+	/**
+	 * 邮编
+	 */
+	private String postcode;
+	/**
+	 * 是否默认<p><br>
+	 * 1-是，2-否
+	 */
+	private Integer isDefault;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+	/**
+	 * 备注<p><br>
+	 * 备注
+	 */
+	private String remark;
+
+	@Column(name = "I_CUS_ID")
+	public Long getCusId() {
+		return cusId;
+	}
+
+	public void setCusId(Long cusId) {
+		this.cusId = cusId;
+	}
+
+	@Column(name = "S_INVOICE_NAME", length = 128)
+	public String getInvoiceName() {
+		return invoiceName;
+	}
+
+	public void setInvoiceName(String invoiceName) {
+		this.invoiceName = invoiceName;
+	}
+
+	@Column(name = "S_OPEN_BANK", length = 128)
+	public String getOpenBank() {
+		return openBank;
+	}
+
+	public void setOpenBank(String openBank) {
+		this.openBank = openBank;
+	}
+
+	@Column(name = "S_BANKACCOUNT_NAME", length = 128)
+	public String getBankaccountName() {
+		return bankaccountName;
+	}
+
+	public void setBankaccountName(String bankaccountName) {
+		this.bankaccountName = bankaccountName;
+	}
+
+	@Column(name = "S_BANKACCOUNT_NO", length = 128)
+	public String getBankaccountNo() {
+		return bankaccountNo;
+	}
+
+	public void setBankaccountNo(String bankaccountNo) {
+		this.bankaccountNo = bankaccountNo;
+	}
+
+	@Column(name = "S_TAX_CERTIFICATE", length = 128)
+	public String getTaxCertificate() {
+		return taxCertificate;
+	}
+
+	public void setTaxCertificate(String taxCertificate) {
+		this.taxCertificate = taxCertificate;
+	}
+
+	@Column(name = "S_COMPANY_TEL", length = 64)
+	public String getCompanyTel() {
+		return companyTel;
+	}
+
+	public void setCompanyTel(String companyTel) {
+		this.companyTel = companyTel;
+	}
+
+	@Column(name = "S_COMPANY_ADDRESS", length = 128)
+	public String getCompanyAddress() {
+		return companyAddress;
+	}
+
+	public void setCompanyAddress(String companyAddress) {
+		this.companyAddress = companyAddress;
+	}
+
+	@Column(name = "S_POSTCODE", length = 64)
+	public String getPostcode() {
+		return postcode;
+	}
+
+	public void setPostcode(String postcode) {
+		this.postcode = postcode;
+	}
+
+	@Column(name = "I_IS_DEFAULT")
+	public Integer getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(Integer isDefault) {
+		this.isDefault = isDefault;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+	@Column(name = "S_REMARK", length = 1024)
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+}
+

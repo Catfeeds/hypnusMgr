@@ -1,0 +1,30 @@
+package com.catt.wfx.service.impl.base.settlementMgr;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementPushRecordDao;
+import com.catt.wfx.repository.entity.customerMgr.SettlementPushRecord;
+import com.catt.wfx.service.base.settlementMgr.SettlementPushRecordBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+/**
+ * 提成/返利结算记录表服务接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-08-22 15:12:48
+ * @version V1.0
+ */
+@Service("settlementPushRecordBaseServiceImpl")
+public class SettlementPushRecordBaseServiceImpl extends
+	BaseServiceImpl<SettlementPushRecord, Long> implements SettlementPushRecordBaseService {
+
+	@Resource(name = "settlementPushRecordDaoImpl")
+	private SettlementPushRecordDao settlementPushRecordDao;
+
+	@Resource
+	public void setBaseDao(SettlementPushRecordDao settlementPushRecordDao) {
+		super.setBaseDao(settlementPushRecordDao);
+	}
+
+}

@@ -1,0 +1,67 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*统计表*/
+.tongjiTop{background:#fff; position:relative; padding-bottom:10px;}
+.tongjiTitle{text-align:center; font-size:14px; color:#faccca; letter-spacing:1px; text-align:center;}
+.tongjiNum{font-size:50px; color:#ffe327; text-align:center; display:block; letter-spacing:1px;}
+.tongjiTip{text-align:center; font-size:12px; color:#f47f30; text-align:center; }
+.tongjiTip02{text-align:center; font-size:12px; color:#646464; text-align:center; padding-top:10px;}
+.tongjidetailBtn{border:1px solid #fff; border-radius:4px; width:120px; height:40px; color:#fff; margin:0 auto; display:block;position:absolute; bottom:40px; left:0; right:0;}
+.imgSelect{position:absolute; top:20px; right:18px; width:24px; height:24px;}
+
+
+.tongjibiao{background:#fff; padding:0 20px;}
+.tongjibiaoItem{overflow:hidden; background:#fff; border-bottom:1px solid #e5e5e5;}
+.tongjibiaoItem h1{float:left; font-size:14px; color:#646464; line-height:50px; margin-right:10px;}
+.tongjibiaoItem h2{float:right; font-size:14px; color:#646464; line-height:50px; font-weight:900;}
+.tongjibiaoItem h3{float:left; font-size:14px; color:#f47f30; line-height:50px; width:54px;}
+.tongjibiaoItem h4{float:right; font-size:12px; color:#969696; line-height:50px; }
+.tongjiBg01{background:#ea3c34 url(../images/tongji_bg_chart.png) no-repeat center; padding:50px;}
+.tongjiBg02{background:#ea3c34 url(../images/tongji_bg_chart02.png) no-repeat center; padding:50px;}
+
+
+/*油站选择*/
+.youzhanTypeBox{background:#FFF; padding:0 20px;}
+.youzhanTypeBox ul li{overflow:hidden; border-bottom:1px solid #e5e5e5; padding:16px 0;}
+.youzhanTypeBox ul li:hover h1{color:#f47f30; cursor:pointer;}
+.youzhanType{float:left; font-size:16px; color:#323232; line-height:24px;}
+.youzhanType:hover{color:#f47f30; cursor:pointer;}
+
+
+/*支付方式*/
+.zhifu{ background:#fff; margin-top:10px;}
+.zhifuTitle{ height:50px; line-height:50px; font-size:18px; color:#323232; border-bottom:1px solid #e5e5e5; padding:0px 20px;}
+.zhifu li{ padding:0px 20px;}
+.zhifuItem{overflow:hidden; background:#fff; border-bottom:1px solid #e5e5e5;}
+.zhifuItem h1{float:left; font-size:16px; color:#333; line-height:60px; margin-right:10px;}
+.zhifuItem h2{float:right; font-size:14px; color:#646464; line-height:50px; font-weight:900;}
+.zhifuPic{ float:left; margin:10px 20px 0px 0px; width:40px;}
+.zhifuSelected{ float:right; width:30px; margin-top:20px;}
+
+
+/*勾选*/
+a.checkbox{ width:20px; height:20px; display:block; cursor:pointer;/*background:url(../images/check.png) no-repeat center center;*/ border:1px solid #ff4d4d; border-radius:30px; position:absolute; top:20px; right:20px;}
+a.checkbox02{position:absolute; right:20px;}
+a.checkboxAll{position:absolute;  right:20px;}
+a.checkbox:hover{background:url(../images/zhifu_img_selected.png) no-repeat center center; border:1px solid #ea3c34;}
+a.checked{background:url(../images/zhifu_img_selected.png) no-repeat center center; border:1px solid #ea3c34;}
+.tickAll{ padding-left:35px; color:#323232; font-size:15px; position:relative; float:left; height:50px; line-height:50px;}
+
+
+
+
+
+
+
+.nextBtn1{background:#ff4d4d ;color:#fff; width:100%; height:50px; font-size:18px; margin-top:20px; position:fixed; bottom:0px; z-index:100; overflow:hidden; font-family:"微软雅黑", Arial; letter-spacing:2px;}
+
+
+
+
+
+
+
+
+
+

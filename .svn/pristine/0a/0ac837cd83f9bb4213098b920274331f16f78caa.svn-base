@@ -1,0 +1,57 @@
+package com.catt.wfx.security.shiro.principal.impl;
+
+import com.catt.common.base.pojo.security.LoginModeType;
+import com.catt.common.base.pojo.security.Principal;
+import com.catt.common.base.repository.entity.BaseUserEntity;
+import com.catt.common.module.wechat.pojo.security.WeChatExtPrincipal;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.security.shiro.SecurityUtil;
+import com.catt.common.web.security.shiro.principal.PrincipalBuilderService;
+import com.catt.wfx.web.service.MessageHandlerService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Objects;
+
+import static com.catt.wfx.security.shiro.principal.impl.WeChatPrincipalBuilderServiceImpl.SERVICE_NAME;
+
+/**
+ * @author Zhang zhongtao
+ * @version Ver 1.0
+ * @since JDK V1.8
+ */
+@Service(value = SERVICE_NAME)
+public class WeChatPrincipalBuilderServiceImpl implements PrincipalBuilderService {
+
+    public static final String SERVICE_NAME = "weChatPrincipalBuilderServiceImpl";
+
+    @Resource(name = "messageHandlerServiceImpl")
+    private MessageHandlerService messageHandlerService;
+
+    @Override
+    public <T extends Principal> T newPrincipal(BaseUserEntity baseUserEntity, String userEntity, LoginModeType loginModeType) {
+        Object attribute = SecurityUtil.getSubject().getSession().getAttribute(SecurityUtil.SESSION_USER_KEY);
+        WeChatExtPrincipal principal = null;
+        String openId = "";
+        String publicAccountId = "";
+        String unionId = "";
+
+        if (attribute != null && attribute instanceof WeChatExtPrincipal) {
+            principal = (WeChatExtPrincipal) attribute;
+            openId = principal.getOpenId();
+            publicAccountId = principal.getPublicAccountId();
+            unionId = principal.getUnionId();
+        }
+
+        if (StringUtil.isNotBlank(openId)) {
+            messageHandlerService.saveRef(openId, publicAccountId, unionId, Objects.toString(baseUserEntity.getId()));
+        }
+
+        principal =
+                new WeChatExtPrincipal(baseUserEntity.getId(),
+                        baseUserEntity.getAccount(),
+                        baseUserEntity.getName(), userEntity, loginModeType, openId, unionId, publicAccountId);
+
+        return (T) principal;
+    }
+}

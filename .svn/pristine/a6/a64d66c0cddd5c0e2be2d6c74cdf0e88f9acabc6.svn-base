@@ -1,0 +1,60 @@
+@charset "utf-8";
+
+/*产品列表 */
+
+.chanpinMain{padding:0 20px; background:#fff;}
+.listItem{border-bottom:1px solid #e5e5e5; position:relative; padding:10px 0; height:100px; cursor:pointer;}
+.chanpinImg{position:absolute; left:0; top:0; width:100px; height:100px; display:block; margin-top:10px;}
+.chanpinContent{position:absolute; left:110px; right:0; top:12px;}
+.chanpinTitle{font-size:18px; color:#323232; overflow:hidden; margin-bottom:4px;}
+.chanpinTipBlue{color:#42aaf2; font-size:12px; border:1px solid #42aaf2; padding:0 3px; border-radius:4px;}
+.chanpinTipRed{color:#f36155; font-size:12px; border:1px solid #f36155; padding:0 3px; border-radius:4px;}
+.chanpinText{font-size:14px; color:#969696; margin-top:4px; display:block; height:16px; overflow:hidden;}
+.itemBtnBox{overflow:hidden; height:19px; }
+.itemBtn{margin-left:10px; float:right; position:relative;}
+.itemBtn img{float:left; width:19px; height:19px; position:absolute; left:0; top:0;}
+.itemBtn font{float:left; font-size:14px; color:#646464; line-height:19px; padding-left:20px;}
+.btnToggle_on{display:none;}
+
+/*产品详情*/
+.chanpinIntro{padding:0 20px; padding-bottom:10px; border-bottom:1px solid #e5e5e5;}
+.menberList{background:#fff; margin-top:10px;}
+.introText{background:#fff; margin-top:10px;}
+.introMain{padding:10px 20px;}
+.introMain p{font-size:15px; color:#646464; line-height:24px;}
+.showTip{text-align:right; display:block; font-size:14px; line-height:30px; color:#f13d2e;}
+.introHide{display:none;}
+
+.commentBox{background:#fff; margin-top:10px;}
+.pingjiaBtn{float:right; line-height:40px; font-size:14px; margin-right:20px; color:#f13d2e;}
+.commentList{padding:0 20px;}
+.commentList li{border-bottom:1px solid #e5e5e5; padding:10px 0; position:relative;}
+.commentNem{width:50px; height:50px; border-radius:32px; border:1px solid #ccc; float:left;}
+.commentComtent{padding-left:60px;}
+.commentName{font-size:16px; color:#323232; line-height:16px; margin-top:6px;}
+.commentDate{font-size:12px; color:#969696;}
+.commentbb{font-size:14px; color:323232; margin-top:4px;}
+.commentBtn{position:absolute; right:0; top:10px; width:20px; height:20px; cursor:pointer;}
+
+
+/*发布产品*/
+.fabuBtn{height:50px; width:50px; border-radius:50px; position:absolute; bottom:0; right:20px; box-shadow:0 2px 6px #b7b7b7; background:#f13d2e; color:#fff; font-size:15px;}
+.fabuBtn:hover{background:#e13b2d;}
+.fabuBtn img{width:30px; height:30px; margin-top:4px;}
+.textBox{border:1px solid #e5e5e5; }
+.chanpinTextarea{border:none; height:120px; padding:10px;}
+.chanpinimgBox{border:1px solid #e5e5e5; width:80px; height:80px;}
+.chanpinimgBox img{width:40px; height:40px; margin:25% auto; display:block;}
+
+/*产品类型选择*/
+.chanpinTypeBox{background:#FFF; padding:0 20px;}
+.chanpinTypeBox ul li{overflow:hidden; border-bottom:1px solid #e5e5e5; padding:16px 0;}
+.chanpinType{float:left; font-size:16px; color:#323232; line-height:24px;}
+.chanpintypeSelect{float:right; width:24px; height:24px; display:none;}
+
+/*企业选择*//
+.qiyeBox{background:#FFF; padding:0 20px;}
+.qiyeBox ul li{overflow:hidden; border-bottom:1px solid #e5e5e5; padding:16px 20px;}
+.qiyeBox ul li:hover h1{color:#f47f30; cursor:pointer;}
+.qiyeList{float:left; font-size:16px; color:#323232; line-height:24px;}
+.qiyeList:hover{color:#f47f30; cursor:pointer;}

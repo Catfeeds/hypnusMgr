@@ -1,0 +1,121 @@
+package com.catt.wfx.web.controller.admin.wechat.shop;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.WebUtil;
+import com.catt.common.web.controller.BaseController;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.entity.customerMgr.CusShop;
+import com.catt.wfx.repository.form.productMgr.ProductFromApp;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.base.customerMgr.CusShopBaseService;
+import com.catt.wfx.service.productMgr.ProductService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 店主精选商品控制器
+ * 作者：邹佳
+ * 时间：2017-03-01
+ */
+@Controller("admin.wechat.shop.ShopkeeperController")
+@RequestMapping(value = "/admin/wechat/shop")
+public class ShopkeeperController extends BaseController {
+
+    // 商品管理服务接口
+    @Resource(name = "productServiceImpl")
+    private ProductService productService;
+
+    // 用户信息服务接口
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    // 店铺信息表服务接口
+    @Resource(name = "cusShopBaseServiceImpl")
+    private CusShopBaseService cusShopBaseService;
+
+    // 附件服务
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    // 公共配置服务
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    /**
+     * 店主精选页面
+     *
+     * @return
+     */
+    @RequestMapping(value = {"/index.html"}, method = RequestMethod.GET)
+    public String toIndex(Long shopId, Model model) {
+        Assert.notNull(shopId, "店铺标识为空");
+        CusShop cusShop = cusShopBaseService.find(shopId);
+        Assert.notNull(cusShop, "店铺不存在");
+
+        //获取店铺背景图片路径
+        String backgroundUrl = null;
+        Attachment background = attachmentBaseService.getFile(cusShop.getId(), CusShop.TABLE_NAME, CusShop.BACKGROUDURL);
+        if (background != null && StringUtil.isNotBlank(background.getPath())) {
+            backgroundUrl = pubConfigService.getFilePath() + background.getPath();
+        }
+        if (StringUtil.isBlank(backgroundUrl)) {
+            // 找不到头像，则使用默认头像
+            backgroundUrl = WebUtil.getRequest().getContextPath() + "/resources/images/bg_store.png";
+        }
+
+        CusInfo shopkeeper = cusInfoBaseService.find(cusShop.getCusId());
+        String shopkeeperPhoto = null; // 店主头像
+        Attachment photo = attachmentBaseService.getFile(shopkeeper.getId(), CusInfo.TABLE_NAME, CusInfo.PHOTO);
+        if (photo != null && StringUtil.isNotBlank(photo.getPath())) {
+            shopkeeperPhoto = pubConfigService.getFilePath() + photo.getPath();
+        }
+        if (StringUtil.isBlank(shopkeeperPhoto)) {
+            // 找不到头像，则使用默认头像
+            shopkeeperPhoto = WebUtil.getRequest().getContextPath() + "/resources/images/menber_img_menber01.png";
+        }
+
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("shopName", cusShop.getShopName()); // 店铺名称
+        model.addAttribute("backgroundUrl", backgroundUrl); // 店铺背景
+        model.addAttribute("shopkeeperName", shopkeeper.getName()); // 店主名称
+        model.addAttribute("shopkeeperPhoto", shopkeeperPhoto); // 店主头像
+        return "/admin/wechat/shop/index";
+    }
+
+
+    /**
+     * 获取商品信息列表
+     *
+     * @param shopId  店铺标识
+     * @param cateId 商品分类标识
+     * @return
+     */
+    @RequestMapping(value = {"/findProductInfoByPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> findProductInfoByPage(Long shopId, Long cateId, Pageable pageable) {
+        Assert.notNull(shopId, "店铺标识为空");
+        CusShop cusShop = cusShopBaseService.find(shopId);
+        Assert.notNull(cusShop, "店铺不存在");
+
+        ProductFromApp productFromApp = new ProductFromApp();
+        productFromApp.setCusId(cusShop.getCusId());
+        productFromApp.setCateId(cateId);
+        productFromApp.setWechat(true);
+        return productService.findProductInfoByPage(productFromApp, pageable);
+    }
+
+}

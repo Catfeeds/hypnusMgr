@@ -1,0 +1,271 @@
+package com.catt.wfx.repository.entity.orderMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 退货订单明细实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:35
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_CUS_ORDER_RETURN_DETAIL")
+public class CusOrderReturnDetail extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 订单标识
+	 */
+	private Long orderId;
+	/**
+	 * 退货单标识
+	 */
+	private Long returnId;
+	/**
+	 * 订单明细标识
+	 */
+	private Long orderDetailId;
+	/**
+	 * 厂家标识
+	 */
+	private Long factoryId;
+	/**
+	 * 商品种类标识<p><br>
+	 * 商品种类标识
+	 */
+	private Long cateId;
+	/**
+	 * 商品种类名称<p><br>
+	 * 商品种类名称
+	 */
+	private String cateName;
+	/**
+	 * 商品标识
+	 */
+	private Long relId;
+	/**
+	 * 商品类型<p><br>
+	 * 1-单品 2-套餐
+	 */
+	private Integer type;
+	/**
+	 * 商品名称
+	 */
+	private String productName;
+	/**
+	 * 商品编码<p><br>
+	 * 商品编码
+	 */
+	private String code;
+	/**
+	 * 商品条码<p><br>
+	 * 商品条码
+	 */
+	private String barCode;
+	/**
+	 * 商品封面<p><br>
+	 * 保存商品图片在附件表的标识
+	 */
+	private String headPath;
+	/**
+	 * 商品规格<p><br>
+	 * 格式：{"体积":"350ML","礼盒包装":"有"}
+	 */
+	private String specJson;
+	/**
+	 * 退货数量
+	 */
+	private Integer num;
+	/**
+	 * 退款单价<p><br>
+	 * 按实际支付的单价进行退款
+	 */
+	private Double price;
+	/**
+	 * 退款总金额
+	 */
+	private Double returnTotalAmount;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+
+	@Column(name = "I_ORDER_ID")
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
+	@Column(name = "I_RETURN_ID")
+	public Long getReturnId() {
+		return returnId;
+	}
+
+	public void setReturnId(Long returnId) {
+		this.returnId = returnId;
+	}
+
+	@Column(name = "I_ORDER_DETAIL_ID")
+	public Long getOrderDetailId() {
+		return orderDetailId;
+	}
+
+	public void setOrderDetailId(Long orderDetailId) {
+		this.orderDetailId = orderDetailId;
+	}
+
+	@Column(name = "I_FACTORY_ID")
+	public Long getFactoryId() {
+		return factoryId;
+	}
+
+	public void setFactoryId(Long factoryId) {
+		this.factoryId = factoryId;
+	}
+
+	@Column(name = "I_CATE_ID")
+	public Long getCateId() {
+		return cateId;
+	}
+
+	public void setCateId(Long cateId) {
+		this.cateId = cateId;
+	}
+
+	@Column(name = "S_CATE_NAME", length = 128)
+	public String getCateName() {
+		return cateName;
+	}
+
+	public void setCateName(String cateName) {
+		this.cateName = cateName;
+	}
+
+	@Column(name = "I_REL_ID")
+	public Long getRelId() {
+		return relId;
+	}
+
+	public void setRelId(Long relId) {
+		this.relId = relId;
+	}
+
+	@Column(name = "I_TYPE")
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	@Column(name = "S_PRODUCT_NAME", length = 128)
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	@Column(name = "S_CODE", length = 128)
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	@Column(name = "S_BAR_CODE", length = 128)
+	public String getBarCode() {
+		return barCode;
+	}
+
+	public void setBarCode(String barCode) {
+		this.barCode = barCode;
+	}
+
+	@Column(name = "S_HEAD_PATH", length = 512)
+	public String getHeadPath() {
+		return headPath;
+	}
+
+	public void setHeadPath(String headPath) {
+		this.headPath = headPath;
+	}
+
+	@Column(name = "S_SPEC_JSON", length = 4000)
+	public String getSpecJson() {
+		return specJson;
+	}
+
+	public void setSpecJson(String specJson) {
+		this.specJson = specJson;
+	}
+
+	@Column(name = "I_NUM")
+	public Integer getNum() {
+		return num;
+	}
+
+	public void setNum(Integer num) {
+		this.num = num;
+	}
+
+	@Column(name = "I_PRICE")
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	@Column(name = "I_RETURN_TOTAL_AMOUNT")
+	public Double getReturnTotalAmount() {
+		return returnTotalAmount;
+	}
+
+	public void setReturnTotalAmount(Double returnTotalAmount) {
+		this.returnTotalAmount = returnTotalAmount;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+}
+

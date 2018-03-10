@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="project-hypnus-web-admin:war">
+    <output-path>$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/target</output-path>
+    <root id="archive" name="hypnusMgr.war">
+      <element id="artifact" artifact-name="project-hypnus-web-admin:war exploded" />
+    </root>
+  </artifact>
+</component>

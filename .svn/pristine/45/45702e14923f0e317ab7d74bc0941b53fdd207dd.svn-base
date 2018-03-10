@@ -1,0 +1,92 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <%@include file="/common/headModule2.jsp" %>
+<title>新增修改代金券</title>
+<link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="${path}/resources/css/quan.css"/>
+<script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
+
+<script src="${path}/resources/admin/js/couponMgr/detail.js"></script>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="positionNow">
+    	<a>主页 &gt; </a><a>代金券管理</a> &gt; <a style="color:#ff4d4d;" id="titles">新增</a>
+    </div>
+    <div class="addActivities" style="min-height:800px">
+        <div class="userDetail">
+        <h1 class="tittle">代金券详情</h1>
+            <input id="id" name="id" type="hidden" value="${entity.id}"/>
+            <input id="status" name="status" type="hidden" value="${entity.status}"/>
+            <div class="userDetailMain">
+            	<div class="eachLine">
+                	<div class="lineLeft">代金券名称：</div>
+                    <label>${entity.couponName}</label>
+                </div>
+            	<div class="eachLine">
+                	<div class="lineLeft">面值：</div>
+                    <label>${entity.faceValue}</label>元
+                </div>
+                <div class="topDevide">
+                    <div class="devideTit">使用限制</div>
+                </div>
+                <div>
+                    <div class="eachLine xw_eachLine">
+                        <div class="lineLeft">商品类型限制：</div>
+                        <input id="typeLimit" name="typeLimit" type="hidden" value="${entity.typeLimit}"/>
+                        <div id="typeLimit1" name="typeLimit" class="activitiestype on xw_activitiestype" rel="2"><span class="tickB"></span>无限制</div>
+                        <div id="typeLimit2" name="typeLimit" class="activitiestype xw_activitiestype" rel="3"><span class="tickB"></span>有限制</div>
+                    </div>
+                    <div class="xw_showOption" style="display:none;" id="chooseTypeLimit">
+                        <div class="eachLine">商品类型：</div>
+                        <div class="eachLine" id="dataList">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="eachLine xw_eachLine">
+                        <div class="lineLeft">使用金额限制：</div>
+                        <input id="moneyLimit" name="moneyLimit" value="${entity.moneyLimit}" type="hidden"/>
+                        <div id="moneyLimit1" name="moneyLimit" class="activitiestype xw_activitiestype on" rel="2"><span class="tickB"></span>无限制</div>
+                        <div id="moneyLimit2" name="moneyLimit" class="activitiestype xw_activitiestype" rel="3"><span class="tickB"></span>有限制</div>
+                    </div>
+                  <div class="eachLine xw_showOption" style="display:none;" id="chooseMoneyLimit">
+                        <div class="lineText">购买商品金额满</div>
+                        <label>${entity.orderMoney}</label> 元可使用。
+                  </div>
+              </div>
+              <div class="topDevide">
+                  <div class="devideTit">有效期</div>
+              </div>
+              <div class="eachLine">
+                	<div class="lineText">领取后</div>
+                    <label>${entity.limitDate}</label> 天过期。
+              </div>
+              <div class="topDevide">
+                  <div class="devideTit">发送范围</div>
+              </div>
+              <div class="eachLine">
+                    <input id="rangeType" value="${entity.rangeType}" type="hidden" />
+                  <label id="rangeName"></label>
+                    <%--<input type="radio" id="rangeType1" name="rangeType" value="1" checked >所有</input>&nbsp;--%>
+                    <%--<input type="radio" id="rangeType2" name="rangeType" value="2" >主管</input>&nbsp;--%>
+                    <%--<input type="radio" id="rangeType3" name="rangeType" value="3" >店主</input>&nbsp;--%>
+                    <%--<input type="radio" id="rangeType4" name="rangeType" value="4" >会员</input>--%>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/html" id="template_dataList">
+    {{each content as cate i}}
+    {{if cate.isChoosed == 1}}
+        <div class="guigeDiv xw_guigeDiv on" data-value="{{cate.cateId}}">{{cate.cateName}}</div>
+    {{/if}}
+    {{/each}}
+</script>
+</html>

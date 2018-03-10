@@ -1,0 +1,204 @@
+
+var _template;
+var _msgBox;
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+        _template = template;
+        _msgBox = msgBox;
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);
+
+/**
+ * 初始化处理器
+ */
+var InitHandler = function () {
+    return {
+        /** 初始化入口 */
+        init: function () {
+            this.initPage();
+            this.initData();
+            this.initEvent();
+        },
+        /** 初始化界面  */
+        initPage: function () {
+            if(limitMoney != "-1"){
+                $("#limitMoney").val(limitMoney);
+            }
+            if(dateList != "-1"){
+                EventHandler.addDateStep(dateList);
+            }else{
+                EventHandler.addDateStep();
+            }
+        },
+        /** 初始化事件 */
+        initEvent: function () {
+            $("#saveDate").bind("click", EventHandler.saveDate);
+            $("#saveMoney").bind("click", EventHandler.saveMoney);
+        },
+
+        /** 初始化数据  */
+        initData: function () {
+
+        }
+    };
+}();
+
+/**
+ * 事件处理器
+ */
+var EventHandler = function () {
+    return {
+        //增加时段
+        addDateStep : function(dateLists){
+            if(dateLists == undefined){
+                dateLists = new Array();
+                dateLists.push({
+                    withdrawStart : "",
+                    withdrawEnd : ""
+                });
+            }
+            var html = _template("dataList_template", dateLists);
+            $("#dataList").append(html);
+        },
+        //删除时段
+        delDateStep : function(tag){
+            var parDiv = $(tag).parent().parent();
+            $(parDiv).remove();
+        },
+        //保存时间段
+        saveDate : function(){
+            var money = $("#limitMoney").val();
+            if(money == "" && limitMoney == "-1"){
+                //第一次设置，并且限制金额置为空
+                _msgBox.tips("请先填写提取限制金额！");
+                return;
+            }
+            if (!EventHandler.isPositive(money)) {
+                _msgBox.tips("提取金额限制只能是正整数");
+                return;
+            }
+            var dateSteps = EventHandler.getDateSteps();
+            if(dateSteps == ""){
+                _msgBox.tips("请正确填写完整提现时间！");
+                return;
+            }
+            var dateListJson = JSON.stringify(dateSteps);
+            DataHandler.saveDate({dateListJson : dateListJson, limitMoney : money}, function(data){
+                _msgBox.tips("保存成功！");
+                location.reload();
+            });
+        },
+        //保存金额
+        saveMoney : function(){
+            var money = $("#limitMoney").val();
+            if(money == ""){
+                _msgBox.tips("提取金额限制不能为空！");
+                return;
+            }
+            if (!EventHandler.isPositive(money)) {
+                _msgBox.tips("提取金额限制只能是正整数");
+                return;
+            }
+            var dateSteps = EventHandler.getDateSteps();
+            if(dateSteps == ""){
+                _msgBox.tips("请先保存提现时间设置！");
+                return;
+            }
+            DataHandler.saveMoney({limitMoney : money}, function(data){
+                _msgBox.tips("保存成功！");
+                location.reload();
+            });
+        },
+        //获取时间段
+        getDateSteps : function(){
+            var startInput = $("#dataList").find("input[name='monthStart']");
+            var endInput = $("#dataList").find("input[name='monthEnd']");
+            var startDates = "";
+            var endDates = "";
+            startInput.each(function(){
+                startDates += $(this).val() + ",";
+            });
+            endInput.each(function(){
+                endDates += $(this).val() + ",";
+            });
+            if(startDates == "" || endDates == ""){
+                return "";
+            }
+            if(startDates.indexOf(",") != -1){
+                startDates = startDates.substring(0, startDates.length - 1);
+            }
+            if(endDates.indexOf(",") != -1){
+                endDates = endDates.substring(0, endDates.length - 1);
+            }
+            if(startDates == "" || endDates == ""){
+                return "";
+            }
+            var sDates = startDates.split(",");
+            var eDates = endDates.split(",");
+            var check = EventHandler.checkDateSteps(sDates, eDates);
+            if(check == -1){
+                _msgBox.tips("时段设置有误，请重新填写!");
+                return "";
+            }
+            var result = new Array();
+            for(var i = 0; i < sDates.length; i++){
+                result.push(sDates[i] + "-" + eDates[i]);
+            }
+            if(result.length > 0){
+                return result;
+            }else{
+                return "";
+            }
+        },
+        //检查时间段是否设置正确
+        checkDateSteps : function(sDates, eDates){
+            for(var i = 0; i < sDates.length; i++){
+                //判断有空
+                if(sDates[i] == "" || eDates[i] == ""){
+                    return -1;
+                }
+                var sdate = parseInt(sDates[i]);
+                var edate = parseInt(eDates[i]);
+                //判断每一行记录日期重复、开始日期大于结束日期
+                if(sdate >= edate){
+                    return -1;
+                }
+                //判断日期是否过大
+                if(sdate > 31 || edate > 31){
+                    return  -1;
+                }
+                //判断日期是否重叠
+            }
+            return 1;
+        },
+        // 正整数验证
+        isPositive: function (s) {
+            var reg = /^[0-9]*[1-9][0-9]*$/;
+            return reg.test(s)
+        }
+    }
+}();
+
+
+/**
+ * 数据处理器
+ */
+var DataHandler = function () {
+    return {
+        //保存时间段
+        saveDate : function(param, callback){
+            $.post(path + "/admin/basicConfig/baseSet/withdraw/saveDate", param, function(data){
+                callback(data);
+            });
+        },
+        //保存限制金额
+        saveMoney : function(param, callback){
+            $.post(path + "/admin/basicConfig/baseSet/withdraw/saveMoney", param, function(data){
+                callback(data);
+            });
+        }
+    }
+}();

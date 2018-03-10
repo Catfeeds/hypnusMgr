@@ -1,0 +1,171 @@
+package com.catt.wfx.repository.dao.couponMgr.impl;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.couponMgr.CouponInfoDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.couponMgr.CouponInfo;
+import com.catt.wfx.repository.entity.couponMgr.CouponRange;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Repository("couponInfoDaoImpl")
+public class CouponInfoDaoImpl extends BaseDaoImpl<CouponInfo, Long>
+		implements CouponInfoDao {
+
+	/**
+	 * 发布代金券（修改状态为1）
+	 * @param ids 代金券ID
+	 */
+	@Override
+	@Transactional
+	public void publishCoupon(Long[] ids) {
+		if(ids != null && ids.length > 0) {
+			String idstr = "";
+			for(Long id : ids){
+				idstr += id + ",";
+			}
+			idstr = idstr.substring(0, idstr.length() - 1);
+			String sql = "UPDATE T_COUPON_INFO SET I_STATUS = :status WHERE I_ID in ("+idstr+")";
+			Map<String, Object> params = new HashMap<>();
+			params.put("status", CouponInfo.STATUS_PUBLISH);
+			this.executeUpdateBySql(sql, params);
+		}
+	}
+
+	/**
+	 * 查询列表
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public Page getCouponPage(Map<String, Object> param) {
+		String couponName = MapUtil.getString(param, "couponName"); //代金券名称
+		Double faceValue = MapUtil.getDouble(param, "faceValue");//代金券面值
+		Integer status = MapUtil.getInteger(param, "status");//发布状态
+		Integer rangeType = MapUtil.getInteger(param, "rangeType"); // 发送范围
+		Integer pageSize = MapUtil.getInteger(param, "pageSize");
+		Integer pageNo = MapUtil.getInteger(param, "pageNo");
+		StringBuilder sql = new StringBuilder();
+		sql.append(" select ");
+		sql.append(" t.I_ID as \"id\", ");
+		sql.append(" t.S_COUPON_NAME as \"couponName\", ");//名称
+		sql.append(" t.I_STATUS as \"status\", ");//发布状态
+		sql.append(" t.I_FACE_VALUE as \"faceValue\", ");//面值
+		sql.append(" t.I_TYPE_LIMIT as \"typeLimit\", ");//是否产品类型限制
+		sql.append(" t.I_MONEY_LIMIT as \"moneyLimit\", ");//是否金额限制
+		sql.append(" t.I_ORDER_MONEY as \"orderMoney\", ");//限制金额
+		sql.append(" t.I_LIMIT_DATE as \"limitDate\", ");//有效使用时间
+		sql.append(" t.I_SEND_NUM as \"sendNum\", ");//发送数量
+		sql.append(" t.I_USE_NUM as \"useNum\", ");//使用数量
+		sql.append(" t.D_CREATE_DATE as \"createTime\" ");//添加时间
+		sql.append(" from T_COUPON_INFO t");
+		if (StringUtil.checkObj(rangeType)) {
+			sql.append(" LEFT JOIN T_COUPON_RANGE a ON t.I_ID = a.I_COUPON_ID ");
+		}
+		sql.append(" where t.I_DEL_FLAG = 2 ");
+
+		Map<String, Object> params = new HashMap<>();
+		if(StringUtil.checkObj(couponName)){
+			sql.append(" and t.S_COUPON_NAME like :couponName");
+			params.put("couponName", "%"+couponName+"%");
+		}
+		if(faceValue != null){
+			sql.append(" and t.I_FACE_VALUE = :faceValue");
+			params.put("faceValue", faceValue);
+		}
+		if(status != null){
+			sql.append(" and t.I_STATUS = :status");
+			params.put("status", status);
+		}
+		if (StringUtil.checkObj(rangeType)) {
+			sql.append(" and a.I_RANGE_TYPE in (:rangeTypes)");
+			List<Integer> rangeTypes = new ArrayList<>();
+			rangeTypes.add(CouponRange.RangeType.ALL.getValue());
+			rangeTypes.add(rangeType);
+			params.put("rangeTypes", rangeTypes);
+		}
+		sql.append(" order by t.D_CREATE_DATE desc");
+		Pageable pageable = new Pageable();
+		pageable.setPageNo(pageNo);
+		pageable.setPageSize(pageSize);
+		return this.findPageBySql(sql.toString(), params, pageable, Map.class);
+	}
+
+	/**
+	 * 删除代金券
+	 *
+	 * @param ids
+	 */
+	@Override
+	public void deleteCoupons(Long[] ids) {
+		if(ids != null && ids.length > 0) {
+			String idstr = "";
+			for(Long id : ids){
+				idstr += id + ",";
+			}
+			idstr = idstr.substring(0, idstr.length() - 1);
+			String sql = "UPDATE T_COUPON_INFO SET I_DEL_FLAG = :delFlag WHERE I_ID in ("+idstr+")";
+			Map<String, Object> params = new HashMap<>();
+			params.put("delFlag", 1);
+			this.executeUpdateBySql(sql, params);
+		}
+	}
+
+    /**
+     * 获取店主补贴对应代金券面值金额
+     *
+     * @param couponIds 代金券标识集合
+     * @return
+     */
+    public Map findFaceValueTotal(List<Long> couponIds) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT ");
+        sql.append(" SUM(t1.I_FACE_VALUE)as \"faceValue\"");
+        sql.append(" FROM T_COUPON_INFO t1");
+        sql.append(" WHERE 1=1 ");
+
+
+        Map<String, Object> params = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(couponIds)) {
+            sql.append(" and t1.I_ID IN (:id)");
+            params.put("id", couponIds);
+        }
+        List<Map> mapList = this.findListBySql(sql.toString(), params, Map.class);
+        if (CollectionUtil.isNotEmpty(mapList)) {
+            return mapList.get(0);
+        }
+        return null;
+    }
+
+	/**
+	 * 获取代金券发放数量和金额
+	 *
+	 * @return
+	 */
+	public List<Map> getTotalCouponInfo(){
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT ");
+		sql.append(" SUM(t1.I_FACE_VALUE * t1.I_SEND_NUM)as \"allFaceValue\",");
+		sql.append(" SUM(t1.I_SEND_NUM)as \"allSendNum\"");
+		sql.append(" FROM T_COUPON_INFO t1");
+		sql.append(" WHERE 1=1 ");
+		sql.append(" AND t1.I_DEL_FLAG = :delFlag AND t1.I_STATUS = :status");
+
+		Map param = new HashMap<>();
+		param.put("delFlag", PubEnum.YesOrNoEnum.NO.getValue());
+		param.put("status", CouponInfo.STATUS_PUBLISH);
+
+		return this.findListBySql(sql.toString(), param, Map.class);
+	}
+}

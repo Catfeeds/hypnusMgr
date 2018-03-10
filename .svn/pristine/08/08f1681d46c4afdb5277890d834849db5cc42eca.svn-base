@@ -1,0 +1,165 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    // 初始化数据列表
+                    EventHandler.search();
+                },
+
+
+                /** 初始化界面  */
+                initPage: function () {
+                    var params = {}; //搜索条件
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $(".xw_select").click(function(){
+                        $(".xw_select").removeClass("selectTabs_on");
+                        $(this).addClass("selectTabs_on");
+                        EventHandler.search({pageNo : 1, pageSize : 15})
+                    });
+                    //重置
+                    $('#btnClean').click(EventHandler.reset);
+
+                    //查询
+                    $('#btnSearch').click(function(){
+                        EventHandler.search();
+                    });
+
+                    //新增
+                    $("#addBtn").click(function () {
+                        EventHandler.add();
+                    });
+
+                    //商品分类弹窗事件绑定
+                    $('#cateName').on('click',function () {
+                        EventHandler.cate()
+
+                    });
+
+                   //商品分类弹窗事件绑定
+                    $('#cate1').on('click',function () {
+                        EventHandler.cate()
+
+                    });
+
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                // 查询
+                search: function (params) {
+                    if(typeof(params)=="undefined"){
+                        params = {pageNo : 1, pageSize : 15};
+                    }
+                    var cateId = $("#cateId").val();
+                    params.cateId = cateId;
+                    var zhName = $("#zhName").val();
+                    if(zhName != "请输入商品名称"){
+                        params.zhName = zhName;
+                    }
+
+                    params.status = $(".selectTabs_on").attr("data-value");
+                    DataHandler.search(params, function (backData) {
+                        var data = backData;
+                        var html = template('listTemp', data.content);
+                        $('#list').html(html);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: data.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        $(window).triggerHandler('resize');
+                    });
+                },
+                //重置
+                reset: function(){
+                    $('#zhName').val("");
+                    $('#cateId').val("");
+                    $('#cateName').val("");
+                },
+
+                //新增
+                add: function(){
+                    msgBox.exWindow.open({
+                        title: '选择商品',
+                        url: path + "/admin/productMgr/productDocument/selectProduct.html",
+                        width: '750px',
+                        height: '558px',
+                        close: function (result) {
+                            if (result) {
+                                var obj = $.evalJSON(result);
+                                window.location.href = path + "/admin/productMgr/productDocument/add.html?productId=" + obj.id;
+                            }
+                        }
+                    });
+
+                },
+
+                //商品分类弹窗事件
+                cate : function(){
+                    msgBox.exWindow.open({
+                        title: '商品分类',
+                        url: path + "/admin/productInfo/productClass.html",
+                        width: '40%',
+                        height: '73%',
+                        close: function (result) {
+                            if (result) {
+                                var param = $.evalJSON(result);
+                                var cateId = param.id;
+                                var name = param.name;
+                                $('#cateName').val(name);
+                                $('#cateId').val(cateId);
+
+                            }
+                        }
+                    });
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/productMgr/productDocument/getProductDocumentByPage', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

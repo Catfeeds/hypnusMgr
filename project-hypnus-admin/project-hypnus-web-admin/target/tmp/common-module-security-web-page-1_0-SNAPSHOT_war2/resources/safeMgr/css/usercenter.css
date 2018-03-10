@@ -1,0 +1,134 @@
+@charset "utf-8";
+/* CSS Document */
+.wrapper{ padding:0px 15px 15px 15px;}
+.usercenterBox{
+	min-height:500px;
+	border:1px #ececec solid;
+	border-radius:5px;
+	margin-top:15px;
+	background:#fff;
+	overflow:hidden;}
+.usercenterTop{
+	height:40px;
+	border-bottom:1px solid #ededed;
+	background:#f9f9f9;}
+.userInfoBox{
+	padding:15px;}
+.userInfo{
+	background:#f3f3f3;
+	}
+.sectionTable{
+	width:100%;
+	margin-top:15px;}
+.sectionTable td{
+	width:33%;
+	padding:0px 15px 15px 0px;}
+.sectionTable tr td:first-child{
+	padding-left:15px;}
+.sectionDiv{
+	height:190px;
+    border: 1px solid #e8e8e8;
+    border-radius: 5px;
+	background: #f9f9f9;
+	overflow:hidden}
+.sectionTop{
+	height:90px;
+	border-bottom:1px solid #ededed;
+	}
+.topContent{
+	height:50px;
+	width:200px;
+	padding:10px 0px 10px 70px;
+	margin:auto;
+	margin-top:10px;
+	}
+/*修改交易密码*/
+.inputBox{
+	height:418px;}
+.inputSection{
+	width:480px;
+	margin:auto;
+	margin-top:80px;}
+.inputLine{
+	display:block;
+	height:42px;
+	line-height:42px;
+	margin-top:20px;}
+.inputSection h2{
+	display:block;
+	float:left;
+	width:8em;
+	line-height:42px;
+	text-align:right;
+	margin-right:10px;
+	font-size:18px;
+	font-weight:normal;}
+.check{
+	float:left;
+	height:32px;
+	width:32px;
+	margin:5px 0px 0px 5px;
+	background:url(../images/check.png);}
+.inputXL{
+	float:left;
+	height:42px;
+	width:275px;
+	line-height:42px;
+	font-size:16px;
+	color:#717171;
+	border:1px #e6e6e6 solid;
+	padding-left:10px;
+	border-radius:3px;
+	background:#f2f0f0;}
+.btnOrange_next{
+	height:38px;
+	line-height:38px;
+	width:122px;
+	margin:auto;
+	margin-top:40px;
+	border-radius:3px;
+	text-align:center;
+	color:#fff;
+	background:#d3403a;
+	cursor:pointer;}
+.btnOrange_next:hover{background:#de3a32;}
+/*-----------------------------------------------------------*/
+.topContent.yue{
+	background:url(../images/yue.png) no-repeat 0px 10px;
+	}
+.topContent.card{
+	background:url(../images/card.png) no-repeat 0px 10px;
+	}
+.topContent.xinxi{
+	background:url(../images/xinxi.png) no-repeat 0px 10px;
+	}
+.topContent.hao{
+	background:url(../images/hao.png) no-repeat 0px 10px;
+	}
+.contentLine{
+	height:30px;
+	font-size:14px;
+	color:#666;
+	letter-spacing:1px;
+	line-height:30px;}
+.sectionBottom{
+	height:100px;
+	border-top:1px solid #fff;
+	}
+ul.sectionUl{
+	display:block;
+	width:270px;
+	margin:auto;
+	margin-top:10px;}
+.sectionUl li{
+	display:block;
+	width:200px;
+	height:22px;
+	padding-left:70px;
+	line-hight:22px;
+	font-size:14px;
+	color:#1692C7;
+	letter-spacing:2px;
+	cursor:pointer;}
+.sectionUl li:hover{
+	color:#00B3FF;}

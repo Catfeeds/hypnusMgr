@@ -1,0 +1,23 @@
+package com.catt.wfx.service.impl.base.basicConfig;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.basicConfig.PlatIncomeSetDao;
+import com.catt.wfx.repository.entity.basicConfig.PlatIncomeSet;
+import com.catt.wfx.service.base.basicConfig.PlatIncomeSetBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+@Service("platIncomeSetBaseServiceImpl")
+public class PlatIncomeSetBaseServiceImpl extends
+	BaseServiceImpl<PlatIncomeSet, Long> implements PlatIncomeSetBaseService {
+
+	@Resource(name = "platIncomeSetDaoImpl")
+	private PlatIncomeSetDao platIncomeSetDao;
+
+	@Resource
+	public void setBaseDao(PlatIncomeSetDao platIncomeSetDao) {
+		super.setBaseDao(platIncomeSetDao);
+	}
+
+}

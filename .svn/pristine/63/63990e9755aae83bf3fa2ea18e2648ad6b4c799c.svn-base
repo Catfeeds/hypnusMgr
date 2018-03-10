@@ -1,0 +1,23 @@
+package com.catt.wfx.service.perforMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+
+import java.util.Map;
+
+/**
+ * Description:主管绩效接口
+ * Created by 2017-03-08  11:32.
+ * author: Zhou mingxiang
+ */
+public interface DirectorPerforService {
+
+    /**
+     * 获取主管绩效
+     *
+     * @param leaderName  主管昵称
+     * @param pageable
+     * @return
+     */
+    Page<Map> getDirectorPerforByPage(String leaderName, Pageable pageable);
+}

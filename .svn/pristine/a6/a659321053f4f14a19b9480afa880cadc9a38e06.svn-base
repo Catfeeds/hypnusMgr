@@ -1,0 +1,36 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>修改手机号</title>
+    <link rel="stylesheet" href="${path}/resources/css/public.css">
+    <link rel="stylesheet" href="${path}/resources/css/gerenxinxi.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+</head>
+
+<body style="background:#f2f2f2;">
+<%--<div style="height:47px;"></div>
+<div class="top header">
+    <button class="top-left" onClick="javascript:history.back(-1);"><img class="top_btn_back" src="${path}/resources/images/top_btn_back.png"></button>
+    <h1>修改手机号</h1>
+</div>--%>
+<div class="selectContent">
+    <div class="tongjibiao">
+        <ul>
+            <li class="tongjibiaoItem" onClick="window.location='${path}/admin/wechat/personal/modifyMobile/useMobile.html?shopId=${shopId}';">
+                <h1>原手机号可用</h1>
+                <img class="arrow" src="${path}/resources/images/login_btn_next.png">
+            </li>
+            <li class="tongjibiaoItem" style="border-bottom:none;" onClick="window.location='${path}/admin/wechat/personal/modifyMobile/usePwd.html?shopId=${shopId}';">
+                <h1>原手机号不可用</h1>
+                <img class="arrow" src="${path}/resources/images/login_btn_next.png">
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

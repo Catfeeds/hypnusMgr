@@ -1,0 +1,172 @@
+package com.catt.wfx.repository.dao.orderMgr.impl;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderDetailDao;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderDetail;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单详情Dao接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:34
+ * @version V1.0
+ */
+@Repository("cusOrderDetailDaoImpl")
+public class CusOrderDetailDaoImpl extends BaseDaoImpl<CusOrderDetail, Long>
+		implements CusOrderDetailDao {
+
+    @Override
+    public Map getAmount(Long orderId) {
+        String sql = " SELECT SUM(I_PROFIT) AS \"profit\" " +
+                    "FROM T_CUS_ORDER_DETAIL WHERE I_ORDER_ID = " + orderId;
+        List<Map> list = this.findListBySql(sql, null, Map.class);
+        if (list.size() > 0){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    public List<Map> findOrderDetail(List<Long> orderIds) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" d.I_ORDER_ID AS \"orderId\", ");
+        sql.append(" d.S_PRODUCT_NAME AS \"productName\", ");
+        sql.append(" sum(d.I_NUM) AS \"num\" ");
+        sql.append(" FROM t_cus_order_detail d");
+        sql.append(" WHERE 1=1");
+
+
+        Map param = new HashMap<>();
+
+        if (orderIds != null && orderIds.size() > 0) {
+            sql.append(" AND d.I_ORDER_ID IN (:orderIds)");
+            param.put("orderIds", orderIds);
+        }
+        sql.append(" GROUP BY d.I_ORDER_ID, d.I_REL_ID,d.S_PRODUCT_NAME");
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    @Override
+    public List<Map> findDetailByOrderId(Long orderId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" I_ID AS \"id\", ");
+        sql.append(" I_CATE_ID AS \"cateId\", ");
+        sql.append(" S_CATE_NAME AS \"cateName\", ");
+        sql.append(" I_REL_ID AS \"relId\", ");
+        sql.append(" S_PRODUCT_NAME AS \"productName\", ");
+        sql.append(" S_CODE AS \"code\", ");
+        sql.append(" S_BAR_CODE AS \"barCode\", ");
+        sql.append(" I_NUM AS \"num\", ");
+        sql.append(" S_SPEC_JSON AS \"specJson\", ");
+        sql.append(" I_COST_PRICE AS \"costPrice\", ");
+        sql.append(" I_SALES_PRICE AS \"salesPrice\", ");
+        sql.append(" I_PROFIT AS \"profit\", ");
+        sql.append(" I_TOTAL_SALES_AMOUNT AS \"totalSalesAmount\", ");
+        sql.append(" I_TOTAL_DISCOUNT_AMOUNT AS \"totalDiscountAmount\", ");
+        sql.append(" I_PAY_PRICE AS \"payPrice\", ");
+        sql.append(" I_RETURN_NUM AS \"returnNum\", ");
+        sql.append(" S_HEAD_PATH AS \"headPath\" ");
+        sql.append(" FROM T_CUS_ORDER_DETAIL");
+        sql.append(" WHERE I_ORDER_ID = " + orderId);
+        return this.findListBySql(sql.toString(), null, Map.class);
+    }
+
+    /**
+     * 获取订单对应的商品数量和店主利润
+     *
+     * @param orderIds 订单标识集合
+     * @return
+     */
+    public List<Map> getGoodNumAndProfit(List<Long> orderIds) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ORDER_ID AS \"orderId\", ");
+        sql.append(" SUM(t1.I_PROFIT) AS \"profit\", ");
+        sql.append(" SUM(t1.I_NUM) AS \"num\"");
+        sql.append(" FROM  T_CUS_ORDER_DETAIL t1");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+
+        if (orderIds != null && orderIds.size() > 0) {
+            sql.append(" AND t1.I_ORDER_ID IN (:orderIds)");
+            param.put("orderIds", orderIds);
+        }
+
+        sql.append("GROUP BY t1.I_ORDER_ID");
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    /**
+     * 获取订单对应的订单详细信息
+     *
+     * @param id  订单标识
+     * @return
+     */
+    public List<Map> getCusOrderDetail(Long id, Long factoryId){
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.S_CATE_NAME AS \"cateName\", ");
+        sql.append(" t1.S_PRODUCT_NAME AS \"productName\", ");
+        sql.append(" t1.I_COST_PRICE AS \"costPrice\", ");
+        sql.append(" t1.I_SALES_PRICE AS \"salesPrice\", ");
+        sql.append(" t1.I_NUM AS \"num\", ");
+        sql.append(" t1.S_SPEC_JSON AS \"specJson\", ");
+        sql.append(" t1.I_TOTAL_SALES_AMOUNT AS \"totalSalesAmount\", ");
+        sql.append(" t1.I_PROFIT AS \"profit\", ");
+        sql.append(" t2.S_FACTORY_NAME AS \"factoryName\" ");
+        sql.append(" FROM T_CUS_ORDER_DETAIL t1");
+        sql.append(" LEFT JOIN T_FACTORY_INFO t2 ON t1.I_FACTORY_ID = t2.I_ID");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+
+        if (StringUtil.checkObj(id)) {
+            sql.append(" AND t1.I_ORDER_ID = :id");
+            param.put("id", id);
+        }
+        if (StringUtil.checkObj(factoryId)) {
+            sql.append(" AND t1.I_FACTORY_ID = :factoryId");
+            param.put("factoryId", factoryId);
+        }
+
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+
+
+    /**
+     * 修改订单明细退货数量
+     *
+     * @param orderDetailId  订单明细标识
+     * @param num            退货数量
+     */
+   public void updateReturnNum(Long orderDetailId, Integer num){
+        String sql = "UPDATE T_CUS_ORDER_DETAIL c SET c.I_RETURN_NUM = c.I_RETURN_NUM+(:returnNum) WHERE I_ID = (:orderDetailId) ";
+        Map<String, Object> params = new HashMap<>();
+        params.put("returnNum", num);
+        params.put("orderDetailId", orderDetailId);
+        this.executeUpdateBySql(sql, params);
+    }
+
+    @Override
+    public double countDiscountAmount(Long orderId) {
+        Assert.notNull(orderId);
+        String sql = " SELECT SUM(I_TOTAL_DISCOUNT_AMOUNT) as \"discountAmount\" " +
+                    " FROM T_CUS_ORDER_DETAIL WHERE I_ORDER_ID = " + orderId;
+        List<Map> list = this.findListBySql(sql, null, Map.class);
+        if (list.size() > 0){
+            return MapUtil.getDouble(list.get(0), "discountAmount", 0.0);
+        }
+        return 0;
+    }
+}

@@ -1,0 +1,65 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+.xiangqingTop{ background:#fff; margin:10px 20px 0px 20px; padding-bottom:10px; }
+.biaoti{ font-size:14px; line-height:24px; color:#666; }
+.neirong{font-size:14px; line-height:24px; color:#333;}
+.topNeirong{font-size:14px; line-height:22px; color:#666;}
+.dizhi{font-size:14px; line-height:22px; color:#666; }
+.kuaidi{margin:0px 20px 0px 20px; height:70px; border-bottom:1px solid #e5e5e5; }
+.kuaidi p{ float:left;font-size:14px; line-height:70px; color:#ff4d4d; width:70%;}
+.arrow{ float:right; height:14px; margin:28px 0px 0px 5px;}
+
+.goodsList{ margin:10px 0;}
+.goodsList h1{ position:relative;}
+.goods{ position:relative; padding:0 10px 0px 40px; height:60px; }
+.goodsList .goods:last-child{ border-bottom:none; border-bottom:1px solid #e5e5e5;} 
+.goodTip{ color:#646464;}
+.biaotiRight{ position:absolute; top:16px; right:20px;  font-size:14px; line-height:24px; font-weight:900; }
+.biaotiLeft{ position:absolute; top:10px; left:120px; height:20px; line-height:20px; font-size:14px; color:#1a1a1a; letter-spacing:1px; padding-right:20px;}
+.goods h3{ position:absolute; top:50px; left:120px; font-size:14px; color:#666;}
+.jiage{ position:absolute; top:70px; left:120px; font-size:14px; color:#333; font-weight:900;}
+.shuliang{ font-weight:normal; color::#808080;}
+.goodsMsg{font-size:14px; color:#969696; margin-bottom:6px; }
+.goodType{ background:#fff; height:120px;border-bottom:1px solid #e5e5e5; }
+.buyNum{ position:absolute; top:28px; left:0px; border:1px solid #c4c4c4; width:104px; height:28px;}
+.gouwuchePic{  position:absolute; top:10px; left:20px; height:90px;}
+
+.jiage{ position:absolute; top:72px; left:120px; font-size:14px; color:#333; font-weight:900;}
+.tuikuan{float:right; width:60px; color:#666; font-size:14px; width: color:#666; line-height:30px; text-align:center; border:1px solid #ccc; border-radius:5px; margin-top:10px; margin-right:20px;}
+.tuikuan1{float:right; font-size:14px; color:#666; line-height:35px; text-align:right; padding:0px 10px; border:1px solid #ccc; border-radius:5px; margin-top:7px; margin-right:20px;}
+
+
+.tongjibiaoItem{overflow:hidden; background:#fff; padding:0px 20px;}
+.tongjibiaoItem h1{float:left; font-size:14px; color:#666; line-height:26px; margin-right:10px;}
+.tongjibiaoItem h2{float:right; font-size:14px; color:#666; line-height:26px; }
+.tongjibiaoItem1{overflow:hidden; background:#fff; padding:0px 20px;}
+.tongjibiaoItem1 h1{float:left; font-size:14px; font-weight:900; color:#333; line-height:26px; margin-right:10px;}
+.tongjibiaoItem1 h2{float:right; font-size:14px; font-weight:900; color:#ff4d4d; line-height:26px; }
+
+/*底部浮动*/
+.baomingList{background:#fff; margin-top:10px;}
+.baodaoTip{position:absolute; right:0; top:0; font-size:12px; border-radius:4px; padding:2px 4px; letter-spacing:1px;}
+.zhifuBottom{position:fixed; bottom:0; left:0; right:0; height:50px; overflow:hidden; background:#fff; box-shadow:0 -1px 6px #b7b7b7; }
+.baomingNum{float:right; line-height:40px; margin-right:20px;}
+.priceText{float:left; font-size:14px; color:#646464; line-height:50px; padding-left:20px; letter-spacing:1px;}
+.priceNum{font-size:28px; font-weight:bold;}
+.zhifuBtn{float:right; width:120px; font-size:16px; letter-spacing:1px; line-height:50px; background:#fa4b9b; color:#fff;}
+.textpriceNum{ float:left;width:120px; margin-top:6px; height:35px; line-height:30px; border:1px solid #efefef;; background:#f9f9f9; font-size:18px; font-weight:bold; color:#f13d2e;}
+
+.zhuangtai{ padding:1px 8px; border-radius:6px;}
+
+
+.xiugaiBt{background:#ff4d4d; width:50px; height:24px; line-height:22px; border-radius:10px; text-align:center; color:#fff; font-size:14px; float:right; display:block;}
+ 
+.dingdantop{ font-size:18px;color:#fff; padding:30px 20px; background:#ffefef; background:url(../images/img_indent_bg.png) no-repeat center scroll; }
+.dingdantop p{ width:90px; line-height:20px; letter-spacing:1px;}
+.ZTpic{ height:40px; position: absolute; top:70px; right:50px;}
+
+
+
+
+
+

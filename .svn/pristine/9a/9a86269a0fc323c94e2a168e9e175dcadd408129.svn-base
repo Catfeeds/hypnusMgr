@@ -1,0 +1,23 @@
+package com.catt.wfx.service.impl.base.basicConfig;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.basicConfig.WithdrawSetDao;
+import com.catt.wfx.repository.entity.basicConfig.WithdrawSet;
+import com.catt.wfx.service.base.basicConfig.WithdrawSetBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+@Service("withdrawSetBaseServiceImpl")
+public class WithdrawSetBaseServiceImpl extends
+	BaseServiceImpl<WithdrawSet, Long> implements WithdrawSetBaseService {
+
+	@Resource(name = "withdrawSetDaoImpl")
+	private WithdrawSetDao withdrawSetDao;
+
+	@Resource
+	public void setBaseDao(WithdrawSetDao withdrawSetDao) {
+		super.setBaseDao(withdrawSetDao);
+	}
+
+}

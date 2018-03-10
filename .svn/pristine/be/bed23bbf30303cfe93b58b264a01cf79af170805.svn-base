@@ -1,0 +1,24 @@
+<%@ taglib prefix="config" uri="http://www.cooldingsoft.com" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/3/13
+  Time: 15:14
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>用户协议</title>
+    <!--手机观看保持比例-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+</head>
+
+<body>
+<config:Config key="app_user_agreement" defaultValue="<p>
+    <span style='color: rgb(102, 102, 102); font-family: 微软雅黑; font-size: 14px; text-indent: 28px;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;欢迎使用xx有限公司（“本公司”）发布提供的微分销APP。本服务协议（“本协议”）适用于用户使用微分销APP”提供的所有网络服务。用户在注册过程中点击“同意”按钮即表示用户完全接受“本协议”项下的全部条款。</span>
+    </p>"/>
+</body>
+</html>

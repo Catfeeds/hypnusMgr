@@ -1,0 +1,184 @@
+package com.catt.hypnus.web.controller.safeMgr;
+
+import com.catt.common.base.pojo.message.MessageConstants;
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.security.pojo.security.ExtPrincipal;
+import com.catt.common.module.security.repository.entity.Dept;
+import com.catt.common.module.security.repository.entity.Role;
+import com.catt.common.module.security.repository.entity.Staff;
+import com.catt.common.module.security.service.DeptService;
+import com.catt.common.module.security.service.StaffService;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.WebUtil;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.security.shiro.SecurityUtil;
+import com.catt.hypnus.repository.data.comEnum.RoleEnum;
+import com.catt.hypnus.repository.entity.pub.PubSetup;
+import com.catt.hypnus.service.base.pub.PubSetupBaseService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.Validate;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * 用户Controller 1、用户的同步
+ * <p>
+ * 技术支持：广东凯通软件开发技术有限公司 (c) 2015
+ *
+ * @author 邹佳：zoujia@gdcattsoft.com
+ * @version 1.0
+ * @date 2015年11月11日
+ * @since jdk版本：jdk1.8
+ */
+@RequestMapping({"/admin/staffMgr"})
+@Controller("hypnus.safeMgr.staffMgrController")
+public class StaffMgrController extends BaseController {
+
+    @Resource(name = "staffServiceImpl")
+    private StaffService staffService;
+
+    @Resource(name = "deptServiceImpl")
+    private DeptService deptService;
+
+    //系统全局设置服务接口
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+    /**
+     * 跳转到新增修改页面
+     *
+     * @param model
+     * @param id    厂家标识
+     * @return
+     */
+    @RequestMapping(value = {"/addEdit"}, method = RequestMethod.GET)
+    public String addEdit(Model model, Long id) {
+        Validate.notNull(id);
+        model.addAttribute("factoryId", id);
+        List<Dept> deptList = deptService.findList(null, Arrays.asList(Filter.eq("shortName", id+"")), null);
+
+        if (CollectionUtil.isNotEmpty(deptList)){
+            Dept dept = deptList.get(0);
+
+            model.addAttribute("deptId", dept.getId());
+            model.addAttribute("deptName", dept.getName());
+        }
+
+
+        return "/safeMgr/staff/addEdit";
+    }
+
+    /**
+     * 保存、更新
+     *
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public Message save(@RequestParam Map<String, Object> param) {
+        Long id = MapUtil.getLong(param, "id");
+        Long deptId = MapUtil.getLong(param, "deptId");
+        String account = MapUtil.getString(param, "account"); //账号
+
+        //查询验证账号
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("account", account));
+        filters.add(Filter.eq("isDel", false));
+        if (id != null) {
+            filters.add(Filter.ne("id", id));
+        }
+        List<Staff> list = staffService.findList(null, filters, null);
+        if (list != null && list.size() > 0) {
+            return new Message(MessageConstants.Type.error, "该账号已存在");
+        }
+
+        Staff staff = new Staff();
+        staff.setId(id);
+        staff.setAccount(account);
+        staff.setName(MapUtil.getString(param, "name"));
+        staff.setMobile(MapUtil.getString(param, "mobile"));
+        staff.setPhone(MapUtil.getString(param, "phone"));
+        Dept dept = new Dept();
+
+        if(StringUtil.checkObj(deptId)){
+            dept =  deptService.find(MapUtil.getLong(param, "deptId"));
+            staff.setDept(dept);
+        }
+
+        staff.setInEmail(MapUtil.getString(param, "inEmail"));
+        staff.setOutEmail(MapUtil.getString(param, "outEmail"));
+        staff.setGender(MapUtil.getInteger(param, "gender"));
+        staff.setFax(MapUtil.getString(param, "fax"));
+        staff.setRemark(MapUtil.getString(param, "remark"));
+        String birthStr = MapUtil.getString(param, "birth");
+
+        if (StringUtil.checkObj(birthStr)) {
+            try {
+                staff.setBirth(DateUtil.parseDate(MapUtil.getString(param, "birth"), "yyyy-MM-dd"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (staff.getId() == null) {
+
+            staff.setIsDel(false);
+            staff.setRegisterIp(WebUtil.getRequest().getRemoteAddr());
+            staff.setIsEnabled(true);
+            staff.setIsLocked(false);
+            staff.setLoginFailureCount(0);
+            staff.setAvailBeginDate(new Date());
+            staff.setAvailEndDate(new Date(2100, 1, 1));
+            staff.setPassword(DigestUtils.md5Hex("888888"));
+            staffService.saveOrUpdate(staff);
+        } else {
+            Staff oldStaff = staffService.find(staff.getId());
+            oldStaff.setAccount(staff.getAccount());
+            oldStaff.setName(staff.getName());
+            oldStaff.setMobile(staff.getMobile());
+            oldStaff.setPhone(staff.getPhone());
+            oldStaff.setDept(staff.getDept());
+            oldStaff.setInEmail(staff.getInEmail());
+            oldStaff.setOutEmail(staff.getOutEmail());
+            oldStaff.setGender(staff.getGender());
+            oldStaff.setFax(staff.getFax());
+            oldStaff.setBirth(staff.getBirth());
+            oldStaff.setRemark(staff.getRemark());
+            staffService.saveOrUpdate(oldStaff);
+        }
+        return Message.success("");
+    }
+
+
+    /**
+     * 获取登陆人当前项目标识
+     * @return 当前项目标识/null
+     */
+    public static Long getCurrentFactoryId() {
+        Long factoryId = null;//当前登陆人标识
+        ExtPrincipal extPrincipal = SecurityUtil.getPrincipal();
+
+        if(StringUtil.isNotBlank(extPrincipal.getDeptShortName())){
+            factoryId =Long.parseLong(extPrincipal.getDeptShortName());
+        }
+
+        return factoryId;
+    }
+}

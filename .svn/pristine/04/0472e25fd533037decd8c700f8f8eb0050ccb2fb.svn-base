@@ -1,0 +1,116 @@
+package com.catt.wfx.web.controller.admin.shopMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.data.vo.CusOrderMgr.CusOrderReturnVo;
+import com.catt.wfx.service.orderMgr.CusOrderReturnService;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:退货管理controller
+ * Created by 2017-02-17  14:47.
+ * author: Zhou mingxiang
+ */
+@RequestMapping({"/admin/shopMgr/cusOrderReturn"})
+@Controller("admin.shopMgr.cusOrderRrturnController")
+public class CusOrderReturnController extends BaseController {
+
+    //退货管理服务接口
+    @Resource(name = "cusOrderReturnServiceImpl")
+    private CusOrderReturnService cusOrderReturnService;
+
+    /**
+     * 申请退货
+     *
+     * @param cusId 当前登录用户ID
+     * @param cusName 当前登录用户昵称
+     * @param cusId 退货vo
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/applyReturnGoods"}, method = RequestMethod.POST)
+    public Message applyReturnGoods(@CurrentUser Long cusId, @CurrentUser("name") String cusName, CusOrderReturnVo cusOrderRrturnVo) {
+        Assert.notNull(cusOrderRrturnVo.getOrderDetailId(),"订单明细标识不能为空");
+        Assert.notNull(cusOrderRrturnVo.getNum(),"退货数量不能为空");
+        Assert.notNull(cusOrderRrturnVo.getReturnReason(),"退货原因不能为空");
+        cusOrderReturnService.applyReturnGoods(cusId, cusName, cusOrderRrturnVo);
+        return Message.success("");
+    }
+
+    /**
+     * 获取我的退货列表（分页）
+     *
+     * @param cusId    客户标识
+     * @param status   状态
+     * @param pageNo   页码
+     * @param pageSize 每页记录数
+     * @return
+     */
+    @RequestMapping(value = "/findReturnGoodsByPage", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Map> findReturnGoodsByPage(@CurrentUser Long cusId, Integer status, Integer pageNo, Integer pageSize) {
+        Pageable pageable = new Pageable(pageNo, pageSize);
+        return cusOrderReturnService.findReturnGoodsByPage(cusId, status, pageable);
+    }
+
+    /**
+     * 获取退货单详情
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/findReturnGoodsDetail", method = RequestMethod.GET)
+    public Message findReturnGoodsDetail(Long id) {
+        Assert.notNull(id,"退货单标识不能为空");
+        return Message.success("").addResult(cusOrderReturnService.findReturnGoodsDetail(id));
+    }
+
+    /**
+     * 获取退货单详情
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/findCusOrderReturnLogByList", method = RequestMethod.GET)
+    public List<Map> findCusOrderReturnLogByList(Long id) {
+        Assert.notNull(id,"退货单标识不能为空");
+        return cusOrderReturnService.findCusOrderReturnLogByList(id);
+    }
+
+    /**
+     * 提交退货单快递单号
+     *
+     * @param returnId      退货单标识
+     * @param logisticsType 退货物流公司
+     * @param logisticsCode 退货运单编号
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/submitReturnNum", method = RequestMethod.POST)
+    public Message submitReturnNum(@CurrentUser Long cusId, @CurrentUser("name") String cusName,
+                                   Long returnId, Integer logisticsType, String logisticsCode) {
+        Assert.notNull(returnId, "退货单标识不能为空");
+        Assert.notNull(logisticsType, "退货物流公司不能为空");
+        Assert.hasText(logisticsCode, "退货运单编号不能为空");
+
+        CusOrderReturnVo cusOrderRrturnVo = new CusOrderReturnVo();
+        cusOrderRrturnVo.setLogisticsType(logisticsType);
+        cusOrderRrturnVo.setReturnId(returnId);
+        cusOrderRrturnVo.setLogisticsCode(logisticsCode);
+        cusOrderReturnService.submitReturnNum(cusId, cusName, cusOrderRrturnVo);
+        return Message.success("");
+    }
+}

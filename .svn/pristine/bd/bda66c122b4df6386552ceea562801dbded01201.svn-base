@@ -1,0 +1,123 @@
+package com.catt.wfx.service.impl.couponMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.couponMgr.CouponCusDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.couponMgr.CouponCus;
+import com.catt.wfx.repository.entity.couponMgr.CouponInfo;
+import com.catt.wfx.repository.form.couponMgr.CouponCusFrom;
+import com.catt.wfx.service.base.couponMgr.CouponCusBaseService;
+import com.catt.wfx.service.base.couponMgr.CouponInfoBaseService;
+import com.catt.wfx.service.couponMgr.CouponCusService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+
+@Service("couponCusServiceImpl")
+public class CouponCusServiceImpl implements CouponCusService {
+
+    @Resource(name = "couponCusBaseServiceImpl")
+    private CouponCusBaseService couponCusBaseService;
+
+    @Resource(name = "couponInfoBaseServiceImpl")
+    private CouponInfoBaseService couponInfoBaseService;
+
+    @Resource(name = "couponCusDaoImpl")
+    private CouponCusDao couponCusDao;
+
+    /**
+     * 发送代金券
+     *
+     * @param userId   创建者ID
+     * @param name     创建者名称
+     * @param paramMap
+     */
+    @Override
+    public void sendCoupon(Long userId, String name, Map<String, Object> paramMap) {
+        Long couponId = MapUtil.getLong(paramMap, "couponId");//代金券ID
+        String cusIds = MapUtil.getString(paramMap, "cusIds");//发送对象IDs（多个逗号隔开）
+
+        if(StringUtil.checkObj(couponId) && StringUtil.checkObj(cusIds)){
+            CouponInfo couponInfo = couponInfoBaseService.find(couponId);
+            String[] cusIdStr = cusIds.split(",");
+            Long[] cIds = new Long[cusIdStr.length];
+            int count = 0;
+            for(String id : cusIdStr){
+                if(StringUtil.isBlank(id)){
+                    continue;
+                }
+                cIds[count++] = Long.parseLong(id);
+            }
+
+            Date now = new Date();
+            List<CouponCus> cusList = new ArrayList<>();
+            for(Long cusId : cIds){
+                CouponCus cus = new CouponCus();
+                cus.setSource(CouponCus.Source.PlatGive.getValue());
+                cus.setCreatedId(userId);
+                cus.setCreatedName(name);
+                cus.setCouponId(couponId);
+                cus.setCusId(cusId);
+                cus.setFaceValue(couponInfo.getFaceValue());
+                cus.setIsUse(CouponCus.ISUSE_NOT_USE);
+                cus.setReceiveTime(now);
+                //计算失效时间
+                Integer limitDate = couponInfo.getLimitDate();
+                Date invalidTime = DateUtil.addDays(now, limitDate);
+                cus.setInvalidTime(invalidTime);
+                cusList.add(cus);
+            }
+            if(cusList.size() > 0) {
+                couponCusBaseService.saveOrUpdate(cusList);
+                couponInfo.setSendNum((couponInfo.getSendNum() != null ? couponInfo.getSendNum() : 0) + cusList.size());
+                couponInfoBaseService.saveOrUpdate(couponInfo);
+            }
+        }
+    }
+
+    /**
+     * 获取用户列表
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public Page getCusPageList(Map<String, Object> param) {
+        return couponCusDao.getCusPageList(param);
+    }
+
+    /**
+     * 获取代金券领取记录
+     *
+     * @param couponCusFrom
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getCouponRecordByPage(CouponCusFrom couponCusFrom, Pageable pageable){
+
+        Page<Map> mapPage = couponCusDao.getCouponRecordByPage(couponCusFrom, pageable);
+        List<Map> mapList = mapPage.getContent();
+        Date nowDate  = new Date();
+        for (Map map : mapList){
+            Integer isUse =  MapUtil.getInteger(map, "isUse");
+            Date invalidTime = DateUtil.parseDate(MapUtil.getString(map, "invalidTime"));
+
+            //判断未使用的代金券是否已过期
+            if(nowDate.after(invalidTime) && isUse.equals(PubEnum.YesOrNoEnum.NO.getValue())){
+                map.put("isUse", "3");
+            }
+        }
+
+        mapPage.setContent(mapList);
+        return mapPage;
+    }
+}

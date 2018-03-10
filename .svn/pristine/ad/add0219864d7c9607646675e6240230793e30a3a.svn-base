@@ -1,0 +1,65 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*会员服务*/
+/*推荐商品*/
+.select_on{color:#f47f30;}
+.tuijianOil{background:#fff;}
+.tuijianoilTable{width:100%;}
+.tuijianoilTable tr th{width:25%; padding:10px 0;}
+.tuijianoilTable tr th img{width:50px;}
+.tuijianoilTable tr th h1{font-size:12px; color:#646464;}
+
+.tuijianProduct{margin-top:10px; background:#fff;}
+.shanpinList{padding:0 20px;}
+.shangpinClick:hover{opacity:0.8; cursor:pointer;}
+.shanpinItem{border-bottom:1px solid #e5e5e5; padding:20px 0;}
+.shangpinTitle{font-size:18px; color:#323232;}
+.shanpinTag{color:#969696; line-height:44px; padding-top:4px;}
+.shanpinPer{text-align:right; padding:0 4px; display:inline-block; float:right; line-height:20px; margin-top:20px; font-size:12px;}
+.shanpinPrice{font-size:32px; color:#f13d2e;}
+.shanpinIntro{background:#f5f5f5; padding:6px; color:#969696; font-size:14px;}
+.cheduiList{background:#fff;}
+
+.shangpinBtn{overflow:hidden; margin-top:6px;}
+.btnLeft{float:left; width:49%; line-height:30px; font-size:14px; text-align:center; background:#f47f30; color:#fff; border-radius:2px;}
+.btnRight{float:right; width:49%; line-height:30px; font-size:14px; text-align:center; background:#ea3c34; color:#fff; border-radius:2px;}
+.btnLeft:hover{background:#e47124; cursor:pointer;}
+.btnRight:hover{background:#da3129; cursor:pointer;}
+
+
+/*商品详情*/
+.ziyuanTop{background:#fff;}
+.tongjicharts{margin-top:10px;}
+.boxtitle{font-size:18px; width:100%; text-align:center; padding-top:20px;}
+.boxtitle02{font-size:18px; width:100%; text-align:center; padding-top:20px; color:#323232;}
+
+.introText{background:#fff; margin-top:10px;}
+.introMain{padding:10px 20px;}
+.introMain p.introTitle{font-size:16px; color:#323232; letter-spacing:1px; margin-top:6px; margin-bottom:4px;}
+.introMain p{font-size:15px; color:#646464; line-height:24px; overflow:hidden;}
+.msgHalf{width:50%; display:inline-block; font-size:16px; line-height:30px;}
+.showTip{text-align:right; display:block; font-size:14px; line-height:30px; color:#f13d2e;}
+.introHide{display:none;}
+.introImg{width:100px; height:100px; margin-right:4px; border:1px solid #e5e5e5;}
+
+
+/*委托书填写*/
+.weituoBox{background:#fff; padding-top:10px;}
+
+
+/*我的协议*/
+.xieyiTag{color:#969696; padding-top:4px; overflow:hidden;}
+.xieyiPriceLeft{font-size:28px; color:#f13d2e; float:left;}
+.xieyiPriceRight{font-size:28px; color:#f13d2e; float:right;}
+.xieyiUnit{font-size:12px; color:#969696; margin-right:4px;}
+.shanpinPer02{text-align:right; padding:0 4px; display:inline-block; float:right; line-height:20px; margin-top:2px; font-size:12px; color:#969696;}
+.xieyiTitle{color:#969696; overflow:hidden; margin-bottom:10px;}
+.xieyiTitleLeft{float:left; font-size:12px; color:#969696;}
+.xieyiTitleRight{float:right; font-size:12px; color:#969696;}
+
+/*产品图片放大*/
+.piclargerBox{position:relative; background:#000; display:none; z-index:30; padding:0 10%;}
+.chanpinLargerImg{width:80%; display:block;position:absolute; right:0; left:0; top:70px; margin:0 auto;z-index:32; background:#ccc; padding:4px; border-radius:4px;}
+.btnpicClose{position:absolute; right:5%; top:58px; width:30px; height:30px; cursor:pointer;z-index:34;}
+

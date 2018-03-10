@@ -1,0 +1,30 @@
+package com.catt.wfx.service.impl.base.orderMgr;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderReturnDao;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturn;
+import com.catt.wfx.service.base.orderMgr.CusOrderReturnBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+/**
+ * 退货单服务接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:35
+ * @version V1.0
+ */
+@Service("cusOrderReturnBaseServiceImpl")
+public class CusOrderReturnBaseServiceImpl extends
+	BaseServiceImpl<CusOrderReturn, Long> implements CusOrderReturnBaseService {
+
+	@Resource(name = "cusOrderReturnDaoImpl")
+	private CusOrderReturnDao cusOrderReturnDao;
+
+	@Resource
+	public void setBaseDao(CusOrderReturnDao cusOrderReturnDao) {
+		super.setBaseDao(cusOrderReturnDao);
+	}
+
+}

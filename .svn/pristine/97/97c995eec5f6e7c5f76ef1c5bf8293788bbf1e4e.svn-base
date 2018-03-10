@@ -1,0 +1,181 @@
+package com.catt.wfx.repository.entity.couponMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 发送范围设置实体类
+ * 
+ * @author chen chusheng
+ * @date 2017-01-16 11:10:42
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_COUPON_RANGE")
+public class CouponRange extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 代金券标识
+	 */
+	private Long couponId;
+	/**
+	 * 范围类型<p><br>
+	 * 1-所有，2-团队，3-店主,4-注册用户
+	 */
+	private Integer rangeType;
+	/**
+	 * 关联标识
+	 */
+	private String relId;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+	/**
+	 * 创建时间<p><br>
+	 * 创建时间
+	 */
+//	private Date createdTime;
+	/**
+	 * 修改时间<p><br>
+	 * 修改时间
+	 */
+//	private Date modifyTime;
+	/**
+	 * 备注<p><br>
+	 * 备注
+	 */
+	private String remark;
+
+	@Column(name = "I_COUPON_ID")
+	public Long getCouponId() {
+		return couponId;
+	}
+
+	public void setCouponId(Long couponId) {
+		this.couponId = couponId;
+	}
+
+	@Column(name = "I_RANGE_TYPE")
+	public Integer getRangeType() {
+		return rangeType;
+	}
+
+	public void setRangeType(Integer rangeType) {
+		this.rangeType = rangeType;
+	}
+
+	@Column(name = "S_REL_ID")
+	public String getRelId() {
+		return relId;
+	}
+
+	public void setRelId(String relId) {
+		this.relId = relId;
+	}
+
+//	@Column(name = "d_modify_time")
+//	public Date getModifyTime() {
+//		return modifyTime;
+//	}
+
+//	public void setModifyTime(Date modifyTime) {
+//		this.modifyTime = modifyTime;
+//	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+//	@Column(name = "d_created_time")
+//	public Date getCreatedTime() {
+//		return createdTime;
+//	}
+//
+//	public void setCreatedTime(Date createdTime) {
+//		this.createdTime = createdTime;
+//	}
+
+	@Column(name = "S_REMARK", length = 1024)
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	/**
+	 * 范围类型<p><br>
+	 * 1-所有，2-主管，3-店主,4-会员
+	 */
+	public enum RangeType {
+		ALL(1, "所有"),
+		TEAM(2, "主管"),
+		BOSS(3, "店主"),
+		CUS(4, "会员");
+
+		private Integer value;
+		private String name;
+
+		RangeType(Integer value, String name) {
+			this.value = value;
+			this.name = name;
+		}
+		/**
+		 * 由数字得是否多实例枚举对象
+		 *
+		 * @param value 枚举值
+		 * @return 返回中文
+		 */
+		public static RangeType getEnum(int value) {
+			RangeType[] source = RangeType.values();
+			for (int i = 0; i < source.length; i++) {
+				if (source[i].getValue() == value) {
+					return source[i];
+				}
+			}
+			return null;
+		}
+		public Integer getValue() {
+			return value;
+		}
+		public void setValue(Integer value) {
+			this.value = value;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
+}

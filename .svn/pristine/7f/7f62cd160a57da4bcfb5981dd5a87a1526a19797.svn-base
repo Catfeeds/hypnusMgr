@@ -1,0 +1,111 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusBankDao;
+import com.catt.wfx.repository.entity.customerMgr.CusBank;
+import com.catt.wfx.service.base.customerMgr.CusBankBaseService;
+import com.catt.wfx.service.customerMgr.CusBankService;
+import org.springframework.stereotype.Service;
+import util.CryptUtil;
+import util.MaskUtil;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:银行卡绑定服务接口实现
+ * Created by 2017-02-15  10:33.
+ * author: Zhou mingxiang
+ */
+@Service("cusBankServiceImpl")
+public class CusBankServiceImpl implements CusBankService {
+
+    //银行卡绑定服务接口
+    @Resource(name = "cusBankBaseServiceImpl")
+    private CusBankBaseService cusBankBaseService;
+
+    //银行卡绑定Dao接口
+    @Resource(name = "cusBankDaoImpl")
+    private CusBankDao cusBankDao;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+    /**
+     * 获取用户银行账号列表（分页）（APP）
+     *
+     * @param cusId    用户标识
+     * @param purpose  用途 可选参数，edit-编辑
+     * @param pageable
+     * @return
+     */
+    public Page<Map> findCusBankByPage(Long cusId, String purpose, Pageable pageable) {
+        Page<Map> mapPage = cusBankDao.findCusBankByPage(cusId, pageable);
+        List<Map> mapList = mapPage.getContent();
+        if (mapList != null && mapList.size() > 0) {
+
+            //判断用途是否为空或者不等于edit
+            if(!StringUtil.isNotBlank(purpose) || !purpose.equals("edit")){
+                for (Map map : mapList) {
+                    String branch = MapUtil.getString(map, "branch");
+                    String bankAccount = MapUtil.getString(map, "bankAccount");
+                    String bankCard = MapUtil.getString(map, "bankCard");
+
+                    map.put("branch", CryptUtil.decryptDatabase(branch));
+                    map.put("bankAccount", MaskUtil.maskName(CryptUtil.decryptDatabase(bankAccount)));
+                    map.put("bankCard", MaskUtil.maskBankCard(CryptUtil.decryptDatabase(bankCard)));
+                }
+
+            }else {
+                for (Map map : mapList) {
+                    String branch = MapUtil.getString(map, "branch");
+                    String bankAccount = MapUtil.getString(map, "bankAccount");
+                    String bankCard = MapUtil.getString(map, "bankCard");
+
+                    map.put("branch", CryptUtil.decryptDatabase(branch));
+                    map.put("bankAccount",CryptUtil.decryptDatabase(bankAccount));
+                    map.put("bankCard", CryptUtil.decryptDatabase(bankCard));
+                }
+            }
+
+
+            //枚举翻译， 开户银行
+            enumMgrService.transformEnum(mapList,
+                    new ArrayList<EnumTransformData>() {
+                        {
+                            add(new EnumTransformData("T_CUS_BANK",
+                                    "I_BANK_TYPE", "bankType",
+                                    "bankTypeName"));
+                        }
+                    });
+        }
+
+        return mapPage;
+    }
+
+    /**
+     * 新增银行卡（APP）
+     *
+     * @param cusBank 银行卡绑定实体
+     */
+    public void saveCusBank(CusBank cusBank) {
+        cusBankBaseService.save(cusBank);
+    }
+
+    /**
+     * 删除银行卡
+     *
+     * @param id 银行账号标识
+     * @return
+     */
+    public void deleteCusBank(Long id) {
+        cusBankBaseService.delete(id);
+    }
+}

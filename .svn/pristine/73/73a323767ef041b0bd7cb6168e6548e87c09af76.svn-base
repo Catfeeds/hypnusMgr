@@ -1,0 +1,23 @@
+package com.catt.wfx.service.impl.base.couponMgr;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.couponMgr.CouponRuleDao;
+import com.catt.wfx.repository.entity.couponMgr.CouponRule;
+import com.catt.wfx.service.base.couponMgr.CouponRuleBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+@Service("couponRuleBaseServiceImpl")
+public class CouponRuleBaseServiceImpl extends
+	BaseServiceImpl<CouponRule, Long> implements CouponRuleBaseService {
+
+	@Resource(name = "couponRuleDaoImpl")
+	private CouponRuleDao couponRuleDao;
+
+	@Resource
+	public void setBaseDao(CouponRuleDao couponRuleDao) {
+		super.setBaseDao(couponRuleDao);
+	}
+
+}

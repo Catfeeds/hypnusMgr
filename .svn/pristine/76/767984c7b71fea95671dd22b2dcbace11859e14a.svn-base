@@ -1,0 +1,212 @@
+package com.catt.wfx.service.impl.extractOrder;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.extractOrder.ExtractOrderDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountDetail;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.entity.extractOrder.ExtractOrder;
+import com.catt.wfx.repository.entity.extractOrder.ExtractOrderLog;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import com.catt.wfx.repository.form.customerMgr.CusAccountHandlerForm;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.base.extractOrder.ExtractOrderBaseService;
+import com.catt.wfx.service.base.extractOrder.ExtractOrderLogBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementBusinessBaseService;
+import com.catt.wfx.service.cusAccount.CusAccountHandlerService;
+import com.catt.wfx.service.extractOrder.ExtractOrderService;
+import org.springframework.stereotype.Service;
+import util.CryptUtil;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service("extractOrderServiceImpl")
+public class ExtractOrderServiceImpl implements ExtractOrderService {
+
+    @Resource(name = "extractOrderBaseServiceImpl")
+    private ExtractOrderBaseService extractOrderBaseService;
+
+    @Resource(name = "extractOrderLogBaseServiceImpl")
+    private ExtractOrderLogBaseService extractOrderLogBaseService;
+
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    @Resource(name = "cusAccountHandlerServiceImpl")
+    private CusAccountHandlerService cusAccountHandlerService;
+
+    @Resource(name = "settlementBusinessBaseServiceImpl")
+    private SettlementBusinessBaseService settlementBusinessBaseService;
+
+    @Resource(name = "extractOrderDaoImpl")
+    private ExtractOrderDao extractOrderDao;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+    private final Integer extractSuccess = 1;//打款成功
+    private final Integer extractError = 2;//打款失败
+
+    /**
+     * 获取分页数据
+     *
+     * @param params
+     * @return
+     */
+    @Override
+    public Page<Map> getPage(Map<String, Object> params) {
+        Page<Map> page =  extractOrderDao.getPage(params);
+        enumMgrService.transformEnum(page, new ArrayList<EnumTransformData>() {{
+                        add(new EnumTransformData("T_EXTRACT_ORDER", "I_STATUS", "status", "statusName"));}});
+        return page;
+    }
+
+    /**
+     * 打款
+     *
+     * @param params
+     */
+    @Override
+    public void remittance(Map<String, Object> params) {
+        Long id = MapUtil.getLong(params, "id");
+        Integer auditResult = MapUtil.getInteger(params, "auditResult");
+        String auditDesc = MapUtil.getString(params, "auditDesc");
+        String bankSeq = MapUtil.getString(params, "bankSeq");
+        Long userId = MapUtil.getLong(params, "userId");
+        String userName = MapUtil.getString(params, "userName");
+        if(StringUtil.checkObj(id)){
+            ExtractOrderLog log = new ExtractOrderLog();
+            log.setAct(ExtractOrderLog.Act.Extract.getValue());
+            log.setOrderId(id);
+            if(auditResult.intValue() == extractSuccess.intValue()) {
+                log.setContent("打款成功 流水单号："+bankSeq);
+                log.setRemitResult(PubEnum.YesOrNoEnum.YES.getValue());
+            }else{
+                log.setContent("打款失败 失败原因："+auditDesc);
+                log.setRemitResult(PubEnum.YesOrNoEnum.NO.getValue());
+                log.setRemitFailedReason(auditDesc);
+            }
+            log.setRemark(auditDesc);
+            log.setOperatorId(userId);
+            log.setOperatorName(userName);
+            log.setBankSeq(bankSeq);
+            extractOrderLogBaseService.save(log);
+
+            //修改原单据状态 待打款—>已完成/打款失败
+            ExtractOrder order = extractOrderBaseService.find(id);
+            if(auditResult.intValue() == extractSuccess.intValue()) {
+                //打款成功
+                order.setStatus(ExtractOrder.Status.Finish.getValue());
+                extractOrderBaseService.update(order);
+
+                //修改商家账户信息：打款成功，增加提现金额
+                CusInfo cusInfo = cusInfoBaseService.find(order.getCusId());
+                if(cusInfo != null) {
+                    SettlementBusiness settlementBusiness = settlementBusinessBaseService.findSettlementBusiness(1L);
+                    if (cusInfo.getType().intValue() == CusInfo.Type.ShopOwner.getValue()) {
+                        //店主
+                        settlementBusiness.setShopGetMoney(NumberUtil.moneyAdd(settlementBusiness.getShopGetMoney(), order.getMoney()));
+                    } else if (cusInfo.getType().intValue() == CusInfo.Type.Director.getValue()) {
+                        //主管
+                        settlementBusiness.setLeaderGetMoney(NumberUtil.moneyAdd(settlementBusiness.getLeaderGetMoney(), order.getMoney()));
+                    }
+                    settlementBusinessBaseService.update(settlementBusiness);
+                }
+            }else{
+                //打款失败
+                order.setStatus(ExtractOrder.Status.ExtractFail.getValue());
+                extractOrderBaseService.update(order);
+
+                //打款失败，金额回退
+                CusAccountHandlerForm form = new CusAccountHandlerForm();
+                form.setCusId(order.getCusId());
+                form.setMoney(order.getMoney());
+                form.setType(CusAccountDetail.Type.RemainderReturn);
+                form.setRelId(order.getId()+"");
+                cusAccountHandlerService.handleMoney(form);
+            }
+        }
+    }
+
+    /**
+     * 获取详情
+     *
+     * @param id 申请单据ID
+     * @return
+     */
+    @Override
+    public Map getAllDetail(Long id) {
+        Map<String, Object> detail = new HashMap<>();
+        if(StringUtil.checkObj(id)){
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("orderId", id));
+            List<ExtractOrderLog> logs = extractOrderLogBaseService.findList(null, filters, null);
+            if(logs != null && logs.size() > 0){
+                for(int i = 0, len = logs.size(); i < len; i++){
+                    if(logs.get(i).getAct() == ExtractOrderLog.Act.Extract.getValue()){
+                        ExtractOrderLog log = logs.get(i);
+                        Map<String, Object> result = new HashMap<>();
+                        if(log.getRemitResult().intValue() == PubEnum.YesOrNoEnum.YES.getValue()){
+                            result.put("content", "打款成功");
+                        }else{
+                            result.put("content", "打款失败");
+                        }
+                        result.put("createDate", DateUtil.format(log.getCreateDate(), "yyyy-MM-dd HH:mm:ss"));
+                        result.put("remark", log.getRemark());
+                        detail.put("extract", result);//打款信息
+                    }
+                }
+            }
+            if(detail.get("extract") == null){
+                Map<String, Object> result = new HashMap<>();
+                result.put("content", "未打款");
+                result.put("createDate", "--");
+                result.put("remark", "");
+                detail.put("extract", result);
+            }
+
+            Map<String, Object> entity = new HashMap<>();
+            Map<String, Object> bank = new HashMap<>();
+            ExtractOrder order = extractOrderBaseService.find(id);
+            if(order != null) {
+                CusInfo cus = cusInfoBaseService.find(order.getCusId());
+                if (cus != null) {
+                    //基本信息
+                    entity.put("id", order.getId());
+                    entity.put("status", order.getStatus());
+                    entity.put("cusId", cus.getId());
+                    entity.put("name", cus.getName());
+                    entity.put("mobile", cus.getMobile());
+                    entity.put("createDate", DateUtil.format(order.getCreateDate(), "yyyy-MM-dd HH:mm:ss"));
+                    entity.put("money", order.getMoney());
+                    enumMgrService.transformEnum(entity, new ArrayList<EnumTransformData>() {{
+                        add(new EnumTransformData("T_EXTRACT_ORDER", "I_STATUS", "status", "statusName"));}});
+
+                    //账户信息
+                    bank.put("bankAccount", CryptUtil.decryptDatabase(order.getBankAccount()));//账户
+                    bank.put("bankCard", CryptUtil.decryptDatabase(order.getBankCard()));//卡号
+                    bank.put("bankType", order.getBankType());//开户行
+                    bank.put("branch", CryptUtil.decryptDatabase(order.getBranch()));//开户支行
+                    enumMgrService.transformEnum(bank, new ArrayList<EnumTransformData>() {{
+                        add(new EnumTransformData("T_CUS_BANK", "I_BANK_TYPE", "bankType", "bankName"));}});
+                }
+            }
+            detail.put("entity", entity);//用户基本信息
+            detail.put("bankCard", bank);//账户信息
+        }
+        return detail;
+    }
+
+}

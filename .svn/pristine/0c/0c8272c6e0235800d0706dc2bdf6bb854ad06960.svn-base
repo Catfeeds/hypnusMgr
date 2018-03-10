@@ -1,0 +1,127 @@
+seajs.use(['$', 'template', 'msgBox', 'jquery.json'],
+    function ($, template, msgBox) {
+
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    EventHandler.countAmount();
+                },
+
+                /** 初始化页面 */
+                initPage: function () {
+                    if($(".goodsList").length == 0){//商品不存在，返回
+                        window.history.go(-1);
+                    } else {
+                        $("body").css("display", "block");
+                    }
+                },
+
+                /** 初始化事件 */
+                initEvent: function () {
+                    $(".pageTurn").click(function(){
+                        $(".pageDiv").toggleClass("hidePage");
+                    });
+                    $(".daijinquanTop").click(function(){
+                        var cusCouponId = $(this).attr("data-value-id");
+                        var maxDeduction = $(this).attr("data-value-maxDeduction");
+                        $("#cusCouponId").val(cusCouponId);
+                        $("#maxDeduction").html(maxDeduction);
+                        EventHandler.countAmount();
+                        $(".pageDiv").toggleClass("hidePage");
+                    });
+                    $(".zhifuBtn").click(function(){
+                        EventHandler.toPay();
+                    });
+                    $("#toContact").click(function(){
+                        EventHandler.toContact();
+                    });
+
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                toContact: function(){
+                    //msgBox.t                    ips("//TODO 选择收货人信息")
+                    //return;
+                    //
+                    msgBox.exWindow.open({
+                        //title: '选择收货地址',
+                        width: '100%',
+                        height: '100%',
+                        closeBtn: 0,
+                        url: path + "/admin/wechat/personal/cusContact/index.html?shopId="+shopId,
+                        extraParams:{},
+                        close: function (data) {
+                            if (data) {
+                                var param = $.evalJSON(data);
+                                $("#contactId").val(param.id);
+                                var contactHtml = '<p class="biaoti">收&nbsp;货&nbsp;人：<span class="neirong">' + param.recipients + '  ' + param.tel
+                                    + '<p class="dizhi" style="font-size: 13px">' + param.provinceName + param.cityName + param.regionName + param.address + '</p>';
+                                $("#toContact").html(contactHtml);
+                            }
+                        }
+                    });
+                },
+                toPay: function(){
+                    var contactId = $("#contactId").val();
+                    if(contactId == ""){
+                        msgBox.tips("请填写收货人信息")
+                        return;
+                    }
+                    var cusCouponId = $("#cusCouponId").val();
+                    var param = {
+                        shopId: shopId,
+                        cartIds: cartIds,
+                        contactId: contactId,
+                        cusCouponId: cusCouponId
+                    };
+                    DataHandler.createOrder(param, function(backData){
+                        if(backData.orderStatus == 1){ //待支付
+                            window.location.href = path + "/admin/wechat/weChatPay/pay.html?shopId="+shopId+"&orderId=" + backData.orderId;
+                        } else{ //已支付（支付金额为0）
+                            window.location = path + '/admin/wechat/cusOrder/paySuccess.html?shopId=' + shopId + "&orderId=" + backData.orderId;
+                        }
+                    });
+
+                },
+                countAmount: function(){
+                    var totalPayAmount = 0;
+                    var productAmount = parseFloat($("#productAmount").val());
+                    var maxDeduction = parseFloat($("#maxDeduction").html());
+                    var logisticsCost = parseFloat($("#logisticsCost").val());
+                    totalPayAmount = productAmount - maxDeduction - logisticsCost;
+                    $("#totalPayAmount").html(totalPayAmount.toFixed(2));
+                }
+            }
+        }();
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                //创建订单
+                createOrder: function (param, callback) {
+                    $.post(path + "/admin/wechat/cusOrder/create", param, function(data){
+                        callback(data);
+                    });
+                }
+
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    });

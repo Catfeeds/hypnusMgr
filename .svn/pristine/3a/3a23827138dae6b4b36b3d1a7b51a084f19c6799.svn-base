@@ -1,0 +1,171 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.wfx.repository.entity.customerMgr.AgentInfo;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.service.base.customerMgr.AgentInfoBaseService;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.customerMgr.AgentInfoService;
+import org.jsoup.helper.StringUtil;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service("agentInfoServiceImpl")
+public class AgentInfoServiceImpl implements AgentInfoService {
+
+    @Resource(name = "agentInfoBaseServiceImpl")
+    private AgentInfoBaseService agentInfoBaseService;
+
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+
+    /**
+     * 获取供应商申请信息
+     * 没有记录，则返回 status=10(未提交)
+     * @param userId
+     * @return
+     */
+    @Override
+    public Map<String, Object> getAgentInfo(Long userId) {
+        Map<String, Object> result = new HashMap<>();
+        List<AgentInfo> infos = agentInfoBaseService.findList(1, Arrays.asList(Filter.eq("cusId", userId)), null);
+        if(infos != null && infos.size() > 0){
+            AgentInfo info = infos.get(0);
+            Integer status = info.getStatus();
+            result.put("status", status);
+            result.put("agencyLevel", info.getAgencyLevel());
+            result.put("provinceId", info.getProvinceId());
+            result.put("provinceName", info.getProvinceName());
+            result.put("cityId", info.getCityId());
+            result.put("cityName", info.getCityName());
+            result.put("regionId", info.getRegionId());
+            result.put("regionName", info.getRegionName());
+            result.put("site", info.getSite());
+            String remark = "";
+            if(status.intValue() == AgentInfo.audit_wait.intValue()){
+                remark = "您的申请正在受理中，请耐心等待。";
+            }else if(status.intValue() == AgentInfo.audit_pass.intValue()){
+                remark = "您的申请已通过审核。";
+            }else if(status.intValue() == AgentInfo.audit_fail.intValue()){
+                remark = "您的申请未通过审核，原因是: " + info.getCause();
+            }
+            result.put("remark", remark);
+        }else{
+            result.put("status", 10);//未提交
+        }
+        return result;
+    }
+
+    /**
+     * 提交代理商申请
+     *
+     * @param userId
+     * @param param
+     */
+    @Override
+    public void appLyAgent(Long userId, Map<String, Object> param) {
+        //主管不能申请
+        CusInfo cus = cusInfoBaseService.find(userId);
+        if(cus != null){
+            if(cus.getType().intValue() == CusInfo.Type.Director.getValue()){
+                throw BaseException.errorByErrInfo("主管不能申请成为代理商");
+            }else if(cus.getType().intValue() == CusInfo.Type.RegistUser.getValue()){
+                throw BaseException.errorByErrInfo("会员不能申请成为代理商");
+            }
+        }else{
+            throw BaseException.errorByErrInfo("获取当前用户失败");
+        }
+
+        Integer agencyLevel = MapUtil.getInteger(param, "agencyLevel");
+        String provinceId = MapUtil.getString(param, "provinceId");
+        String provinceName = MapUtil.getString(param, "provinceName");
+        String cityId = MapUtil.getString(param, "cityId");
+        String cityName = MapUtil.getString(param, "cityName");
+        String regionId = MapUtil.getString(param, "regionId");
+        String regionName = MapUtil.getString(param, "regionName");
+        Integer status = AgentInfo.audit_wait;
+
+        AgentInfo info = new AgentInfo();
+        List<AgentInfo> infos = agentInfoBaseService.findList(1, Arrays.asList(Filter.eq("cusId", userId)), null);
+        if(infos != null && infos.size() > 0){
+            if(infos.get(0).getStatus() != null){
+                if(infos.get(0).getStatus() == AgentInfo.audit_wait.intValue()){
+                    throw BaseException.errorByErrInfo("您的申请正在审核,请耐心等候");
+                }else if(infos.get(0).getStatus() == AgentInfo.audit_pass.intValue()){
+                    throw BaseException.errorByErrInfo("您的申请已通过, 请勿重新申请");
+                }else if(infos.get(0).getStatus() == AgentInfo.audit_fail.intValue()){
+                    info = infos.get(0);
+                }
+            }
+        }
+
+        if(agencyLevel != AgentInfo.agency_total && agencyLevel != AgentInfo.agency_province && agencyLevel != AgentInfo.agency_city
+                && agencyLevel != AgentInfo.agency_region){
+            throw BaseException.errorByErrInfo("请选择正确的代理商级别");
+        }
+
+        info.setCusId(userId);
+        info.setStatus(status);
+        info.setApplyTime(new Date());
+        info.setAgencyLevel(agencyLevel);
+        switch(agencyLevel){
+            case AgentInfo.agency_total:
+                break;
+            case AgentInfo.agency_province:
+                if(StringUtil.isBlank(provinceId) || StringUtil.isBlank(provinceName)){
+                    throw BaseException.errorByErrInfo("请选择省份");
+                }
+                info.setProvinceId(provinceId);
+                info.setProvinceName(provinceName);
+                info.setSite(provinceName);
+                break;
+            case AgentInfo.agency_city:
+                if(StringUtil.isBlank(provinceId) || StringUtil.isBlank(provinceName)){
+                    throw BaseException.errorByErrInfo("请选择省份");
+                }
+                if(StringUtil.isBlank(cityId) || StringUtil.isBlank(cityName)){
+                    throw BaseException.errorByErrInfo("请选择市");
+                }
+                info.setProvinceId(provinceId);
+                info.setProvinceName(provinceName);
+                info.setCityId(cityId);
+                info.setCityName(cityName);
+                info.setSite(provinceName+cityName);
+                break;
+            case AgentInfo.agency_region:
+                if(StringUtil.isBlank(provinceId) || StringUtil.isBlank(provinceName)){
+                    throw BaseException.errorByErrInfo("请选择省份");
+                }
+                if(StringUtil.isBlank(cityId) || StringUtil.isBlank(cityName)){
+                    throw BaseException.errorByErrInfo("请选择市");
+                }
+                if(StringUtil.isBlank(regionId) || StringUtil.isBlank(regionName)){
+                    throw BaseException.errorByErrInfo("请选择区");
+                }
+                info.setProvinceId(provinceId);
+                info.setProvinceName(provinceName);
+                info.setCityId(cityId);
+                info.setCityName(cityName);
+                info.setRegionId(regionId);
+                info.setRegionName(regionName);
+                info.setSite(provinceName+cityName+regionName);
+                break;
+            default:
+                break;
+        }
+        if(info.getId() != null){
+            agentInfoBaseService.update(info);
+        }else{
+            agentInfoBaseService.save(info);
+        }
+    }
+}

@@ -1,0 +1,233 @@
+
+seajs.use(['$', 'base64', 'rsa', 'validate','msgBox', 'jquery.json'],
+    function ($, base64, rsa, validate, msgBox) {
+
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                },
+
+                /** 初始化页面 */
+                initPage: function () {
+                    //表单验证
+                    $("#form").validate({
+                        rules: {
+                            mobileNo: {
+                                required: true,
+                                isMobile: true
+                            }
+                        }, messages: {
+                            mobileNo: {
+                                required: '手机号码不能为空',
+                                isMobile: '手机号码格式不正确'
+                            }
+                        },
+                        ignore: '.ignore',
+                        errorPlacement: function (error, element) {
+                        },
+                        invalidHandler: function (event, validator) {
+                            for (var i in validator.errorList) {
+                                msgBox.tips(validator.errorList[i].message, 1, function () {
+                                    $(validator.errorList[i].element).focus();
+                                });
+                                return false;
+                            }
+                        }
+                    });
+
+
+                },
+
+                /** 初始化事件 */
+                initEvent: function () {
+                    $("#sendMessage").click(function () {
+
+                        if ($("#form").valid()) {
+                            var mobileNo = $('#mobileNo').val();
+                            $("#sendMessage").attr("disabled", true);
+                            var showTime = 60;
+                            $('#sendMessage').everyTime("1s", function () {
+                                $('#sendMessage').html(showTime + '秒');
+                                showTime--;
+                                if (showTime == 0) {
+                                    $('#sendMessage').stopTime();
+                                    $('#sendMessage').html("发送验证码");
+                                    $("#sendMessage").attr("disabled", false);
+                                }
+                            });
+
+                            DataHandler.getRsaKey(function (backData) {
+                                var modulus = backData.modulus;
+                                var exponent = backData.exponent;
+                                var rsaKey = new rsa.RSAKey();
+                                rsaKey.setPublic(base64.b64tohex(modulus), base64.b64tohex(exponent));
+                                var param = {};
+                                param.mobileNo = base64.hex2b64(rsaKey.encrypt(mobileNo));
+                                $.post(path + '/guest/sms/send?type=register', param, function (backData) {
+                                });
+                            });
+                        }
+
+                    });
+
+                    $(".xw_radio").click(function () {
+                        $(this).toggleClass("checked");
+                        if ($(this).hasClass('checked')) {
+                            $('#register').removeAttr("disabled");
+                            $('#register').css("background", "#ff4d4d");
+                            $('#confirmOrder').removeAttr("disabled");
+                            $('#confirmOrder').css("background", "#ff4d4d");
+                        } else {
+                            $('#register').attr("disabled", "disabled");
+                            $('#register').css("background", "#b7b7b7");
+                            $('#confirmOrder').attr("disabled", "disabled");
+                            $('#confirmOrder').css("background", "#b7b7b7");
+                        }
+                    });
+
+
+                    $('#register').click(function () {
+
+                        if ($("#form").valid()) {
+                            var captcha = $('#captcha').val();
+                            if (captcha == "") {
+                                msgBox.tips("验证码不能为空");
+                                return;
+                            }
+                            var account = $('#mobileNo').val();
+                            var passWord = $('#passWord').val();
+                            var password1 = $('#password1').val();
+                            if (passWord == "") {
+                                msgBox.tips("登录密码不能为空");
+                                return;
+                            }
+                            if (passWord != password1) {
+                                msgBox.tips("两次密码不一致");
+                                return;
+                            }
+
+                            var invitationNo = $('#invitationNo').val();
+
+                            DataHandler.getRsaKey(function (backData) {
+                                var modulus = backData.modulus;
+                                var exponent = backData.exponent;
+                                var rsaKey = new rsa.RSAKey();
+                                rsaKey.setPublic(base64.b64tohex(modulus), base64.b64tohex(exponent));
+                                var param = {};
+                                param.account = base64.hex2b64(rsaKey.encrypt(account));
+                                param.pwd = base64.hex2b64(rsaKey.encrypt(passWord));
+                                param.captcha = base64.hex2b64(rsaKey.encrypt(captcha));
+                                param.invitationNo = invitationNo;
+                                $.post(path + '/guest/wechat/customerMgr/cusInfo/regisonCusInfo', param, function (backData) {
+                                    if (backData.type == 'success') {
+                                        window.location = path + '/guest/wechat/customerMgr/cusInfo/success.html';
+                                    }
+                                });
+                            });
+
+
+                        }
+                    });
+
+                    $('#confirmOrder').click(function () {
+                        if ($("#form").valid()) {
+                            var captcha = $('#captcha').val();
+                            if (captcha == "") {
+                                msgBox.tips("验证码不能为空");
+                                return;
+                            }
+                            var account = $('#mobileNo').val();
+                            var passWord = $('#passWord').val();
+                            var password1 = $('#password1').val();
+
+                            if (passWord == "") {
+                                msgBox.tips("登录密码不能为空");
+                                return;
+                            }
+
+
+                            if (passWord != password1) {
+                                msgBox.tips("两次密码不一致");
+                                return;
+                            }
+
+                            var invitationNo = $('#invitationNo').val();
+
+                            DataHandler.getRsaKey(function (backData) {
+                                var modulus = backData.modulus;
+                                var exponent = backData.exponent;
+                                var rsaKey = new rsa.RSAKey();
+                                rsaKey.setPublic(base64.b64tohex(modulus), base64.b64tohex(exponent));
+                                var param = {};
+                                param.mobileNo = base64.hex2b64(rsaKey.encrypt(account));
+                                param.captcha = base64.hex2b64(rsaKey.encrypt(captcha));
+                                param.invitationNo = invitationNo;
+                                var passWord3 ="";
+                                if (passWord) {
+                                    passWord3 = base64.hex2b64(rsaKey.encrypt(passWord));
+                                }
+
+
+                                DataHandler.checkMobile4Register(param, function (backData) {
+                                    if (backData.type == 'success') {
+                                        window.location.href = path + '/admin/wechat/weChatPay/payOrder.html?orderId=' + $('#orderId').val() + '&pwd=' + encodeURIComponent(passWord3) + '&mobileNo=' + account + '&invitationNo=' + invitationNo;
+                                    }
+                                });
+
+                            });
+
+                        }
+                    });
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {}
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+
+                /**
+                 * 获取RAS加密数据
+                 * @param param
+                 * @param callback
+                 */
+                getRsaKey: function (callback) {
+                    $.get(path + '/guest/appPage/key', null, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 注册（需要购买套餐）-验证手机、邀请码
+                 * @param param
+                 * @param callback
+                 */
+                checkMobile4Register: function (param, callback) {
+                    $.post(path + '/guest/wechat/customerMgr/cusInfo/checkMobile4Register', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    });
+

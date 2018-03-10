@@ -1,0 +1,24 @@
+package com.catt.wfx.service.base.settlementMgr;
+
+
+import com.catt.common.base.service.BaseService;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+
+/**
+ * 订单结算统计服务接口
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-02-16 10:10:19
+ */
+public interface SettlementOrderDetailBaseService extends BaseService<SettlementOrderDetail, Long> {
+
+    /**
+     * 获取主管团队销售金额
+     *
+     * @param cusId 主管标识
+     * @return
+     */
+    Double getTeamSaleMoney(Long cusId);
+
+}

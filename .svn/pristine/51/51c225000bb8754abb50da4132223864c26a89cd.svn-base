@@ -1,0 +1,13 @@
+package com.catt.wfx.repository.dao.productMgr.impl;
+
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.wfx.repository.dao.productMgr.ProductDocumentLogDao;
+import com.catt.wfx.repository.entity.productMgr.ProductDocumentLog;
+import org.springframework.stereotype.Repository;
+
+@Repository("productDocumentLogDaoImpl")
+public class ProductDocumentLogDaoImpl extends BaseDaoImpl<ProductDocumentLog, Long>
+        implements ProductDocumentLogDao {
+
+}

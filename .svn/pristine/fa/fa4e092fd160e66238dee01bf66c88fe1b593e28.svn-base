@@ -1,0 +1,91 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/2/23
+  Time: 15:12
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>打印物流小票</title>
+    <link type="text/css" rel="stylesheet" href="${path}/resources/css/common.css"/>
+    <link type="text/css" rel="stylesheet" href="${path}/resources/css/print.css"/>
+    <script src="${path}/resources/js/JsBarcode.code128.min.js"></script>
+    <script src="${path}/resources/admin/js/orderMgr/order/printBill.js"></script>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="listBox">
+        <div class="topDiv">
+            <input type="hidden" id="logisticsType" value="${entity.logisticsType}"/>
+            <img class="logo" src=""/></div>
+        <div class="infoDiv">
+            <span class="titText">寄件人：</span>
+            <span class="mainText" style="margin-right:40px;">${refund.ontact}</span>
+            <span class="titText">手机号：</span>
+            <span class="mainText">${refund.phone}</span>
+        </div>
+        <div class="infoDiv underline">
+            <span class="titText">寄货地址：</span>
+            <p>${refund.provinceName}${refund.cityName}${refund.regionName}${refund.address}</p>
+        </div>
+        <div class="infoDiv">
+            <span class="titText">收件人：</span>
+            <span class="mainText" style="margin-right:40px;">${entity.recipientName}</span>
+            <span class="titText">手机号：</span>
+            <span class="mainText">${entity.recipientTel}</span>
+        </div>
+        <div class="infoDiv">
+            <span class="titText">收货地址：</span>
+            <p>${entity.provinceName}${entity.cityName}${entity.regionName}${entity.recipientAddress}</p>
+        </div>
+        <div class="infoDiv underline">
+            <span class="titText">商品：</span>
+            <span class="mainText" style="margin-right:40px;">${product}</span>
+        </div>
+        <img class="code"/>
+        <div class="numText">${entity.logisticsCode}</div>
+    </div>
+    <div class="listBox" style="margin-top:10px;">
+        <div class="topDiv"><img class="logo"  src=""/></div>
+        <div class="infoDiv">
+            <span class="titText">寄件人：</span>
+            <span class="mainText" style="margin-right:40px;">${refund.ontact}</span>
+            <span class="titText">手机号：</span>
+            <span class="mainText">${refund.phone}</span>
+        </div>
+        <div class="infoDiv underline">
+            <span class="titText">寄货地址：</span>
+            <p>${refund.provinceName}${refund.cityName}${refund.regionName}${refund.address}</p>
+        </div>
+        <div class="infoDiv">
+            <span class="titText">收件人：</span>
+            <span class="mainText" style="margin-right:40px;">${entity.recipientName}</span>
+            <span class="titText">手机号：</span>
+            <span class="mainText">${entity.recipientTel}</span>
+        </div>
+        <div class="infoDiv">
+            <span class="titText">收货地址：</span>
+            <p>${entity.provinceName}${entity.cityName}${entity.regionName}${entity.recipientAddress}</p>
+        </div>
+        <div class="infoDiv underline">
+            <span class="titText">商品：</span>
+            <span class="mainText" style="margin-right:40px;">${product}</span>
+        </div>
+        <div class="infoDiv underline" style="height:40px;">
+            <span class="titText">收货人签名：</span>
+        </div>
+        <input type="hidden" id="logisticsCode" value="${entity.logisticsCode}"/>
+        <img class="code"/>
+        <div class="numText">${entity.logisticsCode}</div>
+
+        <div class="numText"><a href="javascript:;" class="button" onclick="window.print()">打印</a></div>
+    </div>
+</div>
+</body>
+</html>
+

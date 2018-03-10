@@ -1,0 +1,21 @@
+package com.catt.wfx.service.settlement;
+
+/**
+ * 平台结算服务接口
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-2-24 11:16:06
+ */
+public interface PlatSettlementService {
+
+    /**
+     * 平台结算
+     *  1）修改平台账号信息（订单总数量、订单总金额、账户金额）
+     *  2）新增平台账户结算明细
+     *  3）修改商家账户信息（平台累计提成金额）
+     *  4）修改订单结算统计（平台结算明细标识、平台结算金额、平台已结算）
+     */
+    void settle();
+
+}

@@ -1,0 +1,70 @@
+package com.catt.wfx.repository.data.vo.productMgr;
+
+import java.io.Serializable;
+
+/**
+ * Description:商品文案vo
+ * Created by 2017-02-07  9:05.
+ * author: Zhou mingxiang
+ */
+public class ProductDocumentVo implements Serializable {
+    /**
+     * <pre>
+     * 商品文案标识
+     * </pre>
+     */
+    private Long id;
+
+    /**
+     * <pre>
+     * 商品文案内容
+     * </pre>
+     */
+    private String desc;
+
+    /**
+     * <pre>
+     * 商品标识
+     * </pre>
+     */
+    private Long productId;
+
+    /**
+     * <pre>
+     * 文案类型
+     * </pre>
+     */
+    private Integer type;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+}

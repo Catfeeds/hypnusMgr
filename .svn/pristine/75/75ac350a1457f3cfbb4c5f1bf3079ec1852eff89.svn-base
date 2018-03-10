@@ -1,0 +1,85 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $("#submit").click(function () {
+                        var factoryName = "";
+                        var factoryIdStr = $("#factoryIds").val();
+                        if ($("#factoryName").val()) {
+                            factoryName = $("#factoryName").val();
+                        }
+                        var startTime = '';
+                        var endTime = '';
+                        var range = $("#range").val();
+                        if (range == 2) {
+                            if ($("#startTime").val()) {
+                                startTime = $("#startTime").val() + " 00:00:00";
+                            }
+                            if ($("#endTime").val()) {
+                                endTime = $("#endTime").val() + " 23:59:59";
+                            }
+                        }
+                        window.location.href = path + "/admin/statisti/order/export?factoryName=" + factoryName +
+                            "&startDate=" + startTime + "&endDate" + endTime + "&factoryIdStr=" + factoryIdStr;
+                        msgBox.exWindow.close();
+                    });
+                    $("#close").click(function () {
+                        msgBox.exWindow.close();
+                    });
+                    $(".activitiestype").click(function () {
+                        var rel = $(this).attr("rel");
+                        $("#range").val(rel); //1-查询全部 2-分时段
+                        $(this).siblings().removeClass("on");
+                        $(this).addClass("on");
+                        if (rel == 2) {
+                            $("#timeDiv").attr("style", "display:block;");
+                        } else {
+                            $("#timeDiv").attr("style", "display:none;");
+                        }
+
+                    })
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {};
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {};
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });
+
+//金额验证
+function testMoney(ob) {
+    if (!ob.value) {
+        return;
+    }
+    if (!ob.value.match(/^[0-9]+(\.[0-9]{0,2})?$/)) ob.value = ob.t_value; else ob.t_value = ob.value;
+    if (ob.value.match(/^[0-9]+(\.[0-9]{0,2})?$/)) ob.o_value = ob.value;
+    if (ob.value == 'undefined') {
+        ob.value = '';
+    }
+}

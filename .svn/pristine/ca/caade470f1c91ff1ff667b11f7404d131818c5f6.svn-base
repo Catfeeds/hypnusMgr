@@ -1,0 +1,36 @@
+@charset "utf-8";
+
+html {
+    box-sizing: border-box;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    /*overflow: hidden;*/
+    /*border:2px solid red;*/
+}
+
+body {
+    /* 当body出现margin合并问题时，需在<body>加上 border:1px solid transparent; 或 padding-top:1px; */
+    box-sizing: border-box;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    /*overflow: auto;*/
+    /*border:2px solid green;*/
+}
+
+/* 该样式加到jquery-weui下拉刷新容器上，防止初始化界面时下拉刷新元素闪动 */
+.kd-weui-refresh-container {
+    margin-top: -50px;
+}
+
+/* 手机页面如果非body层元素需要滚动条，则需加这个样式 */
+.kd-overflow-auto {
+    overflow: auto;
+    /* 解决IOS下非body层滚动条卡顿问题 */
+    -webkit-overflow-scrolling: touch;
+}
+
+/*.kd-overflow-auto.pull-down {*/
+    /*-webkit-overflow-scrolling: auto;*/
+/*}*/

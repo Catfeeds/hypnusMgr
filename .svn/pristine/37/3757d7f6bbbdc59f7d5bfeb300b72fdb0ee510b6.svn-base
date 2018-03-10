@@ -1,0 +1,120 @@
+package com.catt.wfx.web.controller.admin.statisti;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.web.controller.BaseController;
+import com.catt.wfx.repository.data.comEnum.DateDimension;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.service.statisti.CusStatistiService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 用户统计控制器
+ * 作者：陈楚笙
+ * 时间：2017-03-03
+ */
+@Controller("cusStatistiController")
+@RequestMapping(value = "/admin/statisti/cus")
+public class CusStatistiController extends BaseController {
+
+    // 用户统计接口
+    @Resource(name = "cusStatistiServiceImpl")
+    private CusStatistiService cusStatistiService;
+
+    /**
+     * 跳转到统计首页
+     */
+    @RequestMapping(value = "/index")
+    public String toIndex(Model model) {
+        Map personNum = cusStatistiService.getPersonNum();
+        model.addAttribute("totalMember", personNum.get("totalMember"));//会员总人数
+        model.addAttribute("totalShoper", personNum.get("totalShoper"));//店主总人数
+        Date date = DateUtil.getNearByDay(new Date(), -1);
+        model.addAttribute("createDateDay", DateUtil.format(date, "yyyy-MM-dd"));//前一天
+        model.addAttribute("createDateMonth", DateUtil.format(date, "yyyy"));//当月
+        return "/admin/statisti/cus/cusStatisti";
+    }
+
+    /**
+     * 会员查询列表
+     *
+     * @param createDate
+     * @param nearDay
+     * @param dateDimension 统计周期
+     * @return
+     */
+    @RequestMapping(value = {"/getMembers"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Map getMembers(Date createDate, Integer nearDay, DateDimension dateDimension) {
+        Map map = new HashMap<>();
+        switch (dateDimension) {
+            case DAY:
+                map.put("cusStatisti", cusStatistiService.getCusStatistice(DateUtil.getNearByDay(createDate, -nearDay), createDate, dateDimension, CusInfo.Type.RegistUser.getValue()));
+                break;
+            case MONTH:
+                int year = NumberUtil.toInt(DateUtil.format(createDate, "yyyy"));
+                map.put("cusStatisti", cusStatistiService.getCusStatistice(DateUtil.getYearFirst(year), DateUtil.getYearLast(year), dateDimension, CusInfo.Type.RegistUser.getValue()));
+                break;
+            case YEAR:
+                break;
+            default:
+                break;
+        }
+        return map;
+    }
+
+    /**
+     * 店主查询列表
+     *
+     * @param createDate
+     * @param nearDay
+     * @param dateDimension 统计周期
+     * @return
+     */
+    @RequestMapping(value = {"/getShopers"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Map getShopers(Date createDate, Integer nearDay, DateDimension dateDimension) {
+        Map map = new HashMap<>();
+        switch (dateDimension) {
+            case DAY:
+                map.put("cusStatisti", cusStatistiService.getCusStatistice(DateUtil.getNearByDay(createDate, -nearDay), createDate, dateDimension, CusInfo.Type.ShopOwner.getValue()));
+                break;
+            case MONTH:
+                int year = NumberUtil.toInt(DateUtil.format(createDate, "yyyy"));
+                map.put("cusStatisti", cusStatistiService.getCusStatistice(DateUtil.getYearFirst(year), DateUtil.getYearLast(year), dateDimension, CusInfo.Type.ShopOwner.getValue()));
+                break;
+            case YEAR:
+                break;
+            default:
+                break;
+        }
+        return map;
+    }
+
+    /**
+     * 新增人数分段查询列表
+     *
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/getPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getPage(Date startDate, Date endDate, Pageable pageable) {
+
+        return cusStatistiService.getPersonPage(startDate, endDate, pageable);
+    }
+
+
+
+}

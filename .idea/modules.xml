@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/project-hypnus.iml" filepath="$PROJECT_DIR$/project-hypnus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-admin.iml" filepath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project-hypnus-common/project-hypnus-common.iml" filepath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service/project-hypnus-common-service.iml" filepath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service/project-hypnus-common-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service-impl/project-hypnus-common-service-impl.iml" filepath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service-impl/project-hypnus-common-service-impl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project-hypnus-common/project-hypnus-data/project-hypnus-data.iml" filepath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-data/project-hypnus-data.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service/project-hypnus-service.iml" filepath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service/project-hypnus-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/project-hypnus-service-impl.iml" filepath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/project-hypnus-service-impl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/project-hypnus-web-admin.iml" filepath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/project-hypnus-web-admin.iml" />
+    </modules>
+  </component>
+</project>

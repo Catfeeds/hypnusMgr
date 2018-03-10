@@ -1,0 +1,68 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>选择商品</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/user_list.css" rel="stylesheet" />
+    <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
+    <script src="${path}/resources/js/member.js" type="text/javascript"></script>
+    <script src="${path}/resources/admin/common/temDataGrid.js"></script>
+    <script src="${path}/resources/admin/js/productMgr/publish/selectProduct.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="searchDiv" style="margin:0;">
+        <div class="searchBar" style="margin:0;">
+            <div class="searchBox">
+                <span class="searchName">商品名称：</span>
+                <input class="searchInputText" placeholder="请输入商品名称"  id="zhName" type="text" style="width:130px;" />
+            </div>
+            <div class="searchBox">
+                <span class="searchName">商品分类：</span>
+                <input type="hidden" id="cateId">
+                <input class="searchInputText" readonly id="cateName" type="text"
+                       style="cursor: pointer;width:130px;background:url(${path}/resources/images/plus.png) no-repeat right center #fff;" />
+            </div>
+            <span class="btnGrey" style="margin-left:5px;" id="reset">重置</span>
+            <span class="btnRed" id="search">查询</span>
+
+        </div>
+    </div>
+
+    <div class="userDetail" style="border:1px solid #e6e6e6;">
+        <div class="resultBar" style="margin:0;border-bottom: 1px solid #e6e6e6;">
+            <span class="resultText">共有<span class="textRed" id="total">0</span>条数据</span>
+            <span class="textps">请从列表中选择需要发布的商品</span>
+        </div>
+        <table class="datalistTable">
+            <tr>
+                <th width="40px"><div class=""></div></th>
+                <th>商品名称</th>
+                <th>分类</th>
+            </tr>
+            <tbody id="dataList"></tbody>
+        </table>
+        <!--页码-->
+        <div class="pageBar" id="pageBar">
+        <!-------->
+
+    </div>
+    <div class="popBtDiv">
+        <ul>
+            <li><a class="btnGrey" style=" margin-left:10px;" id="cancel">返&nbsp;&nbsp;回</a></li>
+            <li><a class="btnRed" id="select">选&nbsp;&nbsp;择</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/html" id="template_dataList">
+    {{each}}
+    <tr>
+        <td><span class="tick xw_tick"></span></td><td>{{$value.zhName}}</td><td>{{$value.cateName}}</td>
+        <input type="hidden" name="id" value="{{$value.id}}" param="param">
+    </tr>
+    {{/each}}
+</script>

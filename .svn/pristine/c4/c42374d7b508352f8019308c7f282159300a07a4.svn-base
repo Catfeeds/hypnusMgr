@@ -1,0 +1,284 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'dataGridHelp', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar, dataGridHelp) {
+        var $orderTb = null;
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    $orderTb = $('#orderTb');
+                    var params = {}; //搜索条件
+                    //=========分页初始化start============
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+
+                    EventHandler.search();
+
+
+                    if ($('#isProprietary').val() == "false") {
+                        $('#factoryName').attr('disabled', "disabled");
+                    }
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $("#btnMore").click(function () {
+                        if ($(this).text() == "展开更多搜索条件∨") {
+                            $(this).text("收起更多搜索条件∧");
+                            $("#searchFooter").slideDown(200, function () {
+                                $(window).triggerHandler('resize');
+                            });
+                        } else if ($(this).text() == "收起更多搜索条件∧") {
+                            $(this).text("展开更多搜索条件∨");
+                            $("#searchFooter").slideUp(200, function () {
+                                $(window).triggerHandler('resize');
+                            });
+                        }
+                    })
+
+                    $orderTb.dataGridHelp({
+                        multSelectBtns: [
+                            {btn: $("#confirmDeliver"), fn: EventHandler.confirmDeliver}
+                        ],
+                        singleSelectBtns: [
+                            {btn: $("#deliverGoods"), fn: EventHandler.deliverGoods},
+                            {btn: $("#printBill"), fn: EventHandler.printBill}
+                        ]
+                    });
+
+                    $(".xw_select").click(function () {
+                        $(".xw_select").removeClass("selectTabs_on");
+                        $(this).addClass("selectTabs_on");
+                        EventHandler.search({pageNo: 1, pageSize: 15})
+                    })
+                    //单选类型
+                    $(".xw_optionUl li").click(function () {
+                        $(".xw_optionUl li").removeClass("on");
+                        $(this).addClass("on");
+                        EventHandler.search();
+                    })
+                    $('#reset').click(EventHandler.reset);
+                    $('#search').click(function () {
+                        EventHandler.search();
+                    });
+
+
+                    $('#factoryName').click(function () {
+                        msgBox.exWindow.open({
+                            title: '选择厂家',
+                            width: '60%',
+                            height: '80%',
+                            url: path + "/admin/basiconfig/factory/selectFactory.html",
+                            close: function (backData) {
+                                if (backData) {
+                                    var param = $.evalJSON(backData);
+                                    $('#factoryId').val(param.factoryId);
+                                    $('#factoryName').val(param.factoryName);
+                                }
+                            }
+                        });
+                    })
+
+
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                // 查询
+                search: function (params) {
+                    $(".xw_tickAll").removeClass("tickOn");
+
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: 15};
+                    }
+
+                    if ($("#cusId").val()) {
+                        params.cusId = $("#cusId").val();
+                    }
+
+                    if ($("#shopkeeperId").val()) {
+                        params.shopkeeperId = $("#shopkeeperId").val();
+                    }
+
+                    var typeSelect = $(".typeSelect").find(".on");
+
+
+                    var orderType = typeSelect.attr("data-value");
+                    params.orderType = orderType;
+                    params.status = $(".selectTabs_on").attr("data-value");
+                    params.orderCode = $("#orderCode").val();
+                    params.factoryId = $("#factoryId").val();
+
+                    if ($("#searchFooter").css("display") != "none") {
+                        var buyUser = $("#buyUser").val();
+                        if (buyUser != "请输入昵称或手机号") {
+                            params.buyUser = buyUser;
+                        }
+                        if ($("#startTime").val()) {
+                            params.startTime = $("#startTime").val() + " 00:00:00";
+                        }
+                        if ($("#endTime").val()) {
+                            params.endTime = $("#endTime").val() + " 23:59:59";
+                        }
+                        if ($("#shopKeeperName").val()) {
+                            params.shopKeeperName = $("#shopKeeperName").val();
+                        }
+                    }
+                    DataHandler.search(params, function (backData) {
+                        var html = template('listTemp', backData.content);
+                        $('#list').html(html);
+
+                        //重新设置数据时调用渲染列表方法
+                        $orderTb.dataGridHelp("renderList", backData.content);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        $(window).triggerHandler('resize');
+                    });
+                },
+                //重置
+                reset: function () {
+                    $('#buyUser').val("");
+                    $("#orderCode").val("");
+                    $("#startTime").val("");
+                    $("#endTime").val("");
+                    $("#shopKeeperName").val("");
+                    if ($('#isProprietary').val() == "true") {
+                        $("#factoryId").val("");
+                        $("#factoryName").val("");
+                    }
+                    $(".xw_optionUl li").removeClass("on").first().addClass("on");
+                },
+
+                deliverGoods: function () {
+                    var list = $orderTb.dataGridHelp("getSelected");
+                    if (list.length == 1) {
+                        if (list[0].orderStatus == "2") {
+                            msgBox.exWindow.open({
+                                title: '发货',
+                                url: path + "/admin/orderMgr/cusOrder/delivery.html?id=" + list[0].id,
+                                width: '650px',
+                                height: '210px',
+                                close: function (result) {
+                                    if (result) {
+                                        EventHandler.search();
+                                    }
+                                }
+                            });
+                        } else {
+                            msgBox.tips("该订单未支付或者已发货");
+                            return;
+                        }
+
+                    } else {
+                        msgBox.tips("请勾选一条数据");
+                        return;
+                    }
+                },
+                //打印物流小票
+                printBill: function () {
+                    var list = $orderTb.dataGridHelp("getSelected");
+                    if (list.length == 1) {
+                        if (list[0].orderStatus == "3") {
+                            msgBox.exWindow.open({
+                                title: '打印小票',
+                                url: path + "/admin/orderMgr/cusOrder/printBill.html?id=" + list[0].id,
+                                width: '340px',
+                                height: '700px',
+                                close: function (result) {
+                                    if (result) {
+                                        EventHandler.search();
+                                    }
+                                }
+                            });
+                        } else {
+                            msgBox.tips("该订单未发货或者已收货");
+                            return;
+                        }
+
+                    } else {
+                        msgBox.tips("请勾选一条数据");
+                        return;
+                    }
+                },
+
+                confirmDeliver: function () {
+                    var aId = [];
+                    var data = $orderTb.dataGridHelp("getSelected");
+
+                    for (var o in data) {
+                        if (data[o].orderStatus != "3") {
+                            msgBox.tips("请选择待收货的订单");
+                            return;
+                        }
+
+
+                        aId.push(data[o].id);
+                    }
+
+                    DataHandler.confirmDeliver({
+                        ids: aId.join(',')
+                    }, function (backData) {
+                        if (backData.type == 'success') {
+                            msgBox.tips("操作成功");
+                            //刷新列表
+                            var params = {};
+                            params.pageNo = 1;
+                            params.pageSize = 15;
+                            EventHandler.search(params);
+                        }
+                    });
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/orderMgr/cusOrder/getCusOrderByPage', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 确认收货
+                 * @param params  订单标识集合
+                 * @param callback
+                 */
+                confirmDeliver: function (params, callback) {
+                    $.post(path + '/admin/orderMgr/cusOrder/confirmDeliver', params, function (backData) {
+                        callback(backData);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

@@ -1,0 +1,64 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+/*公用*/
+body{font-size:14px;font-family:'微软雅黑';padding:0;margin:0;}
+*{padding:0;margin:0;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+ul{margin:0px;padding:0;}
+li{list-style-type:none;}
+button{border:none;background:none;cursor:pointer;outline: none;font-family:'微软雅黑';star:expression(this.onFocus=this.blur());}
+select,input{font-family:'微软雅黑';}
+h1,h2,h3,h4,h5,h6,p{margin:0;display:block;font-weight:normal;}
+a{text-decoration:none; color:#f13d2e;cursor:pointer;}
+a:active{star:expression(this.onFocus=this.blur());}
+img{border:none; margin:0;}
+u{text-decoration:none;}
+form {margin: 0;}
+textarea {display: block;resize:none;font-family:'微软雅黑';letter-spacing:1px;border:1px solid #e9e9e9;font-size:16px;}
+input{font-family:'微软雅黑';letter-spacing:1px;border:none;font-size:16px;}
+
+/*注册列表填写*/
+.loginList{padding:20px;}
+.loginTip{font-size:14px; color:#f13d2e;}
+.loginItem{overflow:hidden;}   
+.itemTitle01{float:left; font-size:18px; color:#323232; width:72px; line-height:50px;}
+.itemTitle02{float:left; font-size:18px; color:#323232; width:62px; line-height:50px;}
+.itemTitle03{float:left; font-size:18px; color:#323232; width:50px; line-height:50px;}
+.itemTitle04{float:left; font-size:18px; color:#323232; width:80px; line-height:50px;}
+.inputBox{border-bottom:1px solid #ccc; overflow:hidden; position:relative;}
+.loginInput{float:left; font-size:16px; color:#646464; width:100%; line-height:50px;}
+.scanIcon{width:24px; position:absolute; right:0px; top:12px;}
+.nextIcon{width:14px; position:absolute; right:0px; top:18px;}
+.nextBtn{background:#f47f30;color:#fff; width:100%; height:50px; border-radius:4px; font-size:18px;}
+.nextBtn02{background:#f13d2e;color:#fff; width:90%; height:50px; border-radius:4px; font-size:18px; margin:20px 5%;}
+.nextBtn:hover{background:#e47124; cursor:pointer;}
+.nextBtn02:hover{background:#e47124;}
+.yanzhengma{background:#f13d2e; color:#fff; font-size:14px; position:absolute; top:12px; right:0; border-radius:6px; height:30px; line-height:30px; text-align:center; letter-spacing:1px; width:100px;}
+.yanzhengma:hover{background:#e13425; cursor:pointer;}
+.selectItem{float:left; margin-right:20px; margin-left:10px; overflow:hidden;}
+.imgselect{width:22px; float:left; margin-top:16px;} 
+.selectText{font-size:18px; color:#646464; float:left; line-height:50px; margin-left:6px;}
+
+/*注册页面*/
+.login_bg_line{position:fixed; left:0; right:0; top:20px; width:100%;}
+.loginLogo{width:100%;}
+.loginLogo img{width:160px; height:160px; margin:0 auto; display:block; padding-top:32%;} 
+.loginBottom{padding:40px; padding:0 20px;}
+.loginLine{background:url(../images/login_img_line.png) no-repeat center; padding-top:40px;}
+.bottomText{text-align:center; font-size:15px; color:#f13d2e;}
+.login_img_line{width:180px; margin:0 auto;}
+.loginBtn button{font-size:18px; border-radius:4px; width:48%; height:50px;}
+.zhuceBtn{background:#fff; border:1px solid #f13d2e; color:#f13d2e;float:left;}
+.zhuceBtn:hover{opacity:0.8;}
+.dengluBtn{background:#f13d2e; border:1px solid #f13d2e; color:#fff; float:right;}
+.dengluBtn:hover{background:#e13425;}
+
+.head{ width:100%;}
+.logo{margin:20px 0; margin:40px 0px;}
+.logo img{margin:0 auto; width:80px; display:block;}
+.wangjimima{ float:left; font-size:15px; color:#ff8f22; text-decoration: underline; height:30px; line-height:30px;}
+.zhuce{ float:right; font-size:15px; color:#45aaff; height:30px; line-height:30px; text-decoration:underline;}
+.mima{ height:30px; line-height:30px; margin-top:4px;}
+

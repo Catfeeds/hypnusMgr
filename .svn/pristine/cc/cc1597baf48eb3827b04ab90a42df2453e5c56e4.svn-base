@@ -1,0 +1,67 @@
+package com.catt.wfx.service.orderMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.data.vo.CusOrderMgr.CusOrderReturnVo;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:退货管理服务接口
+ * Created by 2017-02-17  14:49.
+ * author: Zhou mingxiang
+ */
+public interface CusOrderReturnService {
+    /**
+     * 申请退货(APP)
+     *
+     * @param cusId            用户标识
+     * @param cusName          用户昵称
+     * @param cusOrderRrturnVo 退货vo
+     */
+    void applyReturnGoods(Long cusId, String cusName, CusOrderReturnVo cusOrderRrturnVo);
+
+    /**
+     * 获取我的退货列表（分页）(APP)
+     *
+     * @param cusId    用户标识
+     * @param status   单据状态
+     * @param pageable
+     * @return
+     */
+    Page<Map> findReturnGoodsByPage(Long cusId, Integer status, Pageable pageable);
+
+    /**
+     * 获取退货单详情(APP)
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    Map findReturnGoodsDetail(Long id);
+
+    /**
+     * 获取订单单个商品详情
+     *
+     * @param id
+     * @return
+     */
+    Map getSingleGoods(Long id);
+
+    /**
+     * 获取退货单流程信息列表(APP)
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    List<Map> findCusOrderReturnLogByList(Long id);
+
+    /**
+     * 提交退货单快递单号(APP)
+     *
+     * @param cusId            用户标识
+     * @param cusName          用户昵称
+     * @param cusOrderRrturnVo 退货vo
+     */
+    void submitReturnNum(Long cusId, String cusName, CusOrderReturnVo cusOrderRrturnVo);
+}

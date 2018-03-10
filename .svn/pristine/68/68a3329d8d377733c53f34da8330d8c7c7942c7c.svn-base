@@ -1,0 +1,81 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/*.topBg{position:absolute; top:0; left:0; width:100%;z-index:1; }
+.top .top-left{ z-index:99;}
+.top h1{position:absolute; z-index:59; border-bottom:none; color:#fff;}
+.top .top-right{ z-index:29;}
+.headPic{position:absolute; top:50px; z-index:29;}
+*/
+
+/*-------头部-------*/
+.head{ height:47px; position:fixed; top:0; left:0; width:100%; z-index:999; background:#fff;border-bottom:1px solid #dcdcdc;}
+.top-left{ position:absolute;width:38px;height:38px;top:6px;left:0%;font-size:18px;color:#FFF;}
+.top-left img{width:26px; height:26px;}
+
+.top-right{ position:absolute;width:38px;height:38px;top:6px;right:8px;font-size:18px;color:#FFF; }
+.top-right02{ position:absolute;width:38px;height:38px;top:6px;right:52px;font-size:18px;color:#FFF;}
+.top-right03{ position:absolute;width:38px;height:38px;top:6px;right:94px;font-size:18px;color:#FFF;}
+.top-right:hover{opacity:0.7;}
+.top-right_send{float:right; position:absolute; width:100px; height:40px; top:4px; right:5px; font-size:18px; color:#fff; text-align:center; line-height:40px; background:#8bcc46;}
+.head h1{width:100%; font-size:18px;color:#323232;margin:0px auto; line-height:46px; text-align:center; border-bottom:1px solid #e5e5e5;position:absolute; z-index:59; border-bottom:none; color:#222;}
+
+/*---*/
+table{ border-collapse:collapse; width:100%;}
+.floatLeft{ float:left;}
+.floatRight{ float:right;}
+.textRed{ color:#ff4d4d;}
+.bgRed{ background:#fa4b89;}
+.bgYellow{ background:#ff934b;}
+.bgBlue{ background:#4bb2fa;}
+
+
+/*-------我的店铺-------*/
+.storte_top{width:100%;}
+.bg_store{ position:relative; background:#fff;}
+.wode{ position:absolute; top:20%; left:40%; width:100px;}
+.wode img{ margin-left:10px;}
+.wode h2{ font-size:18px; color:#fff; height:30px; line-height:30px;  text-align:center; margin-bottom:3px;}
+.wode h3{ width:100px; height:26px; line-height:26px; text-align:center; background:#fff; border-radius:10px; letter-spacing:1px; color:#ff4d4d; font-size:14px;}
+
+/*-------单品管理-------*/
+.store_main{}
+table.goodsType{ width:100%; height:35px; background:#fff; border-bottom:1px solid #e5e5e5; margin-bottom:10px;}
+table.goodsType td a{ display:block; margin:0 10%; height:40px; line-height:40px; text-align:center; font-size:16px; color:#222; cursor:pointer; border-bottom:2px solid #fff;}
+table.goodsType td a.lion{ border-bottom:2px solid #ff4d4d; color:#ff4d4d;}
+.goodsList{ border-top:1px solid #e5e5e5;}
+.goodsDiv{ border-bottom:1px solid #e5e5e5; padding:10px 0; background:#fff;}
+.goodsHead{ padding:10px 10px 10px 125px; position:relative; height:100px;}
+.goodsHead img{ position:absolute; top:10px; left:15px;}
+.goodsHead h1{ height:44px; line-height:22px; font-size:16px; color:#222; margin-bottom:3px;}
+.goodsHead h2{ color:#555; font-size:14px; height:30px; line-height:26px;}
+.goodsHead h2 span{ font-size:15px; color:#ff4d4d; font-size:22px; padding-right:25px; float:left;}
+.goodsHead h2 font{ color:#ff4d4d; font-size:14px;}
+.goodsHead h3{ color:#a6a6a6; font-size:12px;}
+.goodsHead h3 span{ background:#ff4d4d; width:100px; height:20px; text-align:center; color:#fff; font-size:12px; border-radius:20px; margin-right:25px; padding:0 10px;}
+
+/*-------特卖管理-------*/
+.saleDiv{ background:#fff;}
+.saleDiv img.banner{ width:100%;}
+.saleDiv h1{ font-size:18px; color:#333; height:30px; line-height:30px;  margin:0 10px; overflow:hidden;}
+.saleDiv h1 font{ color:#ff4d4d;}
+.saleDiv h2{ font-size:14px; color:#666; height:30px; line-height:20px; margin:0 10px; border-bottom:1px solid #efefef;}
+.saleDiv h2 font{ font-size:18px; color:#ff4d4d; padding:3px;}
+
+.temaichang{ background:#fff;}
+.temaichang img.topImg{ width:100%;}
+.active{ height:110px; padding:10px 15px 10px 115px; border:2px solid #ff4d4d; position:relative; margin:10px; border-radius:10px;}
+img.goods{ position:absolute; top:15px; left:15px;}
+.active h1{ font-size:18px; color:#222; text-align:center; height:30px; line-height:30px; letter-spacing:1px; margin-top:5px;}
+.active h2{ font-size:15px; color:#666; text-align:center; height:30px; line-height:30px;}
+button.shangjia{ width:120px; height:36px; line-height:36px; background:#ff4d4d; color:#fff; font-size:15px;border-radius:10px; text-align:center; margin:0 auto; display:block; }
+span.bu{ width:140px; height:16px; display:block; position:absolute; top:-11px; left:30%;}
+.active h3{ font-size:15px; color:#333; height:40px; line-height:20px; overflow:hidden;}
+.active h4{ font-size:12px; color:#999; height:26px; line-height:26px;}
+.active h4 span{ color:#ff4d4d; padding-right:8px; font-size:18px;}
+.active h4 font.yuanjia{ text-decoration:line-through;}
+.active h5{ font-size:12px; color:#999; height:20px; line-height:20px;}
+.active h5 font{ color:#ff4d4d;}
+span.kucun{ background:#ff4d4d; color:#fff; font-size:12px; width:80px; height:20px; line-height:20px; border-radius:20px; text-align:center; padding:0 10px; margin-top:10px;}
+span.addCard{ width:36px; height:36px; position:absolute; bottom:14px; right:10px; cursor:pointer;}

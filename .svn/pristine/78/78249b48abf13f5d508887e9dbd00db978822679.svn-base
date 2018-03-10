@@ -1,0 +1,47 @@
+package com.catt.wfx.service.customerMgr;
+
+import java.util.Map;
+
+/**
+ * Description:用户店铺接口服务
+ * Created by 2017-02-15  9:49.
+ * author: Zhou mingxiang
+ */
+public interface CusShopService {
+    /**
+     * 获取登录用户店铺信息
+     *
+     * @param cusId 用户标识
+     * @return
+     */
+    Map findCusShop(Long cusId);
+
+    /**
+     * 修改店铺背景图片
+     *
+     * @param cusId         用户标识
+     * @param backgroundUrl 店铺背景图片
+     */
+    void modifyShopBgUrl(Long cusId, Long backgroundUrl);
+
+    /**
+     *  店铺续费（无需购买套餐）
+     *
+     * @param cusId 用户标识
+     */
+    void shopRenewals(Long cusId);
+
+    /**
+     * 店铺续费（需要购买套餐）-创建订单-初始化界面
+     *
+     * @return
+     */
+    Map renewInit(Long cusId);
+
+    /**
+     * 续费后更新店铺到期时间
+     *
+     * @param cusId
+     */
+    void updateExpireTime(Long cusId);
+}

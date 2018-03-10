@@ -1,0 +1,20 @@
+package com.catt.wfx;
+
+import com.catt.AbstractMain;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
+
+/**
+ * 后台启动主方法
+ * 店主/主管补贴、平台结算/店主提成结算、超时取消订单
+ *
+ * @author 袁幸成
+ *
+ */
+@Configuration
+@ImportResource(value = {"classpath*:applicationContext.xml", "classpath*:applicationContext-project.xml"})
+public class Server extends AbstractMain {
+	public static void main(String[] args) throws Exception {
+		new Server().start();
+	}
+}

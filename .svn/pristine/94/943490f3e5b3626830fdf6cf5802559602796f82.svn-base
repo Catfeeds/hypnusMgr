@@ -1,0 +1,14 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+
+.body{ padding:0% 20px;}
+.body h1{width:100%; font-size:18px; color:#323232; margin:0px auto; line-height:46px;}
+.body p{ font-size:16px; color:#666; margin:0px auto; line-height:20px; letter-spacing:1px;}
+.lihe{ height:350px; margin-top:10px; }
+.pic{display:block; position:relative; width:100%; margin-top:10px;
+border-left:1px solid #ccc; border-right:1px solid #ccc; border-top:1px solid #ccc;;}
+.goumai{ width:100%; height:80px; border:1px solid #ccc;}
+.goumai p{ text-align:center; float:right; font-size:16px; color:#666; line-height:40px; padding:0px 10px; border:1px solid #ccc; border-radius:5px; margin:20px 10px; }

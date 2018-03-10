@@ -1,0 +1,18 @@
+package com.catt.wfx.service.statisti;
+
+import java.util.Map;
+
+/**
+ * 现金发放统计服务
+ * 作者：袁幸成
+ * 时间：2017-3-28 10:39:04
+ */
+public interface CashGiveStatisticsService {
+
+    /**
+     * 查询现金发放统计数据
+     *
+     * @return
+     */
+    Map<String, Object> findStatisticalData();
+}

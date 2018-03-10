@@ -1,0 +1,39 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>商品发布</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
+    <script src="${path}/resources/admin/js/productMgr/publish/sort.js"></script>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="userDetail" style="border:1px solid #e6e6e6;margin-top:0px;min-height:300px">
+        <table class="datalistTable no">
+            <tr>
+                <th>商品名称</th>
+                <th>排列顺序</th>
+            </tr>
+            <tbody id="dataList">
+            <c:forEach items="${products}" var="product">
+                <tr>
+                    <td>${product.zhName}</td>
+                    <td><input class="searchInputNarrow" value="${product.seq}"
+                              data-value-id="${product.id}" type="text" style="width:130px;"/></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
+    <div class="popBtDiv">
+        <ul>
+            <li><a class="btnGrey" style=" margin-left:10px;" id="cancel">返&nbsp;&nbsp;回</a></li>
+            <li><a class="btnRed" id="save">提&nbsp;&nbsp;交</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,211 @@
+package com.catt.wfx.service.impl.basicConfig;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.security.repository.entity.Dept;
+import com.catt.common.module.security.repository.entity.Domain;
+import com.catt.common.module.security.service.DeptService;
+import com.catt.common.module.security.service.DomainService;
+import com.catt.common.util.bean.BeanUtil;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.wfx.repository.dao.customerMgr.FactoryInfoDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.FactoryInfo;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import com.catt.wfx.repository.form.customerMgr.FactoryInfoFrom;
+import com.catt.wfx.service.base.customerMgr.FactoryInfoBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementBusinessBaseService;
+import com.catt.wfx.service.basicConfig.FactoryInfoService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:厂家管理服务接口实现
+ * Created by 2017-10-20  14:40.
+ * author: Zhou mingxiang
+ */
+@Service("factoryInfoServiceImpl")
+public class FactoryInfoServiceImpl implements FactoryInfoService {
+
+    //厂家信息表Dao接口
+    @Resource(name = "factoryInfoDaoImpl")
+    private FactoryInfoDao factoryInfoDao;
+
+    //厂家信息表服务接口
+    @Resource(name = "factoryInfoBaseServiceImpl")
+    private FactoryInfoBaseService factoryInfoBaseService;
+
+    //部门信息表服务接口
+    @Resource(name = "deptServiceImpl")
+    private DeptService deptService;
+
+    @Resource(name = "domainServiceImpl")
+    private DomainService domainService;
+
+    @Resource(name = "settlementBusinessBaseServiceImpl")
+    private SettlementBusinessBaseService settlementBusinessBaseService;
+    /**
+     * 获取厂家信息列表
+     *
+     * @param factoryName 厂家名称
+     * @param pageable    分页
+     * @return
+     */
+    @Override
+    public Page<Map> getFactoryInfoByPage(String factoryName, Pageable pageable) {
+        return factoryInfoDao.getFactoryInfoByPage(factoryName, pageable);
+    }
+
+    /**
+     * 获取厂家信息
+     *
+     * @param id 厂家标识
+     * @return
+     */
+    @Override
+    public FactoryInfo getFactoryInfoById(Long id) {
+        return factoryInfoBaseService.find(id);
+    }
+
+    /**
+     * 保存厂家信息
+     *
+     * @param factoryInfoFrom 厂家信息From
+     */
+    @Override
+    @Transactional
+    public void save(FactoryInfoFrom factoryInfoFrom) {
+        FactoryInfo factoryInfo = new FactoryInfo();
+        BeanUtil.copyProperties(factoryInfo, factoryInfoFrom);
+        factoryInfo.setDelFlag(PubEnum.YesOrNoEnum.NO.getValue());
+
+        factoryInfoBaseService.save(factoryInfo);
+
+        //新增厂家部门
+        this.saveFactoryDept(factoryInfo.getId(), factoryInfo.getFactoryName());
+
+        //创建厂家账户
+        this.saveFactoryAccounnt(factoryInfo.getId(), factoryInfoFrom.getCreatedId(), factoryInfoFrom.getCreatedName());
+    }
+
+    /**
+     * 修改厂家信息
+     *
+     * @param factoryInfoFrom 厂家信息From
+     */
+    @Override
+    @Transactional
+    public void update(FactoryInfoFrom factoryInfoFrom) {
+        FactoryInfo factoryInfo = factoryInfoBaseService.find(factoryInfoFrom.getId());
+        String factoryName = factoryInfo.getFactoryName();
+        BeanUtil.copyProperties(factoryInfo, factoryInfoFrom);
+
+
+        if(!factoryName.equals(factoryInfoFrom.getFactoryName())){
+            List<Filter> filters = new ArrayList<Filter>();
+            filters.add(Filter.eq("shortName", factoryInfo.getId()));
+            List<Dept> deptList = deptService.findList(1, filters, null);
+
+            if(CollectionUtil.isNotEmpty(deptList)){
+                Dept dept = deptList.get(0);
+                dept.setIsDel(Boolean.FALSE);
+                dept.setName(factoryInfo.getFactoryName());
+                dept.setDisName(factoryInfo.getFactoryName());
+                deptService.update(dept);
+            }else {
+               this.saveFactoryDept(factoryInfo.getId(),factoryInfo.getFactoryName());
+            }
+
+        }
+    }
+
+    /**
+     * 删除厂家信息
+     *
+     * @param ids 厂家标识集合
+     */
+    @Override
+    @Transactional
+    public void delete(Long[] ids) {
+        List<FactoryInfo> factoryInfos = factoryInfoBaseService.findList(ids);
+        for (FactoryInfo factoryInfo : factoryInfos){
+            factoryInfo.setDelFlag(PubEnum.YesOrNoEnum.YES.getValue());
+        }
+        factoryInfoBaseService.saveOrUpdate(factoryInfos);
+
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.in("shortName", ids));
+        List<Dept> deptList = deptService.findList(1, filters, null);
+
+        if(CollectionUtil.isNotEmpty(deptList)){
+            for (Dept dept : deptList){
+                dept.setIsDel(Boolean.TRUE);
+            }
+
+            deptService.saveOrUpdate(deptList);
+        }
+
+    }
+
+
+    /**
+     * 保存厂家部门信息
+     *
+     * @param factoryId   厂家标识
+     * @param factoryName 厂家名称
+     */
+    private void saveFactoryDept(Long factoryId, String factoryName){
+        // 新增一个部门
+        Domain doamin = domainService.find(1L);
+        Dept dept = new Dept();
+        dept.setDescription("账号与厂家关联，利用S_SHORT_NAME与厂家ID关联");
+        dept.setShortName(factoryId + "");
+        dept.setName(factoryName);
+        dept.setDisName(factoryName);
+        dept.setIsDel(Boolean.FALSE);
+        dept.setLevel(1);
+        dept.setPath("/");
+        dept.setSeq(2);
+        dept.setType(Dept.Type.group.ordinal());
+        dept.setDomain(doamin);
+        deptService.save(dept);
+    }
+
+    /**
+     * 创建厂家账户
+     *
+     * @param factoryId
+     * @param createdId
+     * @param createdName
+     */
+    private  void saveFactoryAccounnt(Long factoryId, Long createdId, String createdName){
+        SettlementBusiness settlementBusiness = new SettlementBusiness();
+        settlementBusiness.setFactoryId(factoryId);
+
+        settlementBusiness.setGiveMoney(NumberUtil.DOUBLE_ZERO);
+        settlementBusiness.setLeaderGetMoney(NumberUtil.DOUBLE_ZERO);
+        settlementBusiness.setLeaderMoney(NumberUtil.DOUBLE_ZERO);
+        settlementBusiness.setPlatGetMoney(NumberUtil.DOUBLE_ZERO);
+        settlementBusiness.setShopGetMoney(NumberUtil.DOUBLE_ZERO);
+        settlementBusiness.setTotalMoney(NumberUtil.DOUBLE_ZERO);
+        settlementBusiness.setTotalNum(NumberUtil.INTEGER_ZERO);
+        settlementBusiness.setTotalPlatMoney(NumberUtil.DOUBLE_ZERO);
+        settlementBusiness.setTotalShopMoney(NumberUtil.DOUBLE_ZERO);
+        settlementBusiness.setVoucherMoney(NumberUtil.DOUBLE_ZERO);
+        settlementBusiness.setVoucherNum(NumberUtil.INTEGER_ZERO);
+        settlementBusiness.setVoucherUseMoney(NumberUtil.DOUBLE_ZERO);
+        settlementBusiness.setVoucherUseNum(NumberUtil.INTEGER_ZERO);
+
+        settlementBusiness.setCreatedId(createdId);
+        settlementBusiness.setCreatedName(createdName);
+
+        settlementBusinessBaseService.save(settlementBusiness);
+    }
+}

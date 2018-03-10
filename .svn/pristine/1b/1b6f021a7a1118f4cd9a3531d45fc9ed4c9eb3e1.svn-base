@@ -1,0 +1,231 @@
+package com.catt.wfx.web.controller.admin.shopMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.crypto.RSAUtils;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.service.couponMgr.CouponCusService;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Map;
+
+/**
+ * 订单控制器
+ * 作者：袁幸成
+ * 时间：2017-2-9 16:50:21
+ */
+@RequestMapping({"/admin/cusOrder/"})
+@Controller("cusOrderController")
+public class CusOrderController extends BaseController {
+
+    //订单服务
+    @Resource(name = "cusOrderServiceImpl")
+    public CusOrderService cusOrderService;
+
+    //用户代金券服务
+    @Resource(name = "couponCusServiceImpl")
+    public CouponCusService couponCusService;
+
+    /**
+     * 私钥
+     */
+    private static PrivateKey privateKey;
+
+    /**
+     * 私钥Base64文本
+     */
+    @Value("${system.rsa.key.private}")
+    private String priKey;
+
+
+    public String getPriKey() {
+        return priKey;
+    }
+
+    public void setPriKey(String priKey) {
+        this.priKey = priKey;
+    }
+
+    /**
+     * 创建订单-可用代金券列表（分页）
+     *
+     * @param cusId    客户标识
+     * @param cartIds  购物车标识
+     * @param pageNo   页码
+     * @param pageSize 每页记录数
+     * @return
+     */
+    @RequestMapping(value = "/getUsableCoupon", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Map> getUsableCoupon(@CurrentUser Long cusId, Long[] cartIds, Integer pageNo, Integer pageSize) {
+        Assert.notNull(cartIds);
+        if (pageNo == null) {
+            pageNo = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 20;
+        }
+        return couponCusService.getUsableCoupon(cusId, cartIds, pageNo, pageSize);
+    }
+
+    /**
+     * 创建订单
+     *
+     * @param cusId       客户标识
+     * @param cartIds     购物车标识数组
+     * @param contactId   收货地址标识
+     * @param cusCouponId 用户代金券标识
+     * @return
+     */
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ResponseBody
+    public Map create(@CurrentUser Long cusId, Long[] cartIds, Long contactId, Long cusCouponId) {
+        Assert.notNull(cartIds);
+        Assert.isTrue(cartIds.length > 0);
+        Assert.notNull(contactId);
+        return cusOrderService.create(cusId, cartIds, contactId, cusCouponId, null);
+    }
+
+    /**
+     * 获取订单基本信息
+     *
+     * @param id 订单标识
+     * @return
+     */
+    @RequestMapping(value = "/findOrderInfo", method = RequestMethod.GET)
+    @ResponseBody
+    public Map findOrderInfo(Long id) {
+        Assert.notNull(id);
+        return cusOrderService.findOrderInfo(id);
+    }
+
+    /**
+     * 余额支付
+     *
+     * @param cusId   客户标识
+     * @param orderId 订单标识
+     * @param payPwd  支付密码
+     * @return
+     */
+    @RequestMapping(value = "/pay", method = RequestMethod.POST)
+    @ResponseBody
+    public Message pay(@CurrentUser Long cusId, Long orderId, String payPwd)
+            throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+        Assert.notNull(orderId);
+        Assert.hasLength(payPwd);
+        if (privateKey == null) {
+            privateKey = RSAUtils.genPrivateKey(getPriKey());
+        }
+        payPwd = RSAUtils.decrypt(privateKey, payPwd);
+        Assert.hasLength(payPwd);
+        cusOrderService.payByRemainderMoney(cusId, orderId, payPwd);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 店铺续费（需要购买套餐）支付订单-余额支付
+     *
+     * @param cusId   客户标识
+     * @param orderId 订单标识
+     * @param payPwd  支付密码
+     * @return
+     */
+    @RequestMapping(value = "/payByRemainderMoney4Renew", method = RequestMethod.POST)
+    @ResponseBody
+    public Message payByRemainderMoney4Renew(@CurrentUser Long cusId, Long orderId, String payPwd)
+            throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+        Assert.notNull(orderId);
+        Assert.hasLength(payPwd);
+        if (privateKey == null) {
+            privateKey = RSAUtils.genPrivateKey(getPriKey());
+        }
+        payPwd = RSAUtils.decrypt(privateKey, payPwd);
+        Assert.hasLength(payPwd);
+        cusOrderService.payByRemainderMoney4Renew(cusId, orderId, payPwd);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 获取我的订单列表（分页）
+     *
+     * @param cusId       用户标识
+     * @param orderStatus 订单状态数组
+     * @param pageNo      页码
+     * @param pageSize    每页记录数
+     * @return
+     */
+    @RequestMapping(value = "/findMyOrderPage", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Map> findMyOrderPage(@CurrentUser Long cusId, Integer[] orderStatus, Integer pageNo, Integer pageSize) {
+        return cusOrderService.findMyOrderPage(cusId, orderStatus, new Pageable(pageNo, pageSize), true);
+    }
+
+    /**
+     * 获取店铺订单列表（分页）
+     *
+     * @param cusId       店主标识
+     * @param orderStatus 订单状态数组
+     * @param pageNo      页码
+     * @param pageSize    每页记录数
+     * @return
+     */
+    @RequestMapping(value = "/findShopOrderPage", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Map> findShopOrderPage(@CurrentUser Long cusId, Integer[] orderStatus, Integer pageNo, Integer pageSize) {
+        return cusOrderService.findShopOrderPage(cusId, orderStatus, new Pageable(pageNo, pageSize));
+    }
+
+    /**
+     * 获取订单详细信息
+     *
+     * @param id 订单标识
+     * @return
+     */
+    @RequestMapping(value = "/findOrderDetail", method = RequestMethod.GET)
+    @ResponseBody
+    public Map findOrderDetail(Long id) {
+        Assert.notNull(id);
+        return cusOrderService.findOrderDetail(id);
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param orderId 订单标识
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/cancelCusOrder", method = RequestMethod.POST)
+    public Message cancelCusOrder(@CurrentUser Long cusId, @CurrentUser("name") String cusName, Long orderId) {
+        Assert.notNull(orderId, "订单标识不能为空");
+        cusOrderService.cancelCusOrder(cusId, cusName, orderId);
+        return Message.success("");
+    }
+
+
+    /**
+     * 店铺续费（需要购买套餐）-创建订单
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/create4ShopRenew"}, method = RequestMethod.POST)
+    public Message order4BuyPackage(@CurrentUser Long cusId, Long contactId) {
+        return Message.success("").addResult(cusOrderService.order4BuyPackage(new CusOrder(), cusId, contactId));
+    }
+
+}

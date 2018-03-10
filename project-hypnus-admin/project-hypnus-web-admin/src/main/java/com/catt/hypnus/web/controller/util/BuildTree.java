@@ -1,0 +1,197 @@
+package com.catt.hypnus.web.controller.util;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 构建树型数据
+ *
+ * @author gaotao 2010-05-16
+ */
+public class BuildTree {
+    /**
+     * 构造树型数据,此方法根据isCopy 来判断是否复制一份原数据，在
+     * 新数据上进行树型改造 true,代表复制，这样不会改变原数据结构，fasle反之
+     *
+     * @param lis       从数据库查出的原数据
+     * @param parentCol 父ID列名
+     * @param selfCol   主键列名
+     * @param isCopy    是否复制
+     * @return
+     */
+    public static List<Map<String, Object>> createTree(List<Map> lis,
+                                                       String parentCol, String selfCol, boolean isCopy) {
+        // 将数据复制一份，以免对原数据结构改变，此步骤
+        List<Map> list = isCopy ? cloneList(lis) : lis;
+        return createTree(list, parentCol, selfCol);
+    }
+
+    /**
+     * 构造树型数据，此方法会将原数据结构改变
+     *
+     * @param list      从数据库查出的原数据
+     * @param parentCol 父ID列名
+     * @param selfCol   主键列名
+     * @return
+     */
+    public static List<Map<String, Object>> createTree(List<Map> list,
+                                                       String parentCol, String selfCol) {
+        List<Map<String, Object>> tree = new ArrayList<Map<String, Object>>();
+        for (Iterator<Map> it = list.iterator(); it.hasNext(); ) {
+            Map mp = it.next();
+            if (mp == null) {
+                continue;
+            }
+            setChilds(list, parentCol, selfCol, mp);
+        }
+
+        for (Iterator<Map> it = list.iterator(); it.hasNext(); ) {
+            Map mp = it.next();
+            if (mp != null) {
+                tree.add(mp);
+            }
+        }
+        return tree;
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static List<Map<String, Object>> createTree(List<Map> list,
+                                                       String parentCol, String selfCol, String idCol, String textCol) {
+        List<Map<String, Object>> tree = new ArrayList<Map<String, Object>>();
+        for (Iterator<Map> it = list.iterator(); it.hasNext(); ) {
+            Map mp = it.next();
+            if (mp == null) {
+                continue;
+            }
+            Map map = new HashMap<>();
+            map.put("list", list);
+            map.put("parentCol", parentCol);
+            map.put("selfCol", selfCol);
+            map.put("mp", mp);
+            map.put("idCol", idCol);
+            map.put("textCol", textCol);
+            setChilds(map);
+        }
+
+        for (Iterator<Map> it = list.iterator(); it.hasNext(); ) {
+            Map mp = it.next();
+            if (mp != null) {
+                tree.add(mp);
+            }
+        }
+        return tree;
+    }
+
+
+    public static Map<String, Object> objToMap(Object obj) throws
+            SecurityException, NoSuchMethodException, IllegalArgumentException,
+            IllegalAccessException, InvocationTargetException {
+        Map<String, Object> map = new HashMap<String, Object>();
+        Class cls = obj.getClass();
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (Field f : fields) {
+            String name = f.getName();
+            String method = name.substring(0, 1).toUpperCase()
+                    + name.substring(1, name.length());
+            String strGet = "get" + method;
+            Method methodGet = cls.getDeclaredMethod(strGet);
+            Object object = methodGet.invoke(obj);
+            map.put(name, object);
+        }
+        return map;
+    }
+
+    private static void setChilds(Map map) {
+        List<Map> list = (List<Map>) map.get("list");
+        String parentCol = (String) map.get("parentCol");
+        String selfCol = (String) map.get("selfCol");
+        String idCol = (String) map.get("idCol");
+        String textCol = (String) map.get("textCol");
+        Map mp = (Map) map.get("mp");
+        String sid = mp.get(selfCol).toString();
+        for (int i = 0; i < list.size(); i++) {
+            Map temp = list.get(i);
+            if (temp == null) {
+                continue;
+            }
+            temp.put("id", temp.get(idCol));
+            temp.put("text", temp.get(textCol));
+            String pid = temp.get(parentCol).toString();
+            if (pid == sid || (sid != null && sid.equals(pid))) {
+                setChilds(list, parentCol, selfCol, temp);
+                List<Map> arr = (List<Map>) mp.get("children");
+                if (arr == null) {
+                    arr = new ArrayList<Map>();
+                }
+                arr.add(temp);
+                mp.put("children", arr);
+                list.set(i, null);
+            }
+        }
+    }
+
+    /**
+     * 根据当前节点找子节点
+     *
+     * @param list      数据库查出的原数据
+     * @param parentCol 父ID列名
+     * @param selfCol   主键列名
+     * @param mp        当前节点
+     */
+    private static void setChilds(List<Map> list, String parentCol,
+                                  String selfCol, Map mp) {
+        String sid = mp.get(selfCol).toString();
+        for (int i = 0; i < list.size(); i++) {
+            Map temp = list.get(i);
+            if (temp == null) {
+                continue;
+            }
+            String pid = temp.get(parentCol).toString();
+            if (pid == sid || (sid != null && sid.equals(pid))) {
+                setChilds(list, parentCol, selfCol, temp);
+                List<Map> arr = (List<Map>) mp.get("children");
+                if (arr == null) {
+                    arr = new ArrayList<Map>();
+                }
+                arr.add(temp);
+                mp.put("children", arr);
+                list.set(i, null);
+            }
+        }
+    }
+
+    /**
+     * 克隆，以免对原来list数据结构改变
+     *
+     * @param lis
+     * @return
+     */
+    private static List<Map> cloneList(List<Map> lis) {
+        List<Map> list = new ArrayList<Map>();
+        for (int i = 0; i < lis.size(); i++) {
+            list.add(new HashMap(lis.get(i)));
+        }
+        return list;
+    }
+
+    public static <T> List<Map<String, Object>> createTreeMap(List<T> list,
+                                                              String parentCol, String selfCol, String idCol,
+                                                              String textCol) throws SecurityException, IllegalArgumentException,
+            NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        List<Map> listmap = new ArrayList<Map>();
+        for (T t : list) {
+            Map<String, Object> map = objToMap(t);
+            listmap.add(map);
+        }
+
+        return createTree(listmap, parentCol, selfCol, idCol, textCol);
+    }
+
+
+}

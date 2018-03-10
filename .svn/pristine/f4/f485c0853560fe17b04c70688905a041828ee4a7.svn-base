@@ -1,0 +1,26 @@
+package com.catt.wfx.service.settlementMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+
+import java.util.Map;
+
+/**
+ * 账户结算明细服务接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/2/10
+ */
+public interface SettlementShopDetailService {
+    /**
+     * 获取分页补贴记录
+     *
+     * @param cusName    用户名称
+     * @param rewardType 补贴类型
+     * @param type       补贴名称
+     * @param pageable
+     * @return
+     */
+    Page<Map> getPage(String cusName, Integer rewardType, Integer type, Pageable pageable);
+}

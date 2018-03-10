@@ -1,0 +1,115 @@
+package com.catt.wfx.web.controller.admin.customerMgr;
+
+import com.catt.common.util.ConfigUtils;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.crypto.RSAUtils;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.service.AliYunSmsService;
+import com.catt.wfx.service.customerMgr.CusCertificationService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Map;
+
+/**
+ * 身份信息认证控制器
+ * 作者：陈楚笙
+ * 时间：2017-03-08
+ */
+@Controller("admin.cusCertificationController")
+@RequestMapping(value = "/admin/cusCertification")
+public class CusCertificationController extends BaseController {
+
+    // 身份信息认证接口
+    @Resource(name = "cusCertificationServiceImpl")
+    private CusCertificationService cusCertificationService;
+
+    // 阿里云短信平台
+    @Resource(name = "aliYunSmsServiceImpl")
+    private AliYunSmsService loginSmsService;
+
+    /**
+     * 提交实名认证信息
+     * applyIdentify
+     */
+    @RequestMapping(value = "/apply")
+    @ResponseBody
+    public Message apply(@RequestParam Map<String, Object> params, @CurrentUser("id") Long cusId, @CurrentUser("name") String cusName) throws Exception {
+        String captcha = MapUtil.getString(params, "captcha");
+        String mobile = MapUtil.getString(params, "mobile");
+        Assert.notNull(captcha);
+        Assert.notNull(mobile);
+        captcha = decrypt(captcha);
+        mobile = decrypt(mobile);
+
+        // 短信验证码
+        if (loginSmsService.loginMobileNoCheck(mobile, captcha, ConfigUtils.config.getProperty("applyIdentify"))) {  // 短信验证通过
+            params.put("cusId", cusId);
+            params.put("cusName", cusName);
+            params.put("realName", decrypt(MapUtil.getString(params, "realName")));
+            params.put("idCard", decrypt(MapUtil.getString(params, "idCard")));
+            params.put("mobile", mobile);
+            cusCertificationService.apply(params);
+            return Message.success("");
+        } else {  // 短信验证不通过
+            return Message.warn("短信验证码错误");
+        }
+    }
+
+    /**
+     * 获取实名认证信息
+     */
+    @RequestMapping(value = "/getDetail")
+    @ResponseBody
+    public Message getDetail(String purpose, @CurrentUser("id") Long cusId) {
+        Map<String, Object> result = cusCertificationService.getDetail(purpose, cusId);
+        return Message.success("").addResult(result);
+    }
+
+    /**
+     * RSA解密
+     *
+     * @param data
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     * @throws InvalidKeySpecException
+     */
+    public String decrypt(String data) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+        if (privateKey == null) {
+            privateKey = RSAUtils.genPrivateKey(getPriKey());
+        }
+
+        return RSAUtils.decrypt(privateKey, data);
+    }
+
+    /**
+     * 私钥
+     */
+    static PrivateKey privateKey;
+
+    /**
+     * 私钥Base64文本
+     */
+    @Value("${system.rsa.key.private}")
+    private String priKey;
+
+    public String getPriKey() {
+        return priKey;
+    }
+
+    public void setPriKey(String priKey) {
+        this.priKey = priKey;
+    }
+}

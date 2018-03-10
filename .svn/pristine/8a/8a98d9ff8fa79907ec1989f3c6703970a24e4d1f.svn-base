@@ -1,0 +1,20 @@
+package com.catt.wfx.returnQuery;
+
+import com.catt.AbstractMain;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
+
+/**
+ * 查询退款后台主方法
+ * 
+ * @author 纪建宏
+ *
+ */
+@Configuration
+@ImportResource(value = {"classpath*:applicationContext.xml", "classpath*:applicationContext-project.xml"})
+public class Server extends AbstractMain {
+	public static void main(String[] args) throws Exception {
+			new Server().start();
+	}
+}
+

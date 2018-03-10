@@ -1,0 +1,84 @@
+package com.catt.wfx.web.controller.admin.customerMgr;
+
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.service.customerMgr.CusShopService;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * Description:用户店铺controller
+ * Created by 2017-02-15  9:48.
+ * author: Zhou mingxiang
+ */
+@Controller("admin.customerMgr.cusShop")
+@RequestMapping(value = "/admin/customerMgr/cusShop")
+public class CusShopController extends BaseController {
+
+    @Resource(name = "cusShopServiceImpl")
+    private CusShopService cusShopService;
+
+
+    /**
+     * 获取店铺信息
+     *
+     * @param cusId 当前登录用户ID
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/findCusShop", method = RequestMethod.GET)
+    public Message findCusShop(@CurrentUser Long cusId, @CurrentUser("name") String name) {
+        Map map = cusShopService.findCusShop(cusId);
+        if(!StringUtil.isNotBlank(MapUtil.getString(map, "shopName"))){
+            map.put("shopName", name);
+        }
+        return Message.success("").addResult(map);
+    }
+
+
+    /**
+     * 修改店铺背景图片
+     *
+     * @param cusId         用户标识
+     * @param backgroundUrl 店铺背景图片
+     */
+    @ResponseBody
+    @RequestMapping(value = "/modifyShopBgUrl", method = RequestMethod.POST)
+    public Message modifyShopBgUrl(@CurrentUser Long cusId, Long backgroundUrl) {
+        Assert.notNull(backgroundUrl, "店铺背景图片不能为空");
+        cusShopService.modifyShopBgUrl(cusId, backgroundUrl);
+        return Message.success("");
+    }
+
+    /**
+     * 店铺续费（无需购买套餐）
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/shopRenewals", method = RequestMethod.POST)
+    public Message shopRenewals(@CurrentUser Long cusId){
+        cusShopService.shopRenewals(cusId);
+         return Message.success("");
+    }
+
+    /**
+     * 店铺续费（需要购买套餐）-创建订单-初始化界面
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/renewInit", method = RequestMethod.GET)
+    public Message renewInit(@CurrentUser Long cusId) {
+        return Message.success("").addResult(cusShopService.renewInit(cusId));
+    }
+}

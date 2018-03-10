@@ -1,0 +1,21 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+
+.pic{ width:100%;}
+.topBox{  background-color:#fff;}
+.topBox h1{width:100%; font-size:16px; text-align:center; color:#323232;  line-height:30px; margin-top:10px;}
+.topBox h2{width:100%; font-size:14px; text-align:center; color:#666;  line-height:20px;}
+.topBox h3{width:100%; font-size:14px; text-align:center; color:#666; line-height:20px; padding-bottom:10px;}
+.mindBox{ margin-top:10px; background-color:#fff;  padding:0% 5%;}
+.mindBox h1{width:100%; font-size:18px; color:#323232; margin:0px auto; line-height:50px;}
+.xiangqing{width:100%; margin-top:10px;}
+.nextBtn1{background:#ff4d4d ;color:#fff; width:100%; height:50px; font-size:18px; margin-top:20px; position:fixed; bottom:0px; z-index:100; overflow:hidden; font-family:"微软雅黑", Arial; letter-spacing:2px;}
+.bgPink{ border-radius:10px; padding:0px 10px;}
+.touxiangLeft{ width:11%; padding-left:30%; }
+.touxiangmid{width:11%; padding-left:3%; }
+.topName{ text-align:center; color:#666; padding-bottom:10px;}
+.name{ padding:0px 2%; font-size:12px;}
+

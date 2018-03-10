@@ -1,0 +1,195 @@
+package com.catt.wfx.web.controller.admin.wechat.product;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.wechat.service.api.js.JsTicketService;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.WebUtil;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.productMgr.ProductCate;
+import com.catt.wfx.repository.form.productMgr.ProductFromApp;
+import com.catt.wfx.service.base.productMgr.ProductCateBaseService;
+import com.catt.wfx.service.productMgr.ProductService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 精选商品控制器
+ * 作者：邹佳
+ * 时间：2017-03-01
+ */
+@Controller("admin.wechat.product.productInfoController")
+@RequestMapping(value = "/admin/wechat/product")
+public class ProductInfoController extends BaseController {
+
+    // 商品管理服务接口
+    @Resource(name = "productServiceImpl")
+    private ProductService productService;
+
+    // 商品分类管理服务
+    @Resource(name = "productCateBaseServiceImpl")
+    public ProductCateBaseService productCateBaseService;
+
+    // js sdk 相关服务类
+    @Resource(name = "wxApiJsTicketServiceImpl")
+    private JsTicketService jts;
+
+    /**
+     * 精选商品页面
+     *
+     * @param shopId      店主店铺标识
+     * @param cateId      商品分类标识
+     * @param productName 商品名称
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = {"/index.html"}, method = RequestMethod.GET)
+    public String toIndex(Long shopId, Long cateId, String productName, Model model) {
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("cateId", cateId);
+        model.addAttribute("productName", productName);
+        return "/admin/wechat/product/index";
+    }
+
+    /**
+     * 搜索页面
+     *
+     * @param shopId 店主店铺标识
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = {"/search.html"}, method = RequestMethod.GET)
+    public String toSearch(Long shopId, Model model) {
+        model.addAttribute("shopId", shopId);
+        return "/admin/wechat/product/search";
+    }
+
+    /**
+     * 商品详细页面
+     *
+     * @param shopId 店主店铺标识
+     * @param id     商品标识
+     * @param from   打开详情页面源，isSpecialSale：代表从特卖列表打开
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = {"/detail.html"}, method = RequestMethod.GET)
+    public String toDetail(Long shopId, Long id, String from, Model model, @CurrentUser("publicAccountId") String pId) {
+        Assert.notNull(id, "商品标识不能为空");
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("id", id);
+        model.addAttribute("from", from);
+        Map map = productService.findProductInfoDetail(null, id, null);
+        map.put("attrJson", JsonUtils.toList(MapUtil.getString(map, "attrJson"), Map.class));
+        model.addAllAttributes(map);
+
+        // js sdk相关参数
+        HttpServletRequest request = WebUtil.getRequest();
+        StringBuffer sb = request.getRequestURL();
+        if (request.getQueryString() != null) {
+            sb.append("?").append(request.getQueryString());
+        }
+        String url = sb.toString();
+        model.addAllAttributes(jts.signature(pId, url));
+
+        return "/admin/wechat/product/detail";
+    }
+
+    /**
+     * 获取商品信息列表
+     *
+     * @param cateId      商品分类标识
+     * @param productName 商品名称
+     * @return
+     */
+    @RequestMapping(value = {"/findProductInfoByPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> findProductInfoByPage(Long cateId, String productName, Pageable pageable) {
+        ProductFromApp productFromApp = new ProductFromApp();
+        productFromApp.setCateId(cateId);
+        productFromApp.setZhName(productName);
+        productFromApp.setWechat(true);
+        return productService.findProductInfoByPage(productFromApp, pageable);
+    }
+
+
+    /**
+     * 获取商品规格及价格列表
+     *
+     * @param id 商品标识
+     * @return
+     */
+    @RequestMapping(value = "/findSpecAndPrice", method = RequestMethod.GET)
+    @ResponseBody
+    public Map findSpecAndPrice(Long id, String from) {
+        Assert.notNull(id, "商品标识不能为空");
+        Map map = productService.findSpecAndPrice(id, null, null);
+
+        // 如果是特卖列表，则只显示特卖商品
+        if (StringUtil.isNotEmpty(from) && from.equals("isSpecialSale")) {
+            List<Map> productPriceList = (List<Map>) map.get("productPriceList");
+            Iterator<Map> iterator = productPriceList.iterator();
+            while (iterator.hasNext()) {
+                Map next = iterator.next();
+                Integer isActivity = MapUtil.getInteger(next, "isActivity");
+                if (isActivity == PubEnum.YesOrNoEnum.NO.getValue()) {
+                    iterator.remove();
+                }
+            }
+        }
+
+        return map;
+    }
+
+    /**
+     * 获取一级分类
+     *
+     * @return
+     */
+    @RequestMapping(value = {"/getLevel1Cate"}, method = RequestMethod.POST)
+    @ResponseBody
+    public List<ProductCate> getLevel1Cate() {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        filters.add(Filter.eq("level", 1));
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.asc("seq"));
+        return productCateBaseService.findList(null, filters, orders);
+    }
+
+    /**
+     * 获取二级分类
+     *
+     * @return
+     */
+    @RequestMapping(value = {"/getLevel2Cate"}, method = RequestMethod.POST)
+    @ResponseBody
+    public List<ProductCate> getLevel2Cate(Long parentId) {
+        Assert.notNull(parentId);
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        filters.add(Filter.eq("level", 2));
+        filters.add(Filter.eq("parentId", parentId));
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.asc("seq"));
+        return productCateBaseService.findList(null, filters, orders);
+    }
+
+}

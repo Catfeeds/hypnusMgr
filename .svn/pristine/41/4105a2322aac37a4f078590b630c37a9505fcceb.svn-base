@@ -1,0 +1,152 @@
+package com.catt.wfx.repository.entity.settlementMgr;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+/**
+ * 店主/主管规则详情实体类
+ * 
+ * @author 邹佳
+ * @date 2017-02-09 10:30:50
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_SETTLEMENT_SHOP_RULE_DETAIL")
+public class SettlementShopRuleDetail extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * <pre>
+	 * 规则标识
+	 * </pre>
+	 */
+	private Long ruleId;
+	/**
+	 * <pre>
+	 * 奖励类型
+	 * 1-代金券
+	 *  2-现金
+	 * </pre>
+	 */
+	private Integer rewardType;
+	/**
+	 * <pre>
+	 * 销售额起点
+	 * </pre>
+	 */
+	private Double salesStart;
+	/**
+	 * <pre>
+	 * 销售额终点
+	 * </pre>
+	 */
+	private Double salesEnd;
+	/**
+	 * <pre>
+	 * 现金金额
+	 * </pre>
+	 */
+	private Double rewardMoney;
+	/**
+	 * <pre>
+	 * 代金券标识
+	 * 多个以英文逗号分隔
+	 * </pre>
+	 */
+	private String couponId;
+	/**
+	 * <pre>
+	 * 创建人员标识
+	 * 创建人员标识
+	 * </pre>
+	 */
+	private Long createdId;
+	/**
+	 * <pre>
+	 * 创建人员名称
+	 * 创建人员名称
+	 * </pre>
+	 */
+	private String createdName;
+
+	@Column(name = "I_RULE_ID")
+	public Long getRuleId() {
+		return ruleId;
+	}
+
+	public void setRuleId(Long ruleId) {
+		this.ruleId = ruleId;
+	}
+
+	@Column(name = "I_REWARD_TYPE")
+	public Integer getRewardType() {
+		return rewardType;
+	}
+
+	public void setRewardType(Integer rewardType) {
+		this.rewardType = rewardType;
+	}
+
+	@Column(name = "I_SALES_START")
+	public Double getSalesStart() {
+		return salesStart;
+	}
+
+	public void setSalesStart(Double salesStart) {
+		this.salesStart = salesStart;
+	}
+
+	@Column(name = "I_SALES_END")
+	public Double getSalesEnd() {
+		return salesEnd;
+	}
+
+	public void setSalesEnd(Double salesEnd) {
+		this.salesEnd = salesEnd;
+	}
+
+	@Column(name = "I_REWARD_MONEY")
+	public Double getRewardMoney() {
+		return rewardMoney;
+	}
+
+	public void setRewardMoney(Double rewardMoney) {
+		this.rewardMoney = rewardMoney;
+	}
+
+	@Column(name = "S_COUPON_ID", length = 1000)
+	public String getCouponId() {
+		return couponId;
+	}
+
+	public void setCouponId(String couponId) {
+		this.couponId = couponId;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+}
+

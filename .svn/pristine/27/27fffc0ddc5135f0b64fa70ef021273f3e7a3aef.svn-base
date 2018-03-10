@@ -1,0 +1,177 @@
+package com.catt.wfx.web.controller.admin.perforMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.excel.ExcelBean;
+import com.catt.common.util.excel.HSSFExcelBean;
+import com.catt.common.util.excel.SheetBean;
+import com.catt.common.util.io.FileUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.WebUtil;
+import com.catt.common.web.controller.BaseController;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlatDetail;
+import com.catt.wfx.service.perforMgr.PlatPerforService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * 平台提成账单
+ * 作者：袁幸成
+ * 时间：2017-3-29 11:15:55
+ */
+@Controller("admin.perforMgr.platPerforController")
+@RequestMapping(value = "/admin/perforMgr/platPerfor")
+public class PlatPerforController extends BaseController{
+
+    @Resource(name = "platPerforServiceImpl")
+    private PlatPerforService platPerforService;
+
+    /**
+     * 跳转平台提成账单首页
+     */
+    @RequestMapping(value = "/index.html")
+    public String toIndex() {
+        return "/admin/perforMgr/platPerfor/index";
+    }
+
+    /**
+     * 跳转平台提成账单月份详情页
+     */
+    @RequestMapping(value = "/detail/{platDetailId}")
+    public String toDetail(Model model, @PathVariable Long platDetailId) {
+        Assert.notNull(platDetailId);
+        SettlementPlatDetail entity = platPerforService.findSettlementPlatDetail(platDetailId);
+        model.addAttribute("time", DateUtil.format(entity.getSettleDate(), "yyyy年M月份"));
+        model.addAttribute("entity", entity);
+        return "/admin/perforMgr/platPerfor/detail";
+    }
+
+
+    /**
+     * 跳转平台提成结算页
+     */
+    @RequestMapping(value = "/settle.html")
+    public String toSettle() {
+        return "/admin/perforMgr/platPerfor/settle";
+    }
+
+
+    /**
+     * 查询平台提成账单列表
+     *
+     * @param startDate  开始时间
+     * @param endDate  结束时间
+     * @param status  结算状态
+     * @param pageable 分页参数
+     * @return
+     */
+    @RequestMapping(value = "/findPage", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<SettlementPlatDetail> findPage(Date startDate, Date endDate, Integer status, Pageable pageable) {
+        return platPerforService.findPage(startDate, endDate, status, pageable);
+    }
+
+    /**
+     * 查询平台提成月份明细列表
+     *
+     * @param platDetailId  平台结算明细标识
+     * @param pageable 分页参数
+     * @return
+     */
+    @RequestMapping(value = "/findMonthDetailPage", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> findMonthDetailPage(Long platDetailId, Pageable pageable) {
+        return platPerforService.findMonthDetailPage(platDetailId, pageable);
+    }
+
+
+    /**
+     * 结算平台提成（平台提现）
+     *
+     * @param platDetailIds  平台结算明细标识数组
+     * @param staffName 结算人
+     * @param code 流水号
+     * @return
+     */
+    @RequestMapping(value = "/settle", method = RequestMethod.POST)
+    @ResponseBody
+    public Message settle(Long[] platDetailIds, String staffName, String code) {
+        Assert.hasLength(staffName);
+        Assert.hasLength(code);
+        platPerforService.settle(platDetailIds, staffName, code);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 导出
+     * @param fileName 文件名称
+     * @param fileExtName 文件后缀
+     * @param request request
+     * @param response response
+     * @return
+     */
+    @RequestMapping(value = "/exportExcel/{fileName}.{fileExtName}")
+    public void exportExcel(HttpServletRequest request, HttpServletResponse response, @PathVariable String fileName,
+                         @PathVariable String fileExtName) throws Exception {
+        fileName = "平台提成账单.xlsx";
+        String templatePath = WebUtil.getSession().getServletContext().getRealPath("/resources/template/" + fileName);
+        List<SettlementPlatDetail> details = platPerforService.findList(null, null, null);
+        ExcelBean excelBean;
+        File file = new File(templatePath);
+        InputStream inputStream = new FileInputStream(file);
+        excelBean = HSSFExcelBean.create(inputStream);
+        SheetBean sheetBean = excelBean.getSheetBean(0);
+        int row = 1;  //0-标题
+        for (SettlementPlatDetail detail : details) {
+            //把商品名称写到Excel
+            sheetBean.setCellValue(row, 0, DateUtil.format(detail.getSettleDate(), "yyyy年M月")); //时间
+            sheetBean.setCellValue(row, 1, detail.getRuleRemark()); //提成标准
+            sheetBean.setCellValue(row, 2, detail.getSalesMoney()); //提成金额（元）
+            String statusName = "未结算";
+            String remark = "";
+            if (detail.getStatus() == PubEnum.YesOrNoEnum.YES.getValue()){
+                statusName = "已结算";
+                remark = "结算人：" + detail.getSettleStaffName() + "  流水号：" + detail.getSettleCode();
+            }
+            sheetBean.setCellValue(row, 3, statusName); //状态
+            sheetBean.setCellValue(row, 4, remark); //备注
+            row++;
+        }
+        File tempFile = new File(System.getProperty("java.io.tmpdir") + File.separator + fileName);
+        excelBean.write(tempFile);
+        String userAgent = request.getHeader("USER-AGENT");
+        if(StringUtil.contains(userAgent, "MSIE") || StringUtil.contains(userAgent, "Trident")){//IE浏览器
+            fileName = URLEncoder.encode(fileName, "UTF8");
+        }else if(StringUtil.contains(userAgent, "Mozilla")){//google,火狐浏览器
+            fileName = new String(fileName.getBytes(), "ISO8859-1");
+        }else{
+            fileName = URLEncoder.encode(fileName,"UTF8");//其他浏览器
+        }
+        response.setContentType("application/ms-excel");
+        response.setHeader("Content-disposition", "attachment; filename=" + fileName);
+        byte[] buff = FileUtil.readFileToByteArray(tempFile);
+        response.setContentLength(buff.length);
+        response.getOutputStream().write(buff);
+    }
+
+}

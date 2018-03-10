@@ -1,0 +1,50 @@
+package com.catt.wfx.web.controller.admin.productMgr;
+
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.entity.productMgr.ProductShop;
+import com.catt.wfx.service.productMgr.ProductShopService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+
+/**
+ * 店主商品控制器
+ */
+@Controller("admin.productMgr.productShopController")
+@RequestMapping(value = "/admin/productMgr/productShop")
+public class ProductShopController extends BaseController {
+
+    // 店主商品服务接口
+    @Resource(name = "productShopServiceImpl")
+    private ProductShopService productShopService;
+
+    /**
+     * 上架商品到店铺
+     *
+     * @param id 商品标识
+     */
+    @ResponseBody
+    @RequestMapping(value = "/shelves", method = RequestMethod.POST)
+    public Message shelves(@CurrentUser Long createdId, @CurrentUser("name") String createdName, Long id) {
+        productShopService.shelves(createdId, createdName, id, ProductShop.Status.NORMALUSE.getValue());
+        return Message.success("");
+    }
+
+    /**
+     * 下架店铺商品
+     *
+     * @param id 商品标识
+     */
+    @ResponseBody
+    @RequestMapping(value = "/offShelves", method = RequestMethod.POST)
+    public Message offShelves(@CurrentUser Long createdId, Long id) {
+        productShopService.shelves(createdId, null, id, ProductShop.Status.SHELVES.getValue());
+        return Message.success("");
+    }
+
+}

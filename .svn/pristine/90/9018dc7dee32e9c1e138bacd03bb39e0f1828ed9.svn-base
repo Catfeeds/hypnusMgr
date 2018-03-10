@@ -1,0 +1,66 @@
+@charset "utf-8";
+.blue-text {
+    color: #1765ee;
+}
+
+.white-card {
+    font-size: 14px;
+    padding: 8px 15px 8px 15px;
+    background: #fff;
+    margin-bottom: 10px;
+}
+
+/*车单列表 灰色框*/
+.grey-card-margin {
+    font-size: 12px;
+    margin: 5px 5px 5px 5px;
+    padding: 5px;
+    background: #f9f9f9;
+}
+
+.white-card-border {
+    font-size: 14px;
+    margin: 8px 15px 8px 15px;
+    padding-bottom: 5px;
+    background: #fff;
+    border-bottom: #e6e6e6 1px solid;
+}
+
+.list-btn {
+    font-size: 13px;
+    color: #4b4b4b;
+    border: #dcdcdc 1px solid;
+    border-radius: 5px;
+    padding: 3px 10px 3px 10px;
+}
+
+.list-btn:active {
+    background: #ededed;
+}
+
+.select-card {
+    border: 1px solid #c4c4c4;
+    text-align: center;
+    height: 28px;
+    width: 100px;
+}
+
+.refund-minus {
+    width: 28px;
+    height: 100%;
+    border-right: 1px solid #c4c4c4;
+    background: url(../../../../images/ico_minus.png) no-repeat center center #f5f5f5;
+}
+
+#refund-num {
+    height: 100%;
+    text-align: center;
+    font-size: 14px;
+}
+
+.refund-plus {
+    width: 28px;
+    height: 100%;
+    border-left: 1px solid #c4c4c4;
+    background: url(../../../../images/ico_plus.png) no-repeat center center #f5f5f5;
+}

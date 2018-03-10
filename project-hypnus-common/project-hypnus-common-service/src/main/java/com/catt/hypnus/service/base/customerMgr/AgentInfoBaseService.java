@@ -1,0 +1,15 @@
+package com.catt.hypnus.service.base.customerMgr;
+
+import com.catt.common.base.service.BaseService;
+import com.catt.hypnus.repository.entity.customerMgr.AgentInfo;
+
+/**
+ * 代理商申请表服务接口
+ * 
+ * @author chen chusheng
+ * @date 2017-06-14 10:32:50
+ * @version V1.0
+ */
+public interface AgentInfoBaseService extends BaseService<AgentInfo, Long> {
+
+}

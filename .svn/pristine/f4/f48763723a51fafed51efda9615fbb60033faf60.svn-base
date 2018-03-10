@@ -1,0 +1,433 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusCartDao;
+import com.catt.wfx.repository.dao.specialSale.ActivityProductRelDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.CusCart;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductAttr;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+import com.catt.wfx.service.base.customerMgr.CusCartBaseService;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductAttrBaseService;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPriceBaseService;
+import com.catt.wfx.service.base.specialSale.ActivityInfoBaseService;
+import com.catt.wfx.service.customerMgr.CusCartService;
+import com.catt.wfx.service.customerMgr.CusContactService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * 购物车信息服务接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-10 08:50:22
+ * @version V1.0
+ */
+@Service("cusCartServiceImpl")
+public class CusCartServiceImpl implements CusCartService {
+
+    //购物车服务接口
+    @Resource(name = "cusCartDaoImpl")
+    private CusCartDao cusCartDao;
+
+    //购物车服务接口
+    @Resource(name = "cusCartBaseServiceImpl")
+    private CusCartBaseService cusCartBaseService;
+
+    //商品价格服务接口
+    @Resource(name = "productPriceBaseServiceImpl")
+    private ProductPriceBaseService productPriceBaseService;
+
+    //商品服务接口
+    @Resource(name = "productInfoBaseServiceImpl")
+    private ProductInfoBaseService productInfoBaseService;
+
+    //商品扩展服务接口
+    @Resource(name = "productAttrBaseServiceImpl")
+    private ProductAttrBaseService productAttrBaseService;
+
+    //收货地址服务接口
+    @Resource(name = "cusContactServiceImpl")
+    private CusContactService cusContactService;
+
+    //附件服务接口
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    //公共配置服务
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    //活动信息表服务
+    @Resource(name = "activityInfoBaseServiceImpl")
+    ActivityInfoBaseService activityInfoBaseService;
+
+    //商品活动关联表Dao
+    @Resource(name = "activityProductRelDaoImpl")
+    ActivityProductRelDao activityProductRelDao;
+
+    //用户服务
+    @Resource(name = "cusInfoBaseServiceImpl")
+    CusInfoBaseService cusInfoBaseService;
+
+    @Override
+    @Transactional
+    public Long saveCart(Long cusId, String cusName, Long id, Long priceId, Integer num, Integer useType) {
+        if (useType == null){ // 使用类型1-购物车（默认）
+            useType = CusCart.UseType.SHOPPING_CART.getValue();
+        }
+        if (id == null){ //商品详情添加到购物车
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("cusId", cusId));
+            filters.add(Filter.eq("priceId", priceId));
+            filters.add(Filter.eq("useType", useType));
+            List<CusCart> cusCarts = cusCartBaseService.findList(1, filters, null);
+            if (cusCarts.size() == 0){ //新增
+                CusCart cusCart = new CusCart();
+                ProductPrice productPrice = productPriceBaseService.find(priceId);
+                Long productId = productPrice.getProductId();
+                ProductInfo productInfo = productInfoBaseService.find(productId);
+
+                cusCart.setCateId(productInfo.getCateId());
+                cusCart.setCreatedId(cusId);
+                cusCart.setCateName(productInfo.getCateName());
+                cusCart.setProductId(productId);
+                cusCart.setType(productInfo.getType());
+                cusCart.setProductName(productInfo.getZhName());
+                cusCart.setCode(productInfo.getCode());
+                cusCart.setBarCode(productInfo.getBarCode());
+                cusCart.setHeadPath(productInfo.getHeadPath());
+
+                filters.clear();
+                filters.add(Filter.eq("productId", productId));
+                List<ProductAttr> attrs = productAttrBaseService.findList(1, filters, null);
+                if (attrs.size() > 0){
+                    cusCart.setAttrJson(attrs.get(0).getAttrJson());
+                }
+
+                cusCart.setPriceId(priceId);
+                cusCart.setNum(num);
+                cusCart.setCusId(cusId);
+                cusCart.setCreatedName(cusName);
+                cusCart.setUseType(useType);
+                cusCartBaseService.save(cusCart);
+                return cusCart.getId();
+
+            }else { //修改
+                CusCart cusCart = cusCarts.get(0);
+                cusCart.setNum(cusCart.getNum() + num);
+                cusCartBaseService.update(cusCart);
+                return cusCart.getId();
+            }
+
+        } else { //购物车列表页面
+            CusCart cusCart = cusCartBaseService.find(id);
+            cusCart.setPriceId(priceId);
+            cusCart.setNum(num);
+
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("cusId", cusId));
+            filters.add(Filter.eq("priceId", priceId));
+            filters.add(Filter.eq("useType", cusCart.getUseType()));
+            List<CusCart> cusCarts = cusCartBaseService.findList(1, filters, null);
+            if (cusCarts.size() == 0){ //规格变化
+                cusCart.setCusId(cusId);
+                cusCart.setCreatedName(cusName);
+                cusCartBaseService.update(cusCart);
+
+            }else {
+                CusCart cusCartSame = cusCarts.get(0);
+                if (!cusCartSame.getId().equals(id)){ //规格重复删除以前的
+                    cusCartBaseService.delete(cusCartSame);
+                }
+                cusCartBaseService.update(cusCart);
+            }
+        }
+        return id;
+    }
+
+    @Override
+    @Transactional
+    public void deleteCart(Long cusId, Long id) {
+        CusCart cusCart = cusCartBaseService.find(id);
+        if (cusCart != null && cusCart.getCusId() == cusId.longValue()){
+            cusCartBaseService.delete(cusCart);
+        }
+    }
+
+    @Override
+    public List<Map> findAll(Long cusId, Integer useType) {
+        Integer type = CusInfo.Type.RegistUser.getValue();
+        if (useType == null){
+            useType = CusCart.UseType.SHOPPING_CART.getValue(); //默认普通购买
+
+        } else if (useType == CusCart.UseType.PURCHASE_LIST.getValue()){ //进货
+            CusInfo cusInfo = cusInfoBaseService.find(cusId);
+            type = cusInfo.getType();
+        }
+        List<Map> productList = cusCartDao.findAll(cusId, useType);
+        //获取图片访问地址
+        String filePath = pubConfigService.getFilePath();
+        List<Long> priceIds = new ArrayList<>();
+        int size = productList.size();
+        Set productIdsSet = new HashSet<>();
+        for (int i = 0; i < size; i++){
+            Map product = productList.get(i);
+            priceIds.add(MapUtil.getLong(product, "priceId"));
+            productIdsSet.add(MapUtil.getLong(product, "productId"));
+        }
+        Long[] productIds = new Long[productIdsSet.size()];
+        productIds = (Long[]) productIdsSet.toArray(productIds);
+        List<ProductInfo> productInfos = productInfoBaseService.findList(productIds);
+        for (Map product : productList){
+            this.putSpecDesc(product);
+            this.putRealFilePath(filePath, product, "headPath");
+
+            product.put("isActivity", PubEnum.YesOrNoEnum.NO.getValue()); // 是否特卖：1-是，2-否
+            if (useType == CusCart.UseType.SHOPPING_CART.getValue()) {//普通购买
+                Map activityProductRel = activityProductRelDao.findActivityInProductRel(MapUtil.getLong(product, "priceId"));
+                if (activityProductRel != null){
+                    product.put("isActivity", PubEnum.YesOrNoEnum.YES.getValue());
+                    product.put("costPrice", MapUtil.getDouble(activityProductRel, "costPrice"));
+                    product.put("salesPrice", MapUtil.getDouble(activityProductRel, "salesPrice"));
+                    product.put("stockNum", MapUtil.getInteger(activityProductRel, "stockNum"));
+                }
+
+            } else if (useType == CusCart.UseType.PURCHASE_LIST.getValue()) { //进货
+                // 销售价取用户代理商级别对应的销售价
+                Double salesPrice;
+                if (type == CusInfo.Type.TotalAgent.getValue()){ //总代
+                    salesPrice = MapUtil.getDouble(product, "generalAgent");
+
+                } else if (type == CusInfo.Type.ProvinceAgent.getValue()){ //省代
+                    salesPrice = MapUtil.getDouble(product, "provincialAgent");
+
+                } else if (type == CusInfo.Type.CityAgent.getValue()){ //市代
+                    salesPrice = MapUtil.getDouble(product, "cityAgent");
+
+                } else if (type == CusInfo.Type.AreaAgent.getValue()){ //区代
+                    salesPrice = MapUtil.getDouble(product, "regionalAgent");
+                } else {
+                    throw BaseException.errorByErrInfo("非法操作");
+                }
+                product.put("salesPrice", salesPrice);
+                product.put("profit", 0.0);
+            }
+            product.remove("generalAgent");
+            product.remove("provincialAgent");
+            product.remove("cityAgent");
+            product.remove("regionalAgent");
+
+
+            int isValid = PubEnum.YesOrNoEnum.NO.getValue(); //是否有效：发布中、非删除
+            for (ProductInfo productInfo : productInfos){
+                if (productInfo.getId().equals(MapUtil.getLong(product, "productId"))){
+                    if (productInfo.getStatus() == ProductInfo.Status.OnSale.getValue()
+                            && productInfo.getDelFlag() == PubEnum.YesOrNoEnum.NO.getValue()){
+                        isValid = PubEnum.YesOrNoEnum.YES.getValue();
+                        break;
+                    }
+                    break;
+                }
+            }
+            product.put("isValid", isValid);
+        }
+        return productList;
+    }
+
+    /**
+     * 设置完整的文件路径(用于实体只保存附件表标识)
+     * @param filePath 文件访问地址（http://localhost:8080/wfxMgr/attachment）
+     * @param target 目标map
+     * @param key 保存附件表标识的字段名称
+     */
+    private void putRealFilePath(String filePath, Map target, String key) {
+        Long attachmentId = MapUtil.getLong(target, key);
+        if (attachmentId != null){
+            Attachment attachment = attachmentBaseService.find(attachmentId);
+            target.put(key, filePath + attachment.getPath());
+        }
+    }
+
+    @Override
+    public Map<String, Object> getDataByCartToOrder(Long cusId, Long[] cartIds) {
+        Integer type = CusInfo.Type.RegistUser.getValue(); //客户类型
+        Map<String, Object> data = new HashMap<>();
+        List<Map> productList = cusCartDao.findProductByCartIds(cartIds);
+        Integer useType = this.checkUseType(productList);
+        if (useType == CusCart.UseType.PURCHASE_LIST.getValue()){ //进货
+            CusInfo cusInfo = cusInfoBaseService.find(cusId);
+            type = cusInfo.getType();
+        }
+        double productAmount = 0.0;
+        double totalDiscountAmount = 0.0;
+        //获取图片访问地址
+        String filePath = pubConfigService.getFilePath();
+        for (Map product : productList){
+            this.putSpecDesc(product);
+            this.putRealFilePath(filePath, product, "headPath");
+
+            product.put("isActivity", PubEnum.YesOrNoEnum.NO.getValue()); // 是否特卖：1-是，2-否
+            if (useType == CusCart.UseType.SHOPPING_CART.getValue()) {//普通购买
+                Map activityProductRel = activityProductRelDao.findActivityInProductRel(MapUtil.getLong(product, "priceId"));
+                if (activityProductRel != null){
+                    product.put("isActivity", PubEnum.YesOrNoEnum.YES.getValue());
+                    product.put("costPrice", MapUtil.getDouble(activityProductRel, "costPrice"));
+                    product.put("salesPrice", MapUtil.getDouble(activityProductRel, "salesPrice"));
+                    product.put("stockNum", MapUtil.getInteger(activityProductRel, "stockNum"));
+                }
+
+            } else if (useType == CusCart.UseType.PURCHASE_LIST.getValue()) { //进货
+                // 销售价取用户代理商级别对应的销售价
+                Double salesPrice;
+                if (type == CusInfo.Type.TotalAgent.getValue()){ //总代
+                    salesPrice = MapUtil.getDouble(product, "generalAgent");
+
+                } else if (type == CusInfo.Type.ProvinceAgent.getValue()){ //省代
+                    salesPrice = MapUtil.getDouble(product, "provincialAgent");
+
+                } else if (type == CusInfo.Type.CityAgent.getValue()){ //市代
+                    salesPrice = MapUtil.getDouble(product, "cityAgent");
+
+                } else if (type == CusInfo.Type.AreaAgent.getValue()){ //区代
+                    salesPrice = MapUtil.getDouble(product, "regionalAgent");
+                } else {
+                    throw BaseException.errorByErrInfo("非法操作");
+                }
+                product.put("salesPrice", salesPrice);
+                product.put("profit", 0.0);
+            }
+            product.remove("generalAgent");
+            product.remove("provincialAgent");
+            product.remove("cityAgent");
+            product.remove("regionalAgent");
+
+            double salesPrice = MapUtil.getDouble(product, "salesPrice");
+            double costPrice = MapUtil.getDouble(product, "costPrice");
+            int num = MapUtil.getInteger(product, "num");
+            productAmount = NumberUtil.add(productAmount, NumberUtil.mul(salesPrice, num));
+            double discountAmount = NumberUtil.mul(NumberUtil.sub(costPrice, salesPrice), num);
+            totalDiscountAmount = NumberUtil.add(totalDiscountAmount, discountAmount);
+        }
+        data.put("productAmount", productAmount); //商品费用
+        data.put("totalDiscountAmount", totalDiscountAmount); //优惠总价
+        data.put("productList", productList); //商品列表
+        data.put("logisticsCost", 0); //运费 //TODO 运费还没设计好
+        data.put("defaultContact", cusContactService.findDefaultContact(cusId)); //默认收货地址
+        return data;
+    }
+
+    /**
+     * 判断购物车商品的使用类型是否一致
+     * @param productList 购物车商品列表
+     * @return
+     */
+    private Integer checkUseType(List<Map> productList) {
+        if (productList.size() == 0){
+            return CusCart.UseType.SHOPPING_CART.getValue();
+//            throw BaseException.errorByErrInfo("购物车商品已不存在"); //提交订单后不支付按后退键时购物车商品不存在
+        }
+        Integer useType = MapUtil.getInteger(productList.get(0), "useType");
+        Assert.notNull(useType, "商品异常");
+        int size = productList.size();
+        for (int i = 1; i < size; i++){
+            if (useType != MapUtil.getInteger(productList.get(i), "useType")){ //使用类型不一致
+                throw BaseException.errorByErrInfo("非法操作");
+            }
+        }
+        return useType;
+    }
+
+    /**
+     * 增加规格描述
+     * @param product 商品
+     */
+    private void putSpecDesc(Map product) {
+        String specJson = MapUtil.getString(product, "specJson");
+        String specDesc = "";
+        if (StringUtil.checkObj(specJson)){ //套餐时为空
+            Map<String, String> spec = JsonUtils.toObject(specJson, Map.class);
+            for (String key : spec.keySet()) {
+                specDesc += "_" + spec.get(key);
+            }
+            if (specDesc.length() > 0){
+                specDesc = specDesc.substring(1);
+            }
+        }
+        product.put("specDesc", specDesc);
+    }
+
+    /**
+     * 立即购买，跳转到确认订单页面前保存购物车
+     *
+     * @param cusId   客户标识
+     * @param cusName 客户名称
+     * @param priceId 商品价格标识
+     * @param num     购买数量
+     */
+    @Override
+    public Long saveCart4BuyNow(Long cusId, String cusName, Long priceId, Integer num) {
+        // 如果购物车已存在此商品，则删除掉
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", cusId));
+        filters.add(Filter.eq("priceId", priceId));
+        List<CusCart> cusCarts = cusCartBaseService.findList(1, filters, null);
+        if(CollectionUtil.isNotEmpty(cusCarts)) {
+            cusCartBaseService.delete(cusCarts.get(0).getId());
+        }
+
+        CusCart cusCart = new CusCart();
+        ProductPrice productPrice = productPriceBaseService.find(priceId);
+        Long productId = productPrice.getProductId();
+        ProductInfo productInfo = productInfoBaseService.find(productId);
+
+        cusCart.setUseType(CusCart.UseType.SHOPPING_CART.getValue());
+        cusCart.setCateId(productInfo.getCateId());
+        cusCart.setCreatedId(cusId);
+        cusCart.setCateName(productInfo.getCateName());
+        cusCart.setProductId(productId);
+        cusCart.setType(productInfo.getType());
+        cusCart.setProductName(productInfo.getZhName());
+        cusCart.setCode(productInfo.getCode());
+        cusCart.setBarCode(productInfo.getBarCode());
+        cusCart.setHeadPath(productInfo.getHeadPath());
+
+        filters.clear();
+        filters.add(Filter.eq("productId", productId));
+        List<ProductAttr> attrs = productAttrBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(attrs)){
+            cusCart.setAttrJson(attrs.get(0).getAttrJson());
+        }
+
+        cusCart.setPriceId(priceId);
+        cusCart.setNum(num);
+        cusCart.setCusId(cusId);
+        cusCart.setCreatedName(cusName);
+        cusCartBaseService.save(cusCart);
+
+        return cusCart.getId();
+    }
+
+}

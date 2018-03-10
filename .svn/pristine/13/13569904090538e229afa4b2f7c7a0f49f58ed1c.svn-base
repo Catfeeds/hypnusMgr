@@ -1,0 +1,278 @@
+package com.catt.wfx.repository.entity.couponMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.Date;
+
+/**
+ * 用户代金券实体类
+ * 
+ * @author chen chusheng
+ * @date 2017-01-16 11:10:41
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_COUPON_CUS")
+public class CouponCus extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+
+	public static final Integer ISUSE_USE = 1;//是否使用 是
+	public static final Integer ISUSE_NOT_USE = 2;//是否使用 否
+	public static final Integer ISUSE_OVERDUE = 3;//已过期
+
+	
+	/**
+	 * 用户标识
+	 */
+	private Long cusId;
+    /**
+     * 来源	1-平台赠送，2-店主注册奖励，3-店主邀请奖励，4-店主销售奖励，5-主管管理奖励
+     */
+    private Integer source;
+	/**
+	 * 厂家标识
+	 */
+	private Long factoryId;
+	/**
+	 * 代金券标识
+	 */
+	private Long couponId;
+	/**
+	 * 面额
+	 */
+	private Double faceValue;
+	/**
+	 * 领取时间
+	 */
+	private Date receiveTime;
+	/**
+	 * 失效时间
+	 */
+	private Date invalidTime;
+	/**
+	 * 是否使用<p><br>
+	 * 1-已使用<br>
+	 * 2-未使用
+	 */
+	private Integer isUse;
+	/**
+	 * 使用时间
+	 */
+	private Date useTime;
+	/**
+	 * 订单编号
+	 */
+	private String orderCode;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+
+	@Column(name = "I_CUS_ID")
+	public Long getCusId() {
+		return cusId;
+	}
+
+	public void setCusId(Long cusId) {
+		this.cusId = cusId;
+	}
+
+    @Column(name = "I_SOURCE")
+    public Integer getSource() {
+        return source;
+    }
+
+    public void setSource(Integer source) {
+        this.source = source;
+    }
+
+    @Column(name = "I_FACTORY_ID")
+	public Long getFactoryId() {
+		return factoryId;
+	}
+
+	public void setFactoryId(Long factoryId) {
+		this.factoryId = factoryId;
+	}
+
+	@Column(name = "I_COUPON_ID")
+	public Long getCouponId() {
+		return couponId;
+	}
+
+	public void setCouponId(Long couponId) {
+		this.couponId = couponId;
+	}
+
+	@Column(name = "I_FACE_VALUE")
+	public Double getFaceValue() {
+		return faceValue;
+	}
+
+	public void setFaceValue(Double faceValue) {
+		this.faceValue = faceValue;
+	}
+
+	@Column(name = "D_RECEIVE_TIME")
+	public Date getReceiveTime() {
+		return receiveTime;
+	}
+
+	public void setReceiveTime(Date receiveTime) {
+		this.receiveTime = receiveTime;
+	}
+
+	@Column(name = "D_INVALID_TIME")
+	public Date getInvalidTime() {
+		return invalidTime;
+	}
+
+	public void setInvalidTime(Date invalidTime) {
+		this.invalidTime = invalidTime;
+	}
+
+	@Column(name = "I_IS_USE")
+	public Integer getIsUse() {
+		return isUse;
+	}
+
+	public void setIsUse(Integer isUse) {
+		this.isUse = isUse;
+	}
+
+	@Column(name = "D_USE_TIME")
+	public Date getUseTime() {
+		return useTime;
+	}
+
+	public void setUseTime(Date useTime) {
+		this.useTime = useTime;
+	}
+
+	@Column(name = "S_ORDER_CODE", length = 128)
+	public String getOrderCode() {
+		return orderCode;
+	}
+
+	public void setOrderCode(String orderCode) {
+		this.orderCode = orderCode;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+    /**
+     * 来源
+     * 1-平台赠送，2-店主注册奖励，3-店主邀请奖励，4-店主销售奖励，5-主管管理奖励
+     */
+    public enum Source {
+
+        /**
+         * 平台赠送
+         */
+        PlatGive(1, "平台赠送"),
+
+        /**
+         * 店主注册奖励
+         */
+        ShopkeeperRegisterBonus(2, "店主注册奖励"),
+
+        /**
+         * 店主邀请奖励
+         */
+        ShopkeeperInviteBonus(3, "店主邀请奖励"),
+
+        /**
+         * 店主销售奖励
+         */
+        ShopkeeperSaleBonus(4, "店主销售奖励"),
+
+        /**
+         * 主管管理奖励
+         */
+        LeaderMgrBonus(5, "主管管理奖励");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        Source(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static Source getEnum(int value) {
+            Source[] source = Source.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+    }
+}
+

@@ -1,0 +1,307 @@
+var productId;
+var priceList;
+var specList;
+var colNames;
+var dataList = [];
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $("#save").click(EventHandler.save);
+
+                    $("#dataList").on('keyup afterpaste', '.money', function(){
+                        testMoney(this);
+                    });
+                    $("#dataList").on('keyup afterpaste', '.posNum', function(){
+                        testPositiveNumber(this);
+                    });
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                    productId = $("#productId").val();
+                    EventHandler.loadAttr();
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                loadAttr: function(){
+                    DataHandler.getSpecAndPrice({productId: productId}, function (backData) {
+                        var kucun = 0;
+                        priceList = backData.priceList;
+                        specList = backData.specList;
+                        colNames = backData.colNames;
+                        var html = template('template_dataList', {content: specList, colNames: colNames});
+                        $('#dataList').html(html);
+                        for(var i = 0; i < specList.length; i++){
+                            var spec = {};
+                            for(var k = 0; k < colNames.length; k++){
+                                spec[colNames[k]] = specList[i][k];
+                            }
+                            for(var j = 0; j < priceList.length; j++){
+                                var price = priceList[j];
+                                if($.toJSON(spec) == price.specJson){
+                                    kucun += price.stockNum;
+                                    $("#priceId"+i).val(price.id);
+                                    $("#salesPrice"+i).val(price.salesPrice);
+                                    //$("#costPrice"+i).val(price.costPrice);
+                                    $("#profit"+i).val(price.profit);
+
+                                    $("#generalAgent"+i).val(price.generalAgent);
+                                    $("#provincialAgent"+i).val(price.provincialAgent);
+                                    $("#cityAgent"+i).val(price.cityAgent);
+                                    $("#regionalAgent"+i).val(price.regionalAgent);
+
+                                    $("#rebateOne"+i).val(price.rebateOne);
+                                    $("#rebateTwo"+i).val(price.rebateTwo);
+                                    $("#rebateThree"+i).val(price.rebateThree);
+                                    $("#rebateFour"+i).val(price.rebateFour);
+                                    $("#rebateFive"+i).val(price.rebateFive);
+
+                                    $("#stockNum"+i).val(price.stockNum);
+                                    $("#saleNum"+i).val(price.saleNum);
+                                    $("#shelveNum"+i).val(price.stockNum+price.saleNum);
+                                    break;
+                                }
+                            }
+                        }
+                        $("#kucun").html(kucun);
+                        var status = $("#status").val();
+                        if(status == 2){
+                            if(kucun == 0){
+                                $("#statusName").html("已售罄");
+                            }else{
+                                $("#statusName").html("销售中");
+                            }
+                        }
+                        var rows = $("#dataList").find("tr");
+                        for(var i = colNames.length-1; i >= 0; i--){
+                            var rowspanNum = 1;
+                            var index = 1;
+                            var preName = $($(rows[1]).find("td")[i]).html();
+                            for(var j = 2; j < rows.length; j++){
+                                var name = $($(rows[j]).find("td")[i]).html();
+                                if(name == preName){
+                                    $($(rows[j]).find("td")[i]).remove();
+                                } else{
+                                    $($(rows[index]).find("td")[i]).attr("rowspan", rowspanNum);
+                                    index = j;
+                                    rowspanNum = 0;
+                                }
+                                rowspanNum++;
+                                preName = name;
+                                if(j == rows.length - 1){
+                                    $($(rows[index]).find("td")[i]).attr("rowspan", rowspanNum);
+                                }
+                            }
+                        }
+                        $("#contentFrame", window.parent.document).css("height", $("body").css("height"))
+                    });
+                },
+                /**
+                 * 保存
+                 */
+                save: function () {
+                    var prices = [];
+                    for(var i = 0; i < specList.length; i++){
+                        var priceId = $("#priceId"+i).val();
+                        var salesPrice = $("#salesPrice"+i).val();
+                        //var costPrice = $("#costPrice"+i).val();
+                        var profit = $("#profit"+i).val();
+
+                        var generalAgent = $("#generalAgent"+i).val();
+                        var provincialAgent = $("#provincialAgent"+i).val();
+                        var cityAgent = $("#cityAgent"+i).val();
+                        var regionalAgent = $("#regionalAgent"+i).val();
+
+                        var rebateOne = $("#rebateOne"+i).val();
+                        var rebateTwo = $("#rebateTwo"+i).val();
+                        var rebateThree = $("#rebateThree"+i).val();
+                        var rebateFour = $("#rebateFour"+i).val();
+                        var rebateFive = $("#rebateFive"+i).val();
+                        if((rebateFive && (!rebateOne || !rebateTwo || !rebateThree || !rebateFour)) ||
+                            (rebateFour && (!rebateOne || !rebateTwo || !rebateThree)) ||
+                            (rebateThree && (!rebateOne || !rebateTwo)) ||
+                            (rebateTwo && !rebateOne)){
+                            $("#rebateOne"+i).focus();
+                            msgBox.tips("上级返利不能为空");
+                            return;
+                        }
+
+                        var stockNum = $("#stockNum"+i).val();
+                        var shelveNum = $("#shelveNum"+i).val();
+                        var saleNum = $("#saleNum"+i).val() || 0;
+                        if(!((salesPrice == "" && profit == "" && shelveNum == ""
+                                && generalAgent == "" && provincialAgent == "" && cityAgent == "" && regionalAgent == "")
+                            || (salesPrice != "" && profit != "" && shelveNum != ""
+                                && generalAgent != "" && provincialAgent != "" && cityAgent != "" && regionalAgent != ""))){
+                            $("#salesPrice"+i).focus();
+                            msgBox.tips("行数据不完整，除返利外其他数据必须全部填写或全部为空");
+                            return;
+                        }
+                        if(salesPrice != "" && profit != "" && shelveNum != ""
+                                && generalAgent != "" && provincialAgent != "" && cityAgent != "" && regionalAgent != ""){
+                            if(stockNum == ""){ //新增
+                                stockNum = shelveNum;
+                            } else{
+                                if(parseInt(saleNum) > parseInt(shelveNum)){
+                                    $("#shelveNum"+i).focus();
+                                    msgBox.tips("上架数量要大于销售数量【"+saleNum+"】");
+                                    return;
+                                }
+                                stockNum = shelveNum-saleNum;
+                            }
+                            if(parseFloat(salesPrice) <= parseFloat(profit)){
+                                $("#profit"+i).focus();
+                                msgBox.tips("利润要小于售价");
+                                return;
+                            }
+                            if(parseFloat(salesPrice) <= parseFloat(generalAgent)){
+                                $("#generalAgent"+i).focus();
+                                msgBox.tips("总代售价要小于售价");
+                                return;
+                            }
+                            if(parseFloat(salesPrice) <= parseFloat(provincialAgent)){
+                                $("#provincialAgent"+i).focus();
+                                msgBox.tips("省代售价要小于售价");
+                                return;
+                            }
+                            if(parseFloat(salesPrice) <= parseFloat(cityAgent)){
+                                $("#cityAgent"+i).focus();
+                                msgBox.tips("市代售价要小于售价");
+                                return;
+                            }
+                            if(parseFloat(salesPrice) <= parseFloat(regionalAgent)){
+                                $("#regionalAgent"+i).focus();
+                                msgBox.tips("区代售价要小于售价");
+                                return;
+                            }
+
+                            if((parseFloat(salesPrice) <= parseFloat(rebateOne))){
+                                $("#rebateOne"+i).focus();
+                                msgBox.tips("返利要小于售价");
+                                return;
+                            }
+                            if((parseFloat(salesPrice) <= parseFloat(rebateTwo))){
+                                $("#rebateTwo"+i).focus();
+                                msgBox.tips("返利要小于售价");
+                                return;
+                            }
+                            if((parseFloat(salesPrice) <= parseFloat(rebateThree))){
+                                $("#rebateThree"+i).focus();
+                                msgBox.tips("返利要小于售价");
+                                return;
+                            }
+                            if((parseFloat(salesPrice) <= parseFloat(rebateFour))){
+                                $("#rebateFour"+i).focus();
+                                msgBox.tips("返利要小于售价");
+                                return;
+                            }
+                            if((parseFloat(salesPrice) <= parseFloat(rebateFive))){
+                                $("#rebateFive"+i).focus();
+                                msgBox.tips("返利要小于售价");
+                                return;
+                            }
+
+                            var spec = {};
+                            for(var k = 0; k < colNames.length; k++){
+                                spec[colNames[k]] = specList[i][k];
+                            }
+                            var price = {
+                                id: priceId,
+                                salesPrice: salesPrice,
+                                costPrice: salesPrice,
+                                profit: profit,
+                                generalAgent: generalAgent,
+                                provincialAgent: provincialAgent,
+                                cityAgent: cityAgent,
+                                regionalAgent: regionalAgent,
+
+                                rebateOne: rebateOne,
+                                rebateTwo: rebateTwo,
+                                rebateThree: rebateThree,
+                                rebateFour: rebateFour,
+                                rebateFive: rebateFive,
+
+                                stockNum: stockNum,
+                                saleNum: saleNum,
+                                specJson: $.toJSON(spec)
+                            }
+                            prices[prices.length] = price;
+                        }
+                    }
+                    if(prices.length == 0){
+                        msgBox.tips("至少要填写一行数据");
+                        return;
+                    }
+                    var params = {productId: productId, pricesJson: $.toJSON(prices)};
+                    DataHandler.save(params, function (backData) {
+                        msgBox.tips("保存成功");
+                        window.location.href = path + "/admin/productMgr/publish/index.html";
+                    });
+                }
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 * @param params
+                 * @param callback
+                 */
+                save: function (params, callback) {
+                    $.post(path + "/admin/productMgr/publish/save", params, function (result) {
+                        callback(result);
+                    });
+                },
+                getSpecAndPrice: function (params, callback) {
+                    $.post(path + "/admin/productMgr/publish/getSpecAndPrice", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });
+//金额验证
+function testMoney(ob){
+    if(!ob.value){return;}
+    if (!ob.value.match(/^[0-9]+(\.[0-9]{0,2})?$/)) ob.value = ob.t_value; else ob.t_value = ob.value;
+    if (ob.value.match(/^[0-9]+(\.[0-9]{0,2})?$/)) ob.o_value = ob.value;
+    if (ob.value == 'undefined') {
+        ob.value = '';
+    }
+}
+//正整数/0验证
+function testPositiveNumber(ob){
+    if(ob.value.length==1){ob.value=ob.value.replace(/[^0-9]/g,'')}else{ob.value=ob.value.replace(/\D/g,'')}
+    if(ob.value == 'undefined'){
+        ob.value = '';
+    }
+}

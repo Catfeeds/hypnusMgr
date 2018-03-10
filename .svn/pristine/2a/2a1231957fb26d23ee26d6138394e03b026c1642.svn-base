@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <!-- 店主销售奖励任务 -->
+    <bean id="shopkeeperSubsidyJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="shopkeeperSubsidyServiceImpl" />
+        </property>
+        <property name="targetMethod">
+            <value>settleSaleReward</value>
+        </property>
+    </bean>
+
+    <!-- 主管销售奖励任务 -->
+    <bean id="leaderSubsidyJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="leaderSubsidyServiceImpl" />
+        </property>
+        <property name="targetMethod">
+            <value>settleSaleReward</value>
+        </property>
+    </bean>
+
+    <!-- 平台结算任务 -->
+    <bean id="platSettleJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="platSettlementServiceImpl" />
+        </property>
+        <property name="targetMethod">
+            <value>settle</value>
+        </property>
+    </bean>
+
+    <!-- 订单超过退货期限任务 -->
+    <bean id="orderFinishJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="orderServiceImpl" />
+        </property>
+        <property name="targetMethod">
+            <value>handleSignInOrder</value>
+        </property>
+    </bean>
+
+    <!-- 订单超时支付任务 -->
+    <bean id="orderTimeoutJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="orderServiceImpl" />
+        </property>
+        <property name="targetMethod">
+            <value>handleTimeoutOrder</value>
+        </property>
+    </bean>
+
+
+    <!-- 店主销售奖励触发器 -->
+    <bean id="shopkeeperSubsidyTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="shopkeeperSubsidyJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 30 0 * * ?</value><!-- 每天0点30分整触发 -->
+        </property>
+    </bean>
+
+    <!-- 主管销售奖励触发器 -->
+    <bean id="leaderSubsidyTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="leaderSubsidyJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0 1 * * ?</value><!-- 每天1点整触发 -->
+        </property>
+    </bean>
+
+    <!-- 平台结算触发器 -->
+    <bean id="platSettleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="platSettleJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0 2 * * ?</value><!-- 每天2点整触发 -->
+        </property>
+    </bean>
+
+    <!-- 订单超过退货期限触发器 -->
+    <bean id="orderFinishTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="orderFinishJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 10 0/2 * * ?</value><!-- 每2个小时触发 -->
+        </property>
+    </bean>
+
+    <!-- ***************** 触发器开始 ***************** -->
+    <bean id="orderTimeoutTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="orderTimeoutJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0 1 * * ?</value><!-- 每天凌晨1点执行一次 -->
+        </property>
+    </bean>
+    <!--
+		调度作业
+		如果lazy-init='false',则容器启动时就会执行调度程序;否则需要实例化该bean才能执行调度程序
+	-->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+        <property name="triggers">
+            <list>
+                <!-- 店主销售销售奖励任务 -->
+                <ref local="shopkeeperSubsidyTrigger" />
+
+                <!--&lt;!&ndash; 主管销售销售奖励任务 &ndash;&gt;-->
+                <ref local="leaderSubsidyTrigger" />
+
+                <!--&lt;!&ndash; 平台结算任务 &ndash;&gt;-->
+                <ref local="platSettleTrigger" />
+
+                <!--&lt;!&ndash; 订单超过退货期限任务 &ndash;&gt;-->
+                <ref local="orderFinishTrigger" />
+
+                <!-- 订单超时支付任务 -->
+                <ref local="orderTimeoutTrigger" />
+            </list>
+        </property>
+    </bean>
+
+</beans>

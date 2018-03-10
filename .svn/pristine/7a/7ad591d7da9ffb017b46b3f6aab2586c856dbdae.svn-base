@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#进入脚本所在目录
+BASEDIR=$(dirname $0)
+cd $BASEDIR
+
+unzip wfxMgr.war -d wfxMgr
+unzip wfxMobile.war -d wfxMobile
+unzip wfxWechatShop.war -d wfxWechatShop
+

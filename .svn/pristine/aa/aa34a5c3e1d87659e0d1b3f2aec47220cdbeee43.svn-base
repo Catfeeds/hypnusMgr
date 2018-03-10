@@ -1,0 +1,106 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/*.topBg{position:absolute; top:0; left:0; width:100%;z-index:1; }
+.top .top-left{ z-index:99;}
+.top h1{position:absolute; z-index:59; border-bottom:none; color:#fff;}
+.top .top-right{ z-index:29;}
+.headPic{position:absolute; top:50px; z-index:29;}
+*/
+
+/*-------头部-------*/
+.head{ height:47px; position:fixed; top:0; left:0; width:100%; z-index:997;}
+.top-left{ position:absolute;width:38px;height:38px;top:6px;left:0%;font-size:18px;color:#FFF;}
+.top-left img{width:26px; height:26px;}
+
+.top-right{ position:absolute;width:38px;height:38px;top:6px;right:8px;font-size:18px;color:#FFF; }
+.top-right img{width:30px; height:30px;}
+.top-right02{ position:absolute;width:38px;height:38px;top:6px;right:52px;font-size:18px;color:#FFF;}
+.top-right02 img{width:30px; height:30px;}
+.top-right03{ position:absolute;width:38px;height:38px;top:6px;right:94px;font-size:18px;color:#FFF;}
+.top-right03 img{width:30px; height:30px;}
+.top-right:hover{opacity:0.7;}
+.top-right_send{float:right; position:absolute; width:100px; height:40px; top:4px; right:5px; font-size:18px; color:#fff; text-align:center; line-height:40px; background:#8bcc46;}
+.head h1{width:100%; font-size:18px;color:#323232;margin:0px auto; line-height:46px; text-align:center; border-bottom:1px solid #e5e5e5;position:absolute; z-index:59; border-bottom:none; color:#fff;}
+
+/*---*/
+table{ border-collapse:collapse; width:100%;}
+.floatLeft{ float:left;}
+.floatRight{ float:right;}
+
+/*-------我的店铺-------*/
+.storte_top{width:100%;}
+.bg_store{ position:relative; background:#fff; height:204px;}
+.wode{ position:absolute; top:20%; left:40%; width:100px;}
+.wode img{ margin-left:10px;}
+.wode h2{ font-size:18px; color:#fff; height:30px; line-height:30px;  text-align:center; margin-bottom:3px;}
+.wode h3{ width:100px; height:26px; line-height:26px; text-align:center; background:#fff; border-radius:10px; letter-spacing:1px; color:#ff4d4d; font-size:14px;}
+
+/*-------单品管理-------*/
+.store_main{}
+table.goodsType{ width:100%; height:35px; background:#fff; border-bottom:1px solid #e5e5e5; margin-bottom:10px;}
+table.goodsType td a{ display:block; margin:0 10%; height:40px; line-height:40px; text-align:center; font-size:16px; color:#222; cursor:pointer; border-bottom:2px solid #fff;}
+table.goodsType td a.lion{ border-bottom:2px solid #ff4d4d; color:#ff4d4d;}
+.goodsList{ border-top:1px solid #e5e5e5;}
+.goodsDiv{ border-bottom:1px solid #e5e5e5; padding:5px 0; background:#fff;}
+.goodsHead{ padding:10px 10px 10px 120px; position:relative; height:100px;}
+.goodsHead img{ position:absolute; top:10px; left:10px;}
+.goodsHead h1{ height:44px; line-height:22px; font-size:16px; color:#222; margin-bottom:3px; overflow:hidden;}
+.goodsHead h2{ color:#555; font-size:14px; height:30px; line-height:26px;}
+.goodsHead h2 span{ font-size:14px; color:#ff4d4d; font-size:20px; padding-right:18px; float:left;}
+.goodsHead h2 font{ color:#ff4d4d; font-size:14px;}
+.goodsHead h3{ color:#a6a6a6; font-size:12px;}
+.goodsHead h3 span{ background:#ff4d4d; width:100px; height:20px; text-align:center; color:#fff; font-size:12px; border-radius:20px; margin-right:25px; padding:0 10px;}
+
+table.goodsBt{ width:100%;}
+table.goodsBt td{ height:40px; line-height:40px; text-align:center; font-size:14px; color:#808080; cursor:pointer;}
+table.goodsBt td span{ display:block; padding-left:25px; width:30px; margin:0 auto; position:relative;}
+table.goodsBt td span img{ position:absolute; top:9px; left:0;}
+
+/*-------特卖管理-------*/
+.saleDiv{ background:#fff;}
+.saleDiv img.banner{ width:100%;}
+.saleDiv h1{ font-size:18px; color:#333; height:30px; line-height:30px; margin-left:10px; overflow:hidden;}
+.saleDiv h1 font{ color:#ff4d4d;}
+.saleDiv h2{ font-size:15px; color:#666; height:30px; line-height:20px; margin:0 10px;}
+.saleDiv h2 font{ font-size:18px; color:#ff4d4d; padding:3px;}
+
+/*-------拼团管理-------*/
+.pintuanDiv{ padding:10px 10px 10px 120px; position:relative; height:100px; margin-bottom:10px; background:#fff; cursor:pointer;}
+.pintuanDiv img{ position:absolute; top:10px; left:10px;}
+.pintuanDiv h1{ height:30px; line-height:30px; font-size:16px; color:#222; margin-bottom:3px; overflow:hidden;}
+.pintuanDiv p{ font-size:14px; color:#666; height:22px; overflow:hidden;}
+.pintuanDiv h2{ color:#555; font-size:14px; height:30px; line-height:30px;}
+.pintuanDiv h2 span{ color:#ff4d4d; padding-right:18px;}
+.pintuanDiv h2 font{ color:#ff4d4d; font-size:14px; padding:0 5px;}
+.pintuanDiv h3{ color:#888; font-size:12px;}
+
+
+.floatRight{ float:right;}
+
+
+/*-------店铺预览-------*/
+.onlineDiv{ background:#fff; padding-bottom:5px;}
+.onlineDiv img{ width:100%;}
+
+.ptDiv{ background:#fff; padding-bottom:8px;}
+.ptDiv img.banner{ width:100%;}
+.ptDiv h1{ font-size:16px; color:#333; height:30px; line-height:30px; margin-left:10px; overflow:hidden;}
+.ptDiv h1 font{ color:#ff4d4d; padding-right:8px;}
+.ptDiv h2{ font-size:14px; color:#666; height:30px; line-height:30px; margin:0 10px;}
+span.ptState{ float:right; background:#ff4d4d; font-size:13px; height:24px; line-height:24px; width:60px; color:#fff; border-radius:8px; text-align:center;}
+
+/*-----浮动分享框-----*/
+.shareDiv{ background:url(../images/bg_float.png) repeat; position:absolute; top:0; left:0; z-index:998; display:none;}
+span.close{ display:block; width:24px; height:24px; position:absolute; top:0; right:0; cursor:pointer; padding:6px;}
+.share{ width:92%; padding:0 4%; height:250px; background:#fff; border-top:3px solid #ff4d4d; position:fixed; bottom:-250px; left:0; z-index:999;}
+.share h1{ height:50px; font-size:18px; color:#333; text-align:center; margin-top:20px;}
+.share h1 font{ color:#ff4d4d; font-size:28px; padding:0 5px;}
+.share p{ font-size:13px; color:#666; letter-spacing:1px; line-height:130%; min-height:30px;}
+.share h2{ height:20px; border-bottom:1px solid #efefef; position:relative;}
+.share h2 span{ width:50px; font-size:12px; color:#666; position:absolute; top:12px; margin-left:38%; padding:0 10px; background:#fff; text-align:center;}
+table.shareType{ margin-top:30px;}
+table.shareType td{ text-align:center; cursor:pointer;}
+table.shareType th{ font-size:12px; height:20px; color:#666; text-align:center; font-weight:normal;}
+

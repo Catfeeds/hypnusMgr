@@ -1,0 +1,177 @@
+/**
+ * Created by xiazanyi on 2017/3/8.
+ */
+define('admin/wechat/personal/address/list', ['$', 'msgBox', 'template', 'adminSystem', 'jquery.json'], function (require, exports, module) {
+    var $ = require('$');
+    var template = require('template');
+    var msgBox = require('msgBox');
+    var currentForm = 'currentForm';
+    var adminSystem = require('adminSystem');
+    var dataList = [];
+    function AddressList() {
+    }
+
+    /**
+     * 初始化
+     */
+    AddressList.prototype.init = function () {
+        var self = this;
+        self.pageNo = 1;
+        self.pageSize = 8;
+        //列表显示容器
+        self.container = $('#container');
+        //滚动刷新控件
+        self.scrollControl = $('#scrollControl');
+        self.scrollControl.hide();
+        //数据请求地址
+        self.dataUrl = "";
+        self.initDataUrl();
+        //初始化下拉刷新
+        $('#containDiv').pullToRefresh();
+        //
+        self.bindEvent();
+        self.loadData();
+    };
+
+    /**
+     * 事件绑定
+     */
+    AddressList.prototype.bindEvent = function () {
+        var self = this;
+        //是否是  下拉刷新 ，false 无  ，true  有
+        self.freshFlag = false;
+        $('#containDiv').on("pull-to-refresh", function() {
+            self.pageNo = 1;
+            self.freshFlag = true;
+            self.loadData();
+        });
+
+        //是否是 滚动刷新 ，false 无 ，true  有
+        self.scrollFlag = false;  //状态标记
+        $('#containDiv').infinite().on("infinite", function() {
+            if(self.scrollFlag) return;
+            self.scrollFlag = true;
+            self.loadData();
+
+        });
+
+        //设置默认按钮事件(动态添加事件)
+        $('#container').on("click",".xw_selectMoren",function () {
+            var $id = $(this).attr('data-id');
+            var wthis = $(this);
+            $.post(path + "/admin/wechat/personal/cusContact/setDefaultContact",{"id":$id},function(data){
+                if(data.type == 'success'){
+                    $('.morenSelect').each(function(){
+                        $(this).attr("src",path +"/resources/images/chanpin_img_select1.png");
+                    });
+                    wthis.children('.morenSelect').attr("src",path +"/resources/images/chanpin_img_selected.png");
+                    msgBox.tips("设置成功！");
+                }
+            });
+        });
+
+        //删除地址事件
+        $('#container').on("click",".deleteBtn",function (){
+            var wthis = $(this);
+            var $id = $(this).attr('data-id');
+            msgBox.confirm({
+               title :"温馨提示",
+               msg   : "确定要删除此地址么？",
+               callback : function(btnType){
+                   if(btnType == msgBox.ButtonType.OK){
+                       $.post(path + "/admin/wechat/personal/cusContact/delete",{"id":$id},function(data){
+                           if(data.type == 'success'){
+                                wthis.parent().parent().parent().remove();
+                                msgBox.tips("删除成功！");
+                           }
+                       });
+                   }
+               }
+            });
+        });
+
+        //选择地址事件
+        $('#container').on("click",".dizhiMsg",function (){
+            var id = $(this).attr('data-id');
+            for(var i = 0; i < dataList.length; i++){
+                var data = dataList[i];
+                if(data.id == id){
+                    msgBox.exWindow.close(JSON.stringify(data));
+                }
+            }
+        });
+    };
+
+    /**
+     * 定义页面请求数据的URL
+     */
+    AddressList.prototype.initDataUrl = function(){
+        var self = this;
+        self.dataUrl =  path + "/admin/wechat/personal/cusContact/getCusContactByPage";
+    };
+
+    /**
+     * 加载数据
+     * @param $form
+     */
+    AddressList.prototype.loadData = function () {
+        var self = this;
+        var params = [];
+        params = params.concat([
+            {name: 'pageNo', value: self.pageNo},
+            {name: 'pageSize', value: self.pageSize}
+        ]);
+        //    console.log("params"+JSON.stringify(params));
+        $.post(self.dataUrl, params, function (data) {
+            var content = data.result.content;
+            for(var i = 0 ; i < content.length; i++){
+                dataList[dataList.length] = content[i];
+            }
+            //如果是下拉刷新，则结束下拉刷新
+            if(self.freshFlag){
+                $('#containDiv').pullToRefreshDone();
+            }
+            //如果是滚动刷新，则结束滚动刷新
+            if(self.scrollFlag){
+                $('#containDiv').destroyInfinite();
+            }
+            var html = template('templateList', data.result);
+            if(self.pageNo ==1){
+                self.container.html("");
+                $('.weui-infinite-scroll').empty().append("<div class=\"infinite-preloader\"></div>正在加载");
+            }
+            //结尾插入数据
+            self.container.append(html);
+            //当数据量 大于所请求的数据量时，需要在后面加入一个滚动刷新的控件
+            if(self.pageNo * self.pageSize < data.total){
+                self.scrollControl.show();
+                self.pageNo ++;
+                //初始化滚动刷新
+                self.scrollFlag = false;
+                $('#containDiv').infinite(50);
+
+            }else{
+                //  self.scrollControl.hide();
+                self.scrollControl.show();
+                self.scrollControl.empty().append("<span style='color: darkgray'>"+lastPageText+"</span>");
+                self.scrollFlag = false;
+            }
+            if(self.container.html()==""){
+                self.scrollControl.hide();
+                //
+                var msg ="<center ><br/><span style='vertical-align: middle!important;color: darkgray'>"+emptyDataText+"</span></center>";
+                self.container.html(msg);
+            }
+            //  $(window).triggerHandler('resize');
+        });
+    };
+
+    module.exports = new AddressList();
+
+});
+
+seajs.use(['$', 'admin/wechat/personal/address/list'], function ($, addressList) {
+    $(function () {
+        addressList.init();
+    });
+});

@@ -1,0 +1,71 @@
+package com.catt.wfx.repository.dao.customerMgr.impl;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusCertificationDao;
+import com.catt.wfx.repository.entity.customerMgr.CusCertification;
+import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Repository("cusCertificationDaoImpl")
+public class CusCertificationDaoImpl extends BaseDaoImpl<CusCertification, Long>
+		implements CusCertificationDao {
+
+	/**
+	 * 获取分页数据
+	 *
+	 * @param params
+	 * @return
+	 */
+	@Override
+	public Page<Map> getPage(Map<String, Object> params) {
+		String name = MapUtil.getString(params, "name");
+		String mobile = MapUtil.getString(params, "mobile");
+		Integer status = MapUtil.getInteger(params, "status");
+		Integer pageNo = MapUtil.getInteger(params, "pageNo");
+		Integer pageSize = MapUtil.getInteger(params, "pageSize");
+
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT ");
+		sql.append(" a.I_ID AS \"id\", ");
+		sql.append(" a.I_CUS_ID AS \"cusId\", ");//用户ID
+		sql.append(" b.S_NICKNAME AS \"nickname\", ");//用户昵称
+		sql.append(" a.S_MOBILE AS \"mobile\", ");//用户手机
+		sql.append(" a.S_REAL_NAME AS \"name\", ");//用户真实姓名
+		sql.append(" a.S_ID_CARD AS \"idCard\", ");//身份证
+		sql.append(" a.D_CREATE_DATE AS \"createDate\", ");//提交时间
+		sql.append(" a.I_STATUS AS \"status\" ");//状态
+		sql.append(" FROM T_CUS_CERTIFICATION a ");
+		sql.append(" LEFT JOIN T_CUS_INFO b ON a.I_CUS_ID = b.I_ID ");
+		sql.append(" WHERE 1=1 ");
+		Map<String, Object> param = new HashMap<>();
+		if (StringUtil.isNotBlank(name)) {
+			sql.append(" AND b.S_NICKNAME like (:name)");
+			param.put("name", name + "%");
+		}
+		if (StringUtil.isNotBlank(mobile)) {
+			sql.append(" AND a.S_MOBILE = :mobile");
+			param.put("mobile", mobile);
+		}
+		if (StringUtil.checkObj(status)) {
+			sql.append(" AND a.I_STATUS = :status");
+			param.put("status", status);
+		}
+		sql.append(" ORDER BY a.D_CREATE_DATE DESC ");
+
+		Pageable pageable = new Pageable();
+		if(StringUtil.checkObj(pageNo)){
+			pageable.setPageNo(pageNo);
+		}
+		if(StringUtil.checkObj(pageSize)){
+			pageable.setPageSize(pageSize);
+		}
+
+		return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+	}
+}

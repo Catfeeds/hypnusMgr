@@ -1,0 +1,19 @@
+package com.catt.wfx.repository.dao.orderMgr.impl;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderReturnLogDao;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturnLog;
+import org.springframework.stereotype.Repository;
+
+/**
+ * 退货单流程信息Dao接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:34
+ * @version V1.0
+ */
+@Repository("cusOrderReturnLogDaoImpl")
+public class CusOrderReturnLogDaoImpl extends BaseDaoImpl<CusOrderReturnLog, Long>
+		implements CusOrderReturnLogDao {
+
+}

@@ -1,0 +1,79 @@
+<%--
+  User: Wei Rongfeng
+  Date: 2017-03-08 09:13:39
+  Time: 09:13
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>我的代金券</title>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/coupon/couponList.js"></script>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/wodedaijinquan.css"/>
+    <script type="text/javascript">
+    </script>
+</head>
+<body style="background: #F2F2F2">
+
+<table class="goodsType">
+    <tbody>
+    <tr>
+        <td>
+            <a class="lion xw_li">未使用</a>
+        </td>
+        <td>
+            <a class="xw_li">已使用</a>
+        </td>
+        <td>
+            <a class="xw_li">已过期</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div id="refreshUI" style="overflow: hidden">
+    <div id="refreshContainer" class="kd-weui-refresh-container kd-overflow-auto">
+        <%--下拉刷新控件--%>
+        <div class="weui-pull-to-refresh-layer">
+            <div class="pull-to-refresh-arrow"></div> <!-- 上下拉动的时候显示的箭头 -->
+            <div class="pull-to-refresh-preloader"></div> <!-- 正在刷新的菊花 -->
+            <div class="down">下拉刷新</div><!-- 下拉过程显示的文案 -->
+            <div class="up">释放刷新</div><!-- 下拉超过50px显示的文案 -->
+            <div class="refresh">正在刷新...</div><!-- 正在刷新时显示的文案 -->
+        </div>
+
+        <%--列表显示容器--%>
+        <div id="container"></div>
+
+        <%--滚动刷新控件--%>
+        <div class="weui-infinite-scroll">
+        </div>
+    </div>
+</div>
+
+<%--列表显示模板--%>
+<script id="templateList" type="text/html">
+    {{each}}
+    <div class="daijinquanTop">
+        <h1>{{$value.couponName}}</h1>
+        <h2>{{$value.typeLimitDesc}}</h2>
+        <h3>失效日期{{$value.invalidTime}}</h3>
+        <span class="shue"><span style="font-size:19px;">￥</span>{{$value.faceValue}}</span>
+        {{if $value.moneyLimit == 2}}
+        <span class="guize">满{{$value.orderMoney}}元可用</span>
+        {{/if}}
+        {{if $value.status == 2}}
+        <img class="topPic" src="${path}/resources/images/daijinquan_pic.png">
+        {{/if}}
+        {{if $value.status != 2}}
+        <img class="topPic" src="${path}/resources/images/daijinquan_bg1.png">
+        <img style="height:55px;top: 20px; right: 20px; position: absolute;"
+             src="${path}/resources/images/daijinquan_shixiao.png">
+        {{/if}}
+    </div>
+    {{/each}}
+</script>
+</body>
+</html>

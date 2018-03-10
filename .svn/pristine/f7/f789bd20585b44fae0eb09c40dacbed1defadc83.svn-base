@@ -1,0 +1,126 @@
+package com.catt.wfx.service.impl.productMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductDocumentDao;
+import com.catt.wfx.repository.dao.util.SeqUtilDao;
+import com.catt.wfx.repository.entity.productMgr.ProductDocument;
+import com.catt.wfx.service.base.productMgr.ProductDocumentBaseService;
+import com.catt.wfx.service.productMgr.ProductDocumentService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:商品文案服务接口实现
+ * Created by 2017-01-09  14:32.
+ * author: Zhou mingxiang
+ */
+@Service("productDocumentServiceImpl")
+public class ProductDocumentServiceImpl implements ProductDocumentService {
+
+    // 商品文案服务接口
+    @Resource(name = "productDocumentBaseServiceImpl")
+    private ProductDocumentBaseService productDocumentBaseService;
+
+    // 附件服务
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    // 公共配置服务
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    @Resource
+    private SeqUtilDao seqUtilDao;
+
+    // 商品文案Dao接口
+    @Resource(name = "productDocumentDaoImpl")
+    private ProductDocumentDao productDocumentDao;
+
+    /**
+     * 删除商品文案
+     *
+     * @param id 商品文案标识
+     */
+    @Override
+    public void delete(Long id) {
+        productDocumentBaseService.delete(id);
+    }
+
+    /**
+     * 获取商品文案列表
+     *
+     * @param cusId     用户标识
+     * @param productId 商品标识
+     * @param type      文案类型
+     * @param status    文案状态
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getProductDocumentByPage(Long cusId, Long productId, Integer type, Integer status, Pageable pageable) {
+        Page<Map> page = productDocumentDao.getProductDocumentByPage(cusId, productId, type, pageable);
+        List<Map> content = page.getContent();
+        if (CollectionUtil.isNotEmpty(content)) {
+            //获取图片存储地址
+            String filePath = pubConfigService.getFilePath();
+
+            for (Map map : content) {
+                Long documentId = MapUtil.getLong(map, "id");
+                List<Attachment> files = attachmentBaseService.getFiles(documentId, ProductDocument.TABLE_NAME, ProductDocument.COVER_PIC);
+                //图片地址路径集合
+                List<String> pathList = new ArrayList<String>();
+                if (CollectionUtil.isNotEmpty(files)) {
+                    for (Attachment attachment : files) {
+                        pathList.add(filePath + attachment.getPath());
+                    }
+                }
+                map.put("pathList", pathList);
+            }
+        }
+        return page;
+    }
+
+
+    /**
+     * 保存商品文案信息
+     *
+     * @param createdId   创建人员标识
+     * @param createdName 创建人员名称
+     * @param productId   商品标识
+     * @param desc        文案内容
+     * @param path        文案图片附件标识，多个以英文逗号分隔
+     */
+    @Override
+    public void save(Long createdId, String createdName, Long productId, String desc, String path) {
+        ProductDocument document = new ProductDocument();
+        document.setCusId(createdId);
+        document.setProductId(productId);
+        document.setCreatedId(createdId);
+        document.setCreatedName(createdName);
+        document.setStatus(ProductDocument.Status.Adopt.getValue());
+        document.setType(ProductDocument.Type.UserCopy.getValue());
+        document.setDesc(desc);
+        String seqName = "S_DOC_CODE";
+        Integer curVal = seqUtilDao.getSeq(seqName);
+        document.setDocCode(curVal + "");
+        productDocumentBaseService.save(document);
+
+        // 保存文案图片
+        String[] paths = path.split(",");
+        List<Long> attachmentIds = new ArrayList<>();
+        for (String attachmentId : paths) {
+            attachmentIds.add(Long.parseLong(attachmentId));
+        }
+        attachmentBaseService.saveFiles(attachmentIds, document.getId(), ProductDocument.TABLE_NAME, ProductDocument.COVER_PIC);
+    }
+}

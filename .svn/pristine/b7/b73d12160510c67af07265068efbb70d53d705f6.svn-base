@@ -1,0 +1,62 @@
+define('admin/wechat/return/returnInfoDetail', ['$', 'template'], function (require, exports, module) {
+        var $ = require('$');
+        var template = require('template');
+
+        function ReturnInfoDetail() {
+        }
+
+        /**
+         * 初始化
+         */
+        ReturnInfoDetail.prototype.init = function () {
+            var self = this;
+            self.loadData();
+        };
+
+        /**
+         * 加载数据
+         * @param $form
+         */
+        ReturnInfoDetail.prototype.loadData = function () {
+            var param = {};
+            param.id = $("#id").val();
+            $.get(path + '/admin/wechat/returnInfo/findReturnGoodsDetail', param, function (data) {
+
+                var resultData = data['result'];
+                if (resultData) {
+                    $("#returnReasonName").attr('placeholder' , resultData['returnReasonName']);
+                    $("#returnTotalAmount").attr('placeholder' , resultData['returnTotalAmount']);
+                    $("#returnDesc").attr('placeholder' , resultData['returnDesc']);
+                    $("#createDate").attr('placeholder' , resultData['createDate']);
+                    var stateVar = resultData['status'];
+                    if (stateVar != 2) {
+                        $('#submitReturnNumBtn').hide();
+                    }
+                }
+                var html = template('picsTemp', resultData['picList']);
+                if (html) {//有数据,此时需要重置页码
+                    $("#bottomPicList").append(html);
+                } else {
+                    $("#bottomPicList").append("没有图片数据");
+                }
+                $(window).triggerHandler('resize');
+            });
+            $.get(path + '/admin/wechat/returnInfo/findCusOrderReturnLogByList', param, function (data) {
+
+                var html = template('returnLogsTemp', data);
+                if (html) {//有数据,此时需要重置页码
+
+                    $("#returnLogList").append(html);
+                }
+                $(window).triggerHandler('resize');
+            });
+        };
+        module.exports = new ReturnInfoDetail();
+    }
+);
+
+seajs.use(['$', 'admin/wechat/return/returnInfoDetail'], function ($, returnInfoDetail) {
+    $(function () {
+        returnInfoDetail.init();
+    });
+});

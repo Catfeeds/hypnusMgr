@@ -1,0 +1,67 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+                    $("#submit").click(function () {
+                        var param = {};
+                        var auditResult = $('#auditResult').val();
+                        var auditDesc = $('#auditDesc').val();
+                        if (auditResult) {
+                            param.auditResult = auditResult;
+                        } else {
+                            msgBox.tips("审核结果不能为空")
+                        }
+                        param.auditDesc = auditDesc;
+                        param.id = $('#id').val();
+                        DataHandler.auditCus(param, function (result) {
+                            msgBox.tips("操作成功", 1, function () {
+                                msgBox.exWindow.close($.toJSON(result));
+                            });
+                        });
+                    });
+
+                    $("#close").click(function () {
+                        msgBox.exWindow.close();
+                    });
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {};
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 审核
+                 */
+                auditCus: function (params, callback) {
+                    $.post(path + "/admin/cusCertification/audit", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

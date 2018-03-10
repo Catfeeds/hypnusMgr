@@ -1,0 +1,53 @@
+package com.catt.wfx.repository.dao.settlementMgr.impl;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementPlanDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlan;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 店主/主管结算计划表Dao接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-23 11:38:28
+ * @version V1.0
+ */
+@Repository("settlementPlanDaoImpl")
+public class SettlementPlanDaoImpl extends BaseDaoImpl<SettlementPlan, Long>
+		implements SettlementPlanDao {
+
+    @Override
+    public Long[] findToRunPlan(SettlementPlan.TaskType taskType) {
+        Assert.notNull(taskType);
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ID AS \"id\" ");
+        sql.append(" FROM T_SETTLEMENT_PLAN a ");
+        sql.append(" JOIN T_SETTLEMENT_SHOP_RULE b ON a.I_TASK_ID = b.I_ID ");
+        sql.append(" WHERE a.I_TASK_TYPE = :taskType ");
+        sql.append(" AND a.I_RUN_STATE = :runState ");
+        sql.append(" AND a.D_RUN_DATE <= :runTime ");
+        sql.append(" AND b.I_STATUS = " + PubEnum.YesOrNoEnum.YES.getValue());//启用中
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("taskType", taskType.getValue());
+        params.put("runState", SettlementPlan.RunState.ToDo.getValue());
+        params.put("runTime", new Date());
+
+        List<Map> list = this.findListBySql(sql.toString(), params, Map.class);
+        int size = list.size();
+        Long[] planIds = new Long[size];
+        for (int i = 0; i < size; i++){
+            planIds[i] = MapUtil.getLong(list.get(i), "id");
+        }
+        return planIds;
+    }
+}

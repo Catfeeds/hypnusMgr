@@ -1,0 +1,510 @@
+package com.catt.wfx.repository.entity.settlementMgr;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import java.util.Date;
+
+/**
+ * 店主/主管规则实体类
+ * 
+ * @author 邹佳
+ * @date 2017-02-09 10:30:50
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_SETTLEMENT_SHOP_RULE")
+public class SettlementShopRule extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * <pre>
+	 * 厂家标识
+	 * </pre>
+	 */
+	private Long factoryId;
+	/**
+	 * <pre>
+	 * 客户类型
+	 * 1-店主
+	 * 2-主管
+	 * </pre>
+	 */
+	private Integer cusType;
+	/**
+	 * <pre>
+	 * 规则类型
+	 * 1-注册
+	 * 2-邀请
+	 * 3-销售
+	 * </pre>
+	 */
+	private Integer type;
+	/**
+	 * <pre>
+	 * 有效开始时间
+	 * </pre>
+	 */
+	private Date startTime;
+	/**
+	 * <pre>
+	 * 有效结束时间
+	 * </pre>
+	 */
+	private Date endTime;
+	/**
+	 * <pre>
+	 * 停用时间
+	 * 改变规则为无效时的时间
+	 * </pre>
+	 */
+	private Date stopTime;
+	/**
+	 * <pre>
+	 * 规则状态
+	 * 1-有效
+	 * 2-无效
+	 * </pre>
+	 */
+	private Integer status;
+	/**
+	 * <pre>
+	 * 结算周期
+	 * 1-实时
+	 * 2-天
+	 * </pre>
+	 */
+	private Integer cycle;
+	/**
+	 * <pre>
+	 * 结算时长
+	 * 只有在周期为天的情况下，才有效
+	 * </pre>
+	 */
+	private Integer length;
+	/**
+	 * <pre>
+	 * 奖励类型
+	 * 1-代金券
+	 *  2-现金
+	 * </pre>
+	 */
+	private Integer rewardType;
+	/**
+	 * <pre>
+	 * 创建人员标识
+	 * 创建人员标识
+	 * </pre>
+	 */
+	private Long createdId;
+	/**
+	 * <pre>
+	 * 创建人员名称
+	 * 创建人员名称
+	 * </pre>
+	 */
+	private String createdName;
+	/**
+	 * <pre>
+	 * 备注
+	 * 备注
+	 * </pre>
+	 */
+	private String remark;
+
+	@Column(name = "I_FACTORY_ID")
+	public Long getFactoryId() {
+		return factoryId;
+	}
+
+	public void setFactoryId(Long factoryId) {
+		this.factoryId = factoryId;
+	}
+
+	@Column(name = "I_CUS_TYPE")
+	public Integer getCusType() {
+		return cusType;
+	}
+
+	public void setCusType(Integer cusType) {
+		this.cusType = cusType;
+	}
+
+	@Column(name = "I_TYPE")
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	@Column(name = "D_START_TIME")
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	@Column(name = "D_END_TIME")
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	@Column(name = "D_STOP_TIME")
+	public Date getStopTime() {
+		return stopTime;
+	}
+
+	public void setStopTime(Date stopTime) {
+		this.stopTime = stopTime;
+	}
+
+	@Column(name = "I_STATUS")
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	@Column(name = "I_CYCLE")
+	public Integer getCycle() {
+		return cycle;
+	}
+
+	public void setCycle(Integer cycle) {
+		this.cycle = cycle;
+	}
+
+	@Column(name = "I_LENGTH")
+	public Integer getLength() {
+		return length;
+	}
+
+	public void setLength(Integer length) {
+		this.length = length;
+	}
+
+	@Column(name = "I_REWARD_TYPE")
+	public Integer getRewardType() {
+		return rewardType;
+	}
+
+	public void setRewardType(Integer rewardType) {
+		this.rewardType = rewardType;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+	@Column(name = "S_REMARK", length = 1024)
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	/**
+	 * 客户类型
+	 * 1-店主
+	 * 2-主管
+	 */
+	public enum CusType {
+
+		Shopkeeper(1, "店主"),
+		Director(2, "主管");
+
+		/**
+		 * 枚举值
+		 */
+		private Integer value;
+
+		/**
+		 * 枚举中文
+		 */
+		private String name;
+
+		/**
+		 * 构造方法
+		 *
+		 * @param value 枚举值
+		 * @param name  枚举中文
+		 */
+		CusType(Integer value, String name) {
+			this.value = value;
+			this.name = name;
+		}
+
+		/**
+		 * 由数字得是否多实例枚举对象
+		 *
+		 * @param value 枚举值
+		 * @return 返回中文
+		 */
+		public static CusType getEnum(int value) {
+			CusType[] source = CusType.values();
+			for (int i = 0; i < source.length; i++) {
+				if (source[i].getValue() == value) {
+					return source[i];
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * 取值
+		 *
+		 * @return 返回枚举值
+		 */
+		public Integer getValue() {
+			return this.value;
+		}
+
+		/**
+		 * 取中文名称
+		 *
+		 * @return 返回枚举中文
+		 */
+		public String getName() {
+			return this.name;
+		}
+
+	}
+
+	/**
+	 * 规则类型
+	 * 1-注册
+	 * 2-邀请
+	 * 3-销售
+	 */
+	public enum Type {
+
+		Register(1, "注册"),
+		Invite(2, "邀请"),
+		Sale(3, "销售");
+
+		/**
+		 * 枚举值
+		 */
+		private Integer value;
+
+		/**
+		 * 枚举中文
+		 */
+		private String name;
+
+		/**
+		 * 构造方法
+		 *
+		 * @param value 枚举值
+		 * @param name  枚举中文
+		 */
+		Type(Integer value, String name) {
+			this.value = value;
+			this.name = name;
+		}
+
+		/**
+		 * 由数字得是否多实例枚举对象
+		 *
+		 * @param value 枚举值
+		 * @return 返回中文
+		 */
+		public static Type getEnum(int value) {
+			Type[] source = Type.values();
+			for (int i = 0; i < source.length; i++) {
+				if (source[i].getValue() == value) {
+					return source[i];
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * 取值
+		 *
+		 * @return 返回枚举值
+		 */
+		public Integer getValue() {
+			return this.value;
+		}
+
+		/**
+		 * 取中文名称
+		 *
+		 * @return 返回枚举中文
+		 */
+		public String getName() {
+			return this.name;
+		}
+
+	}
+
+	/**
+	 * 结算周期
+	 * 1-实时
+	 * 2-天
+	 */
+	public enum Cycle {
+
+		Actual(1, "实时"),
+		Day(2, "天");
+
+		/**
+		 * 枚举值
+		 */
+		private Integer value;
+
+		/**
+		 * 枚举中文
+		 */
+		private String name;
+
+		/**
+		 * 构造方法
+		 *
+		 * @param value 枚举值
+		 * @param name  枚举中文
+		 */
+		Cycle(Integer value, String name) {
+			this.value = value;
+			this.name = name;
+		}
+
+		/**
+		 * 由数字得是否多实例枚举对象
+		 *
+		 * @param value 枚举值
+		 * @return 返回中文
+		 */
+		public static Cycle getEnum(int value) {
+			Cycle[] source = Cycle.values();
+			for (int i = 0; i < source.length; i++) {
+				if (source[i].getValue() == value) {
+					return source[i];
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * 取值
+		 *
+		 * @return 返回枚举值
+		 */
+		public int getValue() {
+			return this.value;
+		}
+
+		/**
+		 * 取中文名称
+		 *
+		 * @return 返回枚举中文
+		 */
+		public String getName() {
+			return this.name;
+		}
+
+	}
+
+	/**
+	 * 奖励类型
+	 * 1-代金券
+	 * 2-现金
+	 */
+	public enum RewardType {
+
+		Voucher(1, "代金券"),
+		Cash(2, "现金");
+
+		/**
+		 * 枚举值
+		 */
+		private Integer value;
+
+		/**
+		 * 枚举中文
+		 */
+		private String name;
+
+		/**
+		 * 构造方法
+		 *
+		 * @param value 枚举值
+		 * @param name  枚举中文
+		 */
+		RewardType(Integer value, String name) {
+			this.value = value;
+			this.name = name;
+		}
+
+		/**
+		 * 由数字得是否多实例枚举对象
+		 *
+		 * @param value 枚举值
+		 * @return 返回中文
+		 */
+		public static RewardType getEnum(int value) {
+			RewardType[] source = RewardType.values();
+			for (int i = 0; i < source.length; i++) {
+				if (source[i].getValue() == value) {
+					return source[i];
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * 取值
+		 *
+		 * @return 返回枚举值
+		 */
+		public Integer getValue() {
+			return this.value;
+		}
+
+		/**
+		 * 取中文名称
+		 *
+		 * @return 返回枚举中文
+		 */
+		public String getName() {
+			return this.name;
+		}
+
+	}
+
+}
+

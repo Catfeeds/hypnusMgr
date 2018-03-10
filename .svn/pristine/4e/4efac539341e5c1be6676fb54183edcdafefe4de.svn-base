@@ -1,0 +1,74 @@
+// JavaScript Document
+
+
+$(document).ready(function(){
+	
+	
+	$(".xw_radio").click(function(){
+		$(".xw_radio").removeClass("checked");
+			$(this).addClass("checked");
+	})
+	//勾选
+	$(".xw_tick").click(function(){
+			$(this).toggleClass("checked");
+		})
+	//全选
+    $(".xw_tickAll").click(function(){
+		if($(".xw_tickAll").hasClass("checked")){
+			$(this).removeClass("checked");
+			$(this).parents(".singleBtn").siblings(".goodsList").children(".goods").find(".xw_tick").removeClass("checked");
+			//$(".xw_tick").removeClass("checked");
+			$(".xw_tickBoth").removeClass("checked");
+		}
+		else{
+			$(this).addClass("checked");
+			//$(".xw_tick").addClass("checked");
+			$(this).parents(".singleBtn").siblings(".goodsList").children(".goods").find(".xw_tick").addClass("checked");
+			$(".xw_tickBoth").addClass("checked");
+		}
+	});
+	//全选
+    $(".xw_tickBoth").click(function(){
+		if($(this).hasClass("checked")){
+			$(this).removeClass("checked");
+			$(this).parents(".goodsList").find(".xw_tick").removeClass("checked");
+		}
+		else{
+			$(this).addClass("checked");
+			$(this).parents(".goodsList").find(".xw_tick").addClass("checked");
+		}
+	});
+	
+	
+	//编辑下拉框
+	$(".xw_cangkuDown").click(function(){
+		$(this).children(".cangkuList").slideToggle();
+	});
+	$(".cangkuList li").click(function(){
+		var cangkuText = $(this).text();
+		$(this).parents(".cangkuList").siblings(".cangkuName").text(cangkuText);
+			
+	});
+	
+	//收起展开
+    $(".xw_slideUpTip").click(function(){
+		if($(this).text()=="↑收起"){
+			$(this).text("↓展开")
+			$(this).parents(".goodType").children(".goodsList").find(".goodHide").slideUp();
+			}
+		else if($(this).text()=="↓展开"){
+			$(this).text("↑收起");
+			$(this).parents(".goodType").children(".goodsList").find(".goodHide").slideDown();
+			}
+	});
+	
+	
+	//取票勾选
+	$(".gouxuang").click(function(){
+		$(this).parents(".zhifuItem").find(".xw_gouxuang").removeClass("xuanzhong");
+		$(this).addClass("xuanzhong");
+	});
+});
+
+	
+	

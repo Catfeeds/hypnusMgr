@@ -1,0 +1,77 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.common.module.pay.service.event.PaySuccessEvent;
+import com.catt.common.module.pay.service.event.ToPayEvent;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Description:
+ * Created by 2017-02-15
+ * author: yuanxingcheng
+ */
+public class BuyPackagePayHandlerTest extends SpringTest {
+
+    // 注册（需要购买套餐）支付处理器
+    @Resource
+    private BuyPackagePayHandler buyPackagePayHandler;
+
+    // 订单信息表服务
+    @Resource
+    private CusOrderService cusOrderService;
+
+    // 店铺续费（需要购买套餐）
+    @Resource
+    private ShopRenewPayHandler shopRenewPayHandler;
+
+    /**
+     * 订单支付测试
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testPay() throws Exception {
+        CusOrder cusOrder = new CusOrder();
+        cusOrder.setRecipientName("小邹");
+        cusOrder.setRecipientTel("15521077568");
+        cusOrder.setRecipientAddress("广东省广州市天河区岑村红花岗");
+        cusOrderService.order4BuyPackage(cusOrder, null, null);
+
+        Map<String, String> param = new HashMap<>();
+        param.put("orderId", cusOrder.getId() + "");
+        param.put("account", "15666666666");
+        param.put("pwd", "admin");
+        param.put("invitationNo", "SOTYPL");
+
+        ToPayEvent toPayEvent = buyPackagePayHandler.initPayRequestParam(param);
+        toPayEvent.setOrderNo(null);
+        buyPackagePayHandler.paySuccess(new PaySuccessEvent(toPayEvent, new Date()));
+    }
+
+    /**
+     * 订单支付测试
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testRenewPay() throws Exception {
+        CusOrder cusOrder = new CusOrder();
+        cusOrderService.order4BuyPackage(cusOrder, 2L, 528477991102054400L);
+
+        Map<String, String> param = new HashMap<>();
+        param.put("orderId", cusOrder.getId() + "");
+        param.put("payerId", "2");
+
+        ToPayEvent toPayEvent = shopRenewPayHandler.initPayRequestParam(param);
+        toPayEvent.setOrderNo(null);
+        shopRenewPayHandler.paySuccess(new PaySuccessEvent(toPayEvent, new Date()));
+    }
+
+}

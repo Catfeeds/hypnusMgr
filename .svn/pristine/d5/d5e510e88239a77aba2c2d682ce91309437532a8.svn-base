@@ -1,0 +1,93 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/6/19
+  Time: 9:32
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>设置收货地址</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/denglu.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/zhucexinxi.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+
+    <!--手机观看保持比例-->
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/customerMgr/confirmOrder.js"></script>
+</head>
+
+<body>
+<div style="height:47px;"></div>
+<div class="top header">
+    <button class="top-left" onClick="window.history.go(-1)"><img class="top_btn_back"
+                                                                               src="${path}/resources/images/top_btn_back.png">
+    </button>
+    <h1>确定订单</h1>
+</div>
+<form id="myForm" method="post"  action="${path}/guest/wechat/customerMgr/cusInfo/order4BuyPackage"  onsubmit="return false">
+    <div class="loginList">
+        <input type="hidden" name="invitationNo" id="invitationNo" value="${invitationNo}"/>
+        <input type="hidden" name="provinceId" id="provinceId" value="${data.provinceId}"/>
+        <input type="hidden" name="provinceName" id="provinceName" value="${data.provinceName}"/>
+        <input type="hidden" name="cityId" id="cityId" value="${data.cityId}"/>
+        <input type="hidden" name="cityName" id="cityName" value="${data.cityName}"/>
+        <input type="hidden" name="regionId" id="regionId" value="${data.regionId}"/>
+        <input type="hidden" name="regionName" id="regionName" value="${data.regionName}"/>
+        <input type="hidden" name="isDefault" id="isDefault" value="${data.isDefault}"/>
+
+        <div class="loginItem">
+            <span class="itemTitle02">收&nbsp;货&nbsp;人:</span>
+
+            <div class="inputBox">
+                <input class="loginInput" id="recipientName" name="recipientName"  data-rule-required="true" data-msg-required="收货人不能为空"  placeholder="请输入收货人">
+            </div>
+
+        </div>
+        <div class="loginItem">
+            <span class="itemTitle02">联系电话:</span>
+
+            <div class="inputBox">
+                <input class="loginInput" type="text" id="recipientTel" name="recipientTel" data-rule-required="true" data-msg-required="联系电话不能为空" data-rule-isTel="true"
+                       placeholder="请输入联系电话">
+            </div>
+            <!-- <p class="beizhu textRed">注：联系电话将作为店主登录账号</p>-->
+        </div>
+
+        <div class="loginItem">
+            <span class="itemTitle02">选择市区:</span>
+
+            <div class="inputBox">
+                <input class="loginInput" placeholder="请选择市区" id="addressInfo" type="text" name="addressInfo" data-rule-required="true" data-msg-required="市区不能为空"
+                       data-rule-required="true">
+                <img class="nextIcon" src="${path}/resources/images/login_btn_next.png">
+            </div>
+        </div>
+        <div class="loginItem">
+            <span class="itemTitle02">收货地址:</span>
+
+            <div class="inputBox">
+                <input class="loginInput" type="text" id="recipientAddress" name="recipientAddress" data-rule-required="true" data-msg-required="收货地址不能为空" placeholder="请输入收货地址">
+            </div>
+        </div>
+
+        <!-- <div class="loginItem">
+             <a class="checkbox checkbox02 xw_radio"></a>
+             <span class="xieyi">同意《微分销用户协议》</span>
+         </div>-->
+    </div>
+</form>
+<div style="height:60px;"></div>
+<div class="bottomBtnBox">
+    <!--<button onClick="window.location='addkaipiao.html';">新增开票信息</button>-->
+    <button type="submit" id="submit">确&nbsp;定&nbsp;下&nbsp;单</button>
+</div>
+
+</body>
+</html>
+

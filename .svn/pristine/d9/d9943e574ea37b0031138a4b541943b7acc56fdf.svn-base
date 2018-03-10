@@ -1,0 +1,44 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+
+
+.topMenu{ border-bottom:1px solid #e5e5e5; height:45px;}
+.weixuan{  background:#fff; float:left;font-size:16px; line-height:45px; cursor:pointer; text-align:center; width:20%; color:#666;}
+.xuanzhong{ background:#fff; float:left;font-size:16px; line-height:45px; cursor:pointer; text-align:center; width:20%; border-bottom: 2px solid #fa4b89; color:#fa4b89;}
+.topMenu li:hover{ border-bottom: 2px solid #fa4b89; color:#fa4b89;} 
+
+.goodsList{}
+.goodsList h1{ position:relative;}
+.goods{ position:relative; padding:0 10px 0px 40px; height:130px; }
+.goodsList .goods:last-child{ border-bottom:none;} 
+.goodTip{ color:#646464;}
+.biaotiRight{ position:absolute; top:16px; right:20px;  font-size:14px; line-height:24px; font-weight:900; }
+.biaotiLeft{ position:absolute; top:10px; left:140px; height:20px; line-height:20px; font-size:16px; color:#1a1a1a; letter-spacing:1px; padding-right:20px;}
+.goods h3{ position:absolute; top:55px; left:140px; font-size:15px; color:#666;}
+.jiage{ position:absolute; top:100px; left:140px; font-size:16px; color:#666; font-weight:900;}
+.shuliang{ font-weight:normal; color::#808080;}.goodsMsg{font-size:14px; color:#969696; margin-bottom:6px; }
+.goodType{ background:#fff; height:275px;border-bottom:1px solid #e5e5e5; }
+.buyNum{ position:absolute; top:28px; left:0px; border:1px solid #c4c4c4; width:104px; height:28px;}
+.gouwuchePic{  position:absolute; top:10px; left:20px;}
+
+.topBottom{ margin:0px 20px; height:60px; border-top:1px solid #e5e5e5;}
+.topBottom p{ font-size:18px; font:'微软雅黑',Arial, Helvetica, sans-serif; font-weight:bold; line-height:60px; color:#666; float:left; }
+.topBottom h4{float:right; font-size:12px; width:60px; text-align:center; color:#666; line-height:30px;  border:1px solid #ccc; border-radius:5px; margin-top:10px; margin-left:5px;}
+
+
+.toubu{padding:0px 20px; height:40px; border-bottom:1px solid #ccc;}
+.toubuLeft{ float:left;  line-height:40px; font-size:16px; color:#333;}
+.toubuRight{ float:right; line-height:40px; font-size:14px; }
+
+.goodsJiage{ height:50px; border-top:1px solid #e5e5e5; margin:0px 20px;}
+.goodsJiage p{font-size:12px; font:'微软雅黑',Arial, Helvetica, sans-serif;  color:#999; float:right; margin-top:5px; }
+
+
+table.goodsType{ width:100%; height:35px; background:#fff; border-bottom:1px solid #e5e5e5; margin-bottom:10px;}
+table.goodsType td a{ display:block; margin:0 10%; height:40px; line-height:40px; text-align:center; font-size:16px; color:#222; cursor:pointer; border-bottom:2px solid #fff;}
+table.goodsType td a.lion{ border-bottom:2px solid #ff4d4d; color:#ff4d4d;}
+
+

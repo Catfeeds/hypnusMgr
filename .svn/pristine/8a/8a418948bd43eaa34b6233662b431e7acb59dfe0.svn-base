@@ -1,0 +1,158 @@
+package com.catt.wfx.service.impl.customerMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusCertificationDao;
+import com.catt.wfx.repository.entity.customerMgr.CusCertification;
+import com.catt.wfx.repository.entity.customerMgr.CusCertificationLog;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.service.base.customerMgr.CusCertificationBaseService;
+import com.catt.wfx.service.base.customerMgr.CusCertificationLogBaseService;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.customerMgr.CusCertificationService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import util.CryptUtil;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service("cusCertificationServiceImpl")
+public class CusCertificationServiceImpl implements CusCertificationService {
+
+    @Resource(name = "cusCertificationBaseServiceImpl")
+    private CusCertificationBaseService cusCertificationBaseService;
+
+    @Resource(name = "cusCertificationLogBaseServiceImpl")
+    private CusCertificationLogBaseService cusCertificationLogBaseService;
+
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    @Resource(name = "cusCertificationDaoImpl")
+    private CusCertificationDao cusCertificationDao;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+    /**
+     * 获取详情
+     *
+     * @param certificationId
+     * @return
+     */
+    @Override
+    public Map<String, Object> getDetail(Long certificationId) {
+        Map<String, Object> result = new HashMap<>();
+        if(StringUtil.checkObj(certificationId)){
+            CusCertification entity = cusCertificationBaseService.find(certificationId);
+            if(entity != null) {
+                List<CusCertificationLog> logs = cusCertificationLogBaseService.
+                        findList(1, Arrays.asList(Filter.eq("orderId", certificationId)) , Arrays.asList(Order.desc("createDate")));
+                CusInfo cusInfo = cusInfoBaseService.find(entity.getCusId());
+                result.put("nickname", cusInfo != null ? cusInfo.getNickname() : "");
+                result.put("id", certificationId);
+                result.put("name", CryptUtil.decryptDatabase(entity.getRealName()));
+                result.put("mobile", CryptUtil.decryptDatabase(entity.getMobile()));
+                result.put("idCard", CryptUtil.decryptDatabase(entity.getIdCard()));
+                result.put("createDate", DateUtil.format(entity.getCreateDate(), "yyyy-MM-dd HH:mm:ss"));
+                result.put("status", entity.getStatus());
+                result.put("auditDesc", (logs != null && logs.size() > 0) ? logs.get(0).getAuditDesc() : "");
+                Attachment hole = attachmentBaseService.getFile(certificationId, CusCertification.TABLE_NAME, CusCertification.COLUMN_NAME_HOLD);
+                Attachment positive = attachmentBaseService.getFile(certificationId, CusCertification.TABLE_NAME, CusCertification.COLUMN_NAME_POSITIVE);
+                Attachment inverse = attachmentBaseService.getFile(certificationId, CusCertification.TABLE_NAME, CusCertification.COLUMN_NAME_INVERSE);
+                String filePath = pubConfigService.getFilePath();
+                result.put("holdphotoPath", hole != null ? filePath + hole.getPath() : "");
+                result.put("cardpositivePath", positive != null ? filePath + positive.getPath() : "");
+                result.put("cardinversePath", inverse != null ? filePath + inverse.getPath() : "");
+                enumMgrService.transformEnum(result, new ArrayList<EnumTransformData>() {{
+                    add(new EnumTransformData("T_CUS_CERTIFICATION", "I_STATUS", "status", "statusName"));
+                }});
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 查询分页数据
+     *
+     * @param params
+     * @return
+     */
+    @Override
+    public Page<Map> getPage(Map<String, Object> params) {
+        Page<Map> page = cusCertificationDao.getPage(params);
+        List<Map> list = page.getContent();
+        for(Map m : list){
+            m.put("name", CryptUtil.decryptDatabase(MapUtil.getString(m, "name")));
+            m.put("mobile", CryptUtil.decryptDatabase(MapUtil.getString(m, "mobile")));
+            m.put("idCard", CryptUtil.decryptDatabase(MapUtil.getString(m, "idCard")));
+        }
+        enumMgrService.transformEnum(page, new ArrayList<EnumTransformData>() {{
+            add(new EnumTransformData("T_CUS_CERTIFICATION", "I_STATUS", "status", "statusName"));}});
+        return page;
+    }
+
+    /**
+     * 审核
+     * 1、修改信息表状态
+     * 2、记录log表
+     * @param params
+     */
+    @Override
+    @Transactional
+    public void auditCertification(Map<String, Object> params) {
+        Long id = MapUtil.getLong(params, "id");
+        Integer result = MapUtil.getInteger(params, "auditResult");
+        String desc = MapUtil.getString(params, "auditDesc");
+        Long userId = MapUtil.getLong(params, "userId");
+        String userName = MapUtil.getString(params, "userName");
+
+        if(StringUtil.checkObj(id) && StringUtil.checkObj(result)) {
+            //修改单据状态
+            CusCertification cus = cusCertificationBaseService.find(id);
+            if(result == 1) {
+                cus.setStatus(CusCertification.Status.Certificated.getValue());
+            }else {
+                cus.setStatus(CusCertification.Status.WaitForEdit.getValue());
+            }
+            cusCertificationBaseService.update(cus);
+
+            //记录审核结果
+            //FIXME: 不通过后可以再修改提交，所以同一认证申请，会有多条审核记录
+            CusCertificationLog log = new CusCertificationLog();
+            log.setAct(CusCertificationLog.Act.Audit.getValue());
+            log.setAuditResult(result);
+            log.setAuditDesc(desc);
+            log.setOrderId(id);
+            log.setOperatorName(userName);
+            log.setOperatorId(userId);
+            if(result == 1) {
+                log.setContent("审核通过");
+            }else {
+                log.setContent("审核不通过");
+            }
+            cusCertificationLogBaseService.save(log);
+        }
+    }
+}

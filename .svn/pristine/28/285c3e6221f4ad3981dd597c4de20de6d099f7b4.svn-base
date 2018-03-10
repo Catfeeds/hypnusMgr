@@ -1,0 +1,22 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+.xiaoxiTop{ padding:0px 20px;}
+.xiaoxiTop1{ background:#fff; padding:0px 20px;}
+.biaoti{ font-size:16px; color:#666; padding-top:20px;}
+.neirong{font-size:14px; color:#000; padding:5px 0px 20px 0px;}
+
+
+
+
+
+
+
+
+
+
+
+
+

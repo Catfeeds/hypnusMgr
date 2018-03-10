@@ -1,0 +1,13 @@
+package com.catt.wfx.repository.dao.productMgr.impl;
+
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.wfx.repository.dao.productMgr.ProductCateAttrDefineDao;
+import com.catt.wfx.repository.entity.productMgr.ProductCateAttrDefine;
+import org.springframework.stereotype.Repository;
+
+@Repository("productCateAttrDefineDaoImpl")
+public class ProductCateAttrDefineDaoImpl extends BaseDaoImpl<ProductCateAttrDefine, Long>
+        implements ProductCateAttrDefineDao {
+
+}

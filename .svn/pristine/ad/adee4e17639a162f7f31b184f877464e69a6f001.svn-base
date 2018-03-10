@@ -1,0 +1,116 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                },
+
+
+                /** 初始化界面  */
+                initPage: function () {
+                    var order_params = {};
+                    $('#order_pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            order_params.pageNo = page;
+                            order_params.pageSize = pageSize;
+                            order_params.cusId = $("#id").val();
+                            EventHandler.loadOrders(order_params);
+                        }
+                    });
+                    var coupon_params = {};
+                    $('#coupon_pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            coupon_params.pageNo = page;
+                            coupon_params.pageSize = pageSize;
+                            coupon_params.cusId = $("#id").val();
+                            EventHandler.loadCoupon(coupon_params);
+                        }
+                    });
+
+                    EventHandler.loadOrders();
+                    EventHandler.loadCoupon();
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+
+                loadOrders : function(params){
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: 5};
+                    }
+                    params.cusId = $("#id").val();
+
+                    DataHandler.getOrders(params, function (backData) {
+                        var html = template('template_order_dataList', backData.content);
+                        $('#order_dataList').html(html);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#order_pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        setParenHei();
+                    });
+                },
+
+                loadCoupon : function(params){
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: 5};
+                    }
+                    params.cusId = $("#id").val();
+
+                    DataHandler.getCoupon(params, function (backData) {
+                        var html = template('template_coupon_dataList', backData.content);
+                        $('#coupon_dataList').html(html);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#coupon_pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        setParenHei();
+                    });
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                getOrders : function(param, callback){
+                    $.post(path + "/admin/memberAccount/account/order/getPage", param, function(data){
+                        callback(data);
+                    });
+                },
+                getCoupon : function(param, callback){
+                    $.post(path + "/admin/memberAccount/account/coupon/getPage", param, function(data){
+                        callback(data);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

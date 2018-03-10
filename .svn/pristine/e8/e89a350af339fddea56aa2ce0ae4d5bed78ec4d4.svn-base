@@ -1,0 +1,69 @@
+package com.catt.wfx.service.impl.productMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.wfx.repository.dao.productMgr.ProductPackageDao;
+import com.catt.wfx.repository.entity.productMgr.ProductPackage;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+import com.catt.wfx.service.base.productMgr.ProductPackageBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPriceBaseService;
+import com.catt.wfx.service.productMgr.ProductPackageService;
+import com.catt.wfx.service.productMgr.ProductPriceService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商品价格定义服务接口实现
+ * 作者：袁幸成
+ * 时间：2017-1-18 9:04:28
+ */
+@Service("productPackageServiceImpl")
+public class ProductPackageServiceImpl implements ProductPackageService {
+
+    @Resource(name = "productPackageBaseServiceImpl")
+    private ProductPackageBaseService productPackageBaseService;
+
+    @Resource(name = "productPriceBaseServiceImpl")
+    private ProductPriceBaseService productPriceBaseService;
+
+    @Resource(name = "productPriceServiceImpl")
+    private ProductPriceService productPriceService;
+
+    @Resource(name = "productPackageDaoImpl")
+    private ProductPackageDao productPackageDao;
+
+    @Override
+    public void delPackageRelPrice(Long packageProid) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("packageProid", packageProid));
+        List<ProductPackage> packageList = productPackageBaseService.findList(null, filters, null);
+        for (ProductPackage productPackage : packageList){
+            productPackageBaseService.delete(productPackage);
+        }
+    }
+
+    @Override
+    public void savePackageRelPrice(Long packageProid, List<ProductPackage> packageList, Double packagePrice) {
+        ProductPrice price = productPriceService.findPackagePrice(packageProid);
+        price.setSalesPrice(packagePrice);
+        price.setCostPrice(packagePrice);
+        price.setProductId(packageProid);
+        if (price.getId() == null){
+            price.setSaleNum(0);
+        }
+        productPriceBaseService.saveOrUpdate(price);
+        for (ProductPackage productPackage : packageList){
+            productPackage.setId(null);
+            productPackage.setPackageProid(packageProid);
+        }
+        productPackageBaseService.saveOrUpdate(packageList);
+    }
+
+    @Override
+    public List<Map> getPackageRelPrice(Long packageProid) {
+        return productPackageDao.getPackageRelPrice(packageProid);
+    }
+}

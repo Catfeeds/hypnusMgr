@@ -1,0 +1,64 @@
+package com.catt.wfx.service.settlementMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRule;
+import com.catt.wfx.repository.form.productMgr.RuleForm;
+
+import java.util.Map;
+
+/**
+ * 店主/主管规则服务接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/2/10
+ */
+public interface SettlementShopRuleService {
+
+    /**
+     * 保存店主/主管规则
+     *
+     * @param rule       规则
+     * @param detailJson 规则明细json字符串
+     */
+    void save(SettlementShopRule rule, String detailJson);
+
+    /**
+     * 获取规则明细
+     *
+     * @param ruleId 规则标识
+     * @return
+     */
+    Map getDetail(Long ruleId);
+
+    /**
+     * 启用
+     *
+     * @param ruleId 规则标识
+     */
+    void enable(Long ruleId);
+
+    /**
+     * 禁用
+     *
+     * @param ruleIds 规则标识数组
+     */
+    void disable(Long[] ruleIds);
+
+    /**
+     * 获取规则列表
+     *
+     * @param form     补贴规则表单
+     * @param pageable
+     * @return
+     */
+    Page<Map> getRulePage(RuleForm form, Pageable pageable);
+
+    /**
+     * 删除规则
+     *
+     * @param ids 规则标识
+     */
+    void delete(Long[] ids);
+}

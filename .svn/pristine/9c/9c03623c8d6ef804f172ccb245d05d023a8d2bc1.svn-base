@@ -1,0 +1,17 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+
+
+.neirong{ padding:0px 20px; }
+.pic{ width:50%; margin:0 auto; margin:20px 25%;}
+.neirong p{ font-size:16px; color:#333; line-height:22px;  letter-spacing:1px;}
+.xiazai{ border:2px solid #ff9d9d; height:110px; margin:20px;  border-radius:4px;}
+.icon{ width:70px; height:70px; margin:20px 0px 0px 20px; float:left;}
+
+/*底部固定按钮*/
+.bottomBtnBox1{/*position:fixed;*/ left:0; right:0;/* margin-top:50px;*/}
+.bottomBtnBox1 button{width:45%; height:40px; font-size:16px;/* background:#ff4d4d;*/ margin:35px 0px 0px 30px; color:#fff; border-radius:10px; border:1px solid #ff4d4d; color:#ff4d4d;}
+/*.bottomBtnBox1 button:hover{border:1px solid #ff4d4d;}*/

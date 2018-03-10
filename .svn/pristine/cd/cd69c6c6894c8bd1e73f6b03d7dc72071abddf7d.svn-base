@@ -1,0 +1,86 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>开店套餐设置</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/user_list.css" rel="stylesheet" />
+    <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
+    <script src="${path}/resources/js/member.js" type="text/javascript"></script>
+    <script src="${path}/resources/admin/common/temDataGrid.js"></script>
+    <script src="${path}/resources/admin/js/productMgr/package/index.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="positionNow">主页 &gt; <a>开店套餐设置</a></div>
+    <div class="searchBar">
+        <div class="searchBox">
+            <span class="searchName">套餐名称：</span>
+            <input class="searchInputText" placeholder="请输入套餐名称"  id="zhName" type="text" style="width:130px;" />
+        </div>
+        <span class="btnGrey" style="margin-left:5px;" id="reset">重置</span>
+        <span class="btnRed" id="search">查询</span>
+    </div>
+    <div class="resultBar">
+        <div class="selectBox">
+            <div class="selectTabs">
+                <h1 class="xw_select selectTabs_on">全部</h1>
+                <h1 class="xw_select" data-value="3">已下架</h1>
+                <h1 class="xw_select" data-value="21">销售中</h1>
+                <h1 class="xw_select" data-value="22">已售罄</h1>
+            </div>
+        </div>
+        <span class="btnGrey" style="margin-left:6px;" id="delBtn">删除</span>
+        <span class="btnGrey" style="margin-left:6px;" id="downBtn">下架</span>
+        <span class="btnRed" style="margin-left:6px;" id="upBtn">上架</span>
+        <span class="btnRed" style="margin-left:6px;" id="fillBtn">补货</span>
+        <span class="btnRed" style="margin-left:6px;" id="editBtn">修改</span>
+        <span class="btnRed" style="margin-left:6px;" id="addBtn">新增</span>
+
+    </div>
+    <div class="userDetail" style="min-height:500px">
+        <table class="datalistTable fabuList">
+            <tr>
+                <th width="40"><div class="tickAll xw_tickAll"></div></th>
+                <th>套餐名称</th>
+                <th>分类</th>
+                <th>套餐价格（元）</th>
+                <th>剩余数量</th>
+                <th>已销售</th>
+                <th>状态</th>
+                <th>上架时间</th>
+            </tr>
+            <tbody id="dataList"></tbody>
+        </table>
+    </div>
+    <!--页码-->
+    <div class="pageBar" id="pageBar">
+    <!-------->
+</div>
+</body>
+</html>
+<script type="text/html" id="template_dataList">
+    {{each}}
+    <tr ondblclick="window.location.href = path +'/admin/productMgr/package/detail/{{$value.id}}'">
+        <td><span class="tick xw_tick"></span></td>
+        <td><span class="textBlue">{{$value.zhName}}</span></td>
+        <td><span class="borderRed">{{$value.cateName}}</span></td>
+        <td>{{$value.salesPrice}}</td>
+        <td>{{$value.stockNum}}</td>
+        <td>{{$value.saleNum}}</td>
+        <td>
+            {{if $value.status == 3}}
+            <span class="bgGrey">已下架</span>
+            {{else if $value.status == 2 && $value.stockNum > 0}}
+            <span class="bgBlue">销售中</span>
+            {{else}}
+            <span class="bgRed">已售罄</span>
+            {{/if}}
+        </td>
+        <td>{{$value.shelveTime}}</td>
+        <input type="hidden" name="id" value="{{$value.id}}" param="param">
+        <input type="hidden" name="status" value="{{$value.status}}" param="param">
+    </tr>
+    {{/each}}
+</script>

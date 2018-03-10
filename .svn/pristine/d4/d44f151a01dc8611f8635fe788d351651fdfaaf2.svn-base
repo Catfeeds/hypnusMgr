@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#进入脚本所在目录
+BASEDIR=$(dirname $0)
+cd $BASEDIR
+
+echo "停止admin主后台开始"
+sh project-wfx-service-impl/shutdown.sh
+echo "停止admin主后台结束"
+
+echo "停止mobile主后台开始"
+sh project-wfx-service-impl-mobile/shutdown.sh
+echo "停止mobile主后台结束"
+
+echo "停止退款查询后台开始"
+sh project-wfx-returnQuery-service-impl/shutdown.sh
+echo "停止退款查询后台结束"
+
+echo "停止结算后台开始"
+sh project-wfx-settlement-service-impl/shutdown.sh
+echo "停止结算后台结束"
+
+echo "停止支付查询后台开始"
+sh project-wfx-payQuery-service-impl/shutdown.sh
+echo "停止支付查询后台结束"
+

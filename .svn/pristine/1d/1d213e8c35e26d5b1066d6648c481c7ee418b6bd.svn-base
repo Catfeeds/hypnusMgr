@@ -1,0 +1,22 @@
+package com.catt.wfx.service.impl.base.extractOrder;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.extractOrder.ExtractOrderDao;
+import com.catt.wfx.repository.entity.extractOrder.ExtractOrder;
+import com.catt.wfx.service.base.extractOrder.ExtractOrderBaseService;
+import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
+
+@Service("extractOrderBaseServiceImpl")
+public class ExtractOrderBaseServiceImpl extends
+	BaseServiceImpl<ExtractOrder, Long> implements ExtractOrderBaseService {
+
+	@Resource(name = "extractOrderDaoImpl")
+	private ExtractOrderDao extractOrderDao;
+
+	@Resource
+	public void setBaseDao(ExtractOrderDao extractOrderDao) {
+		super.setBaseDao(extractOrderDao);
+	}
+
+}

@@ -1,0 +1,150 @@
+package com.catt.wfx.web.controller.admin.wechat.cart;
+
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.service.couponMgr.CouponCusService;
+import com.catt.wfx.service.customerMgr.CusCartService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 购物车控制器
+ * 作者：袁幸成
+ * 时间：2017-3-1 9:07:18
+ */
+@RequestMapping({"/admin/wechat/cusCart"})
+@Controller("cusCartController")
+public class CusCartController extends BaseController{
+
+    //购物车服务
+    @Resource(name = "cusCartServiceImpl")
+    public CusCartService cusCartService;
+
+    //用户代金券服务
+    @Resource(name = "couponCusServiceImpl")
+    public CouponCusService couponCusService;
+
+    /**
+     * 购物车初始页
+     * @param model model
+     * @param shopId 店铺标识
+     * @return
+     */
+    @RequestMapping(value = "/index.html", method = RequestMethod.GET)
+    public String index(Model model, Long shopId) {
+        Assert.notNull(shopId, "店铺标识为空");
+        model.addAttribute("shopId", shopId);
+        return "/admin/wechat/cart/index";
+    }
+
+    /**
+     * 结算页面
+     * @param model model
+     * @param shopId 店铺标识
+     * @param cusId 用户标识
+     * @param cartIds 购物车数组
+     * @return
+     */
+    @RequestMapping(value = "/settle.html", method = RequestMethod.GET)
+    public String toSettle(Model model, Long shopId, @CurrentUser Long cusId, Long[] cartIds) {
+        Assert.notNull(shopId, "店铺标识为空");
+        Assert.notNull(cartIds);
+        Assert.isTrue(cartIds.length > 0);
+        model.addAttribute("shopId", shopId);
+        String cartIdsStr = "";
+        for (Long cartId : cartIds){
+            cartIdsStr += "," + cartId;
+        }
+        model.addAttribute("cartIds", cartIdsStr.substring(1));
+        model.addAttribute("entity", cusCartService.getDataByCartToOrder(cusId, cartIds));
+        model.addAttribute("couponList", couponCusService.getUsableCoupon(cusId, cartIds, 1, 100).getContent());
+        return "/admin/wechat/cart/settle";
+    }
+
+    /**
+     * 获取购物车商品列表
+     *
+     * @param cusId 用户标识
+     * @return
+     */
+    @RequestMapping(value = {"/findAll"}, method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map> findAll(@CurrentUser Long cusId) {
+        return cusCartService.findAll(cusId, null);
+    }
+
+    /**
+     * 新增/修改购物车
+     * @param id 购物车标识
+     * @param cusId 客户标识
+     * @param cusName 客户名称
+     * @param priceId 商品价格标识
+     * @param num 购买数量
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public Message save(@CurrentUser Long cusId, @CurrentUser("name") String cusName, Long id, Long priceId, Integer num){
+        Assert.notNull(priceId);
+        Assert.notNull(num);
+        Assert.isTrue(num > 0);
+        id = cusCartService.saveCart(cusId, cusName, id, priceId, num, null);
+        return Message.success().addResult(id);
+    }
+
+    /**
+     * 删除
+     * @param cusId 客户标识
+     * @param id 购物车标识
+     * @return
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Message delete(@CurrentUser Long cusId, Long id){
+        Assert.notNull(id);
+        cusCartService.deleteCart(cusId, id);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 创建订单-初始化界面
+     * @param cusId 客户标识
+     * @param cartIds 购物车标识
+     * @return
+     */
+    @RequestMapping(value = "/getDataByCartToOrder", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getDataByCartToOrder(@CurrentUser Long cusId, Long[] cartIds){
+        Assert.notNull(cartIds);
+        return cusCartService.getDataByCartToOrder(cusId, cartIds);
+    }
+
+
+    /**
+     * 立即购买，跳转到确认订单页面前保存购物车
+     *
+     * @param cusId   客户标识
+     * @param cusName 客户名称
+     * @param priceId 商品价格标识
+     * @param num     购买数量
+     */
+    @RequestMapping(value = "/saveCart4BuyNow", method = RequestMethod.POST)
+    @ResponseBody
+    public Message saveCart4BuyNow(@CurrentUser Long cusId, @CurrentUser("name") String cusName, Long priceId, Integer num){
+        Assert.notNull(priceId);
+        Assert.notNull(num);
+        Assert.isTrue(num > 0);
+        Long id = cusCartService.saveCart4BuyNow(cusId, cusName, priceId, num);
+
+        return Message.success().addResult(id);
+    }
+}

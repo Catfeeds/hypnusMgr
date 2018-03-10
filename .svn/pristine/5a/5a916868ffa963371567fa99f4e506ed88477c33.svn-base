@@ -1,0 +1,240 @@
+package com.catt.wfx.web.controller.admin.productMgr;
+
+import com.catt.common.base.pojo.message.MessageConstants;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.util.bean.BeanUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.data.vo.productMgr.ProductDocumentVo;
+import com.catt.wfx.repository.entity.productMgr.ProductDocument;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.productMgr.ProductDocumentService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:商品文案管理
+ * Created by 2017-02-06  10:15.
+ * author: Zhou mingxiang
+ */
+@Controller("admin.productMgr.ProductDocument")
+@RequestMapping(value = "/admin/productMgr/productDocument")
+public class ProductDocumentController extends BaseController {
+
+    //商品服务
+    @Resource(name = "productInfoBaseServiceImpl")
+    public ProductInfoBaseService productInfoBaseService;
+
+    //商品文案服务
+    @Resource(name = "productDocumentServiceImpl")
+    private ProductDocumentService productDocumentService;
+
+    /**
+     * 公共配置服务
+     */
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    /**
+     * 跳转商品文案管理首页
+     */
+    @RequestMapping(value = {"/index.html"}, method = RequestMethod.GET)
+    public String toIndex() {
+        return "/admin/productMgr/document/index";
+    }
+
+    /**
+     * 跳转商品文案新增页面
+     */
+    @RequestMapping(value = {"/add.html", "/update.html"}, method = RequestMethod.GET)
+    public String toAddOrUpdate() {
+        return "/admin/productMgr/document/saveOrUpdate";
+    }
+
+    /**
+     * 跳转到商品文案新增-选择商品页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/selectProduct.html")
+    public String selectProduct() {
+        return "/admin/productMgr/document/selectProduct";
+    }
+
+    /**
+     * 跳转商品文案管理详情页面
+     */
+    @RequestMapping(value = {"/detail.html"}, method = RequestMethod.GET)
+    public String detail() {
+        return "/admin/productMgr/document/detail";
+    }
+
+
+    /**
+     * 获取商品文案列表
+     *
+     * @param
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/getProductDocumentByPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getProductDocumentByPage(String zhName, Long cateId, Pageable pageable) {
+        return productDocumentService.getProductDocumentByPage(zhName, cateId, pageable);
+    }
+
+    /**
+     * 获取商品文案详情列表
+     *
+     * @param
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/getDocumentDetailByPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getDocumentDetailByPage(Long productId, Integer type, Integer status, Pageable pageable) {
+        Page<Map> mapPage = productDocumentService.getDocumentDetailByPage(productId, type, status, pageable);
+        //获取图片存储地址
+        String filePath = pubConfigService.getFilePath();
+        List<Map> mapList = mapPage.getContent();
+        for (Map map : mapList) {
+            map.put("filePath", filePath);
+        }
+        mapPage.setContent(mapList);
+        return mapPage;
+    }
+
+
+    /**
+     * 获取商品文案信息
+     *
+     * @param id 商品文案标识
+     * @return
+     */
+    @RequestMapping(value = {"/getProductDocument"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Map getProductDocument(Long id) {
+        Map map = productDocumentService.getProductDocument(id);
+        return map;
+    }
+
+    /**
+     * 获取商品信息
+     *
+     * @param productId 商品标识
+     * @return
+     */
+    @RequestMapping(value = {"/getProductInfo"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Map getProductInfo(Long productId) {
+        ProductInfo productInfo = productInfoBaseService.find(productId);
+        Map map = new HashMap<>();
+        map.put("zhName", productInfo.getZhName());
+        map.put("cateName", productInfo.getCateName());
+        return map;
+    }
+
+    /**
+     * 获取商品文案图片
+     */
+    @RequestMapping(value = "/getAttachments")
+    @ResponseBody
+    public List<Map> getAttachments(Long productDocumentId) {
+        //获取商品文案图片信息
+        List<Attachment> attachmentList = attachmentBaseService.getFiles(productDocumentId,
+                ProductDocument.TABLE_NAME, ProductDocument.COVER_PIC);
+
+        //获取图片存储地址
+        String filePath = pubConfigService.getFilePath();
+        List<Map> mapList = new ArrayList<Map>();
+        for (Attachment attachment : attachmentList) {
+            Map map = BeanUtil.describe(attachment);
+            map.put("url", filePath + attachment.getPath());
+            mapList.add(map);
+        }
+        return mapList;
+    }
+
+
+    /**
+     * 保存商品文案信息
+     *
+     * @param id                登录人标识
+     * @param name              登录人名称
+     * @param productDocumentVo 商品文案vo
+     * @param coverpic          图片信息
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/save"}, method = RequestMethod.POST)
+    public Message save(@CurrentUser Long id, @CurrentUser("name") String name,
+                        ProductDocumentVo productDocumentVo, String coverpic) {
+
+        if (StringUtil.checkObj(productDocumentVo.getId())) {
+            productDocumentService.update(productDocumentVo, coverpic);
+        } else {
+            productDocumentVo.setId(null);
+            productDocumentVo.setType(ProductDocument.Type.OfficialCopy.getValue()); //官方文案
+            productDocumentService.save(id, name, productDocumentVo, coverpic);
+        }
+
+        return new Message(MessageConstants.Type.success, "操作成功!");
+    }
+
+    /**
+     * 删除商品文案信息
+     *
+     * @param ids 商品文案标识集合
+     * @return
+     */
+    @RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message delete(Long[] ids) {
+        productDocumentService.delete(ids);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 发布/取消商品文案
+     *
+     * @param ids 商品文案标识集合
+     * @return
+     */
+    @RequestMapping(value = {"/copyAudit"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message copyAudit(Long[] ids, boolean trueOrFalse) {
+        productDocumentService.copyAudit(ids, trueOrFalse);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 店主上传文案转为官方文案
+     *
+     * @param ids 商品文案标识集合
+     * @return
+     */
+    @RequestMapping(value = {"/copyOfficial"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message copyOfficial(Long[] ids) {
+        productDocumentService.copyOfficial(ids);
+        return SUCCESS_MSG;
+    }
+}

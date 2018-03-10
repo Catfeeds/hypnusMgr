@@ -1,0 +1,104 @@
+package com.catt.wfx.service.impl.statisti;
+
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusAccountConsumeDao;
+import com.catt.wfx.repository.dao.customerMgr.CusAccountDetailDao;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountConsume;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountDetail;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import com.catt.wfx.service.base.settlementMgr.SettlementBusinessBaseService;
+import com.catt.wfx.service.statisti.CashGiveStatisticsService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 现金发放统计服务
+ * 作者：袁幸成
+ * 时间：2017-3-28 10:39:04
+ */
+@Service("cashGiveStatisticsServiceImpl")
+public class CashGiveStatisticsServiceImpl implements CashGiveStatisticsService {
+
+    //商家账户信息服务
+    @Resource(name = "settlementBusinessBaseServiceImpl")
+    private SettlementBusinessBaseService settlementBusinessBaseService;
+
+    //账户明细记录Dao
+    @Resource(name = "cusAccountDetailDaoImpl")
+    CusAccountDetailDao cusAccountDetailDao;
+
+    //账户信息Dao
+    @Resource(name = "cusAccountConsumeDaoImpl")
+    CusAccountConsumeDao cusAccountConsumeDao;
+
+    @Override
+    public Map<String, Object> findStatisticalData() {
+        Map<String, Object> backData = new HashMap<>();
+
+        SettlementBusiness settlementBusiness = settlementBusinessBaseService.findSettlementBusiness(1L);//TODO 厂家标识
+        double totalPlatMoney = settlementBusiness.getTotalPlatMoney();//平台提成金额
+        double platGetMoney = settlementBusiness.getPlatGetMoney();//平台已提现总金额
+        double platAccountMoney = NumberUtil.sub(totalPlatMoney, platGetMoney);//平台未提现金额
+        double cusAccountMoney = cusAccountConsumeDao.countRemainderMoney();//店主/主管未提现总金额
+
+        backData.put("totalPlatMoney", totalPlatMoney);
+        backData.put("platGetMoney", platGetMoney);
+        backData.put("platAccountMoney", platAccountMoney);
+
+        //店主和主管累计提现
+        double withdrawals = NumberUtil.moneyAdd(settlementBusiness.getShopGetMoney(), settlementBusiness.getLeaderGetMoney());
+
+        double salesCommissions = 0.0;//商品提成利润
+        double shopkeeperRegisterBonus = 0.0;//店主注册奖励
+        double shopkeeperInviteBonus = 0.0;//店主邀请奖励
+        double shopkeeperSaleBonus = 0.0;//店主销售奖励
+        double leaderMgrBonus = 0.0;//主管管理奖励
+        double totalDistributionMoney = 0.0; //分销总金额
+        List<Map> typeMoneyList = cusAccountDetailDao.countByType(); //账号金额交易统计
+        for (Map typeMoney: typeMoneyList){
+            Integer type = MapUtil.getInteger(typeMoney, "type");
+            Double money = NumberUtil.format(MapUtil.getDouble(typeMoney, "money", 0.0), 2);
+
+            if (type == CusAccountDetail.Type.SalesCommissions.getValue()){ //销售提成
+                salesCommissions = money;
+                totalDistributionMoney = NumberUtil.moneyAdd(totalDistributionMoney, money);
+
+            } else if (type == CusAccountDetail.Type.ShopkeeperRegisterBonus.getValue()){//店主注册奖励
+                shopkeeperRegisterBonus = money;
+                totalDistributionMoney = NumberUtil.moneyAdd(totalDistributionMoney, money);
+
+            } else if (type == CusAccountDetail.Type.ShopkeeperInviteBonus.getValue()){ //店主邀请奖励
+                shopkeeperInviteBonus = money;
+                totalDistributionMoney = NumberUtil.moneyAdd(totalDistributionMoney, money);
+
+            } else if (type == CusAccountDetail.Type.ShopkeeperSaleBonus.getValue()){ //店主销售奖励
+                shopkeeperSaleBonus = money;
+                totalDistributionMoney = NumberUtil.moneyAdd(totalDistributionMoney, money);
+
+            } else if (type == CusAccountDetail.Type.LeaderMgrBonus.getValue()){ //主管管理奖励
+                leaderMgrBonus = money;
+                totalDistributionMoney = NumberUtil.moneyAdd(totalDistributionMoney, money);
+            }
+        }
+        backData.put("salesCommissions", salesCommissions);
+        backData.put("shopkeeperRegisterBonus", shopkeeperRegisterBonus);
+        backData.put("shopkeeperInviteBonus", shopkeeperInviteBonus);
+        backData.put("shopkeeperSaleBonus", shopkeeperSaleBonus);
+        backData.put("leaderMgrBonus", leaderMgrBonus);
+        backData.put("totalDistributionMoney", totalDistributionMoney);
+
+        double totalMoney = NumberUtil.moneyAdd(totalPlatMoney, totalDistributionMoney);
+        double totalGetMoney = NumberUtil.moneyAdd(platGetMoney, withdrawals);
+        backData.put("totalMoney", totalMoney); //商家发放总金额
+        backData.put("totalGetMoney", totalGetMoney); //商家发放总金额已提现
+        backData.put("totalNotGetMoney", NumberUtil.moneyAdd(platAccountMoney, cusAccountMoney)); //商家发放总金额未提现
+        backData.put("withdrawals", withdrawals); //分销提成已提现
+        backData.put("notWithdrawals", cusAccountMoney); //分销提成未提现
+        return backData;
+    }
+}

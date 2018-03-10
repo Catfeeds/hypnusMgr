@@ -1,0 +1,35 @@
+package com.catt.wfx.service.basicConfig;
+
+
+import java.util.Map;
+
+/**
+ * 提现设置服务接口
+ * 
+ * @author chen chusheng
+ * @date 2017-02-06 14:09:15
+ * @version V1.0
+ */
+public interface WithdrawSetService{
+
+    /**
+     * 获取提现设置数据
+     * dateList : 时间段列表
+     * limitMoney : 最低限制金额
+     * @return
+     */
+    Map getWithdrawMap();
+
+    /**
+     * 保存提现时间
+     * @param param
+     */
+    void saveWithdrawDate(Map<String, Object> param);
+
+    /**
+     * 保存最低提现金额
+     * @param param
+     */
+    void saveWithdrawMoney(Map<String, Object> param);
+
+}

@@ -1,0 +1,260 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    var params = {}; //搜索条件
+                    //=========分页初始化start============
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+
+                    EventHandler.search();
+
+                    if ($('#isProprietary').val() == "false") {
+                        $('#factoryName').attr('disabled', "disabled");
+                    }
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $(".xw_select").click(function () {
+                        $(".xw_select").removeClass("selectTabs_on");
+                        $(this).addClass("selectTabs_on");
+                        EventHandler.search({pageNo: 1, pageSize: 15})
+                    });
+                    //重置
+                    $('#reset').click(EventHandler.reset);
+                    //查询
+                    $('#search').click(function () {
+                        EventHandler.search();
+                    });
+
+                    //动态绑定click(动态生成的html)
+                    $("#list").on('click', '.xw_tick', templateList.check);
+
+                    //审核
+                    $('#examineReturn').click(function () {
+                        EventHandler.examineReturn()
+                    });
+                    //收到退货
+                    $('#receiveGoods').click(function () {
+                       EventHandler.receiveGoods();
+                    });
+
+
+                    //退款
+                    $('#refund').click(function () {
+                        var list = templateList.getChecked("list", "tr");
+                        if (list.length == 1) {
+                            if (list[0].status == "4") {
+                                msgBox.exWindow.open({
+                                    title: '退款',
+                                    url: path + "/admin/orderMgr/cusOrderReturn/refund.html?id=" + list[0].id,
+                                    width: '500px',
+                                    height: '220px',
+                                    close: function (result) {
+                                        if (result) {
+                                            EventHandler.search();
+                                        }
+                                    }
+                                });
+                            } else {
+                                msgBox.tips("该退货单不能退款");
+                                return;
+                            }
+
+                        } else {
+                            msgBox.tips("请勾选一条数据");
+                            return;
+                        }
+                    });
+
+                    $('#factoryName').click(function(){
+                        msgBox.exWindow.open({
+                            title: '选择厂家',
+                            width: '60%',
+                            height: '80%',
+                            url: path + "/admin/basiconfig/factory/selectFactory.html",
+                            close: function (backData) {
+                                if (backData) {
+                                    var param = $.evalJSON(backData);
+                                    $('#factoryId').val(param.factoryId);
+                                    $('#factoryName').val(param.factoryName);
+                                }
+                            }
+                        });
+                    })
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                // 查询
+                search: function (params) {
+                    $(".xw_tickAll").removeClass("tickOn");
+
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: 15};
+                    }
+                    var returnUser = $("#returnUser").val();
+                    if (returnUser != "请输入昵称或手机号") {
+                        params.returnUser = returnUser;
+                    }
+
+                    params.status = $(".selectTabs_on").attr("data-value");
+                    params.factoryId = $("#factoryId").val();
+                    if ($("#startTime").val()) {
+                        params.startTime = $("#startTime").val() + " 00:00:00";
+                    }
+                    if ($("#endTime").val()) {
+                        params.endTime = $("#endTime").val() + " 23:59:59";
+                    }
+
+                    DataHandler.search(params, function (backData) {
+                    var content =  backData.content;
+                        for (var o in content){
+                            var specDesc = content[o].specDesc;
+                            specDesc=specDesc.replace(/\"/g,"");
+                            specDesc=specDesc.replace(/{/g,"").replace(/}/g,"");
+                            content[o].specDesc = specDesc;
+                        }
+
+                        var html = template('listTemp', content);
+                        $('#list').html(html);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        setParenHei();
+                    });
+                },
+                //重置
+                reset: function () {
+                    $('#returnUser').val("");
+                    $("#startTime").val("");
+                    $("#endTime").val("");
+                    if ($('#isProprietary').val() == "true") {
+                        $("#factoryId").val("");
+                        $("#factoryName").val("");
+                    }
+                },
+
+                //审核
+                examineReturn: function(){
+                    var list = templateList.getChecked("list", "tr");
+                    if (list.length == 1) {
+                        if (list[0].status == "1") {
+                            msgBox.exWindow.open({
+                                title: '审核',
+                                url: path + "/admin/orderMgr/cusOrderReturn/examine.html?id=" + list[0].id+"&returnTotalAmount="+list[0].returnTotalAmount,
+                                width: '500px',
+                                height: '360px',
+                                close: function (result) {
+                                    if (result) {
+                                        EventHandler.search();
+                                    }
+                                }
+                            });
+                        } else {
+                            msgBox.tips("该退货单已审核");
+                            return;
+                        }
+
+                    } else {
+                        msgBox.tips("请勾选一条数据");
+                        return;
+                    }
+                },
+
+                //收到退货
+                receiveGoods: function(){
+                    //获取勾选的数据
+                    var aId = [];
+                    var list = templateList.getChecked("list", "tr");
+                    if (list.length > 0) {
+                        var isTrue = true;
+                        for (var o in list) {
+                            if (list[o].status == "3") {
+                                aId.push(list[o].id);
+                            } else {
+                                isTrue = false;
+                            }
+                        }
+
+                        if (isTrue) {
+                            msgBox.confirm({
+                                title: '收到退货',
+                                msg: '确定已收到用户的退货?',
+                                callback: function (btnType) {
+                                    if (btnType == 'ok') {
+                                        DataHandler.receiveGoods({
+                                            id: aId.join(',')
+                                        }, function (backData) {
+                                            if (backData.type == 'success') {
+                                                msgBox.tips("操作成功");
+                                                EventHandler.search();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        } else {
+                            msgBox.tips("请选择待收货的退货单")
+                        }
+                    } else {
+                        msgBox.tips("请勾选数据")
+                    }
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/orderMgr/cusOrderReturn/getReturnGoodsByPage', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 收到退货
+                 * @param params  退货标识集合
+                 * @param callback
+                 */
+                receiveGoods: function (params, callback) {
+                    $.post(path + '/admin/orderMgr/cusOrderReturn/receiveGoods', params, function (backData) {
+                        callback(backData);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

@@ -1,0 +1,43 @@
+package com.catt.wfx.service.couponMgr;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.form.couponMgr.CouponCusFrom;
+
+import java.util.Map;
+
+/**
+ * 用户代金券服务接口
+ * 
+ * @author chen chusheng
+ * @date 2017-01-16 11:10:41
+ * @version V1.0
+ */
+public interface CouponCusService{
+
+    /**
+     * 发送代金券
+     * @param userId    创建者ID
+     * @param name      创建者名称
+     * @param paramMap
+     */
+    void sendCoupon(Long userId, String name, Map<String, Object> paramMap);
+
+    /**
+     * 获取用户列表
+     * @param param
+     * @return
+     */
+    Page getCusPageList(Map<String, Object> param);
+
+    /**
+     * 获取代金券领取记录
+     *
+     * @param couponCusFrom
+     * @param pageable
+     * @return
+     */
+    Page<Map> getCouponRecordByPage(CouponCusFrom couponCusFrom, Pageable pageable);
+
+}

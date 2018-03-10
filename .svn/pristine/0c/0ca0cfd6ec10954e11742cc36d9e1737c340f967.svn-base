@@ -1,0 +1,43 @@
+package com.catt.wfx.service.impl.wechatReturn.event;
+
+import com.catt.common.util.bean.BeanUtil;
+
+import java.util.Date;
+
+/**
+ * Description:申请退款成功事件
+ * Created by 2017-03-03  10:10.
+ * author: Zhou mingxiang
+ */
+public class CreateReturnSuccessEvent extends ToReturnEvent {
+
+    private static final long serialVersionUID = 1L;
+
+    public CreateReturnSuccessEvent() {
+
+    }
+
+    public CreateReturnSuccessEvent(ToReturnEvent toReturnEvent, Date returnTime) {
+        BeanUtil.copyProperties(this, toReturnEvent);
+        this.returnTime = returnTime;
+    }
+
+    public CreateReturnSuccessEvent(ToReturnEvent toReturnEvent) {
+        BeanUtil.copyProperties(this, toReturnEvent);
+    }
+
+    /**
+     * 退款时间
+     */
+    private Date returnTime;
+
+    public Date getReturnTime() {
+        return returnTime;
+    }
+
+    public void setReturnTime(Date returnTime) {
+        this.returnTime = returnTime;
+    }
+
+}
+

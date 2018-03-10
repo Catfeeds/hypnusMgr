@@ -1,0 +1,163 @@
+package com.catt.wfx.repository.dao.extractOrder.impl;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.extractOrder.ExtractOrderDao;
+import com.catt.wfx.repository.entity.extractOrder.ExtractOrder;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+@Repository("extractOrderDaoImpl")
+public class ExtractOrderDaoImpl extends BaseDaoImpl<ExtractOrder, Long>
+		implements ExtractOrderDao {
+
+	/**
+	 * 获取提现管理分页数据
+	 *
+	 * @param params
+	 * @return
+	 */
+	@Override
+	public Page<Map> getPage(Map<String, Object> params) {
+		Integer pageNo = MapUtil.getInteger(params, "pageNo");
+		Integer pageSize = MapUtil.getInteger(params, "pageSize");
+		Long id = MapUtil.getLong(params, "id");//单据ID
+		String name = MapUtil.getString(params, "name");//用户名
+		Integer status = MapUtil.getInteger(params, "status");//单据状态
+		String startDate = MapUtil.getString(params, "startDate");//提现开始时间
+		Date start = null;
+		if(StringUtil.isNotBlank(startDate)){
+			start = DateUtil.parseDate(startDate);
+		}
+		String endDate = MapUtil.getString(params, "endDate");//提现结束时间
+		Date end = null;
+		if(StringUtil.isNotBlank(endDate)){
+			end = DateUtil.parseDate(endDate);
+		}
+
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT ");
+		sql.append(" a.I_ID AS \"id\", ");
+		sql.append(" a.I_CUS_ID AS \"cusId\", ");
+		sql.append(" b.S_NAME AS \"name\", ");
+		sql.append(" b.S_MOBILE AS \"mobile\", ");
+		sql.append(" a.I_STATUS AS \"status\", ");
+		sql.append(" a.I_MONEY AS \"money\", ");
+		sql.append(" a.D_CREATE_DATE AS \"createDate\" ");
+		sql.append(" FROM T_EXTRACT_ORDER a ");
+		sql.append(" INNER JOIN T_CUS_INFO b ON a.I_CUS_ID = b.I_ID ");
+		sql.append(" WHERE 1=1 ");
+
+		Map param = new HashMap<>();
+		if(StringUtil.checkObj(id)){
+			sql.append(" AND a.I_ID = :id ");
+			param.put("id", id);
+		}
+		if(StringUtil.isNotBlank(name)){
+			sql.append(" AND b.S_NAME like :name ");
+			param.put("name", name+"%");
+		}
+		if(StringUtil.checkObj(status)){
+			sql.append(" AND a.I_STATUS = :status ");
+			param.put("status", status);
+		}
+		if(StringUtil.checkObj(start)){
+			sql.append(" AND a.D_CREATE_DATE >= :start");
+			param.put("start", start);
+		}
+		if(StringUtil.checkObj(end)){
+			sql.append(" AND a.D_CREATE_DATE <= :end");
+			param.put("end", end);
+		}
+		sql.append(" ORDER BY a.D_CREATE_DATE DESC ");
+
+
+		Pageable pageable = new Pageable();
+		if(StringUtil.checkObj(pageNo)){
+			pageable.setPageNo(pageNo);
+		}
+		if(StringUtil.checkObj(pageSize)){
+			pageable.setPageSize(pageSize);
+		}
+		return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+	}
+
+	/**
+	 * 获取提现记录列表（分页）
+	 *
+	 * @param params
+	 * @return
+	 */
+	@Override
+	public Page<Map> getPageForApp(Map<String, Object> params) {
+		Integer pageNo = MapUtil.getInteger(params, "pageNo");
+		Integer pageSize = MapUtil.getInteger(params, "pageSize");
+		Long id = MapUtil.getLong(params, "id");//记录Id
+		Long cusId = MapUtil.getLong(params, "cusId");//用户名Id
+		Integer status = MapUtil.getInteger(params, "status");//单据状态
+		String startDate = MapUtil.getString(params, "startDate");//提现开始时间
+		Date start = null;
+		if(StringUtil.isNotBlank(startDate)){
+			start = DateUtil.parseDate(startDate);
+		}
+		String endDate = MapUtil.getString(params, "endDate");//提现结束时间
+		Date end = null;
+		if(StringUtil.isNotBlank(endDate)){
+			end = DateUtil.parseDate(endDate);
+		}
+
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT ");
+		sql.append(" a.I_ID AS \"id\", ");
+		sql.append(" a.I_CUS_ID AS \"cusId\", ");
+		sql.append(" a.I_STATUS AS \"status\", ");
+		sql.append(" a.I_MONEY AS \"money\", ");
+		sql.append(" a.s_bank_account AS \"bankAccount\", ");
+		sql.append(" a.s_bank_card AS \"bankCard\", ");
+		sql.append(" a.s_branch AS \"branch\", ");
+		sql.append(" a.i_bank_type AS \"bankType\", ");
+		sql.append(" a.D_CREATE_DATE AS \"createDate\" ");
+		sql.append(" FROM T_EXTRACT_ORDER a ");
+		sql.append(" WHERE 1=1 ");
+
+		Map param = new HashMap<>();
+		if(StringUtil.checkObj(id)){
+			sql.append(" AND a.I_ID = :id");
+			param.put("id", id);
+		}
+		if(StringUtil.checkObj(cusId)){
+			sql.append(" AND a.I_CUS_ID = :cusId");
+			param.put("cusId", cusId);
+		}
+		if(StringUtil.checkObj(status)){
+			sql.append(" AND a.I_STATUS = :status ");
+			param.put("status", status);
+		}
+		if(StringUtil.checkObj(start)){
+			sql.append(" AND a.D_CREATE_DATE >= :start");
+			param.put("start", start);
+		}
+		if(StringUtil.checkObj(end)){
+			sql.append(" AND a.D_CREATE_DATE <= :end");
+			param.put("end", end);
+		}
+		sql.append(" ORDER BY a.D_CREATE_DATE DESC ");
+
+
+		Pageable pageable = new Pageable();
+		if(StringUtil.checkObj(pageNo)){
+			pageable.setPageNo(pageNo);
+		}
+		if(StringUtil.checkObj(pageSize)){
+			pageable.setPageSize(pageSize);
+		}
+		return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+	}
+}

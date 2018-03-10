@@ -1,0 +1,32 @@
+<%--
+  User: Sebarswee
+  Date: 2016/5/28
+  Time: 16:46
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModuleWithAdminLTE.jsp" %>
+    <title>404 页面未找到</title>
+</head>
+<body>
+<section class="content">
+    <div class="error-page">
+        <h2 class="headline text-yellow"> 404</h2>
+
+        <div class="error-content">
+            <h3><i class="fa fa-warning text-yellow"></i> 哎呀! 找不到该页面.</h3>
+
+            <p>
+                没有找该页面.
+                您可以重新操作或者联系管理员.
+            </p>
+
+        </div>
+        <!-- /.error-content -->
+    </div>
+    <!-- /.error-page -->
+</section>
+</body>
+</html>

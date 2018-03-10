@@ -1,0 +1,30 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>设置</title>
+    <%@include file="/common/headModule.jsp" %>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/shezhi.css"/>
+</head>
+
+<body style="background:#f2f2f2;">
+<img class="topLogo" src="${path}/resources/images/shezhi_logo.png">
+<p class="logpName">微分销</p>
+
+<div class="selectContent">
+    <div class="tongjibiao">
+        <ul>
+            <li class="tongjibiaoItem" onClick="window.location='${path}/admin/wechat/setting/aboutus.html';">
+                <h1>关于我们</h1>
+                <img class="arrow" src="${path}/resources/images/login_btn_next.png">
+            </li>
+            <li class="tongjibiaoItem" onClick="window.location='${path}/admin/wechat/setting/termService.html';">
+                <h1>服务条款</h1>
+                <img class="arrow" src="${path}/resources/images/login_btn_next.png">
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

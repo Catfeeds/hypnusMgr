@@ -1,0 +1,211 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.entity.customerMgr.CusCertification;
+import com.catt.wfx.repository.entity.customerMgr.CusCertificationLog;
+import com.catt.wfx.service.base.customerMgr.CusCertificationBaseService;
+import com.catt.wfx.service.base.customerMgr.CusCertificationLogBaseService;
+import com.catt.wfx.service.customerMgr.CusCertificationService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import util.CryptUtil;
+import util.MaskUtil;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service("cusCertificationServiceImpl")
+public class CusCertificationServiceImpl implements CusCertificationService {
+
+    @Resource(name = "cusCertificationBaseServiceImpl")
+    private CusCertificationBaseService cusCertificationBaseService;
+
+    @Resource(name = "cusCertificationLogBaseServiceImpl")
+    private CusCertificationLogBaseService cusCertificationLogBaseService;
+
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    /**
+     * 获取认证信息
+     * @param purpose 获取内容
+     * @param cusId 用户ID
+     * @return
+     */
+    @Override
+    public Map getDetail(String purpose, Long cusId) {
+        Map<String, Object> result = new HashMap<>();
+        if(StringUtil.isNotBlank(purpose)){
+            List<CusCertification> cuss = cusCertificationBaseService.findList(1, Arrays.asList(Filter.eq("cusId", cusId)), null);
+            CusCertification cus = (cuss != null && cuss.size() > 0) ? cuss.get(0) : null;
+            Integer status = cus != null ? cus.getStatus() : CusCertification.Status.UnSubmit.getValue();
+            result.put("status", status);
+            if("status".equals(purpose)){
+                return result;
+            }
+            Attachment hole = attachmentBaseService.getFile(cus.getId(), CusCertification.TABLE_NAME, CusCertification.COLUMN_NAME_HOLD);
+            Attachment positive = attachmentBaseService.getFile(cus.getId(), CusCertification.TABLE_NAME, CusCertification.COLUMN_NAME_POSITIVE);
+            Attachment inverse = attachmentBaseService.getFile(cus.getId(), CusCertification.TABLE_NAME, CusCertification.COLUMN_NAME_INVERSE);
+            String filePath = pubConfigService.getFilePath();
+            result.put("holdphotoId", cus.getHoldphotoPath());
+            result.put("holdphotoPath", hole != null ? filePath + hole.getPath() : "");
+            result.put("cardpositiveId", cus.getCardpositivePath());
+            result.put("cardpositivePath", positive != null ? filePath + positive.getPath() : "");
+            result.put("cardinverseId", cus.getCardinversePath());
+            result.put("cardinversePath", inverse != null ? filePath + inverse.getPath() : "");
+            if(status.intValue() != CusCertification.Status.UnSubmit.getValue()) {
+                String remark = "";
+                if(status.intValue() == CusCertification.Status.WaitForAudit.getValue()){
+                    remark = "用户信息认证正在审核中";
+                }
+                if(status.intValue() == CusCertification.Status.Certificated.getValue()){
+                    remark = "用户信息已通过认证";
+                }
+                if(status.intValue() == CusCertification.Status.WaitForEdit.getValue()){
+                    List<CusCertificationLog> logs = cusCertificationLogBaseService.
+                            findList(1, Arrays.asList(Filter.eq("orderId", cus.getId())), Arrays.asList(Order.desc("createDate")));
+                    if(logs != null && logs.size() > 0){
+                        remark = "用户信息未通过认证，原因: " + logs.get(0).getAuditDesc();
+                    }else {
+                        remark = "用户信息未通过认证";
+                    }
+                }
+                result.put("remark", remark);
+            }
+            if("show".equals(purpose)){
+                result.put("realName", MaskUtil.maskName(CryptUtil.decryptDatabase(cus.getRealName())));
+                result.put("idCard", MaskUtil.maskCertNo(CryptUtil.decryptDatabase(cus.getIdCard())));
+                result.put("mobile", MaskUtil.maskMobileNo(CryptUtil.decryptDatabase(cus.getMobile())));
+            }
+            if("edit".equals(purpose)){
+                result.put("realName", CryptUtil.decryptDatabase(cus.getRealName()));
+                result.put("idCard", CryptUtil.decryptDatabase(cus.getIdCard()));
+                result.put("mobile", CryptUtil.decryptDatabase(cus.getMobile()));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 提交实名认证申请
+     * @param params
+     * @return
+     */
+    @Override
+    @Transactional
+    public void apply(Map<String, Object> params) {
+        Long cusId = MapUtil.getLong(params, "cusId");
+        String cusName = MapUtil.getString(params, "cusName");
+        if(StringUtil.checkObj(cusId)){
+            String realName = MapUtil.getString(params, "realName");
+            String idCard = MapUtil.getString(params, "idCard");
+            String mobile = MapUtil.getString(params, "mobile");
+            String holdphotoId = MapUtil.getString(params, "holdphotoId");
+            String cardpositiveId = MapUtil.getString(params, "cardpositiveId");
+            String cardinverseId = MapUtil.getString(params, "cardinverseId");
+
+            Assert.hasText(realName);
+            Assert.hasText(idCard);
+            Assert.hasText(mobile);
+
+            CusCertification cus = null;
+            CusCertificationLog log = new CusCertificationLog();
+
+            List<CusCertification> cuss = cusCertificationBaseService.findList(1, Arrays.asList(Filter.eq("cusId", cusId)), null);
+            if(cuss != null && cuss.size() > 0){
+                cus = cuss.get(0);
+                log.setAct(CusCertificationLog.Act.Edit.getValue());
+            }else{
+                cus = new CusCertification();
+                cus.setCusId(cusId);
+                log.setAct(CusCertificationLog.Act.Create.getValue());
+            }
+            if(cus.getStatus() != null && cus.getStatus().intValue() != CusCertification.Status.WaitForEdit.getValue()){
+                if(cus.getStatus().intValue() == CusCertification.Status.Certificated.getValue()){
+                    throw BaseException.errorByErrInfo("用户信息已通过认证，无需再次申请认证");
+                }
+                if(cus.getStatus().intValue() == CusCertification.Status.WaitForAudit.getValue()){
+                    throw BaseException.errorByErrInfo("认证申请正在审核中，请耐心等待");
+                }
+                if(cus.getStatus().intValue() == CusCertification.Status.UnSubmit.getValue()){
+                    throw BaseException.errorByErrInfo("认证申请正在审核中，请耐心等待");
+                }
+            }
+            cus.setStatus(CusCertification.Status.WaitForAudit.getValue());
+            cus.setRealName(CryptUtil.encryptDatabase(realName));
+            cus.setIdCard(CryptUtil.encryptDatabase(idCard));
+            cus.setMobile(CryptUtil.encryptDatabase(mobile));
+            cus.setHoldphotoPath(holdphotoId);
+            cus.setCardpositivePath(cardpositiveId);
+            cus.setCardinversePath(cardinverseId);
+            cus.setCreatedId(cusId);
+            cus.setCreatedName(cusName);
+            cus = cusCertificationBaseService.saveOrUpdate(cus);
+
+            //todo:保存图片关联的标识、表名等
+            this.updatePics(cus.getId(),StringUtil.isNotBlank(holdphotoId) ? Long.parseLong(holdphotoId) : null,
+                    StringUtil.isNotBlank(cardpositiveId) ? Long.parseLong(cardpositiveId) : null,
+                    StringUtil.isNotBlank(cardinverseId) ? Long.parseLong(cardinverseId) : null);
+
+            log.setContent("申请认证");
+            log.setOperatorName(cusName);
+            log.setOperatorId(cusId);
+            log.setOrderId(cus.getId());
+            cusCertificationLogBaseService.save(log);
+        }else{
+            throw BaseException.errorByErrInfo("操作错误");
+        }
+    }
+
+    /**
+     * 更新图片关联信息
+     * @param relId
+     * @param holdphotoId
+     * @param cardpositiveId
+     * @param cardinverseId
+     */
+    private void updatePics(Long relId, Long holdphotoId, Long cardpositiveId, Long cardinverseId){
+        List<Attachment> pics = new ArrayList<>();
+        if(StringUtil.checkObj(holdphotoId)){
+            Attachment hold = attachmentBaseService.find(holdphotoId);
+            hold.setMdeField(CusCertification.COLUMN_NAME_HOLD);
+            hold.setMdeTable(CusCertification.TABLE_NAME);
+            hold.setRelId(relId);
+            pics.add(hold);
+        }
+        if(StringUtil.checkObj(cardpositiveId)){
+            Attachment positive = attachmentBaseService.find(cardpositiveId);
+            positive.setMdeField(CusCertification.COLUMN_NAME_POSITIVE);
+            positive.setMdeTable(CusCertification.TABLE_NAME);
+            positive.setRelId(relId);
+            pics.add(positive);
+        }
+        if(StringUtil.checkObj(cardinverseId)){
+            Attachment inverse = attachmentBaseService.find(cardinverseId);
+            inverse.setMdeField(CusCertification.COLUMN_NAME_INVERSE);
+            inverse.setMdeTable(CusCertification.TABLE_NAME);
+            inverse.setRelId(relId);
+            pics.add(inverse);
+        }
+
+        if(pics != null && pics.size() > 0) {
+            attachmentBaseService.saveOrUpdate(pics);
+        }
+    }
+}

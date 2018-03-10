@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    
+    <bean id="queryReturnServiceImpl" class="com.catt.wfx.returnQuery.service.impl.QueryReturnServiceImpl" />
+
+    <!-- 查询退款任务 -->
+    <bean id="memoryQueryJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="queryReturnServiceImpl" />
+        </property>
+        <property name="targetMethod">
+            <value>queryReturn</value>
+        </property>
+    </bean>
+
+
+    <!-- 查询退款任务触发器 -->
+    <bean id="memoryQueryTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="memoryQueryJobDetail" />
+		<property name="startDelay" value="10000" />
+		<property name="repeatInterval" value="3600000" /><!-- 每1H触发 -->
+	</bean>
+
+
+
+    <!--
+		调度作业
+		如果lazy-init='false',则容器启动时就会执行调度程序;否则需要实例化该bean才能执行调度程序
+	-->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+        <property name="triggers">
+            <list>
+                <!-- 内存支付查询任务 -->
+                <ref local="memoryQueryTrigger" />
+            </list>
+        </property>
+    </bean>
+
+</beans>

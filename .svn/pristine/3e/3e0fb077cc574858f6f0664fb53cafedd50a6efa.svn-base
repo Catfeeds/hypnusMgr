@@ -1,0 +1,12 @@
+package com.catt.wfx.repository.dao.couponMgr.impl;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.wfx.repository.dao.couponMgr.CouponRuleDao;
+import com.catt.wfx.repository.entity.couponMgr.CouponRule;
+import org.springframework.stereotype.Repository;
+
+@Repository("couponRuleDaoImpl")
+public class CouponRuleDaoImpl extends BaseDaoImpl<CouponRule, Long>
+		implements CouponRuleDao {
+
+}

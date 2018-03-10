@@ -1,0 +1,63 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: xiazanyi
+  Date: 2017/3/8
+  Time: 下午2:27
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>个人信息</title>
+    <link rel="stylesheet" href="${path}/resources/css/public.css">
+    <link rel="stylesheet" href="${path}/resources/css/gerenxinxi.css">
+    <style type="text/css">
+       #headerImage .webuploader-pick {
+            width:100%;
+            padding: 0px ;
+        }
+    </style>
+    <script type="text/javascript" src="${path}/resources/js/gouwuche.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/personal/index.js"></script>
+</head>
+
+<body style="background:#f2f2f2;">
+
+<div class="selectContent">
+    <div class="tongjibiao">
+        <ul>
+            <li class="tongjibiaoItem"  onClick="window.location='${path}/admin/wechat/personal/modifyName.html?name=${user.name}&shopId=${shopId}';">
+                <h1>昵称</h1>
+                <img class="arrow" src="${path}/resources/images/login_btn_next.png">
+                <h2 id="userName"></h2>
+            </li>
+
+            <li class="tongjibiaoItem" id="headerImage">
+                <h1>头像</h1>
+                <img class="arrow" src="${path}/resources/images/login_btn_next.png">
+                <img class="head"  id="headImage" src="">
+            </li>
+
+            <li class="tongjibiaoItem" onClick="window.location='${path}/admin/wechat/personal/modifyMobile/useMobile.html?shopId=${shopId}';">
+                <h1>手机号码</h1>
+                <img class="arrow" src="${path}/resources/images/login_btn_next.png">
+                <h2>${user.account}</h2>
+            </li>
+
+            <li class="tongjibiaoItem" onClick="window.location='${path}/admin/wechat/personal/cusContact/index.html?shopId=${shopId}';">
+                <h1>收货地址</h1>
+                <img class="arrow" src="${path}/resources/images/login_btn_next.png">
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
+
+

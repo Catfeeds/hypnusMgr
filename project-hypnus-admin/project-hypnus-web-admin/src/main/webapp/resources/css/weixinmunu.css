@@ -1,0 +1,85 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.menu{ padding-left:320px; position:relative; margin-top:10px;border-radius:5px; background:#fff; min-height:650px;}
+.weixinDiv{ position:absolute; top:10px; left:10px; background:url(../images/weixin.jpg) no-repeat center center; width:300px; height:532px;}
+.weixinMenu{ position:absolute; bottom:0; left:0; padding-left:40px; height:46px; width:258px; border:1px solid #efefef; border-top:none;}
+table.menuTable{width:100%; border-collapse:collapse;}
+table.menuTable td{ border-right:1px solid #efefef;}
+table.menuTable th{ font-weight:normal;}
+table.menuTable td:hover{ background:#f4f4f4;}
+table.menuTable th:hover{ background:#f4f4f4;}
+.menuDiv{ font-size:14px; letter-spacing:1px; color:#666; height:46px; line-height:46px; text-align:center; cursor:pointer; width:80px; position:relative;}
+.addMenu{ background:url(../images/addkeyword.png) no-repeat center center; width:80px; font-size:14px; letter-spacing:1px; color:#666; height:46px; line-height:46px; text-align:center; cursor:pointer;}
+
+
+.operationDiv{ padding:10px;}
+.operationDiv h1{ height:30px; line-height:30px; font-size:18px; color:#222; letter-spacing:1px; margin-top:15px;}
+.operationDiv h1 font{ font-size:12px; color:#e63425; float:right; margin-right:20px; cursor:pointer;}
+.operationDiv h1 font:hover{ text-decoration:underline;}
+.operationDiv h2{ height:20px; line-height:20px; font-size:14px; color:#666; letter-spacing:1px;margin-top:10px;}
+.operationDiv h2 font{ font-size:12px; color:#999; letter-spacing:1px;}
+input.fitstName{ border:1px solid #e5e5e5; border-radius:3px; height:30px; height:30px; padding:5px 10px; width:80%;margin-top:10px; font-size:12px; color:#666;}
+input.fitstName:hover{ border:1px solid rgba(35,178,148,0.4);}
+
+.menuType{ margin-top:15px; height:20px;}
+.menuTypeDiv{ background:url(../images/ico_tick.png) no-repeat left center; font-size:14px; letter-spacing:1px; height:20px; line-height:20px; color:#666; padding-left:20px; float:left; margin-right:20px; cursor:pointer;}
+.menuTyped{ background:url(../images/ico_ticked.png) no-repeat left center; color:#e63425;}
+.editType{ font-size:12px; color:#666; margin-top:20px;}
+.secondMenu{}
+.huifu{ border:1px solid #e5e5e5; padding:10px;}
+.huifuTypeDiv{ font-size:14px; letter-spacing:1px; height:20px; line-height:20px; color:#666; float:left; margin-right:20px; cursor:pointer; padding-left:20px;}
+.huifuTypeDived{ color:#e63425;}
+.huifuContent{ margin-top:10px; min-height:100px;}
+.huifuContent textarea{ font-size:12px; color:#999; line-height:130%; letter-spacing:1px; border:1px solid #e5e5e5; border-radius:3px; width:80%; min-height:50px; padding:5px;}
+.huifuContent textarea:hover{border:1px solid #fdb874;}
+.ico_link{ background:url(../images/ico_link.png) no-repeat center center; width:24px; height:24px; float:left; margin-right:10px; margin-top:5px; cursor:pointer;}
+.ico_face{ background:url(../images/ico_face.png) no-repeat center center; width:24px; height:24px; float:left; margin-top:5px; cursor:pointer;}
+.ico_text{ background:url(../images/ico_text.png) no-repeat left center;}
+.ico_texted{ background:url(../images/ico_texted.png) no-repeat left center;}
+
+.ico_pic{ background:url(../images/ico_pic.png) no-repeat left center;}
+.ico_piced{ background:url(../images/ico_piced.png) no-repeat left center;}
+
+.ico_pics{ background:url(../images/ico_pics.png) no-repeat left center;}
+.ico_picsed{ background:url(../images/ico_picsed.png) no-repeat left center;}
+
+.ico_activity{ background:url(../images/ico_activity.png) no-repeat left center;}
+.ico_activitied{ background:url(../images/ico_activitied.png) no-repeat left center;}
+
+.ico_live{ background:url(../images/ico_live.png) no-repeat left center;}
+.ico_lived{ background:url(../images/ico_lived.png) no-repeat left center;}
+
+.ico_card{ background:url(../images/ico_card.png) no-repeat left center;}
+.ico_carded{ background:url(../images/ico_carded.png) no-repeat left center;}
+
+.ico_voice{ background:url(../images/ico_voice.png) no-repeat left center;}
+.ico_voiced{ background:url(../images/ico_voiced.png) no-repeat left center;}
+.tiaozhuan{}
+
+.addContent{ border:1px solid #efefef; width:220px; height:150px; background:url(../images/bg_circle_add.png) no-repeat center 45px; cursor:pointer;}
+.addContent h3{ padding-top:90px; height:20px; font-size:12px; color:#999; text-align:center; font-weight:normal; letter-spacing:1px;}
+
+.huifuList{ border:1px solid #efefef; padding:10px; width:200px;}
+.huifuList h1{ font-size:16px; height:20px; line-height:20px; font-weight:normal; margin:0; padding-bottom:5px;}
+.huifuList p{ padding:5px 0; font-size:12px; letter-spacing:1px; height:15px; overflow:hidden;}
+
+.toolDiv{ height:20px; padding-top:5px; border-top:1px solid #efefef;}
+.toolDiv span{ display:block; width:49.5%; height:24px; float:left; cursor:pointer;}
+span.ico_edit{ background:url(../images/ico_pen.png) no-repeat center center; border-right:1px solid #efefef;}
+span.ico_delete{ background:url(../images/ico_delete.png) no-repeat center center;}
+
+ul.subMenu{ width:90px; border:1px solid #d0d0d0; background:#fafafa; position:absolute; top:-100px; left:0; display:none;}
+ul.subMenu li{ height:45px; width:80px;margin:0 5px; border-bottom:1px solid #d0d0d0; line-height:45px; text-align:center; color:#666;}
+ul.subMenu li:hover{ background:#f4f4f4;}
+.subMenu li:last-child{ border-bottom:none;}
+ul.subMenu li.addMenu{ background:url(../images/addkeyword.png) no-repeat center center; border-bottom:none;}
+ul.subMenu li.addMenu:hover{ background:url(../images/addkeyword.png) no-repeat center center #f4f4f4;}
+.arrowIn{bottom:-5px; left:45%;display: inline-block;width: 0;height: 0;border: 6px dashed transparent;border-bottom:none;border-top:6px solid #fafafa;  position:absolute;}
+.arrowOut{left:45%; position:absolute;border:6px dashed transparent;border-top:6px solid #d0d0d0; display: inline-block;height: 0;width: 0;}
+
+
+.saveBar{ margin-top:30px;}
+.save{ width:250px; margin:0 auto;}
+.save div{ width:120px; height:30px; line-height:30px; letter-spacing:1px; font-size:14px; color:#fff; text-align:center;}

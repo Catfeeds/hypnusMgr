@@ -1,0 +1,183 @@
+package com.catt.wfx.service.impl.settlement;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.basicConfig.PlatIncomeSet;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlat;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlatDetail;
+import com.catt.wfx.service.base.basicConfig.PlatIncomeSetBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementBusinessBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementOrderDetailBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementPlatBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementPlatDetailBaseService;
+import com.catt.wfx.service.settlement.PlatSettlementService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 平台结算服务
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-2-20 10:26:36
+ */
+@Service("platSettlementServiceImpl")
+public class PlatSettlementServiceImpl implements PlatSettlementService {
+
+    //LOG
+    private static final Logger LOG = LoggerFactory.getLogger(PlatSettlementServiceImpl.class);
+
+    //订单结算统计服务
+    @Resource(name = "settlementOrderDetailBaseServiceImpl")
+    SettlementOrderDetailBaseService settlementOrderDetailBaseService;
+
+    //平台账户结算明细服务
+    @Resource(name = "settlementPlatDetailBaseServiceImpl")
+    private SettlementPlatDetailBaseService settlementPlatDetailBaseService;
+
+    //平台收益设置服务
+    @Resource(name = "platIncomeSetBaseServiceImpl")
+    private PlatIncomeSetBaseService platIncomeSetBaseService;
+
+    //平台账户信息服务
+    @Resource(name = "settlementPlatBaseServiceImpl")
+    private SettlementPlatBaseService settlementPlatBaseService;
+
+    //商家账户信息服务
+    @Resource(name = "settlementBusinessBaseServiceImpl")
+    private SettlementBusinessBaseService settlementBusinessBaseService;
+
+    /**
+     * 平台结算
+     *  1）修改平台账号信息（订单总数量、订单总金额、账户金额）
+     *  2）新增平台账户结算明细
+     *  3）修改商家账户信息（平台累计提成金额）
+     *  4）修改订单结算统计（平台结算明细标识、平台结算金额、平台已结算）
+     */
+    @Override
+    @Transactional
+    public void settle() {
+        LOG.info("平台结算任务开始执行。");
+        long startTimeMs = System.currentTimeMillis();
+
+        // 统计上一个月、平台未结算的订单
+        List<SettlementOrderDetail> settlementOrderDetails = this.findSettlementOrderDetails();
+        if (settlementOrderDetails.size() > 0){
+            int orderNum = settlementOrderDetails.size();
+            PlatIncomeSet platIncomeSet = this.findPlatIncomeSet(orderNum);
+            if (platIncomeSet == null){
+                LOG.warn("平台收益设置不达标或不存在");
+                return;
+            }
+            Double orderAmount = 0.0; //订单总金额
+            for (SettlementOrderDetail settlementOrderDetail : settlementOrderDetails){
+                orderAmount = NumberUtil.moneyAdd(settlementOrderDetail.getProductAmount(), orderAmount);
+            }
+            String ruleRemark; //平台提成标准
+            Double platMoney; //平台提成金额
+            int type = platIncomeSet.getType();
+            Double orderMoney = platIncomeSet.getOrderMoney(); //订单提取额度
+            if (type == PlatIncomeSet.Type.AmountPercent.getValue()){ //按订单金额百分比
+                ruleRemark = "每单" + orderMoney + "%";
+                orderMoney = orderMoney/100;
+                platMoney = NumberUtil.format(NumberUtil.mul(orderAmount, orderMoney), RoundingMode.UP);
+            } else { //按固定金额
+                ruleRemark = "每单" + orderMoney + "元";
+                platMoney = NumberUtil.mul(orderMoney, orderNum);
+            }
+
+            // 1）修改平台账号信息
+            SettlementPlat settlementPlat = settlementPlatBaseService.findSettlementPlat();
+            settlementPlat.setTotalNum(settlementPlat.getTotalNum() + orderNum); //订单总数量
+            settlementPlat.setTotalMoney(NumberUtil.moneyAdd(settlementPlat.getTotalMoney(), orderAmount)); //订单总金额
+            settlementPlat.setAccountMoney(NumberUtil.moneyAdd(settlementPlat.getAccountMoney(), platMoney)); //账户金额
+            settlementPlatBaseService.update(settlementPlat);
+
+            // 2）新增平台账户结算明细
+            SettlementPlatDetail settlementPlatDetail = new SettlementPlatDetail();
+            settlementPlatDetail.setRuleId(platIncomeSet.getId());
+            settlementPlatDetail.setOrderNum(orderNum);
+            settlementPlatDetail.setOrderMoney(orderAmount);
+            settlementPlatDetail.setSalesMoney(platMoney);
+            Date settleDate = DateUtil.getMonthFirstDateTime(settlementOrderDetails.get(0).getCreateDate()); //结算年月
+            settlementPlatDetail.setSettleDate(settleDate);
+            settlementPlatDetail.setStatus(PubEnum.YesOrNoEnum.NO.getValue());
+            settlementPlatDetail.setRuleRemark(ruleRemark);
+            settlementPlatDetailBaseService.save(settlementPlatDetail);
+            Long platDetailId = settlementPlatDetail.getId();
+
+            // 3）修改商家账户信息
+            SettlementBusiness settlementBusiness = settlementBusinessBaseService.findSettlementBusiness(1L);//TODO 厂家标识
+            settlementBusiness.setTotalPlatMoney(NumberUtil.moneyAdd(settlementBusiness.getTotalPlatMoney(), platMoney));//平台累计提成金额
+            settlementBusinessBaseService.update(settlementBusiness);
+
+            // 4）修改订单结算统计（平台结算明细标识、平台结算金额、平台已结算）
+            if (type == PlatIncomeSet.Type.AmountPercent.getValue()){ //按订单金额百分比
+                for (SettlementOrderDetail settlementOrderDetail : settlementOrderDetails){
+                    settlementOrderDetail.setPlatDetailId(platDetailId);
+                    Double platAmount = NumberUtil.format(
+                            NumberUtil.mul(settlementOrderDetail.getProductAmount(), orderMoney));
+                    settlementOrderDetail.setPlatAmount(platAmount);
+                    settlementOrderDetail.setPlatSettlement(PubEnum.YesOrNoEnum.YES.getValue());
+                }
+            } else { //按固定金额
+                for (SettlementOrderDetail settlementOrderDetail : settlementOrderDetails){
+                    settlementOrderDetail.setPlatDetailId(platDetailId);
+                    settlementOrderDetail.setPlatAmount(orderMoney);
+                    settlementOrderDetail.setPlatSettlement(PubEnum.YesOrNoEnum.YES.getValue());
+                }
+            }
+            settlementOrderDetailBaseService.saveOrUpdate(settlementOrderDetails);
+        }
+
+        long ms = System.currentTimeMillis() - startTimeMs;
+        LOG.info("平台结算任务完成，花费时间" + ms + "ms");
+    }
+
+    /**
+     * 查询平台收益设置
+     * @param orderNum 订单数量
+     * @return
+     */
+    private PlatIncomeSet findPlatIncomeSet(int orderNum) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.le("orderNum", orderNum));
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.desc("orderNum"));
+        List<PlatIncomeSet> platIncomeSets = platIncomeSetBaseService.findList(1, filters, orders);
+        if (platIncomeSets.size() > 0){
+            return platIncomeSets.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 查询上一个月、平台未结算的订单
+     * 订单结算统计是支付后才会新增数据，所以不用判断订单状态
+     * @return
+     */
+    private List<SettlementOrderDetail> findSettlementOrderDetails() {
+        Date now = new Date();
+        Date curMonth = DateUtil.getMonthFirstDateTime(now);//今月第一天0点
+        Date preMonth = DateUtil.addMonths(curMonth, -1);//上月第一天0点
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.dge("createDate", preMonth));//createDate支付时间
+        filters.add(Filter.dlt("createDate", curMonth));
+        filters.add(Filter.eq("platSettlement", PubEnum.YesOrNoEnum.NO.getValue()));
+        return settlementOrderDetailBaseService.findList(null, filters, null);
+    }
+
+}

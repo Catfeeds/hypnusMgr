@@ -1,0 +1,163 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/2/22
+  Time: 17:16
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule2.jsp" %>
+    <title>退货详情</title>
+    <link type="text/css" rel="stylesheet" href="${path}/resources/css/common.css" />
+    <link type="text/css" rel="stylesheet"  href="${path}/resources/css/activitiesDetail.css"/>
+    <link type="text/css" rel="stylesheet"  href="${path}/resources/css/activities_list.css"/>
+    <link type="text/css" href="${path}/resources/css/addActivities.css" rel="stylesheet" />
+    <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
+    <script src="${path}/resources/js/member.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/flipsnap.css"/>
+    <script type="text/javascript" src="${path}/resources/js/flipsnap.js"></script>
+
+
+    <script src="${path}/resources/admin/js/orderMgr/returnGood/detail.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div class="wrapper">
+    <div class="positionNow">
+        <a>主页 &gt; </a><a href="${path}/admin/orderMgr/cusOrderReturn/index.html">退货管理</a> &gt; <a  style="color:#ff4d4d;">退货详情</a>
+        <div class="subBtDiv">
+            <ul>
+                <li><span class="btnRed" id="refund" style="margin-left:6px;">退款</span></li>
+                <li><span class="btnRed" id="receiveGoods" style="margin-left:6px;">收到退货</span></li>
+                <li><span class="btnRed" id="examineReturn">审核</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="userDetail">
+        <input type="hidden" name="id" id="id" value="${fn:escapeXml(param.id)}"/>
+        <input type="hidden" name="status" id="status" value=""/>
+        <h1 class="tittle">退货信息</h1>
+        <div class="activityMsn">
+            <table class="activityMsnTable">
+                <tr>
+                    <td>退货单号：</td>
+                    <th id="returnCode"></th>
+                    <td>退货时间：</td>
+                    <th id="createDate"></th>
+                </tr>
+                <tr>
+                    <td>订单编号：</td>
+                    <th id="orderCode"></th>
+                    <%--<td>下单时间：</td>--%>
+                    <%--<th></th>--%>
+                </tr>
+                <tr>
+                    <td>退货状态：</td>
+                    <th><span class="bgGrey" id="statusName"></span></th>
+                    <td>&nbsp;</td>
+                    <th>&nbsp;</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="userDetail">
+        <h1 class="tittle">用户信息</h1>
+        <div class="activityMsn">
+            <table class="activityMsnTable">
+                <tr>
+                    <td>下单用户：</td>
+                    <th id="cusName"></th>
+                    <td>手机号：</td>
+                    <th id="cusMobile"></th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="userDetail">
+        <h1 class="tittle">商品信息</h1>
+        <div class="userDetail" style="padding:10px; margin-top:0px;">
+            <table class="datalistTable">
+                <tr>
+                    <th>商品名称</th>
+                    <th>分类</th>
+                    <th>规格</th>
+                    <th>售价（元）</th>
+                    <th>原价（元）</th>
+                    <th>实际支付单价（元）</th>
+                    <th>数量</th>
+                    <th>实际支付总价（元）</th>
+                </tr>
+                <tbody id="list">
+
+                </tbody>
+
+                <tr class="lastLine">
+                    <td colspan="8">共<span id="num"></span>件，共<span class="textRed" id="totalPayAmount"></span>元</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="userDetail">
+        <h1 class="tittle">问题描述</h1>
+        <div class="userDetailMain">
+            <p id="returnDesc"></p>
+        </div>
+    </div>
+    <div class="userDetail">
+        <h1 class="tittle">图片</h1>
+        <div class="imgDiv">
+            <ul class="in_imgDiv" id='panea'></ul>
+        </div>
+    </div>
+    <div class="userDetail">
+        <h1 class="tittle">审核结果</h1>
+        <div class="activityMsn">
+            <table class="activityMsnTable">
+                <tr>
+                    <td>审核状态：</td>
+                    <th><span class="bgBlue" id="auditResultName"></span></th>
+                    <td>审核结果：</td>
+                    <th id="auditDesc"></th>
+                </tr>
+            </table>
+            <table class="datalistTable tuihuoList">
+                <tr>
+                    <th colspan="2" style="text-align:left;">处理进度</th>
+                </tr>
+              <tbody id="logList">
+
+              </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/html" id="listTemp">
+    {{each}}
+    <tr>
+        <td>{{$value.productName}}</td>
+        <td><span class="borderRed">{{$value.cateName}}</span></td>
+        <td>{{$value.specDesc}}</td>
+        <td><span class="textRed">{{$value.salesPrice}}</span></td>
+        <td><span class="textRed">{{$value.costPrice}}</span></td>
+        <td><span class="textRed">{{$value.payPrice}}</span></td>
+        <td>{{$value.num}}</td>
+        <td><span class="textRed">{{$value.totalPayAmount}}</span></td>
+    </tr>
+    {{/each}}
+</script>
+<script type="text/html" id="logListTemp">
+    {{each}}
+    <tr>
+        <td>{{$value.createDate}}</td>
+        <td>{{$value.content}}</td>
+    </tr>
+    {{/each}}
+</script>
+</html>

@@ -1,0 +1,36 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*收货地址*/
+.dizhiBox{background:#fff;}
+.dizhiBox ul li{border-bottom:1px solid #e5e5e5; padding:0 20px;}
+.dizhiMsg{padding:20px 0px;}
+.dizhiText{font-size:16px; color:#646464; line-height:24px;}
+.dizhiBtn{height:20px; padding:12px 0; border-top:1px dashed #e5e5e5;}
+.morenSetting{float:left; cursor:pointer;}
+.morenSetting font{font-size:14px; color:#646464; float:left;}
+.bianjiBox{float:right;}
+.bianjiBox font{color:#646464; cursor:pointer; margin-left:16px; float:left;}
+.morenSelect{width:20px; float:left; margin-right:6px;}
+.morenSelect02{width:20px; float:left; margin-right:6px;}
+.bianjiImg{width:18px; float:left; margin-right:4px;}              
+
+/*自行配送*/
+.cheliangItem{border:1px solid #42aaf2; border-radius:0 0 4px 4px; padding:0 10px;}
+.cheliangItemAdd{border:1px dashed #42aaf2; border-radius:4px; padding:0 10px;}
+.cheliangItemAdd:hover{cursor:pointer; background:#f7f7f7;}
+.chelaingTitle{background:#42aaf2; padding-left:10px;}  
+.chelaingTitle img{height:30px; width:30px; float:left; margin-right:6px; margin-top:3px;}
+.chelaingTitle font{line-height:36px; font-size:16px; color:#fff;}
+.cheliangMsg{padding-bottom:10px;}
+.cheliangText01{font-size:16px; color:#646464; line-height:24px;}
+.cheliangText02{font-size:14px; color:#646464; line-height:20px;}
+.cheliangText03{font-size:16px; color:#646464; line-height:24px; text-align:center;}
+.cheliangItemIco{width:20px; height:20px; float:left; margin-right:4px; margin-top:2px;}
+.cheliangaddIco{width:24px; float:left;}
+
+
+
+
+.nextBtn1{background:#ff4d4d ;color:#fff; width:100%; height:50px; font-size:18px; margin-top:20px; position:fixed; bottom:0px; z-index:100; overflow:hidden; font-family:"微软雅黑", Arial; letter-spacing:2px;}
+

@@ -1,0 +1,145 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.common.module.pay.data.config.AbstractAccountConfig;
+import com.catt.common.module.pay.data.config.AliAppAccountConfig;
+import com.catt.common.module.pay.data.config.AliMicroAccountConfig;
+import com.catt.common.module.pay.data.config.AliScanAccountConfig;
+import com.catt.common.module.pay.data.config.WeChatAccountConfig;
+import com.catt.common.module.pay.repository.entity.PayOrder;
+import com.catt.common.module.pay.service.event.PayEvent;
+import com.catt.common.module.pay.service.event.PayEventListener;
+import com.catt.common.util.crypto.RSAUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.annotation.Resource;
+import java.security.PrivateKey;
+
+/**
+ * 支付事件监听器基类<br>
+ * 主要实现商户账号配置和客户端参数解密方法
+ * 
+ * @author 纪建宏
+ *
+ */
+public abstract class AbstractPayEventListener implements PayEventListener {
+
+	@Resource
+	private PubSetupBaseService pubSetupBaseService;
+	/**
+	 * 私钥
+	 */
+	private static PrivateKey privateKey;
+	/**
+	 * 私钥Base64文本
+	 */
+	@Value("${system.rsa.key.private}")
+	private String priKey;
+
+	/**
+	 * 固定RSA解密
+	 *
+	 * @param source
+	 *            密文
+	 * @return String 明文
+	 */
+	protected String decryptByPrivateKey(String source) {
+		if (StringUtil.isEmpty(source)) {
+			return source;
+		}
+
+		if (privateKey == null) {
+			try {
+				privateKey = RSAUtils.genPrivateKey(getPriKey());
+			} catch (Exception e) {
+				throw new RuntimeException("获取解密私钥出现异常", e);
+			}
+		}
+
+		return RSAUtils.decrypt(privateKey, source);
+	}
+
+	@Override
+	public AbstractAccountConfig specifyAccountConfig(PayEvent payEvent) {
+		if (payEvent.getPayMode() == PayOrder.PAY_MODE_ALI_APP) { // 支付宝App支付商户配置
+			AliAppAccountConfig accountConfig = new AliAppAccountConfig();
+			accountConfig.setPartner(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.aliPartner));
+			accountConfig.setSellerId(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.aliSellerId));
+			accountConfig.setSignType(AbstractAccountConfig.SIGN_TYPE_RSA);
+			accountConfig.setSignKey(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.aliSignKey));
+
+			return accountConfig;
+		} else if (payEvent.getPayMode() == PayOrder.PAY_MODE_ALI_SCAN) { // 支付宝扫码支付商户配置
+			AliScanAccountConfig accountConfig = new AliScanAccountConfig();
+			accountConfig.setAppId(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.aliAppId));
+			accountConfig.setPartner(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.aliPartner));
+			accountConfig.setSignKey(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.aliSignKey));
+			return accountConfig;
+		} else if (payEvent.getPayMode() == PayOrder.PAY_MODE_ALI_MICRO) { // 支付宝刷卡支付商户配置
+			AliMicroAccountConfig accountConfig = new AliMicroAccountConfig();
+			accountConfig.setAppId(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.aliAppId));
+			accountConfig.setPartner(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.aliPartner));
+			accountConfig.setSignKey(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.aliSignKey));
+			return accountConfig;
+		} else if (payEvent.getPayMode() == PayOrder.PAY_MODE_WECHAT_APP) { // 微信APP支付商户配置
+
+			WeChatAccountConfig weChatAppAccountConfig = new WeChatAccountConfig();
+			weChatAppAccountConfig.setAppid(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatOpenAppId));
+			weChatAppAccountConfig.setMch_id(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatOpenMchId));
+			weChatAppAccountConfig.setSignKey(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatOpenSignKey));
+			return weChatAppAccountConfig;
+		} else if (payEvent.getPayMode() == PayOrder.PAY_MODE_WECHAT_NATIVE) { // 微信原生扫码支付商户配置
+			WeChatAccountConfig weChatAppAccountConfig = new WeChatAccountConfig();
+			weChatAppAccountConfig.setAppid(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatPubAppId));
+			weChatAppAccountConfig.setMch_id(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatPubMchId));
+			weChatAppAccountConfig.setSignKey(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatPubSignKey));
+			return weChatAppAccountConfig;
+		} else if (payEvent.getPayMode() == PayOrder.PAY_MODE_WECHAT_MICROPAY) { // 微信刷卡支付商户配置
+			WeChatAccountConfig weChatAppAccountConfig = new WeChatAccountConfig();
+			weChatAppAccountConfig.setAppid(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatPubAppId));
+			weChatAppAccountConfig.setMch_id(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatPubMchId));
+			weChatAppAccountConfig.setSignKey(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatPubSignKey));
+			return weChatAppAccountConfig;
+		} else if (payEvent.getPayMode() == PayOrder.PAY_MODE_WECHAT_HFIVE) { // 微信公众号支付商户配置
+			WeChatAccountConfig weChatAppAccountConfig = new WeChatAccountConfig();
+			weChatAppAccountConfig.setAppid(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatPubAppId));
+			weChatAppAccountConfig.setMch_id(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatPubMchId));
+			weChatAppAccountConfig.setSignKey(pubSetupBaseService
+					.getSetupByCode(PubSetup.Code.wechatPubSignKey));
+			return weChatAppAccountConfig;
+		}
+
+		return null;
+	}
+
+	public String getPriKey() {
+		return priKey;
+	}
+
+	public void setPriKey(String priKey) {
+		this.priKey = priKey;
+	}
+
+}

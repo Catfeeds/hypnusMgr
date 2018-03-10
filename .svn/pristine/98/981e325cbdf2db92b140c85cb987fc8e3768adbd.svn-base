@@ -1,0 +1,39 @@
+package com.catt.wfx.service.impl.settlementMgr;
+
+import com.catt.wfx.repository.dao.settlementMgr.SettlementBusinessDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.settlementMgr.SettlementBusinessService;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+
+import java.net.SocketPermission;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.*;
+
+/**
+ * Author: Admin .
+ * Date: 2017/10/30.
+ */
+public class SettlementBusinessServiceImplTest extends SpringTest{
+
+
+    @Resource(name = "settlementBusinessServiceImpl")
+    private SettlementBusinessService settlementBusinessService;
+
+    @Test
+    public void statisticsOfOrder() throws Exception {
+        List<Map> list=settlementBusinessService.statisticsOfOrder(null,null);
+        System.out.print(list.size());
+     }
+
+    @Test
+    public void statisticsOfOrderDetail() throws Exception {
+        List<Map> list=settlementBusinessService.statisticsOfOrderDetail(1l,null,null,null);
+        System.out.println(list.size());
+    }
+
+}

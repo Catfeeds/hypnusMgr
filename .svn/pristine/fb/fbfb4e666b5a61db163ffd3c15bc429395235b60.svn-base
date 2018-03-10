@@ -1,0 +1,30 @@
+package com.catt.wfx.service.impl.wechatReturn;
+
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrder;
+import com.catt.wfx.service.wechatReturn.WechatReturnService;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
+
+/**
+ * Description:微信退款服务实现
+ * Created by 2017-03-01  14:09.
+ * author: Zhou mingxiang
+ */
+@Service("wechatReturnServiceImpl")
+public class WechatReturnServiceImpl extends WechatReturnMoney implements WechatReturnService {
+
+    public void returnMoney(Map<String, String> param, WechatReturnOrder wechatReturnOrder) {
+        this.wechatReturnMoney(param, wechatReturnOrder);
+
+    }
+
+    /***
+     * 申请退款
+     *
+     * @return 退款结果
+     */
+    public void queryReturn(Map<String, String> oriParam, WechatReturnOrder wechatReturnOrder) {
+         this.wechatQueryReturn(oriParam, wechatReturnOrder);
+    }
+}

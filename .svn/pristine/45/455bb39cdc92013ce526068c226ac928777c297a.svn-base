@@ -1,0 +1,256 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.module.pay.repository.entity.PayOrder;
+import com.catt.common.module.pay.service.event.PaySuccessEvent;
+import com.catt.common.module.pay.service.event.ToPayEvent;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLog;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderPay;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductPackage;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+import com.catt.wfx.service.base.orderMgr.CusOrderBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderLogBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderPayBaseService;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPackageBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPriceBaseService;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import com.catt.wfx.service.customerMgr.CusInfoService;
+import com.catt.wfx.service.productMgr.ProductPackageService;
+import com.catt.wfx.service.settlementMgr.SettlementOrderDetailService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.*;
+
+/**
+ * 注册（需要购买套餐）支付处理器
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017-2-16 16:05:10
+ */
+@Service("buyPackagePayHandler")
+public class BuyPackagePayHandler extends AbstractPayEventListener {
+
+    private static final Logger LOG = LoggerFactory
+            .getLogger(BuyPackagePayHandler.class);
+
+    // 系统全局设置服务
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+    // 用户订单服务
+    @Resource(name = "cusOrderBaseServiceImpl")
+    private CusOrderBaseService cusOrderBaseService;
+
+    // 订单日志服务
+    @Resource(name = "cusOrderLogBaseServiceImpl")
+    private CusOrderLogBaseService cusOrderLogBaseService;
+
+    // 订单支付服务
+    @Resource(name = "cusOrderPayBaseServiceImpl")
+    private CusOrderPayBaseService cusOrderPayBaseService;
+
+    // 订单结算统计服务
+    @Resource(name = "settlementOrderDetailServiceImpl")
+    private SettlementOrderDetailService settlementOrderDetailService;
+
+    // 用户信息服务
+    @Resource(name = "cusInfoServiceImpl")
+    private CusInfoService cusInfoService;
+
+    // 商品信息表服务接口
+    @Resource(name = "productInfoBaseServiceImpl")
+    private ProductInfoBaseService productInfoBaseService;
+
+    // 开店套餐服务接口
+    @Resource(name = "productPackageServiceImpl")
+    private ProductPackageService productPackageService;
+
+    // 开店套餐服务接口
+    @Resource(name = "productPackageBaseServiceImpl")
+    private ProductPackageBaseService productPackageBaseService;
+
+    // 商品价格服务
+    @Resource(name = "productPriceBaseServiceImpl")
+    private ProductPriceBaseService productPriceBaseService;
+
+    @Value("${order.pay.title.prefix:微分销}")
+    private String prefix;
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    @Override
+    public ToPayEvent initPayRequestParam(Map<String, String> param) {
+        Long orderId = MapUtil.getLong(param, "orderId"); // 订单标识
+        String account = this.decryptByPrivateKey(MapUtil.getString(param, "account"));  // 手机号码，RSA加密，固定公钥加密
+        String pwd = this.decryptByPrivateKey(MapUtil.getString(param, "pwd"));  // 密码，RSA加密，固定公钥加密
+        String unionId = this.decryptByPrivateKey(MapUtil.getString(param, "unionId"));  // unionId，RSA加密，固定公钥加密
+        String invitationNo = MapUtil.getString(param, "invitationNo");  // 邀请码，可选
+        Assert.notNull(orderId);
+        Assert.notNull(account);
+        Assert.notNull(pwd);
+
+        CusOrder cusOrder = cusOrderBaseService.find(orderId);
+        if (cusOrder.getOrderStatus() != CusOrder.OrderStatus.ToPay.getValue()) {
+            throw BaseException.errorByErrInfo("该订单已经不允许支付！");
+        }
+
+        // 查询已上架的开店套餐
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("type", ProductInfo.Type.Package.getValue()));
+        filters.add(Filter.eq("status", ProductInfo.Status.OnSale.getValue()));
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        List<ProductInfo> packages = productInfoBaseService.findList(null, filters, null);
+        if (CollectionUtil.isNotEmpty(packages)) {
+            ProductInfo productInfo = packages.get(0);
+            // 查询套餐库存量是否足够
+            Integer stockNum4Package = productPackageService.getStockNum(productInfo.getId());
+            if (stockNum4Package < 1) {
+                throw BaseException.errorByErrInfo("开店套餐库存量不足");
+            }
+        }
+
+        Double totalPayAmount = cusOrder.getTotalPayAmount();
+        ToPayEvent toPayEvent = new ToPayEvent();
+        //判断支付金额是否大于零
+        if (totalPayAmount != null && totalPayAmount > 0) {
+            //充值交易流水号
+            String orderNo = "DDZF-"
+                    + DateUtil.format(new Date(), "yyyyMMddHHmmssSSS")
+                    + RandomStringUtils.random(3, false, true);
+            toPayEvent.setOrderNo(orderNo);
+            toPayEvent.setTitle(getPrefix() + "-购买开店套餐");
+            toPayEvent.setDetail("支付金额为：" + totalPayAmount);
+            toPayEvent.setTotalAmount((long) (totalPayAmount * 100)); // 单位：分
+            toPayEvent.setBusinessType(param.get("businessType"));
+            toPayEvent.setBusinessRel("");
+
+            // 将原始参数作为额外参数
+            toPayEvent.setAdditionalParam(param);
+
+            toPayEvent.setTimeout(pubSetupBaseService
+                    .getIntegerSetupByCode(PubSetup.Code.payTimeoutCode));
+
+            Map<String, Object> p = new HashMap<String, Object>();
+            p.put("orderId", orderId);
+            p.put("orderNo", orderNo);
+            p.put("account", account);
+            p.put("pwd", DigestUtils.md5Hex(pwd));
+            p.put("invitationNo", invitationNo);
+            p.put("unionId", unionId);
+            toPayEvent.setBusinessParam(JsonUtils.toJson(p));
+
+        } else {
+            throw BaseException.errorByErrInfo("订单金额异常");
+        }
+        return toPayEvent;
+    }
+
+    @Override
+    @Transactional
+    public void paySuccess(PaySuccessEvent paySuccessEvent) {
+        Map map = JsonUtils.toObject(paySuccessEvent.getBusinessParam(), Map.class);
+        Long orderId = MapUtil.getLong(map, "orderId");
+        String orderNo = MapUtil.getString(map, "orderNo");
+        String account = MapUtil.getString(map, "account");
+        String pwd = MapUtil.getString(map, "pwd");
+        String invitationNo = MapUtil.getString(map, "invitationNo");
+        String unionId = MapUtil.getString(map, "unionId");
+
+        LOG.info("订单支付回调方法，参数：{}", JsonUtils.toJson(map));
+
+        CusOrder cusOrder = cusOrderBaseService.find(orderId);
+        if (cusOrder == null) {
+            LOG.error("支付成功后找不到订单记录，订单标识【" + orderId + "】，" + "订单号【" + orderNo + "】");
+        }
+
+        // 店主注册
+        Long cusId = cusInfoService.regisonCusInfo4App(account, pwd, invitationNo, unionId);
+
+        // 修改套餐下各商品的库存、销量
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("type", ProductInfo.Type.Package.getValue()));
+        filters.add(Filter.eq("status", ProductInfo.Status.OnSale.getValue()));
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        List<ProductInfo> packages = productInfoBaseService.findList(null, filters, null);
+        if (CollectionUtil.isNotEmpty(packages)) {
+            ProductInfo productInfo = packages.get(0);
+            filters.clear();
+            filters.add(Filter.eq("packageProid", productInfo.getId()));
+            List<ProductPackage> productPackages = productPackageBaseService.findList(null, filters, null);
+
+            // 套餐下各商品库存数量减1、销量加1
+            for (ProductPackage productPackage : productPackages) {
+                Long priceId = productPackage.getPriceId();
+                ProductPrice productPrice = productPriceBaseService.find(priceId);
+                productPrice.setStockNum(productPrice.getStockNum() - 1);
+                productPrice.setSaleNum(productPrice.getSaleNum() + 1);
+                productPriceBaseService.update(productPrice);
+            }
+        }
+
+        // 1) 修改订单状态，并更新订单客户相关信息
+        cusOrder.setOrderStatus(CusOrder.OrderStatus.ToDelivery.getValue());
+        cusOrder.setCusType(CusInfo.Type.ShopOwner.getValue());
+        cusOrder.setCusId(cusId);
+        cusOrderBaseService.save(cusOrder);
+
+        // 2）新增订单流程信息
+        CusOrderLog cusOrderLog = new CusOrderLog();
+        cusOrderLog.setOrderId(orderId);
+        cusOrderLog.setAct(CusOrderLog.Act.Pay.getValue());
+        cusOrderLog.setOperatorId(cusId);
+        cusOrderLog.setContent("购买开店套餐支付");
+        cusOrderLogBaseService.save(cusOrderLog);
+
+        CusOrderPay.PayType payType;
+        if (paySuccessEvent.getPayMode() == PayOrder.PAY_MODE_WECHAT_APP) {
+            payType = CusOrderPay.PayType.WeChatApp;
+        } else if (paySuccessEvent.getPayMode() == PayOrder.PAY_MODE_WECHAT_HFIVE) {
+            payType = CusOrderPay.PayType.WeChatPublic;
+        } else {
+            throw new BaseException("支付方式异常");
+        }
+        // 3）新增订单支付
+        CusOrderPay cusOrderPay = new CusOrderPay();
+        cusOrderPay.setOrderId(orderId);
+        cusOrderPay.setCusId(cusId);
+        cusOrderPay.setCreditMoney(0.0);
+        cusOrderPay.setRechargeMoney(0.0);
+        cusOrderPay.setPayType(payType.getValue());
+        cusOrderPay.setPayMoney(cusOrder.getTotalPayAmount());
+        cusOrderPay.setTradeNo(orderNo);
+        cusOrderPayBaseService.save(cusOrderPay);
+
+        // 4）新增订单结算统计、5）修改商家账户信息的订单量、销售额等
+        settlementOrderDetailService.addSettlementOrderDetail(cusOrder, SettlementOrderDetail.PayType.ONLINE);
+
+    }
+
+}

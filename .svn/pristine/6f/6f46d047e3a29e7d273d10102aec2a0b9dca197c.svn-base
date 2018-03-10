@@ -1,0 +1,46 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>修改手机号</title>
+    <link rel="stylesheet" href="${path}/resources/css/denglu.css">
+    <link rel="stylesheet" href="${path}/resources/css/zhucexinxi.css">
+    <link rel="stylesheet" href="${path}/resources/css/public.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/personal/modifyMobile/modify.js"></script>
+</head>
+
+<body>
+<%--<div style="height:47px;"></div>
+<div class="top header">
+    <button class="top-left" onClick="window.location='1-4-1-2xiugaishoujihaoma.html';"><img class="top_btn_back" src="images/top_btn_back.png"></button>
+    <h1>修改手机号</h1>
+</div>--%>
+<div class="loginList">
+    <div class="loginItem">
+        <span class="itemTitle06">手机号:</span>
+        <div class="inputBox">
+            <input class="loginInput2" placeholder="请输入新的手机号码" id="mobileNo">
+        </div>
+    </div>
+    <div class="loginItem">
+        <span class="itemTitle06">验证码:</span>
+        <div class="inputBox">
+            <input class="loginInput" type="password" placeholder="请输入验证码" id="captcha">
+            <p id="sendMsg">获取验证码</p>
+            <p id="sendMsgTime" style="display: none">60秒</p>
+        </div>
+    </div>
+
+</div>
+<div style="height:60px;"></div>
+<div class="bottomBtnBox">
+    <!--<button onClick="window.location='addkaipiao.html';">新增开票信息</button>-->
+    <button id="commitBtn">提&nbsp;交</button>
+</div>
+
+</body>
+</html>

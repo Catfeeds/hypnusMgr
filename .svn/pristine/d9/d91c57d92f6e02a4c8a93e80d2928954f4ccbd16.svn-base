@@ -1,0 +1,24 @@
+package com.catt.wfx.service.impl.base.specialSale;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.specialSale.ActivityProductRelDao;
+import com.catt.wfx.repository.entity.specialSale.ActivityProductRel;
+import com.catt.wfx.service.base.specialSale.ActivityProductRelBaseService;
+
+@Service("activityProductRelBaseServiceImpl")
+public class ActivityProductRelBaseServiceImpl extends
+	BaseServiceImpl<ActivityProductRel, Long> implements ActivityProductRelBaseService {
+
+	@Resource(name = "activityProductRelDaoImpl")
+	private ActivityProductRelDao activityProductRelDao;
+
+	@Resource
+	public void setBaseDao(ActivityProductRelDao activityProductRelDao) {
+		super.setBaseDao(activityProductRelDao);
+	}
+
+}

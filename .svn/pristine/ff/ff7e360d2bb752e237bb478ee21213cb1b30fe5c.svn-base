@@ -1,0 +1,52 @@
+/**
+ * Created by xiazanyi on 2017/3/8.
+ */
+define('admin/wechat/personal/modifyname', ['$','msgBox' ], function (require, exports, module) {
+        var $ = require('$');
+        var msgBox = require('msgBox');
+        function ModifyName() {
+        }
+
+        /**
+         * 初始化
+         */
+        ModifyName.prototype.init = function () {
+            var self = this;
+            self.myForm = $('#myForm');
+            self.bindEvent();
+        };
+
+    ModifyName.prototype.bindEvent = function () {
+        var self = this;
+        self.myForm.submit(function(){
+            if($('#name').val() ==""){
+                msgBox.warn("请填写昵称！");
+                return;
+            }
+            if($('#name').val() == $('#oName').val()){
+                msgBox.warn("您没有做任何修改哦！");
+                return;
+            }
+            $('#submit').attr("disabled", true);
+            $.post(self.myForm.attr('action'), self.myForm.serializeArray(), function (data) {
+                $('#submit').removeAttr("disabled");//将按钮可用
+                if (data.type =='success') {
+                    msgBox.tips("修改成功！");
+                    setTimeout(function(){
+                        window.history.go(-1);
+                    },500);
+                }
+            });
+            return false;
+        });
+    };
+
+        module.exports = new ModifyName();
+    }
+);
+
+seajs.use(['$', 'admin/wechat/personal/modifyname'], function ($, modifyName) {
+    $(function () {
+        modifyName.init();
+    });
+});

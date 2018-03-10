@@ -1,0 +1,30 @@
+package com.catt.wfx.service.impl.base.orderMgr;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderLogDao;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLog;
+import com.catt.wfx.service.base.orderMgr.CusOrderLogBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+/**
+ * 订单流程信息服务接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:34
+ * @version V1.0
+ */
+@Service("cusOrderLogBaseServiceImpl")
+public class CusOrderLogBaseServiceImpl extends
+	BaseServiceImpl<CusOrderLog, Long> implements CusOrderLogBaseService {
+
+	@Resource(name = "cusOrderLogDaoImpl")
+	private CusOrderLogDao cusOrderLogDao;
+
+	@Resource
+	public void setBaseDao(CusOrderLogDao cusOrderLogDao) {
+		super.setBaseDao(cusOrderLogDao);
+	}
+
+}

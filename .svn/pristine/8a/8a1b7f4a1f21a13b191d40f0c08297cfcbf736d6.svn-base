@@ -1,0 +1,30 @@
+package com.catt.wfx.service.impl.base.settlementMgr;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementPlatDetailDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlatDetail;
+import com.catt.wfx.service.base.settlementMgr.SettlementPlatDetailBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+/**
+ * 平台账户结算明细服务接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-23 11:38:28
+ * @version V1.0
+ */
+@Service("settlementPlatDetailBaseServiceImpl")
+public class SettlementPlatDetailBaseServiceImpl extends
+	BaseServiceImpl<SettlementPlatDetail, Long> implements SettlementPlatDetailBaseService {
+
+	@Resource(name = "settlementPlatDetailDaoImpl")
+	private SettlementPlatDetailDao settlementPlatDetailDao;
+
+	@Resource
+	public void setBaseDao(SettlementPlatDetailDao settlementPlatDetailDao) {
+		super.setBaseDao(settlementPlatDetailDao);
+	}
+
+}

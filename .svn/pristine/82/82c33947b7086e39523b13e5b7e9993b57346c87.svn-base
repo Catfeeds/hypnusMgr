@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd"
+	   default-lazy-init="true">
+
+	<context:property-placeholder location="classpath*:/system.properties" ignore-resource-not-found="true" ignore-unresolvable="true" />
+
+	<!-- 自动扫描且只扫描@Controller -->
+	<context:component-scan base-package="com.catt.**.web.controller" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+		<!--注解事务，加了才生效??-->
+		<context:include-filter type="annotation"  expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+
+	<mvc:annotation-driven  conversion-service="conversionService" validator="validator">
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper" ref="jsonDataMapper"/>
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json</value>
+						<value>text/json</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+		<mvc:argument-resolvers>
+			<bean class="com.catt.common.web.spring.resolver.CurrentUserMethodArgumentResolver"/>
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+
+	<!--<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">-->
+	<!--<property name="ignoreAcceptHeader" value="true"/>-->
+	<!--</bean>-->
+	<bean id="cnManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="ignoreAcceptHeader" value="false"/>
+		<property name="favorPathExtension" value="true"/>
+		<property name="defaultContentType" value="text/html"/>
+		<property name="favorParameter" value="true"/>
+		<property name="mediaTypes">
+			<map>
+				<entry key="xml" value="application/xml"/>
+				<entry key="json" value="application/json"/>
+				<entry key="html" value="text/html"/>
+				<entry key="xls" value="application/vnd.ms-excel"/>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="viewResolver"
+		  class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="contentNegotiationManager" ref="cnManager"/>
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+				<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="prefix" value="/WEB-INF/jsp"></property>
+					<property name="suffix" value=".jsp"></property>
+				</bean>
+			</list>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+					<!-- <property name="extractValueFromSingleKeyModel" value="true"/> -->
+					<property name="prettyPrint" value="true"/>
+					<property name="objectMapper" ref="jsonDataMapper"/>
+					<property name="contentType" value="application/json"/>
+					<property name="jsonpParameterNames">
+						<set>
+							<value>jsonp</value>
+							<value>callback</value>
+						</set>
+					</property>
+				</bean>
+				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+					<property name="marshaller">
+						<bean class="org.springframework.oxm.xstream.XStreamMarshaller">
+							<!-- 启用annotation -->
+							<property name="autodetectAnnotations" value="true" />
+							<property name="encoding" value="utf-8"/>
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL-->
+	<mvc:default-servlet-handler/>
+
+	<mvc:view-controller path="/" view-name="redirect:/guest/index/interfaceTest.html"/>
+
+	<bean id="conversionService"
+		  class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<!--页面传递的字符串或整型转换为对应的枚举类型-->
+				<bean class="com.catt.common.util.spring.converter.EnumConverter"/>
+			</set>
+		</property>
+	</bean>
+
+	<!-- 拦截器链 -->
+	<mvc:interceptors>
+		<!--<mvc:interceptor>-->
+			<!--<mvc:mapping path="/**"/>-->
+			<!--<mvc:exclude-mapping path="/guest/pay/**"/>&lt;!&ndash; 支付模块第三方调用接口 &ndash;&gt;-->
+			<!--<mvc:exclude-mapping path="/admin/excelController/**"/>-->
+            <!--<mvc:exclude-mapping path="/attachment/upload"/>-->
+			<!--<bean id="tokenInterceptor" class="com.catt.common.web.spring.interceptor.TokenInterceptor" />-->
+		<!--</mvc:interceptor>-->
+
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+				<property name="paramName" value="locale"/>
+			</bean>
+		</mvc:interceptor>
+
+		<!-- 浏览器不缓存设置 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/resources/**"/>
+			<mvc:exclude-mapping path="/attachment/**"/>
+			<bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+				<property name="cacheSeconds" value="0"/>
+			</bean>
+		</mvc:interceptor>
+
+		<!-- 附件浏览器缓存 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/attachment/**" />
+			<bean class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+				<!-- 缓存1周 -->
+				<property name="cacheSeconds" value="604800" />
+			</bean>
+		</mvc:interceptor>
+
+		<!--<mvc:interceptor>-->
+			<!--<mvc:mapping path="/**" />-->
+			<!--<bean id="openSessionInViewInterceptor" class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor">-->
+				<!--<property name="entityManagerFactory" ref="entityManagerFactory" />-->
+			<!--</bean>-->
+		<!--</mvc:interceptor>-->
+		<mvc:interceptor>
+			<mvc:mapping path="/admin/**" />
+			<bean id="logInterceptor" class="com.catt.common.web.spring.interceptor.LogInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean>
+
+	<!--  
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="contentType" value="text/html; charset=UTF-8" />
+		<property name="suffix" value="${template.suffix}" />
+	</bean>
+	-->
+	<!-- 视图链实现的多视图 -->
+	<!--  
+	<bean id="freemarkerViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="order" value="1" />
+		<property name="contentType" value="text/html; charset=UTF-8" />
+		<property name="suffix" value="${template.suffix}" />
+	</bean>
+	-->
+
+	<!--<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+	<!--<property name="order" value="0" />-->
+	<!--<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />-->
+	<!--<property name="prefix" value="/WEB-INF/jsp" />-->
+	<!--<property name="suffix" value=".jsp"></property>-->
+	<!--</bean>-->
+
+	<!-- 文件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8" />
+	</bean>
+
+	<!-- 错误拦截器，统一处理 -->
+	<bean id="exceptionResolver" class="com.catt.common.web.spring.exception.ExtSimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<!-- shiro未授权异常处理 -->
+				<prop key="org.apache.shiro.authz.UnauthorizedException">
+					redirect:/admin/login
+				</prop>
+				<prop key="org.apache.shiro.authz.UnauthenticatedException">
+					redirect:/admin/login
+				</prop>
+				<prop key="java.lang.RuntimeException">/common/error</prop>
+			</props>
+		</property>
+		<!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+		<property name="warnLogCategory" value="INFO" />
+		<property name="defaultErrorView" value="/common/error" />
+        <property name="exceptionMessageConverter">
+            <bean class="com.catt.common.module.exception.service.impl.ExtExceptionMessageConverter"/>
+        </property>
+	</bean>
+
+	<aop:config proxy-target-class="true"/>
+
+	<!--<aop:aspectj-autoproxy proxy-target-class="true"/>-->
+
+	<!--<bean class="com.catt.common.web.spring.aop.XSSControllerAopMethodHandler"/>-->
+
+	<!-- 支持 Shiro对Controller的方法级AOP安全控制-->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"/>
+	</bean>
+</beans>

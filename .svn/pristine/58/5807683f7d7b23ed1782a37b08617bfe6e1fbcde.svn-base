@@ -1,0 +1,65 @@
+package com.catt.wfx.repository.dao.productMgr.impl;
+
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductPackageDao;
+import com.catt.wfx.repository.entity.productMgr.ProductPackage;
+import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Repository("productPackageDaoImpl")
+public class ProductPackageDaoImpl extends BaseDaoImpl<ProductPackage, Long>
+        implements ProductPackageDao {
+
+    @Override
+    public List<Map> getPackageRelPrice(Long packageProid) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_PRICE_ID AS \"priceId\", ");
+        sql.append(" a.I_PRODUCT_ID AS \"productId\", ");
+        sql.append(" c.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" b.I_SALES_PRICE AS \"salesPrice\", ");
+        sql.append(" b.S_SPEC_JSON AS \"specJson\", ");
+//        sql.append(" b.I_SALE_NUM AS \"saleNum\", ");
+        sql.append(" b.I_STOCK_NUM AS \"stockNum\" ");
+        sql.append(" FROM T_PRODUCT_PACKAGE a ");
+        sql.append(" LEFT JOIN T_PRODUCT_PRICE b ON a.I_PRICE_ID = b.I_ID ");
+        sql.append(" LEFT JOIN T_PRODUCT_INFO c ON a.I_PRODUCT_ID = c.I_ID ");
+        sql.append(" WHERE 1=1 ");
+        sql.append(" AND a.I_PACKAGE_PROID = :packageProid ");
+
+        Map param = new HashMap<>();
+        param.put("packageProid", packageProid);
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    /**
+     * 获取套餐的库存量
+     *
+     * @param productId 套餐商品标识
+     * @return
+     */
+    @Override
+    public Integer getStockNum(Long productId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" MIN(c.I_STOCK_NUM) AS \"stockNum\" ");
+        sql.append(" FROM T_PRODUCT_INFO a ");
+        sql.append(" LEFT JOIN T_PRODUCT_PACKAGE b ON a.I_ID = b.I_PACKAGE_PROID ");
+        sql.append(" LEFT JOIN T_PRODUCT_PRICE c ON b.I_PRICE_ID = c.I_ID ");
+        sql.append(" WHERE a.I_ID = :productId");
+
+        Map param = new HashMap<>();
+        param.put("productId", productId);
+        List<Map> list = this.findListBySql(sql.toString(), param, Map.class);
+        if (CollectionUtil.isNotEmpty(list)) {
+            return MapUtil.getInteger(list.get(0), "stockNum");
+        }
+        return null;
+    }
+}

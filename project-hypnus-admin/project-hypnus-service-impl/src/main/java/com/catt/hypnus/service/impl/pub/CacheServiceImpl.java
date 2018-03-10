@@ -1,0 +1,66 @@
+package com.catt.hypnus.service.impl.pub;
+
+
+import com.catt.hypnus.service.pub.CacheService;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Collection;
+
+/**
+ * 系统缓存业务接口实现
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2016-03-14 15:26:28
+ */
+@Service("cacheServiceImpl")
+public class CacheServiceImpl implements CacheService {
+
+    @Resource(name = "cacheManager")
+    private CacheManager cacheManager;
+
+    /**
+     * 清理缓存
+     *
+     * @param cacheName 缓存标识名称
+     */
+    @Override
+    public void flush(String cacheName) {
+        Cache cache = cacheManager.getCache(cacheName);
+        if (cache != null) {
+            cache.clear();
+        }
+    }
+
+    /**
+     * 清理缓存
+     *
+     * @param cacheNames 缓存标识名称数组
+     */
+    @Override
+    public void flush(String[] cacheNames) {
+        for (String cacheName : cacheNames){
+            Cache cache = cacheManager.getCache(cacheName);
+            if (cache != null) {
+                cache.clear();
+            }
+        }
+    }
+
+    /**
+     * 清理所有缓存
+     */
+    @Override
+    public void flushAll() {
+        Collection<String> cacheNames = cacheManager.getCacheNames();
+        for (String cacheName : cacheNames){
+            Cache cache = cacheManager.getCache(cacheName);
+            if (cache != null) {
+                cache.clear();
+            }
+        }
+    }
+}

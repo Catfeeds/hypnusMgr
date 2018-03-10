@@ -1,0 +1,73 @@
+package com.catt.wfx.repository.dao.specialSale;
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.specialSale.ActivityProductRel;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商品活动关联表Dao接口
+ * 
+ * @author 邹佳
+ * @date 2017-03-08 16:18:02
+ * @version V1.0
+ */
+public interface ActivityProductRelDao extends BaseDao<ActivityProductRel, Long> {
+
+    /**
+     * 获取活动商品列表
+     *
+     * @param activityId 活动标识
+     * @return
+     */
+    List<Map> findActivityProductList(Long activityId);
+
+    /**
+     * 统计在时间范围内商品
+     * 同一时间可以有多个活动，但同一时间的同一个商品不能存在多个活动
+     * @param activityId 活动标识<>activityId
+     * @param startTime 活动开始时间
+     * @param endTime 活动结束时间
+     * @param productId 商品标识
+     * @return >0 商品存在
+     */
+    long countProduct(Long activityId, Date startTime, Date endTime, Long productId);
+
+    /**
+     * 查询活动中的商品价格
+     * @param priceId 价格标识
+     * @return 不是活动中->null
+     */
+    Map findActivityInProductRel(Long priceId);
+
+    /**
+     * 查询活动中的商品价格列表
+     * @param productId 商品标识
+     * @return
+     */
+    List<Map> findActivityInProductRelList(Long productId);
+
+    /**
+     * 统计活动商品商品数量、库存、销量（根据活动标识分组）
+     * @param actIds 活动标识
+     * @return
+     */
+    List<Map> countActivityProduct(List<Long> actIds);
+
+    /**
+     * 通过商品标识获取参与活动的商品详情信息
+     *
+     * @param productId 商品标识
+     * @return
+     */
+    Map getActivityProductDetailByProductId(Long productId);
+
+    /**
+     * 查询活动结束时间大于当前时间的商品（此类商品不允许下架）
+     * @param productIds 商品标识
+     * @return
+     */
+    List<Map> findActivityProductRelList(Long[] productIds);
+}

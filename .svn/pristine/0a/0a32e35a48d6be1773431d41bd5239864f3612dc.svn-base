@@ -1,0 +1,55 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/3/13
+  Time: 16:26
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>收益说明</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public1.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/wodeyeji.css"/>
+
+    <!--<script type="text/javascript" src="js/tongjicharts02.js"></script>-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+</head>
+
+<body>
+<div style="height:47px;"></div>
+<%--<div class="head">--%>
+    <%--<button class="top-left" onClick="window.location='3-4-2tixian.html';"><img class="top_btn_back" src="images/top_btn_back.png"></button>--%>
+    <%--<h1>购买须知</h1>--%>
+<%--</div>--%>
+<div>
+    <h1 class="wenti">1、 正品保证</h1>
+    <p class="daan">
+        微分销全场商品均有品牌商直接供应，保证都是正品。
+    </p>
+    <h1 class="wenti">2、 全场包邮</h1>
+    <p class="daan">
+        微分销全场商品支持全国范围内包邮，暂不支持运送到国外。
+    </p>
+    <h1 class="wenti">3、 关于发货</h1>
+    <p class="daan">
+        微分销会在用户下单后24小时内进行发货，遇上活动期间会在用户下单后72小时内进行发货，敬请原谅。
+    </p>
+    <h1 class="wenti">4、 关于快递</h1>
+    <p class="daan">
+        微分销跟多家快递公司合作，暂不支持指定快递。
+    </p>
+    <h1 class="wenti">5、 关于退换货</h1>
+    <p class="daan">
+        无理由退换货：在产品包装良好，不影响二次销售的情况下，支持7天无理由退货，运费由用户承担。
+        非无理由退换货：因商品质量、错发漏发等问题，支持7天内，来回运费由微分销承担。
+    </p>
+</div>
+
+
+</body>
+</html>

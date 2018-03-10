@@ -1,0 +1,36 @@
+package com.catt.wfx.service.productMgr;
+
+
+import java.util.Map;
+
+/**
+ * 开店套餐服务接口
+ * 作者：袁幸成
+ * 时间：2017-1-18 9:03:47
+ */
+public interface ProductPackageService {
+
+    /**
+     * 获取开店套餐详情
+     *
+     * @return 唯一一个上架的开店套餐
+     */
+    Map getPackageDetail();
+
+    /**
+     * 获取套餐原价
+     *
+     * @param packageProid 套餐标识
+     * @return
+     */
+    Double getPackageCostPrice(Long packageProid);
+
+    /**
+     * 获取套餐的库存量
+     *
+     * @param productId 套餐商品标识
+     * @return
+     */
+    Integer getStockNum(Long productId);
+}
+

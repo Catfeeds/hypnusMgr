@@ -1,0 +1,36 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/3/10
+  Time: 14:14
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>提现说明</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public1.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/wodeyeji.css"/>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+</head>
+
+<body>
+<div style="height:47px;"></div>
+<%--<div class="head">--%>
+    <%--<button class="top-left" onClick="window.location='3-4-2tixian.html';"><img class="top_btn_back" src="images/top_btn_back.png"></button>--%>
+    <%--<h1>提现说明</h1>--%>
+<%--</div>--%>
+<div>
+    <p class="explain"><font>提现时间：</font>每个月的1号到10号可允许店主提现可用余额。</p>
+    <p class="explain"><font>提现金额：</font>可用余额大于等于100元时可提现。</p>
+</div>
+
+
+</body>
+</html>
+

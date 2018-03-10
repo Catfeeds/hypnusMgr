@@ -1,0 +1,77 @@
+package com.catt.wfx.repository.dao.couponMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.couponMgr.CouponCus;
+import com.catt.wfx.repository.form.couponMgr.CouponCusFrom;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 用户代金券Dao接口
+ * 
+ * @author chen chusheng
+ * @date 2017-01-16 11:10:41
+ * @version V1.0
+ */
+public interface CouponCusDao extends BaseDao<CouponCus, Long> {
+
+    /**
+     * 获取用户列表
+     * @param param
+     * @return
+     */
+    Page getCusPageList(Map<String, Object> param);
+
+    /**
+     * 获取用户代金券数量和总金额
+     * @param cusId
+     * @return
+     */
+    Map getCouponTotal(Long cusId);
+
+    /**
+     * 获取用户代金券列表（分页）（APP）
+     *
+     * @param cusId    用户标识
+     * @param status   状态
+     * @param pageable
+     * @return
+     */
+    Page<Map> findCusCoupon(Long cusId, Integer status, Pageable pageable);
+
+    /**
+     * 获取用户代金券列表（分页）（账户管理详情）
+     * @param cusId
+     * @param pageable
+     * @return
+     */
+    Page<Map> getCusCouponPage(Long cusId, Pageable pageable);
+
+    /**
+     * 获取代金券领取记录
+     *
+     * @param couponCusFrom
+     * @param pageable
+     * @return
+     */
+    Page<Map> getCouponRecordByPage(CouponCusFrom couponCusFrom, Pageable pageable);
+
+    /**
+     * 获取主管代金券数量和金额
+     *
+     * @param cusIds 主管标识集合
+     * @return
+     */
+    List<Map> getCouPonCus(List<Long> cusIds);
+
+    /**
+     * 获取代金券数量和金额
+     *
+     * @param isUse 代金券状态
+     * @return
+     */
+    List<Map> getTotalCoupon(Integer isUse);
+}

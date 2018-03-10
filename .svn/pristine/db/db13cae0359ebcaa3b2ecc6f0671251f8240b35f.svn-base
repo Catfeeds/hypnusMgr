@@ -1,0 +1,670 @@
+var DEFINE_LIST = [];
+var SPEC_LIST = [];
+seajs.use(['$', 'adminSystem', 'template', 'validate', 'msgBox', 'util', 'uEeditor', 'base64', 'attachment', 'pageBar', 'dataGridHelp', 'jquery.json'],
+    function ($, adminSystem, template, validate, msgBox, util, UE, base64, attachment, pageBar, dataGridHelp) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    // 初始化编辑器控件
+                    ue = UE.getEditor('introduce', ueditor.config);
+
+                    var aData = [];
+                    aData.push({tabName: "T_PRODUCT_INFO", colName: "I_UNIT"});//单位
+                    //2代表反馈数组
+                    adminSystem.getEnumList(aData, 2, function (backData) {
+                        var unit = backData['T_PRODUCT_INFO-I_UNIT'].sEnumMapping;
+                        var unitStr = "";
+                        unitStr += "<option value=''>" + "全部" + "</option>";
+                        for (var i = 0, len = unit.length; i < len; i++) {
+                            unitStr += "<option value=" + unit[i].value + ">" + unit[i].name + "</option>";
+                        }
+                        $('#unit').html(unitStr);
+
+                    });
+
+
+                    if ($('#id').val()) {
+                        DataHandler.getProductInfoAndAttr({
+                            id: $('#id').val()
+                        }, function (productInfo) {
+                            var headPath = productInfo.headPath;
+                            $('#zhName').val(productInfo.zhName);
+                            $('#cateId').val(productInfo.cateId);
+                            $('#cateName').val(productInfo.cateName);
+                            $('#cate').val(productInfo.cateName);
+                            $('#headPath').val(headPath);
+                            $('#barCode').val(productInfo.barCode);
+                            //$('#unit').val(productInfo.unit);
+                            $('#introduceTemp').html(productInfo.introduce);
+                            $('#brandName').val(productInfo.brandName);
+
+                            //厂家id,名称===============================================================
+                            $("#factoryId").val(productInfo.factoryId);
+                            $("#factoryName").val(productInfo.factoryName);
+
+                            var attrJson = $.evalJSON(productInfo.attrJson);
+                            var specJson = $.evalJSON(productInfo.specJson);
+                            EventHandler.getProductParamAndspec(productInfo.cateId, attrJson, specJson);
+                            CoverpicHandler.initPicture();
+
+                            ue.ready(function () {
+                                // 设置编辑器的内容
+                                ue.setContent($('#introduceTemp').val());
+                            });
+
+                            $(window).triggerHandler('resize');
+                            if (productInfo.unit) {
+                                $('#unit').val(productInfo.unit);
+                            }
+                        });
+                    }
+
+                    //获取图片最佳长宽比例
+                    $.post(path + "/admin/productInfo/getPicRatio", {}, function(data){
+                        if(data){
+                            var ratio = data.productPicRatio;
+                            if(!ratio || ratio == ""){
+                                ratio = 2;
+                            }
+                            $("#picRatio").text(ratio);
+                        }
+                    });
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    //按钮事件--当保存操作失败后还原按钮状态
+                    $(window.top).ajaxError(function (event, data) {
+                        $('#submit').button('reset');
+                    });
+
+                    //商品分类弹窗事件绑定
+                    $('#cate').on('click', function () {
+                        EventHandler.cate();
+                    });
+
+                    //商品分类弹窗事件绑定
+                    $('#cate1').on('click', function () {
+                        EventHandler.cate();
+                    });
+                    // 子表新增按钮
+                    $("#btn_coverpic_save").click(function () {
+                        CoverpicHandler.add();
+                    });
+
+                    // 子表删除按钮
+                    $("#btn_coverpic_del").click(function () {
+                        CoverpicHandler.del();
+
+                    });
+
+                    // 油站图片设置封面
+                    $("#btn_coverpic_add").click(function () {
+                        CoverpicHandler.addCoverPic();
+                    });
+
+                    //保存
+                    $('#submit').click(function () {
+
+                        $('#submit').button('loading');
+                        EventHandler.save();
+                    });
+
+                    //选择厂家
+                    if($("#isSelfSell").val() == 1){
+                        $('#factoryName').click(function () {
+                            msgBox.exWindow.open({
+                                title: '选择厂家',
+                                width: '60%',
+                                height: '80%',
+                                url: path + "/admin/basiconfig/factory/selectFactory.html",
+                                close: function (backData) {
+                                    if (backData) {
+                                        var param = $.evalJSON(backData);
+                                        $('#factoryId').val(param.factoryId);
+                                        $('#factoryName').val(param.factoryName);
+                                    }
+                                }
+                            });
+                        });
+                    }else{
+                        $("#factoryName").attr("disabled", "disabled");
+                    }
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            /**
+             * 验证油站信息
+             */
+            function verifiOilstation() {
+                var data = {
+                    zhName: "产品名称",
+                    cateId: "商品分类",
+                    unit: "计量单位",
+                    brandName:"商品品牌",
+                    barCode: "条码编号"
+                };
+                $("form#goodsForm").validate({
+                    rules: {
+                        zhName: {required: true},
+                        cateId: {required: true, digits: true},
+                        unit: {required: true},
+                        brandName: {required: true},
+                        barCode: {required: true}
+                    },
+                    ignore: '.ignore',
+                    errorPlacement: function (error, element) {
+                    },
+                    invalidHandler: function (event, validator) {
+                        var tip = '';
+                        for (var i in validator.errorMap) {
+                            tip += data[i] + ":" + validator.errorMap[i] + "\n\r";
+                            msgBox.tips(data[i] + ":" + validator.errorMap[i]);
+                            $('#' + i).focus();
+                            return;
+                        }
+                    }
+                });
+            }
+
+            return {
+                /**
+                 * 保存
+                 */
+                save: function () {
+                    verifiOilstation();
+                    if ($("form#goodsForm").valid()) {
+                        var params = {};
+                        var goods = function (list) {
+                            var map = {};
+                            $.each(list, function (i, n) {
+                                map[n.name] = n.value;
+                            });
+                            return map;
+                        }($("form#goodsForm").serializeArray());
+
+                        goods.introduce = ue.getContent();
+                        //goods.factoryId = $("#factoryId").val();//TODO: test if without this row can get factoryId?
+                        params.goods = $.toJSON(goods);
+                        params.coverpic;
+                        params.attrJson = EventHandler.makeDefineAttr();
+                        var spec = EventHandler.getSpec();
+                        if (SPEC_LIST && SPEC_LIST.length > 0) {
+                            for (var o in spec) {
+                                var detail = spec[o].detail;
+                                if (detail.length <= 0) {
+                                    msgBox.tips("商品规格{" + spec[o].name + "}不能为空，请选择" + spec[o].name);
+                                    $('#submit').button('reset');
+                                    return;
+                                }
+                            }
+                            params.specJson = $.toJSON(spec);
+                        } else {
+                            params.specJson = $.toJSON(spec);
+                        }
+
+                        // 图片 coverpic
+                        if ($("div.imgDiv div.jd_box").length > 0) {
+                            params.coverpic = $.toJSON(CoverpicHandler.getCoverPic());
+                        }
+
+                        DataHandler.save(params, function (result) {
+                            $('#submit').button('reset');
+                            if (result.type == "success") {
+                                msgBox.tips("操作成功", 1, function () {
+                                    window.location.href = path + "/admin/productMgr/publish/index.html";
+                                });
+                            }
+                        });
+                    } else {
+                        $('#submit').button('reset');
+                    }
+                },
+
+                //获取商品规格、属性
+                getProductParamAndspec: function (cateId, attrJson, specJson) {
+                    DataHandler.getProductParamAndspec({cateId: cateId}, function (backData) {
+                        //清理历史数据
+                        var paramTemp = $("#paramFrom").find("div[class='paramTemp']");
+                        if(paramTemp && paramTemp[0]) {
+                            paramTemp[0].remove();
+                        }
+                        var specTemp = $("#spec").find("div[class='specTemp']");
+                        if(specTemp && specTemp[0]){
+                            specTemp[0].remove();
+                        }
+                        DEFINE_LIST = [];
+                        SPEC_LIST = [];
+
+                        var param = $.evalJSON(backData.attrDefineJson);
+                        var spce = $.evalJSON(backData.specJson);
+                        DEFINE_LIST = param;
+                        var html = template('paramTemp', DEFINE_LIST);
+                        $('#paramFrom').html(html);
+
+
+                        //循环遍历将规格中的详情数组进行处理------主要处理问题，当div的id为5%等有特殊字符的情况下无法赋值，所以要base64编码
+                        var nameData = [];
+                        if (specJson && specJson.length > 0) {
+
+                            for (var o1 in specJson) {
+                                var isTrue = true;
+                                nameData.push({name:specJson[o1].name});
+                                for (var o in spce) {
+                                    var detail = spce[o].detail;
+                                    var name = spce[o].name;
+                                    if (specJson[o1].name == name) {
+                                        //$.merge(detail, specJson[o1].detail);
+                                        //$.unique(detail);
+                                        isTrue = false;
+                                    }
+                                }
+
+                                if (isTrue) {
+                                    spce.push(specJson[o1]);
+                                }
+                            }
+
+                        }
+                        for (var o in spce) {
+                            var detail = spce[o].detail;
+                            var name = spce[o].name;
+                            if (detail.length > 0) {
+                                var aData = [];
+                                for (var i in detail) {
+                                    var param = {};
+                                    var data = base64.b64tohex(detail[i]);
+                                    if (data) {
+                                        param.name = data;
+                                    } else {
+                                        param.name = detail[i];
+                                    }
+                                    param.value = detail[i];
+                                    aData.push(param);
+
+                                }
+                                spce[o].detail = aData
+                            }
+                            //if (specJson && specJson.length > 0) {
+                            //    for (var o1 in nameData) {
+                            //        if (nameData[o1].name == name) {
+                            //            SPEC_LIST.push(spce[o]);
+                            //        }
+                            //    }
+                            //}else
+                            if(detail.length > 0){
+                                SPEC_LIST.push(spce[o]);
+                            }
+                        }
+
+                        var html1 = template('specTemp', SPEC_LIST);
+                        $('#spec').html(html1);
+
+                        //商品规格选择
+                        $(".xw_guigeDiv").on('click', function () {
+                            $(this).toggleClass("on");
+                        });
+                        $(window).triggerHandler('resize');
+
+                        if (attrJson && attrJson.length > 0) {
+                            //修改操作时，设置相应的参数
+                            for (var o in attrJson) {
+                                $("#" + attrJson[o].name).val(attrJson[o].value);
+                            }
+                        }
+                        if (specJson && specJson.length > 0) {
+                            //修改操作时，设置保存的规格显示为已选中
+                            for (var o in specJson) {
+                                var name = specJson[o].name;
+                                var detail = specJson[o].detail;
+                                if (detail.length > 0) {
+                                    //这里使用#1  是为了处理    $("#" + "容量" + " #" +"250ML").addClass("on"); 这种组合无法生效所已以1开头
+                                    for (var i in detail) {
+                                        var name1 = base64.b64tohex(detail[i]);
+                                        if (name1) {
+                                            $("#1" + name + " #" + name1).addClass("on");
+                                        } else {
+                                            $("#1" + name + " #" + detail[i]).addClass("on");
+                                        }
+
+
+                                    }
+                                }
+                            }
+                        }
+
+
+                    });
+                },
+
+                //组合参数内容，返回json
+                makeDefineAttr: function () {
+                    var attr;
+                    var attrList = [];
+                    var length = DEFINE_LIST.length;
+                    for (var i = 0; i < length; i++) {
+                        var params = {};
+                        var name = DEFINE_LIST[i].name;
+                        var value = "";
+                        //if(DEFINE_LIST[i].enum.length>0){
+                        //    value =  $("#" + name).combobox("getValue");
+                        //}else{
+                        value = $("#" + name).val();
+                        //}
+                        params.name = name;
+                        params.value = value;
+                        params.unit = DEFINE_LIST[i].unit;
+                        attrList.push(params);
+                    }
+                    attr = $.toJSON(attrList);
+                    return attr;
+                },
+
+
+                //组合参数内容，返回json
+                getSpec: function () {
+                    //var attr;
+                    var attrList = [];
+                    var length = SPEC_LIST.length;
+                    for (var i = 0; i < length; i++) {
+                        var params = {};
+                        var name = SPEC_LIST[i].name;
+                        var value = [];
+                        //if(DEFINE_LIST[i].enum.length>0){
+                        //    value =  $("#" + name).combobox("getValue");
+                        //}else{
+                        var jsonParams = $("#1" + name).find(".xw_guigeDiv.on");
+                        if (jsonParams.length > 0) {
+                            jsonParams.each(function (i) {
+                                //var param = {};
+                                //参数组件
+                                var $this = $((this));
+                                //param.name = $this.text();
+                                value.push($this.text());
+                            });
+                        }
+                        params.name = name;
+                        params.detail = value;
+                        attrList.push(params);
+                    }
+                    //attr = $.toJSON(attrList);
+                    return attrList;
+                },
+
+                //商品分类弹窗
+                cate: function () {
+                    msgBox.exWindow.open({
+                        title: '商品分类',
+                        url: path + "/admin/productInfo/productClass.html",
+                        width: '40%',
+                        height: '83%',
+                        close: function (result) {
+                            if (result) {
+                                var param = $.evalJSON(result)
+                                var cateId = param.id;
+                                var name = param.name;
+                                $('#cateName').val(name);
+                                $('#cateId').val(cateId);
+                                $('#cate').val(name);
+                                ////获取商品基础参数和规格
+                                EventHandler.getProductParamAndspec(cateId, null, null);
+                            }
+                        }
+                    });
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取商品参数和规格信息
+                 * @param params
+                 * @param callback
+                 */
+                getProductParamAndspec: function (params, callback) {
+                    $.post(path + '/admin/basicConfig/productCate/getCateAttr', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 获取商品信息
+                 * @param params
+                 * @param callback
+                 */
+                getProductInfoAndAttr: function (params, callback) {
+                    $.post(path + '/admin/productInfo/getProductInfoAndAttr', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 保存油站
+                 * @param params
+                 * @param callback
+                 */
+                save: function (params, callback) {
+                    $.post(path + "/admin/productInfo/save", params, function (result) {
+                        callback(result);
+                    });
+                },
+            };
+        })();
+
+        /**
+         * 油站图片
+         */
+        var CoverpicHandler = (function () {
+            var resource = {};
+            return {
+                /**
+                 * 计算图片宽高，进行等比例缩放，并计算居中值
+                 * @param divWH  图片框宽高（正方形）
+                 * @returns {Array}
+                 */
+                initTempImg : function(divWH){
+                    var imgs = $("#panea_temp").find("img");
+                    var imgWH = [];
+                    $.each(imgs, function(i, item){
+                        var wh = {
+                            width: item.width,
+                            height: item.height
+                        };
+                        var temp;//比例值
+                        //重新等比例缩放图片
+                        if(wh.width >= wh.height){
+                            //宽长，高度需要调整，并计算好高度居中值
+                            temp = wh.width/divWH;
+                            wh.width = divWH;
+                            wh.height = wh.height/temp;
+                            var mid = (divWH - wh.height)/2;
+                            wh.mid = mid;
+                            wh.midStyle = "margin-top: "+mid+"px; margin-bottom: "+mid+"px;";
+                        }else{
+                            //高长，宽度需要调整，并计算好宽度度居中值
+                            temp = wh.height/divWH;
+                            wh.height = divWH;
+                            wh.width = wh.width/temp;
+                            var mid = (divWH - wh.width)/2;
+                            wh.mid = mid;
+                            wh.midStyle = "margin-left: "+mid+"px; margin-right: "+mid+"px;";
+                        }
+                        //拼接样式
+                        wh.style = "width: "+wh.width+"px; height: "+wh.height+"px;" + wh.midStyle ;
+                        imgWH.push(wh);
+                    });
+                    return imgWH;
+                },
+                refresh: function () {
+                    var tempList = [];
+                    for (var o in resource) {
+                        tempList.push(resource[o]);
+                    }
+                    var html = template("panea_temp_template", tempList);
+                    $("#panea_temp").html(html);
+                    //加载完图片后，延迟读取，否则可能出现未加载完成就读取的情况
+                    setTimeout(function(){
+                        var wh = CoverpicHandler.initTempImg(156);//计算等比例缩放后的宽高及居中值
+                        //初始化所有图片
+                        var itemContent = [];
+                        var headPath = $('#headPath').val();
+                        for (var i = 0; i < tempList.length; i++) {
+                            $.extend(tempList[i], wh[i]);
+                            //itemContent.push("<div class='jd_box' data-value-fileId='" + tempList[i].fileId + "' style='background:#efefef url(" + tempList[i].url + ") no-repeat center 45px'><div class='" + tempList[i].fileId + "'></div><div class='imgtick xw_tickpic'></div><div class='eachtit'>" + tempList[i].fileName + "</div></div>");
+                            if (headPath && headPath == tempList[i].attachmentId) {
+                                itemContent.push("" +
+                                    "<div class='jd_box' style='width: 156px; height: 156px;' " +
+                                    "data-value-fileId='" + tempList[i].fileId + "' data-value-attachmentId='" + tempList[i].attachmentId + "'>" +
+                                        //"<img class='pic1' src='" + tempList[i].url + "' style='width: 100%; height: 100%;' />" +
+                                    "<img src='" + tempList[i].url + "' style='"+tempList[i].style+"' />" +
+                                    "<div class='" + tempList[i].fileId + "'></div>" +
+                                    "<div class='imgtick xw_tickpic'></div>" +
+                                    "'<div class='cover'></div>" +
+                                        //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + tempList[i].fileName + "</div>" +
+                                    "</div>");
+                            } else {
+                                itemContent.push("" +
+                                    "<div class='jd_box' style='width: 156px; height: 156px;' " +
+                                    "data-value-fileId='" + tempList[i].fileId + "' data-value-attachmentId='" + tempList[i].attachmentId + "'>" +
+                                        //"<img class='pic1' src='" + tempList[i].url + "' style='width: 100%; height: 100%;' />" +
+                                    "<img class='pic1' src='" + tempList[i].url + "' style='"+tempList[i].style+"' />" +
+                                    "<div class='" + tempList[i].fileId + "'></div>" +
+                                    "<div class='imgtick xw_tickpic'></div>" +
+                                        //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + tempList[i].fileName + "</div>" +
+                                    "</div>");
+                            }
+
+                        }
+
+                        var canshowNum = ($("div.imgDiv").outerWidth() - 86) / 230;
+                        canshowNum = Math.floor(canshowNum);
+                        //初始化面板对象
+                        panel = new BasePanel('#panea', {
+                            /**面板可视范围内显示的元素个数，如果展开后，
+                             * 则是disItem = disItem * expanRow*/
+                            disItem: canshowNum,
+                            /**显示面板宽度*/
+                            /**面板里需要承载的html内容*/
+                            contentHtml: itemContent,
+                            /**是否显示展开按钮*/
+                            isExpan: false,
+                            /**是否自动展开*/
+                            isAutoExpan: false,
+                            /**展开后显示的行数*/
+                            expanRows: 1,
+                            /**箭头位置：top：顶部；middle：中间*/
+                            arrowAlign: 'middle',
+                            /**面板移动完成后事件*/
+                            onmoveend: function (pageNo) {
+                            }
+                        });
+
+                        //勾选
+                        $(".xw_tickpic").click(function () {
+                            $(this).toggleClass("pictickOn");
+                        });
+                        //全选
+                        $(".xw_tickAllpic").click(function () {
+                            if ($(".xw_tickAllpic").hasClass("pictickOn")) {
+                                $(this).removeClass("pictickOn");
+                                $(".xw_tickpic").removeClass("pictickOn");
+                            }
+                            else {
+                                $(this).addClass("pictickOn");
+                                $(".xw_tickpic").addClass("pictickOn");
+                            }
+                        });
+                    },500);
+                },
+
+                //初始化加载已存在的图片
+                initPicture: function () {
+                    $.get(path + "/admin/productInfo/getAttachments", {productId: $('#id').val()}, function (result) {
+                        for (var i = 0, len = result.length; i < len; i++) {
+                            var param = {};
+                            param.fileId = result[i].path;
+                            param.url = result[i].url;
+                            param.attachmentId = result[i].id;
+                            resource[result[i].id] = param;
+                        }
+                        if (result.length > 0) {
+                            CoverpicHandler.refresh();
+                        }
+                        $(window).triggerHandler('resize');
+                    });
+                },
+
+                add: function () {
+                    var param = {
+                        //scene: "T_OILSTATION_COVERPIC", //场景化标识
+                        limitType: "image", //limitType默认不传就不限制,支持：image/file/media
+                        isDB: 1
+                    };
+                    attachment.uploadFile(function (result) {
+
+                        var r = result[0];
+                        if (r.code == 0) {
+                            resource[r.fileId] = r;
+                            CoverpicHandler.refresh();
+                        }
+                    }, param);
+                },
+
+                addCoverPic: function () {
+                    if ($("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").length == 1) {
+                        $("div.imgDiv div.jd_box div.cover").remove();
+                        $("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").append('<div class="cover"></div>');
+                        // 设置到商品form中
+                        $("#goodsForm #headPath").val($("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").attr("data-value-attachmentId"));
+                        msgBox.tips("设置成功!");
+                    } else {
+                        msgBox.tips("请选择一个的商品图片!");
+                    }
+                },
+
+                del: function () {
+                    if ($("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").length > 0) {
+                        for (var o in resource) {
+                            if (resource[o].fileId == $("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").attr("data-value-fileId")) {
+                                // 删除图片是，判断删除的是封面图片的时候，主表的封面图字段滞空
+                                if (resource[o].attachmentId == $("#goodsForm #headPath").val()) {
+                                    $("#goodsForm #headPath").val('');
+                                }
+                                delete resource[o];
+                                $("div.imgDiv div.jd_box div.pictickOn").parents("div.item").remove();   //界面上移除图片
+                            }
+                        }
+                    } else {
+                        msgBox.tips("请选择删除的商品图片!");
+                    }
+                },
+
+                getCoverPic: function () {
+                    var temp = [];
+                    for (var o in resource) {
+                        temp.push(resource[o]);
+                    }
+                    return temp;
+                }
+            }
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

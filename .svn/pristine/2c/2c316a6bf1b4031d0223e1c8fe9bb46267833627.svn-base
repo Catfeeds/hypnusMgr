@@ -1,0 +1,24 @@
+package com.catt.wfx.service.impl.base.settlementMgr;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementShopDetailDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopDetail;
+import com.catt.wfx.service.base.settlementMgr.SettlementShopDetailBaseService;
+
+@Service("settlementShopDetailBaseServiceImpl")
+public class SettlementShopDetailBaseServiceImpl extends
+	BaseServiceImpl<SettlementShopDetail, Long> implements SettlementShopDetailBaseService {
+
+	@Resource(name = "settlementShopDetailDaoImpl")
+	private SettlementShopDetailDao settlementShopDetailDao;
+
+	@Resource
+	public void setBaseDao(SettlementShopDetailDao settlementShopDetailDao) {
+		super.setBaseDao(settlementShopDetailDao);
+	}
+
+}

@@ -1,0 +1,88 @@
+seajs.use(['$', 'msgBox', 'jquery.json'],
+    function ($,  msgBox) {
+
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                },
+
+                /** 初始化页面 */
+                initPage: function () {
+
+                },
+
+                /** 初始化事件 */
+                initEvent: function () {
+                    $("#pay").click(function(){
+                        EventHandler.payment();
+                    });
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                //支付
+                payment: function () {
+                    if (typeof WeixinJSBridge == "undefined") {
+                        if (document.addEventListener) {
+                            document.addEventListener('WeixinJSBridgeReady', EventHandler.onBridgeReady, false);
+                        } else if (document.attachEvent) {
+                            document.attachEvent('WeixinJSBridgeReady', EventHandler.onBridgeReady);
+                            document.attachEvent('onWeixinJSBridgeReady', EventHandler.onBridgeReady);
+                        }
+                    } else {
+                        var param = {
+                            payerId: $('#payerId').val(),
+                            businessType: "cusOrderPayHandler",
+                            orderId: $("#orderId").val()
+                        }
+                        $.post(path + '/pay/weChatHFivepay/getPayParam', param, function (backData) {
+                            if (backData.type == 'success') {
+                                EventHandler.onBridgeReady(backData.result)
+                            }
+                        });
+                    }
+                },
+                onBridgeReady: function (param) {
+                    var realParam = {
+                        appId: param.appId,
+                        timeStamp: param.timeStamp,         //时间戳，自1970年以来的秒数
+                        nonceStr: param.nonceStr, //随机串
+                        "package": param["package"],
+                        signType: param.signType,         //微信签名方式：
+                        paySign: param.sign //微信签名
+                    };
+                    WeixinJSBridge.invoke('getBrandWCPayRequest', realParam,
+                        function (res) {
+                            //alert(res.err_code+res.err_desc+res.err_msg);
+                            if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                window.location = path + '/admin/wechat/cusOrder/paySuccess.html?shopId=' + shopId + "&orderId=" + $("#orderId").val();
+                            }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                        });
+                }
+            }
+        }();
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    });

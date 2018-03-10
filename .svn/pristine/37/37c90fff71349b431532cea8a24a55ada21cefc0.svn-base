@@ -1,0 +1,10 @@
+seajs.use(['$'], function ($) {
+    $(function () {
+        $.post(path + "/admin/wechat/personal/getCusPhotoAndName?v=" + new Date().getTime(), null, function (data) {
+            if(data){
+                $("#userPhoto").attr("src", data.photo);
+                $("#userName").html(data.name);
+            }
+        });
+    });
+});

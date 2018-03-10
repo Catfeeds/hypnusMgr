@@ -1,0 +1,115 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/1/6
+  Time: 14:21
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>主管补贴设置</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/user_list.css" rel="stylesheet"/>
+
+    <script src="${path}/resources/js/member.js" type="text/javascript"></script>
+    <script src="${path}/resources/admin/common/temDataGrid.js"></script>
+    <script src="${path}/resources/admin/js/customerMgr/shopkeeper/index.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="positionNow">主页 &gt; <a>店主管理</a></div>
+    <div class="searchBar">
+        <div class="searchBox">
+            <span class="searchName">店主昵称：</span>
+            <input class="searchInputText" id="name" type="text" style="width:130px;" />
+        </div>
+        <div class="searchBox">
+            <span class="searchName">手机号：</span>
+            <input class="searchInputText" id="mobile" type="text" style="width:130px;" />
+        </div>
+
+        <span class="btnGrey" style="margin-left:5px;" id="reset">重置</span>
+        <span class="btnRed" id="search">查询</span>
+        <div class="moreOptions xw_moreOptions">展开更多↓</div>
+    </div>
+    <div class="searchBar xw_hideBar" id="searchFooter" style="border-top:none; display:none;">
+        <div class="searchBox typeSelect">
+            <span class="searchName">代理商级别：</span>
+            <ul class="optionUl xw_optionUl">
+                <li class="on" data-value="">全部</li>
+                <li  data-value="4">总代</li>
+                <li  data-value="6">省代</li>
+                <li  data-value="7">市代</li>
+                <li  data-value="5">区代</li>
+                <li  data-value="1">店主</li>
+            </ul>
+        </div>
+        <div class="searchBox">
+            <span class="searchName">注册时间：</span>
+            <div class="dateDiv">
+                <input class="zjInput" type="text" style="width:120px;" id="startDate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'endDate\')}'})" />
+            </div>
+            <span class="formText" style="margin:8px 5px 0;">~</span>
+            <div class="dateDiv">
+                <input class="zjInput" type="text" style="width:120px;" id="endDate"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd', minDate:'#F{$dp.$D(\'startDate\')}'})" />
+            </div>
+        </div>
+
+    </div>
+    <div class="resultBar">
+        <div class="selectBox">
+            <input id="status" type="hidden" class="hiddenValue"/>
+            <div class="selectTabs">
+                <h1 class="xw_select selectTabs_on" data-value="">全部</h1>
+                <h1 class="xw_select" data-value="2">未过期</h1>
+                <h1 class="xw_select" data-value="1">已过期</h1>
+            </div>
+        </div>
+        <span class="btnGrey" style="margin-left:6px;" id="disable">禁用</span>
+        <span class="btnRed" style="margin-left:6px;" id="enable">解除禁用</span>
+    </div>
+    <div class="userDetail">
+        <table class="datalistTable xw_zhuguan">
+            <tr>
+                <th width="40px"><div class="tickAll xw_tickAll"></div></th>
+                <th>店主昵称</th>
+                <th>手机号码</th>
+                <th>代理商级别</th>
+                <th>注册时间</th>
+                <th>到期时间</th>
+                <th>订单数量</th>
+                <th>订单金额</th>
+                <th>店铺状态</th>
+                <th>状态</th>
+            </tr>
+            <tbody id="dataList"></tbody>
+        </table>
+    </div>
+    <!--页码-->
+    <div class="pageBar" id="pageBar"></div>
+    <!-------->
+</div>
+
+<script type="text/html" id="template_dataList">
+    {{each}}
+    <tr ondblclick="window.location.href = path +'/admin/cusInfo/shopkeeper/detail.html?cusId={{$value.id}}'" title="双击查看详情">
+        <td><span class="tick xw_tick"></span></td>
+        <td>{{$value.name}}</td>
+        <td>{{$value.account}}</td>
+        <td>{{if $value.type == 1}}--{{else if $value.type != 1}}{{$value.typeName}}{{/if}}</td>
+        <td>{{$value.openTime}}</td>
+        <td>{{$value.expireTime}}</td>
+        <td>{{$value.orderNum}}</td>
+        <td>{{$value.orderMoney}}</td>
+        <td>{{if $value.isExpire == 2}}<span class="bgBlue">未过期</span>{{else if $value.isExpire == 1}}<span class="bgRed">已过期</span>{{/if}}</td>
+        <td>{{if $value.status == 1}}<span class="bgBlue">正常</span>{{else if $value.status == 2}}<span class="bgRed">禁用</span>{{/if}}</td>
+        <input type="hidden" name="id" value="{{$value.id}}" param="param">
+        <input type="hidden" name="status" value="{{$value.status}}" param="param">
+    </tr>
+    {{/each}}
+</script>
+</body>
+</html>

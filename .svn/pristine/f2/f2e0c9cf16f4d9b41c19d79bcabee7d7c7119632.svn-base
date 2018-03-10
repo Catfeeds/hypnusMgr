@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	updateCheck="false">
+
+	<diskStore path="${java.io.tmpdir}/${system.project_name}/cache" />
+
+	<cache name="menus" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="enumCache" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="authorization" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="propertiesListCache" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="homeTodoCount" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="exceptionInfoCfgCache" maxElementsInMemory="2000" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+
+	<!--手机登录的短信验证码，有效期：10分钟-->
+	<cache name="loginSmsCache" maxElementsInMemory="10000" timeToLiveSeconds="600" eternal="false" overflowToDisk="true" />
+</ehcache>

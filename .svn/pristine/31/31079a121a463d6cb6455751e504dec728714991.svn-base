@@ -1,0 +1,63 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+                    $("#save").click(function () {
+                        var param = {};
+                        param.cause = $("#cause").val();
+                        param.id = $('#id').val();
+                        param.status = 3;//1待审核、2通过、3不通过
+                        DataHandler.save(param, function (result) {
+                            msgBox.tips("操作成功", 1, function () {
+                                msgBox.exWindow.close($.toJSON(result));
+                            });
+                        });
+                    });
+
+                    $("#cancel").click(function () {
+                        msgBox.exWindow.close();
+                    });
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {};
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 * @param params
+                 * @param callback
+                 */
+                save: function (params, callback) {
+                    $.post(path + "/admin/agentInfo/audit", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

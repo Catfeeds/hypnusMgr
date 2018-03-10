@@ -1,0 +1,52 @@
+package com.catt.wfx.repository.dao.couponMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.couponMgr.CouponInfo;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 代金券信息Dao接口
+ * 
+ * @author chen chusheng
+ * @date 2017-01-16 11:10:41
+ * @version V1.0
+ */
+public interface CouponInfoDao extends BaseDao<CouponInfo, Long> {
+
+    /**
+     * 发布代金券（修改状态为1）
+     * @param ids 代金券ID
+     */
+    void publishCoupon(Long[] ids);
+
+    /**
+     * 查询列表
+     * @param param
+     * @return
+     */
+    Page getCouponPage(Map<String, Object> param);
+
+    /**
+     * 删除代金券
+     * @param ids
+     */
+    void deleteCoupons(Long[] ids);
+
+    /**
+     * 获取店主补贴对应代金券面值金额
+     *
+     * @param couponIds 代金券标识集合
+     * @return
+     */
+    Map findFaceValueTotal(List<Long> couponIds);
+
+    /**
+     * 获取代金券发放数量和金额
+     *
+     * @return
+     */
+    List<Map> getTotalCouponInfo();
+}

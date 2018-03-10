@@ -1,0 +1,36 @@
+package com.catt.wfx.service.extractOrder;
+
+
+import com.catt.common.base.pojo.search.Page;
+
+import java.util.Map;
+
+/**
+ * 提现单据信息服务接口
+ * 
+ * @author chen chusheng
+ * @date 2017-03-03 16:59:31
+ * @version V1.0
+ */
+public interface ExtractOrderService{
+
+    /**
+     * 获取分页数据
+     * @param params
+     * @return
+     */
+    Page<Map> getPage(Map<String, Object> params);
+
+    /**
+     * 打款
+     * @param params
+     */
+    void remittance(Map<String, Object> params);
+
+    /**
+     * 获取详情
+     * @param id 申请单据ID
+     * @return
+     */
+    Map getAllDetail(Long id);
+}

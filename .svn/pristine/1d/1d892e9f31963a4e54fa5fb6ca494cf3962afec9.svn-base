@@ -1,0 +1,28 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: houhuateng
+  Date: 2017/3/7
+  Time: 10:35
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <%@include file="/common/headModule2.jsp" %>
+    <title>身份信息审核</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet" />
+    <link type="text/css" href="${path}/resources/css/user_list.css" rel="stylesheet" />
+    <script src="${path}/resources/admin/js/customerMgr/cards/index.js" type="text/javascript"></script>
+</head>
+<body  class="bg-gray-light">
+<section class="content">
+    <div class="box box-solid">
+        <div class="box-body">
+            <form id="addform" class="form-horizontal"></form>
+
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

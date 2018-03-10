@@ -1,0 +1,29 @@
+package com.catt.common.module.express.service.impl;
+
+import com.catt.common.module.express.data.Constats;
+import com.catt.common.module.express.data.QueryParam;
+import com.catt.common.module.express.repository.entity.ExpressLog;
+import com.catt.wfx.service.SpringTest;
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+
+/**
+ * @author Zhang zhongtao
+ * @version 1.0.0.20170706
+ * @since JDK V1.8
+ */
+public class ExpressServiceImplTest extends SpringTest {
+    @Resource(name = "expressServiceImpl")
+    private ExpressServiceImpl expressService;
+
+    @Test
+    public void findByExCodeAndExCom() throws Exception {
+        QueryParam queryParam = new QueryParam();
+        queryParam.setExCom(Constats.ExpressCom.STO);
+        queryParam.setExCode("403263831489");
+        ExpressLog expressLog = expressService.findByExCodeAndExCom(queryParam);
+        Assert.assertNotNull(expressLog);
+    }
+}

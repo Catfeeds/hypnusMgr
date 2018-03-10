@@ -1,0 +1,308 @@
+package com.catt.wfx.repository.entity.productMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 商品价格定义实体类
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-01-09 11:37:12
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_PRODUCT_PRICE")
+public class ProductPrice extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+
+    /**
+     * <pre>
+     * 商品标识
+     * </pre>
+     */
+    private Long productId;
+    /**
+     * <pre>
+     * 商品规格
+     * 采用json格式描述
+     * </pre>
+     */
+    private String specJson;
+    /**
+     * <pre>
+     * 商品销售价
+     * </pre>
+     */
+    private Double salesPrice;
+    /**
+     * <pre>
+     * 商品原价
+     * </pre>
+     */
+    private Double costPrice;
+    /**
+     * <pre>
+     * 总代价格
+     * </pre>
+     */
+    private Double generalAgent;
+    /**
+     * <pre>
+     * 区代价格
+     * </pre>
+     */
+    private Double regionalAgent;
+    /**
+     * <pre>
+     * 省代价格
+     * </pre>
+     */
+    private Double provincialAgent;
+    /**
+     * <pre>
+     * 市代价格
+     * </pre>
+     */
+    private Double cityAgent;
+    /**
+     * <pre>
+     * 店主利润
+     * </pre>
+     */
+    private Double profit;
+    /**
+     * <pre>
+     * 库存数量（剩余数量）
+     * </pre>
+     */
+    private Integer stockNum;
+
+    /**
+     * <pre>
+     * 创建人员标识
+     * </pre>
+     */
+    private Long createdId;
+    /**
+     * <pre>
+     * 创建人员名称
+     * </pre>
+     */
+    private String createdName;
+
+    /**
+     * <pre>
+     * 备注
+     * </pre>
+     */
+    private String remark;
+
+    /**
+     * <pre>
+     * 销售数量
+     * </pre>
+     */
+    private Integer saleNum;
+    /**
+     * 一级返利
+     */
+    private Double rebateOne;
+    /**
+     * 二级返利
+     */
+    private Double rebateTwo;
+    /**
+     * 三级返利
+     */
+    private Double rebateThree;
+    /**
+     * 四级返利
+     */
+    private Double rebateFour;
+    /**
+     * 五级返利
+     */
+    private Double rebateFive;
+
+    @Column(name = "I_PRODUCT_ID")
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    @Column(name = "S_SPEC_JSON", length = 4000)
+    public String getSpecJson() {
+        return specJson;
+    }
+
+    public void setSpecJson(String specJson) {
+        this.specJson = specJson;
+    }
+
+    @Column(name = "I_SALES_PRICE")
+    public Double getSalesPrice() {
+        return salesPrice;
+    }
+
+    public void setSalesPrice(Double salesPrice) {
+        this.salesPrice = salesPrice;
+    }
+
+    @Column(name = "I_COST_PRICE")
+    public Double getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(Double costPrice) {
+        this.costPrice = costPrice;
+    }
+
+    @Column(name = "I_PROFIT")
+    public Double getProfit() {
+        return profit;
+    }
+
+    public void setProfit(Double profit) {
+        this.profit = profit;
+    }
+
+    @Column(name = "I_STOCK_NUM")
+    public Integer getStockNum() {
+        return stockNum;
+    }
+
+    public void setStockNum(Integer stockNum) {
+        this.stockNum = stockNum;
+    }
+
+
+    @Column(name = "I_CREATED_ID")
+    public Long getCreatedId() {
+        return createdId;
+    }
+
+    public void setCreatedId(Long createdId) {
+        this.createdId = createdId;
+    }
+
+    @Column(name = "S_CREATED_NAME", length = 32)
+    public String getCreatedName() {
+        return createdName;
+    }
+
+    public void setCreatedName(String createdName) {
+        this.createdName = createdName;
+    }
+
+
+    @Column(name = "S_REMARK", length = 1024)
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    @Column(name = "I_SALE_NUM")
+    public Integer getSaleNum() {
+        return saleNum;
+    }
+
+    public void setSaleNum(Integer saleNum) {
+        this.saleNum = saleNum;
+    }
+
+    @Column(name = "I_CITY_AGENT")
+    public Double getCityAgent() {
+        return cityAgent;
+    }
+
+    public void setCityAgent(Double cityAgent) {
+        this.cityAgent = cityAgent;
+    }
+
+    @Column(name = "I_GENERAL_AGENT")
+    public Double getGeneralAgent() {
+        return generalAgent;
+    }
+
+    public void setGeneralAgent(Double generalAgent) {
+        this.generalAgent = generalAgent;
+    }
+
+    @Column(name = "I_PROVINCIAL_AGENT")
+    public Double getProvincialAgent() {
+        return provincialAgent;
+    }
+
+    public void setProvincialAgent(Double provincialAgent) {
+        this.provincialAgent = provincialAgent;
+    }
+
+    @Column(name = "I_REGIONAL_AGENT")
+    public Double getRegionalAgent() {
+        return regionalAgent;
+    }
+
+    public void setRegionalAgent(Double regionalAgent) {
+        this.regionalAgent = regionalAgent;
+    }
+
+    @Column(name = "I_REBATE_ONE")
+    public Double getRebateOne() {
+        return rebateOne;
+    }
+
+    public void setRebateOne(Double rebateOne) {
+        this.rebateOne = rebateOne;
+    }
+
+    @Column(name = "I_REBATE_TWO")
+    public Double getRebateTwo() {
+        return rebateTwo;
+    }
+
+    public void setRebateTwo(Double rebateTwo) {
+        this.rebateTwo = rebateTwo;
+    }
+
+    @Column(name = "I_REBATE_THREE")
+    public Double getRebateThree() {
+        return rebateThree;
+    }
+
+    public void setRebateThree(Double rebateThree) {
+        this.rebateThree = rebateThree;
+    }
+
+    @Column(name = "I_REBATE_FOUR")
+    public Double getRebateFour() {
+        return rebateFour;
+    }
+
+    public void setRebateFour(Double rebateFour) {
+        this.rebateFour = rebateFour;
+    }
+
+    @Column(name = "I_REBATE_FIVE")
+    public Double getRebateFive() {
+        return rebateFive;
+    }
+
+    public void setRebateFive(Double rebateFive) {
+        this.rebateFive = rebateFive;
+    }
+
+}
+

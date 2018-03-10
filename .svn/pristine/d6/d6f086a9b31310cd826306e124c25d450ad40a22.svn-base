@@ -1,0 +1,86 @@
+package com.catt.wfx.repository.data.comEnum;
+
+/**
+ * 角色枚举类
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2016-08-03
+ */
+public enum RoleEnum {
+    /**
+     * 超级管理员
+     */
+    SUPERADMIN(100L, "超级管理员"),
+
+    /**
+     * 业务经理
+     */
+    BUSINEESSMANAGER(101L, "业务经理"),
+
+    /**
+     * 业务经理领导
+     */
+    BUSINEESSMANAGERLEADER(102L, "业务经理领导"),
+    /**
+     * 厂家管理员
+     */
+    FACTORYMANAGER(103L, "厂家管理员");
+
+    /**
+     * 枚举值
+     */
+    private Long value;
+
+    /**
+     * 枚举中文
+     */
+    private String name;
+
+    /**
+     * 构造方法
+     *
+     * @param value 枚举值
+     * @param name  枚举中文
+     */
+    RoleEnum(Long value, String name) {
+        this.value = value;
+        this.name = name;
+    }
+
+    /**
+     * 由数字得是否多实例枚举对象
+     *
+     * @param value 枚举值
+     * @return 返回中文
+     */
+    public static RoleEnum getEnum(int value) {
+        RoleEnum[] source = RoleEnum.values();
+        for (int i = 0; i < source.length; i++) {
+            if (source[i].getValue() == value) {
+                return source[i];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 取值
+     *
+     * @return 返回枚举值
+     */
+    public Long getValue() {
+        return this.value;
+    }
+
+    /**
+     * 取中文名称
+     *
+     * @return 返回枚举中文
+     */
+    public String getName() {
+        return this.name;
+    }
+
+}
+

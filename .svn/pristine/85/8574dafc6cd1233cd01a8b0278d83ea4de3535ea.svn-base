@@ -1,0 +1,53 @@
+package com.catt.wfx.service.impl.extractOrder;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.extractOrder.ExtractOrderService;
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by Administrator on 2017/3/7.
+ */
+public class ExtractOrderServiceImplTest extends SpringTest {
+
+    @Resource(name = "extractOrderServiceImpl")
+    private ExtractOrderService extractOrderService;
+
+    @Test
+    public void testGetPageForApp() throws Exception {
+        Page<Map> page = extractOrderService.getPageForApp(new HashMap<>());
+        List<Map> list = page.getContent();
+        Assert.assertNotNull(list);
+        if(list.size() > 0){
+            Assert.assertNotNull(list.get(0).get("bankAccount"));
+        }
+    }
+
+    @Test
+    public void testApplyExtract() throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("cusId", "1");
+        params.put("cusName", "xingming");
+        params.put("money", 200D);//提现金额
+        params.put("bankType", 2);//开户银行
+        params.put("branch", "tianhezhihan");//开户支行
+        params.put("bankAccount", "wodezhanghu");//账户名称
+        params.put("bankCard", "8229039123009487800");//银行卡号
+        Map<String, Object> result = extractOrderService.applyExtract(params);
+        Assert.assertNotNull(result);
+        System.out.println(result);
+    }
+
+    @Test
+    public void testGetSteps() throws  Exception {
+        Long id = 533166072518410240l;
+        List<Map> list = extractOrderService.getSteps(id);
+        Assert.assertNotNull(list);
+    }
+}

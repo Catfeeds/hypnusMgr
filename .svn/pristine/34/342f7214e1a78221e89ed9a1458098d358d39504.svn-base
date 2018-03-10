@@ -1,0 +1,44 @@
+package com.catt.wfx.service.impl.base.wechatReturn;
+
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.wechatReturn.WechatReturnOrderDao;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrder;
+import com.catt.wfx.service.base.wechatReturn.WechatReturnOrderBaseService;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
+
+@Service("wechatReturnOrderBaseServiceImpl")
+public class WechatReturnOrderBaseServiceImpl extends
+        BaseServiceImpl<WechatReturnOrder, Long> implements WechatReturnOrderBaseService {
+
+    @Resource(name = "wechatReturnOrderDaoImpl")
+    private WechatReturnOrderDao wechatReturnOrderDao;
+
+    @Resource
+    public void setBaseDao(WechatReturnOrderDao wechatReturnOrderDao) {
+        super.setBaseDao(wechatReturnOrderDao);
+    }
+
+    /**
+     * 根据退款单号获取退款单
+     *
+     * @param refundNo
+     *           退款单号
+     * @return
+     */
+   public WechatReturnOrder getReturnOrderByRefundNo(String refundNo) {
+        Assert.hasText(refundNo);
+        List<WechatReturnOrder> list = this.findList(1,
+                Arrays.asList(Filter.eq("refundNo", refundNo)), null);
+        if (list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+}

@@ -1,0 +1,424 @@
+var dataList = [];
+seajs.use(['$', 'template', 'msgBox', 'uEeditor', 'attachment', 'util', 'jquery.json'],
+    function ($, template, msgBox, UE, attachment, util) {
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+                    ue = UE.getEditor('introduce', ueditor.config);
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $("#packagePrice").on('keyup afterpaste', function(){
+                        testMoney(this);
+                    });
+                    //动态绑定click(动态生成的html)
+                    $("#dataList").on('click', '.xw_tick', templateList.check);
+                    $(".tickAll").on('click', templateList.checkAll);
+                    //保存
+                    $("#save").click(EventHandler.save);
+
+                    //选择分类
+                    $('#cateName').click(EventHandler.getCate);
+
+                    // 上传图片
+                    $("#uploadPic").click(CoverpicHandler.add);
+
+                    // 删除图片
+                    $("#delPic").click(CoverpicHandler.del);
+
+                    // 设置封面
+                    $("#setHeadPic").click(CoverpicHandler.addCoverPic);
+
+                    //添加商品
+                    $('#addProduct').click(EventHandler.addProduct);
+
+                    //删除商品
+                    $('#delProduct').click(EventHandler.delProduct);
+
+                    $(window).resize(function () {          //当浏览器大小变化时
+                        $("#contentFrame", window.parent.document).css("height", $("body").css("height"));
+                    });
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                    if ($('#id').val() != "") {
+                        CoverpicHandler.initPicture();
+                        ue.ready(function () {
+                            // 设置编辑器的内容
+                            ue.setContent($("#introduceTemp").val());
+                        });
+                        EventHandler.loadPackageProduct();
+                    }
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 */
+                save: function () {
+                    var zhName = $("#zhName").val();
+                    var cateId = $("#cateId").val();
+                    var cateName = $("#cateName").val();
+                    var packagePrice = $("#packagePrice").val();
+                    var introduce = ue.getContent();
+                    if(zhName == ""){
+                        $("#zhName").focus();
+                        msgBox.tips("套餐名称不能为空");
+                        return;
+                    }
+                    if(cateName == ""){
+                        $("#cateName").focus();
+                        msgBox.tips("商品类型不能为空");
+                        return;
+                    }
+                    if(packagePrice == ""){
+                        $("#packagePrice").focus();
+                        msgBox.tips("套餐价格不能为空");
+                        return;
+                    }
+                    if(introduce == ""){
+                        $("#introduce").focus();
+                        msgBox.tips("套餐简介不能为空");
+                        return;
+                    }
+                    var params = {};
+                    params.id = $("#id").val();
+                    params.headPath = $("#headPath").val();
+                    params.zhName = zhName;
+                    params.cateId = cateId;
+                    params.cateName = cateName;
+                    params.packagePrice = packagePrice;
+                    params.introduce = introduce;
+                    params.coverpic;
+                    // 图片 coverpic
+                    if ($("div.imgDiv div.jd_box").length > 0) {
+                        params.coverpic = $.toJSON(CoverpicHandler.getCoverPic());
+                    }
+                    if(dataList.length == 0){
+                        msgBox.tips("至少要新增一个套餐商品");
+                        return;
+                    }
+                    params.packageJson = $.toJSON(dataList);
+                    DataHandler.save(params, function (backData) {
+                        msgBox.tips("保存成功");
+                        window.location.href = path + "/admin/productMgr/package/index.html";
+                    });
+                },
+                loadPackageProduct: function(){
+                    var params = {id : $("#id").val()};
+                    DataHandler.getPackageProduct(params, function (backData) {
+                        dataList = backData;
+                        addSepcStr(dataList);
+                        var html = template('template_dataList', {content: dataList});
+                        $('#dataList').html(html);
+                        $("#contentFrame", window.parent.document).css("height", $("body").css("height"));
+                    });
+                },
+                addProduct: function(){
+                    msgBox.exWindow.open({
+                        title: '选择商品',
+                        url: path + "/admin/productMgr/package/selectProduct.html",
+                        width: '800px',
+                        height: '600px',
+                        close: function (result) {
+                            if (result) {
+                                var content = $.evalJSON(result);
+                                addSepcStr(content);
+                                for (var i = 0; i < content.length; i++){
+                                    var data = content[i];
+                                    var notExist = true;
+                                    for(var j = 0; j < dataList.length; j++){
+                                        if(data.specStr == dataList[j].specStr && data.productId == dataList[j].productId){
+                                            notExist = false;
+                                            break;
+                                        }
+                                    }
+                                    if(notExist){
+                                        dataList[dataList.length] = data;
+                                    }
+                                }
+                                var html = template('template_dataList', {content: dataList});
+                                $('#dataList').html(html);
+                                $("#contentFrame", window.parent.document).css("height", $("body").css("height"))
+                            }
+                        }
+                    });
+                },
+                delProduct: function(){
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length == 0) {
+                        msgBox.tips("请选择需要删除的套餐商品");
+                        return;
+                    }
+                    msgBox.confirm({
+                        title: '提示',
+                        msg: '确认删除所选套餐?',
+                        callback: function (btnType) {
+                            if (btnType == 'ok') {
+                                for(var i = 0; i < checked.length; i++){
+                                    dataList.remove(checked[i].index);
+                                }
+                                var html = template('template_dataList', {content: dataList});
+                                $('#dataList').html(html);
+                                $("#contentFrame", window.parent.document).css("height", $("body").css("height"))
+                            }
+                        }
+                    });
+                },
+                //分类选择
+                getCate: function(){
+                    msgBox.exWindow.open({
+                        title: '商品分类',
+                        url: path + "/admin/productInfo/productClass.html",
+                        width: '40%',
+                        height: '73%',
+                        close: function (result) {
+                            if (result) {
+                                var param = $.evalJSON(result)
+                                var cateId = param.id;
+                                var name = param.name;
+                                $('#cateName').val(name);
+                                $('#cateId').val(cateId);
+                            }
+                        }
+                    });
+                }
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 * @param params
+                 * @param callback
+                 */
+                save: function (params, callback) {
+                    $.post(path + "/admin/productMgr/package/save", params, function (result) {
+                        callback(result);
+                    });
+                },
+                getPackageProduct: function (params, callback) {
+                    $.post(path + "/admin/productMgr/package/getPackageProduct", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /**
+         * 图片
+         */
+        var CoverpicHandler = (function () {
+            var resource = {};
+            return {
+                refresh: function () {
+                    var tempList = [];
+                    for (var o in resource) {
+                        tempList.push(resource[o]);
+                    }
+
+                    //初始化所有图片
+                    var itemContent = [];
+                    var headPath = $('#headPath').val();
+                    for (var i = 0; i < tempList.length; i++) {
+                        //itemContent.push("<div class='jd_box' data-value-fileId='" + tempList[i].fileId + "' style='background:#efefef url(" + tempList[i].url + ") no-repeat center 45px'><div class='" + tempList[i].fileId + "'></div><div class='imgtick xw_tickpic'></div><div class='eachtit'>" + tempList[i].fileName + "</div></div>");
+                        if (headPath && headPath == tempList[i].attachmentId) {
+                            itemContent.push("" +
+                            "<div class='jd_box' data-value-fileId='" + tempList[i].fileId + "' data-value-attachmentId='" + tempList[i].attachmentId + "'>" +
+                            "<img class='pic1' src='" + tempList[i].url + "' style='width: 100%; height: 100%;' />" +
+                            "<div class='" + tempList[i].fileId + "'></div>" +
+                            "<div class='imgtick xw_tickpic'></div>" +
+                            "'<div class='cover'></div>" +
+                                //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + tempList[i].fileName + "</div>" +
+                            "</div>");
+                        } else {
+                            itemContent.push("" +
+                            "<div class='jd_box' data-value-fileId='" + tempList[i].fileId + "' data-value-attachmentId='" + tempList[i].attachmentId + "'>" +
+                            "<img class='pic1' src='" + tempList[i].url + "' style='width: 100%; height: 100%;' />" +
+                            "<div class='" + tempList[i].fileId + "'></div>" +
+                            "<div class='imgtick xw_tickpic'></div>" +
+                                //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + tempList[i].fileName + "</div>" +
+                            "</div>");
+                        }
+
+                    }
+
+                    var canshowNum = ($("div.imgDiv").outerWidth() - 86) / 230;
+                    canshowNum = Math.floor(canshowNum);
+                    //初始化面板对象
+                    panel = new BasePanel('#panea', {
+                        /**面板可视范围内显示的元素个数，如果展开后，
+                         * 则是disItem = disItem * expanRow*/
+                        disItem: canshowNum,
+                        /**显示面板宽度*/
+                        /**面板里需要承载的html内容*/
+                        contentHtml: itemContent,
+                        /**是否显示展开按钮*/
+                        isExpan: false,
+                        /**是否自动展开*/
+                        isAutoExpan: false,
+                        /**展开后显示的行数*/
+                        expanRows: 1,
+                        /**箭头位置：top：顶部；middle：中间*/
+                        arrowAlign: 'middle',
+                        /**面板移动完成后事件*/
+                        onmoveend: function (pageNo) {
+                        }
+                    });
+
+                    //勾选
+                    $(".xw_tickpic").click(function () {
+                        $(this).toggleClass("pictickOn");
+                    });
+                    //全选
+                    $(".xw_tickAllpic").click(function () {
+                        if ($(".xw_tickAllpic").hasClass("pictickOn")) {
+                            $(this).removeClass("pictickOn");
+                            $(".xw_tickpic").removeClass("pictickOn");
+                        }
+                        else {
+                            $(this).addClass("pictickOn");
+                            $(".xw_tickpic").addClass("pictickOn");
+                        }
+                    });
+                },
+
+                //初始化加载已存在的图片
+                initPicture: function () {
+                    $.get(path + "/admin/productInfo/getAttachments", {productId: $('#id').val()}, function (result) {
+                        for (var i = 0, len = result.length; i < len; i++) {
+                            var param = {};
+                            param.fileId = result[i].path;
+                            param.url = result[i].url;
+                            param.attachmentId = result[i].id;
+                            resource[result[i].id] = param;
+                        }
+                        if (result.length > 0) {
+                            CoverpicHandler.refresh();
+                        }
+                        setParenHei();
+                    });
+                },
+
+                add: function () {
+                    var param = {
+                        //scene: "T_OILSTATION_COVERPIC", //场景化标识
+                        limitType: "image", //limitType默认不传就不限制,支持：image/file/media
+                        isDB: 1
+                    };
+                    attachment.uploadFile(function (result) {
+
+                        var r = result[0];
+                        if (r.code == 0) {
+                            resource[r.fileId] = r;
+                            CoverpicHandler.refresh();
+                        }
+                    }, param);
+                },
+
+                addCoverPic: function () {
+                    if ($("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").length == 1) {
+                        $("div.imgDiv div.jd_box div.cover").remove();
+                        $("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").append('<div class="cover"></div>');
+                        $("#headPath").val($("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").attr("data-value-attachmentId"));
+                        msgBox.tips("设置成功!");
+                    } else {
+                        msgBox.tips("请选择一个的商品图片!");
+                    }
+                },
+
+                del: function () {
+                    if ($("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").length > 0) {
+                        for (var o in resource) {
+                            if (resource[o].attachmentId == $("div.imgDiv div.jd_box div.pictickOn").parents("div.jd_box").attr("data-value-attachmentId")) {
+                                // 删除图片是，判断删除的是封面图片的时候，主表的封面图字段滞空
+                                if (resource[o].attachmentId == $("#headPath").val()) {
+                                    $("#headPath").val('');
+                                }
+                                delete resource[o];
+                                $("div.imgDiv div.jd_box div.pictickOn").parents("div.item").remove();   //界面上移除图片
+                            }
+                        }
+                    } else {
+                        msgBox.tips("请选择删除的商品图片!");
+                    }
+                },
+
+                getCoverPic: function () {
+                    var temp = [];
+                    for (var o in resource) {
+                        temp.push(resource[o]);
+                    }
+                    return temp;
+                }
+            }
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });
+//金额验证
+function testMoney(ob){
+    if (!ob.value.match(/^[0-9]+(.[0-9]{0,2})?$/)) ob.value = ob.t_value; else ob.t_value = ob.value;
+    if (ob.value.match(/^[0-9]+(.[0-9]{0,2})?$/)) ob.o_value = ob.value;
+    if(ob.value == 'undefined'){
+        ob.value = '';
+    }
+}
+//正整数验证
+function testPositiveNumber(ob){
+    if(ob.value.length==1){ob.value=ob.value.replace(/[^1-9]/g,'')}else{ob.value=ob.value.replace(/\D/g,'')}
+    if(ob.value == 'undefined'){
+        ob.value = '';
+    }
+}
+
+function addSepcStr(arr){
+    for(var i = 0; i < arr.length; i++){
+        var spec = $.evalJSON(arr[i].specJson);
+        var str = "";
+        for(var o in spec){
+            str += "_" + spec[o];
+        }
+        arr[i].specStr = str.substr(1);
+    }
+}
+
+/**
+ *删除数组指定下标或指定对象
+ */
+Array.prototype.remove=function(obj){
+    for(var i =0;i <this.length;i++){
+        var temp = this[i];
+        if(!isNaN(obj)){
+            temp=i;
+        }
+        if(temp == obj){
+            for(var j = i;j <this.length;j++){
+                this[j]=this[j+1];
+            }
+            this.length = this.length-1;
+        }
+    }
+}

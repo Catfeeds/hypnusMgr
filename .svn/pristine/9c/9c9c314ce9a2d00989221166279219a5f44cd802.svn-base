@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	updateCheck="false">
+
+	<diskStore path="${java.io.tmpdir}/${system.project_name}/cache" />
+
+	<cache name="menus" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="menus2" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="enumCache" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="authorization" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="propertiesListCache" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="homeTodoCount" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+    <cache name="pubSetupCache" maxElementsInMemory="100" timeToLiveSeconds="${filter.ehcache.timeToLiveSeconds}" eternal="false" overflowToDisk="false"/>
+	<!--银行信息缓存配置-->
+	<cache name="dmBankCache" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false"/>
+	<!--微信缓存配置-->
+	<cache name="weChat_PublicAccountCache" maxElementsInMemory="2000" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false"/>
+	<cache name="weChat_PageAuthCache" maxElementsInMemory="2000" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false"/>
+	<!--票据在微信平台(微信官方服务器)的有效期为7200秒，缓存有效期为7000秒-->
+	<cache name="weChat_ApiTicketCache" maxElementsInMemory="2000" timeToLiveSeconds="7000" eternal="false" overflowToDisk="false"/>
+	<!-- 微信商城商品详情链接缓存配置 -->
+	<cache name="wxProductDetailUrCache" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false"/>
+	<!--快递物流信息缓存-->
+	<cache name="expressCache" maxElementsInMemory="100" timeToLiveSeconds="14400" eternal="false" overflowToDisk="true"/>
+
+</ehcache>

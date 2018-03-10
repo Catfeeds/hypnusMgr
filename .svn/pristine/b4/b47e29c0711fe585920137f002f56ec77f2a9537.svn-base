@@ -1,0 +1,4 @@
+@echo off
+set classpath=classes/
+java -Djava.ext.dirs=lib\  com.catt.wfx.Server
+pause

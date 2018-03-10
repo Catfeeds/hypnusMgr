@@ -1,0 +1,24 @@
+package com.catt.wfx.util;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
+
+@Component
+public class WeChatLocationCacheUtil {
+	@CachePut(value="weChatLocationCache",key="#pId+'_'+#openId")
+	public Map<String,String> put(String pId,String openId,String lat,String lng){
+		Map<String,String> map = new HashMap<String, String>();
+		map.put("lat", lat);
+		map.put("lng", lng);
+		return map;
+	}
+	
+	@Cacheable(value="weChatLocationCache",key="#pId+'_'+#openId")
+	public Map<String,String> get(String pId,String openId){
+		return null;
+	}
+}

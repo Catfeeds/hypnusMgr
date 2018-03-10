@@ -1,0 +1,79 @@
+seajs.use(['$', 'template', 'msgBox', 'jquery.json'],
+    function ($, template, msgBox) {
+        var platDetailIds;
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $("#submit").click(EventHandler.settle);
+
+                    $("#cancel").click(function(){
+                        msgBox.exWindow.close();
+                    });
+
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                    msgBox.exWindow.getExtraParams(function (result) {
+                        platDetailIds = result.platDetailIds;
+                    });
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                // 查询
+                settle: function () {
+                    var params = {platDetailIds : platDetailIds.join(",")};
+                    var staffName = $("#staffName").val();
+                    var code = $("#code").val();
+                    if(staffName == ""){
+                        $("#staffName").focus();
+                        msgBox.tips("请填写结算人员");
+                        return;
+                    }
+                    if(code == ""){
+                        $("#code").focus();
+                        msgBox.tips("请填写流水号");
+                        return;
+                    }
+                    params.staffName = staffName;
+                    params.code = code;
+                    DataHandler.settle(params, function (backData) {
+                        msgBox.tips("操作成功");
+                        msgBox.exWindow.close(1);
+                    });
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                settle: function (param, callback) {
+                    $.post(path + '/admin/perforMgr/platPerfor/settle', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

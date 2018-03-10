@@ -1,0 +1,59 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.customerMgr.CusCertificationService;
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Created by Administrator on 2017/3/9.
+ */
+public class CusCertificationServiceImplTest extends SpringTest {
+
+    @Resource(name = "cusCertificationServiceImpl")
+    private CusCertificationService cusCertificationService;
+
+    @Test
+    public void testGetDetail() throws Exception {
+//        String purpose = "status";
+//        String purpose = "show";
+        String purpose = "edit";
+        Long cusId = 1l;
+        Map<String, Object> result = cusCertificationService.getDetail(purpose, cusId);
+        Assert.assertFalse(result.isEmpty());
+        System.out.println("====================================================================");
+        System.out.println("====================================================================");
+        System.out.println("====================================================================");
+        System.out.println("====================================================================");
+        System.out.println(result);
+        System.out.println("====================================================================");
+        System.out.println("====================================================================");
+        System.out.println("====================================================================");
+        System.out.println("====================================================================");
+    }
+
+    @Test
+    public void testGetApplyCode() throws Exception {
+
+    }
+
+    @Test
+    public void testApply() throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("cusId", "530900970649944064");
+        params.put("cusName", "德华");
+        params.put("realName", "德华");
+        params.put("idCard", "123123123123123");
+        params.put("mobile", "4323423123123");
+        params.put("captcha", "6sdf");
+        params.put("holdphotoId", "538966765233766400");
+        params.put("cardpositiveId", "");
+        params.put("cardinverseId", "");
+
+        cusCertificationService.apply(params);
+    }
+}

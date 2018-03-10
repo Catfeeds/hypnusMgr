@@ -1,0 +1,127 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    var params = {}; //搜索条件
+                    //=========分页初始化start============
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+
+                    EventHandler.search();
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $(".xw_select").click(function () {
+                        $(".xw_select").removeClass("selectTabs_on");
+                        $(this).addClass("selectTabs_on");
+                        EventHandler.search({pageNo: 1, pageSize: 15})
+                    })
+                    $('#reset').click(EventHandler.reset);
+                    $('#search').click(function () {
+                        EventHandler.search();
+                    });
+
+                    $(".xw_moreOptions").click(function(){
+                        var myText = $(this).text();
+                        if(myText == "展开更多↓"){
+                            $(".xw_hideBar").slideDown(200);
+                            $(this).text("收起↑");
+                        }
+                        else if(myText == "收起↑"){
+                            $(".xw_hideBar").slideUp(200);
+                            $(this).text("展开更多↓");
+                        }
+                        setParenHei();
+                    })
+
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                // 查询
+                search: function (params) {
+
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: 15};
+                    }
+                    var couponName = $("#couponName").val();
+                    var cusName = $("#cusName").val();
+
+                    if ($('.xw_hideBar').css("display") == 'block') {
+                        params.mobile = $("#mobile").val();
+                        if($("#startTime").val()){
+                            params.startTime = $("#startTime").val() + " 00:00:00";
+                        }
+                        if($("#endTime").val()){
+                            params.endTime = $("#endTime").val() + " 23:59:59";
+                        }
+                    }
+                    params.isUse = $(".selectTabs_on").attr("data-value");
+                    params.couponName = couponName;
+                    params.cusName = cusName;
+
+
+                    DataHandler.search(params, function (backData) {
+                        var html = template('listTemp', backData.content);
+                        $('#list').html(html);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+
+                        setParenHei();
+                    });
+                },
+                //重置
+                reset: function () {
+                    $('#couponName').val("");
+                    $("#cusName").val("");
+                    $("#mobile").val("");
+                    $("#startTime").val("");
+                    $("#endTime").val("");
+                },
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/couponMgr/couponRecord/getCouponRecordByPage', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

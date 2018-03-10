@@ -1,0 +1,237 @@
+package com.catt.wfx.service.impl.couponMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.wfx.repository.dao.couponMgr.CouponCusDao;
+import com.catt.wfx.repository.dao.customerMgr.CusCartDao;
+import com.catt.wfx.repository.dao.productMgr.ProductCateDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.couponMgr.CouponCus;
+import com.catt.wfx.repository.entity.couponMgr.CouponInfo;
+import com.catt.wfx.repository.entity.couponMgr.CouponRule;
+import com.catt.wfx.repository.entity.productMgr.ProductCate;
+import com.catt.wfx.service.base.couponMgr.CouponCusBaseService;
+import com.catt.wfx.service.base.couponMgr.CouponInfoBaseService;
+import com.catt.wfx.service.base.couponMgr.CouponRuleBaseService;
+import com.catt.wfx.service.base.productMgr.ProductCateBaseService;
+import com.catt.wfx.service.couponMgr.CouponCusService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+
+@Service("couponCusServiceImpl")
+public class CouponCusServiceImpl implements CouponCusService {
+
+    @Resource(name = "couponCusBaseServiceImpl")
+    private CouponCusBaseService couponCusBaseService;
+
+    //用户代金券服务
+    @Resource(name = "couponCusServiceImpl")
+    private CouponCusService couponCusService;
+
+    //代金券服务
+    @Resource(name = "couponInfoBaseServiceImpl")
+    private CouponInfoBaseService couponInfoBaseService;
+
+    //代金券规则服务
+    @Resource(name = "couponRuleBaseServiceImpl")
+    private CouponRuleBaseService couponRuleBaseService;
+
+    //商品分类服务
+    @Resource(name = "productCateBaseServiceImpl")
+    private ProductCateBaseService productCateBaseService;
+
+    //商品分类Dao
+    @Resource(name = "productCateDaoImpl")
+    private ProductCateDao productCateDao;
+
+    //用户代金券Dao接口
+    @Resource(name = "couponCusDaoImpl")
+    private CouponCusDao couponCusDao;
+
+    //购物车服务接口
+    @Resource(name = "cusCartDaoImpl")
+    private CusCartDao cusCartDao;
+
+    @Override
+    public List<CouponCus> findCusCouponList(Long cusId) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", cusId));
+        filters.add(Filter.eq("isUse", PubEnum.YesOrNoEnum.NO.getValue()));
+        filters.add(Filter.dge("invalidTime", new Date()));
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.desc("faceValue"));
+        return couponCusBaseService.findList(null, filters, orders);
+    }
+
+    @Override
+    public Page<Map> getUsableCoupon(Long cusId, Long[] cartIds, Integer pageNo, Integer pageSize) {
+        List<CouponCus> couponCusList = couponCusService.findCusCouponList(cusId);
+        if (couponCusList.size() > 0){
+            List<Map> usableCouponList = new ArrayList<>();
+            List<Map> productList = cusCartDao.findProductByCartIds(cartIds);
+            for (CouponCus couponCus : couponCusList){
+                Map couponData = new HashMap<>();
+                if (this.checkCanUseCouponCus(productList, couponCus, couponData)){
+                    usableCouponList.add(couponData);
+                }
+            }
+            //最大抵扣金额降序
+            Collections.sort(usableCouponList, new Comparator<Map>() {
+                public int compare(Map o1, Map o2) {
+                    double value1 = MapUtil.getDoubleValue(o1, "maxDeduction");
+                    double value2 = MapUtil.getDoubleValue(o2, "maxDeduction");
+                    return value1 - value2 < 0 ? 1 : -1;
+                }
+            });
+            int total = usableCouponList.size();
+            int start = (pageNo - 1) * pageSize;
+            int end = start + pageSize;
+            List<Map> backData = new ArrayList<>();
+            for (int i = start; i < end && i < total; i++){
+                backData.add(usableCouponList.get(i));
+            }
+            return new Page<>(backData, total, new Pageable(pageNo, pageSize));
+        }
+        return new Page<>();
+    }
+
+    @Override
+    public boolean checkCanUseCouponCus(List<Map> productList, CouponCus couponCus, Map couponData) {
+        Long couponId = couponCus.getCouponId();
+        CouponInfo couponInfo = couponInfoBaseService.find(couponId);
+        Integer typeLimit = couponInfo.getTypeLimit();
+        Integer moneyLimit = couponInfo.getMoneyLimit();
+        Double orderMoney = couponInfo.getOrderMoney();
+        Double faceValue = couponInfo.getFaceValue();
+
+        couponData.put("id", couponCus.getId());
+        couponData.put("couponId", couponId);
+        couponData.put("couponName", couponInfo.getCouponName());
+        couponData.put("faceValue", couponCus.getFaceValue());
+        couponData.put("moneyLimit", moneyLimit);
+        couponData.put("orderMoney", orderMoney);
+        couponData.put("createDate", couponCus.getCreateDate());
+        couponData.put("invalidTime", couponCus.getInvalidTime());
+        couponData.put("typeLimitDesc", couponInfo.getTypeLimitDesc());
+
+        Map<Long, Double> priceAmount = new HashMap<>(); //价格标识--商品总价
+
+        Double amount = 0.0; //代金券适用商品金额
+        boolean canUse = false;
+        if (typeLimit == PubEnum.YesOrNoEnum.NO.getValue()){ //类型无限制
+            if (moneyLimit == PubEnum.YesOrNoEnum.NO.getValue()){
+                //金额无限制
+                amount = this.getAmount(productList, null, priceAmount);
+                canUse = true;
+
+            }else if (moneyLimit == PubEnum.YesOrNoEnum.YES.getValue()){
+                //金额限制
+                amount = this.getAmount(productList, null, priceAmount);
+                if (amount >= orderMoney){
+                    canUse = true;
+                }
+            }
+
+        } else if (typeLimit == PubEnum.YesOrNoEnum.YES.getValue()) { //类型限制
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("couponId", couponId));
+            List<CouponRule> couponRules = couponRuleBaseService.findList(null, filters, null);
+            Set<Long> cateIds = new HashSet<>();
+            for (CouponRule couponRule : couponRules){
+                Long cateId = couponRule.getCateId();
+                cateIds.add(cateId);
+                ProductCate productCate = productCateBaseService.find(cateId);
+                String path = productCate.getPath() + cateId;
+                Set<Long> childCateIds = productCateDao.findCateIdsByPath(path); //子类型也可以使用
+                if (childCateIds != null && childCateIds.size() > 0){
+                    cateIds.addAll(childCateIds);
+                }
+            }
+            if (moneyLimit == PubEnum.YesOrNoEnum.NO.getValue()){
+                //金额无限制
+                amount = this.getAmount(productList, cateIds, priceAmount);
+                if (amount > 0){
+                    canUse = true;
+                }
+
+            } else if (moneyLimit == PubEnum.YesOrNoEnum.YES.getValue()){
+                //金额限制
+                amount = this.getAmount(productList, cateIds, priceAmount);
+                if (amount >= orderMoney){
+                    canUse = true;
+                }
+            }
+        }
+        if (canUse) {
+            double maxDeduction = amount < faceValue ? amount : faceValue; //代金券最多抵扣多少
+            couponData.put("maxDeduction", maxDeduction);
+            this.putUseCouponPercent(productList, amount, priceAmount);
+        }
+        return canUse;
+    }
+
+    /**
+     * 增加每个商品使用的代金券金额百分比
+     * @param productList 商品列表
+     * @param useCouponProductAmount 使用代金券总价
+     * @param priceAmount 价格标识--商品总价(为空时所有商品公用代金券)
+     */
+    private void putUseCouponPercent(List<Map> productList, Double useCouponProductAmount, Map<Long, Double>
+            priceAmount) {
+        for (Map product : productList){
+            Long priceId = MapUtil.getLong(product, "priceId");
+            if (priceAmount.containsKey(priceId)) {
+                Double productPrice = priceAmount.get(priceId);
+                product.put("useCouponPercent", NumberUtil.div(productPrice, useCouponProductAmount, 6));
+            }
+        }
+    }
+
+    @Override
+    public Double getAmount(List<Map> productList,  Set<Long> cateIds, Map<Long, Double> priceAmount) {
+        double productAmount = 0.0;
+        for (Map product : productList){
+            Long cateId = MapUtil.getLong(product, "cateId");
+            if (cateIds == null || cateIds.contains(cateId)){
+                double salesPrice = MapUtil.getDouble(product, "salesPrice");
+                int num = MapUtil.getInteger(product, "num");
+                double amount = NumberUtil.mul(salesPrice, num);
+                productAmount = NumberUtil.add(productAmount, amount);
+                if (priceAmount != null){
+                    priceAmount.put(MapUtil.getLong(product, "priceId"), amount);
+                }
+            }
+        }
+        return productAmount;
+    }
+
+    /**
+     * 获取用户代金券列表（分页）（APP）
+     *
+     * @param cusId    用户标识
+     * @param status   状态
+     * @param pageNo   页码
+     * @param pageSize 每页记录数
+     * @return
+     */
+    public Page<Map> findCusCoupon(Long cusId, Integer status, Integer pageNo, Integer pageSize){
+         Pageable pageable = new Pageable(pageNo, pageSize);
+        return couponCusDao.findCusCoupon(cusId, status, pageable);
+    }
+
+}

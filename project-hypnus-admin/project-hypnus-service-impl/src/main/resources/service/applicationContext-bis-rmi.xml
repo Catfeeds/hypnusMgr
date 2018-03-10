@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <!-- 系统全局设置服务设置 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="pubSetupBaseServiceImpl"/>
+        <property name="serviceName" value="pubSetupBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.base.pub.PubSetupBaseService"/>
+    </bean>
+
+    <!-- 缓存 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cacheServiceImpl"/>
+        <property name="serviceName" value="cacheServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.pub.CacheService"/>
+    </bean>
+
+
+</beans>

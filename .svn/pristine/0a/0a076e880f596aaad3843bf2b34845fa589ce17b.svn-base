@@ -1,0 +1,751 @@
+package com.catt.wfx.repository.entity.orderMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.Date;
+
+/**
+ * 订单信息表实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:34
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_CUS_ORDER")
+public class CusOrder extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 订单状态<p>
+	 * 1-待支付  2-待发货  3-待收货 4-已收货 5-已完成  6-已取消只有当此商品订单数量全部取消时，状态才是已取消。
+	 */
+	private Integer orderStatus;
+	/**
+	 * 订单编号
+	 */
+	private String orderCode;
+	/**
+	 * 商品金额
+	 */
+	private Double productAmount;
+	/**
+	 * 用户代金券标识
+	 */
+	private Long cusCouponId;
+	/**
+	 * 代金券抵扣金额<p><br>
+	 * 代金券不能抵扣运费，且代金券抵扣金额不一定等于代金券面值
+	 */
+	private Double couponMoney;
+	/**
+	 * 物流费用<p><br>
+	 * 目前暂时采用免邮的方式进行。
+	 */
+	private Double logisticsCost;
+	/**
+	 * 订单总额<p><br>
+	 * 等于商品金额+物流金额
+	 */
+	private Double totalAmount;
+	/**
+	 * 订单实付金额<p><br>
+	 * 订单实付金额 = 订单总额 - 代金券抵扣金额
+	 */
+	private Double totalPayAmount;
+	/**
+	 * 客户类型<p><br>
+	 * 1-会员 2-店主 3-主管 4-总代 5-区代 6-省代 7-市代
+	 */
+	private Integer cusType;
+	/**
+	 * 客户标识
+	 */
+	private Long cusId;
+	/**
+	 * 客户名称
+	 */
+	private String cusName;
+	/**
+	 * 签收时间<p><br>
+	 * 订单状态改为“已完成”时记录
+	 */
+	private Date signinDate;
+	/**
+	 * 退货有效期<p><br>
+	 * 单位：天
+	 */
+	private Integer returnValidity;
+	/**
+	 * 收件人姓名
+	 */
+	private String recipientName;
+	/**
+	 * 收件人电话
+	 */
+	private String recipientTel;
+	/**
+	 * 所属省份编码
+	 */
+	private String provinceId;
+	/**
+	 * 所属省份名称
+	 */
+	private String provinceName;
+	/**
+	 * 所属城市编码
+	 */
+	private String cityId;
+	/**
+	 * 所属城市名称
+	 */
+	private String cityName;
+	/**
+	 * 所属区/县编码
+	 */
+	private String regionId;
+	/**
+	 * 所属区/县名称
+	 */
+	private String regionName;
+	/**
+	 * 收件人地址
+	 */
+	private String recipientAddress;
+	/**
+	 * 第三方订单编号
+	 */
+	private String thirdCode;
+	/**
+	 * 订单类型<p><br>
+	 * 1-注册（用户成为店主时下单）2-分销（代理商给下级代理商发货）3-零售（平台、代理商、店主销售给终端用户）
+	 */
+	private Integer orderType;
+	/**
+	 * 订单来源<p><br>
+	 * 1-自有 2-淘宝 3-天猫 4-京东 5-eBay 6-Amazon
+	 */
+	private Integer source;
+	/**
+	 * 是否删除<p><br>
+	 * 1-否 2-是
+	 */
+	private Integer delFlag;
+	/**
+	 * 代理商标识
+	 */
+	private Long agentId;
+	/**
+	 * 店主标识
+	 */
+	private Long shopkeeperId;
+	/**
+	 * 店主名称
+	 */
+	private String shopkeeperName;
+	/**
+	 * 店铺标识
+	 */
+	private Long shopId;
+	/**
+	 * 是否结算同步<p><br>
+	 * 1-否 2-是
+	 */
+	private Integer settlementSyn;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+	/**
+	 * 备注<p><br>
+	 * 备注
+	 */
+	private String remark;
+	/**
+	 * 父订单标识（套餐时为空）
+	 */
+	private Long parentId;
+	/**
+	 * 厂家标识（套餐时为空）
+	 */
+	private Long factoryId;
+
+	@Column(name = "I_ORDER_STATUS")
+	public Integer getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(Integer orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
+	@Column(name = "S_ORDER_CODE", length = 128)
+	public String getOrderCode() {
+		return orderCode;
+	}
+
+	public void setOrderCode(String orderCode) {
+		this.orderCode = orderCode;
+	}
+
+	@Column(name = "I_PRODUCT_AMOUNT")
+	public Double getProductAmount() {
+		return productAmount;
+	}
+
+	public void setProductAmount(Double productAmount) {
+		this.productAmount = productAmount;
+	}
+
+	@Column(name = "I_CUS_COUPON_ID")
+	public Long getCusCouponId() {
+		return cusCouponId;
+	}
+
+	public void setCusCouponId(Long cusCouponId) {
+		this.cusCouponId = cusCouponId;
+	}
+
+	@Column(name = "I_COUPON_MONEY")
+	public Double getCouponMoney() {
+		return couponMoney;
+	}
+
+	public void setCouponMoney(Double couponMoney) {
+		this.couponMoney = couponMoney;
+	}
+
+	@Column(name = "I_LOGISTICS_COST")
+	public Double getLogisticsCost() {
+		return logisticsCost;
+	}
+
+	public void setLogisticsCost(Double logisticsCost) {
+		this.logisticsCost = logisticsCost;
+	}
+
+	@Column(name = "I_TOTAL_AMOUNT")
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	@Column(name = "I_TOTAL_PAY_AMOUNT")
+	public Double getTotalPayAmount() {
+		return totalPayAmount;
+	}
+
+	public void setTotalPayAmount(Double totalPayAmount) {
+		this.totalPayAmount = totalPayAmount;
+	}
+
+	@Column(name = "I_CUS_TYPE")
+	public Integer getCusType() {
+		return cusType;
+	}
+
+	public void setCusType(Integer cusType) {
+		this.cusType = cusType;
+	}
+
+	@Column(name = "I_CUS_ID")
+	public Long getCusId() {
+		return cusId;
+	}
+
+	public void setCusId(Long cusId) {
+		this.cusId = cusId;
+	}
+
+	@Column(name = "S_CUS_NAME", length = 32)
+	public String getCusName() {
+		return cusName;
+	}
+
+	public void setCusName(String cusName) {
+		this.cusName = cusName;
+	}
+
+	@Column(name = "D_SIGNIN_DATE")
+	public Date getSigninDate() {
+		return signinDate;
+	}
+
+	public void setSigninDate(Date signinDate) {
+		this.signinDate = signinDate;
+	}
+
+	@Column(name = "I_RETURN_VALIDITY")
+	public Integer getReturnValidity() {
+		return returnValidity;
+	}
+
+	public void setReturnValidity(Integer returnValidity) {
+		this.returnValidity = returnValidity;
+	}
+
+	@Column(name = "S_RECIPIENT_NAME", length = 32)
+	public String getRecipientName() {
+		return recipientName;
+	}
+
+	public void setRecipientName(String recipientName) {
+		this.recipientName = recipientName;
+	}
+
+	@Column(name = "S_RECIPIENT_TEL", length = 32)
+	public String getRecipientTel() {
+		return recipientTel;
+	}
+
+	public void setRecipientTel(String recipientTel) {
+		this.recipientTel = recipientTel;
+	}
+
+	@Column(name = "S_PROVINCE_ID", length = 32)
+	public String getProvinceId() {
+		return provinceId;
+	}
+
+	public void setProvinceId(String provinceId) {
+		this.provinceId = provinceId;
+	}
+
+	@Column(name = "S_PROVINCE_NAME", length = 128)
+	public String getProvinceName() {
+		return provinceName;
+	}
+
+	public void setProvinceName(String provinceName) {
+		this.provinceName = provinceName;
+	}
+
+	@Column(name = "S_CITY_ID", length = 32)
+	public String getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
+	}
+
+	@Column(name = "S_CITY_NAME", length = 128)
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+	@Column(name = "S_REGION_ID", length = 32)
+	public String getRegionId() {
+		return regionId;
+	}
+
+	public void setRegionId(String regionId) {
+		this.regionId = regionId;
+	}
+
+	@Column(name = "S_REGION_NAME", length = 128)
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+
+	@Column(name = "S_RECIPIENT_ADDRESS", length = 256)
+	public String getRecipientAddress() {
+		return recipientAddress;
+	}
+
+	public void setRecipientAddress(String recipientAddress) {
+		this.recipientAddress = recipientAddress;
+	}
+
+	@Column(name = "S_THIRD_CODE", length = 128)
+	public String getThirdCode() {
+		return thirdCode;
+	}
+
+	public void setThirdCode(String thirdCode) {
+		this.thirdCode = thirdCode;
+	}
+
+	@Column(name = "I_ORDER_TYPE")
+	public Integer getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(Integer orderType) {
+		this.orderType = orderType;
+	}
+
+	@Column(name = "I_SOURCE")
+	public Integer getSource() {
+		return source;
+	}
+
+	public void setSource(Integer source) {
+		this.source = source;
+	}
+
+	@Column(name = "I_DEL_FLAG")
+	public Integer getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(Integer delFlag) {
+		this.delFlag = delFlag;
+	}
+
+	@Column(name = "I_AGENT_ID")
+	public Long getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(Long agentId) {
+		this.agentId = agentId;
+	}
+
+	@Column(name = "I_SHOPKEEPER_ID")
+	public Long getShopkeeperId() {
+		return shopkeeperId;
+	}
+
+	public void setShopkeeperId(Long shopkeeperId) {
+		this.shopkeeperId = shopkeeperId;
+	}
+
+	@Column(name = "S_SHOPKEEPER_NAME", length = 32)
+	public String getShopkeeperName() {
+		return shopkeeperName;
+	}
+
+	public void setShopkeeperName(String shopkeeperName) {
+		this.shopkeeperName = shopkeeperName;
+	}
+
+	@Column(name = "I_SHOP_ID")
+	public Long getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(Long shopId) {
+		this.shopId = shopId;
+	}
+
+	@Column(name = "I_SETTLEMENT_SYN")
+	public Integer getSettlementSyn() {
+		return settlementSyn;
+	}
+
+	public void setSettlementSyn(Integer settlementSyn) {
+		this.settlementSyn = settlementSyn;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+	@Column(name = "S_REMARK", length = 1024)
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	@Column(name = "I_PARENT_ID")
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
+
+	@Column(name = "I_FACTORY_ID")
+	public Long getFactoryId() {
+		return factoryId;
+	}
+
+	public void setFactoryId(Long factoryId) {
+		this.factoryId = factoryId;
+	}
+
+	/**
+     * 订单状态枚举
+     * 1-待支付 2-待发货 3-待收货 4-已收货 5-已完成 6-已取消
+     */
+    public enum OrderStatus {
+
+        /**
+         * 待支付
+         */
+        ToPay(1, "待支付"),
+
+        /**
+         * 待发货
+         */
+        ToDelivery(2, "待发货"),
+
+        /**
+         * 待收货
+         */
+        ToTakeDelivery(3, "待收货"),
+        /**
+         * 已收货
+         */
+        TakedDelivery(4, "已收货"),
+        /**
+         * 已完成
+         */
+        Finish(5, "已完成"),
+
+        /**
+         * 已取消
+         */
+        Cancel(6, "已取消");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        OrderStatus(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static OrderStatus getEnum(int value) {
+            OrderStatus[] source = OrderStatus.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+    }
+
+    /**
+     * 订单类型<p><br>
+     * 1-注册（用户成为店主时下单）2-分销（代理商给下级代理商发货）3-零售（平台、代理商、店主销售给终端用户）
+     */
+    public enum OrderType {
+
+        /**
+         * 注册
+         */
+        Register(1, "注册"),
+
+        /**
+         * 分销
+         */
+        Distribution(2, "分销"),
+
+        /**
+         * 零售
+         */
+        Retail(3, "零售"),
+
+		/**
+		 * 续费
+		 */
+		Renew(4, "续费");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        OrderType(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static OrderType getEnum(int value) {
+            OrderType[] source = OrderType.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+    }
+
+    /**
+     * 订单来源<p><br>
+     * 1-自有 2-淘宝 3-天猫 4-京东 5-eBay 6-Amazon
+     */
+    public enum Source {
+
+        /**
+         * 待审核
+         */
+        Self(1, "自有");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        Source(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static Source getEnum(int value) {
+            Source[] source = Source.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+
+    }
+
+}
+

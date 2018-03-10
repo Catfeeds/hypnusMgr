@@ -1,0 +1,29 @@
+package com.catt.wfx.service.productMgr;
+
+
+import com.catt.wfx.repository.entity.productMgr.ProductCate;
+
+/**
+ * 商品分类设置接口
+ * 作者：袁幸成
+ * 时间：2017-1-9 2017-1-9 16:33:34
+ */
+public interface ProductCateService {
+
+    /**
+     * 逻辑删除分类及其子类
+     * @param cateIds 分类标识
+     */
+    void deleteCate(Long[] cateIds);
+
+    /**
+     * 保存商品类型
+     * @param userId 操作人标识
+     * @param id 分类标识
+     * @param name 分类名称
+     * @param parentId 分类父ID
+     * @return
+     */
+    ProductCate saveCate(Long userId, String userName, Long id, String name, Long parentId);
+}
+

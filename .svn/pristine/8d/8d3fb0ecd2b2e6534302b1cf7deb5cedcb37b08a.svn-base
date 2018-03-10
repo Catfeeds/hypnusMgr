@@ -1,0 +1,373 @@
+package com.catt.wfx.service.impl.productMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.bean.BeanUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductInfoDao;
+import com.catt.wfx.repository.dao.specialSale.ActivityProductRelDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.data.vo.productMgr.ProductVo;
+import com.catt.wfx.repository.entity.customerMgr.FactoryInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductAttr;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductPackage;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.repository.form.productMgr.ProductForm;
+import com.catt.wfx.service.base.customerMgr.FactoryInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductAttrBaseService;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPriceBaseService;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import com.catt.wfx.service.productMgr.ProductPackageService;
+import com.catt.wfx.service.productMgr.ProductPriceService;
+import com.catt.wfx.service.productMgr.ProductService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:商品管理服务接口实现
+ * Created by 2017-01-09  14:32.
+ * author: Zhou mingxiang
+ */
+@Service("productServiceImpl")
+public class ProductServiceImpl implements ProductService {
+
+    @Resource(name = "productInfoDaoImpl")
+    private ProductInfoDao productInfoDao;
+
+    //商品信息表服务接口
+    @Resource(name = "productInfoBaseServiceImpl")
+    private ProductInfoBaseService productInfoBaseService;
+
+    //商品扩展服务接口
+    @Resource(name = "productAttrBaseServiceImpl")
+    private ProductAttrBaseService productAttrBaseService;
+
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+    //套餐服务
+    @Resource(name = "productPackageServiceImpl")
+    private ProductPackageService productPackageService;
+
+    //商品价格服务
+    @Resource(name = "productPriceServiceImpl")
+    private ProductPriceService productPriceService;
+
+    //商品价格基础服务
+    @Resource(name = "productPriceBaseServiceImpl")
+    private ProductPriceBaseService productPriceBaseService;
+
+    //商品活动关联表Dao
+    @Resource(name = "activityProductRelDaoImpl")
+    private ActivityProductRelDao activityProductRelDao;
+
+    //厂家基础服务接口
+    @Resource(name = "factoryInfoBaseServiceImpl")
+    private FactoryInfoBaseService factoryInfoBaseService;
+
+    //系统全局设置服务接口
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+    /**
+     * 获取商品信息列表
+     *
+     * @param productForm
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getProductInfoByPage(ProductForm productForm, Pageable pageable) {
+        return productInfoDao.getProductInfoByPage(productForm, pageable);
+    }
+
+    /**
+     * 获取商品信息
+     *
+     * @param id 商品标识
+     * @return
+     */
+    public Map getProductInfoAndAttr(Long id) {
+        Map map = new HashMap<>();
+        ProductInfo productInfo = productInfoBaseService.find(id);
+        //获取商品扩展信息
+        List<ProductAttr> productAttrList = this.getProductAttrByProductId(id);
+        if (productAttrList != null && productAttrList.size() > 0) {
+            ProductAttr productAttr = productAttrList.get(0);
+            map.put("attrJson", productAttr.getAttrJson());
+            map.put("specJson", productAttr.getSpecJson());
+        }
+        map.put("status", productInfo.getStatus());
+        map.put("zhName", productInfo.getZhName());
+        map.put("barCode", productInfo.getBarCode());
+        map.put("cateId", productInfo.getCateId());
+        map.put("cateName", productInfo.getCateName());
+        map.put("introduce", productInfo.getIntroduce());
+        map.put("unit", productInfo.getUnit());
+        map.put("headPath", productInfo.getHeadPath());
+        map.put("brandName", productInfo.getBrandName());
+        map.put("shopSales", productInfo.getShopSales());
+
+        //厂家信息
+        Long factoryId = productInfo.getFactoryId();
+        String factoryName = "";
+        if(factoryId != null){
+            FactoryInfo factory = factoryInfoBaseService.find(factoryId);
+            factoryName = factory != null ? factory.getFactoryName() : "";
+        }
+        map.put("factoryId", factoryId);
+        map.put("factoryName", factoryName);
+
+        enumMgrService.transformEnum(map,
+                new ArrayList<EnumTransformData>() {
+                    {
+                        add(new EnumTransformData("T_PRODUCT_INFO",
+                                "I_UNIT", "unit",
+                                "unitName"));
+                    }
+                });
+        return map;
+    }
+
+    /**
+     * 修改商品信息
+     *
+     * @param productVo 商品信息vo
+     * @param coverpic  图片信息
+     * @param attrJson  商品参数Json
+     * @param specJson  商品规格Json
+     */
+    @Transactional
+    public void update(ProductVo productVo, String coverpic, String attrJson, String specJson) {
+        //修改商品基础信息
+        ProductInfo productInfo = productInfoBaseService.find(productVo.getId());
+        BeanUtil.copyProperties(productInfo, productVo);
+        productInfoBaseService.update(productInfo);
+
+        //保存商品图片
+        this.saveFiles(productInfo.getId(), coverpic);
+
+        //保存商品扩展信息
+        this.saveProductAttr(productInfo, attrJson, specJson);
+    }
+
+    /**
+     * 保存商品信息
+     *
+     * @param productVo 商品信息vo
+     * @param coverpic  图片信息
+     * @param attrJson  商品参数Json
+     * @param specJson  商品规格Json
+     */
+    @Transactional
+    public void save(ProductVo productVo, String coverpic, String attrJson, String specJson) {
+        ProductInfo productInfo = new ProductInfo();
+        BeanUtil.copyProperties(productInfo, productVo);
+        productInfo.setDelFlag(PubEnum.YesOrNoEnum.NO.getValue());
+        productInfo.setStatus(ProductInfo.Status.ToPublish.getValue());
+        productInfo.setType(ProductInfo.Type.Single.getValue());
+        productInfo.setShopSales(NumberUtil.INTEGER_ZERO);
+        productInfoBaseService.save(productInfo);
+
+        //保存商品图片
+        this.saveFiles(productInfo.getId(), coverpic);
+
+        //保存商品扩展信息
+        this.saveProductAttr(productInfo, attrJson, specJson);
+    }
+
+    /**
+     * 删除商品
+     *
+     * @param ids 商品标识集合
+     */
+    public void delete(Long[] ids) {
+        List<ProductInfo> productInfos = productInfoBaseService.findList(ids);
+        for (ProductInfo productInfo : productInfos) {
+            productInfo.setDelFlag(PubEnum.YesOrNoEnum.YES.getValue());
+        }
+
+        productInfoBaseService.saveOrUpdate(productInfos);
+    }
+
+    @Override
+    public Page<Map> findPageWithSaleInfo(Pageable pageable, String zhName, Long cateId, Integer status, Integer minStockNum) {
+        return productInfoDao.findPageWithSaleInfo(pageable, zhName, cateId, status, minStockNum);
+    }
+
+    public Page<Map> findPageWithSaleInfoByFactoryId(Pageable pageable, String zhName, Long cateId, Integer status, Integer minStockNum, Long factoryId) {
+        return   productInfoDao.findPageWithSaleInfoByFactoryId(pageable, zhName, cateId, status, minStockNum, factoryId);
+    }
+
+    @Override
+    public Page<Map> findPackagePage(Pageable pageable, String zhName, Integer status) {
+        Page<Map> page = productInfoDao.findPackagePage(pageable, zhName, status);
+        for (Map map : page.getContent()){
+            Long productId = MapUtil.getLong(map, "id");
+            ProductPrice productPrice = productPriceService.findPackagePrice(productId);
+            map.put("salesPrice", productPrice.getSalesPrice());
+            map.put("saleNum", productPrice.getSaleNum());
+        }
+        return page;
+    }
+
+    @Override
+    public Page<Map> findPublishPage(ProductForm productForm, Pageable pageable) {
+        Long defaultFactoryId = Long.parseLong(pubSetupBaseService.getSetupByCode(PubSetup.Code.selfSupport));
+        productForm.setSelfSellFactoryId(defaultFactoryId);
+        return productInfoDao.findPublishPage(productForm, pageable);
+    }
+
+    @Override
+    public void deletePackage(Long[] ids) {
+        List<ProductInfo> list = productInfoBaseService.findList(ids);
+        for (ProductInfo productInfo : list){
+            if (productInfo.getType() != ProductInfo.Type.Package.getValue()){
+                throw BaseException.errorByErrInfo("非法操作");
+            }
+            productInfo.setDelFlag(PubEnum.YesOrNoEnum.YES.getValue());
+        }
+        productInfoBaseService.saveOrUpdate(list);
+    }
+
+    @Override
+    @Transactional
+    public void savePackage(ProductInfo productInfo, String coverpic, List<ProductPackage> packageList) {
+        Long id = productInfo.getId();
+        if (id == null){
+            productInfo.setDelFlag(PubEnum.YesOrNoEnum.NO.getValue());
+            productInfo.setStatus(ProductInfo.Status.NoSale.getValue());
+            productInfo.setType(ProductInfo.Type.Package.getValue());
+            productInfoBaseService.save(productInfo);
+            id = productInfo.getId();
+        } else {
+            ProductInfo old = productInfoBaseService.find(id);
+            old.setZhName(productInfo.getZhName());
+            old.setCateId(productInfo.getCateId());
+            old.setCateName(productInfo.getCateName());
+            old.setIntroduce(productInfo.getIntroduce());
+            old.setHeadPath(productInfo.getHeadPath());
+            productPackageService.delPackageRelPrice(id);
+            productInfoBaseService.update(old);
+        }
+        //保存商品图片
+        this.saveFiles(id, coverpic);
+        productPackageService.savePackageRelPrice(id, packageList, productInfo.getPackagePrice());
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, Integer status) {
+        Date now = new Date();
+        List<ProductInfo> productInfoList = productInfoBaseService.findList(ids);
+        if (status == ProductInfo.Status.NoSale.getValue()){ //下架-判断是否关联特卖（结束时间大于当前时间）
+            List<Map> relList = activityProductRelDao.findActivityProductRelList(ids);
+            String productNames = "";
+            for (Map rel : relList){
+                for (ProductInfo productInfo : productInfoList){
+                    if (productInfo.getId().equals(MapUtil.getLong(rel, "productId"))){
+                        productNames += "【" + productInfo.getZhName() + "】";
+                    }
+                }
+            }
+            if (StringUtil.checkObj(productNames)){
+                throw BaseException.errorByErrInfo("商品" + productNames + "已在特卖中，不允许下架");
+            }
+        }
+        if (status == ProductInfo.Status.OnSale.getValue()){//上架-判断没有设置价格和库存数量
+            List<ProductPrice> prices = productPriceBaseService.findList(null, Arrays.asList(Filter.in("productId", ids)), null);
+            if(prices == null || prices.size() <= 0){
+                throw BaseException.errorByErrInfo("请先对商品设置价格库存");
+            }
+        }
+        for (ProductInfo productInfo : productInfoList){
+            productInfo.setStatus(status);
+            if (status == ProductInfo.Status.OnSale.getValue()){
+                productInfo.setShelveTime(now);
+            }
+        }
+        productInfoBaseService.saveOrUpdate(productInfoList);
+    }
+
+    /**
+     * 保存商品扩展信息
+     *
+     * @param productInfo 产品标识
+     * @param attrJson    商品参数
+     * @param specJson    商品规格
+     */
+    private void saveProductAttr(ProductInfo productInfo, String attrJson, String specJson) {
+        ProductAttr productAttr = new ProductAttr();
+
+        Long productId = productInfo.getId();
+        //获取商品扩展信息
+        List<ProductAttr> productAttrList = this.getProductAttrByProductId(productId);
+
+        if (productAttrList != null && productAttrList.size() > 0) {
+            productAttr = productAttrList.get(0);
+            productAttr.setAttrJson(attrJson);
+            productAttr.setSpecJson(specJson);
+            productAttrBaseService.update(productAttr);
+        } else {
+            productAttr.setProductId(productId);
+            productAttr.setAttrJson(attrJson);
+            productAttr.setSpecJson(specJson);
+            productAttr.setCreatedName(productInfo.getCreatedName());
+            productAttr.setCreatedId(productInfo.getCreatedId());
+            productAttrBaseService.save(productAttr);
+        }
+    }
+
+    /**
+     * 获取商品扩展信息
+     *
+     * @param productId
+     * @return
+     */
+    private List<ProductAttr> getProductAttrByProductId(Long productId) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("productId", productId));
+        List<ProductAttr> productAttrList = productAttrBaseService.findList(null, filters, null);
+        return productAttrList;
+    }
+
+    /**
+     * 保存图片信息
+     *
+     * @param productId 产品标识
+     * @param coverpic  图片地址
+     */
+    private void saveFiles(Long productId, String coverpic) {
+        if (StringUtil.isNotBlank(coverpic)) {
+            List<Map> list = JsonUtils.toList(coverpic, Map.class);
+            List<Long> list1 = new ArrayList<Long>();
+            for (Map map : list) {
+                list1.add(MapUtil.getLongValue(map, "attachmentId"));
+            }
+
+
+            attachmentBaseService.saveFiles(list1, productId, ProductInfo.TABLE_NAME, ProductInfo.PIC_PATH);
+        }
+    }
+}

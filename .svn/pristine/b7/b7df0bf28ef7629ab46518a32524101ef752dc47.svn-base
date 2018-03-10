@@ -1,0 +1,185 @@
+package com.catt.wfx.web.controller.admin.orderMgr;
+
+import com.catt.common.base.pojo.message.MessageConstants;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderPay;
+import com.catt.wfx.repository.form.orderMgr.CusOrderReturnFrom;
+import com.catt.wfx.service.orderMgr.CusOrderReturnService;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import com.catt.wfx.service.wechatReturn.WechatReturnService;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * Description:退货管理
+ * Created by 2017-02-22  17:24.
+ * author: Zhou mingxiang
+ */
+@Controller("admin.orderMgr.cusOrderReturnController")
+@RequestMapping(value = "/admin/orderMgr/cusOrderReturn")
+public class CusOrderReturnController extends BaseController {
+
+    //退货管理服务接口
+    @Resource(name = "cusOrderReturnServiceImpl")
+    private CusOrderReturnService cusOrderReturnService;
+
+    @Resource
+    private CusOrderService cusOrderService;
+
+    @Resource
+    private WechatReturnService wechatReturnService;
+
+    /**
+     * 跳转退货管理首页
+     */
+    @RequestMapping(value = "/index.html", method = RequestMethod.GET)
+    public String toIndex() {
+        return "/admin/orderMgr/returnGood/index";
+    }
+
+    /**
+     * 跳转退货详情页面
+     */
+    @RequestMapping(value = "/detail.html", method = RequestMethod.GET)
+    public String toDetail() {
+        return "/admin/orderMgr/returnGood/detail";
+    }
+
+    /**
+     * 跳转审核页面
+     */
+    @RequestMapping(value = "/examine.html", method = RequestMethod.GET)
+    public String toExamine() {
+        return "/admin/orderMgr/returnGood/examine";
+    }
+
+    /**
+     * 跳转退款页面
+     */
+    @RequestMapping(value = "/refund.html", method = RequestMethod.GET)
+    public String toRefund() {
+        return "/admin/orderMgr/returnGood/refund";
+    }
+
+    /**
+     * 获取退货信息列表
+     *
+     * @param cusOrderReturnFrom
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = "/getReturnGoodsByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getReturnGoodsByPage(CusOrderReturnFrom cusOrderReturnFrom, Pageable pageable) {
+        return cusOrderReturnService.getReturnGoodsByPage(cusOrderReturnFrom, pageable);
+    }
+
+    /**
+     * 获取退货信息详情
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    @RequestMapping(value = {"/getReturnGoodsDetail"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Map getReturnGoodsDetail(Long id) {
+        Map map = cusOrderReturnService.getReturnGoodsDetail(id);
+        map.put("returnLogList", cusOrderReturnService.getCusOrderReturnLogByList(id));
+        return map;
+    }
+
+    /**
+     * 退货管理--审核
+     *
+     * @param cusId       当前登录人员标识
+     * @param cusName     当前登录人员名称
+     * @param id          订单标识
+     * @param auditResult 审核结果
+     * @param auditDesc   审核意见
+     * @return
+     */
+    @RequestMapping(value = {"/examineReturn"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message examineReturn(@CurrentUser Long cusId, @CurrentUser("name") String cusName,
+                                 Long id, Integer auditResult, String auditDesc) {
+        cusOrderReturnService.examineReturn(cusId, cusName, id, auditResult, auditDesc);
+        return SUCCESS_MSG;
+    }
+
+
+    /**
+     * 收到退货
+     *
+     * @param cusId   当前登录人员标识
+     * @param cusName 当前登录人员名称
+     * @param id      订单标识
+     * @return
+     */
+    @RequestMapping(value = {"/receiveGoods"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message receiveGoods(@CurrentUser Long cusId, @CurrentUser("name") String cusName,
+                                Long[] id) {
+        cusOrderReturnService.receiveGoods(cusId, cusName, id);
+        return SUCCESS_MSG;
+    }
+
+
+    /**
+     * 获取退货信息详情
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    @RequestMapping(value = {"/getReturnTotalAmount"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Map getReturnTotalAmount(Long id) {
+        Map map = cusOrderReturnService.getReturnTotalAmount(id);
+        return map;
+    }
+
+    /**
+     * 退款---微信退款
+     */
+    @RequestMapping(value = "/returnMoney", method = RequestMethod.POST)
+    @ResponseBody
+    public Message returnMoney(@CurrentUser Long id, @CurrentUser("name") String name,
+                               @RequestParam Map<String, String> param) {
+        Assert.notNull(id);
+        param.put("operatorId", id + "");
+        param.put("operatorName", name);
+        param.put("businessType", "cusOrderReturnHandler");
+        CusOrderPay cusOrderPay = cusOrderService.getPayTypeByOrderId(param);
+
+        if (StringUtil.checkObj(cusOrderPay)) {
+            Integer payType = cusOrderPay.getPayType();
+            Double rechargeMoney = cusOrderPay.getRechargeMoney();
+            if(StringUtil.checkObj(payType)){
+                if (payType.equals(CusOrderPay.PayType.WeChatApp.getValue())
+                        || payType.equals(CusOrderPay.PayType.WeChatPublic.getValue())){
+                    wechatReturnService.returnMoney(param, null);
+                }
+            }else {
+                if (StringUtil.checkObj(rechargeMoney)) {
+                    cusOrderReturnService.rechargeReturn(param);
+                }
+            }
+            return new Message(MessageConstants.Type.success, "申请退款成功");
+        } else {
+            return new Message(MessageConstants.Type.warn, "申请退款失败，该订单不存在或者没有支付");
+        }
+
+    }
+
+}

@@ -1,0 +1,23 @@
+package com.catt.wfx.service.impl.base.customerMgr;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.customerMgr.CusCertificationDao;
+import com.catt.wfx.repository.entity.customerMgr.CusCertification;
+import com.catt.wfx.service.base.customerMgr.CusCertificationBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+@Service("cusCertificationBaseServiceImpl")
+public class CusCertificationBaseServiceImpl extends
+	BaseServiceImpl<CusCertification, Long> implements CusCertificationBaseService {
+
+	@Resource(name = "cusCertificationDaoImpl")
+	private CusCertificationDao cusCertificationDao;
+
+	@Resource
+	public void setBaseDao(CusCertificationDao cusCertificationDao) {
+		super.setBaseDao(cusCertificationDao);
+	}
+
+}

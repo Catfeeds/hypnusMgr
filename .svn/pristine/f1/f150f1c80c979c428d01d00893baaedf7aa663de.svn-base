@@ -1,0 +1,49 @@
+package com.catt.wfx.repository.dao.orderMgr.impl;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderLogDao;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLog;
+import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单流程信息Dao接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:34
+ * @version V1.0
+ */
+@Repository("cusOrderLogDaoImpl")
+public class CusOrderLogDaoImpl extends BaseDaoImpl<CusOrderLog, Long>
+		implements CusOrderLogDao {
+
+	/**
+	 * 获取订单对应的发货时间
+	 *
+	 * @param orderIds 订单标识
+	 * @return
+	 */
+	@Override
+	public List<Map> getDeliveryTimeByOrderId(List<Long> orderIds) {
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+        sql.append(" t1.I_ORDER_ID AS \"orderId\",");
+        sql.append(" t1.D_CREATE_DATE AS \"deliveryTime\"");
+		sql.append(" FROM  T_CUS_ORDER_LOG t1");
+		sql.append(" WHERE 1=1 ");
+
+		Map param = new HashMap<>();
+
+
+		sql.append(" AND t1.I_ACT = :act");
+		param.put("act", CusOrderLog.Act.Delivery.getValue());
+
+		sql.append(" AND t1.I_ORDER_ID IN (:orderIds)");
+		param.put("orderIds", orderIds);
+
+		return this.findListBySql(sql.toString(), param, Map.class);
+	}
+}

@@ -1,0 +1,15 @@
+package com.catt.wfx.service.base.extractOrder;
+
+import com.catt.common.base.service.BaseService;
+import com.catt.wfx.repository.entity.extractOrder.ExtractOrderLog;
+
+/**
+ * 提现流程信息服务接口
+ * 
+ * @author chen chusheng
+ * @date 2017-03-03 16:59:32
+ * @version V1.0
+ */
+public interface ExtractOrderLogBaseService extends BaseService<ExtractOrderLog, Long> {
+
+}

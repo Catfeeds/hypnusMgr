@@ -1,0 +1,44 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: houhuateng
+  Date: 2017/3/7
+  Time: 10:35
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <%@include file="/common/headModule2.jsp" %>
+    <title>代理商审核</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet" />
+    <link type="text/css" href="${path}/resources/css/shenhe.css" rel="stylesheet" />
+    <link type="text/css" href="${path}/resources/css/user_list.css" rel="stylesheet" />
+    <script src="${path}/resources/admin/js/customerMgr/agentInfo/auditFail.js" type="text/javascript"></script>
+</head>
+<body  class="bg-gray-light">
+<section class="content">
+    <div class="box box-solid">
+        <div class="box-body">
+            <input type="hidden" id="id" value="${id}"/>
+            <table class="massageTable" cellspacing="0">
+                <tr>
+                    <td width="100">审核结果：</td>
+                    <td>不通过</td>
+                </tr>
+                <tr>
+                    <td width="100">审核原因：</td>
+                    <td><textarea id="cause" class="textArea" width="100"></textarea></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="popBtDiv" style="height: 45px;">
+        <ul>
+            <li><a class="btnGrey" style=" margin-left:10px;" id="cancel">取&nbsp;&nbsp;消</a></li>
+            <li><a class="btnRed" id="save">提交</a></li>
+        </ul>
+    </div>
+</section>
+
+</body>
+</html>

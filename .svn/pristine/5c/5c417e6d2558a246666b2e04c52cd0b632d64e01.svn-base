@@ -1,0 +1,143 @@
+seajs.use(['$', 'msgBox', 'dataGridHelp', 'template','util', 'jquery.json'],
+    function ($, msgBox, dataGridHelp, template, util) {
+
+        var $dg = $('#tableModule');
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                    EventHandler.initTree();
+                    EventHandler.loadTree();
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                //初始化树形
+                initTree: function(){
+                    $dg.treegridData({
+                        id: 'id',
+                        parentColumn: 'parentId',
+                        type: "post", //请求数据的ajax类型
+                        url: path + '/admin/cusInfo/getTreePage',   //请求数据的ajax的url
+                        //ajaxParams: param, //请求数据的ajax的data属性
+                        expandColumn: null,//在哪一列上面显示展开按钮
+                        striped: false,   //是否各行渐变色
+                        bordered: true,  //是否显示边框
+                        expandAll: true,  //是否全部展开
+                        columns: [
+
+                            {title: '人员姓名', field: 'name'},
+                            {title: '手机号码', field: 'account'},
+                            {title: '团队人数', field: 'teamStaffNum'}
+
+                        ]
+
+                    });
+                },
+                //加载树形
+                loadTree: function(){
+                    var params = {};
+                    params.cusId = $("#cusId").val();
+                    $dg.treegridOption({ajaxParams: params});
+                    $dg.treegridData("reloadTree");
+                    $(window).triggerHandler('resize');
+                },
+
+
+
+
+
+                ////初始化清单树
+                //initDateTree : function(){
+                //    //表格高度初始化
+                //    $("#tableModule").css("min-height", "420px");
+                //    $("#tableModule").css("height", "auto");
+                //    var options = {
+                //        idField: 'id',
+                //        //checkbox: true,
+                //        treeField: 'name',
+                //        loadMsg: true,
+                //        pagination: false,//显示分页工具栏
+                //        rownumbers: true,
+                //        onExpand: function(row) {
+                //            $(window).triggerHandler('resize');
+                //        },
+                //        onDblClickRow: function (row) {
+                //            $dg.treegrid(row.state == 'closed' ? "expand" : "collapse", row.id);
+                //        },
+                //        columns: [[
+                //            {field: 'name', title: '人员姓名', width: '10%'},
+                //            {field: 'teamStaffNum', title: '团队人数', width: '6%'}
+                //        ]]
+                //    };
+                //    $dg.treegrid(options);
+                //
+                //
+                //},
+                ////加载清单树 数据
+                //loadTreeData: function(){
+                //    var cusId = $("#cusId").val();
+                //    if(cusId != null && cusId != "" && typeof(cusId) != "undefined" ){
+                //        DataHandler.loadTreeData({cusId: cusId}, function (backData) {
+                //
+                //            $('#teamStaffNum').html(backData.total);
+                //
+                //            if(backData != null && backData.rows != null && backData.rows.length > 0 ){
+                //                $dg.treegrid('loadData', backData);
+                //                $(window).triggerHandler('resize');
+                //            }
+                //
+                //
+                //            //删除空行
+                //            var table0 = $(".datagrid-view2").find("[class='datagrid-btable']")[0];
+                //            var spans = $(table0).find("span");
+                //            var spanTitle = $(spans)[2];
+                //            var titleVal = $(spanTitle).text();
+                //            if(titleVal == "undefined" || titleVal == "" || typeof(titleVal) == "undefined" ){
+                //                $(table0).remove();
+                //            }
+                //        });
+                //    }
+                //},
+
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                ///**
+                // * 获取清单树分页数据
+                // */
+                //loadTreeData: function (param, callback) {
+                //    $.post(path + '/admin/cusInfo/getTreePage', param, function (backData) {
+                //        callback(backData);
+                //    });
+                //},
+
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });
+

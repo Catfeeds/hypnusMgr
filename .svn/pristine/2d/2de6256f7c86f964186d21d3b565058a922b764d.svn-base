@@ -1,0 +1,119 @@
+package com.catt.wfx.web.controller.admin.extractOrder;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.crypto.RSAUtils;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.service.extractOrder.ExtractOrderService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 提现控制器
+ * 作者：陈楚笙
+ * 时间：2017-03-03
+ */
+@Controller("extractOrderController")
+@RequestMapping(value = "/admin/extractOrder")
+public class ExtractOrderController extends BaseController {
+
+    //提现服务接口
+    @Resource(name = "extractOrderServiceImpl")
+    private ExtractOrderService extractOrderService;
+
+    /**
+     * 私钥
+     */
+    static PrivateKey privateKey;
+
+    /**
+     * 私钥Base64文本
+     */
+    @Value("${system.rsa.key.private}")
+    private String priKey;
+
+    public String getPriKey() {
+        return priKey;
+    }
+
+    public void setPriKey(String priKey) {
+        this.priKey = priKey;
+    }
+
+    /**
+     * RSA解密
+     *
+     * @param data
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     * @throws InvalidKeySpecException
+     */
+    public String decrypt(String data) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+        if (privateKey == null) {
+            privateKey = RSAUtils.genPrivateKey(getPriKey());
+        }
+
+        return RSAUtils.decrypt(privateKey, data);
+    }
+
+    /**
+     * 获取提现管理分页数据
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/getPageForApp")
+    @ResponseBody
+    public Page<Map> getPageForApp(@RequestParam Map<String, Object> params) {
+        return extractOrderService.getPageForApp(params);
+    }
+
+    /**
+     * 申请提现
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/applyExtract")
+    @ResponseBody
+    public Message applyExtract(@RequestParam Map<String, Object> params, @CurrentUser("id") Long cusId, @CurrentUser("name") String cusName)
+            throws Exception {
+        params.put("cusId", cusId);
+        params.put("cusName", cusName);
+        params.put("branch", decrypt(MapUtil.getString(params, "branch")));//开户支行
+        params.put("bankAccount", decrypt(MapUtil.getString(params, "bankAccount")));//账户名称
+        params.put("bankCard", decrypt(MapUtil.getString(params, "bankCard")));//银行卡号
+        Map<String, Object> result = extractOrderService.applyExtract(params);
+        if(MapUtil.getInteger(result, "result").intValue() == PubEnum.YesOrNoEnum.YES.getValue()){
+            return Message.success("");
+        }else{
+            return Message.warn(MapUtil.getString(result, "reason"));
+        }
+    }
+
+    /**
+     * 获取提现进度
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = {"/getStepsForApp"}, method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map> getStepsForApp(Long id){
+        return extractOrderService.getSteps(id);
+    }
+}

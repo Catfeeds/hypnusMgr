@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="../sea-modules/seajs/sea.js"></script>
+    <script type="text/javascript" src="../sea-modules/seajs/seajs-preload.js"></script>
+    <script type="text/javascript" src="../sea-modules/seajs/init.js"></script>
+    <!--<script type="text/javascript" src="../js/index.js"></script>-->
+    <script type="text/javascript">
+        seajs.use(['$','msgBox'],function ($, msgBox) {
+            msgBox.tips('33333333');
+            window.setTimeout(function () {
+//                * 	title:'窗口标题',
+//                    * 	url:'http地址',
+//                    * 	width:'宽度px',
+//                    * 	height:'高度px',
+//                    * 	success:'成功打开时的回调函数,会回传当前的窗口标识ID',
+//                    * 	close:'窗口关闭的时候，回调函数'
+                msgBox.exWindow.open({title:'百度', url:'http://www.baidu.com',width:'800px', height:'600px'});
+            }, 2000);
+        });
+    </script>
+    <title>uilib常用插件实例及教程</title>
+</head>
+<body>
+<h2 align="center">uilib常用插件实例及教程</h2>
+<input type="button" id="json" value="json插件实例及教程"/></br>
+<input type="button" id="msgBox" value="msgBox插件实例及教程"/></br>
+<input type="button" id="my97" value="my97插件实例及教程"/></br>
+<input type="button" id="template" value="template插件实例及教程"/></br>
+<input type="button" id="UEditor" value="UEditor插件实例及教程"/></br>
+<input type="button" id="util" value="util插件实例及教程"/></br>
+<input type="button" id="validation" value="validation插件实例及教程"/></br>
+
+</body>
+</html>

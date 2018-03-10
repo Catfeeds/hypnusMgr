@@ -1,0 +1,110 @@
+package com.catt.wfx.service.impl.perforMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.wfx.repository.dao.couponMgr.CouponCusDao;
+import com.catt.wfx.repository.dao.customerMgr.CusInfoDao;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementOrderDetailDao;
+import com.catt.wfx.service.perforMgr.DirectorPerforService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:主管绩效接口实现
+ * Created by 2017-03-08  11:32.
+ * author: Zhou mingxiang
+ */
+@Service("directorPerforServiceImpl")
+public class DirectorPerforServiceImpl implements DirectorPerforService {
+
+    //用户信息Dao接口
+    @Resource(name = "cusInfoDaoImpl")
+    private CusInfoDao cusInfoDao;
+
+    //订单结算统计Dao接口
+    @Resource(name = "settlementOrderDetailDaoImpl")
+    private SettlementOrderDetailDao settlementOrderDetailDao;
+
+    //用户代金券Dao接口
+    @Resource(name = "couponCusDaoImpl")
+    private CouponCusDao couponCusDao;
+
+    /**
+     * 获取主管绩效
+     *
+     * @param leaderName 主管昵称
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getDirectorPerforByPage(String leaderName, Pageable pageable) {
+        //获取主管信息
+        Page<Map> mapPage = cusInfoDao.getDirectorInfoByPage(leaderName, pageable);
+        List<Map> mapList = mapPage.getContent();
+
+        Map<Long, Map> mapMap = new HashMap<>();
+        List<Long> cusIds = new ArrayList<>();
+
+        if (mapList != null && mapList.size() > 0) {
+            for (Map map : mapList) {
+                Long cusId = MapUtil.getLong(map, "id");
+                cusIds.add(cusId);
+
+
+                //初始化参数，制造空壳
+                map.put("orderNum", 0);     //销售订单数
+                map.put("salesAmount", 0);  //销售金额
+                map.put("couponNum", 0);  //代金券数量
+                map.put("faceValue", 0);  //代金券面值
+                mapMap.put(cusId, map);
+            }
+
+            //查询主管对应的团队销售订单数量和金额
+            List<Map> cusOrderInfo = settlementOrderDetailDao.getDirectorOrderNumAndMoney(cusIds);
+            if (cusOrderInfo != null && cusOrderInfo.size() > 0) {
+                for (Map map : cusOrderInfo) {
+                    Long leaderId = MapUtil.getLong(map, "leaderId");
+                    if (mapMap.containsKey(leaderId)) {
+                        Map map1 = mapMap.get(leaderId);
+
+                        map1.putAll(map);
+                        map1.put("salesAmount", NumberUtil.format(MapUtil.getDouble(map, "salesAmount")));
+
+                    }
+                }
+            }
+            //查询主管代金券信息
+            List<Map> cusCouponInfo =  couponCusDao.getCouPonCus(cusIds);
+            if (cusCouponInfo != null && cusCouponInfo.size() > 0) {
+                for (Map map : cusCouponInfo) {
+                    Long cusId = MapUtil.getLong(map, "cusId");
+                    if (mapMap.containsKey(cusId)) {
+                        Map map1 = mapMap.get(cusId);
+                        map1.putAll(map);
+                        map1.put("faceValue", NumberUtil.format(MapUtil.getDouble(map, "faceValue")));
+                    }
+                }
+            }
+
+
+            //遍历map集合，将数据放入list集合中
+            List<Map> mapList1 = new ArrayList<>();
+            if (!mapMap.isEmpty()) {
+                for (Long key : mapMap.keySet()) {
+                    mapList1.add(mapMap.get(key));
+                }
+            }
+            mapPage.setContent(mapList1);
+        }
+
+
+
+        return mapPage;
+    }
+}

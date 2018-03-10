@@ -1,0 +1,87 @@
+package com.catt.wfx.service.impl.basicConfig;
+
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.entity.basicConfig.PlatIncomeSet;
+import com.catt.wfx.service.base.basicConfig.PlatIncomeSetBaseService;
+import com.catt.wfx.service.basicConfig.PlatIncomeSetService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service("platIncomeSetServiceImpl")
+public class PlatIncomeSetServiceImpl implements PlatIncomeSetService {
+
+    @Resource(name = "platIncomeSetBaseServiceImpl")
+    private PlatIncomeSetBaseService platIncomeSetBaseService;
+
+    /**
+     * 获取设置信息
+     * sets : 收益梯度
+     * type : 收益类型
+     */
+    @Override
+    public Map getPlatIncomeMap() {
+        List<Order> orders = new ArrayList<>();
+        orders.add(Order.asc("orderNum"));
+        List<PlatIncomeSet> setList = platIncomeSetBaseService.findList(null, null, orders);
+        Map<String, Object> result = new HashMap<>();
+        if(setList != null && setList.size() > 0){
+            result.put("type", setList.get(0).getType());
+            result.put("sets", setList);
+        }
+        return result;
+    }
+
+    /**
+     * 保存设置信息
+     *
+     * @param param
+     */
+    @Override
+    @Transactional
+    public void saveSet(Map<String, Object> param) {
+        Long userId = MapUtil.getLong(param, "userId");
+        String userName = MapUtil.getString(param, "userName");
+        Integer type = MapUtil.getInteger(param, "type");
+        String stepJson = MapUtil.getString(param, "stepJson");
+        if(!StringUtil.checkObj(stepJson)){
+            return;
+        }
+        List<String> stepList = JsonUtils.toList(stepJson, String.class);
+        List<PlatIncomeSet> setList = new ArrayList<>();
+        for(String step : stepList){
+            if(StringUtil.checkObj(step) && step.indexOf("-") != -1){//以 - 隔开 订单数和提取金额
+                String[] steps = step.split("-");
+                if(steps != null && steps.length >= 2) {
+                    PlatIncomeSet set = new PlatIncomeSet();
+                    set.setCreatedId(userId);
+                    set.setCreatedName(userName);
+                    set.setOrderNum(Integer.parseInt(steps[0]));
+                    set.setOrderMoney(Double.parseDouble(steps[1]));
+                    set.setType(type);
+                    setList.add(set);
+                }
+            }
+        }
+        if(setList.size() > 0) {
+            List<PlatIncomeSet> setlistAll = platIncomeSetBaseService.findAll();
+            if(setlistAll != null && setlistAll.size() > 0) {
+                Long[] delIds = new Long[setlistAll.size()];
+                int delCount = 0;
+                for (PlatIncomeSet s : setlistAll) {
+                    delIds[delCount++] = s.getId();
+                }
+                platIncomeSetBaseService.delete(delIds);
+            }
+            platIncomeSetBaseService.saveOrUpdate(setList);
+        }
+    }
+}

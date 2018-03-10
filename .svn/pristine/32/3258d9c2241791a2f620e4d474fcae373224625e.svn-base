@@ -1,0 +1,22 @@
+package com.catt.wfx.service.order;
+
+/**
+ * 订单服务接口
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-2-27 14:50:07
+ */
+public interface OrderService {
+
+    /**
+     * 处理已签收订单，超过退货时间改成已完成、结算店主利润提成
+     */
+    void handleSignInOrder();
+
+
+    /**
+     * 处理超时订单
+     */
+    void handleTimeoutOrder();
+}

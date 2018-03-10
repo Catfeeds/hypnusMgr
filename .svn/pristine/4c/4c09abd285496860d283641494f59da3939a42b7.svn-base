@@ -1,0 +1,31 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.orderMgr.CusOrderReturnService;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
+
+
+/**
+ * Description:
+ * Created by 2017-02-28  16:31.
+ * author: Zhou mingxiang
+ */
+public class CusOrderReturnServiceImplTest extends SpringTest{
+
+    @Resource
+    private CusOrderReturnService cusOrderReturnService;
+
+    @Test
+    public void testRechargeReturn() throws Exception {
+        Map<String, String> param = new HashMap<String, String>();
+        param.put("returnId", 530538051911286784L+"");
+        param.put("returnMoney", 230D+"");
+        param.put("operatorId", 1L + "");
+        param.put("operatorName", "系统管理员");
+        cusOrderReturnService.rechargeReturn(param);
+    }
+}

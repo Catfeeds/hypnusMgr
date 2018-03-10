@@ -1,0 +1,47 @@
+package com.catt.hypnus.repository.dao.customerMgr;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.hypnus.repository.entity.customerMgr.CusAccountDetail;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 账户明细记录Dao接口
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-02-10 14:30:14
+ */
+public interface CusAccountDetailDao extends BaseDao<CusAccountDetail, Long> {
+    /**
+     *获取交易记录列表（分页）(APP)
+     *
+     * @param cusId           当前登录用户ID
+     * @param types            交易类型
+     * @param createDateBegin 交易起始时间
+     * @param createDateEnd   交易结束时间
+     * @param pageable
+     * @return
+     */
+    Page<Map> findTransactionRecord(Long cusId, List<Long> types, Date createDateBegin,
+                                    Date createDateEnd, Pageable pageable);
+
+    /**
+     * 获取我的收益统计（分页）
+     * @param cusId
+     * @param pageNo
+     * @return
+     */
+    Page<Map> getMyIncomeStatistics(Long cusId, Integer pageNo, Integer pageSize);
+
+    /**
+     * 根据交易类型统计金额
+     * @return
+     */
+    List<Map> countByType();
+}

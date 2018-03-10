@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd"
+       default-lazy-init="true">
+    
+    <!-- 订单在线支付处理器 -->
+    <bean id="cusOrderPayHandler" name="cusOrderPayHandler"
+          class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+        <property name="lookupStubOnStartup" value="false"/>
+        <property name="refreshStubOnConnectFailure" value="true"/>
+        <property name="serviceUrl" value="rmi://${rmi.mobile.server.hostname}:${rmi.mobile.registryPort}/cusOrderPayHandler"/>
+        <property name="serviceInterface" value="com.catt.common.module.pay.service.event.PayEventListener"/>
+    </bean>
+
+    <!-- 店铺续费（需要购买套餐）支付处理器 -->
+    <bean id="shopRenewPayHandler" name="shopRenewPayHandler"
+          class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+        <property name="lookupStubOnStartup" value="false"/>
+        <property name="refreshStubOnConnectFailure" value="true"/>
+        <property name="serviceUrl" value="rmi://${rmi.mobile.server.hostname}:${rmi.mobile.registryPort}/shopRenewPayHandler"/>
+        <property name="serviceInterface" value="com.catt.common.module.pay.service.event.PayEventListener"/>
+    </bean>
+
+    <!-- 注册（需要购买套餐）支付处理器 -->
+    <bean id="buyPackagePayHandler" name="buyPackagePayHandler"
+          class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+        <property name="lookupStubOnStartup" value="false"/>
+        <property name="refreshStubOnConnectFailure" value="true"/>
+        <property name="serviceUrl" value="rmi://${rmi.mobile.server.hostname}:${rmi.mobile.registryPort}/buyPackagePayHandler"/>
+        <property name="serviceInterface" value="com.catt.common.module.pay.service.event.PayEventListener"/>
+    </bean>
+
+</beans>

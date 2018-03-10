@@ -1,0 +1,28 @@
+package com.catt.wfx.service.base.basicConfig;
+
+import com.catt.common.base.service.BaseService;
+import com.catt.wfx.repository.entity.basicConfig.RefundsSet;
+
+/**
+ * 退货设置服务接口
+ *
+ * @author chen chusheng
+ * @version V1.0
+ * @date 2017-02-06 14:09:15
+ */
+public interface RefundsSetBaseService extends BaseService<RefundsSet, Long> {
+
+    /**
+     * 获取当前的退货设置
+     *
+     * @return
+     */
+    RefundsSet getCurrentSet();
+
+    /**
+     * 获取当前设置的退货天数
+     *
+     * @return
+     */
+    Integer getRefundDays();
+}

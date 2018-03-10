@@ -1,0 +1,80 @@
+package com.catt.wfx.service.impl.productMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.form.productMgr.ProductFromApp;
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.productMgr.ProductService;
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:
+ * Created by 2017-02-09  17:09.
+ * author: Zhou mingxiang
+ */
+public class ProductServiceImplTest extends SpringTest {
+
+    @Resource(name = "productServiceImpl")
+    private ProductService productService;
+
+    /**
+     * 获取商品信息列表(app接口)
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testFindProductInfoByPage() throws Exception {
+        Pageable pageable = new Pageable(1, 15);
+        ProductFromApp productFromApp = new ProductFromApp();
+        productFromApp.setCateId(1L);
+        productFromApp.setCusId(1L);
+        productFromApp.setIsInShop(1);
+        productFromApp.setWechat(false);
+        productFromApp.setZhName(null);
+        Page<Map> mapPage = productService.findProductInfoByPage(productFromApp, pageable);
+        System.out.print("############"+mapPage);
+    }
+
+    /**
+     * 获取商品信息列表(app接口)
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testFindProductInfoDetail() throws Exception {
+        Map map = productService.findProductInfoDetail(1L, 522656170939252736L, null);
+        System.out.print("############"+map);
+    }
+
+    /**
+     * 获取商品规格及价格列表(app接口)
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testFindSpecAndPrice() throws Exception {
+        Map map = productService.findSpecAndPrice(522656170939252736L, null, null);
+        System.out.print("############"+map);
+    }
+
+    /**
+     * 获取所有商品类型列表
+     *
+     * @throws Exception
+     */
+    @Test
+    public void getAllCate() throws Exception {
+        List<Map> list = productService.getAllCate();
+        Assert.assertNotNull(list);
+        System.out.println("=====================================================");
+        System.out.println("=====================================================");
+        System.out.println("cateList: "+list);
+        System.out.println("=====================================================");
+        System.out.println("=====================================================");
+    }
+}

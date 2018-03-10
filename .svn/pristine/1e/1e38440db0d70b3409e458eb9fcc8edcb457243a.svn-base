@@ -1,0 +1,187 @@
+define('/admin/wechat/cusOrder/index.html', ['$', 'template', 'msgBox'], function (require, exports, module) {
+        var $ = require('$');
+        var template = require('template');
+        var msgBox = require('msgBox');
+        var currentForm = 'currentForm';
+
+        function OrderList() {
+        }
+
+        /**
+         * 初始化
+         */
+        OrderList.prototype.init = function () {
+            var self = this;
+            self.listCard = $("#list-card");
+            self.listParent = $("#list-parent");
+            self.orderStatus = 0;
+
+            self.listParent.height($("body").height() - $(".top").outerHeight() - $(".goodsType").outerHeight());
+            self.listCard.height(self.listParent.height() + 50);
+
+            self.isRefresh = true;//状态标记:下拉刷新->true  滑动加载->false
+            self.isLoading = false;//记录是否在加载中
+            self.container = $('#container');//列表父控件
+            self.pageSize = 6;//一页存储item数量
+            self.pageNo = 0;//当前页码
+
+            self.bindEvent();
+            self.initRefresh();
+            self.loadData();
+        };
+
+        /**
+         * 初始化滑动加载
+         */
+        OrderList.prototype.initLoading = function () {
+            var self = this;
+            self.listCard.infinite(80).on("infinite", function () {
+                if (self.isLoading) return;
+                self.isLoading = true;
+                self.isRefresh = false;
+                self.loadData();
+            });
+        };
+
+        /**
+         * 初始化下拉刷新
+         */
+        OrderList.prototype.initRefresh = function () {
+            var self = this;
+            self.listCard.pullToRefresh(80).on("pull-to-refresh", function () {
+                if (self.isLoading) return;
+                self.pageNo = 0;//重置页码
+                self.isLoading = true;
+                self.isRefresh = true;
+                self.loadData();
+            });
+        };
+
+        /**
+         * 事件绑定
+         */
+        OrderList.prototype.bindEvent = function () {
+            var self = this;
+            //tab点击
+            $(".xw_li").click(function () {
+                if ($(this).hasClass('lion')) {
+                    return;
+                }
+                $(this).parents(".goodsType").find('.xw_li').removeClass("lion");
+                $(this).addClass("lion");
+
+                self.orderStatus = $(this).parents(".goodsType").find('.xw_li').index(this);
+                //重新刷新
+                self.pageNo = 0;//重置页码
+                self.isLoading = true;
+                self.isRefresh = true;
+                //清空列表
+                self.container.empty();
+                self.loadData();
+                //将滑动加载清空
+                self.listCard.destroyInfinite();
+                $('.weui-infinite-scroll').empty();
+
+                $(this).parents(".goodsType").parents(".xw_mainBox").find(".xw_goodsList").hide();
+                $(this).parents(".goodsType").parents(".xw_mainBox").find(".xw_goodsList").eq(self.orderStatus).show();
+            });
+        };
+
+        /**
+         * 加载数据
+         * @param $form
+         */
+        OrderList.prototype.loadData = function () {
+            var self = this;
+            //如果当前为刷新,则设置页数为1    若为加载,则为当前页数加1
+            var params;
+            if (self.orderStatus == 0) {
+                params = {pageNo: self.pageNo + 1, pageSize: self.pageSize};
+            } else if (self.orderStatus == 4) {
+                params = {pageNo: self.pageNo + 1, pageSize: self.pageSize, orderStatus: '4, 5'};
+            } else {
+                params = {pageNo: self.pageNo + 1, pageSize: self.pageSize, orderStatus: self.orderStatus};
+            }
+
+            $.get(path + '/admin/wechat/cusOrder/findMyOrderPage', params, function (data) {
+                //数据获取完成,加载状态为false
+                self.isLoading = false;
+
+                //如果为刷新状态,重置刷新状态,页面清空
+                if (self.isRefresh) {
+                    self.container.empty();
+                    self.listCard.pullToRefreshDone();
+                }
+
+                var html = template('templateList', data);
+                if (html) {//有数据,此时需要重置页码
+                    self.loading = false;
+                    self.pageNo = data.pageNo;
+
+                    self.container.append(html);
+
+                    var count = data.pageNo * data.pageSize;
+                    //实际item数量 大于 当前页数可以存储最大item数量  -> 即需要滑动加载更多
+                    if (count < data.total) {
+                        //等首次数据加载完成之后,初始化滑动加载
+                        if (data.pageNo == 1) {
+                            $('.weui-infinite-scroll').empty()
+                                .html('<div class="infinite-preloader"></div> 正在努力加载...');
+                            self.initLoading();
+                        }
+                    } else {//隐藏加载更多(销毁,或者隐藏)
+                        self.listCard.destroyInfinite();
+                        $('.weui-infinite-scroll').empty().html(lastPageText);
+                    }
+                } else {
+                    $('.weui-infinite-scroll').empty().html(emptyDataText);
+                }
+                //取消订单点击
+                $(".cancel[init!='true']").click(function (event) {
+                    var e = event || window.event;
+                    var $this = $(this);
+                    $.confirm("是否取消该订单", function () {//确定
+                        var params = {orderId: $this.attr("current")};
+                        $.post(path + '/admin/wechat/cusOrder/cancelCusOrder', params, function (data) {
+                            if ("success" == data.type) {
+                                msgBox.tips("操作成功");
+                                window.location.reload();
+                            } else {
+                                msgBox.warn(data.content);
+                            }
+                        });
+                    }, function () {//取消
+                    });
+                    e.stopPropagation();
+                }).attr("init", "true");
+                //去支付点击
+                $(".topay[init!='true']").click(function (event) {
+                    var e = event || window.event;
+                    var $this = $(this);
+                    window.location.href = path + '/admin/wechat/weChatPay/pay.html?shopId=' + shopId + '&orderId=' + $this.attr("current");
+                    e.stopPropagation();
+                }).attr("init", "true");
+                //查看物流点击
+                $(".check[init!='true']").click(function (event) {
+                    var e = event || window.event;
+                    var $this = $(this);
+
+                    var exCom = $this.attr("currentLogisticsType");
+                    var exCode = $this.attr("currentLogisticsCode");
+
+                    e.stopPropagation();
+
+                    window.location.href = path + '/admin/wechat/express/view/detail/' + exCom + '/' + exCode;
+                }).attr("init", "true");
+                $(window).triggerHandler('resize');
+            });
+        };
+        module.exports = new OrderList();
+    }
+);
+
+seajs.use(['$', '/admin/wechat/cusOrder/index.html'], function ($, apList) {
+    $(function () {
+        apList.init();
+    });
+});

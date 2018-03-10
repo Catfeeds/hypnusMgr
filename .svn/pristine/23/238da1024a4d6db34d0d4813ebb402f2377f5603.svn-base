@@ -1,0 +1,140 @@
+package com.catt.wfx.repository.entity.settlementMgr;
+
+import com.catt.common.base.repository.annotation.SafeLock;
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.catt.common.base.repository.listener.SafeLockListener;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Table;
+
+/**
+ * 平台账户信息实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-23 11:38:28
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_SETTLEMENT_PLAT")
+@EntityListeners({SafeLockListener.class})
+@SafeLock(lockFields = {"id", "totalNum", "totalMoney", "accountMoney", "applyMoney", "getMoney"})
+public class SettlementPlat extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 订单总数量
+	 */
+	private Integer totalNum;
+	/**
+	 * 订单总金额
+	 */
+	private Double totalMoney;
+	/**
+	 * 账户金额<p><br>
+	 * (单位：元)
+	 */
+	private Double accountMoney;
+	/**
+	 * 申请金额
+	 */
+	private Double applyMoney;
+	/**
+	 * 提现金额
+	 */
+	private Double getMoney;
+	/**
+	 * 校验字段<p><br>
+	 * 用于验证数据是否被异常修改
+	 */
+	private String validNo;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+
+	@Column(name = "I_TOTAL_NUM")
+	public Integer getTotalNum() {
+		return totalNum;
+	}
+
+	public void setTotalNum(Integer totalNum) {
+		this.totalNum = totalNum;
+	}
+
+	@Column(name = "I_TOTAL_MONEY")
+	public Double getTotalMoney() {
+		return totalMoney;
+	}
+
+	public void setTotalMoney(Double totalMoney) {
+		this.totalMoney = totalMoney;
+	}
+
+	@Column(name = "I_ACCOUNT_MONEY")
+	public Double getAccountMoney() {
+		return accountMoney;
+	}
+
+	public void setAccountMoney(Double accountMoney) {
+		this.accountMoney = accountMoney;
+	}
+
+	@Column(name = "I_APPLY_MONEY")
+	public Double getApplyMoney() {
+		return applyMoney;
+	}
+
+	public void setApplyMoney(Double applyMoney) {
+		this.applyMoney = applyMoney;
+	}
+
+	@Column(name = "I_GET_MONEY")
+	public Double getGetMoney() {
+		return getMoney;
+	}
+
+	public void setGetMoney(Double getMoney) {
+		this.getMoney = getMoney;
+	}
+
+	@Column(name = "S_VALID_NO", length = 256)
+	public String getValidNo() {
+		return validNo;
+	}
+
+	public void setValidNo(String validNo) {
+		this.validNo = validNo;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+}
+

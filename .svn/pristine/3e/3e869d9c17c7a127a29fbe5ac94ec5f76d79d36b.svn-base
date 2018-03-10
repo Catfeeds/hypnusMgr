@@ -1,0 +1,13 @@
+#!/bin/bash
+
+BASEDIR=$(dirname $0)
+cd $BASEDIR
+
+#nohup java  -Dproject-wfx-settlement-service-impl -jar project-wfx-settlement-service-impl.jar >/dev/null 2>&1 &
+
+#如果错误信息也不想要的话
+#nohup java -Dproject-wfx-settlement-service-impl -jar project-wfx-settlement-service-impl.jar >/dev/null 2>&1 &
+
+#将错误输出到log文件中
+nohup java -Dproject-wfx-settlement-service-impl -jar project-wfx-settlement-service-impl.jar >/dev/null 2>out.log &
+

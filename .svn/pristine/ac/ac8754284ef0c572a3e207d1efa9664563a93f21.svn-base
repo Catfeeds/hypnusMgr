@@ -1,0 +1,138 @@
+package com.catt.wfx.service.impl.productMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductPackageDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPriceBaseService;
+import com.catt.wfx.service.productMgr.ProductPackageService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商品价格定义服务接口实现
+ * 作者：袁幸成
+ * 时间：2017-1-18 9:04:28
+ */
+@Service("productPackageServiceImpl")
+public class ProductPackageServiceImpl implements ProductPackageService {
+
+    @Resource(name = "productPriceBaseServiceImpl")
+    private ProductPriceBaseService productPriceBaseService;
+
+    @Resource(name = "productInfoBaseServiceImpl")
+    private ProductInfoBaseService productInfoBaseService;
+
+    @Resource(name = "productPackageDaoImpl")
+    private ProductPackageDao productPackageDao;
+
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    // 公共配置服务
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+
+    /**
+     * 获取开店套餐详情
+     *
+     * @return 唯一一个上架的开店套餐
+     */
+    @Override
+    public Map getPackageDetail() {
+        // 查询已上架的开店套餐
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("type", ProductInfo.Type.Package.getValue()));
+        filters.add(Filter.eq("status", ProductInfo.Status.OnSale.getValue()));
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        List<ProductInfo> packages = productInfoBaseService.findList(null, filters, null);
+        if (CollectionUtil.isNotEmpty(packages)) {
+            Map result = new HashMap<>();
+
+            //获取图片存储地址
+            String filePath = pubConfigService.getFilePath();
+
+            // 获取套餐封面图片
+            ProductInfo info = packages.get(0);
+            Long infoId = info.getId();
+            String headPath = info.getHeadPath();
+            if (StringUtil.checkStr(headPath)) {
+                headPath = filePath + attachmentBaseService.find(Long.parseLong(headPath)).getPath();
+            }
+
+            //获取图片地址信息
+            List<Attachment> attachmentList = attachmentBaseService.getFiles(infoId, ProductInfo.TABLE_NAME, ProductInfo.PIC_PATH);
+            //图片地址路径集合
+            List<String> picPathList = new ArrayList<String>();
+            for (Attachment attachment : attachmentList) {
+                picPathList.add(filePath + attachment.getPath());
+            }
+
+            filters.clear();
+            filters.add(Filter.eq("productId", infoId));
+            List<ProductPrice> prices = productPriceBaseService.findList(1, filters, null);
+            Double salesPrice = NumberUtil.DOUBLE_ZERO;
+            if (CollectionUtil.isNotEmpty(prices)) {
+                salesPrice = prices.get(0).getSalesPrice();
+            }
+
+            result.put("id", infoId); // 商品标识
+            result.put("zhName", info.getZhName()); // 商品名称
+            result.put("status", info.getStatus()); // 商品状态
+            result.put("headPath", headPath); // 商品封面图片地址
+            result.put("salesPrice", salesPrice); // 商品销售价
+            result.put("stockNum", productPackageDao.getStockNum(infoId)); // 库存数量
+            result.put("introduce", info.getIntroduce()); // 商品简介
+            result.put("attrJson", ""); //attrJson
+            result.put("picPathList", picPathList); // 商品图片路径列表
+            return result;
+        } else {
+            throw BaseException.errorByErrInfo("未上架开店套餐");
+        }
+    }
+
+    /**
+     * 获取套餐原价
+     *
+     * @param packageProid 套餐标识
+     * @return
+     */
+    @Override
+    public Double getPackageCostPrice(Long packageProid) {
+        List<Map> prices = productPackageDao.getPackageRelPrice(packageProid);
+        Double costPrice = NumberUtil.DOUBLE_ZERO;
+        if (CollectionUtil.isNotEmpty(prices)) {
+            for (Map price : prices) {
+                costPrice = NumberUtil.add(costPrice, MapUtil.getDouble(price, "salesPrice"));
+            }
+        }
+        return costPrice;
+    }
+
+    /**
+     * 获取套餐的库存量
+     *
+     * @param productId 套餐商品标识
+     * @return
+     */
+    @Override
+    public Integer getStockNum(Long productId) {
+        return productPackageDao.getStockNum(productId);
+    }
+}

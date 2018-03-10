@@ -1,0 +1,39 @@
+package com.catt.wfx.service.customerMgr;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.entity.customerMgr.AgentInfo;
+
+import java.util.Map;
+
+/**
+ * 代理商申请表服务接口
+ * 
+ * @author chen chusheng
+ * @date 2017-06-14 10:32:50
+ * @version V1.0
+ */
+public interface AgentInfoService{
+
+    /**
+     * 获取分页
+     * @param params
+     * @return
+     */
+    Page<Map> getPage(Map<String, Object> params, Pageable pageable);
+
+    /**
+     * 查询代理商信息
+     * @param cusId：用户标识
+     * @return
+     */
+    AgentInfo findAgengInfoByCusId(Long cusId);
+
+    /**
+     * 审核
+     * @param params
+     */
+    void audit(Map<String, Object> params);
+
+}

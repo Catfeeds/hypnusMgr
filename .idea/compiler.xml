@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="project-hypnus-common-service" />
+        <module name="project-hypnus-common-service-impl" />
+        <module name="project-hypnus-data" />
+        <module name="project-hypnus-service" />
+        <module name="project-hypnus-service-impl" />
+        <module name="project-hypnus-web-admin" />
+        <module name="project-wfx-common-service" />
+        <module name="project-wfx-common-service-impl" />
+        <module name="project-wfx-data" />
+        <module name="project-wfx-service" />
+        <module name="project-wfx-service-impl" />
+        <module name="project-wfx-web-admin" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="project-hypnus" target="1.5" />
+      <module name="project-hypnus-admin" target="1.5" />
+      <module name="project-hypnus-common" target="1.8" />
+      <module name="project-hypnus-common-service" target="1.8" />
+      <module name="project-hypnus-common-service-impl" target="1.8" />
+      <module name="project-hypnus-data" target="1.8" />
+      <module name="project-hypnus-service" target="1.8" />
+      <module name="project-hypnus-service-impl" target="1.8" />
+      <module name="project-hypnus-web-admin" target="1.8" />
+      <module name="project-wfx" target="1.5" />
+      <module name="project-wfx-admin" target="1.5" />
+      <module name="project-wfx-background" target="1.5" />
+      <module name="project-wfx-common" target="1.8" />
+      <module name="project-wfx-common-service" target="1.8" />
+      <module name="project-wfx-common-service-impl" target="1.8" />
+      <module name="project-wfx-data" target="1.8" />
+      <module name="project-wfx-mobile" target="1.5" />
+      <module name="project-wfx-payQuery" target="1.5" />
+      <module name="project-wfx-payQuery-service-impl" target="1.8" />
+      <module name="project-wfx-returnQuery" target="1.5" />
+      <module name="project-wfx-returnQuery-service-impl" target="1.8" />
+      <module name="project-wfx-service" target="1.8" />
+      <module name="project-wfx-service-impl" target="1.8" />
+      <module name="project-wfx-service-impl-mobile" target="1.8" />
+      <module name="project-wfx-service-mobile" target="1.8" />
+      <module name="project-wfx-settlement" target="1.5" />
+      <module name="project-wfx-settlement-service" target="1.8" />
+      <module name="project-wfx-settlement-service-impl" target="1.8" />
+      <module name="project-wfx-web-admin" target="1.8" />
+      <module name="project-wfx-web-mobile" target="1.8" />
+      <module name="project-wfx-web-wechat" target="1.8" />
+      <module name="project-wfx-web-wechatShop" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

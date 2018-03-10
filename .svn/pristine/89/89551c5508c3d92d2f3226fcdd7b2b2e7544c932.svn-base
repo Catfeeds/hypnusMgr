@@ -1,0 +1,100 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    var aData = [];
+                    aData.push({tabName: "T_CUS_ORDER_RETURN", colName: "I_AUDIT_RESULT"});//退货原因
+                    //2代表反馈数组
+                    adminSystem.getEnumList(aData, 2, function (backData) {
+                        var auditResult = backData['T_CUS_ORDER_RETURN-I_AUDIT_RESULT'].sEnumMapping;
+                        var auditResultStr = "";
+
+                        for (var i = 0, len = auditResult.length; i < len; i++) {
+                            auditResultStr += "<option value=" + auditResult[i].value + ">" + auditResult[i].name + "</option>";
+                        }
+                        $('#auditResult').html(auditResultStr);
+
+                    });
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+
+                    $('#auditResult').on('change', function () {
+                        var auditResult = $(this).val();
+
+                            if($('#returnTotalAmount').val() === "0"){
+                                if(auditResult == "2" || auditResult == "4"){
+                                    msgBox.tips("该退货商品支付金额为零，不支持退款");
+                                    $('#auditResult').val(1);
+                                    return;
+                                }
+                            }
+
+                    });
+
+
+                    $("#submit").click(function () {
+                        var param = {};
+                        var auditResult = $('#auditResult').val();
+                        var auditDesc = $('#auditDesc').val();
+                        if (auditResult) {
+                            param.auditResult = auditResult;
+                        } else {
+                            msgBox.tips("审核结果不能为空")
+                        }
+                        param.auditDesc = auditDesc;
+                        param.id = $('#id').val();
+                        DataHandler.examineReturn(param, function (result) {
+                            //$('#submit').button('reset');
+                            if (result.type == "success") {
+                                msgBox.tips("操作成功", 1, function () {
+                                    msgBox.exWindow.close($.toJSON(result));
+                                });
+                            }
+                        });
+                    });
+
+                    $("#close").click(function () {
+                        msgBox.exWindow.close();
+                    });
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {};
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 发货
+                 * @param params
+                 * @param callback
+                 */
+                examineReturn: function (params, callback) {
+                    $.post(path + "/admin/orderMgr/cusOrderReturn/examineReturn", params, function (result) {
+                        callback(result);
+                    });
+                },
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

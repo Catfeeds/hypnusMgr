@@ -1,0 +1,92 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/6/16
+  Time: 10:59
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>设置店主账号</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/denglu.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/zhucexinxi.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <%--<script type="text/javascript" src="${path}/resources/js/public.js"></script>--%>
+    <%--<script type="text/javascript" src="${path}/resources/js/gouwuche1.js"></script>--%>
+
+    <script src="${path}/resources/js/jquery.timers-1.2.js"></script>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/customerMgr/setLoginPass.js"></script>
+</head>
+
+<body>
+<div style="height:47px;"></div>
+<div class="top header">
+    <button class="top-left" onClick="window.history.go(-1)"><img class="top_btn_back" src="${path}/resources/images/top_btn_back.png">
+    </button>
+    <h1>设置店主登录密码</h1>
+</div>
+<div class="loginList">
+    <input type="hidden" id="orderId" value="${orderInfo.orderId}">
+
+    <div class="loginItem">
+        <span class="itemTitle02">手机号码:</span>
+        <form id="form">
+            <div class="inputBox">
+                <input class="loginInput2" type="text" id="mobileNo" name="mobileNo" placeholder="请输入手机号码">
+            </div>
+        </form>
+    </div>
+    <div class="loginItem">
+        <span class="itemTitle02">验&nbsp;证&nbsp;码:</span>
+
+        <div class="inputBox">
+            <input class="loginInput" type="text" id="captcha" placeholder="请输入验证码">
+
+            <p id="sendMessage">获取验证码</p>
+        </div>
+    </div>
+    <div class="loginItem">
+        <span class="itemTitle02">登录密码:</span>
+
+        <div class="inputBox">
+
+            <input class="loginInput2" id="passWord" type="password" placeholder="请输入输入登录密码">
+        </div>
+    </div>
+    <div class="loginItem">
+        <span class="itemTitle02">再次输入:</span>
+
+        <div class="inputBox">
+            <input class="loginInput2" id="password1" type="password" placeholder="请再次输入登录密码">
+        </div>
+        <!-- <p class="beizhu1">登录密码用于登录店主APP，请牢记！</p>-->
+    </div>
+    <div class="loginItem">
+        <span class="itemTitle02">邀&nbsp;请&nbsp;码:</span>
+
+        <div class="inputBox">
+            <input class="loginInput" type="text" id="invitationNo" placeholder="请输入邀请码" value="${invitationNo}">
+        </div>
+        <p class="beizhu textRed">注：选填</p>
+    </div>
+    <div class="loginItem">
+        <a class="checkbox checkbox03 xw_radio"></a>
+        <span class="xieyi">同意《<a href="${path}/resources/static/agreement.html"><spring:eval expression="@configProperties['platform.name']" var="platformName"/>用户协议</a>》</span>
+    </div>
+</div>
+<div style="height:40px;"></div>
+<div class="bottomBtnBox">
+    <!--<button onClick="window.location='addkaipiao.html';">新增开票信息</button>-->
+    <c:if test="${orderId != null}">
+        <button  id="confirmOrder" disabled="disabled" style="background:#b7b7b7">确&nbsp;定&nbsp;下&nbsp;单</button>
+    </c:if>
+    <c:if test="${orderId == null}">
+        <button id="register" disabled="disabled" style="background:#b7b7b7">注&nbsp;&nbsp;&nbsp;册</button>
+    </c:if>
+</div>
+
+</body>
+</html>

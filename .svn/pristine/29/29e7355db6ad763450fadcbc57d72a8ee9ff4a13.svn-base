@@ -1,0 +1,34 @@
+package com.catt.wfx.service.impl.pub;
+
+import com.catt.common.module.attachment.base.StoragePlugin;
+import com.catt.common.module.attachment.service.StoragePluginService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+/**
+ * Description:公共配置服务接口
+ * date: 2016-05-23 10:55
+ * author: Zhou mingxiang
+ */
+@Service("pubConfigServiceImpl")
+public class PubConfigServiceImpl implements PubConfigService {
+
+    /**
+     * 存储插件
+     */
+    @Resource
+    private StoragePluginService storagePluginService;
+
+    @Override
+    public String getFilePath() {
+        List<StoragePlugin> list = storagePluginService.getStoragePlugins(true);
+        String filePath = ""; //附件请求地址
+        if (list != null && list.size() > 0) {
+            filePath = list.get(0).getViewUrl("");
+        }
+        return filePath;
+    }
+}

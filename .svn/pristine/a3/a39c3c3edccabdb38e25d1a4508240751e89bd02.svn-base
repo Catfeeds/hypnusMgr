@@ -1,0 +1,100 @@
+package com.catt.wfx.web.service.impl;
+
+import com.catt.common.base.pojo.security.LoginModeType;
+import com.catt.common.base.repository.entity.BaseUserEntity;
+import com.catt.common.module.wechat.pojo.Consts;
+import com.catt.common.module.wechat.repository.entity.WeChatUser;
+import com.catt.common.module.wechat.repository.entity.WeChatUserRefBis;
+import com.catt.common.module.wechat.service.WeChatUserRefBisService;
+import com.catt.common.module.wechat.web.service.WeChatRefBisLogicProcesServices;
+import com.catt.common.util.html.HtmlUtil;
+import com.catt.common.web.security.shiro.token.ExtAuthenticationToken;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import org.apache.shiro.SecurityUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author Zhang zhongtao
+ * @version Ver 1.0
+ * @since JDK V1.8
+ */
+@Service(value = "weChatRefBisLogicProcesServicesImpl")
+public class WeChatRefBisLogicProcesServicesImpl implements WeChatRefBisLogicProcesServices {
+
+    private String redirect = "redirect:";
+
+    @Resource(name = "weChatUserRefBizServiceImpl")
+    private WeChatUserRefBisService weChatUserRefBisService;
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    @Override
+    public WeChatUserRefBis.BisType getCurrentBisType() {
+        return WeChatUserRefBis.BisType.CUS;
+    }
+
+    @Override
+    public ModelAndView unboundView(WeChatUser weChatUser) {
+//        return new ModelAndView(redirect + "/guest/wechat/regist/index.html?" +
+//                Consts.PARAMS_WX_PUBLIC_ACCOUNT_ID + "=" + weChatUser.getPublicAccountId());
+        return new ModelAndView("/login");
+    }
+
+    @Override
+    public ModelAndView authFailView() {
+        return new ModelAndView(redirect + "/guest/wechat/statePage/fail.html");
+    }
+
+    @Override
+    public ModelAndView authSuccessView(WeChatUser weChatUser) {
+        return new ModelAndView(redirect + "/guest/wechat/statePage/success.html?" +
+                Consts.PARAMS_WX_PUBLIC_ACCOUNT_ID + "=" + weChatUser.getPublicAccountId());
+    }
+
+    @Override
+    public String authSuccessRedirectFailUrl() {
+        return "/guest/wechat/statePage/success.html";
+    }
+
+    @Override
+    public void login(WeChatUser weChatUser, HttpServletRequest request) {
+        BaseUserEntity boundUser = getBoundUser(weChatUser);
+        Map params = new HashMap<>();
+        params.put(Consts.PARAMS_OPEN_ID, weChatUser.getOpenId());
+        params.put(Consts.PARAMS_WX_PUBLIC_ACCOUNT_ID, weChatUser.getPublicAccountId());
+        params.put(Consts.PARAMS_WECHAT_USER_ID, weChatUser.getId());
+
+        String browserType = HtmlUtil.getBrowserType(request);
+
+        ExtAuthenticationToken token =
+                new ExtAuthenticationToken(boundUser.getAccount(), "密码", "验证码ID", "验证码", true,
+                        request.getRemoteHost(), browserType, CusInfo.class.getCanonicalName(),
+                        LoginModeType.BaseLogin, params);
+        token.setCaptcha(false);
+
+        SecurityUtils.getSubject().login(token);
+    }
+
+    @Override
+    public <T extends BaseUserEntity> T getBoundUser(WeChatUser weChatUser) {
+        WeChatUserRefBis userRefBis = weChatUserRefBisService.find(weChatUser.getId(), getCurrentBisType());
+        CusInfo cusInfo = cusInfoBaseService.find(Long.valueOf(userRefBis.getBisId()));
+
+        if (cusInfo == null && userRefBis != null) {
+            weChatUserRefBisService.delete(userRefBis.getId());
+        }
+        return (T) cusInfo;
+    }
+
+    @Override
+    public  void weChatAuthSuccessAfter(WeChatUser currentWeChatUser, String requestUrl) {
+    }
+
+}

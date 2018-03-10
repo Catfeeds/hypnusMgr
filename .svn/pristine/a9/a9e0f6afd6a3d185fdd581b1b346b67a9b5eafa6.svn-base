@@ -1,0 +1,14 @@
+package com.catt.wfx.service.pub;
+
+/**
+ * Description: 公共配置服务
+ * date: 2016-05-23 10:54
+ * author: Zhou mingxiang
+ */
+public interface PubConfigService {
+    /**
+     * 获取图片存储地址
+     * @return
+     */
+     String getFilePath();
+}

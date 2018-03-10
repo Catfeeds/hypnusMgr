@@ -1,0 +1,120 @@
+package com.catt.wfx.service.orderMgr;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderPay;
+
+import java.util.Map;
+
+/**
+ * 订单信息表服务接口
+ *
+ * @author 袁幸成
+ * @date 2017-02-14 08:56:52
+ * @version V1.0
+ */
+public interface CusOrderService {
+
+    /**
+     * 创建订单
+     * 操作：1）保存订单表
+     *      3）新增订单详情
+     *      5）新增订单流程信息      6）删除购物车
+     *      7）修改代金券状态（使用代金券时）  8)修改代金券使用数量（使用代金券时）
+     *
+     *      9）支付金额为0？-->支付成功操作
+     * @param cusId 客户标识
+     * @param cartIds 购物车标识数组
+     * @param contactId 收货地址标识
+     * @param cusCouponId 用户代金券标识（可为空）
+     * @param shopId 店铺标识（店主APP为空，微信商城不为空）
+     * @return
+     */
+    Map create(Long cusId, Long[] cartIds, Long contactId, Long cusCouponId, Long shopId);
+
+    /**
+     * 获取订单基本信息（店主APP）
+     * @param id 订单标识
+     * @return
+     */
+    Map findOrderInfo(Long id);
+
+    /**
+     * 注册（需要购买套餐）-购买套餐下单
+     *
+     * @param cusOrder
+     * @param cusId      用户标志
+     * @param contactId  收获地址标志
+     * @return
+     */
+    Map order4BuyPackage(CusOrder cusOrder, Long cusId, Long contactId);
+
+    /**
+     * 余额支付 (APP）
+     * @param cusId 客户标识
+     * @param orderId 订单标识
+     * @param payPwd 支付密码
+     * @return
+     */
+    void payByRemainderMoney(Long cusId, Long orderId, String payPwd);
+
+    /**
+     * 余额支付【店铺续费】(APP）
+     * @param cusId 客户标识
+     * @param orderId 订单标识
+     * @param payPwd 支付密码
+     * @return
+     */
+    void payByRemainderMoney4Renew(Long cusId, Long orderId, String payPwd);
+
+    /**
+     * 取消订单(APP）
+     *
+     * @param orderId 订单标识
+     */
+    void cancelCusOrder(Long cusId, String cusName,Long orderId);
+
+    /**
+     * 获取我的订单列表（分页）
+     * @param cusId 用户标识
+     * @param orderStatus 订单状态数组
+     * @param pageable 分页参数
+     * @param isApp false：微信商城查询我的订单时要过滤掉进货单  true：不过滤
+     * @return
+     */
+    Page<Map> findMyOrderPage(Long cusId, Integer[] orderStatus, Pageable pageable, boolean isApp);
+
+    /**
+     * 获取店铺订单列表（分页）
+     * @param shopkeeperId 店主标识
+     * @param orderStatus 订单状态数组
+     * @param pageable 分页参数
+     * @return
+     */
+    Page<Map> findShopOrderPage(Long shopkeeperId, Integer[] orderStatus, Pageable pageable);
+
+
+    /**
+     * 获取订单详细信息
+     * @param id 订单标识
+     * @return
+     */
+    Map findOrderDetail(Long id);
+
+    /**
+     * 订单支付成功操作
+     * 1) 修改订单状态
+     * 2）新增订单流程信息
+     * 3）新增订单支付
+     * 4）新增订单结算统计
+     * 5）修改商家账户信息的订单量、销售额等
+     * 6）修改商品库存、销量、（如果是特卖，修改特卖销量）
+     * 7）修改店铺信息的订单数、订单金额
+     * @param cusOrder 订单
+     * @param payType 支付方式 微信支付/null
+     * @param tradeNo 交易号   微信支付订单号
+     */
+    void paySuccess(CusOrder cusOrder, CusOrderPay.PayType payType, String tradeNo);
+}

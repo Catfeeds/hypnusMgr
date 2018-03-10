@@ -1,0 +1,114 @@
+seajs.use(['$', 'adminSystem', 'template', 'wechat', 'jquery.json'], function ($, adminSystem, template, wx) {
+    /** 初始化处理器 */
+    var InitHandler = (function () {
+        return {
+            /** 初始化入口 */
+            init: function () {
+                this.initPage();
+                this.initEvent();
+                this.initData();
+
+            },
+            /** 初始化界面 */
+            initPage: function () {
+                EventHandler.getPackageDetail ();
+
+            },
+            /** 初始化事件绑定 */
+            initEvent: function () {
+                $(".swiper-container").swiper({
+                    loop: true,
+                    autoplay: 3000,
+                    autoplayDisableOnInteraction : false  //属性设置为false  则在触摸滑块后会继续自动滑动  ture则会停止自动滑动
+                });
+
+                $('#submit').click(function(){
+                    window.location.href=path+'/guest/wechat/customerMgr/cusInfo/confirmOrder.html?invitationNo='+$('#invitationNo').val();
+                });
+            },
+            /** 初始化数据加载 */
+            initData: function () {
+                //图片操作，等比缩放成正方形
+                EventHandler.makePic();
+
+            }
+        };
+    })();
+    /** 事件处理器 */
+    var EventHandler = (function () {
+        return {
+            //-获取套餐详情
+            getPackageDetail : function () {
+                DataHandler.getPackageDetail (function (backData) {
+
+                    var result = backData.result;
+                    $('#zhName').html(result.zhName);
+                    $('#salesPrice').html("￥"+result.salesPrice);
+                    $('#stockNum').html(result.stockNum);
+                    var introduce = result.introduce.replace(/&lt;/g, '<')
+                        .replace(/&gt;/g, '>');
+                    $('#introduce').html(introduce);
+                    var html = template('subNavTemp', result.picPathList);
+                    $('#pics').html(html);
+                });
+            },
+
+            //图片操作，等比缩放成正方形
+            makePic: function(){
+                //加载完列表，对图片进行等比缩放 成正方形
+                var imgs = $(".pic");
+                $.each(imgs, function(i, item){
+                    var par = $(item).parent().parent();
+                    var divWH = par[0].clientWidth;
+
+                    var wh = {
+                        width: item.width,
+                        height: item.height
+                    };//图片原本宽高
+                    var temp;//比例值
+                    //重新等比例缩放图片
+                    if(wh.width >= wh.height){
+                        //宽长，高度需要调整，并计算好高度居中值
+                        temp = wh.width/divWH;
+                        wh.width = divWH;
+                        wh.height = wh.height/temp;
+                        var mid = (divWH - wh.height)/2;
+                        wh.mid = mid;
+                        wh.midStyle = "margin-top: "+mid+"px; margin-bottom: "+mid+"px;";
+                    }else{
+                        //高长，宽度需要调整，并计算好宽度度居中值
+                        temp = wh.height/divWH;
+                        wh.height = divWH;
+                        wh.width = wh.width/temp;
+                        var mid = (divWH - wh.width)/2;
+                        wh.mid = mid;
+                        wh.midStyle = "margin-left: "+mid+"px; margin-right: "+mid+"px;";
+                    }
+                    wh.style = "width: "+wh.width+"px; height: "+wh.height+"; " + wh.midStyle;
+                    $(item).attr("style", wh.style);
+                });
+            }
+
+        };
+    })();
+    /** 数据处理器 */
+    var DataHandler = (function () {
+        return {
+            /**
+             * -获取套餐详情
+             * @param param
+             * @param callback
+             */
+            getPackageDetail : function (callback) {
+                $.get(path + '/guest/wechat/customerMgr/cusInfo/getPackageDetail ', null, function (backData) {
+                    callback(backData);
+                });
+            }
+        };
+    })();
+
+    /** 页面入口 */
+    $(function () {
+        InitHandler.init();
+    });
+});

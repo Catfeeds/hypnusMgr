@@ -1,0 +1,70 @@
+<%--
+  User: Luojiawei
+  Date: 17/3/6
+  Time: 上午10:50
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>物流详情</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/huiyuanfuwu.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/dingdan.css"/>
+    <style type="text/css">
+        <%-- 不加这个样式在页面加载后，滚动条无效 --%>
+        .weui-pull-to-refresh-layer .pull-to-refresh-arrow {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+    </style>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/order/index.js"></script>
+</head>
+
+<body style="background:#f7f7f7;">
+<div style="height:47px;"></div>
+<div class="top header">
+    <button class="top-left" onclick="javascript:window.history.back();">
+        <img class="top_btn_back" src="${path}/resources/images/top_btn_back.png"></button>
+    <h1>物流详情</h1>
+</div>
+<div class="wuliutop">
+    <div class="wuliu">
+        <h2 style="left: auto"><font class="biaotiLeft">物流状态:</font><span class="textRed">${data.stateName}</span></h2>
+        <h3 style="left: auto"><font class="biaotiLeft">物流公司:</font>${data.exComName}</h3>
+        <h4 style="left: auto"><font class="biaotiLeft">运  单  号:</font><span style="letter-spacing:normal">${data.exCode}</span></h4>
+        <%--<img class="gouwuchePic" src="${path}/resources/images/gouwuche_pic.png">--%>
+    </div>
+</div>
+<div class="introText" style="padding-top:10px; ">
+    <div class="introMain">
+        <ul class="wuliList">
+            <c:set var="startIndex" value="${fn:length(data.infos) -1}"></c:set>
+            <c:forEach items="${data.infos}" var="item" varStatus="status">
+                <li>
+                    <c:choose>
+                        <c:when test="${status.index == 0}">
+                            <img class="wuliuimgLeft" src="${path}/resources/images/wuliu_img_dotted_green.png">
+                            <h1 class="textPink">${data.infos[startIndex - status.index].content}</h1>
+                            <font class="textPink">
+                                <fmt:formatDate value="${data.infos[startIndex - status.index].time}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                            </font>
+                        </c:when>
+                        <c:otherwise>
+                            <img class="wuliuimgLeft02" src="${path}/resources/images/wuliu_img_dotted_grey.png">
+                            <h1 class="textBlue">${data.infos[startIndex - status.index].content}</h1>
+                            <font class="textLightgrey"><fmt:formatDate value="${data.infos[startIndex - status.index].time}" pattern="yyyy-MM-dd HH:mm:ss"/></font>
+                        </c:otherwise>
+                    </c:choose>
+                </li>
+            </c:forEach>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

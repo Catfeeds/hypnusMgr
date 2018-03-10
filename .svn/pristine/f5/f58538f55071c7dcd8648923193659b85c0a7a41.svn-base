@@ -1,0 +1,189 @@
+package com.catt.wfx.repository.entity.productMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 店主商品实体类
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-01-09 11:37:12
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_PRODUCT_SHOP")
+public class ProductShop extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+
+    /**
+     * <pre>
+     * 店铺标识
+     * </pre>
+     */
+    private Long shopId;
+    /**
+     * <pre>
+     * 厂家标识
+     * </pre>
+     */
+    private Long factoryId;
+    /**
+     * <pre>
+     * 店主标识
+     * </pre>
+     */
+    private Long cusId;
+    /**
+     * <pre>
+     * 商品标识
+     * </pre>
+     */
+    private Long productId;
+    /**
+     * <pre>
+     * 商品状态
+     * 1-正常
+     *  2-下架
+     * </pre>
+     */
+    private Integer status;
+
+    /**
+     * <pre>
+     * 创建人员标识
+     * 创建人员标识
+     * </pre>
+     */
+    private Long createdId;
+    /**
+     * <pre>
+     * 创建人员名称
+     * 创建人员名称
+     * </pre>
+     */
+    private String createdName;
+
+
+    @Column(name = "I_SHOP_ID")
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
+    }
+
+    @Column(name = "I_FACTORY_ID")
+    public Long getFactoryId() {
+        return factoryId;
+    }
+
+    public void setFactoryId(Long factoryId) {
+        this.factoryId = factoryId;
+    }
+
+    @Column(name = "I_CUS_ID")
+    public Long getCusId() {
+        return cusId;
+    }
+
+    public void setCusId(Long cusId) {
+        this.cusId = cusId;
+    }
+
+    @Column(name = "I_PRODUCT_ID")
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    @Column(name = "I_STATUS")
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+
+    @Column(name = "I_CREATED_ID")
+    public Long getCreatedId() {
+        return createdId;
+    }
+
+    public void setCreatedId(Long createdId) {
+        this.createdId = createdId;
+    }
+
+    @Column(name = "S_CREATED_NAME", length = 32)
+    public String getCreatedName() {
+        return createdName;
+    }
+
+    public void setCreatedName(String createdName) {
+        this.createdName = createdName;
+    }
+
+    /**
+     * 商品状态
+     * 1-正常 2-下架
+     */
+    public enum Status {
+        NORMALUSE(1, "正常"),
+        SHELVES(2, "下架");
+
+        private Integer value;
+        private String name;
+
+        Status(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static Status getEnum(int value) {
+            Status[] source = Status.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+            //throw new Exception("枚举:\" + value + \"不支持。");
+
+        }
+
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public void setValue(Integer value) {
+            this.value = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+}
+

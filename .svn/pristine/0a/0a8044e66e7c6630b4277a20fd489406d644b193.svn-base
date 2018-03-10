@@ -1,0 +1,126 @@
+
+var publishStatus = "1";//是否发布
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initData();
+                    this.initEvent();
+                },
+                /** 初始化界面  */
+                initPage: function () {
+                    var params = {}; //搜索条件
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            params.status = publishStatus;
+                            EventHandler.search(params);
+                        }
+                    });
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    //动态绑定click(动态生成的html)
+                    $("#dataList").on('click', '.xw_tick', templateList.check);
+
+                    //查询
+                    $('#searchBtn').click(EventHandler.search);
+
+                    //重置
+                    $('#resetBtn').click(EventHandler.reset);
+
+                    // 返回
+                    $('#cancleBtn').click(function () {
+                        msgBox.exWindow.close();
+                    });
+
+                    $('#checkBtn').click(EventHandler.check);
+                },
+
+                /** 初始化数据  */
+                initData : function(){
+                    // 初始化数据列表
+                    EventHandler.search();
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                //重置
+                reset : function(){
+                    $("#couponName").val("请输入代金券名称");
+                    $("#faceValue").val("");
+                },
+                // 查询
+                search: function (params) {
+                    $(".xw_tickAll").removeClass("tickOn");
+
+                    if(typeof(params)=="undefined" || params.type == "click"){
+                        params = {pageNo : 1, pageSize : 5, status : publishStatus};
+                    }
+                    var couponName = $("#couponName").val();
+                    if(couponName != "请输入代金券名称"){
+                        params.couponName = couponName;
+                    }
+                    params.rangeType = $("#rangeType").val();
+
+                    DataHandler.search(params, function (backData) {
+                        var data = backData;
+                        var html = template('template_dataList', data.content);
+                        $('#dataList').html(html);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: data.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        setParenHei();
+                    });
+                },
+                check: function(){
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length == 0) {
+                        msgBox.tips("请选择代金券");
+                        return;
+                    }
+                    msgBox.exWindow.close($.toJSON(checked));
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/couponMgr/search', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

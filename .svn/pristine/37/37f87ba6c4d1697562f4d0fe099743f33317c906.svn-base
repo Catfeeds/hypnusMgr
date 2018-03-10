@@ -1,0 +1,91 @@
+package com.catt.wfx.returnQuery.service.impl;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrder;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrderLog;
+import com.catt.wfx.returnQuery.service.QueryReturnService;
+import com.catt.wfx.service.base.wechatReturn.WechatReturnOrderBaseService;
+import com.catt.wfx.service.base.wechatReturn.WechatReturnOrderLogBaseService;
+import com.catt.wfx.service.wechatReturn.WechatReturnService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:查询退款接口实现类
+ * Created by 2017-03-03  9:27.
+ * author: Zhou mingxiang
+ */
+@Service("queryReturnServiceImpl")
+public class QueryReturnServiceImpl implements QueryReturnService {
+
+    private static final Logger LOG = LoggerFactory
+            .getLogger(QueryReturnServiceImpl.class);
+
+    @Resource
+    private WechatReturnOrderBaseService wechatReturnOrderBaseService;
+
+
+    @Resource
+    private WechatReturnOrderLogBaseService wechatReturnOrderLogBaseService;
+
+    @Resource(name = "wechatReturnServiceImpl")
+    private WechatReturnService wechatReturnService;
+
+    public void queryReturn() {
+        LOG.info("查询退款任务开始...");
+        long start = System.currentTimeMillis();
+
+        //查询退款单信息
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("status", WechatReturnOrder.STATUS_REFUNDIN));
+        List<WechatReturnOrder> wechatReturnOrders = wechatReturnOrderBaseService.findList(null, filters, null);
+        if (wechatReturnOrders != null && wechatReturnOrders.size() > 0) {
+            Map<String, WechatReturnOrder> map = new HashMap<>();
+
+            String[] refundNos = new String[wechatReturnOrders.size()];
+            int i = 0;
+            for (WechatReturnOrder wechatReturnOrder : wechatReturnOrders) {
+                String refundNo = wechatReturnOrder.getRefundNo();
+                map.put(refundNo, wechatReturnOrder);
+                refundNos[i] = refundNo;
+                i++;
+            }
+
+            //查询退款单对应的微信申请退款日志信息
+            List<Filter> filterList = new ArrayList<Filter>();
+            filterList.add(Filter.in("outRefundNo", refundNos));
+            List<WechatReturnOrderLog> wechatReturnOrderLogs = wechatReturnOrderLogBaseService.findList(null, filterList, null);
+
+            if (wechatReturnOrderLogs != null && wechatReturnOrderLogs.size() > 0) {
+
+                for (WechatReturnOrderLog wechatReturnOrderLog : wechatReturnOrderLogs) {
+
+                    WechatReturnOrder wechatReturnOrder = map.get(wechatReturnOrderLog.getOutRefundNo());
+                    Map<String, String> param = new HashMap<String, String>();
+                    param.put("appid", wechatReturnOrderLog.getAppId());
+                    param.put("mch_id", wechatReturnOrderLog.getMchId());
+                    param.put("nonce_str", wechatReturnOrderLog.getNonceStr());
+                    param.put("out_refund_no", wechatReturnOrderLog.getOutRefundNo());
+                    param.put("total_fee", String.valueOf(wechatReturnOrderLog.getTotalFee()));
+                    param.put("refund_fee", String.valueOf(wechatReturnOrderLog.getRefundFee()));
+                    param.put("out_refund_no", wechatReturnOrderLog.getOutRefundNo());
+                    param.put("op_user_id", wechatReturnOrderLog.getOpUserId());
+                    wechatReturnService.queryReturn(param, wechatReturnOrder);
+                }
+
+            }
+
+
+        }
+
+        long end = System.currentTimeMillis();
+        LOG.info("查询退款任务结束...花费时间" + (end - start) + "ms");
+    }
+}

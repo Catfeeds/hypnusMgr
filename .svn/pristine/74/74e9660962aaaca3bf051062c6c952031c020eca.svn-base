@@ -1,0 +1,15 @@
+package com.catt.wfx.repository.dao.basicConfig;
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.basicConfig.PlatIncomeSet;
+
+/**
+ * 平台收益设置Dao接口
+ * 
+ * @author chen chusheng
+ * @date 2017-02-06 14:09:15
+ * @version V1.0
+ */
+public interface PlatIncomeSetDao extends BaseDao<PlatIncomeSet, Long> {
+
+}

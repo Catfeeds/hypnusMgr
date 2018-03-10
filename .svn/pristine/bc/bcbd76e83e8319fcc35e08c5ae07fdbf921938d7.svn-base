@@ -1,0 +1,83 @@
+<%--
+  User: Wei Rongfeng
+  Date: 2017-03-06 11:05:25
+  Time: 10:49
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>退货详情</title>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/return/returnInfoDetail.js"></script>
+    <link rel="stylesheet" href="${path}/resources/css/public.css">
+    <link rel="stylesheet" href="${path}/resources/css/tuihuoshenqing.css">
+    <script type="text/javascript">
+        var id = '${id}';
+    </script>
+</head>
+
+<body>
+<input type="hidden" name="id" id="id" value="${id}"/>
+<div class="loginList">
+    <div class="loginItem">
+        <span class="itemTitle02">退款原因</span>
+        <div class="inputBox">
+            <input class="loginInput" readOnly="true" id="returnReasonName" placeholder="${returnReasonName}">
+        </div>
+    </div>
+    <div class="loginItem">
+        <span class="itemTitle02">退款金额</span>
+        <div class="inputBox">
+            <input class="loginInput" readOnly="true" id="returnTotalAmount" placeholder="${returnTotalAmount}">
+        </div>
+    </div>
+    <div class="loginItem">
+        <span class="itemTitle02">退款说明</span>
+        <div class="inputBox">
+            <input class="loginInput2" readOnly="true" id="returnDesc" placeholder="${returnDesc}">
+        </div>
+    </div>
+    <div class="loginItem">
+        <span class="itemTitle02">申请时间</span>
+        <div class="inputBox">
+            <input class="loginInput" readOnly="true" style="width: auto" id="createDate" placeholder="${createDate}">
+        </div>
+    </div>
+    <div class="tuihuoBottom">
+        <span class="itemTitle08">上传照片</span>
+    </div>
+    <div class="bottomPic" id="bottomPicList">
+
+    </div>
+    <div class="loginItem">
+        <span class="itemTitle02">解决进度</span>
+        <div class="inputBox">
+            <input class="loginInput3" readOnly="true" placeholder=" ">
+        </div>
+        <div class="tuihuo" id="returnLogList">
+
+        </div>
+        <div class="bottomBtnBox" style="margin-bottom:20px;">
+            <!--<button onClick="window.location='addkaipiao.html';">新增开票信息</button>-->
+            <button id="submitReturnNumBtn" onclick="window.location='${path}/admin/wechat/returnInfo/submitReturnNum.html?returnId=${id}&shopId=${shopId}';">填写快递单号</button>
+        </div>
+    </div>
+
+</div>
+<script type="text/html" id="picsTemp">
+    {{each}}
+    <div class="pic">
+        <img class="zhaopian" src="{{$value}}">
+    </div>
+    {{/each}}
+</script>
+
+<script type="text/html" id="returnLogsTemp">
+    {{each}}
+    <p style="margin-bottom:5px;">{{$value.createDate}}&nbsp;<span class="textRed">&nbsp;{{$value.actName}},</span>{{$value.content}}</p>
+    {{/each}}
+</script>
+
+</body>
+</html>

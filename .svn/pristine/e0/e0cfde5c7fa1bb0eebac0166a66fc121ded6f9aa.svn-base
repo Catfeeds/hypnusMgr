@@ -1,0 +1,420 @@
+seajs.use(['$', 'adminSystem', 'template', 'validate', 'msgBox', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, validate, msgBox, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    if ($('#productId').val()) {
+                        DataHandler.getProductInfo({
+                            productId: $('#productId').val()
+                        }, function (productInfo) {
+                            if (productInfo) {
+                                $('#zhName').html(productInfo.zhName);
+                                $('#cateName').html(productInfo.cateName);
+                            }
+                        });
+
+                    }
+                    var params = {}; //搜索条件
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+                    EventHandler.search();
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    //官方文档和店主上传文档tab选择
+                    $(".xw_topTab li").click(function () {
+                        $(".xw_topTab li").removeClass("on");
+                        $(this).addClass("on");
+                        var type = $(this).attr("data-value");
+                        if (type == "1") {
+                            $('#shopKeeper').css('display', 'none');
+                            $('#official').css('display', 'block');
+                            $(".xw_select").removeClass("selectTabs_on");
+                            $('.selectTabs h1:first-child').addClass("selectTabs_on")
+                        } else if (type == "2") {
+                            $('#official').css('display', 'none');
+                            $('#shopKeeper').css('display', 'block');
+                        }
+                        EventHandler.search({pageNo: 1, pageSize: 15})
+                    });
+
+
+                    $(".xw_select").click(function () {
+                        $(".xw_select").removeClass("selectTabs_on");
+                        $(this).addClass("selectTabs_on");
+                        EventHandler.search({pageNo: 1, pageSize: 15})
+                    });
+
+
+                    //动态绑定click(动态生成的html)
+                    $("#list").on('click', '.xw_tick', templateList.check);
+
+                    //新增
+                    $("#addBtn").click(function () {
+                        window.location.href = path + "/admin/productMgr/productDocument/add.html?productId=" + $('#productId').val();
+                    });
+
+                    //修改
+                    $("#editBtn").click(function () {
+                        var list = templateList.getChecked("list", "div.wenanTop");
+                        if (list.length == 1) {
+                            if (list[0].status == "2") {
+                                msgBox.tips("文案已发布无法修改");
+                                return;
+                            } else {
+                                window.location.href = path + "/admin/productMgr/productDocument/update.html?id=" + list[0].id + "&productId=" + $('#productId').val();
+                            }
+
+                        } else {
+                            msgBox.tips("请勾选一条数据");
+                            return;
+                        }
+
+                    });
+
+                    //删除文案
+                    $("#delBtn").click(function () {
+                        EventHandler.delBtn();
+                    });
+
+                    //取消发布
+                    $("#offRelease").click(function () {
+                        EventHandler.copyAudit(false);
+                    });
+
+                    //发布
+                    $("#release").click(function () {
+                        EventHandler.copyAudit(true);
+                    });
+
+                    //转为官方文档
+                    $("#copyOfficial").click(function () {
+                        EventHandler.copyOfficial();
+                    });
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                // 查询
+                search: function (params) {
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: 15};
+                    }
+                    var productId = $("#productId").val();
+                    params.productId = productId;
+                   var type =  $(".on").attr("data-value");
+                    params.type = $(".on").attr("data-value");
+                    if(type == "1"){
+                        params.status = $(".selectTabs_on").attr("data-value");
+                    }
+
+                    DataHandler.getDocumentDetailByPage(params, function (backData) {
+                        var data = backData;
+                        if (backData) {
+                            var html = template('listTemp', backData.content);
+                            $('#list').html(html);
+
+                            CoverpicHandler.init(backData.content);
+                            var content = backData.content;
+                            for (var o in content) {
+                                var id = content[o].id;
+                                $('#desc' + id).html($('#descTemp' + id).val())
+                            }
+                        }
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: data.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        $(window).triggerHandler('resize');
+
+                        //setParenH();
+                    });
+                },
+
+                delBtn: function () {
+                    var aId = [];
+                    var list = templateList.getChecked("list", "div.wenanTop");
+                    if (list.length > 0) {
+                        for (var o in list) {
+                            aId.push(list[o].id);
+                        }
+                        msgBox.confirm({
+                            title: '提示',
+                            msg: '确认删除所选商品文案?',
+                            callback: function (btnType) {
+                                if (btnType == 'ok') {
+                                    DataHandler.btnDelete({
+                                        ids: aId.join(',')
+                                    }, function (backData) {
+                                        if (backData.type == 'success') {
+                                            msgBox.tips("操作成功");
+                                            //刷新列表
+                                            var params = {};
+                                            params.pageNo = 1;
+                                            params.pageSize = 15;
+                                            EventHandler.search(params);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        msgBox.tips("请勾选数据")
+                    }
+                },
+
+                /**
+                 * 文案审核
+                 * @param trueOrFalse 判断  true为通过  false为不通过
+                 */
+                copyAudit: function (trueOrFalse) {
+                    var aId = [];
+                    var isTrue = true;
+                    var content = null;
+                    var list = templateList.getChecked("list", "div.wenanTop");
+                    if (list.length > 0) {
+                        for (var o in list) {
+                            aId.push(list[o].id);
+                            if (!trueOrFalse ) {
+                                if(list[o].status == "1"){
+                                    isTrue = false;
+                                    content = "文案未发布,请选择已发布文案进行取消发布";
+                                    break;
+                                }
+
+                            }else {
+                                if(list[o].status == "2"){
+                                    isTrue = false;
+                                    content = "文案已发布,请选择未发布文案进行发布";
+                                    break;
+                                }
+
+                            }
+                        }
+                        if (isTrue) {
+                            DataHandler.copyAudit({
+                                ids: aId.join(','), trueOrFalse: trueOrFalse
+                            }, function (backData) {
+                                if (backData.type == 'success') {
+                                    msgBox.tips("操作成功");
+                                    EventHandler.search();
+                                }
+                            });
+                        } else {
+                            msgBox.tips(content);
+                            return;
+                        }
+                    }
+                },
+
+                //转为官方文档
+                copyOfficial: function () {
+                    var aId = [];
+                    var list = templateList.getChecked("list", "div.wenanTop");
+                    if (list.length > 0) {
+                        for (var o in list) {
+                            aId.push(list[o].id);
+                        }
+
+                        DataHandler.copyOfficial({
+                            ids: aId.join(',')
+                        }, function (backData) {
+                            if (backData.type == 'success') {
+                                msgBox.tips("操作成功");
+                                //刷新列表
+                                var params = {};
+                                params.pageNo = 1;
+                                params.pageSize = 15;
+                                EventHandler.search(params);
+                            }
+                        });
+                    } else {
+                        msgBox.tips("请勾选数据")
+                    }
+                },
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取商品信息
+                 * @param params
+                 * @param callback
+                 */
+                getDocumentDetailByPage: function (params, callback) {
+                    $.post(path + '/admin/productMgr/productDocument/getDocumentDetailByPage', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+                /**
+                 * 获取商品信息
+                 * @param params
+                 * @param callback
+                 */
+                getProductInfo: function (params, callback) {
+                    $.post(path + '/admin/productMgr/productDocument/getProductInfo', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 删除商品文案
+                 * @param params  商品标识集和
+                 * @param callback
+                 */
+                btnDelete: function (params, callback) {
+                    $.post(path + '/admin/productMgr/productDocument/delete', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 商品文案审核
+                 * @param params  商品标识集和
+                 * @param callback
+                 */
+                copyAudit: function (params, callback) {
+                    $.post(path + '/admin/productMgr/productDocument/copyAudit', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 转为官方文档
+                 * @param params  商品标识集和
+                 * @param callback
+                 */
+                copyOfficial: function (params, callback) {
+                    $.post(path + '/admin/productMgr/productDocument/copyOfficial', params, function (backData) {
+                        callback(backData);
+                    });
+                }
+            };
+        })();
+
+        /**
+         * 油站图片
+         */
+        var CoverpicHandler = (function () {
+            return {
+                /**
+                 * 计算图片宽高，进行等比例缩放，并计算居中值
+                 * @param result 图片信息
+                 * @param divWH  图片框宽高（正方形）
+                 * @returns {Array}
+                 */
+                initTempImg : function(result, divWH, entity){
+                    var imgs = $("#panea_temp"+entity.id).find("img");
+                    var imgWH = [];
+                    $.each(imgs, function(i, item){
+                        var wh = {
+                            width: item.width,
+                            height: item.height
+                        };
+                        var temp;//比例值
+                        //重新等比例缩放图片
+                        if(wh.width >= wh.height){
+                            //宽长，高度需要调整，并计算好高度居中值
+                            temp = wh.width/divWH;
+                            wh.width = divWH;
+                            wh.height = wh.height/temp;
+                            var mid = (divWH - wh.height)/2;
+                            wh.mid = "margin-top: "+mid+"px; margin-bottom: "+mid+"px;";
+                        }else{
+                            //高长，宽度需要调整，并计算好宽度度居中值
+                            temp = wh.height/divWH;
+                            wh.height = divWH;
+                            wh.width = wh.width/temp;
+
+                            var mid = (divWH - wh.width)/2;
+                            wh.mid = "margin-left: "+mid+"px; margin-right: "+mid+"px;";
+                        }
+                        imgWH.push(wh);
+                    });
+                    return imgWH;
+                },
+                init: function (result) {
+                    for (var o in result) {
+                        for(var i = 0, size = result[o].attachment.length; i < size; i++){
+                            result[o].attachment[i].url = result[o].filePath + result[o].attachment[i].path;
+                        }
+                        var html = template("panea_temp_template", result[o].attachment);
+                        $("#panea_temp" +result[o].id).html(html);
+                    }
+                    setTimeout(function() {
+                        for (var o in result) {
+                            var attachment = result[o].attachment;
+                            if (attachment.length > 0) {
+                                var wh = CoverpicHandler.initTempImg(attachment, 156, result[o]);
+                                //初始化所有图片
+                                var itemContent = [];
+                                for (var i = 0; i < attachment.length; i++) {
+                                    $.extend(attachment[i], wh[i]);
+                                    itemContent.push("" +
+                                        "<div class='jd_box' style='width: 156px; height: 156px;'>" +
+                                            //"<img class='pic1' src='" + result[o].filePath + attachment[i].path + "' style='width: 100%; height: 100%;' />" +
+                                        "<img src='" + result[o].filePath + attachment[i].path + "' style='width: " + attachment[i].width + "px; height: " + attachment[i].height + "px;" + attachment[i].mid + "' />" +
+                                            //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + result[i].fileName + "</div>" +
+                                        "</div>");
+                                }
+
+                                //var canshowNum = ($("div.imgDiv").outerWidth() - 86) / 230;
+                                var canshowNum = ($("div.imgDiv").outerWidth() - 50) / 200;
+                                canshowNum = Math.floor(canshowNum);
+                                var panea = '#panea' + result[o].id;
+                                //初始化面板对象
+                                panel = new BasePanel(panea, {
+                                    /**面板可视范围内显示的元素个数，如果展开后，
+                                     * 则是disItem = disItem * expanRow*/
+                                    disItem: canshowNum,
+                                    /**显示面板宽度*/
+                                    /**面板里需要承载的html内容*/
+                                    contentHtml: itemContent,
+                                    /**是否显示展开按钮*/
+                                    isExpan: false,
+                                    /**是否自动展开*/
+                                    isAutoExpan: false,
+                                    /**展开后显示的行数*/
+                                    expanRows: 1,
+                                    /**箭头位置：top：顶部；middle：中间*/
+                                    arrowAlign: 'middle',
+                                    /**面板移动完成后事件*/
+                                    onmoveend: function (pageNo) {
+                                    }
+                                });
+                            }
+                        }
+                    }, 1000);
+                }
+            }
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

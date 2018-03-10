@@ -1,0 +1,15 @@
+package com.catt.wfx.service.base.orderMgr;
+
+import com.catt.common.base.service.BaseService;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturnDetail;
+
+/**
+ * 退货订单明细服务接口
+ * 
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:35
+ * @version V1.0
+ */
+public interface CusOrderReturnDetailBaseService extends BaseService<CusOrderReturnDetail, Long> {
+
+}

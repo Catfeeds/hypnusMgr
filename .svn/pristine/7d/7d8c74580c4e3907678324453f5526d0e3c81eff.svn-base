@@ -1,0 +1,96 @@
+seajs.use(['$', 'msgBox'],
+    function ($, msgBox) {
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    //增加
+                    $("#save").click(EventHandler.save);
+
+                    //单选按钮组
+                    $(".xw_activitiestype").click(function () {
+                        $(this).siblings(".xw_activitiestype").removeClass("on")
+                        $(this).addClass("on");
+
+                        var data = $(this).attr("data-value");
+                        $(this).parents(".eachLine").find(".hiddenValue").val(data);
+                    });
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 */
+                save: function () {
+                    var params = {};
+                    params.needBuyForRegister = $("#needBuyForRegister").val();
+                    params.needBuyForRenew = $("#needBuyForRenew").val();
+                    params.validity = $("#validity").val();
+                    if (!params.validity) {
+                        msgBox.tips("开店时长不能为空");
+                        return;
+                    }
+                    if (!EventHandler.isPositive(params.validity)) {
+                        msgBox.tips("开店时长只能是正整数");
+                        return;
+                    }
+
+                    DataHandler.save({setJson: JSON.stringify(params)}, function (backData) {
+                        if (backData.type == 'success') {
+                            msgBox.tips("操作成功");
+                        }
+                    });
+                },
+                // 正整数验证
+                isPositive: function (s) {
+                    var reg = /^[0-9]*[1-9][0-9]*$/;
+                    return reg.test(s)
+                }
+
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 * @param params
+                 * @param callback
+                 */
+                save: function (params, callback) {
+                    $.post(path + "/admin/basicConfig/baseSet/saveOpenStoreSet", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });

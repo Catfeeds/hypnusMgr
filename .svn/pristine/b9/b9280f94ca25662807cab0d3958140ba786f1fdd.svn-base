@@ -1,0 +1,180 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>主管补贴设置</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/quan.css" rel="stylesheet"/>
+
+    <script src="${path}/resources/admin/common/temDataGrid.js"></script>
+    <script src="${path}/resources/js/member.js"></script>
+    <script src="${path}/resources/admin/js/subsidyMgr/director/addEdit.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="positionNow">
+        <a>主页 &gt; </a><a href="${path}/admin/subsidy/director/index.html">主管补贴设置</a> &gt; <a>添加管理奖励</a>
+    </div>
+    <input id="couponId" name="couponId" type="hidden" value="${rule.id}"/>
+    <div class="addActivities">
+        <div class="userDetail">
+            <h1 class="tittle">添加管理奖励</h1>
+            <div class="userDetailMain">
+                <div class="eachLine xw_eachLine">
+                    <div class="lineLeft">补贴名称：</div>主管管理补贴
+                </div>
+                <div class="eachLine">
+                    <div class="lineLeft">有效时间：</div>
+                    <input class="zjInput" type="text" style="width:140px;" id="startTime" name="startTime" value="<fmt:formatDate value="${rule.startTime}" pattern="yyyy-MM-dd"/>"
+                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'endTime\')}',minDate:'%y-%M-%d'})"/>
+                    <span class="formText" style="margin:8px 5px 0; float:none;">~</span>
+                    <input class="zjInput" type="text" style="width:140px;" id="endTime" name="endTime" value="<fmt:formatDate value="${rule.endTime}" pattern="yyyy-MM-dd"/>"
+                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd', minDate:'#F{$dp.$D(\'startTime\')}'})"/>
+                </div>
+                <div class="eachLine xw_eachLine">
+                    <input id="status" name="status" type="hidden" class="hiddenValue" value="${rule.status == null ? 1 : rule.status}"/>
+                    <div class="lineLeft">是否启用：</div>
+                    <div class="activitiestype xw_activitiestype <c:if test="${rule.status == 1 || rule.status == null}">on</c:if>" data-value="1"><span class="tickB"></span>是</div>
+                    <div class="activitiestype xw_activitiestype <c:if test="${rule.status == 2}">on</c:if>" data-value="2"><span class="tickB"></span>否</div>
+                </div>
+                <div class="bonusBox xw_bonusBox2">
+                    <div class="eachLine xw_eachLine">
+                        <div class="lineLeft">结算周期：</div>
+                        <input class="tkinput" type="text"  style="width:80px;" id="length" name="length" value="${rule.length}"/>天
+                    </div>
+                </div>
+
+                <div class="bonusBox xw_bonusBox2">
+                    <div class="eachLine xw_eachLine">
+                        <input id="rewardType3" name="rewardType3" type="hidden" class="hiddenValue" value="${rule.rewardType == null ? 1 : rule.rewardType}"/>
+                        <div class="lineLeft">奖励类型：</div>
+                        <div class="activitiestype xw_activitiestype <c:if test="${rule.rewardType == 1 || rule.rewardType == null}">on</c:if>" rel="4" data-value="1"><span class="tickB"></span>代金券</div>
+                        <div class="activitiestype xw_activitiestype <c:if test="${rule.rewardType == 2}">on</c:if>" rel="5" data-value="2"><span class="tickB"></span>现金补贴</div>
+                    </div>
+                    <div class="xw_show4" <c:if test="${rule.rewardType == 2}">style="display:none;"</c:if>>
+                        <c:if test="${rule.rewardType == 1}">
+                            <c:forEach items="${details}" var="detail">
+                                <div class="xw_range">
+                                    <div class="topDevide" style="margin-top:0px;">
+                                        <div class="devideTit">梯度</div>
+                                        <div class="deleRange xw_deleRange">删除梯度</div>
+                                    </div>
+                                    <div class="eachLine">
+                                        <span class="btnGrey deleteVoncher" style="margin-left:6px;">删除</span>
+                                        <span class="btnRed checkCoupon" style="margin-left:6px;">选择代金券</span>
+                                        <div class="lineText">店主销售金额达到</div>
+                                        <input class="tkinput saleMoney" type="text" style="width:80px;" value="${detail.salesStart}"/>
+                                        元可获得代金券
+                                    </div>
+                                    <table class="datalistTable no">
+                                        <tr>
+                                            <th width="40px">&nbsp;</th>
+                                            <th>代金券名称</th>
+                                            <th>面值（元）</th>
+                                            <th>有效期</th>
+                                        </tr>
+                                        <c:forEach items="${detail.coupons}" var="coupon">
+                                            <tr>
+                                                <td><span class="tick xw_tick"></span></td>
+                                                <td><span class="textBlue">${coupon.couponName}</span></td>
+                                                <td><span class="textRed">${coupon.faceValue}</span></td>
+                                                <td>领取后${coupon.limitDate}天过期</td>
+                                                <input type="hidden" class="couponId" value="${coupon.couponId}">
+                                            </tr>
+                                        </c:forEach>
+                                    </table>
+                                </div>
+                            </c:forEach>
+                        </c:if>
+                        <div class="addRange xw_addRange addVoucher">+添加梯度</div>
+                    </div>
+                    <!------------>
+                    <div class="xw_show5" <c:if test="${rule.rewardType == 1 || rule == null}">style="display:none;"</c:if>>
+                        <c:if test="${rule.rewardType == 2}">
+                            <c:forEach items="${details}" var="detail">
+                                <div class="xw_range">
+                                    <div class="topDevide" style="margin-top:0px;">
+                                        <div class="devideTit">梯度1</div>
+                                        <div class="deleRange xw_deleRange">删除梯度</div>
+                                    </div>
+                                    <div class="eachLine">
+                                        <div class="lineText">店主销售金额达到</div>
+                                        <input class="tkinput saleMoney2" type="text" style="width:80px;" value="${detail.salesStart}"/>
+                                        <div class="lineText">元补贴</div>
+                                        <input class="tkinput giveMoney2" type="text" style="width:80px;" value="${detail.rewardMoney}"/>
+                                        元。
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </c:if>
+                        <div class="addRange xw_addRange addCash">+添加梯度</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="saveBar">
+        <span class="btnRed" id="save">保存</span>
+        <span class="btnGrey" onclick="window.location='${path}/admin/subsidy/director/index.html'">取消</span>
+    </div>
+</div>
+</div>
+</body>
+</html>
+
+<script type="text/html" id="template_cash">
+    {{each}}
+    <div class="xw_range xw_rangeHide">
+        <div class="topDevide" style="margin-top:0px;">
+            <div class="devideTit">梯度</div>
+            <div class="deleRange xw_deleRange">删除梯度</div>
+        </div>
+        <div class="eachLine">
+            <div class="lineText">店主销售金额达到</div>
+            <input class="tkinput saleMoney2" type="text" style="width:80px;" />
+            <div class="lineText">元补贴</div>
+            <input class="tkinput giveMoney2" type="text" style="width:80px;" />
+            元。
+        </div>
+    </div>
+    {{/each}}
+</script>
+
+<script type="text/html" id="template_voucher">
+    {{each}}
+    <div class="xw_range xw_rangeHide">
+        <div class="topDevide" style="margin-top:0px;">
+            <div class="devideTit">梯度</div>
+            <div class="deleRange xw_deleRange">删除梯度</div>
+        </div>
+        <div class="eachLine">
+            <span class="btnGrey deleteVoncher" style="margin-left:6px;">删除</span>
+            <span class="btnRed checkCoupon" style="margin-left:6px;">选择代金券</span>
+            <div class="lineText">店主销售金额达到</div>
+            <input class="tkinput saleMoney" type="text" style="width:80px;" />
+            元可获得代金券
+        </div>
+        <table class="datalistTable no">
+            <tr>
+                <th width="40px"></th>
+                <th>代金券名称</th>
+                <th>面值（元）</th>
+                <th>有效期</th>
+            </tr>
+        </table>
+    </div>
+    {{/each}}
+</script>
+
+<script type="text/html" id="template_checkCoupon">
+    {{each}}
+    <tr>
+        <td><span class="tick xw_tick"></span></td>
+        <td><span class="textBlue">{{$value.couponName}}</span></td>
+        <td><span class="textRed">{{$value.faceValue}}</span></td>
+        <td>领取后{{$value.limitDate}}天过期</td>
+        <input type="hidden" class="couponId" value="{{$value.id}}">
+    </tr>
+    {{/each}}
+</script>

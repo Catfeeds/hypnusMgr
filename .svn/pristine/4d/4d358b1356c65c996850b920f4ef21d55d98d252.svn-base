@@ -1,0 +1,80 @@
+package com.catt.wfx.repository.dao.settlementMgr.impl;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementBusinessDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商家账户信息Dao接口实现
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-02-23 11:38:28
+ */
+@Repository("settlementBusinessDaoImpl")
+public class SettlementBusinessDaoImpl extends BaseDaoImpl<SettlementBusiness, Long>
+        implements SettlementBusinessDao {
+    public List<Map> statisticsOfOrder(Long factoryId, String factoryName) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t.I_ID AS \"id\", ");
+        sql.append(" t.I_TOTAL_NUM AS \"totalNum\", ");
+        sql.append(" t.I_TOTAL_MONEY AS \"totalMoney\", ");
+        sql.append(" t.I_FACTORY_ID AS \"factoryId\", ");
+        sql.append(" f.S_FACTORY_NAME AS \"factoryName\" ");
+        sql.append(" FROM t_settlement_business t ");
+        sql.append(" LEFT JOIN t_factory_info f ON (t.I_FACTORY_ID = f.I_ID) ");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+        if (StringUtil.checkObj(factoryId)) {
+            sql.append(" AND t.I_FACTORY_ID = :factoryId");
+            param.put("factoryId", factoryId);
+        }
+
+        if (StringUtil.checkStr(factoryName)) {
+            sql.append(" AND f.S_FACTORY_NAME LIKE :factoryName");
+            param.put("factoryName", "%"+factoryName+"%");
+        }
+
+        return this.findListBySql(sql.toString(), param, Map.class);
+
+    }
+
+    public List<Map> statisticsOfOrderDetail(Long factoryId, String factoryName, Date startDate, Date endDate) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t.I_ID AS \"id\", ");
+        sql.append(" f.S_FACTORY_NAME AS \"factoryName\", ");
+        sql.append(" t.S_ORDER_CODE AS \"orderCode\", ");
+        sql.append(" t.I_TOTAL_AMOUNT AS \"totalAmount\", ");
+        sql.append(" s.I_COUPON_MONEY AS \"couponMoney\", ");
+        sql.append(" s.I_PAY_TYPE AS \"payType\" ");
+        sql.append(" FROM t_cus_order t ");
+        sql.append(" RIGHT JOIN t_settlement_order_detail s ON (t.I_ID = s.I_ORDER_ID) ");
+        sql.append(" LEFT JOIN t_factory_info f ON (t.I_FACTORY_ID = f.I_ID) ");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+        if (StringUtil.checkObj(factoryId)) {
+            sql.append(" AND t.I_FACTORY_ID = :factoryId");
+            param.put("factoryId", factoryId);
+        }
+
+        if (StringUtil.checkStr(factoryName)) {
+            sql.append(" AND f.S_FACTORY_NAME LIKE :factoryName");
+            param.put("factoryName", "%" + factoryName + "%");
+        }
+
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+
+}

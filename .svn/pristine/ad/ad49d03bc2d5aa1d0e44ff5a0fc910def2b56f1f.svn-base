@@ -1,0 +1,30 @@
+<%@ taglib prefix="config" uri="http://www.cooldingsoft.com" %>
+<%@ page language="java" pageEncoding="utf-8" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>关于我们</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/shezhi1.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <!--手机观看保持比例-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+</head>
+
+<body style="background:#fff;">
+<spring:eval expression="@configProperties['platform.name']" var="platformName"/>
+<spring:eval expression="@configProperties['platform.default.op.model']" var="platformOpModel"/>
+
+<div style="height:47px; background:#fff;"></div>
+<%--<div class="top header">--%>
+    <%--<button class="top-left" onClick="window.location='6-1-0shezhi.html';"><img class="top_btn_back" src="images/top_btn_back.png"></button>--%>
+    <%--<h1>关于我们</h1>--%>
+<%--</div>--%>
+<img class="topLogo" src="${path}/resources/images/shezhi_logo.png">
+<p class="logpName">${platformName} V1.2.3</p>
+<p class="neirong">
+    <config:Config key="app_abouts" defaultValue="云集微店是一款在手机端开店的app，为店主提供美妆、母婴、健康食品等上万种正品货源。并有海量商品文案，手把手培训，一键代发，专属客服等特色服务，是中国领先的社交零售平台." />
+</p>
+</body>
+</html>
+

@@ -1,0 +1,38 @@
+package com.catt.wfx.service.productMgr;
+
+
+import com.catt.wfx.repository.entity.productMgr.ProductPackage;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 开店套餐服务接口
+ * 作者：袁幸成
+ * 时间：2017-1-18 9:03:47
+ */
+public interface ProductPackageService {
+
+    /**
+     * 删除套餐关联的套餐详情
+     * @param packageProid 套餐标识
+     */
+    void delPackageRelPrice(Long packageProid);
+
+    /**
+     * 保存套餐关联的商品价格定义
+     * @param packageProid 套餐标识
+     * @param packageList 套餐详情
+     * @param packagePrice 套餐价格
+     */
+    void savePackageRelPrice(Long packageProid, List<ProductPackage> packageList, Double packagePrice);
+
+    /**
+     * 获取套餐关联的商品价格定义
+     * @param packageProid 套餐标识
+     * @return
+     */
+    List<Map> getPackageRelPrice(Long packageProid);
+}
+

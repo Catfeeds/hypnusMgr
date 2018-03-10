@@ -1,0 +1,36 @@
+package com.catt.wfx.service.impl.base.wechatReturn;
+
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.wechatReturn.WechatReturnResultNotifyDao;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnResultNotify;
+import com.catt.wfx.service.base.wechatReturn.WechatReturnResultNotifyBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
+
+@Service("wechatReturnResultNotifyBaseServiceImpl")
+public class WechatReturnResultNotifyBaseServiceImpl extends
+		BaseServiceImpl<WechatReturnResultNotify, Long> implements WechatReturnResultNotifyBaseService {
+
+	@Resource(name = "returnWechatReturnResultNotifyDaoImpl")
+	private WechatReturnResultNotifyDao returnWechatReturnResultNotifyDao;
+
+	@Resource
+	public void setBaseDao(WechatReturnResultNotifyDao returnWechatReturnResultNotifyDao) {
+		super.setBaseDao(returnWechatReturnResultNotifyDao);
+	}
+
+
+	public WechatReturnResultNotify getWechatReturnResultNotify(String out_refund_no) {
+		List<WechatReturnResultNotify> list = 	this.findList(1,
+				Arrays.asList(Filter.eq("outRefundNo", out_refund_no)), null);
+		if (list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
+	}
+}

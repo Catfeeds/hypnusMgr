@@ -1,0 +1,24 @@
+package com.catt.wfx.service.perforMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+
+import java.util.Map;
+
+/**
+ * Description:店主绩效接口
+ * Created by 2017-03-08  11:25.
+ * author: Zhou mingxiang
+ */
+public interface ShopkeeperPerforService {
+    /**
+     * 获取店主绩效
+     *
+     * @param cusName     店主昵称
+     * @param leaderName  所属主管
+     * @param pageable
+     * @return
+     */
+    Page<Map> getShopkeeperPerforByPage(String cusName, String leaderName, Pageable pageable);
+
+}

@@ -1,0 +1,134 @@
+seajs.use(['base64', 'rsa', 'validate', 'cookie', '$', 'msgBox'], function (base64, rsa, validate, cookie, $, msgBox) {
+    /** 初始化处理器 */
+    var InitHandler = (function () {
+        var $form = $('#form');
+        var $username = $("#username");
+        var $captcha = $("#captcha");
+        var $captchaBtn = $("#captchaBtn");
+        var modulus;
+        var exponent;
+
+        function getKey(callFn) {
+            if (!modulus || !exponent) {
+                $.get(path + '/guest/appPage/key', null, function (data) {
+                    modulus = data.modulus;
+                    exponent = data.exponent;
+                    callFn && callFn();
+                });
+            } else {
+                callFn && callFn();
+            }
+        }
+
+        return {
+            /** 初始化入口 */
+            init: function () {
+                this.initPage();
+                this.initEvent();
+                this.initData();
+            },
+
+            /** 初始化界面 */
+            initPage: function () {
+                if ($.cookie("username") != null) {
+                    $username.val($.cookie("username"));
+                    $captcha.focus();
+                } else {
+                    $username.focus();
+                }
+            },
+
+            /** 初始化事件绑定 */
+            initEvent: function () {
+                $form.validate({
+                    //如果这个参数为true，那么表单不会提交，只进行检查，调试时十分方便
+                    debug: true,
+                    rules: {
+                        username: {
+                            required: true,
+                            isMobile: true
+                        },
+                        captcha: {
+                            required: false
+                        }
+                    },
+                    messages: {
+                        username: {
+                            required: '手机号不能为空',
+                            isMobile: '手机号码格式不正确'
+                        },
+                        captcha: {
+                            required: '验证码不能为空'
+                        }
+                    },
+                    errorPlacement: function (error, element) {
+                    },
+                    invalidHandler: function (event, validator) {
+                        $.each(validator.errorMap, function (name, msg) {
+                            msgBox.warn(msg);
+                            return false;
+                        });
+                    }
+                });
+
+                $("#captchaBtn").click(function () {
+                    if ($captchaBtn.attr("unabled") != "true" && $form.valid()) {
+                        var username = $username.val();
+                        $captchaBtn.attr("unabled", "true");
+                        var showTime = 60;
+                        $captchaBtn.everyTime("1s", function () {
+                            $captchaBtn.html(showTime + '秒');
+                            showTime--;
+                            if (showTime == 0) {
+                                $captchaBtn.stopTime();
+                                $captchaBtn.html("获取验证码");
+                                $captchaBtn.attr("unabled", "false");
+                            }
+                        });
+
+                        getKey(function () {
+                            var rsaKey = new rsa.RSAKey();
+                            rsaKey.setPublic(base64.b64tohex(modulus), base64.b64tohex(exponent));
+                            var param = {};
+                            param.mobileNo = base64.hex2b64(rsaKey.encrypt(username));
+                            $.post(path + '/guest/sms/send?type=register', param, function (backData) {
+                            });
+                        });
+                    }
+                });
+
+                $form.submit(function () {
+                    if ($form.valid()) {
+                        $.cookie("username", $username.val(), {expires: 7 * 24 * 60 * 60});
+
+                        var captcha = $('#captcha').val();
+                        if ($.trim(captcha) == "") {
+                            msgBox.warn("验证码不能为空");
+                            return;
+                        }
+
+                        $.post(path + "/login", $form.serializeArray(), function (data) {
+                            if (data.type == 'success') {
+                                window.location.href = successUrl;
+                            } else {
+                                msgBox.warn(data.content);
+                            }
+                        });
+                    }
+
+                    return false;
+                });
+            },
+
+            /** 初始化数据加载 */
+            initData: function () {
+
+            }
+        };
+    })();
+
+    /** 页面入口 */
+    $(function () {
+        InitHandler.init();
+    });
+});

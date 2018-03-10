@@ -1,0 +1,16 @@
+package com.catt.wfx.repository.dao.wechatReturn;
+
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrder;
+
+/**
+ * 退款订单Dao接口
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-03-02 15:15:26
+ */
+public interface WechatReturnOrderDao extends BaseDao<WechatReturnOrder, Long> {
+
+}

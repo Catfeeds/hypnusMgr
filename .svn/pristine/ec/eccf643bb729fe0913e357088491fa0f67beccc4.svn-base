@@ -1,0 +1,306 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+        var rangeType = 3;
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    //增加
+                    $("#save").click(EventHandler.save);
+
+                    // 勾选
+                    $(".bonusBox").on('click', '.xw_tick', function () {
+                        $(this).toggleClass("tickOn");
+                    });
+
+                    //单选按钮组
+                    $(".xw_activitiestype").click(function () {
+                        $(this).siblings(".xw_activitiestype").removeClass("on")
+                        $(this).addClass("on");
+
+                        var data = $(this).attr("data-value");
+                        $(this).parents(".eachLine").find(".hiddenValue").val(data);
+
+                        var tickText = $(this).attr("rel");
+                        if (tickText == 2) {
+                            $(this).parents(".xw_eachLine").siblings(".xw_showOption").slideUp(200);
+                        } else if (tickText == 3) {
+                            $(this).parents(".xw_eachLine").siblings(".xw_showOption").slideDown(200);
+                        } else if (tickText == 4) {
+                            $(this).parents(".xw_eachLine").parents("div.bonusBox").find(".xw_show4").show(200);
+                            $(this).parents(".xw_eachLine").parents("div.bonusBox").find(".xw_show5").hide(200);
+                        } else if (tickText == 5) {
+                            $(this).parents(".xw_eachLine").parents("div.bonusBox").find(".xw_show5").show(200);
+                            $(this).parents(".xw_eachLine").parents("div.bonusBox").find(".xw_show4").hide(200);
+                        }
+
+                        var bonusType = $(this).attr("bonustype");
+                        if (bonusType == "type1") {
+                            $(".xw_bonusBox1").show();
+                            $(".xw_bonusBox2").hide();
+                        } else if (bonusType == "type2") {
+                            $(".xw_bonusBox2").show();
+                            $(".xw_bonusBox1").hide();
+                        }
+                        setParenHei();
+                    });
+
+                    // 删除梯度
+                    $(".xw_bonusBox2").on('click', '.xw_deleRange', EventHandler.del);
+
+                    // 增加销售现金奖励梯度
+                    $(".addCash").click(EventHandler.addCash);
+
+                    // 增加代金券奖励梯度
+                    $(".addVoucher").click(EventHandler.addVoucher);
+
+                    // 删除代金券
+                    $(".bonusBox").on('click', '.deleteVoncher', EventHandler.deleteVoncher);
+
+                    // 选择代金券
+                    $(".bonusBox").on('click', '.checkCoupon', function () {
+                        EventHandler.checkCoupon(this);
+                    });
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 */
+                save: function () {
+                    var params = {};
+                    params.cusType = 1;
+                    params.id = $("#couponId").val();
+
+                    // 有效时间
+                    var startTime = $('#startTime').val();
+                    var endTime = $('#endTime').val();
+                    if (startTime) {
+                        params.startTime = startTime.replace(/\-/g, '/') + " 00:00:00";
+                    } else {
+                        msgBox.tips("请设置有效时间");
+                        return;
+                    }
+                    if (endTime) {
+                        params.endTime = endTime.replace(/\-/g, '/') + " 00:00:00";
+                    } else {
+                        msgBox.tips("请设置有效时间");
+                        return;
+                    }
+
+                    params.type = $("#type").val();
+                    if (params.type == 1 || params.type == 2) { // 注册或者邀请奖励
+                        var detailArr = [];
+                        params.rewardType = $("#rewardType").val();
+                        if (params.rewardType == 1) { // 代金券
+                            var couponIds = $(".xw_bonusBox1").find(".couponId");
+                            if (couponIds.length == 0) {
+                                msgBox.tips("请添加代金券");
+                                return;
+                            }
+                            // 拼接代金券标识，多个以英文逗号分隔
+                            var couponId = "";
+                            $.each(couponIds, function (i, item) {
+                                couponId += $(item).val() + ",";
+                            });
+                            couponId = couponId.substring(0, couponId.length - 1);
+                            detailArr[0] = {rewardType: params.rewardType, couponId: couponId};
+                        } else if (params.rewardType == 2) { // 现金补贴
+                            var rewardMoney = $("#rewardMoney").val();
+                            if (!rewardMoney) {
+                                msgBox.tips("现金补贴不能为空");
+                                return;
+                            }
+                            if (!EventHandler.isMoney(rewardMoney)) {
+                                msgBox.tips("请输入正确的金额格式");
+                                return
+                            }
+                            detailArr[0] = {rewardType: params.rewardType, rewardMoney: rewardMoney};
+                        }
+                        params.detailJson = JSON.stringify(detailArr);
+                        params.cycle = 1; // 注册或邀请时，结算周期为即时
+                    } else if (params.type == 3) { // 销售奖励
+                        // 结算周期
+                        params.length = $("#length").val();
+                        if (!params.length) {
+                            msgBox.tips("结算周期天数不能为空");
+                            return;
+                        }
+                        if (!EventHandler.isPositive(params.length)) {
+                            msgBox.tips("结算周期天数只能是正整数");
+                            return;
+                        }
+
+                        var detailArr = [];
+                        params.rewardType = $("#rewardType3").val();
+                        var flag = false;
+                        if (params.rewardType == 1) { // 代金券
+                            var saleMoneys = $(".xw_bonusBox2").find(".saleMoney");
+                            $.each(saleMoneys, function (i, item) {
+                                var saleMoney = $(item).val();
+                                if (!saleMoney) {
+                                    msgBox.tips("销售金额不能为空");
+                                    flag = true;
+                                    return;
+                                }
+                                if (!EventHandler.isMoney(saleMoney)) {
+                                    msgBox.tips("请输入正确的金额格式");
+                                    flag = true;
+                                    return;
+                                }
+                                var couponIds = $(item).parent().parent().find(".couponId");
+                                if (couponIds.length == 0) {
+                                    msgBox.tips("请添加代金券");
+                                    flag = true;
+                                    return;
+                                }
+
+                                // 拼接代金券标识，多个以英文逗号分隔
+                                var couponId = "";
+                                $.each(couponIds, function (i, item) {
+                                    couponId += $(item).val() + ",";
+                                });
+                                couponId = couponId.substring(0, couponId.length - 1);
+                                var detail = {
+                                    rewardType: params.rewardType,
+                                    salesStart: saleMoney,
+                                    couponId: couponId
+                                };
+                                detailArr[i] = detail;
+                            });
+                        } else if (params.rewardType == 2) { // 现金补贴
+                            var saleMoney2Arr = $(".saleMoney2");
+                            var giveMoney2Arr = $(".giveMoney2");
+
+                            for (var j = 0; j < saleMoney2Arr.length; j++) {
+                                var saleMoney2 = $(saleMoney2Arr[j]).val();
+                                var giveMoney2 = $(giveMoney2Arr[j]).val();
+                                if (!saleMoney2 || !giveMoney2) {
+                                    msgBox.tips("销售和补贴金额不能为空");
+                                    return;
+                                }
+                                if (!EventHandler.isMoney(saleMoney2) || !EventHandler.isMoney(giveMoney2)) {
+                                    msgBox.tips("请输入正确的金额格式");
+                                    return
+                                }
+                                var detail = {
+                                    rewardType: params.rewardType,
+                                    salesStart: saleMoney2,
+                                    rewardMoney: giveMoney2
+                                };
+                                detailArr[detailArr.length] = detail;
+                            }
+                        }
+
+                        if (flag) {
+                            return;
+                        }
+                        // 判断是否有梯度，并将梯度数组转换成json格式
+                        if (detailArr.length == 0) {
+                            msgBox.tips("至少要添加一个梯度");
+                            return;
+                        }
+                        params.detailJson = JSON.stringify(detailArr);
+                        params.cycle = 2; // 销售奖励时，结算周期为天
+                    }
+
+                    params.status = $("#status").val();
+                    DataHandler.save(params, function (backData) {
+                        window.location.href = path + "/admin/subsidy/shopkeeper/index.html";
+                    });
+                },
+                addCash: function () {
+                    var html = template('template_cash', [{}]);
+                    $(this).before(html);
+                    setParenHei();
+                },
+                addVoucher: function () {
+                    var html = template('template_voucher', [{}]);
+                    $(this).before(html);
+                    setParenHei();
+                },
+                del: function () {
+                    $(this).parent().parent().remove();
+                    setParenHei();
+                },
+                deleteVoncher: function () {
+                    var trList = $(this).parent().parent().find('.tickOn').parents("tr");
+                    $.each(trList, function (i, item) {
+                        $(this).remove();
+                    });
+                    setParenHei();
+                },
+                checkCoupon: function (checkObj) {
+                    msgBox.exWindow.open({
+                        title: '选择代金券',
+                        url: path + "/admin/couponMgr/check.html?rangeType=" + rangeType,
+                        width: '850px',
+                        height: '570px',
+                        close: function (result) {
+                            if (result) {
+                                var coupons = $.evalJSON(result);
+                                var html = template('template_checkCoupon', coupons);
+                                $(checkObj).parent().parent().find("table").append(html);
+                                setParenHei();
+                            }
+                        }
+                    });
+                },
+                // 正整数验证
+                isPositive: function (s) {
+                    var reg = /^[0-9]*[1-9][0-9]*$/;
+                    return reg.test(s)
+                },
+                // 金钱验证
+                isMoney: function (s) {
+                    var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+                    return reg.test(s);
+                }
+
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 * @param params
+                 * @param callback
+                 */
+                save: function (params, callback) {
+                    $.post(path + "/admin/subsidy/save", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });

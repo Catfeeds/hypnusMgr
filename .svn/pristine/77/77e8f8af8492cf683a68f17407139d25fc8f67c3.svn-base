@@ -1,0 +1,40 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/3/8
+  Time: 16:05
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule2.jsp" %>
+    <title>结算</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/shenhe.css" rel="stylesheet" />
+    <script src="${path}/resources/admin/js/perforMgr/platPerfor/settle.js" type="text/javascript"></script>
+</head>
+<body>
+<body>
+<div class="wrapper" style="min-height: 150px">
+    <table class="massageTable" cellspacing="0">
+        <tr>
+            <td width="100">结算人：</td>
+            <td><input class="tkinput" style="width: 150px" type="text" id="staffName"/></td>
+        </tr>
+        <tr>
+            <td>流水号：</td>
+            <td><input class="tkinput" style="width: 150px" type="text" id="code"/></td>
+        </tr>
+    </table>
+    <div class="popBtDiv" style="height:45px;">
+        <ul>
+            <li><a class="btnGrey" style=" margin-left:10px;" id="cancel">取&nbsp;&nbsp;消</a></li>
+            <li><a class="btnRed" id="submit">提 交</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
+

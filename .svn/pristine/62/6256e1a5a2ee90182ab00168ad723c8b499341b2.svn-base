@@ -1,0 +1,24 @@
+package com.catt.wfx.repository.dao.orderMgr;
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLog;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单流程信息Dao接口
+ *
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:34
+ * @version V1.0
+ */
+public interface CusOrderLogDao extends BaseDao<CusOrderLog, Long> {
+    /**
+     * 获取订单对应的发货时间
+     *
+     * @param orderIds 订单标识
+     * @return
+     */
+    List<Map> getDeliveryTimeByOrderId(List<Long> orderIds);
+}

@@ -1,0 +1,58 @@
+package com.catt.wfx.service.productMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.form.productMgr.ProductFromApp;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:商品管理服务接口
+ * Created by 2017-01-09  14:31.
+ * author: Zhou mingxiang
+ */
+public interface ProductService {
+    /**
+     * 获取商品信息列表(app接口)
+     *
+     * @param productFromApp  商品信息from
+     * @param pageable
+     * @return
+     */
+    Page<Map> findProductInfoByPage(ProductFromApp productFromApp, Pageable pageable);
+
+    /**
+     * 获取商品详细信息(app接口)
+     *
+     * @param cusId 用户标识
+     * @param id    商品标识
+     * @param useType 使用类型 1-普通  2-进货清单
+     * @return
+     */
+    Map findProductInfoDetail(Long cusId, Long id, Integer useType);
+
+    /**
+     * 获取商品规格及价格列表(app接口)
+     *
+     * @param productId 商品标识
+     * @param cusId 用户标识（进货时非空）
+     * @param useType 1-普通，2-进货。不传代表“普通”
+     * @return
+     */
+    Map findSpecAndPrice(Long productId, Long cusId, Integer useType);
+
+    /**
+     * 获取所有商品类型列表
+     * @return
+     */
+    List<Map> getAllCate();
+
+    /**
+     * 通过商品标识获取参与活动的商品详情信息
+     *
+     * @param productId 商品标识
+     * @return
+     */
+    Map getActivityProductDetailByProductId(Long productId);
+}

@@ -1,0 +1,45 @@
+package com.catt.wfx.service.customerMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+
+import java.util.Date;
+import java.util.Map;
+
+/**
+ * Description:用户账户服务接口
+ * Created by 2017-02-15  14:17.
+ * author: Zhou mingxiang
+ */
+public interface CusAccountService {
+    /**
+     * 获取我的账户信息(APP)
+     *
+     * @param cusId 当前登录用户ID
+     * @param unsettleMoneyInResult  是否返回待到账收益
+     * @return
+     */
+    Map findCusAccount(Long cusId, Integer unsettleMoneyInResult);
+
+    /**
+     *获取交易记录列表（分页）(APP)
+     *
+     * @param cusId           当前登录用户ID
+     * @param type            交易类型
+     * @param createDateBegin 交易起始时间
+     * @param createDateEnd   交易结束时间
+     * @param pageable
+     * @return
+     */
+    Page<Map> findTransactionRecord(Long cusId, String type, Date createDateBegin,
+                                    Date createDateEnd, Pageable pageable);
+
+    /**
+     * 获取我的收益统计(分页)
+     * @param cusId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    Page<Map> getMyIncomeStatistics(Long cusId, Integer pageNo, Integer pageSize);
+}

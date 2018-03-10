@@ -1,0 +1,535 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.catt</groupId>
+    <parent>
+        <groupId>com.catt</groupId>
+        <artifactId>project-hypnus-admin</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>project-hypnus-service-impl</artifactId>
+    <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>project-hypnus-service-impl</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <ktjsdp.version>1.1.3.3</ktjsdp.version>
+    </properties>
+    <dependencies>
+
+        <!-- junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- 文档格式转换 -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>1.8.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.catt</groupId>
+            <artifactId>common-module-exception-data</artifactId>
+            <version>${com.catt.module.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.catt</groupId>
+            <artifactId>framework-base-service-impl</artifactId>
+            <version>${com.catt.framwork.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.catt</groupId>
+            <artifactId>common-module-exception-service</artifactId>
+            <version>${com.catt.module.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.catt</groupId>
+            <artifactId>common-module-exception-service-impl</artifactId>
+            <version>${com.catt.module.version}</version>
+        </dependency>
+
+        <!--发送短息sms相关jar包-->
+        <dependency>
+            <groupId>com.catt</groupId>
+            <artifactId>common-module-sms-service-impl</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.catt</groupId>
+            <artifactId>project-hypnus-service</artifactId>
+            <version>${com.catt.version}</version>
+        </dependency>
+
+		<dependency>
+            <groupId>com.catt</groupId>
+            <artifactId>project-hypnus-common-service-impl</artifactId>
+            <version>${com.catt.version}</version>
+        </dependency>
+
+        <!--快递相关接口-->
+        <dependency>
+            <groupId>com.catt</groupId>
+            <artifactId>common-module-express-service-impl</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${com.alibaba.druid.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.jdbc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.jtds</groupId>
+            <artifactId>jtds</artifactId>
+            <version>1.2.4</version>
+        </dependency>
+
+        <!-- hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${org.hibernate.entitymanager.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${org.hibernate.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${org.hibernate.validator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search</artifactId>
+            <version>${org.hibernate.search.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>${org.hibernate.jpa.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-oxm</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <!--重试模块-->
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+            <version>${org.springframework.retry.version}</version>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <defaultGoal>install</defaultGoal>
+
+        <filters>
+            <filter>${project.basedir}/../../filters/${env}.properties</filter>
+        </filters>
+        <finalName>project-hypnus-service-impl</finalName>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/java</directory>
+                <includes>
+                    <include>**/*.jpg</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.bat</include>
+                    <include>**/*.sh</include>
+                </includes>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>filters/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <directory>${project.basedir}/target</directory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <env>dev</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>demo</id>
+            <properties>
+                <env>demo</env>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <env>prod</env>
+            </properties>
+        </profile>
+        
+        <profile>
+            <!--测试的时候启动后台服务-->
+            <id>runInTest</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.4.0</version>
+                        <executions>
+                            <execution>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>com.catt.hypnus.Server</mainClass>
+                                    <keepAlive>true</keepAlive>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!--部署后台服务的时候启用，执行完后复制整个dist目录到服务器-->
+            <id>releasePackage</id>
+            <properties>
+                <dist.dir>${project.basedir}/dist</dist.dir>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.10</version>
+                        <executions>
+                            <execution>
+                                <id>copy-dependencies</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}/lib</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <encoding>UTF-8</encoding>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}/conf</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/resources/</directory>
+                                            <filtering>true</filtering>
+                                            <excludes>
+                                                <exclude>*.bat</exclude>
+                                                <exclude>*.sh</exclude>
+                                            </excludes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-command</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <encoding>UTF-8</encoding>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/resources/</directory>
+                                            <filtering>true</filtering>
+                                            <includes>
+                                                <include>*.bat</include>
+                                                <include>*.sh</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.4</version>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>true</addClasspath>
+                                    <classpathPrefix>lib/</classpathPrefix>
+                                    <mainClass>com.catt.hypnus.Server</mainClass>
+                                </manifest>
+                                <manifestEntries>
+                                    <Class-Path>conf/</Class-Path>
+                                </manifestEntries>
+                            </archive>
+                            <includes>
+                                <include>**/*.class</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>init-db</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.dbunit</groupId>
+                    <artifactId>dbunit</artifactId>
+                    <version>2.5.1</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.poi</groupId>
+                    <artifactId>poi</artifactId>
+                    <version>${org.apache.poi.version}</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <configuration>
+                            <target>
+                                <!-- mysql -->
+                                <property name="dbunit.datatype" value="org.dbunit.ext.mysql.MySqlDataTypeFactory"/>
+                                <!-- oracle
+                                <property name="dbunit.datatype" value="org.dbunit.ext.oracle.Oracle10DataTypeFactory" /> -->
+
+                                <!-- mssql
+                                <property name="dbunit.datatype" value="org.dbunit.ext.mssql.MsSqlDataTypeFactory" /> -->
+
+                                <property file="${project.basedir}/target/classes/system.properties"/>
+                                <sql driver="${jdbc.driver}" url="${jdbc.url}&amp;sessionVariables=foreign_key_checks=0&amp;characterEncoding=UTF-8" userid="${jdbc.username}"
+                                     password="${jdbc.password}"
+                                     onerror="continue" encoding="${project.build.sourceEncoding}">
+                                    <classpath refid="maven.test.classpath"/>
+                                    <!--<transaction src="db/mysql/delete.sql"/>-->
+                                    <!--<transaction src="db/mysql/addrInfo.sql"/>-->
+                                    <!--<transaction src="db/mysql/business.sql"/>-->
+                                </sql>
+
+                                <taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask"
+                                         classpathref="maven.test.classpath"/>
+
+                                <!-- mysql、mssql -->
+                                <dbunit driver="${jdbc.driver}" url="${jdbc.url}&amp;sessionVariables=foreign_key_checks=0&amp;characterEncoding=UTF-8" userid="${jdbc.username}"
+                                        password="${jdbc.password}">
+
+                                    <!-- oracle
+                                    <dbunit driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}"
+                                        schema="${jdbc.username}" > -->
+
+                                    <dbconfig>
+                                        <property name="datatypeFactory" value="${dbunit.datatype}"/>
+                                    </dbconfig>
+                                    <classpath refid="maven.test.classpath"/>
+                                    <!--<operation type="INSERT" src="db/mysql/data.xls" format="xls" transaction="true"/>-->
+                                    <!--<operation type="INSERT" src="db/mysql/addrInfo.xls" format="xls" transaction="true"/>-->
+                                    <!--<operation type="INSERT" src="db/mysql/business.xls" format="xls" transaction="true"/>-->
+
+                                </dbunit>
+
+                            </target>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!--<profile>-->
+            <!--<id>checkCode</id>-->
+            <!--<activation>-->
+                <!--<activeByDefault>false</activeByDefault>-->
+            <!--</activation>-->
+            <!--<build>-->
+                <!--<plugins>-->
+                    <!--<plugin>-->
+                        <!--<groupId>org.apache.maven.plugins</groupId>-->
+                        <!--<artifactId>maven-checkstyle-plugin</artifactId>-->
+                        <!--<version>${checkstyle.version}</version>-->
+                        <!--<executions>-->
+                            <!--<execution>-->
+                                <!--<id>validate</id>-->
+                                <!--<phase>validate</phase>-->
+                                <!--<configuration>-->
+                                    <!--<encoding>UTF-8</encoding>-->
+                                    <!--<consoleOutput>true</consoleOutput>-->
+                                    <!--<failsOnError>true</failsOnError>-->
+                                <!--</configuration>-->
+                                <!--<goals>-->
+                                    <!--<goal>check</goal>-->
+                                <!--</goals>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                    <!--</plugin>-->
+                    <!--<plugin>-->
+                        <!--<groupId>org.apache.maven.plugins</groupId>-->
+                        <!--<artifactId>maven-jxr-plugin</artifactId>-->
+                        <!--<version>${checkstyle.jxr.version}</version>-->
+                    <!--</plugin>-->
+                <!--</plugins>-->
+            <!--</build>-->
+        <!--</profile>-->
+
+
+    </profiles>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${checkstyle.jxr.version}</version>
+            </plugin>
+        </plugins>
+    </reporting>
+</project>

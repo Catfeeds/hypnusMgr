@@ -1,0 +1,373 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderDao;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderDetailDao;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderLogDao;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementOrderDetailDao;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.entity.customerMgr.FactoryInfo;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLog;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLogistics;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderPay;
+import com.catt.wfx.repository.form.orderMgr.CusOrderFrom;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.base.customerMgr.FactoryInfoBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderLogBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderLogisticsBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderPayBaseService;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单信息表服务接口实现
+ *
+ * @author Zhou mingxiang
+ * @version V1.0
+ * @date 2017-02-22 08:56:52
+ */
+@Service("cusOrderServiceImpl")
+public class CusOrderServiceImpl implements CusOrderService {
+
+    //用户服务
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    //用户订单服务
+    @Resource(name = "cusOrderBaseServiceImpl")
+    private CusOrderBaseService cusOrderBaseService;
+
+    //订单信息表Dao接口
+    @Resource(name = "cusOrderDaoImpl")
+    private CusOrderDao cusOrderDao;
+
+    //订单详情Dao接口
+    @Resource(name = "cusOrderDetailDaoImpl")
+    private CusOrderDetailDao cusOrderDetailDao;
+
+    //订单日志服务
+    @Resource(name = "cusOrderLogBaseServiceImpl")
+    private CusOrderLogBaseService cusOrderLogBaseService;
+
+    //配送信息服务接口
+    @Resource(name = "cusOrderLogisticsBaseServiceImpl")
+    private CusOrderLogisticsBaseService cusOrderLogisticsBaseService;
+
+    //订单支付服务接口
+    @Resource(name = "cusOrderPayBaseServiceImpl")
+    private CusOrderPayBaseService cusOrderPayBaseService;
+
+    //订单结算统计Dao接口
+    @Resource(name = "settlementOrderDetailDaoImpl")
+    private SettlementOrderDetailDao settlementOrderDetailDao;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+    //厂家信息表服务接口
+    @Resource(name = "factoryInfoBaseServiceImpl")
+    private FactoryInfoBaseService factoryInfoBaseService;
+
+    //订单流程信息Dao接口
+    @Resource(name = "cusOrderLogDaoImpl")
+    private CusOrderLogDao cusOrderLogDao;
+
+    @Override
+    public Map findOrderInfo(Long id) {
+        CusOrder cusOrder = cusOrderBaseService.find(id);
+        Map map = new HashMap<>();
+        map.put("id", id);
+        map.put("orderCode", cusOrder.getOrderCode());
+        map.put("orderStatus", cusOrder.getOrderStatus());
+        map.put("productAmount", cusOrder.getProductAmount());
+        map.put("couponMoney", cusOrder.getCouponMoney());
+        map.put("logisticsCost", cusOrder.getLogisticsCost());
+        map.put("totalAmount", cusOrder.getTotalAmount());
+        map.put("totalPayAmount", cusOrder.getTotalPayAmount());
+        return map;
+    }
+
+    public List<Map> findOrderDetail(List<Long> orderIds){
+        return cusOrderDetailDao.findOrderDetail(orderIds);
+    }
+
+    /**
+     * 获取订单信息列表
+     *
+     * @param cusOrderFrom 订单from
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getCusOrderByPage(CusOrderFrom cusOrderFrom, Pageable pageable) {
+        Page<Map> mapPage =  cusOrderDao.getCusOrderByPage(cusOrderFrom, pageable);
+
+        List<Map> mapList = mapPage.getContent();
+        if (mapList != null && mapList.size() > 0) {
+            //订单标识集合
+            List<Long> orderIds = new ArrayList<Long>();
+
+            //订单详细信息
+            Map<Long, Map> orderDetailMap = new HashMap<Long, Map>();
+
+            //订单发货时间结合
+            Map<Long, String> deliverTimelMap = new HashMap<Long, String>();
+            for (Map map : mapList) {
+                map.put("orderStatusName", CusOrder.OrderStatus.getEnum(MapUtil.getInteger(map, "orderStatus")).getName());
+                map.put("deliveryTime", "");
+                orderIds.add(MapUtil.getLong(map, "id"));
+
+            }
+
+
+            if (orderIds != null && orderIds.size() > 0) {
+                //查询订单对应的明细信息，并放入orderDetailMap中
+                List<Map> mapList1 = cusOrderDetailDao.getGoodNumAndProfit(orderIds);
+
+                if (mapList1 != null && mapList1.size() > 0) {
+                    for (Map map : mapList1) {
+                        Long id = MapUtil.getLong(map, "orderId");
+                        orderDetailMap.put(id, map);
+                    }
+
+                }
+
+                //查询订单对应的发货时间，并放入deliverTimelMap中
+                List<Map> deliverTimeList =  cusOrderLogDao.getDeliveryTimeByOrderId(orderIds);
+
+                if (CollectionUtil.isNotEmpty(deliverTimeList)) {
+                    for (Map map : deliverTimeList) {
+                        Long id = MapUtil.getLong(map, "orderId");
+                        String deliveryTime = MapUtil.getString(map, "deliveryTime");
+                        deliverTimelMap.put(id, deliveryTime);
+                    }
+
+                }
+            }
+
+            //遍历数据，将符合条件的厂家信息和订单信息放入集合
+            for (Map map : mapList) {
+                Long id = MapUtil.getLong(map, "id");
+                if (orderDetailMap.containsKey(id)) {
+                    map.putAll(orderDetailMap.get(id));
+                }
+
+                if (deliverTimelMap.containsKey(id)) {
+                    map.put("deliveryTime", deliverTimelMap.get(id));
+                }
+
+            }
+
+
+        }
+        mapPage.setContent(mapList);
+        return mapPage;
+    }
+
+    /**
+     * 获取订单详情
+     *
+     * @param id 订单标识
+     * @return
+     */
+    public Map getCusOrderDetail(Long id, Long factoryId) {
+        Map map = cusOrderDao.getCusOrderDetail(id);
+        Integer payType = MapUtil.getInteger(map, "payType");
+        Integer status = MapUtil.getInteger(map, "status");
+        if (StringUtil.checkObj(payType)) {
+            //支付方式枚举翻译
+            map.put("payTypeName", CusOrderPay.PayType.getEnum(payType).getName());
+        }
+
+        map.put("orderStatusName", CusOrder.OrderStatus.getEnum(MapUtil.getInteger(map, "orderStatus")).getName());
+
+        if (StringUtil.checkObj(status)) {
+            //状态枚举翻译
+            map.put("statusName", CusOrderLogistics.Status.getEnum(status).getName());
+        }
+
+
+        //获取用户和店主对应名称和电话号码
+        Long cusId = MapUtil.getLong(map, "cusId");
+        Long shopkeeperId = MapUtil.getLong(map, "shopkeeperId");
+        Long[] cusIds = new Long[2];
+        cusIds[0] = cusId;
+        cusIds[1] = shopkeeperId;
+        List<CusInfo> cusInfoList = cusInfoBaseService.findList(cusIds);
+        if (cusInfoList != null && cusInfoList.size() > 0) {
+            for (CusInfo cusInfo : cusInfoList) {
+                if (cusInfo.getId().equals(cusId)) {
+                    map.put("cusName", cusInfo.getName());
+                    map.put("cusMobile", cusInfo.getMobile());
+                }
+
+                if (cusInfo.getId().equals(shopkeeperId)) {
+                    map.put("shopkeeperName", cusInfo.getName());
+                    map.put("shopkeeperMobile", cusInfo.getMobile());
+                }
+            }
+        }
+
+        //获取订单对应的商品信息
+        List<Map> mapList = cusOrderDetailDao.getCusOrderDetail(id, factoryId);
+        //枚举翻译， 退货物流公司
+        enumMgrService.transformEnum(map,
+                new ArrayList<EnumTransformData>() {
+                    {
+                        add(new EnumTransformData("T_CUS_ORDER_RETURN",
+                                "I_LOGISTICS_TYPE", "logisticsType",
+                                "logisticsTypeName"));
+                    }
+                });
+
+        map.put("productList", mapList);
+        return map;
+    }
+
+    public Map getFirstCusOrderDetail(Long id) {
+        List<Map> mapList = cusOrderDetailDao.getCusOrderDetail(id, null);
+        if (CollectionUtil.isNotEmpty(mapList)) {
+            return mapList.get(0);
+        }
+        return null;
+    }
+
+
+    /**
+     * 发货
+     *
+     * @param id                订单标识
+     * @param cusOrderLogistics 配送信息
+     */
+    @Transactional
+    public void deliverGoods(Long cusId, String cusName, Long id, CusOrderLogistics cusOrderLogistics) {
+        CusOrder cusOrder = cusOrderBaseService.find(id);
+        if (cusOrder.getOrderStatus().equals(CusOrder.OrderStatus.ToDelivery.getValue())) {
+            //保存订单信息
+            cusOrder.setOrderStatus(CusOrder.OrderStatus.ToTakeDelivery.getValue());
+            cusOrderBaseService.update(cusOrder);
+
+            //-------------------------保存配送信息----------
+            //详细收货地址
+            cusOrderLogistics.setAddress(cusOrder.getRecipientAddress());
+            //收货人
+            cusOrderLogistics.setRecipients(cusOrder.getRecipientName());
+            //联系电话
+            cusOrderLogistics.setTel(cusOrder.getRecipientTel());
+            cusOrderLogistics.setCityId(cusOrder.getCityId());
+            cusOrderLogistics.setCityName(cusOrder.getCityName());
+            cusOrderLogistics.setProvinceId(cusOrder.getProvinceId());
+            cusOrderLogistics.setProvinceName(cusOrder.getProvinceName());
+            cusOrderLogistics.setRegionId(cusOrder.getRegionId());
+            cusOrderLogistics.setRegionName(cusOrder.getRegionName());
+            //配送状态
+            cusOrderLogistics.setStatus(CusOrderLogistics.Status.Distribution.getValue());
+            //发货时间
+            cusOrderLogistics.setSendDate(new Date());
+
+            //创建人
+            cusOrderLogistics.setCreatedId(cusId);
+            cusOrderLogistics.setCreatedName(cusName);
+
+            cusOrderLogisticsBaseService.save(cusOrderLogistics);
+
+            //----------------------保存订单流程信息-----------------------
+            CusOrderLog cusOrderLog = new CusOrderLog();
+            cusOrderLog.setOrderId(id);
+            cusOrderLog.setAct(CusOrderLog.Act.Delivery.getValue());
+            cusOrderLog.setOperatorId(cusId);
+            cusOrderLog.setOperatorName(cusName);
+            cusOrderLogBaseService.save(cusOrderLog);
+
+        } else {
+            throw BaseException.errorByErrInfo("该订单已发货或者未支付完成");
+        }
+    }
+
+
+    public CusOrderPay getPayTypeByOrderId(Map<String, String> param) {
+        Long orderId = MapUtil.getLong(param, "orderId");
+        //查询出对应退货标识的退货单流程信息
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("orderId", orderId));
+        List<CusOrderPay> cusOrderPays = cusOrderPayBaseService.findList(null, filters, null);
+        if (cusOrderPays != null && cusOrderPays.size() > 0) {
+            return cusOrderPays.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 确认收货
+     *
+     * @param cusId   操作人员标识
+     * @param cusName 操作人员名称
+     * @param ids     订单标识集合
+     */
+    @Transactional
+    public void confirmDeliver(Long cusId, String cusName, Long[] ids) {
+        List<CusOrder> mapList = cusOrderBaseService.findList(ids);
+
+
+        if (CollectionUtil.isNotEmpty(mapList)) {
+            //查询配送信息
+            List<CusOrderLogistics> cusOrderLogisticses =
+                    cusOrderLogisticsBaseService.findList(null, Arrays.asList(Filter.in("orderId", ids)), null);
+
+            //订单流程信息集合
+            List<CusOrderLog> cusOrderLogs = new ArrayList<CusOrderLog>();
+
+            //订单标识集合
+            List<Long> orderIds = Arrays.asList(ids);
+
+            for (CusOrder cusOrder : mapList) {
+                cusOrder.setOrderStatus(CusOrder.OrderStatus.TakedDelivery.getValue());
+                cusOrder.setSigninDate(new Date());
+
+                //订单流程信息
+                CusOrderLog cusOrderLog = new CusOrderLog();
+                cusOrderLog.setOrderId(cusOrder.getId());
+                cusOrderLog.setAct(CusOrderLog.Act.TakeDelivery.getValue());
+                cusOrderLog.setContent("确认收货");
+                cusOrderLog.setOperatorId(cusId);
+                cusOrderLog.setOperatorName(cusName);
+                cusOrderLogs.add(cusOrderLog);
+            }
+
+            for (CusOrderLogistics cusOrderLogistics : cusOrderLogisticses) {
+                cusOrderLogistics.setStatus(CusOrderLogistics.Status.ReceivedGoods.getValue());
+            }
+
+            //修改订单信息
+            cusOrderBaseService.saveOrUpdate(mapList);
+
+            //保存订单操作日志信息
+            cusOrderLogBaseService.saveOrUpdate(cusOrderLogs);
+
+            //修改订单结算信息
+            settlementOrderDetailDao.updateOrderStatus(orderIds, CusOrder.OrderStatus.TakedDelivery);
+
+            //保存配送信息
+            cusOrderLogisticsBaseService.saveOrUpdate(cusOrderLogisticses);
+        }
+    }
+}

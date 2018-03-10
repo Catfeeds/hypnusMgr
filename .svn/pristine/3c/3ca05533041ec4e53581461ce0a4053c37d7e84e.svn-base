@@ -1,0 +1,471 @@
+package com.catt.wfx.repository.entity.orderMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.catt.common.module.enumMgr.pojo.EnumTrans;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+/**
+ * 退货单实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:35
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_CUS_ORDER_RETURN")
+public class CusOrderReturn extends BaseEntity {
+	/**
+	 * 用于从附件表获取附件
+	 */
+	public static final String TABLE_NAME = "T_CUS_ORDER_RETURN";
+	public static final String PIC = "S_PIC";
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 退货单编号
+	 */
+	private String returnCode;
+	/**
+	 * 单据标识
+	 */
+	private Long orderId;
+	/**
+	 * 订单编号
+	 */
+	private String orderCode;
+	/**
+	 * 退货单总金额
+	 */
+	private Double returnTotalAmount;
+	/**
+	 * 客户标识
+	 */
+	private Long cusId;
+	/**
+	 * 客户名称
+	 */
+	private String cusName;
+	/**
+	 * 单据状态<p><br>
+	 * 1-待审核 2-待退货 3-待收货 4-待退款 5-已完成 6-已取消 7-审核不通过
+	 */
+	private Integer status;
+	/**
+	 * 退货原因
+	 * 1-收到商品破损 2-商品错发/漏发 3-拍错了 4-未收到货品
+	 */
+	private Long returnReason;
+	/**
+	 * 问题描述
+	 */
+	private String returnDesc;
+	/**
+	 * 相关照片
+	 */
+	private String pic;
+	/**
+	 * 审核结果<p><br>
+	 * 1-不通过，2-仅退款，3-仅退货，4-退款退货
+	 */
+	private Integer auditResult;
+	/**
+	 * 审核意见
+	 */
+	private String auditDesc;
+	/**
+	 * 退货物流公司<p><br>
+	 * 1-EMS 2-顺丰 3-圆通 4-联邦快递 5-天天
+	 */
+	private Integer logisticsType;
+
+	/**
+	 * 退货物流公司枚举翻译<p><br>
+	 * 1-EMS 2-顺丰 3-圆通 4-联邦快递 5-天天
+	 */
+	private String logisticsTypeName;
+	/**
+	 * 退货运单编号
+	 */
+	private String logisticsCode;
+	/**
+	 * 删除标识<p><br>
+	 * 1-是 2-否 用户管理员彻底删除募集信息。此过程不可逆。
+	 */
+	private Integer delFlag;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+	/**
+	 * 备注<p><br>
+	 * 备注
+	 */
+	private String remark;
+
+	@Column(name = "S_RETURN_CODE", length = 64)
+	public String getReturnCode() {
+		return returnCode;
+	}
+
+	public void setReturnCode(String returnCode) {
+		this.returnCode = returnCode;
+	}
+
+	@Column(name = "I_ORDER_ID")
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
+	@Column(name = "S_ORDER_CODE", length = 64)
+	public String getOrderCode() {
+		return orderCode;
+	}
+
+	public void setOrderCode(String orderCode) {
+		this.orderCode = orderCode;
+	}
+
+	@Column(name = "I_RETURN_TOTAL_AMOUNT")
+	public Double getReturnTotalAmount() {
+		return returnTotalAmount;
+	}
+
+	public void setReturnTotalAmount(Double returnTotalAmount) {
+		this.returnTotalAmount = returnTotalAmount;
+	}
+
+	@Column(name = "I_CUS_ID")
+	public Long getCusId() {
+		return cusId;
+	}
+
+	public void setCusId(Long cusId) {
+		this.cusId = cusId;
+	}
+
+	@Column(name = "S_CUS_NAME", length = 32)
+	public String getCusName() {
+		return cusName;
+	}
+
+	public void setCusName(String cusName) {
+		this.cusName = cusName;
+	}
+
+	@Column(name = "I_STATUS")
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	@Column(name = "S_RETURN_REASON")
+	public Long getReturnReason() {
+		return returnReason;
+	}
+
+	public void setReturnReason(Long returnReason) {
+		this.returnReason = returnReason;
+	}
+
+	@Column(name = "S_RETURN_DESC", length = 1024)
+	public String getReturnDesc() {
+		return returnDesc;
+	}
+
+	public void setReturnDesc(String returnDesc) {
+		this.returnDesc = returnDesc;
+	}
+
+	@Column(name = "S_PIC", length = 128)
+	public String getPic() {
+		return pic;
+	}
+
+	public void setPic(String pic) {
+		this.pic = pic;
+	}
+
+	@Column(name = "I_AUDIT_RESULT")
+	public Integer getAuditResult() {
+		return auditResult;
+	}
+
+	public void setAuditResult(Integer auditResult) {
+		this.auditResult = auditResult;
+	}
+
+	@Column(name = "S_AUDIT_DESC", length = 1024)
+	public String getAuditDesc() {
+		return auditDesc;
+	}
+
+	public void setAuditDesc(String auditDesc) {
+		this.auditDesc = auditDesc;
+	}
+
+	@Column(name = "I_LOGISTICS_TYPE")
+	@EnumTrans(colName = "I_LOGISTICS_TYPE", nameField = "logisticsTypeName", tableName = "T_CUS_ORDER_RETURN")
+	public Integer getLogisticsType() {
+		return logisticsType;
+	}
+
+	public void setLogisticsType(Integer logisticsType) {
+		this.logisticsType = logisticsType;
+	}
+	@Transient
+	public String getLogisticsTypeName() {
+		return logisticsTypeName;
+	}
+
+	public void setLogisticsTypeName(String logisticsTypeName) {
+		this.logisticsTypeName = logisticsTypeName;
+	}
+
+	@Column(name = "S_LOGISTICS_CODE", length = 128)
+	public String getLogisticsCode() {
+		return logisticsCode;
+	}
+
+	public void setLogisticsCode(String logisticsCode) {
+		this.logisticsCode = logisticsCode;
+	}
+
+	@Column(name = "I_DEL_FLAG")
+	public Integer getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(Integer delFlag) {
+		this.delFlag = delFlag;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+	@Column(name = "S_REMARK", length = 1024)
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	/**
+	 * 单据状态枚举
+	 * 1-待审核 2-待退货 3-待收货 4-待退款 5-已完成 6-已取消 7-审核不通过
+	 */
+	public enum Status {
+
+		/**
+		 * 待审核
+		 */
+		PendAudit(1, "待审核"),
+
+		/**
+		 * 待退货
+		 */
+		ToDelivery(2, "待退货"),
+
+		/**
+		 * 待收货
+		 */
+		ToTakeDelivery(3, "待收货"),
+		/**
+		 * 待退款
+		 */
+		PendRefund(4, "待退款"),
+		/**
+		 * 已完成
+		 */
+		Finish(5, "已完成"),
+		/**
+		 * 已取消
+		 */
+		Cancel(6, "已取消"),
+		/**
+		 * 审核不通过
+		 */
+		NotPass(7, "审核不通过"),
+		/**
+		 * 退款中
+		 */
+		RefundIn(8, "退款中"),
+		/**
+		 * 退款失败
+		 */
+		RefundFail(9, "退款失败");
+
+		/**
+		 * 枚举值
+		 */
+		private Integer value;
+
+		/**
+		 * 枚举中文
+		 */
+		private String name;
+
+		/**
+		 * 构造方法
+		 *
+		 * @param value 枚举值
+		 * @param name  枚举中文
+		 */
+		Status(Integer value, String name) {
+			this.value = value;
+			this.name = name;
+		}
+
+		/**
+		 * 由数字得是否多实例枚举对象
+		 *
+		 * @param value 枚举值
+		 * @return 返回中文
+		 */
+		public static Status getEnum(int value) {
+			Status[] source = Status.values();
+			for (int i = 0; i < source.length; i++) {
+				if (source[i].getValue() == value) {
+					return source[i];
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * 取值
+		 *
+		 * @return 返回枚举值
+		 */
+		public int getValue() {
+			return this.value;
+		}
+
+		/**
+		 * 取中文名称
+		 *
+		 * @return 返回枚举中文
+		 */
+		public String getName() {
+			return this.name;
+		}
+	}
+
+	/**
+	 * 审核结果<p><br>
+	 * 1-不通过，2-仅退款，3-仅退货，4-退款退货
+	 */
+	public enum AuditResult {
+
+		/**
+		 * 不通过
+		 */
+		NotPass(1, "不通过"),
+
+		/**
+		 * 仅退款
+		 */
+		RefundOnly(2, "仅退款"),
+
+		/**
+		 * 仅退货
+		 */
+		ReturnOnly(3, "仅退货"),
+		/**
+		 * 退款退货
+		 */
+		Refund(4, "退款退货");
+
+		/**
+		 * 枚举值
+		 */
+		private Integer value;
+
+		/**
+		 * 枚举中文
+		 */
+		private String name;
+
+		/**
+		 * 构造方法
+		 *
+		 * @param value 枚举值
+		 * @param name  枚举中文
+		 */
+		AuditResult(Integer value, String name) {
+			this.value = value;
+			this.name = name;
+		}
+
+		/**
+		 * 由数字得是否多实例枚举对象
+		 *
+		 * @param value 枚举值
+		 * @return 返回中文
+		 */
+		public static AuditResult getEnum(int value) {
+			AuditResult[] source = AuditResult.values();
+			for (int i = 0; i < source.length; i++) {
+				if (source[i].getValue() == value) {
+					return source[i];
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * 取值
+		 *
+		 * @return 返回枚举值
+		 */
+		public int getValue() {
+			return this.value;
+		}
+
+		/**
+		 * 取中文名称
+		 *
+		 * @return 返回枚举中文
+		 */
+		public String getName() {
+			return this.name;
+		}
+	}
+}
+

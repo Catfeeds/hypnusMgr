@@ -1,0 +1,171 @@
+package com.catt.wfx.service.impl.customerMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.customerMgr.AgentInfoDao;
+import com.catt.wfx.repository.entity.customerMgr.AgentInfo;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.service.base.customerMgr.AgentInfoBaseService;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.customerMgr.AgentInfoService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+@Service("agentInfoServiceImpl")
+public class AgentInfoServiceImpl implements AgentInfoService {
+
+    @Resource(name = "agentInfoBaseServiceImpl")
+    private AgentInfoBaseService agentInfoBaseService;
+
+    @Resource(name = "agentInfoDaoImpl")
+    private AgentInfoDao agentInfoDaoImpl;
+
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    /**
+     * 获取分页
+     *
+     * @param params
+     * @return
+     */
+    @Override
+    public Page<Map> getPage(Map<String, Object> params, Pageable pageable) {
+        Page<Map> result = agentInfoDaoImpl.getPage(params, pageable);
+        List<Map> list = result.getContent();
+        enumMgrService.transformEnum(list, Arrays.asList(
+                new EnumTransformData("T_AGENT_INFO", "I_STATUS", "status", "statusName"),
+                new EnumTransformData("T_AGENT_INFO", "I_AGENCY_LEVEL", "agencyLevel", "agencyLevelName")
+        ));
+        result.setContent(list);
+        return result;
+    }
+
+    public AgentInfo findAgengInfoByCusId(Long cusId) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", cusId));
+        List<AgentInfo> list=agentInfoBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(list)){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 审核
+     *
+     * @param params
+     */
+    @Override
+    @Transactional
+    public void audit(Map<String, Object> params) {
+        Long userId = MapUtil.getLong(params, "userId");
+        Long id = MapUtil.getLong(params, "id");
+        Integer status = MapUtil.getInteger(params, "status");
+        if (id != null) {
+            AgentInfo info = agentInfoBaseService.find(id);
+            if (status.intValue() == AgentInfo.audit_pass.intValue()) {
+                //审核通过
+                Integer agencyLevel = MapUtil.getInteger(params, "agencyLevel");
+                String provinceId = MapUtil.getString(params, "provinceId");
+                String provinceName = MapUtil.getString(params, "provinceName");
+                String cityId = MapUtil.getString(params, "cityId");
+                String cityName = MapUtil.getString(params, "cityName");
+                String regionId = MapUtil.getString(params, "regionId");
+                String regionName = MapUtil.getString(params, "regionName");
+                String site = "";
+                Integer cusType = null;
+
+                Long cusId = info.getCusId();
+                CusInfo cus = cusInfoBaseService.find(cusId);
+                if (cus != null && cus.getType() == CusInfo.Type.Director.getValue()) {
+                    throw BaseException.errorByErrInfo("主管不能申请成为代理商");
+                } else if (cus != null && cus.getType() == CusInfo.Type.RegistUser.getValue()) {
+                    throw BaseException.errorByErrInfo("会员不能申请成为代理商");
+                }
+
+                switch (agencyLevel) {
+                    case AgentInfo.agency_total://总代理
+                        cusType = CusInfo.Type.TotalAgent.getValue();
+                        break;
+                    case AgentInfo.agency_province://省级代理
+                        if (StringUtil.isBlank(provinceId) || StringUtil.isBlank(provinceName)) {
+                            throw BaseException.errorByErrInfo("省份不能为空");
+                        }
+                        cusType = CusInfo.Type.ProvinceAgent.getValue();
+                        site = provinceName;
+                        break;
+                    case AgentInfo.agency_city://市级代理
+                        if (StringUtil.isBlank(provinceId) || StringUtil.isBlank(provinceName)) {
+                            throw BaseException.errorByErrInfo("省份不能为空");
+                        }
+                        if (StringUtil.isBlank(cityId) || StringUtil.isBlank(cityName)) {
+                            throw BaseException.errorByErrInfo("市级能为空");
+                        }
+                        cusType = CusInfo.Type.CityAgent.getValue();
+                        site = provinceName + cityName;
+                        break;
+                    case AgentInfo.agency_region://区级代理
+                        if (StringUtil.isBlank(provinceId) || StringUtil.isBlank(provinceName)) {
+                            throw BaseException.errorByErrInfo("省份不能为空");
+                        }
+                        if (StringUtil.isBlank(cityId) || StringUtil.isBlank(cityName)) {
+                            throw BaseException.errorByErrInfo("市级能为空");
+                        }
+                        if (StringUtil.isBlank(regionId) || StringUtil.isBlank(regionName)) {
+                            throw BaseException.errorByErrInfo("区级能为空");
+                        }
+                        cusType = CusInfo.Type.AreaAgent.getValue();
+                        site = provinceName + cityName + regionName;
+                        break;
+                    default:
+                        break;
+                }
+                info.setStatus(status);
+                info.setAuditStaffId(userId);
+                info.setAuditTime(new Date());
+                info.setAgencyLevel(agencyLevel);
+                info.setProvinceId(provinceId);
+                info.setProvinceName(provinceName);
+                info.setCityId(cityId);
+                info.setCityName(cityName);
+                info.setRegionId(regionId);
+                info.setRegionName(regionName);
+                info.setSite(site);
+                agentInfoBaseService.saveOrUpdate(info);
+
+                //修改用户状态
+                cus.setType(cusType);
+                cusInfoBaseService.saveOrUpdate(cus);
+            } else if (status.intValue() == AgentInfo.audit_fail.intValue()) {
+                //审核不通过
+                String cause = MapUtil.getString(params, "cause");
+                info.setStatus(status);
+                info.setAuditStaffId(userId);
+                info.setAuditTime(new Date());
+                info.setCause(cause);
+                agentInfoBaseService.saveOrUpdate(info);
+            } else {
+                //其他
+                throw BaseException.errorByErrInfo("审核结果只能是通过或不通过");
+            }
+        }
+    }
+}

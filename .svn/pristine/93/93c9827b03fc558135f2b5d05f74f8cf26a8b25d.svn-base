@@ -1,0 +1,92 @@
+seajs.use(['$', 'msgBox', 'util', 'jquery.json'],
+    function ($, msgBox, util) {
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+                    //基础信息保存
+                    $("#saveBtn").click(EventHandler.save);
+
+                    // 返回
+                    $('#cancleBtn').click(function () {
+                        msgBox.exWindow.close(0);
+                    });
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                    msgBox.exWindow.getExtraParams(function (result) {
+                        var pName = result.pName;
+                        var level = result.level || 1;
+                        if(pName == ""){
+                            $("#pName").html("无");
+                        }else{
+                            $("#pName").html(pName);
+                        }
+                        $("#level").html(level + "级目录");
+                    });
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 */
+                save: function () {
+                    var param = {};
+                    param.id = $("#id").val();
+                    param.parentId = $("#parentId").val();
+                    param.name = $("#name").val();
+                    if(param.name == ""){
+                        $("#name").focus();
+                        msgBox.tips("请输入商品分类名称");
+                        return;
+                    }
+                    DataHandler.saveCate(param, function (backData) {
+                        msgBox.tips("操作成功");
+                        msgBox.exWindow.close($.toJSON(backData));
+                    });
+
+
+                }
+
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 保存类型
+                 */
+                saveCate: function (param, callback) {
+                    $.post(path + "/admin/basicConfig/productCate/saveCate", param, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });

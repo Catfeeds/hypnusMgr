@@ -1,0 +1,35 @@
+package com.catt.wfx.service;
+
+/**
+ * <pre>
+ * 登录、注册时，发送、校验短信服务类
+ * 注：某些方法会进行缓存便于短信验证码校验
+ * @author : Zhang zhongtao
+ * @version : Ver 1.0
+ * </pre>
+ */
+public interface LoginSmsService {
+    /**
+     * 发送登录短信验证码
+     *
+     * @param mobileNo 手机号码
+     * @return String code验证码
+     */
+    String sendLoginSms(String mobileNo, String contentTemplate);
+
+    /**
+     * 登录短信验证
+     *
+     * @param mobileNo 手机号码
+     * @param code     短信验证码
+     * @return true：验证通过；false：验证失败；
+     */
+    boolean loginMobileNoCheck(String mobileNo, String code, String contentTemplate);
+
+    /**
+     * 清理短信缓存，类似标记，空方法即可
+     *
+     * @param mobileNo 手机号码
+     */
+    void clearLoginSms(String mobileNo);
+}

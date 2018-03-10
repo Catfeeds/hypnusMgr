@@ -1,0 +1,214 @@
+
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+                    var typeLimit = $("#typeLimit").val();
+                    var moneyLimit = $("#moneyLimit").val();
+                    if(typeLimit == 1){
+                        $("#typeLimit2").addClass("on");
+                        $("#typeLimit1").removeClass("on");
+                        $("#chooseTypeLimit").attr("style", "display:block;");
+                    }else{
+                        $("#typeLimit").val(2);
+                    }
+                    if(moneyLimit == 1){
+                        $("#moneyLimit2").addClass("on");
+                        $("#moneyLimit1").removeClass("on");
+                        $("#chooseMoneyLimit").attr("style", "display:block;");
+                    }else{
+                        $("#moneyLimit").val(2);
+                    }
+
+                    //TODO:test
+                    var rangeType = $("#rangeType").val();
+                    if(rangeType != ""){
+                        $("#rangeType"+rangeType).attr("checked", "checked");
+                    }
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    //限制选择点击事件
+                    $(".xw_activitiestype").click(function(){
+                        var clickId = $(this).attr("name");
+                        if($(this).attr("id").indexOf("2") != -1){
+                            $("#"+clickId).val(1);
+                        }else{
+                            $("#"+clickId).val(2);
+                        }
+                    });
+                    //发布
+                    $("#publishCoupon").click(function(){
+                        EventHandler.saveCoupon(1);
+                    });
+                    //保存
+                    $("#saveCoupon").click(function(){
+                        EventHandler.saveCoupon(2);
+                    });
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                    //加载商品类型列表
+                    EventHandler.loadCateList();
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                //保存/发布
+                saveCoupon : function (status) {
+                    var id = $("#id").val();
+                    var couponName = $("#couponName").val();
+                    if(couponName == ""){
+                        msgBox.tips("代金券名称不能为空！");
+                        return;
+                    }
+                    var faceValue = $("#faceValue").val();
+                    if(faceValue == ""){
+                        msgBox.tips("代金券面值不能为空！");
+                        return;
+                    }
+                    var limitDate = $("#limitDate").val();
+                    if(limitDate == ""){
+                        msgBox.tips("有效期不能为空！");
+                        return;
+                    }
+                    var moneyLimit = $("#moneyLimit").val();
+                    var orderMoney = "";
+                    if(moneyLimit == 1){
+                        orderMoney = $("#orderMoney").val();
+                    }
+                    var typeLimit = $("#typeLimit").val();
+                    var cateIds = "";
+                    if(typeLimit == 1){
+                        cateIds = EventHandler.getChooseCate();
+                        if(cateIds == ""){
+                            msgBox.tips("请选择限制的商品类型！");
+                            return;
+                        }
+                    }
+                    var rangeType = $("input[name='rangeType']:checked").val();
+                    var param = {
+                        id : id,
+                        couponName : couponName,
+                        faceValue : faceValue,
+                        limitDate : limitDate,
+                        moneyLimit : moneyLimit,
+                        orderMoney : orderMoney,
+                        typeLimit : typeLimit,
+                        cateIds : cateIds,
+                        rangeType : rangeType,
+                        status : status
+                    };
+                    if(status == 1){
+                        msgBox.confirm({
+                            title : "提示",
+                            msg : "发布成功后的代金券，将无法修改和删除，是否确定发布？",
+                            callback : function(result){
+                                if(result == "ok"){
+                                    DataHandler.saveCoupon(param, function(data){
+                                        if(status == 1){
+                                            msgBox.tips("发布成功");
+                                        }else if(status == 2) {
+                                            msgBox.tips("保存成功");
+                                        }
+                                        window.location.href = path + "/admin/couponMgr/index";
+                                    });
+                                }
+                            }
+                        });
+                    }else{
+                        DataHandler.saveCoupon(param, function(data){
+                            if(status == 1){
+                                msgBox.tips("发布成功");
+                            }else if(status == 2) {
+                                msgBox.tips("保存成功");
+                            }
+                            window.location.href = path + "/admin/couponMgr/index";
+                        });
+                    }
+                },
+                //获取选择的商品类型
+                getChooseCate : function(){
+                    var chooseTag = $("#dataList").find("div[class='guigeDiv xw_guigeDiv on']");
+                    var cateIds = "";
+                    chooseTag.each(function(){
+                        var cateId = $(this).attr("data-value");
+                        cateIds += cateId + ",";
+                    });
+                    if(cateIds.indexOf(",") != -1){
+                        cateIds = cateIds.substring(0, cateIds.length - 1);
+                    }
+                    return cateIds;
+                },
+                //加载商品类型
+                loadCateList : function(){
+                    var couponId = $("#id").val();
+                    DataHandler.getCateList({couponId : couponId}, function(data){
+                        var html = template("template_dataList", {content : data});
+                        $("#dataList").html(html);
+                        //商品规格选择
+                        $(".xw_guigeDiv").click(function(){
+                            $(this).toggleClass("on");
+                        });
+                    });
+                }
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                //保存
+                saveCoupon: function (params, callback) {
+                    $.post(path + "/admin/couponMgr/save", params, function (result) {
+                        callback(result);
+                    });
+                },
+                //获取商品类型
+                getCateList: function (params, callback) {
+                    $.post(path + "/admin/couponMgr/getProductCate", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });
+//小数验证
+function testNumber(ob){
+    if (!ob.value.match(/^[\+]?\d*?\.?\d*?$/)) ob.value = ob.t_value; else ob.t_value = ob.value;
+    if (ob.value.match(/^(?:[\+]?\d+(?:\.\d+)?)?$/)) ob.o_value = ob.value;
+    if(ob.value == 'undefined'){
+        ob.value = '';
+    }
+    return ob.value != '';
+}
+//正整数/0验证
+function testPositiveNumber(ob){
+    if(ob.value.length==1){ob.value=ob.value.replace(/[^0-9]/g,'')}else{ob.value=ob.value.replace(/\D/g,'')}
+    if(ob.value == 'undefined'){
+        ob.value = '';
+    }
+    return ob.value != '';
+}

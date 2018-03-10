@@ -1,0 +1,128 @@
+package com.catt.wfx.service.impl.perforMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusInfoDao;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementOrderDetailDao;
+import com.catt.wfx.service.perforMgr.ShopkeeperPerforService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:店主绩效接口实现
+ * Created by 2017-03-08  11:26.
+ * author: Zhou mingxiang
+ */
+@Service("shopkeeperPerforServiceImpl")
+public class ShopkeeperPerforServiceImpl implements ShopkeeperPerforService {
+
+
+    @Resource(name = "cusInfoDaoImpl")
+    private CusInfoDao cusInfoDao;
+
+    @Resource(name = "settlementOrderDetailDaoImpl")
+    private SettlementOrderDetailDao settlementOrderDetailDao;
+
+    public Page<Map> getShopkeeperPerforByPage(String cusName, String leaderName, Pageable pageable) {
+        //查询店主信息
+        Page<Map> mapPage = cusInfoDao.getShopkeeperByPage(cusName, leaderName, pageable);
+        List<Map> mapList = mapPage.getContent();
+
+        Map<Long, Map> mapMap = new HashMap<>();
+        List<Long> cusIds = new ArrayList<>();
+
+        if (mapList != null && mapList.size() > 0) {
+            for (Map map : mapList) {
+                Long cusId = MapUtil.getLong(map, "id");
+                cusIds.add(cusId);
+
+                //初始化参数，制造空壳
+                map.put("orderNum", 0);     //销售订单数
+                map.put("salesAmount", 0);  //销售金额
+                map.put("invitationNum", 0); //邀请人数
+                map.put("totalMoney", 0);   //收益
+                map.put("couponNum", 0);  //代金券数量
+                map.put("faceValue", 0);  //代金券面值
+
+                mapMap.put(cusId, map);
+            }
+
+            //查询店主对应的销售订单数量和金额
+            List<Map> cusOrderInfo = settlementOrderDetailDao.getShopOwnerOrderNumAndMoney(cusIds);
+            if (cusOrderInfo != null && cusOrderInfo.size() > 0) {
+                mapMap = this.dataSort(mapMap, cusOrderInfo);
+            }
+
+
+            //查询店主邀请人数
+            List<Map> cusCouponInfo = cusInfoDao.getCouPonCusAndProfit(cusIds);
+
+            //查询店主代金券信息
+            List<Map> couPonList = cusInfoDao.getCouPon(cusIds);
+
+            //查询店主收益
+            List<Map> profitList = cusInfoDao.getProfit(cusIds);
+
+            if (cusCouponInfo != null && cusCouponInfo.size() > 0) {
+                mapMap = this.dataSort(mapMap, cusCouponInfo);
+            }
+
+            if(CollectionUtil.isNotEmpty(couPonList)){
+                mapMap = this.dataSort(mapMap, couPonList);
+            }
+
+            if(CollectionUtil.isNotEmpty(profitList)){
+                mapMap = this.dataSort(mapMap, profitList);
+            }
+
+            //遍历map集合，将数据放入list集合中
+            List<Map> mapList1 = new ArrayList<>();
+            if (!mapMap.isEmpty()) {
+                for (Long key : mapMap.keySet()) {
+                    mapList1.add(mapMap.get(key));
+                }
+            }
+            mapPage.setContent(mapList1);
+        }
+
+
+        return mapPage;
+    }
+
+
+    /**
+     * 数据整理
+     *
+     * @param mapMap
+     * @param list
+     * @return
+     */
+    private Map<Long, Map> dataSort(Map<Long, Map> mapMap, List<Map> list) {
+        for (Map map : list) {
+            Long cusId = MapUtil.getLong(map, "cusId");
+            Double salesAmount = MapUtil.getDouble(map, "salesAmount");
+            Double faceValue = MapUtil.getDouble(map, "faceValue");
+            if(StringUtil.checkObj(salesAmount)){
+            map.put("salesAmount", NumberUtil.format(salesAmount));
+            }
+
+            if(StringUtil.checkObj(faceValue)){
+                map.put("faceValue", NumberUtil.format(faceValue));
+            }
+
+            if (mapMap.containsKey(cusId)) {
+                mapMap.get(cusId).putAll(map);
+            }
+        }
+        return mapMap;
+    }
+}

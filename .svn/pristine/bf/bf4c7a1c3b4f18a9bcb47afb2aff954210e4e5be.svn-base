@@ -1,0 +1,490 @@
+package com.catt.wfx.repository.entity.orderMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 订单详情实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:34
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_CUS_ORDER_DETAIL")
+public class CusOrderDetail extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 单据标识
+	 */
+	private Long orderId;
+    /**
+     * 特卖活动标识
+     */
+    private Long actId;
+	/**
+	 * 厂家标识
+	 */
+	private Long factoryId;
+	/**
+	 * 商品种类标识<p><br>
+	 * 商品种类标识
+	 */
+	private Long cateId;
+	/**
+	 * 商品种类名称<p><br>
+	 * 商品种类名称
+	 */
+	private String cateName;
+	/**
+	 * 商品标识
+	 */
+	private Long relId;
+	/**
+	 * 商品价格标识
+	 */
+	private Long priceId;
+	/**
+	 * 商品规格<p><br>
+	 * 格式：{"体积":"350ML","礼盒包装":"有礼盒"}
+	 */
+	private String specJson;
+	/**
+	 * 总代利润
+	 */
+	private Double generalAgent;
+	/**
+	 * 区代利润
+	 */
+	private Double regionalAgent;
+	/**
+	 * 省代利润
+	 */
+	private Double provincialAgent;
+	/**
+	 * 市代利润
+	 */
+	private Double cityAgent;
+	/**
+	 * 店主利润
+	 */
+	private Double profit;
+	/**
+	 * 商品类型<p><br>
+	 * 1-单品 2-套餐
+	 */
+	private Integer type;
+	/**
+	 * 商品名称
+	 */
+	private String productName;
+	/**
+	 * 商品编码<p><br>
+	 * 商品编码
+	 */
+	private String code;
+	/**
+	 * 商品条码<p><br>
+	 * 商品条码
+	 */
+	private String barCode;
+	/**
+	 * 商品封面<p><br>
+	 * 保存商品图片在附件表的标识
+	 */
+	private String headPath;
+	/**
+	 * 商品原价<p><br>
+	 * 厂家不打折的价格
+	 */
+	private Double costPrice;
+	/**
+	 * 商品销售价<p><br>
+	 * 厂家打折后的价格
+	 */
+	private Double salesPrice;
+	/**
+	 * 实付单价<p><br>
+	 * 实付单价是去除使用代金券后的价格，主要用于退货
+	 */
+	private Double payPrice;
+	/**
+	 * 商品数量
+	 */
+	private Integer num;
+	/**
+	 * 商品销售总价<p><br>
+	 * 商品销售总价 = 商品销售价 x 商品数量
+	 */
+	private Double totalSalesAmount;
+	/**
+	 * 实付总价<p><br>
+	 * 实付总价是去除使用代金券后的金额，主要用于退货
+	 */
+	private Double totalPayAmount;
+	/**
+	 * 优惠总价<p><br>
+	 * 优惠总价 = 商品原价 x 商品数量 - 商品销售总价
+	 */
+	private Double totalDiscountAmount;
+	/**
+	 * 退货数量
+	 */
+	private Integer returnNum;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+    /**
+     * 厂家返利金额
+     * Json格式：i_rebate_one_price: 返利单价，i_rebate_one：返利总价，shopkeeper_id；店主id
+     *     [{"i_rebate_one_price":"5","i_rebate_one":"5*2","shopkeeper_id":"123"},
+     {"i_rebate_two_price":"7","i_rebate_two":"7*3","shopkeeper_id":"456"},
+     {"i_rebate_three_price":"6","i_rebate_three":"6*3","shopkeeper_id":""},
+     {"i_rebate_four_price":"0","i_rebate_four":"0*3","shopkeeper_id":""},
+     {"i_rebate_five_price":"0","i_rebate_five_price":"0*3","shopkeeper_id":""}]
+     */
+    private String rebateJson;
+
+	@Column(name = "I_ORDER_ID")
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
+    @Column(name = "I_ACT_ID")
+    public Long getActId() {
+        return actId;
+    }
+
+    public void setActId(Long actId) {
+        this.actId = actId;
+    }
+
+    @Column(name = "I_FACTORY_ID")
+	public Long getFactoryId() {
+		return factoryId;
+	}
+
+	public void setFactoryId(Long factoryId) {
+		this.factoryId = factoryId;
+	}
+
+	@Column(name = "I_CATE_ID")
+	public Long getCateId() {
+		return cateId;
+	}
+
+	public void setCateId(Long cateId) {
+		this.cateId = cateId;
+	}
+
+	@Column(name = "S_CATE_NAME", length = 128)
+	public String getCateName() {
+		return cateName;
+	}
+
+	public void setCateName(String cateName) {
+		this.cateName = cateName;
+	}
+
+	@Column(name = "I_REL_ID")
+	public Long getRelId() {
+		return relId;
+	}
+
+	public void setRelId(Long relId) {
+		this.relId = relId;
+	}
+
+	@Column(name = "I_PRICE_ID")
+	public Long getPriceId() {
+		return priceId;
+	}
+
+	public void setPriceId(Long priceId) {
+		this.priceId = priceId;
+	}
+
+	@Column(name = "S_SPEC_JSON", length = 4000)
+	public String getSpecJson() {
+		return specJson;
+	}
+
+	public void setSpecJson(String specJson) {
+		this.specJson = specJson;
+	}
+
+	@Column(name = "I_GENERAL_AGENT")
+	public Double getGeneralAgent() {
+		return generalAgent;
+	}
+
+	public void setGeneralAgent(Double generalAgent) {
+		this.generalAgent = generalAgent;
+	}
+
+	@Column(name = "I_REGIONAL_AGENT")
+	public Double getRegionalAgent() {
+		return regionalAgent;
+	}
+
+	public void setRegionalAgent(Double regionalAgent) {
+		this.regionalAgent = regionalAgent;
+	}
+
+	@Column(name = "I_PROVINCIAL_AGENT")
+	public Double getProvincialAgent() {
+		return provincialAgent;
+	}
+
+	public void setProvincialAgent(Double provincialAgent) {
+		this.provincialAgent = provincialAgent;
+	}
+
+	@Column(name = "I_CITY_AGENT")
+	public Double getCityAgent() {
+		return cityAgent;
+	}
+
+	public void setCityAgent(Double cityAgent) {
+		this.cityAgent = cityAgent;
+	}
+
+	@Column(name = "I_PROFIT")
+	public Double getProfit() {
+		return profit;
+	}
+
+	public void setProfit(Double profit) {
+		this.profit = profit;
+	}
+
+	@Column(name = "I_TYPE")
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	@Column(name = "S_PRODUCT_NAME", length = 128)
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	@Column(name = "S_CODE", length = 128)
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	@Column(name = "S_BAR_CODE", length = 128)
+	public String getBarCode() {
+		return barCode;
+	}
+
+	public void setBarCode(String barCode) {
+		this.barCode = barCode;
+	}
+
+	@Column(name = "S_HEAD_PATH", length = 512)
+	public String getHeadPath() {
+		return headPath;
+	}
+
+	public void setHeadPath(String headPath) {
+		this.headPath = headPath;
+	}
+
+	@Column(name = "I_COST_PRICE")
+	public Double getCostPrice() {
+		return costPrice;
+	}
+
+	public void setCostPrice(Double costPrice) {
+		this.costPrice = costPrice;
+	}
+
+	@Column(name = "I_SALES_PRICE")
+	public Double getSalesPrice() {
+		return salesPrice;
+	}
+
+	public void setSalesPrice(Double salesPrice) {
+		this.salesPrice = salesPrice;
+	}
+
+	@Column(name = "I_PAY_PRICE")
+	public Double getPayPrice() {
+		return payPrice;
+	}
+
+	public void setPayPrice(Double payPrice) {
+		this.payPrice = payPrice;
+	}
+
+	@Column(name = "I_NUM")
+	public Integer getNum() {
+		return num;
+	}
+
+	public void setNum(Integer num) {
+		this.num = num;
+	}
+
+	@Column(name = "I_TOTAL_SALES_AMOUNT")
+	public Double getTotalSalesAmount() {
+		return totalSalesAmount;
+	}
+
+	public void setTotalSalesAmount(Double totalSalesAmount) {
+		this.totalSalesAmount = totalSalesAmount;
+	}
+
+	@Column(name = "I_TOTAL_PAY_AMOUNT")
+	public Double getTotalPayAmount() {
+		return totalPayAmount;
+	}
+
+	public void setTotalPayAmount(Double totalPayAmount) {
+		this.totalPayAmount = totalPayAmount;
+	}
+
+	@Column(name = "I_TOTAL_DISCOUNT_AMOUNT")
+	public Double getTotalDiscountAmount() {
+		return totalDiscountAmount;
+	}
+
+	public void setTotalDiscountAmount(Double totalDiscountAmount) {
+		this.totalDiscountAmount = totalDiscountAmount;
+	}
+
+	@Column(name = "I_RETURN_NUM")
+	public Integer getReturnNum() {
+		return returnNum;
+	}
+
+	public void setReturnNum(Integer returnNum) {
+		this.returnNum = returnNum;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+    @Column(name = "S_REBATE_JSON", length = 1024)
+    public String getRebateJson() {
+        return rebateJson;
+    }
+
+    public void setRebateJson(String rebateJson) {
+        this.rebateJson = rebateJson;
+    }
+
+	/**
+	 * 商品类型<p><br>
+	 * 1-单品   2-套餐
+	 */
+	public enum Type {
+
+		Single(1, "单品"),
+		Package(2, "套餐");
+
+		/**
+		 * 枚举值
+		 */
+		private Integer value;
+
+		/**
+		 * 枚举中文
+		 */
+		private String name;
+
+		/**
+		 * 构造方法
+		 *
+		 * @param value 枚举值
+		 * @param name  枚举中文
+		 */
+		Type(Integer value, String name) {
+			this.value = value;
+			this.name = name;
+		}
+
+		/**
+		 * 由数字得是否多实例枚举对象
+		 *
+		 * @param value 枚举值
+		 * @return 返回中文
+		 */
+		public static Type getEnum(int value) {
+			Type[] source = Type.values();
+			for (int i = 0; i < source.length; i++) {
+				if (source[i].getValue() == value) {
+					return source[i];
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * 取值
+		 *
+		 * @return 返回枚举值
+		 */
+		public int getValue() {
+			return this.value;
+		}
+
+		/**
+		 * 取中文名称
+		 *
+		 * @return 返回枚举中文
+		 */
+		public String getName() {
+			return this.name;
+		}
+
+	}
+}
+

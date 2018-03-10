@@ -1,0 +1,241 @@
+package com.catt.wfx.service.impl.extractOrder;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.extractOrder.ExtractOrderDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.basicConfig.WithdrawSet;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountConsume;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountDetail;
+import com.catt.wfx.repository.entity.extractOrder.ExtractOrder;
+import com.catt.wfx.repository.entity.extractOrder.ExtractOrderLog;
+import com.catt.wfx.repository.form.customerMgr.CusAccountHandlerForm;
+import com.catt.wfx.service.base.basicConfig.WithdrawSetBaseService;
+import com.catt.wfx.service.base.customerMgr.CusAccountConsumeBaseService;
+import com.catt.wfx.service.base.extractOrder.ExtractOrderBaseService;
+import com.catt.wfx.service.base.extractOrder.ExtractOrderLogBaseService;
+import com.catt.wfx.service.cusAccount.CusAccountHandlerService;
+import com.catt.wfx.service.extractOrder.ExtractOrderService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import util.CryptUtil;
+import util.MaskUtil;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service("extractOrderServiceImpl")
+public class ExtractOrderServiceImpl implements ExtractOrderService {
+
+    //提现单据
+    @Resource(name = "extractOrderDaoImpl")
+    private ExtractOrderDao extractOrderDao;
+
+    //提现单据
+    @Resource(name = "extractOrderBaseServiceImpl")
+    private ExtractOrderBaseService extractOrderBaseService;
+
+    //提交记录
+    @Resource(name = "extractOrderLogBaseServiceImpl")
+    private ExtractOrderLogBaseService extractOrderLogBaseService;
+
+    //提现设置
+    @Resource(name = "withdrawSetBaseServiceImpl")
+    private WithdrawSetBaseService withdrawSetBaseService;
+
+    //用户账户信息
+    @Resource(name = "cusAccountConsumeBaseServiceImpl")
+    private CusAccountConsumeBaseService cusAccountConsumeBaseService;
+
+    //资金操作
+    @Resource(name = "cusAccountHandlerServiceImpl")
+    private CusAccountHandlerService cusAccountHandlerService;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+    /**
+     * 获取分页数据(APP)
+     *
+     * @param params
+     * @return
+     */
+    @Override
+    public Page<Map> getPageForApp(Map<String, Object> params) {
+        Page<Map> page =  extractOrderDao.getPageForApp(params);
+        enumMgrService.transformEnum(page, new ArrayList<EnumTransformData>() {{
+            add(new EnumTransformData("T_EXTRACT_ORDER", "I_STATUS", "status", "statusName"));
+            add(new EnumTransformData("T_CUS_BANK", "I_BANK_TYPE", "bankType", "bankTypeName"));}});
+        List<Map> list = page.getContent();
+        if(list != null && list.size() > 0){
+            for(Map m : list){
+                m.put("bankAccount", MaskUtil.maskName(CryptUtil.decryptDatabase(MapUtil.getString(m, "bankAccount").trim())));
+                m.put("bankCard", MaskUtil.maskBankCard(CryptUtil.decryptDatabase(MapUtil.getString(m, "bankCard").trim())));
+                m.put("branch", CryptUtil.decryptDatabase(MapUtil.getString(m, "branch")));
+            }
+        }
+        return page;
+    }
+
+    /**
+     * 申请提现
+     *
+     * @param params
+     */
+    @Override
+    @Transactional
+    public Map<String, Object> applyExtract(Map<String, Object> params){
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", PubEnum.YesOrNoEnum.YES.getValue());
+
+        Long cusId = MapUtil.getLong(params, "cusId");//提现人
+        String cusName = MapUtil.getString(params, "cusName");//提现人
+        Double money = MapUtil.getDouble(params, "money");//提现金额
+        String bankType = MapUtil.getString(params, "bankType");//开户银行
+        String branch = MapUtil.getString(params, "branch");//开户支行
+        String bankAccount = MapUtil.getString(params, "bankAccount");//账户名称
+        String bankCard = MapUtil.getString(params, "bankCard");//银行卡号
+
+        Assert.notNull(cusId);
+        Assert.notNull(money);
+        Assert.notNull(bankType);
+        Assert.notNull(bankAccount);
+        Assert.notNull(bankCard);
+        Assert.notNull(branch);
+
+        //提现条件判断
+        Map<String, Object> checkResult = this.chechExtractCondition(new Date(), money, cusId);
+        if(MapUtil.getInteger(checkResult, "result").intValue() == PubEnum.YesOrNoEnum.NO.getValue()){
+            return checkResult;
+        }
+
+        //申请提现
+        //记录log
+        //扣除金额
+        ExtractOrder order = new ExtractOrder();
+        order.setCusId(cusId);
+        order.setCreatedId(cusId);
+        order.setCreatedName(cusName);
+        order.setStatus(ExtractOrder.Status.Extract.getValue());
+        order.setBankAccount(CryptUtil.encryptDatabase(bankAccount));//加密入库
+        order.setBankCard(CryptUtil.encryptDatabase(bankCard));//加密入库
+        order.setBankType(Integer.parseInt(bankType));
+        order.setBranch(CryptUtil.encryptDatabase(branch));//加密入库
+        order.setMoney(money);
+        ExtractOrder newOrder = extractOrderBaseService.save(order);
+
+        ExtractOrderLog log = new ExtractOrderLog();
+        log.setAct(ExtractOrderLog.Act.Create.getValue());
+        log.setOperatorId(cusId);
+        log.setOperatorName(cusName);
+        log.setContent("申请提现");
+        log.setOrderId(newOrder.getId());
+        extractOrderLogBaseService.save(log);
+
+        CusAccountHandlerForm form = new CusAccountHandlerForm();
+        form.setCusId(cusId);
+        form.setMoney(money);
+        form.setType(CusAccountDetail.Type.Withdrawals);
+        form.setRelId(newOrder.getId()+"");
+        cusAccountHandlerService.handleMoney(form);
+
+        return result;
+    }
+
+    /**
+     * 获取提现进度
+     *
+     * @param id 提现单据ID
+     * @return
+     */
+    @Override
+    public List<Map> getSteps(Long id) {
+        List<Map> stepList = new ArrayList<>();
+        if(StringUtil.checkObj(id)) {
+            List<ExtractOrderLog> logs = extractOrderLogBaseService.
+                    findList(null, Arrays.asList(Filter.eq("orderId", id)), Arrays.asList(Order.desc("createDate")));
+            if(logs != null && logs.size() > 0){
+                for(ExtractOrderLog log : logs){
+                    Map<String, Object> m = new HashMap<>();
+                    m.put("createDate", DateUtil.format(log.getCreateDate(), "yyyy-MM-dd HH:mm:ss"));
+                    m.put("act", log.getAct());
+                    m.put("content", log.getContent());
+                    enumMgrService.transformEnum(m, new ArrayList<EnumTransformData>() {{
+                        add(new EnumTransformData("T_EXTRACT_ORDER_LOG", "I_ACT", "act", "actName"));}});
+                    stepList.add(m);
+                }
+            }
+        }
+        return stepList;
+    }
+
+    /**
+     * 提现条件判断
+     * @param extractDate 提现日期
+     * @param money  提现金额
+     * @param cusId  提现人ID
+     * @return
+     *      失败情况：
+     *          1、账户不存在
+     *          2、余额不足
+     *          3、未到提现日期
+     */
+    private Map chechExtractCondition(Date extractDate, Double money, Long cusId){
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", PubEnum.YesOrNoEnum.YES.getValue());
+
+        Integer nowDay = Integer.parseInt(DateUtil.format(extractDate, "dd"));
+        List<CusAccountConsume> accounts = cusAccountConsumeBaseService.findList(1, Arrays.asList(Filter.eq("cusId", cusId)), null);
+        Double remainderMoney = null;
+        if(accounts != null && accounts.size() > 0){
+            remainderMoney = accounts.get(0).getRemainderMoney();
+        }else{
+            result.put("result", PubEnum.YesOrNoEnum.NO.getValue());
+            result.put("reason", "用户账户不存在");
+            return result;
+        }
+        List<WithdrawSet> sets = withdrawSetBaseService.findAll();
+        boolean onTime = false;//在提现日期内
+        StringBuilder extractDays = new StringBuilder();
+        for(WithdrawSet set : sets){
+            if(NumberUtil.compare(remainderMoney, set.getWithdrawMoney()) == 1){//账户余额大于提现金额限制
+                if(NumberUtil.compare(remainderMoney, money) == 0 || NumberUtil.compare(remainderMoney, money) == 1){//账户余额大于提现金额
+                    extractDays.append("【"+set.getWithdrawStart()+"号-"+set.getWithdrawEnd()+"号】");
+                    if(nowDay.intValue() >= set.getWithdrawStart().intValue() && nowDay.intValue() <= set.getWithdrawEnd().intValue()){//不在提现日期内
+                        onTime = true;
+                        break;
+                    }
+                }else{
+                    result.put("result", PubEnum.YesOrNoEnum.NO.getValue());
+                    result.put("reason", "当前账户余额不足: 当前余额为【"+remainderMoney+"元】;提现金额为【"+money+"元】");
+                    return result;
+                }
+            }else{
+                result.put("result", PubEnum.YesOrNoEnum.NO.getValue());
+                result.put("reason", "当前账户余额不足: 当前余额为【"+remainderMoney+"元】;提现余额需满足【"+set.getWithdrawMoney()+"元】");
+                return result;
+            }
+        }
+        if(!onTime){
+            result.put("result", PubEnum.YesOrNoEnum.NO.getValue());
+            result.put("reason", "未到提现日期,提现日期为:每月"+extractDays.toString());
+            return result;
+        }
+
+        return result;
+    }
+}

@@ -1,0 +1,26 @@
+package com.catt.wfx.repository.dao.settlementMgr.impl;
+
+import org.springframework.stereotype.Repository;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementShopRuleDetailDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRuleDetail;
+import org.springframework.util.Assert;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Repository("settlementShopRuleDetailDaoImpl")
+public class SettlementShopRuleDetailDaoImpl extends BaseDaoImpl<SettlementShopRuleDetail, Long>
+		implements SettlementShopRuleDetailDao {
+
+    @Override
+    public void deleteDetailByRuleId(Long ruleId) {
+        Assert.notNull(ruleId);
+        String sql = "DELETE FROM T_SETTLEMENT_SHOP_RULE_DETAIL WHERE I_RULE_ID = :ruleId";
+        Map<String, Object> params = new HashMap<>();
+        params.put("ruleId", ruleId);
+        this.executeUpdateBySql(sql, params);
+    }
+
+}

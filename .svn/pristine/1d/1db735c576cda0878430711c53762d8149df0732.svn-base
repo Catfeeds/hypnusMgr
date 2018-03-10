@@ -1,0 +1,434 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusInfoDao;
+import com.catt.wfx.repository.dao.util.SeqUtilDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountConsume;
+import com.catt.wfx.repository.entity.customerMgr.CusAllot;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.entity.customerMgr.CusShop;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRule;
+import com.catt.wfx.repository.form.settlementMgr.BusinessHandlerForm;
+import com.catt.wfx.service.base.customerMgr.CusAccountConsumeBaseService;
+import com.catt.wfx.service.base.customerMgr.CusAllotBaseService;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.base.customerMgr.CusShopBaseService;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import com.catt.wfx.service.base.settlementMgr.BusinessHandlerService;
+import com.catt.wfx.service.customerMgr.CusInfoService;
+import com.catt.wfx.service.pub.PubConfigService;
+import com.catt.wfx.service.settlementMgr.SettlementOrderDetailService;
+import com.catt.wfx.service.settlementMgr.SettlementShopRuleService;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import util.ShareCodeUtil;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 用户信息服务接口实现
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-02-10 09:47:36
+ */
+@Service("cusInfoServiceImpl")
+public class CusInfoServiceImpl implements CusInfoService {
+
+    private static Logger logger = LoggerFactory.getLogger(CusInfoServiceImpl.class);
+
+    //用户信息服务接口
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    //用户信息Dao接口
+    @Resource(name = "cusInfoDaoImpl")
+    private CusInfoDao cusInfoDao;
+
+    //账户信息服务接口
+    @Resource(name = "cusAccountConsumeBaseServiceImpl")
+    private CusAccountConsumeBaseService cusAccountConsumeBaseService;
+
+    //店铺信息表服务接口
+    @Resource(name = "cusShopBaseServiceImpl")
+    private CusShopBaseService cusShopBaseService;
+
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+    @Resource
+    private SeqUtilDao seqUtilDao;
+
+    /**
+     * 公共配置服务
+     */
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    //系统全局设置服务接口
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+    // 店主/主管规则服务
+    @Resource(name = "settlementShopRuleServiceImpl")
+    private SettlementShopRuleService settlementShopRuleService;
+
+    // 商家账户信息相关操作服务接口
+    @Resource(name = "businessHandlerServiceImpl")
+    private BusinessHandlerService businessHandlerService;
+
+    // 订单结算统计服务
+    @Resource(name = "settlementOrderDetailServiceImpl")
+    private SettlementOrderDetailService settlementOrderDetailService;
+
+    // 团队信息表服务接口
+    @Resource(name = "cusAllotBaseServiceImpl")
+    private CusAllotBaseService cusAllotBaseService;
+
+    /**
+     * 获取登录用户基本信息（APP）
+     *
+     * @param cusId 客户ID
+     * @return
+     */
+    public Map findLoginCusInfo(Long cusId) {
+        Map map = new HashMap<>();
+        //获取用户基本信息
+        List<Map> mapList = cusInfoDao.findCusInfo(cusId);
+        if (mapList != null && mapList.size() > 0) {
+            map = mapList.get(0);
+
+            //店铺状态
+            Integer shopStatus = MapUtil.getInteger(map, "shopStatus");
+
+            //店铺状态枚举翻译
+            if (StringUtil.checkObj(shopStatus)) {
+                map.put("shopStatusName", CusShop.Status.getEnum(shopStatus).getName());
+            }
+
+            List<Attachment> files = attachmentBaseService.getFiles(cusId, CusInfo.TABLE_NAME, CusInfo.PHOTO);
+            if (files != null && files.size() > 0) {
+                String filePath = pubConfigService.getFilePath();
+                map.put("photo", filePath + files.get(0).getPath());
+            } else { // 如无头像，则置空
+                map.put("photo", StringUtils.EMPTY);
+            }
+
+            //判断是否设置了支付密码
+            if (StringUtil.isNotBlank(MapUtil.getString(map, "isPayPwd"))) {
+                map.put("isPayPwd", PubEnum.YesOrNoEnum.YES.getValue()); //是
+            } else {
+                map.put("isPayPwd", PubEnum.YesOrNoEnum.NO.getValue()); //否
+            }
+            //枚举翻译， 商品单位
+            enumMgrService.transformEnum(map,
+                    new ArrayList<EnumTransformData>() {
+                        {
+                            add(new EnumTransformData("T_CUS_INFO",
+                                    "I_STATUS", "status",
+                                    "statusName"));
+                        }
+                    });
+
+        }
+
+
+        return map;
+    }
+
+    /**
+     * 注册普通用户（APP）
+     *
+     * @param account      账户（手机号）
+     * @param pwd          密码(md5加密)
+     * @param invitationNo 邀请码
+     * @param unionId      同一开放平台下的用户ID
+     */
+    @Transactional
+    public Long regisonCusInfo4App(String account, String pwd, String invitationNo, String unionId) {
+
+
+        List<Filter> filters2 = new ArrayList<Filter>();
+        filters2.add(Filter.eq("account", account));
+        filters2.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("regisonCusInfo4App filters2："+ JsonUtils.toJson(filters2));
+        }
+
+        List<CusInfo> cusInfoList2 = cusInfoBaseService.findList(null, filters2, null);
+
+        if(CollectionUtil.isNotEmpty(cusInfoList2)){
+            throw BaseException.errorByErrInfo("该手机号已经存在");
+        }
+
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("weixId", unionId));
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("regisonCusInfo4App filters："+ JsonUtils.toJson(filters));
+        }
+
+        List<CusInfo> cusInfoList = cusInfoBaseService.findList(null, filters, null);
+
+        if (cusInfoList != null && cusInfoList.size() > 0) {
+            CusInfo cusInfo = cusInfoList.get(0);
+            if (cusInfo.getType().equals(CusInfo.Type.RegistUser.getValue())) {
+                this.saveCusInfo(cusInfo, account, pwd, invitationNo);
+                return cusInfo.getId();
+            } else {
+                throw BaseException.errorByErrInfo("该手机号已经存在");
+            }
+        } else {
+            CusInfo cusInfo = new CusInfo();
+            cusInfo.setWeixId(unionId);
+            this.saveCusInfo(cusInfo, account, pwd, invitationNo);
+            return cusInfo.getId();
+        }
+
+
+    }
+
+    /**
+     * 根据微信用户unionId注册用户（APP）
+     *
+     * @param unionId  微信用户openId
+     * @param nickName 微信用户昵称
+     * @return CusInfo 注册的对象
+     */
+    public CusInfo registAccountByUnionidId(String unionId, String nickName) {
+        CusInfo cusInfo = new CusInfo();
+
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("weixId", unionId));
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+
+        List<CusInfo> cusInfoList = cusInfoBaseService.findList(null, filters, null);
+        if (cusInfoList != null && cusInfoList.size() > 0) {
+            cusInfo = cusInfoList.get(0);
+        }else {
+            cusInfo.setAccount(unionId);
+            cusInfo.setName(nickName);
+            cusInfo.setType(CusInfo.Type.RegistUser.getValue());
+            cusInfo.setDelFlag(PubEnum.YesOrNoEnum.NO.getValue());
+            cusInfo.setStatus(CusInfo.Status.NORMALUSE.getValue());
+            cusInfo.setWeixId(unionId);
+            String seqName = "S_INVITATION_NO";
+            Integer curVal = seqUtilDao.getSeq(seqName);
+            cusInfo.setInvitationNo(ShareCodeUtil.toSerialCode(curVal).toUpperCase());
+
+            cusInfoBaseService.saveOrUpdate(cusInfo);
+        }
+
+
+
+        return cusInfo;
+    }
+
+    /**
+     * 保存用户相关信息
+     *
+     * @param cusInfo      用户信息
+     * @param account      账户
+     * @param pwd          密码
+     * @param invitationNo 邀请码
+     */
+    private void saveCusInfo(CusInfo cusInfo, String account, String pwd, String invitationNo) {
+        //用户类型
+        cusInfo.setType(CusInfo.Type.ShopOwner.getValue());
+        cusInfo.setStatus(CusInfo.Status.NORMALUSE.getValue());
+        cusInfo.setDelFlag(PubEnum.YesOrNoEnum.NO.getValue());
+        cusInfo.setPwd(pwd);
+        cusInfo.setAccount(account);
+        cusInfo.setMobile(account);
+        String seqName = "S_INVITATION_NO";
+        Integer curVal = seqUtilDao.getSeq(seqName);
+        cusInfo.setInvitationNo(ShareCodeUtil.toSerialCode(curVal).toUpperCase());
+
+        //邀请码判断---注册时是否输入邀请码（即是被他人邀请注册的）
+        Long invitationId = null;
+        String invitationPath = null;
+        if (StringUtil.isNotBlank(invitationNo)) {
+            List<CusInfo> cusInfoList1 = this.getInvitatuionId(invitationNo);
+            if (cusInfoList1 != null && cusInfoList1.size() > 0) {
+                CusInfo cusInfo1 = cusInfoList1.get(0);
+                invitationId = cusInfo1.getId();
+                cusInfo.setInvitationId(invitationId);
+
+                if(StringUtil.isNotBlank(cusInfo1.getInvitationPath())){
+                    invitationPath = cusInfo1.getInvitationPath()+"/"+cusInfo1.getId();
+                }else {
+                    invitationPath = "/"+cusInfo1.getId();
+                }
+                cusInfo.setInvitationPath(invitationPath);
+            }
+        }
+        cusInfoBaseService.saveOrUpdate(cusInfo);
+
+        // 添加账户信息记录
+        CusAccountConsume cusAccountConsume = new CusAccountConsume();
+        cusAccountConsume.setCusId(cusInfo.getId());
+        cusAccountConsume.setApplyMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsume.setGetMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsume.setGiveMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsume.setRemainderMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsume.setSalesMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsume.setTotalMoney(NumberUtil.DOUBLE_ZERO);
+        cusAccountConsumeBaseService.save(cusAccountConsume);
+
+        //保存店铺信息
+        CusShop cusShop = new CusShop();
+        cusShop.setCusId(cusInfo.getId());
+        cusShop.setStatus(CusShop.Status.Normal.getValue());
+
+        //开店时间
+        Date openTime = new Date();
+        cusShop.setOpenTime(openTime);
+
+        String openStoreSet = pubSetupBaseService
+                .getSetupByCode(PubSetup.Code.openStoreSet);
+
+        // 开店年限
+        int validity = MapUtil.getIntValue(
+                JsonUtils.toObject(openStoreSet, Map.class),
+                "validity");
+
+        //到期时间
+        Date expireTime = DateUtil.getNearByYear(openTime, +validity);
+        cusShop.setExpireTime(expireTime);
+
+        cusShop.setOrderNum(NumberUtil.INTEGER_ZERO);
+        cusShop.setOrderMoney(NumberUtil.DOUBLE_ZERO);
+        cusShopBaseService.save(cusShop);
+
+        // 店主注册奖励
+        Long registerRuleId = settlementShopRuleService.getCurrentRule(SettlementShopRule.Type.Register.getValue());
+        businessHandlerService.ruleSettlement(new BusinessHandlerForm(cusInfo.getId(), registerRuleId));
+
+        // 店主邀请奖励
+        if (invitationId != null) {
+            Long invitationRuleId = settlementShopRuleService.getCurrentRule(SettlementShopRule.Type.Invite.getValue());
+            businessHandlerService.ruleSettlement(new BusinessHandlerForm(invitationId, invitationRuleId));
+        }
+    }
+
+    /**
+     * 获取邀请码对应的用户信息
+     *
+     * @param invitationNo 邀请码
+     * @return
+     */
+    private List<CusInfo> getInvitatuionId(String invitationNo) {
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("invitationNo", invitationNo.toUpperCase()));
+        List<CusInfo> cusInfoList = cusInfoBaseService.findList(null, filters, null);
+        return cusInfoList;
+
+    }
+
+    /**
+     * 获取我的业绩
+     *
+     * @param cusId
+     * @return
+     */
+    @Override
+    public Map getMyAchievement(Long cusId) {
+        Map map = new HashMap<>();
+
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", cusId));
+        List<CusShop> shops = cusShopBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(shops)) {
+            CusShop cusShop = shops.get(0);
+            map.put("shopkeeperOrderNum", cusShop.getOrderNum()); // 店主销售订单数
+            map.put("shopkeeperOrderMoney", cusShop.getOrderMoney()); // 店主销售金额
+
+            long shopkeeperInviteNum = cusInfoBaseService.count(Filter.eq("invitationId", cusId)); // 店主邀请人数
+            map.put("shopkeeperInviteNum", shopkeeperInviteNum);
+        } else {
+            throw BaseException.errorByErrInfo("未找到店主店铺");
+        }
+
+        CusInfo cusInfo = cusInfoBaseService.find(cusId);
+        if (CusInfo.Type.Director.getValue() == cusInfo.getType()) {
+            filters.clear();
+            filters.add(Filter.eq("leaderId", cusId));
+            List<CusAllot> list = cusAllotBaseService.findList(1, filters, null);
+            if (CollectionUtil.isNotEmpty(list)) {
+                map.put("teamMemberNum", list.get(0).getStaffNum()); // 主管团队人数
+            }
+
+            map.put("teamOrderNum", settlementOrderDetailService.getTeamOrderNum(cusId)); // 主管团队销售订单数
+            map.put("teamOrderMoney", settlementOrderDetailService.getTeamSaleMoney(cusId)); // 主管团队销售金额
+        }
+
+        return map;
+    }
+
+    /**
+     * 获取邀请码
+     *
+     * @param shopId  店铺标识
+     * @return
+     */
+    public String findInvitationNo(Long shopId){
+       List<Map> mapList =  cusInfoDao.findInvitationNo(shopId);
+        if (CollectionUtil.isNotEmpty(mapList)){
+            return MapUtil.getString(mapList.get(0), "invitationNo");
+        }
+        return "";
+    }
+
+    /**
+     * 判断是否存在已成为店主的微信账号
+     *
+     * @param unionId 微信标识
+     * @return
+     */
+    public boolean checlCusInfoByUuionId(String unionId) {
+        boolean isTrue = false;
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("weixId", unionId));
+        filters.add(Filter.eq("status", CusInfo.Status.NORMALUSE.getValue()));
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+
+        List<CusInfo> cusInfoList = cusInfoBaseService.findList(null, filters, null);
+
+        if(CollectionUtil.isNotEmpty(cusInfoList)){
+           if(cusInfoList.get(0).getType().equals(CusInfo.Type.RegistUser.getValue())){
+               isTrue = false;
+           }else {
+               isTrue = true;
+           }
+        }
+
+        return isTrue;
+    }
+}

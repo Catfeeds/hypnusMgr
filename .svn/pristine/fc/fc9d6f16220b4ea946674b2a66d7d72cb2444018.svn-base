@@ -1,0 +1,71 @@
+package com.catt.wfx.repository.dao.customerMgr.impl;
+
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.wfx.repository.dao.customerMgr.CusAccountConsumeDao;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountConsume;
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.Query;
+import java.util.List;
+import java.util.Map;
+
+@Repository("cusAccountConsumeDaoImpl")
+public class CusAccountConsumeDaoImpl extends BaseDaoImpl<CusAccountConsume, Long>
+        implements CusAccountConsumeDao {
+
+    /**
+     * 通过用户标识获取用户账户信息
+     *
+     * @param cusId
+     * @return
+     */
+    @Override
+    @Transactional
+    public CusAccountConsume findCusAccountByCusId(Long cusId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT");
+        sql.append(" c.I_ID as id,");
+        sql.append(" c.D_CREATE_DATE as createDate,");
+        sql.append(" c.D_MODIFY_DATE as modifyDate,");
+        sql.append(" c.I_CUS_ID as cusId,");
+        sql.append(" c.I_GIVE_MONEY as giveMoney,");
+        sql.append(" c.I_SALES_MONEY as salesMoney,");
+        sql.append(" c.I_TOTAL_MONEY as totalMoney,");
+        sql.append(" c.I_GET_MONEY as getMoney,");
+        sql.append(" c.I_REMAINDER_MONEY as remainderMoney,");
+        sql.append(" c.I_APPLY_MONEY as applyMoney,");
+        sql.append(" c.S_VALID_NO as validNo,");
+        sql.append(" c.I_CREATED_ID as createdId,");
+        sql.append(" c.S_CREATED_NAME as createdName,");
+        sql.append(" c.I_UNACCEPT_MONEY as unAcceptMoney,");
+        sql.append(" c.I_RECIVE_REBATE_MONEY as reciveRebateMoney");
+        sql.append(" FROM T_CUS_ACCOUNT_CONSUME c");
+        sql.append(" WHERE c.I_CUS_ID = :cusId");
+
+        Query nativeQuery = this.entityManager.createNativeQuery(sql.toString());// .setParameter("cusId", cusId).getResultList();
+        nativeQuery.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        List<Map> list = nativeQuery.setParameter("cusId", cusId).getResultList();
+        if (CollectionUtil.isNotEmpty(list)) {
+            return JsonUtils.toObject(JsonUtils.toJson(list.get(0)), CusAccountConsume.class);
+        }
+
+        return null;
+    }
+
+    @Override
+    public double countRemainderMoney() {
+        String sql = "SELECT SUM(I_REMAINDER_MONEY) AS \"remainderMoney\" FROM T_CUS_ACCOUNT_CONSUME ";
+        List<Map> list = this.findListBySql(sql, null, Map.class);
+        if (CollectionUtil.isNotEmpty(list)) {
+            return MapUtil.getDouble(list.get(0), "remainderMoney", 0.0);
+        }
+        return 0;
+    }
+}

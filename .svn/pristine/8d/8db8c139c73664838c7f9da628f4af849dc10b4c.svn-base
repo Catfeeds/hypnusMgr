@@ -1,0 +1,72 @@
+package com.catt.wfx.repository.form.productMgr;
+
+import java.io.Serializable;
+
+/**
+ * Description:商品From
+ * Created by 2017-01-09  14:27.
+ * author: Zhou mingxiang
+ */
+public class ProductForm implements Serializable {
+    /**
+     * <pre>
+     * 商品中文名称
+     * </pre>
+     */
+    private String zhName;
+
+    /**
+     * <pre>
+     * 商品种类标识
+     * </pre>
+     */
+    private Long cateId;
+
+    /**
+     * <pre>
+     * 商品状态
+     * </pre>
+     */
+    private Integer status;
+
+    /**
+     * <pre>
+     * 商品类型
+     *  1-单品
+     *  2-套餐
+     * </pre>
+     */
+    private Integer type;
+
+    public String getZhName() {
+        return zhName;
+    }
+
+    public void setZhName(String zhName) {
+        this.zhName = zhName;
+    }
+
+    public Long getCateId() {
+        return cateId;
+    }
+
+    public void setCateId(Long cateId) {
+        this.cateId = cateId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+}

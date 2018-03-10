@@ -1,0 +1,149 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/3/8
+  Time: 16:05
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule2.jsp" %>
+    <title>平台提成账单</title>
+    <link type="text/css" href="${path}/resources/css/user_list.css" rel="stylesheet" />
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <script type="text/javascript" src="${path}/resources/sea-modules/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script src="${path}/resources/admin/js/perforMgr/platPerfor/index.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        .help{ width:20px; height:20px; cursor:pointer;}
+        .really{background:#fff;padding:20px;color:#333;letter-spacing:2px;font-size:13px;}
+    </style>
+</head>
+<body>
+<body class="bg-gray-light">
+<section class="content-header">
+    <!-- 面包屑 -->
+    <ol class="breadcrumb" style="right: auto">
+        <li><a href="#" id="linkHome"><i class="fa fa-home"></i>主页</a></li>
+        <li class="active">平台提成账单</li>
+    </ol>
+    <!-- /.面包屑 -->
+</section>
+<section class="content">
+    <div class="box box-solid">
+        <form class="form-inline">
+            <div class="box-header with-border">
+                <div class="form-group" style="margin-left: 10px">
+                    <label for="startDate" class="control-label">统计时间：</label>
+                    <div class="box-tools form-control-static">
+                        <div class="has-feedback">
+                            <input class="form-control" name="startDate" id="startDate" style="width: 140px"
+                                   onclick="WdatePicker({dateFmt:'yyyy-MM', maxDate:'#F{$dp.$D(\'endDate\') || \'%y-%M-%d\'}'})"/>
+                            <span class="fa fa-calendar form-control-feedback"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="endDate" class="control-label">&nbsp;~&nbsp;</label>
+                    <div class="box-tools form-control-static">
+                        <div class="has-feedback">
+                            <input class="form-control" name="endDate" id="endDate" style="width: 140px"
+                                   onclick="WdatePicker({dateFmt:'yyyy-MM',
+                                   minDate:'#F{$dp.$D(\'startDate\')}', maxDate:'%y-%M'})"/>
+                            <span class="fa fa-calendar form-control-feedback"></span>
+                        </div>
+                    </div>
+                </div>
+                <p class="pull-right">
+                    <span style="font-size: 13px">指标说明
+                        <img src="${path}/resources/images/help.png" class="help">&nbsp;&nbsp;
+                    </span>
+                    <button type="button" class="btn bg-maroon" id="search">&nbsp;查&nbsp;&nbsp;询&nbsp;</button>
+                    <button type="button" class="btn bg-write" id="reset">&nbsp;重&nbsp;&nbsp;置&nbsp;</button>
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <div class="box box-solid">
+        <div class="box-header with-border">
+            <span class="titleText">
+                 <div class="selectTabs">
+                     <h1 class="xw_select selectTabs_on" data-value="">全部</h1>
+                     <h1 class="xw_select" data-value="2">待结算</h1>
+                     <h1 class="xw_select" data-value="1">已结算</h1>
+                 </div>
+            </span>
+            <p class="pull-right">
+                <button type="button" class="btn bg-maroon" id="settle"
+                        title="请勾选数据">已结算</button>
+                <button type="button" class="btn bg-write" id="export">导出数据</button>
+            </p>
+        </div>
+        <div class="box-body no-padding" style="min-height:400px">
+            <table class="table table-striped table-hover table-bordered" id="dataTb">
+                <thead>
+                <tr>
+                    <th style="width: 50px">
+                        <input type="checkbox" check-all="true" class="minimal-red check">
+                    </th>
+                    <th>时间</th>
+                    <th>提成标准</th>
+                    <th>提成金额（元）</th>
+                    <th>状态</th>
+                    <th>备注</th>
+                </tr>
+                </thead>
+                <tbody id="list">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer">
+            <div id="pageBar"></div>
+        </div>
+    </div>
+</section>
+<div style="display: none" id="helpContent">
+    <div class="really">
+        <strong style="color: red">时间：</strong>每一个月结算一次上一个月通过该平台卖出且成功支付的所有订单
+        <br/>
+        <strong style="color: red">提成标准：</strong>平台按照规则收取一定费用，具体请参考【平台收益设置】
+        <br/>
+        <strong style="color: red">提成金额：</strong>平台按照提成标准收取的金额，具体请参考【平台收益设置】
+        <br/>
+        <strong style="color: red">状态：</strong>未结算（未打款给平台）、已结算（已打款给平台）
+    </div>
+</div>
+</body>
+<script type="text/html" id="listTemp">
+    {{each}}
+    <tr  ondblclick="window.location.href = path +'/admin/perforMgr/platPerfor/detail/{{$value.id}}'"
+         title="双击查看详情" style="cursor:pointer">
+        <td>
+            <label>
+                <input type="checkbox" check-all="false" class="minimal-red check">
+            </label>
+        </td>
+        <td>{{$value.settleDate.substr(0,7)}}</td>
+        <td>{{$value.ruleRemark}}</td>
+        <td>{{$value.salesMoney}}</td>
+        <td>
+            {{if $value.status == 1}}
+            <span class="bgGrey">已结算</span>
+            {{else}}
+            <span class="bgRed">未结算</span>
+            {{/if}}
+        </td>
+        <td>
+            {{if $value.status == 1}}
+            结算人：{{$value.settleStaffName}} 流水号：{{$value.settleCode}}
+            {{/if}}
+        </td>
+    </tr>
+    {{/each}}
+</script>
+</html>
+

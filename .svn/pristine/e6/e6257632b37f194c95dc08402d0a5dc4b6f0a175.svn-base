@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <!-- 系统全局设置服务设置 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="pubSetupBaseServiceImpl"/>
+        <property name="serviceName" value="pubSetupBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.pub.PubSetupBaseService"/>
+    </bean>
+
+    <!-- 商品分类服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productCateServiceImpl"/>
+        <property name="serviceName" value="productCateServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.productMgr.ProductCateService"/>
+    </bean>
+
+    <!-- 商品分类服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productCateBaseServiceImpl"/>
+        <property name="serviceName" value="productCateBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.productMgr.ProductCateBaseService"/>
+    </bean>
+
+    <!-- 商品分类服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productCateAttrDefineBaseServiceImpl"/>
+        <property name="serviceName" value="productCateAttrDefineBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.productMgr.ProductCateAttrDefineBaseService"/>
+    </bean>
+
+    <!-- 公共配置服务接口 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="pubConfigServiceImpl"/>
+        <property name="serviceName" value="pubConfigServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.pub.PubConfigService"/>
+    </bean>
+
+    <!-- 商品管理服务设置 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productServiceImpl"/>
+        <property name="serviceName" value="productServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.productMgr.ProductService"/>
+    </bean>
+
+    <!-- 商品文案管理服务设置 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productDocumentServiceImpl"/>
+        <property name="serviceName" value="productDocumentServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.productMgr.ProductDocumentService"/>
+    </bean>
+
+    <!-- 种类扩展定义表服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productCateAttrDefineBaseServiceImpl"/>
+        <property name="serviceName" value="productCateAttrDefineBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.productMgr.ProductCateAttrDefineBaseService"/>
+    </bean>
+
+    <!-- 商品价格定义服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productPriceBaseServiceImpl"/>
+        <property name="serviceName" value="productPriceBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.productMgr.ProductPriceBaseService"/>
+    </bean>
+
+    <!-- 商品价格定义服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productPriceServiceImpl"/>
+        <property name="serviceName" value="productPriceServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.productMgr.ProductPriceService"/>
+    </bean>
+
+    <!-- 商品扩展服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productAttrBaseServiceImpl"/>
+        <property name="serviceName" value="productAttrBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.productMgr.ProductAttrBaseService"/>
+    </bean>
+
+    <!-- 商品服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productInfoBaseServiceImpl"/>
+        <property name="serviceName" value="productInfoBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.productMgr.ProductInfoBaseService"/>
+    </bean>
+
+    <!-- 代金券信息服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="couponInfoServiceImpl"/>
+        <property name="serviceName" value="couponInfoServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.couponMgr.CouponInfoService"/>
+    </bean>
+
+    <!-- 用户代金券服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="couponCusServiceImpl"/>
+        <property name="serviceName" value="couponCusServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.couponMgr.CouponCusService"/>
+    </bean>
+
+    <!-- 开店套餐服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productPackageBaseServiceImpl"/>
+        <property name="serviceName" value="productPackageBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.productMgr.ProductPackageBaseService"/>
+    </bean>
+
+    <!-- 开店套餐服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="productPackageServiceImpl"/>
+        <property name="serviceName" value="productPackageServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.productMgr.ProductPackageService"/>
+    </bean>
+
+    <!-- 提现设置服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="withdrawSetServiceImpl"/>
+        <property name="serviceName" value="withdrawSetServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.basicConfig.WithdrawSetService"/>
+    </bean>
+
+    <!-- 退货设置服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="refundsSetServiceImpl"/>
+        <property name="serviceName" value="refundsSetServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.basicConfig.RefundsSetService"/>
+    </bean>
+
+    <!-- 平台收益设置服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="platIncomeSetServiceImpl"/>
+        <property name="serviceName" value="platIncomeSetServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.basicConfig.PlatIncomeSetService"/>
+    </bean>
+
+    <!-- 店主/主管规则服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="settlementShopRuleServiceImpl"/>
+        <property name="serviceName" value="settlementShopRuleServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.settlementMgr.SettlementShopRuleService"/>
+    </bean>
+
+    <!-- 账户结算明细服务接口 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="settlementShopDetailServiceImpl"/>
+        <property name="serviceName" value="settlementShopDetailServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.settlementMgr.SettlementShopDetailService"/>
+    </bean>
+
+    <!-- 订单服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cusOrderBaseServiceImpl"/>
+        <property name="serviceName" value="cusOrderBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.orderMgr.CusOrderBaseService"/>
+    </bean>
+
+    <!-- 订单服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cusOrderServiceImpl"/>
+        <property name="serviceName" value="cusOrderServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.orderMgr.CusOrderService"/>
+    </bean>
+
+    <!-- 退货管理服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cusOrderReturnServiceImpl"/>
+        <property name="serviceName" value="cusOrderReturnServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.orderMgr.CusOrderReturnService"/>
+    </bean>
+
+    <!-- 用户信息服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cusInfoServiceImpl"/>
+        <property name="serviceName" value="cusInfoServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.customerMgr.CusInfoService"/>
+    </bean>
+
+    <!-- 用户信息服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cusInfoBaseServiceImpl"/>
+        <property name="serviceName" value="cusInfoBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.customerMgr.CusInfoBaseService"/>
+    </bean>
+
+    <!-- 提现信息服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="extractOrderServiceImpl"/>
+        <property name="serviceName" value="extractOrderServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.extractOrder.ExtractOrderService"/>
+    </bean>
+
+    <!-- 用户信息服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="wechatReturnServiceImpl"/>
+        <property name="serviceName" value="wechatReturnServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.wechatReturn.WechatReturnService"/>
+    </bean>
+
+    <!-- 活动信息服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="activityInfoServiceImpl"/>
+        <property name="serviceName" value="activityInfoServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.specialSale.ActivityInfoService"/>
+    </bean>
+
+    <!-- 活动信息服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="activityInfoBaseServiceImpl"/>
+        <property name="serviceName" value="activityInfoBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.specialSale.ActivityInfoBaseService"/>
+    </bean>
+
+    <!-- 商品活动关联表服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="activityProductRelBaseServiceImpl"/>
+        <property name="serviceName" value="activityProductRelBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.specialSale.ActivityProductRelBaseService"/>
+    </bean>
+
+    <!-- 店主绩效服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="shopkeeperPerforServiceImpl"/>
+        <property name="serviceName" value="shopkeeperPerforServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.perforMgr.ShopkeeperPerforService"/>
+    </bean>
+    <!-- 主管绩效服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="directorPerforServiceImpl"/>
+        <property name="serviceName" value="directorPerforServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.perforMgr.DirectorPerforService"/>
+    </bean>
+
+    <!-- 身份信息认证服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cusCertificationServiceImpl"/>
+        <property name="serviceName" value="cusCertificationServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.customerMgr.CusCertificationService"/>
+    </bean>
+
+    <!-- 用户统计服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cusStatistiServiceImpl"/>
+        <property name="serviceName" value="cusStatistiServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.statisti.CusStatistiService"/>
+    </bean>
+
+    <!-- 代金券发放统计服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="couponStatistiServiceImpl"/>
+        <property name="serviceName" value="couponStatistiServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.statisti.CouponStatistiService"/>
+    </bean>
+
+    <!-- 现金发放统计服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cashGiveStatisticsServiceImpl"/>
+        <property name="serviceName" value="cashGiveStatisticsServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.statisti.CashGiveStatisticsService"/>
+    </bean>
+
+    <!-- 订单统计服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="orderStatistiServiceImpl"/>
+        <property name="serviceName" value="orderStatistiServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.statisti.OrderStatistiService"/>
+    </bean>
+
+    <!-- 平台提成账单服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="platPerforServiceImpl"/>
+        <property name="serviceName" value="platPerforServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.perforMgr.PlatPerforService"/>
+    </bean>
+
+    <!-- 代理商基础服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="agentInfoBaseServiceImpl"/>
+        <property name="serviceName" value="agentInfoBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.base.customerMgr.AgentInfoBaseService"/>
+    </bean>
+
+    <!-- 代理商服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="agentInfoServiceImpl"/>
+        <property name="serviceName" value="agentInfoServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.customerMgr.AgentInfoService"/>
+    </bean>
+
+    <!-- 缓存服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cacheServiceImpl"/>
+        <property name="serviceName" value="cacheServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.pub.CacheService"/>
+    </bean>
+
+    <!-- 厂家管理服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="factoryInfoServiceImpl"/>
+        <property name="serviceName" value="factoryInfoServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.wfx.service.basicConfig.FactoryInfoService"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,47 @@
+package com.catt.wfx.service.customerMgr;
+
+
+import java.util.Map;
+
+/**
+ * 用户信息服务接口
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-02-10 09:47:36
+ */
+public interface CusInfoService {
+    /**
+     * 获取登录用户基本信息（APP）
+     *
+     * @param cusId 客户ID
+     * @return
+     */
+    Map findLoginCusInfo(Long cusId);
+
+    /**
+     * 注册普通用户（APP）
+     *
+     * @param account      账户（手机号）
+     * @param pwd          密码
+     * @param invitationNo 邀请码
+     */
+    Long regisonCusInfo4App(String account, String pwd, String invitationNo);
+
+    /**
+     * 获取我的业绩
+     *
+     * @param cusId
+     * @return
+     */
+    Map getMyAchievement(Long cusId);
+
+    /**
+     * 获取邀请码
+     *
+     * @param shopId  店铺标识
+     * @return
+     */
+    String findInvitationNo(Long shopId);
+
+}

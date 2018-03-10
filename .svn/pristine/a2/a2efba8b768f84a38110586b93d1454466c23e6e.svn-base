@@ -1,0 +1,112 @@
+define('/admin/wechat/cusOrder/detail.html', ['$', 'template', 'msgBox'], function (require, exports, module) {
+        var $ = require('$');
+        var template = require('template');
+        var msgBox = require('msgBox');
+
+        function OrderDetail() {
+        }
+
+        /**
+         * 初始化
+         */
+        OrderDetail.prototype.init = function () {
+            var self = this;
+            self.listCard = $(".list-card");
+
+            self.loadData();
+        };
+
+        /**
+         * 事件绑定
+         */
+        OrderDetail.prototype.bindEvent = function () {
+            var self = this;
+            //取消订单
+            $("#cancel").click(function () {
+                $.alert("是否要取消订单", function () {
+                    var params = {orderId: $('#id').val()};
+                    $.post(path + '/admin/wechat/cusOrder/cancelCusOrder', params, function (data) {
+                        if ("success" == data.type) {
+                            msgBox.tips("操作成功");
+                            window.history.back();
+                        } else {
+                            msgBox.warn(data.content);
+                        }
+                    });
+                });
+            });
+
+            $('#topay').click(function () {
+                window.location.href = path + '/admin/wechat/weChatPay/pay.html?shopId=' + shopId + '&orderId=' + $('#id').val();
+            })
+        };
+
+        /**
+         * 加载数据
+         * @param $form
+         */
+        OrderDetail.prototype.loadData = function () {
+            var self = this;
+            var params = {id: $('#id').val()};
+
+            $.get(path + '/admin/wechat/cusOrder/findOrderDetail', params, function (cusOrderDetail) {
+                $("#status").html(cusOrderDetail.orderStatusName);
+                $("#num").html(cusOrderDetail.orderCode);
+                $("#time").html(cusOrderDetail.createDate);
+                $("#receive").html(cusOrderDetail.recipientName + "&nbsp;&nbsp;" + cusOrderDetail.recipientTel);
+                $("#addr").html(cusOrderDetail.provinceName + cusOrderDetail.cityName + cusOrderDetail.regionName + cusOrderDetail.recipientAddress);
+                $("#price").html("￥" + cusOrderDetail.productAmount);
+                $("#discount").html("￥" + cusOrderDetail.totalDiscountAmount);
+                $("#voucher").html("￥" + cusOrderDetail.couponMoney);
+                $("#freight").html("￥" + cusOrderDetail.logisticsCost);
+                $("#totalPay").html("￥" + cusOrderDetail.totalPayAmount);
+
+                var expressMsg = cusOrderDetail.latestLogisticsInfo;
+                if(expressMsg){
+                    $("#express").html(expressMsg).click(function() {
+                        window.location.href = path + '/admin/wechat/express/view/detail/' + expressMsg.logisticsType + '/' + expressMsg.logisticsCode;
+                    });
+                }else{
+                    $("#express").html("暂无物流信息");
+                }
+                //if (cusOrderDetail.orderStatus > 2) {//当状态为待收货或之后的状态时才显示快递信息
+                //    $('#express-card').html(
+                //        //onClick="${path}" 链上物流界面
+                //        '<div class="kuaidi" >' +
+                //        '<p id="express">' + cusOrderDetail.latestLogisticsInfo + '</p>' +
+                //        '<img class="arrow" src="${path}/resources/images/login_btn_next.png"></div>'
+                //    );
+                //}
+
+                var bottomHtml = '';
+                if (cusOrderDetail.canCancel == 1) {//仅允许取消订单时
+                    bottomHtml += '<div class="singleBtn zhifuBottom">' +
+                        '<h4 class="tuikuan1" id="cancel">取消订单</h4></div>';
+                }
+
+                if (cusOrderDetail.orderStatus == 1) {//当订单未支付的时候
+                    bottomHtml += '<div class="singleBtn zhifuBottom">' +
+                        '<h4 class="tuikuan1" id="topay">去支付</h4></div>';
+                }
+
+                $("#bottom-card").html(bottomHtml);
+                self.bindEvent();
+
+                var productList = cusOrderDetail.productList;
+                if (productList.length > 0) {
+                    var html = template('listTemp', cusOrderDetail.productList);
+                    $('#productList').html(html);
+                }
+
+                $(window).triggerHandler('resize');
+            });
+        };
+        module.exports = new OrderDetail();
+    }
+);
+
+seajs.use(['$', '/admin/wechat/cusOrder/detail.html'], function ($, apList) {
+    $(function () {
+        apList.init();
+    });
+});

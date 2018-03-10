@@ -1,0 +1,187 @@
+package com.catt.wfx.web.controller.admin.basicConfig;
+
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.entity.basicConfig.PlatIncomeSet;
+import com.catt.wfx.repository.entity.basicConfig.RefundsSet;
+import com.catt.wfx.repository.entity.basicConfig.WithdrawSet;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import com.catt.wfx.service.basicConfig.PlatIncomeSetService;
+import com.catt.wfx.service.basicConfig.RefundsSetService;
+import com.catt.wfx.service.basicConfig.WithdrawSetService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 提现、退货、平台收益设置控制器
+ * 作者：陈楚笙
+ * 时间：2017-2-6 14:50:15
+ */
+@RequestMapping({"/admin/basicConfig/baseSet"})
+@Controller("baseSetController")
+public class BaseSetController extends BaseController {
+
+    //提现设置服务
+    @Resource(name = "withdrawSetServiceImpl")
+    public WithdrawSetService withdrawSetService;
+
+    //退货设置服务
+    @Resource(name = "refundsSetServiceImpl")
+    public RefundsSetService refundsSetService;
+
+    //平台收益设置服务
+    @Resource(name = "platIncomeSetServiceImpl")
+    public PlatIncomeSetService platIncomeSetService;
+
+    //系统全局设置服务接口
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+//---提现----------------------------------------------------------------------------------------
+
+    //跳转到提现设置首页
+    @RequestMapping(value = "/withdraw/index")
+    public String toWithdrawIndex(Model model) {
+        Map<String, Object> map = withdrawSetService.getWithdrawMap();
+        if (map != null && !map.isEmpty()) {
+            List<WithdrawSet> dateList = (List) map.get("dateList");
+            Double limitMoney = MapUtil.getDouble(map, "limitMoney");
+            model.addAttribute("limitMoney", limitMoney + "");
+            if (dateList != null && dateList.size() > 0) {
+                String dateListJson = JsonUtils.toJson(dateList);
+                model.addAttribute("dateList", dateListJson);
+            } else {
+                model.addAttribute("dateList", "-1");
+            }
+        } else {
+            model.addAttribute("dateList", "-1");
+            model.addAttribute("limitMoney", "-1");
+        }
+        return "/admin/basicConfig/baseSet/withdrawIndex";
+    }
+
+    //保存提现时间
+    @RequestMapping(value = "/withdraw/saveDate")
+    public void saveWithdrawDate(@CurrentUser("id") Long userId, @CurrentUser("name") String userName, @RequestParam Map<String, Object> param) {
+        param.put("userId", userId);
+        param.put("userName", userName);
+        withdrawSetService.saveWithdrawDate(param);
+    }
+
+    //保存最低提现金额
+    @RequestMapping(value = "/withdraw/saveMoney")
+    public void saveWithdrawMoney(@CurrentUser("id") Long userId, @CurrentUser("name") String userName, @RequestParam Map<String, Object> param) {
+        param.put("userId", userId);
+        param.put("userName", userName);
+        withdrawSetService.saveWithdrawMoney(param);
+    }
+
+
+//---退货----------------------------------------------------------------------------------------
+
+    //跳转到退货设置首页
+    @RequestMapping(value = "/refunds/index")
+    public String toRefundsIndex(Model model) {
+        RefundsSet entity = refundsSetService.getRefundsSet();
+        if (entity != null) {
+            model.addAttribute("entity", entity);
+        }
+        return "/admin/basicConfig/baseSet/refundsIndex";
+    }
+
+    //保存退货时间设置
+    @RequestMapping(value = "/refunds/saveDate")
+    public void saveRefundsDate(@CurrentUser("id") Long userId, @CurrentUser("name") String userName, @RequestParam Map<String, Object> param) {
+        param.put("userId", userId);
+        param.put("userName", userName);
+        refundsSetService.saveRefundsDate(param);
+    }
+
+    //保存退货地址设置
+    @RequestMapping(value = "/refunds/saveAddress")
+    public void saveRefundsAddress(@CurrentUser("id") Long userId, @CurrentUser("name") String userName, @RequestParam Map<String, Object> param) {
+        param.put("userId", userId);
+        param.put("userName", userName);
+        refundsSetService.saveRefundsAddress(param);
+    }
+
+
+//---平台收益----------------------------------------------------------------------------------------
+
+    //跳转到退货设置首页
+    @RequestMapping(value = "/platIncome/index")
+    public String toPlatIncomeIndex(Model model) {
+        Map<String, Object> result = platIncomeSetService.getPlatIncomeMap();
+        if (result != null && !result.isEmpty()) {
+            List<PlatIncomeSet> sets = (List) result.get("sets");
+            Integer type = MapUtil.getInteger(result, "type");
+            model.addAttribute("type", type + "");
+            if (sets != null && sets.size() > 0) {
+                String setsJson = JsonUtils.toJson(sets);
+                model.addAttribute("sets", setsJson);
+            } else {
+                model.addAttribute("sets", "-1");
+            }
+        } else {
+            model.addAttribute("type", "-1");
+            model.addAttribute("sets", "-1");
+        }
+        return "/admin/basicConfig/baseSet/platIncomeIndex";
+    }
+
+    @RequestMapping(value = "/platIncome/saveSet")
+    public void saveSet(@CurrentUser("id") Long userId, @CurrentUser("name") String userName, @RequestParam Map<String, Object> param) {
+        param.put("userId", userId);
+        param.put("userName", userName);
+        platIncomeSetService.saveSet(param);
+    }
+
+
+    // ----开店配置-------------------------------------
+
+    /**
+     * 开店配置页面
+     */
+    @RequestMapping(value = {"/openStore/index.html"}, method = RequestMethod.GET)
+    public String toOpenStoreIndex(Model model) {
+        String openStoreSet = pubSetupBaseService.getSetupByCode(PubSetup.Code.openStoreSet);
+        if (StringUtil.checkStr(openStoreSet)) {
+            model.addAllAttributes(JsonUtils.toObject(openStoreSet, Map.class));
+        }
+        return "/admin/basicConfig/baseSet/openStoreIndex";
+    }
+
+    /**
+     * 保存开店配置
+     *
+     * @param setJson 开店配置JSON字符串格式
+     * @return
+     */
+    @RequestMapping(value = {"/saveOpenStoreSet"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message saveOpenStoreSet(String setJson) {
+        PubSetup pubSetup = pubSetupBaseService.findByCode(PubSetup.Code.openStoreSet);
+        if (pubSetup == null) {
+            pubSetup = new PubSetup();
+            pubSetup.setCode(PubSetup.Code.openStoreSet.getName());
+            pubSetup.setName("开店配置");
+        }
+        pubSetup.setValue(setJson);
+        pubSetupBaseService.update(pubSetup);
+        return Message.success("");
+    }
+
+}

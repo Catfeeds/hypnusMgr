@@ -1,0 +1,32 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*支付密码框*/
+
+
+.floatDiv{background:url(../images/bg_float.png) repeat; position:absolute; top:0; left:0; z-index:998; display:none;}
+.password{ width:92%; padding:25px 4%; height:180px; background:#fff; border-top:2px solid #ff4d4d; position:fixed; bottom:-230px; left:0; z-index:999;}
+.password h1{ height:40px; line-height:40px; font-size:14px; color:#333; margin-bottom:10px;}
+.password table{ margin:0 2%; width:96%;}
+.password table td{ width:16%;}
+
+.password input{ width:40px; height:40px; line-height:40px; text-align:center; font-size:20px; color:#222; border:1px solid #efefef; margin:0 auto;}
+span.close{ display:block; width:24px; height:24px; position:absolute; top:0; right:0; cursor:pointer; padding:6px;}
+.nextBtn1{ left:0;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,579 @@
+package com.catt.wfx.service.impl.productMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductCateDao;
+import com.catt.wfx.repository.dao.productMgr.ProductInfoDao;
+import com.catt.wfx.repository.dao.productMgr.ProductPriceDao;
+import com.catt.wfx.repository.dao.specialSale.ActivityProductRelDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.CusCart;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductAttr;
+import com.catt.wfx.repository.entity.productMgr.ProductCate;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.form.productMgr.ProductFromApp;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductAttrBaseService;
+import com.catt.wfx.service.base.productMgr.ProductCateBaseService;
+import com.catt.wfx.service.base.specialSale.ActivityProductRelBaseService;
+import com.catt.wfx.service.productMgr.ProductService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:商品管理服务接口实现
+ * Created by 2017-01-09  14:32.
+ * author: Zhou mingxiang
+ */
+@Service("productServiceImpl")
+public class ProductServiceImpl implements ProductService {
+
+    @Resource(name = "productInfoDaoImpl")
+    private ProductInfoDao productInfoDao;
+
+    @Resource(name = "productPriceDaoImpl")
+    private ProductPriceDao productPriceDao;
+
+
+    //商品种类信息服务接口
+    @Resource(name = "productCateBaseServiceImpl")
+    private ProductCateBaseService productCateBaseService;
+
+    //商品种类信息Dao接口
+    @Resource(name = "productCateDaoImpl")
+    private ProductCateDao productCateDao;
+
+    //商品扩展服务接口
+    @Resource(name = "productAttrBaseServiceImpl")
+    private ProductAttrBaseService productAttrBaseService;
+
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+    /**
+     * 公共配置服务
+     */
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    //商品活动关联表Dao
+    @Resource(name = "activityProductRelDaoImpl")
+    ActivityProductRelDao activityProductRelDao;
+
+    //用户服务
+    @Resource(name = "cusInfoBaseServiceImpl")
+    CusInfoBaseService cusInfoBaseService;
+
+    // 商品活动关联表服务接口
+    @Resource(name = "activityProductRelBaseServiceImpl")
+    private ActivityProductRelBaseService activityProductRelBaseService;
+
+    /**
+     * 获取商品信息列表(app接口)
+     *
+     * @param productFromApp 商品信息from
+     * @param pageable
+     * @return
+     */
+    public Page<Map> findProductInfoByPage(ProductFromApp productFromApp, Pageable pageable) {
+
+        Integer useType = productFromApp.getUseType();
+        Long cusId = productFromApp.getCusId();
+        Long cateId = productFromApp.getCateId();
+        boolean isWechat = productFromApp.isWechat();
+
+        Integer type = null; //客户类型
+        if (useType == null){
+            useType = CusCart.UseType.SHOPPING_CART.getValue(); //默认普通购买
+
+        } else if (useType == CusCart.UseType.PURCHASE_LIST.getValue()){ //进货
+            CusInfo cusInfo = cusInfoBaseService.find(cusId);
+            type = cusInfo.getType();
+        }
+
+        //分类标识所有子集（以及子集的子集）集合
+        List<Long> cateList = new ArrayList<Long>();
+
+        if (StringUtil.checkObj(cateId)) {
+            cateList = this.findProductCateById(cateId);
+        }
+        productFromApp.setCateList(cateList);
+
+
+        //获取商品基本信息
+        Page<Map> mapPage = null;
+        if (isWechat) {
+            mapPage = productInfoDao.findProductInfoByPage4Wechat(cusId, cateList, pageable, productFromApp.getZhName());
+        } else {
+            mapPage = productInfoDao.findProductInfoByPage(productFromApp, pageable);
+        }
+        List<Map> mapList = mapPage.getContent();
+
+        if (mapList != null && mapList.size() > 0) {
+            //封面图片标识集合
+            Long[] headPathId = new Long[mapList.size()];
+            //商品标识集合
+            List<Long> productIds = new ArrayList<Long>();
+            int i = 0;
+
+            //遍历拼装数据
+            for (Map map : mapList) {
+                headPathId[i] = MapUtil.getLong(map, "headPath");
+                productIds.add(MapUtil.getLong(map, "id"));
+                i++;
+            }
+
+            //获取商品价格信息
+            List<Map> priceList = productPriceDao.findProductPriceByProductId(productIds);
+            for (Map priceMap : priceList){
+                if (useType == CusCart.UseType.PURCHASE_LIST.getValue()) { //进货
+                    // 销售价取用户代理商级别对应的销售价
+                    Double salesPrice;
+                    if (type == CusInfo.Type.TotalAgent.getValue()){ //总代
+                        salesPrice = MapUtil.getDouble(priceMap, "generalAgent");
+
+                    } else if (type == CusInfo.Type.ProvinceAgent.getValue()){ //省代
+                        salesPrice = MapUtil.getDouble(priceMap, "provincialAgent");
+
+                    } else if (type == CusInfo.Type.CityAgent.getValue()){ //市代
+                        salesPrice = MapUtil.getDouble(priceMap, "cityAgent");
+
+                    } else if (type == CusInfo.Type.AreaAgent.getValue()){ //区代
+                        salesPrice = MapUtil.getDouble(priceMap, "regionalAgent");
+                    } else {
+                        throw BaseException.errorByErrInfo("非法操作");
+                    }
+                    priceMap.put("salesPrice", salesPrice);
+                    priceMap.put("profit", 0.0);
+                }
+                priceMap.remove("generalAgent");
+                priceMap.remove("provincialAgent");
+                priceMap.remove("cityAgent");
+                priceMap.remove("regionalAgent");
+            }
+
+            //获取图片地址信息
+            List<Attachment> attachmentList = attachmentBaseService.findList(headPathId);
+
+            //获取图片存储地址
+            String filePath = pubConfigService.getFilePath();
+
+            for (Map map : mapList) {
+                //封面图片标识
+                Long headPath = MapUtil.getLong(map, "headPath");
+                //商品标识
+                Long id = MapUtil.getLong(map, "id");
+
+                //循环遍历设置商品价格数据
+                for (Map map1 : priceList) {
+                    Long productId = MapUtil.getLong(map1, "productId");
+                    if (StringUtil.checkObj(id) && id.equals(productId)) {
+                        map.putAll(map1);
+                        break;
+                    }
+                }
+
+                //循环遍历设置封面图片路径
+                for (Attachment attachment : attachmentList) {
+                    if (StringUtil.checkObj(headPath) && headPath.equals(attachment.getId())) {
+                        map.put("headPath", filePath + attachment.getPath());
+                        break;
+                    }
+
+                }
+            }
+
+            if (!isWechat) {
+                //枚举翻译， 商品单位
+                enumMgrService.transformEnum(mapList,
+                        new ArrayList<EnumTransformData>() {
+                            {
+                                add(new EnumTransformData("T_PRODUCT_INFO",
+                                        "I_UNIT", "unit",
+                                        "unitName"));
+                            }
+                        });
+            }
+        }
+        mapPage.setContent(mapList);
+
+        return mapPage;
+    }
+
+    /**
+     * 获取商品详细信息(app接口)
+     *
+     * @param cusId 用户标识
+     * @param id    商品标识
+     * @param useType 使用类型 1-普通  2-进货清单
+     * @return
+     */
+    public Map findProductInfoDetail(Long cusId, Long id, Integer useType) {
+        Integer type = null; //客户类型
+        if (useType == null){
+            useType = CusCart.UseType.SHOPPING_CART.getValue(); //默认普通购买
+
+        } else if (useType == CusCart.UseType.PURCHASE_LIST.getValue()){ //进货
+            CusInfo cusInfo = cusInfoBaseService.find(cusId);
+            type = cusInfo.getType();
+        }
+
+        Map map = new HashMap<>();
+        List<Map> mapList = productInfoDao.findProductInfoDetail(cusId, id);
+        if (mapList != null && mapList.size() > 0) {
+            map = mapList.get(0);
+
+            //商品标识集合
+            List<Long> productIds = new ArrayList<Long>();
+            productIds.add(id);
+
+            //获取商品价格信息
+            List<Map> priceList = productPriceDao.findProductPriceByProductId(productIds);
+            if (priceList != null && priceList.size() > 0) {
+                Map priceMap = priceList.get(0);
+                Double salesPrice = MapUtil.getDouble(priceMap, "salesPrice");
+
+                if (useType == CusCart.UseType.PURCHASE_LIST.getValue()) { //进货
+                    // 销售价取用户代理商级别对应的销售价
+                    if (type == CusInfo.Type.TotalAgent.getValue()){ //总代
+                        salesPrice = MapUtil.getDouble(priceMap, "generalAgent");
+
+                    } else if (type == CusInfo.Type.ProvinceAgent.getValue()){ //省代
+                        salesPrice = MapUtil.getDouble(priceMap, "provincialAgent");
+
+                    } else if (type == CusInfo.Type.CityAgent.getValue()){ //市代
+                        salesPrice = MapUtil.getDouble(priceMap, "cityAgent");
+
+                    } else if (type == CusInfo.Type.AreaAgent.getValue()){ //区代
+                        salesPrice = MapUtil.getDouble(priceMap, "regionalAgent");
+                    } else {
+                        throw BaseException.errorByErrInfo("非法操作");
+                    }
+                    priceMap.put("salesPrice", salesPrice);
+                    priceMap.put("profit", 0.0);
+
+                } else { //普通or特卖
+                    List<Map> productPriceList = productPriceDao.findListByProductId(id);
+                    List<Map> activityProductRelList = activityProductRelDao.findActivityInProductRelList(id);
+
+                    Double profit = 0.0;
+
+                    for (Map productPrice : productPriceList) {
+                        Double profit2 = MapUtil.getDouble(productPrice, "profit");
+                        Double costPrice = MapUtil.getDouble(productPrice, "costPrice");
+
+                        boolean isActivity = false;
+
+                        long priceId = MapUtil.getLong(productPrice, "id");
+                        if(CollectionUtil.isNotEmpty(activityProductRelList)) {
+                            for (Map activityProductRel : activityProductRelList) {
+
+                                Double profit3 = MapUtil.getDouble(activityProductRel, "profit");
+                                if (MapUtil.getLong(activityProductRel, "priceId") == priceId) {
+                                    map.put("costPrice", MapUtil.getDouble(activityProductRel, "costPrice"));
+                                    salesPrice =  MapUtil.getDouble(activityProductRel, "salesPrice");
+                                    isActivity = true;
+                                    if (profit3.compareTo(profit) > 0) {
+                                        profit = profit3;
+                                    }
+                                    break;
+                                }
+
+
+
+                            }
+
+                        }
+                        if (!isActivity) {
+                            if (profit2.compareTo(profit) > 0) {
+                                profit = profit2;
+                            }
+                        }
+
+
+                    }
+
+                    map.put("profit", profit);
+
+                }
+
+                map.put("salesPrice", salesPrice);//商品最低销售价
+//                map.put("profit", MapUtil.getDouble(priceMap, "profit"));//商品最高店主利润
+                map.put("totalStockNum", MapUtil.getInteger(priceMap, "totalStockNum"));//总库存数量
+            }
+
+            //获取图片地址信息
+            List<Attachment> attachmentList = attachmentBaseService.getFiles(id, ProductInfo.TABLE_NAME, ProductInfo.PIC_PATH);
+
+            //图片地址路径集合
+            List<String> picPathList = new ArrayList<String>();
+
+            //获取图片存储地址
+            String filePath = pubConfigService.getFilePath();
+
+            for (Attachment attachment : attachmentList) {
+                String path = filePath + attachment.getPath();
+                picPathList.add(path);
+                if (attachment.getId().equals(MapUtil.getLong(map, "headPath"))) {
+                    map.put("headPath", path);
+                }
+            }
+            map.put("picPathList", picPathList);
+
+
+            enumMgrService.transformEnum(mapList,
+                    new ArrayList<EnumTransformData>() {
+                        {
+                            add(new EnumTransformData("T_PRODUCT_INFO",
+                                    "I_UNIT", "unit",
+                                    "unitName"));
+                        }
+                    });
+        }
+
+        return map;
+    }
+
+    @Override
+    public Map findSpecAndPrice(Long productId, Long cusId, Integer useType) {
+        Integer type = CusInfo.Type.RegistUser.getValue();
+        if (useType == null){
+            useType = CusCart.UseType.SHOPPING_CART.getValue(); //默认普通购买
+
+        } else if (useType == CusCart.UseType.PURCHASE_LIST.getValue()){ //进货
+            CusInfo cusInfo = cusInfoBaseService.find(cusId);
+            type = cusInfo.getType();
+        }
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("productId", productId));
+        List<Map> productPriceList = productPriceDao.findListByProductId(productId);
+        List<Map> activityProductRelList = activityProductRelDao.findActivityInProductRelList(productId);
+        for (Map productPrice : productPriceList){
+            this.putSpecDesc(productPrice);
+            long priceId = MapUtil.getLong(productPrice, "id");
+            productPrice.put("isActivity", PubEnum.YesOrNoEnum.NO.getValue()); // 是否特卖：1-是，2-否
+            if (useType == CusCart.UseType.SHOPPING_CART.getValue()){//普通购买
+                for (Map activityProductRel : activityProductRelList){
+                    if (MapUtil.getLong(activityProductRel, "priceId") == priceId){
+                        productPrice.put("isActivity", PubEnum.YesOrNoEnum.YES.getValue());
+                        productPrice.put("costPrice", MapUtil.getDouble(activityProductRel, "costPrice"));
+                        productPrice.put("salesPrice", MapUtil.getDouble(activityProductRel, "salesPrice"));
+                        productPrice.put("profit", MapUtil.getDouble(activityProductRel, "profit"));
+                        productPrice.put("stockNum", MapUtil.getInteger(activityProductRel, "stockNum"));
+                        break;
+                    }
+                }
+
+            } else if (useType == CusCart.UseType.PURCHASE_LIST.getValue()){ //进货
+                // 销售价取用户代理商级别对应的销售价
+                Double salesPrice;
+                if (type == CusInfo.Type.TotalAgent.getValue()){ //总代
+                    salesPrice = MapUtil.getDouble(productPrice, "generalAgent");
+
+                } else if (type == CusInfo.Type.ProvinceAgent.getValue()){ //省代
+                    salesPrice = MapUtil.getDouble(productPrice, "provincialAgent");
+
+                } else if (type == CusInfo.Type.CityAgent.getValue()){ //市代
+                    salesPrice = MapUtil.getDouble(productPrice, "cityAgent");
+
+                } else if (type == CusInfo.Type.AreaAgent.getValue()){ //区代
+                    salesPrice = MapUtil.getDouble(productPrice, "regionalAgent");
+                } else {
+                    throw BaseException.errorByErrInfo("非法操作");
+                }
+                productPrice.put("salesPrice", salesPrice);
+                productPrice.put("profit", 0.0);
+            }
+            productPrice.remove("generalAgent");
+            productPrice.remove("provincialAgent");
+            productPrice.remove("cityAgent");
+            productPrice.remove("regionalAgent");
+        }
+        Map map = new HashMap<>();
+        map.put("productPriceList", productPriceList);
+        List<ProductAttr> attrs = productAttrBaseService.findList(1, filters, null);
+        String specJson = "";
+        if (attrs.size() > 0) {
+            specJson = attrs.get(0).getSpecJson();
+        }
+        map.put("specJson", specJson);
+        return map;
+    }
+
+    /**
+     * 获取所有商品类型列表
+     *
+     * @return
+     */
+    @Override
+    public List<Map> getAllCate() {
+        List<Map> result = new ArrayList<>();
+        List<ProductCate> allNotDelCateList = productCateBaseService.findList(null,
+                Arrays.asList(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue())), Arrays.asList(Order.desc("level")));
+        if(CollectionUtil.isNotEmpty(allNotDelCateList)){
+            result = this.resetCateTree(allNotDelCateList, allNotDelCateList.get(0).getLevel().intValue());
+        }
+        return result;
+    }
+
+    /**
+     * 排列类型树
+     * 需要：1、有 层级 字段值(没有的话可以用path代替处理)
+     *       2、有指引到父节点的 path 字段值
+     * @param cates 类型列表
+     * @param level 层级数
+     * @return
+     */
+    private List<Map> resetCateTree(List<ProductCate> cates, int level){
+        List<Map> result = new ArrayList<>();
+        List<ProductCate> cateList = new ArrayList<>(cates);//循环列表（删减已处理的节点）
+        if(CollectionUtil.isNotEmpty(cates)){
+            int count = 1;
+            while(count <= level){
+                cates = new ArrayList<>(cateList);//过滤处理过的层级节点
+                for(ProductCate cate : cates){
+                    if(cate.getLevel().intValue() == count){
+                        //分析节点路径,获取父级节点列表
+                        String path = StringUtil.isNotBlank(cate.getPath()) ? cate.getPath().substring(1) : "";
+                        if(StringUtil.checkObj(path)){
+                            List<String> parentIds = Arrays.asList(path.split("/"));//父节点列表，按照层级顺序排列
+                            String indexParentId = cate.getParentId()+"";//直接父节点id
+
+                            int parentIdCount = 0;//父节点ID位置
+                            String parentId = parentIds.get(parentIdCount);//查询父节点id
+                            List<Map> parentList = result;//查询列表
+                            Integer parentIndex = null;//父节点map位置
+                            while((parentIndex = this.checkInclude(parentList, "id", parentId)) != null) {//追溯到直接节点
+                                Map parentMap = parentList.get(parentIndex);
+                                String mapParentId = MapUtil.getString(parentMap, "id");
+                                List<Map> chlidrenMap = (List<Map>)parentMap.get("children");
+                                if(indexParentId.equals(mapParentId)){
+                                    //找到了直接父节点，加入到直接父节点的children中
+                                    Map newChild = new HashMap<>();
+                                    newChild.put("id", cate.getId());
+                                    newChild.put("name", cate.getName());
+                                    newChild.put("children", new ArrayList<Map>());
+                                    chlidrenMap.add(newChild);
+                                    //parentList.put("children", childrenMap);
+                                    cateList.remove(cate);
+                                    break;
+                                }else{
+                                    //不是直接父节点，继续追溯
+                                    parentId = parentIds.get(++parentIdCount);
+                                    parentList = chlidrenMap;
+                                }
+                            }
+                        }else {
+                            //顶级节点
+                            Map m = new HashMap<>();
+                            m.put("id", cate.getId());
+                            m.put("name", cate.getName());
+                            m.put("children", new ArrayList<Map>());
+                            result.add(m);
+                            cateList.remove(cate);
+                        }
+                    }
+                }
+                count++;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 检查列表中的Map是否包含对应的value
+     * @param list
+     * @param key
+     * @param value
+     * @return index Map位置
+     */
+    private Integer checkInclude(List<Map> list, String key, String value){
+        Integer index = null;
+        if(CollectionUtil.isNotEmpty(list)){
+            for(int i = 0, len = list.size(); i < len; i++){
+                if(value.equals(MapUtil.getString(list.get(i), key))){
+                    index = i;
+                }
+            }
+        }
+        return index;
+    }
+
+    /**
+     * 增加规格描述
+     * @param product 商品
+     */
+    private void putSpecDesc(Map product) {
+        String specJson = MapUtil.getString(product, "specJson");
+        String specDesc = "";
+        if (StringUtil.checkObj(specJson)){
+            Map<String, String> spec = JsonUtils.toObject(specJson, Map.class);
+            for (String key : spec.keySet()) {
+                specDesc += "_" + spec.get(key);
+            }
+            if (specDesc.length() > 0){
+                specDesc = specDesc.substring(1);
+            }
+        }
+        product.put("specDesc", specDesc);
+    }
+
+    /**
+     * 根据分类标识获取分类标识所有子集（以及子集的子集）
+     *
+     * @param cateId 分类标识
+     * @return
+     */
+    private List<Long> findProductCateById(Long cateId) {
+//        List<Filter> filters = new ArrayList<>();
+//        filters.add(Filter.like("path", "/"+cateId));
+//        List<ProductCate> productCates = productCateBaseService.findList(null, filters, null);
+
+        List<Map> mapList =  productCateDao.findProductCateById(cateId);
+
+        List<Long> cateList = new ArrayList<Long>();
+        cateList.add(cateId);
+
+        if (mapList != null && mapList.size() > 0) {
+            for (Map map : mapList) {
+                cateList.add(MapUtil.getLong(map, "cateId"));
+            }
+        }
+
+        return cateList;
+    }
+
+    /**
+     * 通过商品标识获取参与活动的商品详情信息
+     *
+     * @param productId 商品标识
+     * @return
+     */
+    @Override
+    public Map getActivityProductDetailByProductId(Long productId) {
+        return activityProductRelDao.getActivityProductDetailByProductId(productId);
+    }
+}

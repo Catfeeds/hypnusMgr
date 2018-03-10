@@ -1,0 +1,88 @@
+package com.catt.wfx.web.controller.admin.customerMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.service.customerMgr.CusCertificationService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * 身份信息认证控制器
+ * 作者：陈楚笙
+ * 时间：2017-03-08
+ */
+@Controller("admin.cusCertificationController")
+@RequestMapping(value = "/admin/cusCertification")
+public class CusCertificationController extends BaseController {
+
+    // 身份信息认证接口
+    @Resource(name = "cusCertificationServiceImpl")
+    private CusCertificationService cusCertificationService;
+
+    /**
+     * 主页
+     */
+    @RequestMapping(value = "/index")
+    public String toIndex() {
+        return "/admin/customerMgr/cusCertification/index";
+    }
+
+    /**
+     * 详情
+     */
+    @RequestMapping(value = "/detail")
+    public String getDetail(Long certificationId, Model model) {
+        if (StringUtil.checkObj(certificationId)) {
+            model.addAllAttributes(cusCertificationService.getDetail(certificationId));
+        }
+        return "/admin/customerMgr/cusCertification/detail";
+    }
+
+    /**
+     * 获取分页数据
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = {"/getPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getPage(@RequestParam Map<String, Object> params) {
+        return cusCertificationService.getPage(params);
+    }
+
+    /**
+     * 审核页面
+     */
+    @RequestMapping(value = "/auditPage/{id}")
+    public String toAuditPage(@PathVariable Long id, Model model) {
+        model.addAttribute("id", id);
+        return "/admin/customerMgr/cusCertification/audit";
+    }
+
+    /**
+     * 审核
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/audit")
+    @ResponseBody
+    public Message audit(@RequestParam Map<String, Object> params, @CurrentUser("id") Long id, @CurrentUser("name") String name) {
+        params.put("userId", id);
+        params.put("userName", name);
+        cusCertificationService.auditCertification(params);
+        return SUCCESS_MSG;
+    }
+
+}

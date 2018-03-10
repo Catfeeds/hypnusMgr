@@ -1,0 +1,109 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>开店套餐设置</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/activitiesDetail.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/activities_list.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/addActivities.css" rel="stylesheet"/>
+
+    <script src="${path}/resources/js/member.js"></script>
+    <script src="${path}/resources/admin/js/customerMgr/shopkeeper/detail.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="positionNow">
+        <a>主页 &gt; </a><a href="${path}/admin/cusInfo/shopkeeper/index.html">店主管理</a> &gt; <a>详情</a>
+        <div class="subBtDiv">
+            <ul>
+                <li>
+                    <button class="subMit btnRed" id="toBeDirectorBtn">选拔为主管</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <input type="hidden" id="id" value="${id}">
+    <input type="hidden" id="name" value="${name}">
+    <div class="userDetail">
+        <h1 class="tittle">基本信息</h1>
+        <div class="activityMsn">
+            <table class="activityMsnTable">
+                <tr>
+                    <td>店主昵称：</td>
+                    <th>${name}</th>
+                    <td>手机号：</td>
+                    <th>${mobile}</th>
+                </tr>
+                <tr>
+                    <td>所属主管：</td>
+                    <th>${directorName}<span class="linkText" id="selectDirectorBtn">分配主管</span></th>
+                    <td>注册时间：</td>
+                    <th><fmt:formatDate value="${openTime}" pattern="yyyy-MM-dd HH:mm:ss"/></th>
+                </tr>
+                <tr>
+                    <td>到期时间：</td>
+                    <th><fmt:formatDate value="${expireTime}" pattern="yyyy-MM-dd HH:mm:ss"/></th>
+                    <td>&nbsp;</td>
+                    <th>&nbsp;</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="userDetail">
+        <h1 class="tittle">店铺信息</h1>
+        <div class="activityMsn">
+            <table class="activityMsnTable">
+                <tr>
+                    <td>店铺名称：</td>
+                    <th colspan="3">${shopName}</th>
+                </tr>
+                <tr>
+                    <td>店铺简介：</td>
+                    <th colspan="3">${shopDesc}</th>
+                </tr>
+                <tr>
+                    <td>上架商品：</td>
+                    <th><span class="textBlue">${productNum}个</span></th>
+                    <td>上架特卖专场：</td>
+                    <th><span class="textBlue">0场</span></th>
+                </tr>
+                <tr>
+                    <td>发布拼团：</td>
+                    <th><span class="textBlue">0个</span></th>
+                    <td>&nbsp;</td>
+                    <th>&nbsp;</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="userDetail">
+        <h1 class="tittle">代理商信息</h1>
+        <div class="activityMsn">
+            <table class="activityMsnTable">
+                <tr>
+                    <td>代理商级别：</td>
+                    <th>
+                        <c:if test="${type==1}">
+                            <span>--</span>
+                        </c:if>
+                        <c:if test="${type!=1}">
+                            <span>${typeName}</span>
+                        </c:if>
+                    </th>
+                    <td>代理地区：</td>
+                    <th>
+                        <c:if test="${type==1}">
+                            <span>--</span>
+                        </c:if>
+                        <c:if test="${type!=1}">
+                            <span>${agentSite}</span>
+                        </c:if></th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

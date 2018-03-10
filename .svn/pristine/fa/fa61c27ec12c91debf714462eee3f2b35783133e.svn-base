@@ -1,0 +1,114 @@
+package com.catt.wfx.service.impl.productMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductCateDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.productMgr.ProductCate;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.service.base.productMgr.ProductCateBaseService;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.productMgr.ProductCateService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * 商品分类设置接口实现
+ * 作者：袁幸成
+ * 时间：2017-1-9 2017-1-9 16:33:34
+ */
+@Service("productCateServiceImpl")
+public class ProductCateServiceImpl implements ProductCateService {
+
+    @Resource(name = "productCateBaseServiceImpl")
+    private ProductCateBaseService productCateBaseService;
+
+    @Resource(name = "productInfoBaseServiceImpl")
+    private ProductInfoBaseService productInfoBaseService;
+
+    @Resource(name = "productCateDaoImpl")
+    private ProductCateDao productCateDao;
+
+    @Override
+    @Transactional
+    public void deleteCate(Long[] cateIds) {
+        for (Long id : cateIds){
+            List<ProductInfo> infoList = productInfoBaseService.findList(1, Arrays.asList(Filter.eq("cateId", id), Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue())), null);
+            if(infoList != null && infoList.size() > 0){
+                throw BaseException.errorByErrInfo("该分类下已有商品，请先删除相关商品");
+            }
+            ProductCate cate = productCateBaseService.find(id);
+            if (cate != null){
+                String path = cate.getPath() + id + "/";
+                productCateDao.deleteCate(id, path);
+            }
+        }
+    }
+
+    @Override
+    public ProductCate saveCate(Long userId, String userName, Long id, String name, Long parentId) {
+        ProductCate cate;
+        if (StringUtil.checkObj(id)) {
+            //修改
+            cate = productCateBaseService.find(id);
+            parentId = cate.getParentId();
+        } else {
+            cate = new ProductCate();
+            String path;
+            Integer level;
+            if (parentId == null) {
+                path = "/";
+                level = 1;
+            } else {
+                ProductCate parent = productCateBaseService.find(parentId);
+                path = parent.getPath() + parentId + "/";
+                level = parent.getLevel() + 1;
+            }
+            cate.setParentId(parentId);
+            cate.setPath(path);
+            cate.setLevel(level);
+            cate.setDelFlag(PubEnum.YesOrNoEnum.NO.getValue());
+            cate.setCreatedId(userId);
+            cate.setCreatedName(userName);
+        }
+        if(this.checkNameExist(id, name, parentId)){
+            throw BaseException.errorByErrInfo("请勿重复添加相同名称的类型！");
+        }
+        cate.setName(name);
+        productCateBaseService.saveOrUpdate(cate);
+        return cate;
+    }
+
+    /**
+     * 判断同一父节点下是否已存在分类名称
+     * @param id 分类标识
+     * @param name 分类名称
+     * @param parentId 父id
+     * @return
+     */
+    private boolean checkNameExist(Long id, String name, Long parentId) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        if (id != null){
+            filters.add(Filter.ne("id", id));
+        }
+        if (StringUtil.checkObj(name)){
+            filters.add(Filter.eq("name", name));
+        }
+        if (parentId == null){
+            filters.add(Filter.isNull("parentId"));
+        } else {
+            filters.add(Filter.eq("parentId", parentId));
+        }
+        Filter[] filters1 = new Filter[filters.size()];
+        filters.toArray(filters1);
+        return productCateBaseService.count(filters1) > 0;
+    }
+
+}

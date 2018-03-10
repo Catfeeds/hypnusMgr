@@ -1,0 +1,116 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    // 初始化数据列表
+                    EventHandler.search();
+                },
+
+
+                /** 初始化界面  */
+                initPage: function () {
+                    var params = {}; //搜索条件
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $("#toBeDirectorBtn").click(function () {
+                        EventHandler.toBeDirector();
+                    });
+
+                    $("#selectDirectorBtn").click(function () {
+                        EventHandler.selectDirector();
+                    });
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                // 选拔为主管
+                toBeDirector: function () {
+                    var name = $("#name").val();
+                    msgBox.confirm({
+                        title: '提示',
+                        msg: '确定选拔' + name + '为主管吗？',
+                        callback: function (btnType) {
+                            if (btnType == 'ok') {
+                                var params = {cusId: $("#id").val()};
+                                DataHandler.toBeDirector(params, function (backData) {
+                                    if (backData.type == 'success') {
+                                        msgBox.tips("操作成功");
+                                    }
+                                });
+                            }
+                        }
+                    });
+                },
+                // 分配主管
+                selectDirector: function () {
+                    msgBox.exWindow.open({
+                        title: '分配主管',
+                        url: path + "/admin/cusInfo/director/toCheckDirector.html",
+                        width: '650px',
+                        height: '500px',
+                        close: function (result) {
+                            if (result) {
+                                var director = $.evalJSON(result);
+                                var leaderId = director[0].id;
+                                var cusId = $("#id").val();
+                                var params = {cusId: cusId, leaderId: leaderId};
+                                DataHandler.selectDirector(params, function (backData) {
+                                    if (backData.type == 'success') {
+                                        msgBox.tips("操作成功");
+                                        window.location.href = window.location.href;
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                // 选拔为主管
+                toBeDirector: function (param, callback) {
+                    $.post(path + '/admin/cusInfo/toBeDirector', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+                // 分配主管
+                selectDirector: function (param, callback) {
+                    $.post(path + '/admin/cusInfo/selectDirector', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

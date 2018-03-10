@@ -1,0 +1,41 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/3/13
+  Time: 16:11
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>如何成为店主？</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/dianzhu.css"/>
+    <!--手机观看保持比例-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+</head>
+
+<body style="background:#fff;">
+<div style="height:47px;"></div>
+<%--<div class="top header">--%>
+    <%--<button class="top-left" onClick="window.location='0-1login.html';"><img class="top_btn_back" src="images/top_btn_back.png"></button>--%>
+    <%--<h1>如何成为店主？</h1>--%>
+<%--</div>--%>
+<div class="body">
+    <h1>如何成为微分销店主？</h1>
+    <p>途径一：如果有朋友已经是微分销的店主，通过他的邀请链接，即可成为微分销店主</p>
+    <p>途径二：通过购买微分销的专享大礼包，可以赠送1~2年的开店资格。</p>
+    <%--<div class="lihe">--%>
+        <%--<img class="pic" src="${path}/resources/images/pic_libao.png">--%>
+        <%--<div class="goumai">--%>
+            <%--<p onClick="window.location='0-3dalibao.html';">点击购买礼盒套装</p>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+
+</div>
+
+</body>
+</html>

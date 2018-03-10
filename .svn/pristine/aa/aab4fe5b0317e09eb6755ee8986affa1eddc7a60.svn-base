@@ -1,0 +1,68 @@
+package com.catt.wfx.repository.dao.productMgr.impl;
+
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductCateDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.productMgr.ProductCate;
+import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+@Repository("productCateDaoImpl")
+public class ProductCateDaoImpl extends BaseDaoImpl<ProductCate, Long>
+        implements ProductCateDao {
+
+    @Override
+    public void deleteCate(Long id, String path) {
+        String sql = "UPDATE T_PRODUCT_CATE SET I_DEL_FLAG = :delFlag WHERE I_ID = :id OR S_PATH LIKE :path ";
+        Map<String, Object> params = new HashMap<>();
+        params.put("delFlag", PubEnum.YesOrNoEnum.YES.getValue());
+        params.put("id", id);
+        params.put("path", "%" + path + "%");
+        this.executeUpdateBySql(sql, params);
+    }
+
+    @Override
+    public Set<Long> findCateIdsByPath(String path) {
+        String sql = "SELECT I_ID AS \"id\" FROM T_PRODUCT_CATE WHERE I_DEL_FLAG = :delFlag AND S_PATH LIKE :path ";
+        Map<String, Object> params = new HashMap<>();
+        params.put("delFlag", PubEnum.YesOrNoEnum.NO.getValue());
+        params.put("path", path + "%");
+        List<Map> list = this.findListBySql(sql, params, Map.class);
+        Set<Long> set = new HashSet<>();
+        for (Map map : list){
+            set.add(MapUtil.getLong(map, "id"));
+        }
+        return set;
+    }
+
+    /**
+     *
+     * 根据分类标识获取分类标识所有子集（以及子集的子集）
+     *
+     * @param cateId 分类标识
+     * @return
+     */
+    public List<Map> findProductCateById(Long cateId){
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"cateId\" ");
+        sql.append(" FROM T_PRODUCT_CATE t1 ");
+        sql.append(" WHERE 1=1 ");
+        sql.append(" AND t1.I_DEL_FLAG ="+PubEnum.YesOrNoEnum.NO.getValue());
+        Map param = new HashMap<>();
+        if(StringUtil.checkObj(cateId)){
+            sql.append(" AND t1.S_PATH LIKE (:path)");
+            param.put("path", "%/"+cateId+"%");
+        }
+
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+}

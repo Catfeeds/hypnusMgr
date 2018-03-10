@@ -1,0 +1,256 @@
+package com.catt.wfx.repository.entity.settlementMgr;
+
+import com.catt.common.base.repository.annotation.SafeLock;
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.catt.common.base.repository.listener.SafeLockListener;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Table;
+
+/**
+ * 商家账户信息实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-23 11:38:28
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_SETTLEMENT_BUSINESS")
+@EntityListeners({SafeLockListener.class})
+@SafeLock(lockFields = {"factoryId", "totalNum", "totalMoney", "voucherUseMoney", "giveMoney", "totalShopMoney",
+        "totalPlatMoney", "leaderMoney", "leaderGetMoney", "platGetMoney", "shopGetMoney"})
+public class SettlementBusiness extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 厂家标识
+	 */
+	private Long factoryId;
+	/**
+	 * 订单总数量
+	 */
+	private Integer totalNum;
+	/**
+	 * 订单总金额
+	 */
+	private Double totalMoney;
+	/**
+	 * 代金券数量（发放）
+	 */
+	private Integer voucherNum;
+	/**
+	 * 代金券金额（发放）
+	 */
+	private Double voucherMoney;
+    /**
+     * 代金券数量（使用）
+     */
+    private Integer voucherUseNum;
+    /**
+     * 代金券金额（使用）
+     */
+    private Double voucherUseMoney;
+	/**
+	 * 赠送现金
+	 */
+	private Double giveMoney;
+	/**
+	 * 店主累计提成金额
+	 */
+	private Double totalShopMoney;
+	/**
+	 * 平台累计提成金额
+	 */
+	private Double totalPlatMoney;
+	/**
+	 * 主管累计提成金额
+	 */
+	private Double leaderMoney;
+	/**
+	 * 主管已提现金额
+	 */
+	private Double leaderGetMoney;
+	/**
+	 * 平台已提现金额
+	 */
+	private Double platGetMoney;
+	/**
+	 * 店主已提现金额
+	 */
+	private Double shopGetMoney;
+	/**
+	 * 校验字段<p><br>
+	 * 用于验证数据是否被异常修改
+	 */
+	private String validNo;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+
+	@Column(name = "I_FACTORY_ID")
+	public Long getFactoryId() {
+		return factoryId;
+	}
+
+	public void setFactoryId(Long factoryId) {
+		this.factoryId = factoryId;
+	}
+
+	@Column(name = "I_TOTAL_NUM")
+	public Integer getTotalNum() {
+		return totalNum;
+	}
+
+	public void setTotalNum(Integer totalNum) {
+		this.totalNum = totalNum;
+	}
+
+	@Column(name = "I_TOTAL_MONEY")
+	public Double getTotalMoney() {
+		return totalMoney;
+	}
+
+	public void setTotalMoney(Double totalMoney) {
+		this.totalMoney = totalMoney;
+	}
+
+	@Column(name = "I_VOUCHER_NUM")
+	public Integer getVoucherNum() {
+		return voucherNum;
+	}
+
+	public void setVoucherNum(Integer voucherNum) {
+		this.voucherNum = voucherNum;
+	}
+
+	@Column(name = "I_VOUCHER_MONEY")
+	public Double getVoucherMoney() {
+		return voucherMoney;
+	}
+
+	public void setVoucherMoney(Double voucherMoney) {
+		this.voucherMoney = voucherMoney;
+	}
+
+    @Column(name = "I_VOUCHER_USE_NUM")
+    public Double getVoucherUseMoney() {
+        return voucherUseMoney;
+    }
+
+    public void setVoucherUseMoney(Double voucherUseMoney) {
+        this.voucherUseMoney = voucherUseMoney;
+    }
+
+    @Column(name = "I_VOUCHER_USE_MONEY")
+    public Integer getVoucherUseNum() {
+        return voucherUseNum;
+    }
+
+    public void setVoucherUseNum(Integer voucherUseNum) {
+        this.voucherUseNum = voucherUseNum;
+    }
+
+    @Column(name = "I_GIVE_MONEY")
+	public Double getGiveMoney() {
+		return giveMoney;
+	}
+
+	public void setGiveMoney(Double giveMoney) {
+		this.giveMoney = giveMoney;
+	}
+
+	@Column(name = "I_TOTAL_SHOP_MONEY")
+	public Double getTotalShopMoney() {
+		return totalShopMoney;
+	}
+
+	public void setTotalShopMoney(Double totalShopMoney) {
+		this.totalShopMoney = totalShopMoney;
+	}
+
+	@Column(name = "I_TOTAL_PLAT_MONEY")
+	public Double getTotalPlatMoney() {
+		return totalPlatMoney;
+	}
+
+	public void setTotalPlatMoney(Double totalPlatMoney) {
+		this.totalPlatMoney = totalPlatMoney;
+	}
+
+	@Column(name = "I_LEADER_MONEY")
+	public Double getLeaderMoney() {
+		return leaderMoney;
+	}
+
+	public void setLeaderMoney(Double leaderMoney) {
+		this.leaderMoney = leaderMoney;
+	}
+
+	@Column(name = "I_LEADER_GET_MONEY")
+	public Double getLeaderGetMoney() {
+		return leaderGetMoney;
+	}
+
+	public void setLeaderGetMoney(Double leaderGetMoney) {
+		this.leaderGetMoney = leaderGetMoney;
+	}
+
+	@Column(name = "I_PLAT_GET_MONEY")
+	public Double getPlatGetMoney() {
+		return platGetMoney;
+	}
+
+	public void setPlatGetMoney(Double platGetMoney) {
+		this.platGetMoney = platGetMoney;
+	}
+
+	@Column(name = "I_SHOP_GET_MONEY")
+	public Double getShopGetMoney() {
+		return shopGetMoney;
+	}
+
+	public void setShopGetMoney(Double shopGetMoney) {
+		this.shopGetMoney = shopGetMoney;
+	}
+
+	@Column(name = "S_VALID_NO", length = 256)
+	public String getValidNo() {
+		return validNo;
+	}
+
+	public void setValidNo(String validNo) {
+		this.validNo = validNo;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+}
+

@@ -1,0 +1,21 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.topMenu{ border-bottom:1px solid #e5e5e5; height:45px;}
+.topMenu li{  background:#fff; float:left;font-size:16px; line-height:45px; cursor:pointer; text-align:center; width:25%;}
+.xuanzhong{ border-bottom: 2px solid #fa4b89; color:#fa4b89;}
+.topMenu li:hover{ border-bottom: 2px solid #fa4b89; color:#fa4b89;} 
+
+.daijinquanTop{ background:#fff; margin:10px; height:90px; position:relative;}
+.daijinquanTop h1{ position:absolute; top:10px; left:10px; float:left; font-size:16px; font-weight:normal; color:#333;}
+.daijinquanTop h2{ position:absolute; top:40px; left:10px; float:left; font-size:14px; font-weight:normal; color:#808080; line-height:20px; }
+.daijinquanTop h3{ position:absolute; top:60px; left:10px; float:left; font-size:12px; font-weight:normal; color:#808080; line-height:20px; }
+.topPic{ float:right; height:90px;}
+
+table.goodsType{ width:100%; height:35px; background:#fff; border-bottom:1px solid #e5e5e5;}
+table.goodsType td a{ display:block; margin:0 10%; height:40px; line-height:40px; text-align:center; font-size:16px; color:#222; cursor:pointer; border-bottom:2px solid #fff;}
+table.goodsType td a.lion{ border-bottom:2px solid #ff4d4d; color:#ff4d4d;}
+
+.shue{position:absolute; top:16px; right:28px; font-size:28px; color:#fff;}
+.guize{ color:#fff; position:absolute; top:54px; right:20px;  font-size:12px; text-align: center}

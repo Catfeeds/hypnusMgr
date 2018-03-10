@@ -1,0 +1,138 @@
+// JavaScript Document
+
+$(document).ready(function(e) {
+	
+	 //底部tabs图片切换
+	$(".xw_icoSwitch").click(function(){
+		$(".bottomIco_on").hide();
+		$(".bottomIco").show();
+		$(".xw_icoSwitch").css("color","#969696");
+		$(this).children(".bottomIco").hide();
+		$(this).children(".bottomIco_on").show();
+		$(this).css("color","#f47f30");
+	});
+	
+	//选择
+	$(".xw_select").click(function(){
+		var index = $(this).index();
+		$(".xw_select").css("color","#646464");
+		$(this).css("color","#ea3c34");
+		$(".selectContent").slideUp();
+		$(".selectContent").eq(index).slideDown();
+		})
+	
+	//表单性别选中
+	$(".xw_imgnoselect").click(function(event){
+		$(this).parents(".selectItem").siblings(".selectItem").children(".xw_imgselect").hide();
+		$(this).parents(".selectItem").siblings(".selectItem").children(".xw_imgnoselect").show();
+		$(this).hide();
+		$(this).siblings(".xw_imgselect").show();
+	});
+	
+    //点赞与收藏显示
+	$(".xw_btnToggle").click(function(event){
+		$(this).hide(800);
+		$(this).siblings(".xw_btnToggle_on").show(800);
+	});
+	$(".xw_btnToggle_on").click(function(event){
+		$(this).hide(800);
+		$(this).siblings(".xw_btnToggle").show(800);
+	});
+	
+	//选择
+	$(".xw_xiala").click(function(){
+		var index = $(this).index();
+		$(this).css("color","#f47f30");
+		$(".xialaList").slideUp();
+		$(".xialaList").eq(index).slideDown();
+	});
+	$(".xialaList li").click(function(){
+		var liText = $(this).text()+" ∨";
+		var index = $(this).parents("ul.xialaList").index() - 1;
+		$(".xialaTabs").find(".xw_xiala").eq(index).text(liText);
+		//$(".xw_select").text(liText);
+		$(".xialaTabs").find(".xw_xiala").eq(index).css("color","#646464");
+		$(".xialaList").slideUp();
+	});
+	
+	//产品详情展开更多与收起
+	$(".xw_showTip").click(function(){
+		if($(this).text()=="更多∨"){
+			$(this).text("收起∧")
+			$(this).parents(".introMain").find(".introHide").slideDown();
+			}
+		else if($(this).text()=="收起∧"){
+			$(this).text("更多∨");
+			$(this).parents(".introMain").find(".introHide").slideUp();
+			}
+		});
+		
+	//发票信息展开隐藏	
+	$(".xw_selectDown").click(function(event){
+		$(".msgHide").show();
+	});
+	$(".xw_selectUp").click(function(event){
+		$(".msgHide").hide();
+	});
+	
+	
+	//产品类型多项选择
+	$(".xw_selectType").click(function(){
+		$(".chanpinType").css("color","#646464");
+		$(".chanpintypeSelect").hide(400);
+		$(this).children(".chanpinType").css("color","#ea3c34");
+		$(this).children(".chanpintypeSelect").show(400);
+	});
+	
+	//地址、发票抬头选择
+	$(".xw_selectMoren").click(function(){
+		$(".morenSelect").hide();
+		$(".morenSelect02").show();
+		$(this).children(".morenSelect02").hide();
+		$(this).children(".morenSelect").show();
+	});
+	
+	//资讯类型的下拉
+	$(".xw_zixunDown").click(function(){
+		$(".bgsearchzhezhao").show();
+		$("body").css("overflow","hidden");
+		$(".zixunSelect").slideDown();
+	});
+	$(".xw_zixunselect").click(function(){
+		$(".bgsearchzhezhao").hide();
+		$("body").css("overflow","auto");
+		$(".zixunSelect").slideUp();
+	});
+	
+	//取票勾选
+	$(".gouxuan").click(function(){
+		$(this).parents(".qupiaoTop").find(".gouxuan").removeClass("xuanzhong");
+		$(this).addClass("xuanzhong");
+	});
+	
+	
+	
+	//公告类型的下拉
+	$(".xw_gonggaoDown").click(function(){
+		$(".bgsearchzhezhao").show();
+		$("body").css("overflow","hidden");
+		$(".gonggaoSelect").slideDown();
+	});
+	$(".xw_gonggaoselect").click(function(){
+		$(".bgsearchzhezhao").hide();
+		$("body").css("overflow","auto");
+		$(".gonggaoSelect").slideUp();
+	});
+	
+});
+
+function an(){
+	$(".xw_selectType").click(function(){
+		$(".chanpinType").css("color","#646464");
+		$(".chanpintypeSelect").hide(400);
+		$(this).children(".chanpinType").css("color","#ea3c34");
+		$(this).children(".chanpintypeSelect").show(400);
+	});
+	
+	
+	}

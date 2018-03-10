@@ -1,0 +1,347 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.bean.BeanUtil;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.util.spring.SpringUtils;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderReturnDao;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderReturnDetailDao;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderDetail;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturn;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturnDetail;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturnLog;
+import com.catt.wfx.repository.form.orderMgr.CusOrderReturnFrom;
+import com.catt.wfx.service.base.orderMgr.CusOrderDetailBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderReturnBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderReturnDetailBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderReturnLogBaseService;
+import com.catt.wfx.service.impl.wechatReturn.event.CreateReturnSuccessEvent;
+import com.catt.wfx.service.impl.wechatReturn.event.ReturnEventListener;
+import com.catt.wfx.service.impl.wechatReturn.event.ToReturnEvent;
+import com.catt.wfx.service.orderMgr.CusOrderReturnService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:退货管理服务接口实现
+ * Created by 2017-02-17  14:49.
+ * author: Zhou mingxiang
+ */
+@Service("cusOrderReturnServiceImpl")
+public class CusOrderReturnServiceImpl implements CusOrderReturnService {
+
+    //退货单Dao接口
+    @Resource(name = "cusOrderReturnDaoImpl")
+    private CusOrderReturnDao cusOrderReturnDao;
+
+    //退货订单明细Dao接口
+    @Resource(name = "cusOrderReturnDetailDaoImpl")
+    private CusOrderReturnDetailDao cusOrderReturnDetailDao;
+
+    //退货单服务接口
+    @Resource(name = "cusOrderReturnBaseServiceImpl")
+    private CusOrderReturnBaseService cusOrderReturnBaseService;
+
+    //退货单服务接口
+    @Resource(name = "cusOrderReturnLogBaseServiceImpl")
+    private CusOrderReturnLogBaseService cusOrderReturnLogBaseService;
+
+    //退货订单明细服务接口
+    @Resource(name = "cusOrderReturnDetailBaseServiceImpl")
+    private CusOrderReturnDetailBaseService cusOrderReturnDetailBaseService;
+
+    //订单明细标识
+    @Resource(name = "cusOrderDetailBaseServiceImpl")
+    private CusOrderDetailBaseService cusOrderDetailBaseService;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+    /**
+     * 公共配置服务
+     */
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+
+    /**
+     * 获取我的退货列表（分页）
+     *
+     * @param cusOrderReturnFrom 单据状态
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getReturnGoodsByPage(CusOrderReturnFrom cusOrderReturnFrom, Pageable pageable) {
+        Page<Map> mapPage = cusOrderReturnDao.getReturnGoodsByPage(cusOrderReturnFrom, pageable);
+        List<Map> mapList = mapPage.getContent();
+        if (mapList != null && mapList.size() > 0) {
+            for (Map map : mapList) {
+                map.put("statusName", CusOrderReturn.Status.getEnum(MapUtil.getInteger(map, "status")).getName());
+            }
+
+            mapPage.setContent(mapList);
+        }
+        return mapPage;
+    }
+
+    /**
+     * 获取退货单详情
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    public Map getReturnGoodsDetail(Long id) {
+        Map map = new HashMap<>();
+        List<Map> mapList = cusOrderReturnDao.getReturnGoodsDetail(id);
+        if (mapList != null && mapList.size() > 0) {
+            map = mapList.get(0);
+            //审核状态
+            Integer auditResult = MapUtil.getInteger(map, "auditResult");
+
+            //退货单状态
+            Integer status = MapUtil.getInteger(map, "status");
+
+            if (StringUtil.checkObj(auditResult)) {
+                //审核结果枚举翻译
+                map.put("auditResultName",
+                        CusOrderReturn.AuditResult.getEnum(auditResult).getName());
+            }
+            //退货单状态枚举翻译
+            map.put("statusName",
+                    CusOrderReturn.Status.getEnum(status).getName());
+            //枚举翻译， 退货物流公司
+            enumMgrService.transformEnum(map,
+                    new ArrayList<EnumTransformData>() {
+                        {
+                            add(new EnumTransformData("T_CUS_ORDER_RETURN",
+                                    "I_LOGISTICS_TYPE", "logisticsType",
+                                    "logisticsTypeName"));
+                        }
+                    });
+
+            //获取退货单对应的退货明细信息
+            List<Map> productList = cusOrderReturnDetailDao.getOrderDetail(id);
+
+            map.put("productList", productList);
+
+
+            //获取相关图片信息
+            List<Attachment> attachmentList = attachmentBaseService.getFiles(id, CusOrderReturn.TABLE_NAME, CusOrderReturn.PIC);
+            List<String> picList = new ArrayList<>();
+            if (attachmentList != null && attachmentList.size() > 0) {
+                //获取图片存储地址
+                String filePath = pubConfigService.getFilePath();
+                for (Attachment attachment : attachmentList) {
+                    picList.add(filePath + attachment.getPath());
+                }
+            }
+
+            //相关图片列表
+            map.put("picList", picList);
+
+
+        }
+
+        return map;
+    }
+
+    /**
+     * 获取退货单流程信息列表
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    public List<Map> getCusOrderReturnLogByList(Long id) {
+        List<Map> mapList = new ArrayList<>();
+        Map map = null;
+
+        //查询出对应退货标识的退货单流程信息
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("bill", id));
+        List<CusOrderReturnLog> cusOrderReturnLogs = cusOrderReturnLogBaseService.findList(null, filters, null);
+
+
+        if (cusOrderReturnLogs != null && cusOrderReturnLogs.size() > 0) {
+            for (CusOrderReturnLog cusOrderReturnLog : cusOrderReturnLogs) {
+                map = new HashMap<>();
+                map.put("content", cusOrderReturnLog.getContent());
+                map.put("createDate", cusOrderReturnLog.getCreateDate());
+                mapList.add(map);
+            }
+        }
+        return mapList;
+    }
+
+    /**
+     * 退货单审核
+     *
+     * @param id          退货单标识
+     * @param auditResult 审核结果
+     * @param auditDesc   审核意见
+     */
+    @Transactional
+    public void examineReturn(Long cusId, String cusName, Long id, Integer auditResult, String auditDesc) {
+        CusOrderReturn cusOrderReturn = cusOrderReturnBaseService.find(id);
+
+        if (cusOrderReturn != null && cusOrderReturn.getStatus().equals(CusOrderReturn.Status.PendAudit.getValue())) {
+            String content = "";
+            Integer act = CusOrderReturnLog.Act.Audit.getValue();
+
+            cusOrderReturn.setAuditResult(auditResult);
+            cusOrderReturn.setAuditDesc(auditDesc);
+
+            if (auditResult.equals(CusOrderReturn.AuditResult.NotPass.getValue())) {//不通过
+                cusOrderReturn.setStatus(CusOrderReturn.Status.NotPass.getValue());
+
+                //获取退货商品详细信息
+                List<CusOrderReturnDetail> cusOrderReturnDetails = cusOrderReturnDetailBaseService.findList(null, Arrays.asList(Filter.eq("returnId", id)), null);
+
+                if (CollectionUtil.isNotEmpty(cusOrderReturnDetails)) {
+                    CusOrderReturnDetail cusOrderReturnDetail = cusOrderReturnDetails.get(0);
+
+                    //获取订单商品详细信息
+                    CusOrderDetail cusOrderDetail = cusOrderDetailBaseService.find(cusOrderReturnDetail.getOrderDetailId());
+
+                    //退货不通过---回退商品退货数量
+                    cusOrderDetail.setReturnNum(cusOrderDetail.getReturnNum() - cusOrderReturnDetail.getNum());
+                    cusOrderDetailBaseService.update(cusOrderDetail);
+                }
+
+                content = "已审核，不通过。原因：" + auditDesc;
+
+            } else if (auditResult.equals(CusOrderReturn.AuditResult.RefundOnly.getValue())) {//仅退款
+                cusOrderReturn.setStatus(CusOrderReturn.Status.PendRefund.getValue());
+
+                content = "已审核，通过，同意退款。";
+            } else if (auditResult.equals(CusOrderReturn.AuditResult.ReturnOnly.getValue())) {//仅退货
+                cusOrderReturn.setStatus(CusOrderReturn.Status.ToDelivery.getValue());
+
+                content = "已审核，通过，同意退货。请将商品按邮寄地址寄回。";
+            } else if (auditResult.equals(CusOrderReturn.AuditResult.Refund.getValue())) {
+                cusOrderReturn.setStatus(CusOrderReturn.Status.ToDelivery.getValue());
+
+                content = "已审核，通过，同意退货退款。请将商品按邮寄地址寄回。";
+            }
+            //修改退货单信息
+            cusOrderReturnBaseService.update(cusOrderReturn);
+
+            //保存退货单流程信息
+            this.saveCusOrderReturnLog(cusId, cusName, content, act, id);
+        } else {
+            throw BaseException.errorByErrInfo("该退货单已经审核了");
+        }
+    }
+
+    /**
+     * 收到退货
+     *
+     * @param cusId   当前登录人标识
+     * @param cusName 当前登录人名称
+     * @param id      退货单标识
+     */
+    @Transactional
+    public void receiveGoods(Long cusId, String cusName, Long[] id) {
+        List<CusOrderReturn> cusOrderReturnList = cusOrderReturnBaseService.findList(id);
+
+        for (CusOrderReturn cusOrderReturn : cusOrderReturnList) {
+            if (cusOrderReturn != null &&
+                    cusOrderReturn.getStatus().equals(CusOrderReturn.Status.ToTakeDelivery.getValue())) {
+
+                //审核结果
+                Integer auditResult = cusOrderReturn.getAuditResult();
+
+                if (auditResult.equals(CusOrderReturn.AuditResult.ReturnOnly.getValue())) {//仅退货
+                    cusOrderReturn.setStatus(CusOrderReturn.Status.Finish.getValue());
+                } else if (auditResult.equals(CusOrderReturn.AuditResult.Refund.getValue())) {//退款退货
+                    cusOrderReturn.setStatus(CusOrderReturn.Status.PendRefund.getValue());
+                }
+
+                //修改退货单信息
+                cusOrderReturnBaseService.update(cusOrderReturn);
+
+                Integer act = CusOrderReturnLog.Act.Delivery.getValue();
+                String content = "收到退货";
+                //保存退货单流程信息
+                this.saveCusOrderReturnLog(cusId, cusName, content, act, cusOrderReturn.getId());
+            }
+        }
+
+
+    }
+
+    /**
+     * 获取退款信息
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    public Map getReturnTotalAmount(Long id) {
+        Map map = new HashMap<>();
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("returnId", id));
+
+        List<CusOrderReturnDetail> cusOrderReturnDetails = cusOrderReturnDetailBaseService.findList(null, filters, null);
+        if (cusOrderReturnDetails != null && cusOrderReturnDetails.size() > 0) {
+            map = BeanUtil.describe(cusOrderReturnDetails.get(0));
+        }
+        return map;
+    }
+
+    /**
+     * 退款---余额退款
+     *
+     * @param param
+     */
+    public void rechargeReturn(Map<String, String> param) {
+        // 业务类型（支付事件处理器bean名称）
+        ReturnEventListener listener = SpringUtils.getBean("cusOrderReturnHandler");
+        Assert.notNull(listener);
+
+        ToReturnEvent toReturnEvent = listener.initPayRequestParam(param);
+        toReturnEvent.setRefundNo(null); // 余额退款时，退款订单号没意义
+        listener.returnSuccess(new CreateReturnSuccessEvent(toReturnEvent, new Date()));
+    }
+
+
+    /**
+     * 保存退货单流程信息
+     *
+     * @param cusId    操作人标识
+     * @param cusName  操作人名称
+     * @param content  操作内容
+     * @param act      操作环节
+     * @param returnId 单据标识
+     */
+    private void saveCusOrderReturnLog(Long cusId, String cusName, String content, Integer act, Long returnId) {
+        CusOrderReturnLog cusOrderReturnLog = new CusOrderReturnLog();
+        cusOrderReturnLog.setBill(returnId);
+        cusOrderReturnLog.setAct(act);
+        cusOrderReturnLog.setContent(content);
+        cusOrderReturnLog.setOperatorId(cusId);
+        cusOrderReturnLog.setOperatorName(cusName);
+        cusOrderReturnLogBaseService.save(cusOrderReturnLog);
+    }
+
+}

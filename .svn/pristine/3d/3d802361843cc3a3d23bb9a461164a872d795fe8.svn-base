@@ -1,0 +1,39 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.customerMgr.CusShopService;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * Description:用户店铺管理单元测试
+ * Created by 2017-02-15  10:29.
+ * author: Zhou mingxiang
+ */
+public class CusShopServiceImplTest extends SpringTest {
+
+    @Resource(name = "cusShopServiceImpl")
+    private CusShopService cusShopService;
+
+    /**
+     * 获取登录用户店铺信息
+     *
+     * @return
+     */
+    @Test
+    public void testGetCusShop() throws Exception {
+        Map map = cusShopService.findCusShop(1L);
+        System.out.print("###########" + map);
+    }
+
+    /**
+     * 修改店铺背景图片
+     *
+     */
+    @Test
+    public void testModifyShopBgUrl() throws Exception {
+        cusShopService.modifyShopBgUrl(1L, 2L);
+    }
+}

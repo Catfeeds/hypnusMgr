@@ -1,0 +1,103 @@
+<%--
+  User: Wei Rongfeng
+  Date: 2017-03-06 11:05:25
+  Time: 10:49
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>退货申请</title>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/return/applyReturnGoods.js"></script>
+    <link rel="stylesheet" href="${path}/resources/css/public.css">
+    <link rel="stylesheet" href="${path}/resources/css/tuikuan.css">
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/admin/wechat/order/order.css"/>
+    <script type="text/javascript">
+        var maxNum = ${params.num};
+        var price = ${params.salesPrice};
+    </script>
+</head>
+
+<body style="background:#f2f2f2;">
+<div style="height:47px;"></div>
+<div class="top header">
+    <button class="top-left" onClick="window.history.back();">
+        <img class="top_btn_back" src="${path}/resources/images/top_btn_back.png">
+    </button>
+    <h1>退货申请</h1>
+</div>
+<form id="form" onsubmit="return false;">
+    <div class="loginList">
+        <div class="shangpin">
+            <p class="biaoti">请选择商品数量:</p>
+            <div class="goodType">
+                <div class="goodsList" style="margin:0;">
+                    <div class="weui-row weui-no-gutter">
+                        <div class="weui-col-33" style="text-align: center">
+                            <img style="max-width:60px;width: auto;height: 60px;"
+                                 src="${params.headPath}">
+                            <%--src="${path}/resources/images/gouwuche_pic.png">--%>
+                        </div>
+                        <div class="weui-col-66">
+                            <p style="color: #3a3a3a;font-size: 13px">${params.productName}</p>
+                            <p style="color: #747474;margin: 10px 0px 10px 0px">￥${params.salesPrice}</p>
+                            <div class="weui-row" style="color: #747474;">
+                                <p class="">x${params.num}</p>
+                                <div class=" weui-row select-card">
+                                    <span class="refund-minus"></span>
+                                    <span id="refund-num">1</span>
+                                    <span class="refund-plus"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="shangpingM">
+                <span class="tuikuan">退款金额：</span>
+                <span class="jine"></span>
+            </div>
+
+        </div>
+        <input id="orderDetailId" name="orderDetailId" type="hidden" value="${params.id}">
+        <%--默认让退货数量为1--%>
+        <input id="num" name="num" type="hidden" value="1">
+        <div class="loginItem" style=" margin-top:10px; box-shadow:0 1px 2px #ccc;">
+            <span class="itemTitle02">退款原因:</span>
+            <h3>
+                <div class="cangkuDown">
+                    <img class="cangkuDownIco" src="${path}/resources/images/login_btn_xiala.png">
+                    <select class="weui_select cangkuName" id="returnReason" name="returnReason"
+                            style="padding-left: 0px"></select>
+                </div>
+            </h3>
+        </div>
+        <div class="loginItem">
+            <span class="itemTitle02">退款说明:</span>
+            <div class="inputBox">
+                <input id="returnDesc" name="returnDesc" class="loginInput" placeholder="请输入退款说明">
+            </div>
+        </div>
+
+        <div class="loginItem" style="  box-shadow:0 1px 2px #ccc;">
+            <span class="itemTitle02">上传照片:</span>
+            <div class="imgDiv">
+                <ul id="pics">
+                    <li id="picsPicker" style="float:left;list-style:none;width:90px;height:90px;margin-bottom: 10px;">
+                        <img style="width:80px;height:80px;" src="${path}/resources/images/img_add.png"/>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div style="height:30px;"></div>
+    <div class="bottomBtnBox">
+        <!--<button onClick="window.location='addkaipiao.html';">新增开票信息</button>-->
+        <button type="submit">提&nbsp;交&nbsp;申&nbsp;请</button>
+    </div>
+</form>
+
+<div style="height:30px;"></div>
+</body>
+</html>

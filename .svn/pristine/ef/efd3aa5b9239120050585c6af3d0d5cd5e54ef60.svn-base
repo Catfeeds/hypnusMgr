@@ -1,0 +1,142 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>店主推荐</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public1.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/jingxuan.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/danpinmanage.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+
+    <script type="text/javascript" src="${path}/resources/js/danpinmanage.js"></script>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/shop/index.js"></script>
+</head>
+
+<body>
+<div class="storte_top">
+    <%--<div class="head">
+        <button class="top-left" onClick="javascript:history.back(-1);">
+            <img src="${path}/resources/images/top_btn_back1.png">
+        </button>
+        <button class="top-right">
+            <img src="${path}/resources/images/top_btn_share.png">
+        </button>
+    </div>--%>
+    <div class="bg_store">
+        <img src="${backgroundUrl}" style="width:100%; height:200px;">
+        <div class="wode xw_wode">
+            <img src="${shopkeeperPhoto}" width="80" height="80">
+            <h2>${shopkeeperName}</h2>
+            <%--<h3>${shopName}</h3>--%>
+        </div>
+    </div>
+    <div class="store_main xw_store_main">
+        <table class="goodsType">
+            <tr>
+                <td style="border-right:1px solid #efefef;">
+                    <a class="lion xw_li">在售商品</a>
+                </td>
+                <%--<td>--%>
+                    <%--<a class="xw_li">拼团商品</a>--%>
+                <%--</td>--%>
+            </tr>
+        </table>
+        <div class="goodsList xw_goodsList">
+            <%--<div class="onlineDiv xw_shangpin saleDiv">
+                <img src="images/img_zaishou01.png">
+                <h1>进口法国原瓶专场</h1>
+                <h2>
+                    <span class="floatLeft">法国原装进口</span>
+                    <span class="floatRight">
+                    	剩余<font>4</font>天<font>12</font>小时
+                    </span>
+                </h2>
+            </div>
+            <div class="onlineDiv xw_shangpin saleDiv" style=" border-bottom:1px solid #e5e5e5;">
+                <img src="images/img_zaishou02.png">
+                <h1>进口法国原瓶专场</h1>
+                <h2>
+                    <span class="floatLeft">法国原装进口</span>
+                    <span class="floatRight">
+                    	剩余<font>4</font>天<font>12</font>小时
+                    </span>
+                </h2>
+            </div>--%>
+            <div id="container">
+
+            </div>
+            <%--滚动刷新控件--%>
+            <div class="weui-infinite-scroll" id="scrollControl" style="display: none">
+                <div class="infinite-preloader"></div><!-- 菊花 -->
+                正在加载... <!-- 文案，可以自行修改 -->
+            </div>
+        </div>
+        <div class="goodsList xw_goodsList" style="display:none;">
+            <%--<div class="ptDiv xw_pintuan">
+                <img class="banner" src="images/img_pintuan02.png">
+                <h1><font>3人团</font>40°轩尼诗白兰地礼盒装</h1>
+                <h2>
+                    <span class="floatLeft">开团时间：2016.06.20   15:30:00</span>
+                    <span class="ptState">
+                    	进行中
+                    </span>
+                </h2>
+
+            </div>
+            <div class="ptDiv xw_pintuan">
+                <img class="banner" src="images/img_pintuan02.png">
+                <h1><font>3人团</font>40°轩尼诗白兰地礼盒装</h1>
+                <h2>
+                    <span class="floatLeft">开团时间：2016.06.20   15:30:00</span>
+                    <span class="ptState">
+                    	进行中
+                    </span>
+                </h2>
+            </div>
+            <div class="ptDiv xw_pintuan">
+                <img class="banner" src="images/img_pintuan02.png">
+                <h1><font>3人团</font>40°轩尼诗白兰地礼盒装</h1>
+                <h2>
+                    <span class="floatLeft">开团时间：2016.06.20   15:30:00</span>
+                    <span class="ptState">
+                    	进行中
+                    </span>
+                </h2>
+            </div>--%>
+        </div>
+    </div>
+</div>
+<%--列表显示模板--%>
+<script id="templateList" type="text/html">
+    {{each}}
+    <div class="daili xw_shangpin" onclick="window.location='${path}/admin/wechat/product/detail.html?id={{$value.id}}&shopId=${shopId}'">
+        <div style="background:#f3f3f3;">
+            <img class="banner" name="proImg" src="{{$value.headPath}}">
+        </div>
+        <div class="content">
+            <h1>{{$value.zhName}}</h1>
+            <h2><span>￥{{$value.salesPrice}}</span></h2>
+            <h3><span>库存{{$value.totalStockNum}}</span></h3>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<%--<script id="templateList" type="text/html">--%>
+    <%--{{each}}--%>
+    <%--<div class="goodsDiv" onclick="window.location='${path}/admin/wechat/product/detail.html?id={{$value.id}}&shopId=${shopId}'">--%>
+        <%--<div class="goodsHead xw_shangpin">--%>
+            <%--<img src="{{$value.headPath}}" width="100" height="100">--%>
+            <%--<h1>{{$value.zhName}}</h1>--%>
+            <%--<h2><span><font>￥</font>{{$value.salesPrice}}</span></h2>--%>
+            <%--<h3>--%>
+                <%--<span>库存{{$value.totalStockNum}}</span>--%>
+            <%--</h3>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+    <%--{{/each}}--%>
+<%--</script>--%>
+</body>
+</html>

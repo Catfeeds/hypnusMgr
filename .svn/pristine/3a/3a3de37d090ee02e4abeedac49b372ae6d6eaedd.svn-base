@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd"
+       default-lazy-init="true">
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login"/>
+        <property name="successUrl" value="/"/>
+        <property name="unauthorizedUrl" value="/login"/>
+        <property name="filterChainDefinitions">
+            <value>
+                /guest/wechat/page/auth/callback/** = anon
+                /guest/wechat/main/entry/index/** = anon
+                /guest/common/** = anon
+                /common/404/** = anon
+                /common/error/** = anon
+                /common/unauthorized/** = anon
+                /admin/wechat/weChatPay/payOrder.html = weChat,anon
+                /login = weChat,authc
+
+                / = weChat,user
+                /index = weChat,user
+                /admin/wechat/** = weChat,user
+                /guest/wechat/** = weChat,anon
+
+
+                /logout = logout
+                /admin/** = user
+                /guest/** = anon
+                /** = anon
+            </value>
+        </property>
+        <property name="filters">
+            <map>
+                <!--拦截需要登录以及使用自动功能才能访问的资源-->
+                <entry key="guest" value-ref="guestFilter"/>
+                <!--拦截需要登录以及使用自动功能才能访问的资源-->
+                <entry key="user" value-ref="userFilter"/>
+                <!--拦截需要登录才能访问的资源-->
+                <entry key="authc" value-ref="authenticationFilter"/>
+
+                <!--退出过滤器-->
+                <entry key="logout" value-ref="logoutFilter"/>
+                <!--微信拦截器-->
+                <entry key="weChat" value-ref="weChatPageAuthFilter"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="true"/>
+        <!--单位秒，15552000：6个月-->
+        <property name="maxAge" value="15552000"/>
+    </bean>
+
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
+
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="authenticationRealm"/>
+        <property name="cacheManager" ref="shiroCacheManager"/>
+        <property name="rememberMeManager" ref="rememberMeManager"/>
+    </bean>
+
+    <bean id="guestFilter" class="com.catt.common.web.security.shiro.filter.ExtGuestFilter">
+    </bean>
+
+    <bean id="weChatPageAuthFilter" class="com.catt.common.module.wechat.web.security.filter.WeChatPageAuthFilter"/>
+
+    <bean id="userFilter" class="com.catt.common.web.security.shiro.filter.ExtUserFilter">
+    </bean>
+
+    <bean id="logoutFilter" class="com.catt.common.web.security.shiro.filter.ExtLogoutFilter"/>
+
+    <bean id="authenticationRealm" class="com.catt.common.web.security.shiro.realm.ExtAuthenticationRealm">
+        <property name="authorizationCacheName" value="authorization"/>
+        <property name="obtainUserData">
+            <map value-type="com.catt.common.web.security.shiro.validate.ObtainUserData">
+                <entry key="com.catt.wfx.repository.entity.customerMgr.CusInfo.BaseLogin"
+                       value-ref="obtainDataCusInfo"></entry>
+            </map>
+        </property>
+        <property name="authenticationValidate">
+            <map>
+                <entry key="com.catt.wfx.repository.entity.customerMgr.CusInfo.BaseLogin">
+                    <list>
+                        <!--&lt;!&ndash;校验配置&ndash;&gt;-->
+                        <ref bean="cusInfoValidate"/>
+                    </list>
+                </entry>
+            </map>
+        </property>
+        <property name="updateLog">
+            <map>
+                <!--<entry key="com.catt.common.module.security.repository.entity.Staff" value-ref="updateLogStaffManage"></entry>-->
+            </map>
+        </property>
+        <property name="principalBuilderService">
+            <ref bean="weChatPrincipalBuilderServiceImpl"/>
+        </property>
+    </bean>
+
+    <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManager" ref="ehCacheManager"/>
+    </bean>
+
+    <bean id="authenticationFilter" class="com.catt.common.web.security.shiro.filter.ExtAuthenticationFilter">
+        <property name="rememberMeParam" value="rememberMe"/>
+        <property name="exceptionMessageConverter">
+            <bean class="com.catt.common.module.exception.service.impl.ExtExceptionMessageConverter"/>
+        </property>
+    </bean>
+
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
+        <property name="arguments" ref="securityManager"/>
+    </bean>
+
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!-- AOP式方法级权限检查  -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+</beans>

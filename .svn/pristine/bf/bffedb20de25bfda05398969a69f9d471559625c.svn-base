@@ -1,0 +1,405 @@
+package com.catt.wfx.service.impl.couponMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.util.bean.BeanUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.couponMgr.CouponInfoDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.couponMgr.CouponInfo;
+import com.catt.wfx.repository.entity.couponMgr.CouponRange;
+import com.catt.wfx.repository.entity.couponMgr.CouponRule;
+import com.catt.wfx.repository.entity.productMgr.ProductCate;
+import com.catt.wfx.service.base.couponMgr.CouponInfoBaseService;
+import com.catt.wfx.service.base.couponMgr.CouponRangeBaseService;
+import com.catt.wfx.service.base.couponMgr.CouponRuleBaseService;
+import com.catt.wfx.service.base.productMgr.ProductCateBaseService;
+import com.catt.wfx.service.couponMgr.CouponInfoService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service("couponInfoServiceImpl")
+public class CouponInfoServiceImpl implements CouponInfoService {
+
+    @Resource(name = "couponInfoBaseServiceImpl")
+    private CouponInfoBaseService couponInfoBaseService;
+
+    @Resource(name = "couponInfoDaoImpl")
+    private CouponInfoDao couponInfoDao;
+
+    @Resource(name = "couponRuleBaseServiceImpl")
+    private CouponRuleBaseService couponRuleBaseService;
+
+    @Resource(name = "couponRangeBaseServiceImpl")
+    private CouponRangeBaseService couponRangeBaseService;
+
+    @Resource(name = "productCateBaseServiceImpl")
+    private ProductCateBaseService productCateBaseService;
+
+    /**
+     * 根据ID获取代金券详情
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Map getCouponInfoById(Long id) {
+        Map coupon = new HashMap<>();
+        if(id != null) {
+            CouponInfo couponInfo = couponInfoBaseService.find(id);
+            if(couponInfo != null) {
+                coupon = BeanUtil.describe(couponInfo);
+                //获取发送范围设置
+                List<Filter> filters = new ArrayList<>();
+                filters.add(Filter.eq("couponId", couponInfo.getId()));
+                List<CouponRange> ranges = couponRangeBaseService.findList(null, filters, null);
+                if(ranges != null && ranges.size() > 0){
+                    Integer rangeType = ranges.get(0).getRangeType();
+                    coupon.put("rangeType", rangeType);
+                    CouponRange.RangeType rangeEnum = CouponRange.RangeType.getEnum(rangeType);
+                    String rangeTypeName = rangeEnum.getName();
+                    coupon.put("rangeTypeName", rangeTypeName);
+                }
+            }
+        }
+        return coupon;
+    }
+
+    /**
+     * 保存代金券信息
+     *
+     * @param userId
+     * @param name
+     * @param paramMap
+     */
+    @Override
+    @Transactional
+    public void saveCoupon(Long userId, String name, Map<String, Object> paramMap) {
+        Long id = MapUtil.getLong(paramMap, "id");
+        String couponName = MapUtil.getString(paramMap, "couponName");
+        Double faceValue = MapUtil.getDouble(paramMap, "faceValue");
+        Integer limitDate = MapUtil.getInteger(paramMap, "limitDate");
+        Integer moneyLimit = MapUtil.getInteger(paramMap, "moneyLimit");
+        Double orderMoney = MapUtil.getDouble(paramMap, "orderMoney");
+        String remark = MapUtil.getString(paramMap, "remark");
+        Integer typeLimit = MapUtil.getInteger(paramMap, "typeLimit");
+        Integer status = MapUtil.getInteger(paramMap, "status");
+        String cateIds = MapUtil.getString(paramMap, "cateIds");
+        Integer rangeType = MapUtil.getInteger(paramMap, "rangeType");
+
+        CouponInfo t;
+        if(id == null){//新增
+            t = new CouponInfo();
+            t.setCreatedId(userId);         //创建人ID
+            t.setCreatedName(name);         //创建人姓名
+            t.setDelFlag(2);                //是否删除
+            t.setSendNum(0);                //发送数量
+            t.setUseNum(0);                 //使用数量
+            t.setStatus(status);            //发布状态
+            t.setCouponName(couponName);    //代金券名
+            t.setFaceValue(faceValue);      //面值
+            t.setLimitDate(limitDate);      //有效时长
+            t.setMoneyLimit(moneyLimit);    //使用金额限制 1是2否
+            t.setOrderMoney(orderMoney);    //限制金额额度
+            t.setRemark(remark);            //备注
+            t.setTypeLimit(typeLimit);      //商品类型限制 1是2否
+//            t.setFactoryId();
+        }else{//修改
+            t = couponInfoDao.find(id);
+            t.setStatus(status);            //发布状态
+            t.setCouponName(couponName);    //代金券名
+            t.setFaceValue(faceValue);      //面值
+            t.setLimitDate(limitDate);      //有效时长
+            t.setMoneyLimit(moneyLimit);    //使用金额限制 1是2否
+            t.setOrderMoney(orderMoney);    //限制金额额度
+            t.setRemark(remark);            //备注
+            t.setTypeLimit(typeLimit);      //商品类型限制 1是2否
+        }
+        //商品类型限制描述
+        if(t.getTypeLimit() == PubEnum.YesOrNoEnum.NO.getValue()){
+            t.setTypeLimitDesc(CouponInfo.TYPELIMIT_DESC);
+        }else{
+            StringBuilder desc = new StringBuilder("仅限【");
+            Long[] pIds = getLongIds(cateIds);
+            int start = 0;
+            for(Long pid : pIds){
+                ProductCate cate = productCateBaseService.find(pid);
+                if(cate == null || cate.getId() == null){
+                    continue;
+                }else{
+                    start++;
+                    if(start > 1) {
+                        desc.append("," + cate.getName());
+                    }else{
+                        desc.append(cate.getName());
+                    }
+                }
+            }
+            desc.append("】使用");
+            t.setTypeLimitDesc(desc.toString());
+        }
+        //保存代金券主表
+        t = couponInfoBaseService.saveOrUpdate(t);
+        if(t != null) {
+            //保存商品类型限制
+            saveProductCateLimit(t.getId(), cateIds, userId, name);
+        }
+        //保存 发送范围设置
+        saveCouponRange(rangeType, t.getId(), name, userId);
+    }
+
+    /**
+     * 保存发送范围限制
+     * @param couponId
+     * @param userName
+     * @param userId
+     */
+    private void saveCouponRange(Integer rangeType, Long couponId, String userName, Long userId){
+        if(rangeType != null) {
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("couponId", couponId));
+            List<CouponRange> rangeList = couponRangeBaseService.findList(null, filters, null);
+            if(rangeList != null && rangeList.size() > 0){
+                for(CouponRange r : rangeList){
+                    couponRangeBaseService.delete(r);
+                }
+            }
+            CouponRange range = new CouponRange();
+            range.setCouponId(couponId);
+            range.setCreatedId(userId);
+            range.setCreatedName(userName);
+            range.setRangeType(rangeType);
+            couponRangeBaseService.saveOrUpdate(range);
+        }
+    }
+
+    /**
+     * 保存商品限制
+     * 与原限制列表比较,保留未变动的类型，保存新增的类型，删除缺少的类型
+     * @param couponId    代金券ID
+     * @param cateIds  商品类型id数组
+     */
+    private void saveProductCateLimit(Long couponId, String cateIds, Long userId, String userName){
+        if(couponId != null) {
+            Long[] pIds = getLongIds(cateIds);
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("couponId", couponId));
+            List<CouponRule> oldRuleList = couponRuleBaseService.findList(null, filters, null);//原商品类型限制列表
+            Long[] addRuleId = new Long[pIds.length];       //待新增IDs
+            if(oldRuleList != null && oldRuleList.size() > 0) {
+                Long[] delRuleId = new Long[oldRuleList.size()];  //待删IDs
+                int delCount = 0;
+                int addCount = 0;
+                List<Long> pIdList = new ArrayList<>();
+                for(Long id : pIds){
+                    pIdList.add(id);
+                }
+                for (CouponRule r : oldRuleList) {
+                    if (pIdList.contains(r.getCateId())) {
+                        pIdList.remove(r.getCateId());
+                    }else{
+                        delRuleId[delCount++] = r.getId();
+                    }
+                }
+                for(Long id : pIdList){
+                    addRuleId[addCount++] = id;
+                }
+                couponRuleBaseService.delete(delRuleId);
+            }else{
+                addRuleId = pIds;
+            }
+            List<CouponRule> ruleList = new ArrayList<>();
+            for(Long id : addRuleId){
+                ProductCate cate = productCateBaseService.find(id);
+                if(cate == null || cate.getId() == null){
+                    continue;
+                }
+                CouponRule rule = new CouponRule();
+                rule.setCouponId(couponId);
+                rule.setCateId(id);
+                rule.setCateName(cate.getName());
+                rule.setCreatedId(userId);
+                rule.setCreatedName(userName);
+                ruleList.add(rule);
+            }
+            couponRuleBaseService.saveOrUpdate(ruleList);
+        }
+    }
+
+    /**
+     * 删除代金券
+     *
+     * @param ids 代金券id数组
+     */
+    @Override
+    @Transactional
+    public void deleteCouponsByIds(Long[] ids) {
+        if(ids != null && ids.length > 0) {
+            couponInfoDao.deleteCoupons(ids);
+            //删除对应的类型限制、发送范围
+            List<Long> ruleIds = new ArrayList<>();
+            Long[] rangeIds = new Long[ids.length];
+            int rangeCount = 0;
+            for (Long couponId : ids) {
+                List<Filter> filters = new ArrayList<>();
+                filters.add(Filter.eq("couponId", couponId));
+                //限制类型
+                List<CouponRule> ruleList = couponRuleBaseService.findList(null, filters, null);
+                for(CouponRule rule : ruleList){
+                    ruleIds.add(rule.getId());
+                }
+                //发送范围
+                List<CouponRange> rangeList = couponRangeBaseService.findList(null, filters, null);
+                for(CouponRange range : rangeList){
+                    rangeIds[rangeCount++] = range.getId();
+                }
+            }
+            Long[] rIds = new Long[ruleIds.size()];
+            int count = 0;
+            if(ruleIds.size() > 0){
+                for(Long id : ruleIds){
+                    rIds[count++] = id;
+                }
+            }
+            couponRuleBaseService.delete(rIds);
+            couponRangeBaseService.delete(rangeIds);
+        }
+    }
+
+    /**
+     * 发布代金券
+     *
+     * @param ids 代金券id数组
+     */
+    @Override
+    public void publish(Long[] ids) {
+        if(ids != null && ids.length > 0){
+            couponInfoDao.publishCoupon(ids);
+        }
+    }
+
+    /**
+     * 获取代金券分页列表
+     *
+     * @param paramMap
+     * @return
+     */
+    @Override
+    public Page<Map> getCouponPageByParam(Map<String, Object> paramMap) {
+        Page<Map> page = couponInfoDao.getCouponPage(paramMap);
+        List<Map> list = page.getContent();
+        if(list != null && list.size() > 0){
+            for(Map m : list){
+                Long couponId = MapUtil.getLong(m, "id");
+                //查询商品类型限制
+                List<CouponRule> ruleList = new ArrayList<>();
+                if(MapUtil.getInteger(m, "typeLimit") == 1) {//使用商品类型限制
+                    List<Filter> filters = new ArrayList<>();
+                    filters.add(Filter.eq("couponId", couponId));
+                    ruleList = couponRuleBaseService.findList(null, filters, null);
+                }
+                m.put("ruleList", ruleList);
+                //查询发送范围设置
+                List<Filter> filterForRange = new ArrayList<>();
+                filterForRange.add(Filter.eq("couponId", couponId));
+                List<CouponRange> rangeList = couponRangeBaseService.findList(null, filterForRange, null);
+                if(rangeList != null && rangeList.size() > 0){
+                    Integer rangeType = rangeList.get(0).getRangeType();
+                    CouponRange.RangeType rangeEnum = CouponRange.RangeType.getEnum(rangeType);
+                    String rangeTypeName = rangeEnum.getName();
+                    m.put("rangeType", rangeTypeName);
+                }
+            }
+        }
+        return page;
+    }
+
+    /**
+     * 获取商品类型列表
+     *
+     * @param paramMap
+     * @return
+     */
+    @Override
+    public List<Map> getProductCateList(Map<String, Object> paramMap) {
+        Long couponId = MapUtil.getLong(paramMap, "couponId");
+        List<CouponRule> ruleList = new ArrayList<>();//已关联限制的商品类型
+        if(couponId != null){
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("couponId", couponId));
+            ruleList = couponRuleBaseService.findList(null, filters, null);
+        }
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        List<ProductCate> cateList = productCateBaseService.findList(null, filters, null);//所有的商品类型
+
+        List<Map> result = maskCateList(cateList, ruleList);//混合
+        return result;
+    }
+
+    /**
+     * 混合 全部类型 + 已选类型
+     * @param allCate
+     * @param ruleList
+     * @return
+     */
+    private List<Map> maskCateList(List<ProductCate> allCate, List<CouponRule> ruleList){
+        List<Map> result = new ArrayList<>();
+        for(ProductCate cate : allCate){//遍历所有类型，寻找已勾选的类型
+            boolean choose = false;
+            for(CouponRule rule : ruleList){
+                if(rule.getCateId().intValue() == cate.getId().intValue()){
+                    choose = true;
+                    Map m = new HashMap<>();
+                    m.put("cateId", cate.getId());
+                    m.put("cateName", cate.getName());
+                    m.put("isChoosed", 1);//是否已选择 1是2否
+                    result.add(m);
+                    break;
+                }
+            }
+            if(!choose){
+                Map m = new HashMap<>();
+                m.put("cateId", cate.getId());
+                m.put("cateName", cate.getName());
+                m.put("isChoosed", 2);//是否已选择 1是2否
+                result.add(m);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 解析id字符串为数组
+     * @param idStr
+     * @return
+     */
+    private Long[] getLongIds(String idStr){
+        Long[] ids = null;
+        if(StringUtil.checkObj(idStr)) {
+            if (idStr.indexOf(",") != -1) {
+                String[] idStrs = idStr.split(",");
+                ids = new Long[idStrs.length];
+                int count = 0;
+                for (String sId : idStrs) {
+                    if (StringUtil.checkObj(sId)) {
+                        ids[count++] = Long.parseLong(sId);
+                    }
+                }
+            } else {
+                ids = new Long[]{Long.parseLong(idStr)};
+            }
+        }
+        if(ids == null){
+            ids = new Long[]{};
+        }
+        return ids;
+    }
+}

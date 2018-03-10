@@ -1,0 +1,118 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    // 初始化数据列表
+                    EventHandler.search();
+                },
+
+
+                /** 初始化界面  */
+                initPage: function () {
+                    var params = {}; //搜索条件
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $('#search').click(function () {
+                        EventHandler.search();
+                    });
+
+                    $('#reset').click(function () {
+                        EventHandler.reset();
+                    });
+
+                    // 下拉选择
+                    $("div.xw_moreDrop").hover(function () {
+                        $(this).find("div.xw_searchDoult").slideDown('fast');
+
+                        $(".jieguolist li").click(function () {
+                            var changetext = $(this).text();
+                            var data = $(this).attr("data-value");
+                            $(this).parents("div.xw_moreDrop").find(".xw_searchInput").val(changetext);
+                            $(this).parents("div.xw_moreDrop").find(".hiddenValue").val(data);
+                        });
+                    }, function () {
+                        $(this).find("div.xw_searchDoult").slideUp();
+                    });
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                // 查询
+                search: function (params) {
+                    $(".xw_tickAll").removeClass("tickOn");
+
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: 15};
+                    }
+                    params.cusName = $("#cusName").val();
+                    params.rewardType = $("#rewardType").val();
+                    params.type = $("#type").val();
+
+                    DataHandler.search(params, function (backData) {
+                        var html = template('template_dataList', backData.content);
+                        $('#dataList').html(html);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        setParenHei();
+                    });
+                },
+                //重置
+                reset: function () {
+                    $('#cusName').val("");
+                    $('#rewardTypeName').val("");
+                    $('#rewardType').val("");
+                    $('#typeName').val("");
+                    $('#type').val("");
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/subsidy/getRecord', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

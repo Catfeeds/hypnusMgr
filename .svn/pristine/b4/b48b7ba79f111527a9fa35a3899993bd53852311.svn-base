@@ -1,0 +1,248 @@
+/**
+ * Created by xiazanyi on 2017/3/9.
+ */
+define('admin/wechat/personal/address/edit', ['base64', 'rsa','$', 'msgBox', 'validate','address','uploader'], function (require, exports, module) {
+    var $ = require('$');
+    var msgBox = require('msgBox');
+    var validate = require('validate');
+    var address = require('address');
+    var base64  = require('base64');
+    var rsa     = require('rsa');
+    var Uploader = require('uploader');
+    function AddressAdd() {
+    }
+
+    AddressAdd.prototype.getKey = function(callFn) {
+        var self = this;
+        if (self.modulus=="" || self.exponent=="") {
+            $.get(path + '/guest/appPage/key', null, function (data) {
+                self.modulus = data.modulus;
+                self.exponent = data.exponent;
+                callFn && callFn();
+            });
+        } else {
+            callFn && callFn();
+        }
+    }
+    /**
+     * 初始化
+     */
+    AddressAdd.prototype.init = function () {
+        var self = this;
+        self.form = $('#myForm');
+        self.submit = $('#submit');
+        self.msgFlag= 0;
+        self.modulus ="";
+        self.exponent ="";
+        
+        self.level =1;  //1  级为 省份选择  ，2级为市选择 ，3级为 区选择
+        self.privence ="";//省份名字数组
+        self.privenceCode = "";//代码
+        self.city     = "";//选中省份的市名字数组
+        self.cityCode = "";//代码
+        self.region   = ""; //选中市的区县 名称数组
+        self.regionCode ="";//代码
+        self.getData(1,"");
+        self.bindEvent();
+        self.form.validate({
+            //忽略某些元素不验证
+            ignore: ".ignore",
+            //如果这个参数为true，那么表单不会提交，只进行检查，调试时十分方便
+            debug: true,
+            //messages：自定义的提示信息，key:value 的形式，key 是要验证的元素，value 可以是字符串或函数。
+            messages: {},
+            // 用什么标签标记错误，默认是 label，可以改成 em。
+            errorElement: 'span',
+            //	指定错误提示的 css 类名，可以自定义错误提示的样式。
+            errorClass: 'help-block',
+            //自定义规则，key:value 的形式，key 是要验证的元素，value 可以是字符串或对象。
+            rules: {},
+            //更改错误信息显示的位置s
+            errorPlacement: function (error, element) {
+                // error.insertAfter(element);
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('has-error');
+            },
+            invalidHandler: function (event, validator) {
+                for (v in validator.errorMap) {
+                    var $form = $(event.currentTarget);
+                    var $element = $form.find('[name="' + v + '"]');
+                    var msg = $element.attr('data-rule-error-msg') || validator.errorMap[v];
+                    if (msg) {
+                        msgBox.warn(msg);
+                    }
+                    $element.focus();
+                    break;
+                }
+            }, unhighlight: function (element) {
+                $(element).parent().removeClass('has-error');
+            }
+        });
+
+    };
+
+    /**
+     * 事件绑定
+     */
+    AddressAdd.prototype.bindEvent = function () {
+        var self = this;
+        self.submit.on('click', function () {
+            if (self.form.valid()) {
+                if(isNaN($("#tel").val())){
+                    msgBox.tips("请确保手机号码正确！");
+                    return;
+                }
+                if($("#addressInfo").val().length< 3){
+                    msgBox.tips("请选择省市区！");
+                    return;
+                }
+
+                self.getKey(function () {
+                    var rsaKey = new rsa.RSAKey();
+                    rsaKey.setPublic(base64.b64tohex(self.modulus), base64.b64tohex(self.exponent));
+                    var param = {};
+                    param.id =  $('#id').val();
+                    param.provinceId =  $('#provinceId').val();
+                    param.provinceName = $('#provinceName').val();
+                    param.cityId       = $('#cityId').val();
+                    param.cityName     = $('#cityName').val();
+                    param.regionId     = $('#regionId').val();
+                    param.regionName   =$('#regionName').val();
+                    param.isDefault    = $('#isDefault').val() == 1 ? 1  :2 ;
+                    param.recipients   = base64.hex2b64(rsaKey.encrypt($('#recipients').val()));
+                    param.tel          = base64.hex2b64(rsaKey.encrypt($('#tel').val()));
+                    param.address      = base64.hex2b64(rsaKey.encrypt($('#address').val()));
+                    $("#submit").attr({"disabled":"disabled"});
+                    $.post(self.form.attr('action'), param, function (data) {
+                        $("#submit").removeAttr("disabled");//将按钮可用
+                        if(data.type =='success'){
+                            msgBox.tips("操作成功！");
+                            window.history.go(-1);
+                        }
+                    });
+                });
+            }
+
+        });
+
+        /**
+         * 省市区选择
+         */
+        $("#addressInfo").select({
+            title: "选&nbsp;择&nbsp;省&nbsp;市&nbsp;区",
+            autoClose: false,
+            items: [],
+            onChange: function () {
+                if(self.level ==1){
+                    self.privence = $("#addressInfo").val();
+                    self.privenceCode = $("#addressInfo").attr('data-values');
+                    self.city = "";
+                    self.cityCode = "";
+                    self.getData(2,self.privenceCode);
+                }else if(self.level ==2){
+                    self.city = $("#addressInfo").val();
+                    self.cityCode = $("#addressInfo").attr('data-values');
+                    self.region = "";
+                    self.regionCode = "";
+                    self.getData(3,self.cityCode);
+                }else if(self.level ==3){
+                    self.region = $("#addressInfo").val();
+                    self.regionCode = $("#addressInfo").attr('data-values');
+                    self.flag =  "";
+                }
+            },
+            onOpen: function () {
+                window.event.stopImmediatePropagation();
+               // console.log(self.level);
+                //为了防止地址选择省市区混乱
+                if( self.level ==2){
+                    self.getData(1,"");
+                    self.privence = "";
+                    self.privenceCode = "";
+                    self.city = "";
+                    self.cityCode = "";
+                    self.region = "";
+                    self.regionCode = "";
+                    $("#addressInfo").val("");
+                }else if(self.level==3){
+                    self.getData(1,"");
+                }
+            },
+            onClose:function(){
+             //   console.log(self.level);
+                if(self.level == 1){
+                    return;
+                }
+                if(self.privenceCode =="" || self.cityCode=="" || self.regionCode==""){
+                    self.msgFlag ++;
+                    if(self.msgFlag ==2){
+                        msgBox.tips("请选择完整地址！");
+                        $("#addressInfo").val("");
+                        self.msgFlag =0;
+                }
+                }else {
+                    $("#addressInfo").val(self.privence+self.city+self.region);
+                    $('#provinceId').val(self.privenceCode);
+                    $('#provinceName').val(self.privence);
+                    $('#cityId').val(self.cityCode);
+                    $('#cityName').val(self.city);
+                    $('#regionId').val(self.regionCode);
+                    $('#regionName').val(self.region);
+                }
+            }
+
+        });
+
+    };
+
+    /**
+     * 获取省市区数据
+     * @param level  1 省  2 市  3 区
+     * @param code  省编码  市编码
+     */
+    AddressAdd.prototype.getData = function (level,code) {
+        var self = this;
+        if(level==1){
+            address.findProvince(function (responseResult) {
+                self.updateData(responseResult,1);
+            });
+        }else if(level ==2){
+            address.findCity(code,function(responseResult){
+                self.updateData(responseResult,2);
+            });
+        }else if(level ==3){
+            address.findCounty(code,function(responseResult){
+                self.updateData(responseResult,3);
+            });
+        }
+    };
+    /**
+     * 更新省市区控件内容
+     * @param result
+     * @param level
+     */
+    AddressAdd.prototype.updateData = function (result,level) {
+        var self = this;
+        if (result.length > 0) {
+            self.level = level;
+            var datas = [];
+            $.each(result, function (i, item) {
+                var addr = {};
+                addr.title = item.name;
+                addr.value = item.addrCode;
+                datas.push(addr);
+                return
+            });
+            $("#addressInfo").select("update", {items: datas});
+        }
+    };
+    module.exports = new AddressAdd();
+
+});
+
+seajs.use(['$', 'admin/wechat/personal/address/edit'], function ($, addressAdd) {
+    $(function () {
+        addressAdd.init();
+    });
+});

@@ -1,0 +1,66 @@
+package com.catt.wfx.service.customerMgr;
+
+
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+
+import java.util.Map;
+
+/**
+ * 用户信息服务接口
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-02-10 09:47:36
+ */
+public interface CusInfoService {
+    /**
+     * 获取登录用户基本信息（APP）
+     *
+     * @param cusId 客户ID
+     * @return
+     */
+    Map findLoginCusInfo(Long cusId);
+
+    /**
+     * 注册普通用户（APP）
+     *
+     * @param account      账户（手机号）
+     * @param pwd          密码
+     * @param invitationNo 邀请码
+     * @param unionId      同一开放平台下的用户ID
+     */
+    Long regisonCusInfo4App(String account, String pwd, String invitationNo, String unionId);
+
+    /**
+     * 根据微信用户unionId注册用户（APP）
+     *
+     * @param unionId   微信用户openId
+     * @param nickName 微信用户昵称
+     * @return CusInfo 注册的对象
+     */
+    CusInfo registAccountByUnionidId(String unionId, String nickName);
+
+    /**
+     * 获取我的业绩
+     *
+     * @param cusId
+     * @return
+     */
+    Map getMyAchievement(Long cusId);
+
+    /**
+     * 获取邀请码
+     *
+     * @param shopId  店铺标识
+     * @return
+     */
+    String findInvitationNo(Long shopId);
+
+    /**
+     *判断是否存在已成为店主的微信账号
+     *
+     * @param unionId 微信标识
+     * @return
+     */
+    boolean checlCusInfoByUuionId(String unionId);
+}

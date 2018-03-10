@@ -1,0 +1,14 @@
+package com.catt.wfx.service.impl.extractOrder;
+
+import com.catt.wfx.service.base.extractOrder.ExtractOrderLogBaseService;
+import com.catt.wfx.service.extractOrder.ExtractOrderLogService;
+import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
+
+@Service("extractOrderLogServiceImpl")
+public class ExtractOrderLogServiceImpl implements ExtractOrderLogService {
+
+    @Resource(name = "extractOrderLogBaseServiceImpl")
+    private ExtractOrderLogBaseService extractOrderLogBaseService;
+
+}

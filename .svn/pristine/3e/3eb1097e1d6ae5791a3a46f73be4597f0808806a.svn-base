@@ -1,0 +1,61 @@
+<%--
+  User: Wei Rongfeng
+  Date: 2017-03-06 11:05:25
+  Time: 10:49
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>填写快递单号</title>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/return/submitReturnNum.js"></script>
+    <link rel="stylesheet" href="${path}/resources/css/public.css">
+    <link rel="stylesheet" href="${path}/resources/css/tuikuan.css">
+    <script type="text/javascript">
+        var id = '${id}';
+    </script>
+</head>
+
+<body style="background: rgb(242, 242, 242);">
+
+<div class="top header" style="position: relative;">
+    <button class="top-left" onClick="window.location='${path}/admin/wechat/returnInfo/returnInfoDetail.html?returnId=${id}&shopId=${shopId}';">
+        <img class="top_btn_back" src="${path}/resources/images/top_btn_back.png"></button>
+    <h1>填写快递单号</h1>
+</div>
+
+<form id="form" action="${path}/admin/wechat/returnInfo/submitReturnNum" onsubmit="return false;">
+    <div style="height:10px;"></div>
+    <input id="returnId" name="returnId" type="hidden" value="${id}">
+    <div class="loginList">
+        <div class="loginItem">
+            <span class="itemTitle02">快递公司:</span>
+            <h3>
+                <div class="cangkuDown xw_cangkuDown">
+                    <img class="cangkuDownIco" src="${path}/resources/images/login_btn_xiala.png">
+                    <select  class="weui_select" style="width: 100%;height: 100%;" id="logisticsType"
+                            data-rule-required="false"
+                            name="logisticsType"
+                            initValue="${data.logisticsTypeName}">
+                    </select>
+                </div>
+            </h3>
+        </div>
+        <div class="loginItem">
+            <span class="itemTitle02">快递单号:</span>
+            <div class="inputBox">
+                <input class="loginInput" name="logisticsCode" placeholder="请填写快递单号">
+            </div>
+        </div>
+    </div>
+    <div style="height:18px;background: #FFFFFF"></div>
+    <div style="height:12px;"></div>
+    <div class="bottomBtnBox">
+        <button type="submit">提&nbsp;交</button>
+    </div>
+</form>
+</body>
+
+
+</html>

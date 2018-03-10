@@ -1,0 +1,40 @@
+package com.catt.wfx.service.impl.base.settlementMgr;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementPlatDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlat;
+import com.catt.wfx.service.base.settlementMgr.SettlementPlatBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+/**
+ * 平台账户信息服务接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-23 11:38:28
+ * @version V1.0
+ */
+@Service("settlementPlatBaseServiceImpl")
+public class SettlementPlatBaseServiceImpl extends
+	BaseServiceImpl<SettlementPlat, Long> implements SettlementPlatBaseService {
+
+	@Resource(name = "settlementPlatDaoImpl")
+	private SettlementPlatDao settlementPlatDao;
+
+	@Resource
+	public void setBaseDao(SettlementPlatDao settlementPlatDao) {
+		super.setBaseDao(settlementPlatDao);
+	}
+
+    @Override
+    public SettlementPlat findSettlementPlat() {
+        List<SettlementPlat> list = this.findList(1, null, null);
+        if (list == null || list.size() == 0){
+            throw BaseException.errorByErrInfo("平台账户不存在");
+        }
+        return list.get(0);
+    }
+}

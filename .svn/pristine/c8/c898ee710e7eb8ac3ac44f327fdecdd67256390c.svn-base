@@ -1,0 +1,66 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/9/22
+  Time: 10:53
+  To change this template use File | Settings | File Templates.
+--%>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule2.jsp" %>
+    <title>合同管理</title>
+    <script src="${path}/resources/admin/js/customerMgr/shopkeeper/toShopTeamStaffs.js?ver=${version}" type="text/javascript"></script>
+
+
+    <!--树形表格-->
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/themes/icon.css">
+    <script type="text/javascript" src="${path}/resources/js/jquery.easyui.min.js"></script>
+
+</head>
+<body class=" ${systemBgClass} ${systemSkin}">
+<section class="content-header">
+    <!-- 面包屑 -->
+    <ol class="breadcrumb" style="right: auto">
+        <li><a><i class="fa fa-home"></i>主页</a></li>
+        <li><a style="cursor: pointer;"  href="${path}/admin/cusInfo/shopkeeper/index.html">店主管理</a></li>
+        <li><a style="cursor: pointer;" onclick="history.go(-1)">详情</a></li>
+        <li class="active">查看团队名单</li>
+        <a class="pull-right text-black" style="cursor: pointer;" onclick="history.go(-1)">
+            <i class="fa fa-reply" style="margin-right:5px"></i>返回上一层
+        </a>
+    </ol>
+    <!-- /.面包屑 -->
+</section>
+<section class="content">
+
+        <%--<div class="tab-pane fade" id="procurement">--%>
+        <div class="tab-pane fade active in " id="procurement">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h1 class="box-title"><span class="box-title-split"></span>店主姓名:
+                        <span  class="lblCount moneyScale2">${name}</span>
+                    </h1>
+                    <h1 class="box-title">团队人数:
+                        <span class="lblCount moneyScale2" id="teamStaffNum">0</span>
+                    </h1>
+                </div>
+                <input type="hidden" id="cusId" value="${cusId}"/>
+                <div class="box-body no-padding" style="min-height:400px">
+                    <table class="xw_tree" id="tableModule"></table>
+
+                </div>
+                <div class="box-footer">
+
+                </div>
+            </div>
+        </div>
+
+</section>
+</body>
+
+</html>
+

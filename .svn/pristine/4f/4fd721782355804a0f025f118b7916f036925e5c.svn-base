@@ -1,0 +1,22 @@
+package com.catt.wfx.service.base.wechatReturn;
+
+
+import com.catt.common.base.service.BaseService;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrderLog;
+
+/**
+ * 微信退款日志服务接口
+ * 
+ * @author 周明祥
+ * @date 2017-03-02 15:15:26
+ * @version V1.0
+ */
+public interface WechatReturnOrderLogBaseService extends BaseService<WechatReturnOrderLog, Long> {
+    /**
+     * 查询微信退款日志
+     *
+     * @param out_refund_no  退款单号
+     * @return
+     */
+    WechatReturnOrderLog getWechatReturnOrderLog(String out_refund_no);
+}

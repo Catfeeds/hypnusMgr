@@ -1,0 +1,32 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*详情基本信息*/
+.userDetail{margin-top:10px; background:#fff; border-radius:2px; overflow:hidden; border-radius:5px;}
+.userHead{overflow:hidden; height:104px; background:#23b294; padding:0 20px; border-bottom:1px solid #e5e5e5; }
+.userHead img{float:left; margin:20px 10px; }
+.userHeadRight{float:left;}
+.userHead h1{font-size:16px; color:#fff; margin-left:20px; font-weight:bold; margin-top:30px;}
+.userHead h2{font-size:14px; color:#fff; margin-left:20px; float:left; margin-top:4px; font-weight: normal;}
+.userMain{background:#fff; border-radius:2px; padding:0 20px; }
+
+.DetailColumn li{overflow:hidden; font-size:12px; color:#969696; border-bottom:1px dashed #e5e5e5; padding:12px 0; width:100%;}
+.DetailColumn h1{font-size:15px; color:#323232; margin-right:16px; width:180px; float:left; font-weight:bold;}
+.DetailColumn h2{font-size:12px; color:#969696; margin-right:16px; width:180px; float:left; font-weight: normal;}
+.DetailColumn b{color:#323232; font-weight:normal; font-size:12px;}
+
+.OtherDetail{margin:20px; border:1px solid #ccc; background:#fff; border-radius:2px;}
+.DetailTitle{height:45px; background:#f6f9fe; padding:0 20px; border-bottom:1px solid #e5e5e5;}
+.DetailTitle h1{line-height:45px; color:#646464; font-size:15px; font-weight:bold;}
+.DetailContent{ padding:0 20px; border-radius:2px;}
+.DetailContent table{width:100%;}
+.DetailContent table tr th{width:96px;}
+.Place{border-radius:2px; height:36px; padding:0 20px; margin-bottom:20px; background:url(../images/ico_location.png) no-repeat 10px #f2f2f2;}
+.Place h1{font-size:14px; color:#646464; float:left; line-height:36px; margin-left:20px;}
+.Place span{font-size:12px; color:#969696; float:right; line-height:36px;}
+
+
+.ioc_star{background:url(../images/ico_star.png) repeat-x; width:60px; height:20px;float:left; margin-top:2px; margin-left:20px;}
+.ioc_star_half{background:url(../images/ico_star_half.png) repeat-x; width:40px; height:20px; float:left; margin-top:2px;}
+
+

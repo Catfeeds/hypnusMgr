@@ -1,0 +1,72 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Zhang zhongtao
+  Date: 2016/6/11
+  Time: 16:58
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>${empty param.title ? '文件上传' : param.title}</title>
+    <%@include file="/common/headModule.jsp" %>
+    <link rel="stylesheet" href="${path}/resources/admin/file/css/webuploader.css">
+    <link rel="stylesheet" href="${path}/resources/admin/file/css/style.css">
+    <link rel="stylesheet" href="${path}/resources/admin/file/css/demo.css">
+    <script type="text/javascript" src="${path}/resources/admin/file/js/upload.js"></script>
+</head>
+<body style="background: #f6f6f6;">
+<section class="content-header">
+    <ol class="breadcrumb">
+        <li><a href="${path}/home"><i class="fa fa-home"></i>首页</a></li>
+        <li><a href="#" onclick="javascript:window.history.back();">返回</a></li>
+        <li class="active">${empty param.title ? '文件上传' : param.title}</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-solid">
+        <%--<div class="box-header with-border">--%>
+        <%--<h1 class="box-title">${empty param.title ? '文件上传' : param.title}</h1>--%>
+        <%--</div>--%>
+        <div class="box-body no-padding">
+            <div id="uploader">
+                <div class="queueList">
+                    <div id="dndArea" class="placeholder">
+                        <div id="filePicker" class="webuploader-container">
+                            <div class="webuploader-pick webuploader-pick-hover">点击选择图片</div>
+                            <div id="rt_rt_1akv9fm9t1ahq1tianeo5r6j9e1"
+                                 style="position: absolute; top: 0px; left: 448.016px; width: 168px; height: 44px; overflow: hidden; bottom: auto; right: auto;">
+                                <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple"
+                                       accept="image/*"><label
+                                    style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label>
+                            </div>
+                        </div>
+                        <p>或将照片拖到这里，单次最多可选300张</p>
+                    </div>
+                    <ul class="filelist" style="display: none;"></ul>
+                </div>
+                <div class="statusBar element-invisible" style="">
+                    <div class="progress" style="display: none;">
+                        <span class="text">0%</span>
+                        <span class="percentage" style="width: 0%;"></span>
+                    </div>
+                    <div class="info">共0张（0B），已上传0张</div>
+                    <div class="btns">
+                        <div id="filePicker2" class="webuploader-container">
+                            <div class="webuploader-pick">继续添加</div>
+                            <div id="rt_rt_1akv9fma6jeoc0m6763q8ul6"
+                                 style="position: absolute; top: 0px; left: 10px; width: 94px; height: 42px; overflow: hidden; bottom: auto; right: auto;">
+                                <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple"
+                                       accept="image/*"><label
+                                    style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label>
+                            </div>
+                        </div>
+                        <div class="uploadBtn state-pedding">开始上传</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

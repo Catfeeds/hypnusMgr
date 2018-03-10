@@ -1,0 +1,221 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'dataGridHelp', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar, dataGridHelp) {
+        var $productTb = null;
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+
+                    //EventHandler.getCateList();
+
+
+                    $productTb = $('#productTb');
+                    var params = {}; //搜索条件
+                    //=========分页初始化start============
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+
+                    // 初始化数据列表
+                    var initParams = {};
+                    initParams.pageNo = 1;
+                    initParams.pageSize = 15;
+                    EventHandler.search(initParams);
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $productTb.dataGridHelp({
+                        multSelectBtns: [
+                            {btn: $("#btnDelete"), fn: EventHandler.btnDelete}
+                        ],
+                        singleSelectBtns: [
+                            {btn: $("#btnEdit"), fn: EventHandler.btnEdit}
+                        ]
+                    });
+
+                    //查询事件
+                    $('#btnSearch').click(function () {
+                        // 初始化数据列表
+                        var initParams = {};
+                        initParams.pageNo = 1;
+                        initParams.pageSize = 15;
+                        EventHandler.search(initParams);
+                    });
+
+                    //重置事件
+                    $('#btnClean').click(function () {
+                        $('#zhName').val('');
+                        $('#cateId').val('');
+                        $('#cate').val('');
+                    });
+
+                    //商品分类弹窗事件绑定
+                    $('#cate').on('click',function () {
+                        EventHandler.cate();
+                    });
+
+                    //商品分类弹窗事件绑定
+                    $('#cate1').on('click',function () {
+                        EventHandler.cate();
+                    });
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                search: function (params) {
+                    params.zhName = $('#zhName').val();
+                    params.cateId = $('#cateId').val();
+                    DataHandler.getProductInfoByPage(params, function (backData) {
+                        var html = template('listTemp', backData.content);
+                        $('#list').html(html);
+
+                        //重新设置数据时调用渲染列表方法
+                        $productTb.dataGridHelp("renderList", backData.content);
+
+                        //$('.testCheck').iCheck({
+                        //    checkboxClass: 'icheckbox_minimal-red'
+                        //});
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        $(window).triggerHandler('resize');
+                    });
+                },
+
+                /**
+                 * 删除协议政策
+                 */
+                btnDelete: function () {
+                    //获取勾选的数据
+                    var aId = [];
+                    var data = $productTb.dataGridHelp("getSelected");
+
+                    for (var o in data) {
+                        aId.push(data[o].id);
+                    }
+
+                    msgBox.confirm({
+                        title: '提示',
+                        msg: '确认删除所选商品?',
+                        callback: function (btnType) {
+                            if (btnType == 'ok') {
+                                DataHandler.btnDelete({
+                                    ids: aId.join(',')
+                                }, function (backData) {
+                                    if (backData.type == 'success') {
+                                        msgBox.tips("操作成功");
+                                        //刷新列表
+                                        var params = {};
+                                        params.pageNo = 1;
+                                        params.pageSize = 15;
+                                        EventHandler.search(params);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                },
+
+                /**
+                 * 修改
+                 */
+                btnEdit: function () {
+                    //获取勾选的数据
+
+                    var aId = [];
+                    var data = $productTb.dataGridHelp("getSelected");
+
+                    for (var o in data) {
+                        aId.push(data[o].id);
+                    }
+                    window.location.href = path + '/admin/productInfo/update.html?id=' + aId;
+                },
+
+                //商品分类弹窗
+                cate : function(){
+                    msgBox.exWindow.open({
+                        title: '商品分类',
+                        url: path + "/admin/productInfo/productClass.html",
+                        width: '40%',
+                        height: '73%',
+                        close: function (result) {
+                            if (result) {
+                                var param = $.evalJSON(result)
+                                var cateId = param.id;
+                                var name = param.name;
+                                $('#cateName').val(name);
+                                $('#cateId').val(cateId);
+                                $('#cate').val(name);
+                                ////获取商品基础参数和规格
+                                EventHandler.getProductParamAndspec(cateId, null, null);
+                            }
+                        }
+                    });
+                },
+
+                getCateList: function () {
+                    DataHandler.getCateList(params, function (backData) {
+                        var truckTypeStr = "";
+                        truckTypeStr += "<option value=''>" + "全部" + "</option>";
+                        for (var i = 0, len = backData.length; i < len; i++) {
+                            truckTypeStr += "<option value=" + backData[i].id + ">" + backData[i].name + "</option>";
+                        }
+                        $('#cateId').html(truckTypeStr);
+                    });
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取商品信息列表
+                 * @param params
+                 * @param callback
+                 */
+                getProductInfoByPage: function (params, callback) {
+                    $.post(path + '/admin/productInfo/getProductInfoByPage', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 删除商品
+                 * @param params  商品标识集和
+                 * @param callback
+                 */
+                btnDelete: function (params, callback) {
+                    $.post(path + '/admin/productInfo/delete', params, function (backData) {
+                        callback(backData);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

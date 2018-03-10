@@ -1,0 +1,49 @@
+@charset "utf-8";
+body{
+    overflow:hidden;
+    scrollbar-face-color:#DEF;
+    scrollbar-highlight-color:#FFF;
+    scrollbar-shadow-color:#9BC;
+    scrollbar-3dlight-color:#ACD;
+    scrollbar-arrow-color:#68A;
+    scrollbar-track-color:#EEE;
+    scrollbar-darkshadow-color:#DEF;
+    font-family:'微软雅黑',Arial, Helvetica, sans-serif;
+    font-size:12px;
+}
+*{padding:0;margin:0;font-family:'微软雅黑';}
+a{ text-decoration:none; color:#0CF;outline:none;}
+a:active {outline: none;star:expression(this.onFocus=this.blur());}
+img{border:none;}
+ul{ list-style:none;}
+
+/*********** 按钮样式begin ****************/
+div.comfirBar{ clear:both; padding:20px 0px 0px;margin-top:0px; height:55px; border-left:0px solid #CACACA; background:none;}
+ul.ctrolToolbarUl{ width:270px; margin:0 auto; overflow:hidden; padding:8px;}
+
+ul.ctrolToolbarUl li{ float:left; margin-left:8px;}
+ul.ctrolToolbarUl li button{ width:124px; height:38px; line-height:38px; float:left; border-radius:3px;border:0px;
+font-family:'微软雅黑'; font-size:16px; color:#fff; text-align:center; letter-spacing:1px;
+border-bottom:3px solid #629E53; background:#79B16B; cursor:pointer;}
+ul.ctrolToolbarUl li button:hover{ background:#57B340; border-bottom:3px solid #34931c; color:#FF0;}
+/*********** 按钮样式end ****************/
+
+/*********** 上传区域样式begin ****************/
+.notFile {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    height: 80px;
+    background:
+    url(../images/zengjiapic.png) no-repeat center;
+}
+#uploadfile{
+    font-size: 300px;
+    position: absolute;
+    top: -100px;
+    right: 0;
+    filter:alpha(opacity=0);
+    -moz-opacity:0;
+    opacity: 0;
+}
+/*********** 上传区域样式end ****************/

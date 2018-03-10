@@ -1,0 +1,16 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.loginList{padding:0px 20px; background:#fff; }
+.loginTip{font-size:14px; color:#f13d2e;}
+.loginItem{overflow:hidden; padding:5px 0px;} 
+.loginItem01{overflow:hidden; padding:5px 0px 15px 0px;}
+.itemTitle01{float:left; font-size:18px; color:#323232; width:72px; line-height:50px;}
+.itemTitle02{float:left; font-size:16px; color:#323232; width:70px; line-height:50px; letter-spacing:1px;}
+.itemTitle03{float:left; font-size:16px; color:#323232; width:80px; line-height:50px;}
+.itemTitle04{float:left; font-size:18px; color:#323232; width:80px; line-height:50px;}
+.inputBox{border-bottom:1px solid #ccc; overflow:hidden; position:relative;}
+.inputBox1{float:left; font-size:14px; color:#646464; width:60%; line-height:50px;}
+.loginInput{float:left; font-size:14px; color:#646464; width:60%; line-height:50px;}
+.loginInput1{float:left; font-size:14px; color:#646464; width:33%; line-height:50px;}

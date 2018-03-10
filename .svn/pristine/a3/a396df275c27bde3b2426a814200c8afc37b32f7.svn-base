@@ -1,0 +1,15 @@
+package com.catt.wfx.service.base.specialSale;
+
+import com.catt.common.base.service.BaseService;
+import com.catt.wfx.repository.entity.specialSale.ActivityInfo;
+
+/**
+ * 活动信息表服务接口
+ * 
+ * @author 邹佳
+ * @date 2017-03-08 16:31:12
+ * @version V1.0
+ */
+public interface ActivityInfoBaseService extends BaseService<ActivityInfo, Long> {
+
+}

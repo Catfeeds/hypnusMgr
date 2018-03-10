@@ -1,0 +1,262 @@
+
+var publishStatus = "";//是否发布
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initData();
+                    this.initEvent();
+                },
+                /** 初始化界面  */
+                initPage: function () {
+                    var params = {}; //搜索条件
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            params.status = publishStatus;
+                            EventHandler.search(params);
+                        }
+                    });
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+
+                    $(".xw_select").click(function(){
+                        $(".xw_select").removeClass("selectTabs_on");
+                        $(this).addClass("selectTabs_on");
+                        publishStatus = $(this).attr("data-value");
+                        EventHandler.search({pageNo : 1, pageSize : 15, status: publishStatus})
+                    })
+                    //动态绑定click(动态生成的html)
+                    $("#dataList").on('click', '.xw_tick', templateList.check);
+
+                    //查询
+                    $('#searchBtn').click(EventHandler.search);
+
+                    //重置
+                    $('#resetBtn').click(EventHandler.reset);
+
+                    //删除
+                    $('#deleteCoupon').click(EventHandler.deleteCoupon);
+
+                    //修改
+                    $('#editCoupon').click(EventHandler.editCoupon);
+
+                    //新增
+                    $('#addCoupon').click(EventHandler.addCoupon);
+
+                    //发送
+                    $('#sendCoupon').click(EventHandler.sendCoupon);
+
+                    //发布
+                    $('#publishCoupon').click(EventHandler.publishCoupon);
+
+                },
+
+                /** 初始化数据  */
+                initData : function(){
+                    // 初始化数据列表
+                    EventHandler.search();
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                //重置
+                reset : function(){
+                    $("#couponName").val("请输入代金券名称");
+                    $("#faceValue").val("");
+                },
+                // 查询
+                search: function (params) {
+                    $(".xw_tickAll").removeClass("tickOn");
+
+                    if(typeof(params)=="undefined" || params.type == "click"){
+                        params = {pageNo : 1, pageSize : 15, status : publishStatus};
+                    }
+                    var couponName = $("#couponName").val();
+                    var faceValue = $("#faceValue").val();
+                    if(couponName != "请输入代金券名称"){
+                        params.couponName = couponName;
+                    }
+                    params.faceValue = faceValue;
+                    DataHandler.search(params, function (backData) {
+                        var data = backData;
+                        var html = template('template_dataList', data.content);
+                        $('#dataList').html(html);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: data.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        setParenHei();
+                    });
+                },
+                //新增
+                addCoupon : function(){
+                    window.location.href = path + "/admin/couponMgr/addOrEdit/0";
+                },
+                //修改
+                editCoupon : function(){
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length != 1) {
+                        msgBox.tips("请勾选一张代金券再修改");
+                        return;
+                    }
+                    if(checked[0].status == 1){
+                        msgBox.tips("已发布的代金券不能修改");
+                        return;
+                    }
+                    window.location.href = path + "/admin/couponMgr/addOrEdit/" + checked[0].id;
+                },
+                //删除
+                deleteCoupon : function(){
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length < 1) {
+                        msgBox.tips("请勾选代金券进行删除");
+                        return;
+                    }
+                    var delList = new Array();
+                    for(var i = 0; i < checked.length; i++){
+                        if(checked[i].status == 2){
+                            delList.push(checked[i]);
+                        }
+                    }
+                    if(delList.length <= 0){
+                        msgBox.tips("所选代金券均已发布，无法删除，请重新选择");
+                        return;
+                    }
+                    msgBox.confirm({
+                        title: '提示',
+                        msg: '确认删除所选代金券?',
+                        callback: function (btnType) {
+                            if (btnType == 'ok') {
+                                var delIds = "";
+                                for(var i = 0; i < delList.length; i++){
+                                    delIds += delList[i].id + ",";
+                                }
+                                if(delIds.indexOf(",") != null){
+                                    delIds = delIds.substring(0, delIds.length - 1);
+                                }
+                                var param = {ids : delIds};
+                                DataHandler.deleteCoupon(param, function(data){
+                                    msgBox.tips("删除成功");
+                                    //刷新列表
+                                    var params = {pageNo : 1, pageSize : 15};
+                                    params.status = publishStatus;
+                                    EventHandler.search(params);
+                                });
+                            }
+                        }
+                    });
+                },
+                //发布
+                publishCoupon : function(){
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length < 1) {
+                        msgBox.tips("请勾选代金券进行发布");
+                        return;
+                    }
+                    //检查代金券是否包含未发布
+                    var hasUnpublish = 2;
+                    for(var i = 0; i < checked.length; i++){
+                        if(checked[i].status == 2){
+                            hasUnpublish = 1;
+                            break;
+                        }
+                    }
+                    if(hasUnpublish == 2){
+                        msgBox.tips("所选代金券都已发布，请重新选择");
+                        return;
+                    }
+                    msgBox.confirm({
+                        title: '提示',
+                        msg: '确认发布所选代金券?（发布后不可修改）',
+                        callback: function (btnType) {
+                            if (btnType == 'ok') {
+                                var publishIds = "";
+                                for(var i = 0; i < checked.length; i++){
+                                    publishIds += checked[i].id + ",";
+                                }
+                                if(publishIds.indexOf(",") != null){
+                                    publishIds = publishIds.substring(0, publishIds.length - 1);
+                                }
+                                var param = {ids : publishIds};
+                                DataHandler.publishCoupon(param, function(data){
+                                    msgBox.tips("发布成功");
+                                    //刷新列表
+                                    EventHandler.search();
+                                });
+                            }
+                        }
+                    });
+                },
+                //发送
+                sendCoupon : function(){
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length != 1) {
+                        msgBox.tips("请勾选一张代金券再发送");
+                        return;
+                    }
+                    if(checked[0].status == 2){
+                        msgBox.tips("未发布的代金券不能发送");
+                        return;
+                    }
+                    window.location.href = path + "/admin/couponMgr/sendCoupon/"+checked[0].id;
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/couponMgr/search', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+                /**
+                 * 获取数据列表删除
+                 */
+                deleteCoupon: function (param, callback) {
+                    $.post(path + '/admin/couponMgr/delete', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+                /**
+                 * 发布
+                 */
+                publishCoupon: function (param, callback) {
+                    $.post(path + '/admin/couponMgr/publish', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

@@ -1,0 +1,65 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>特卖详情</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public1.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/temai.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/specialSale/detail.js"></script>
+</head>
+
+<body style="background:#fff;">
+<input type="hidden" id="id" value="${id}" />
+<div class="storte_top">
+<%--
+    <div style="height:47px;"></div>
+    <div class="head">
+        <button class="top-left" onClick="window.location='4-4-1temai.html';"><img class="top_btn_back" src="images/top_btn_back.png"></button>
+        <h1>特卖列表</h1>
+    </div>
+--%>
+
+    <div class="temaichang">
+        <div class="swiper-container" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+            <div class="swiper-wrapper">
+                <c:forEach items="${picPathList}" var="pic">
+                    <div class="swiper-slide"><img class="topImg" src="${pic}"></div>
+                </c:forEach>
+            </div>
+        </div>
+        <div class="active" style="padding:10px 0; margin-top:20px; height:80px;">
+            <span class="bu"><img src="${path}/resources/images/img_bu.png" width="133" height="10"></span>
+            <h1>${name}</h1>
+            <h2>活动时间：<fmt:formatDate value="${startTime}" pattern="M月d日H:mm"></fmt:formatDate>--<fmt:formatDate value="${endTime}" pattern="M月d日H:mm"></fmt:formatDate> </h2>
+        </div>
+
+        <div id="container">
+
+        </div>
+        <%--滚动刷新控件--%>
+        <div class="weui-infinite-scroll" id="scrollControl" style="display: none">
+            <div class="infinite-preloader"></div><!-- 菊花 -->
+            正在加载... <!-- 文案，可以自行修改 -->
+        </div>
+    </div>
+</div>
+
+<%--列表显示模板--%>
+<script id="templateList" type="text/html">
+    {{each}}
+        <div class="active" onClick="window.location='${path}/admin/wechat/product/detail.html?id={{$value.productId}}&shopId=${shopId}'">
+        <%--<div class="active" onClick="window.location='${path}/admin/wechat/product/detail.html?id={{$value.productId}}&shopId=${shopId}&from=isSpecialSale'">--%>
+            <img class="goods" src="{{$value.headPath}}" width="90" height="99">
+            <h3>{{$value.productName}}</h3>
+            <h4>￥<span>{{$value.salesPrice}}</span> <font class="yuanjia">￥{{$value.costPrice}}</font></h4>
+            <span class="kucun">库存{{$value.totalStockNum}}</span>
+        </div>
+    {{/each}}
+</script>
+</body>
+</html>

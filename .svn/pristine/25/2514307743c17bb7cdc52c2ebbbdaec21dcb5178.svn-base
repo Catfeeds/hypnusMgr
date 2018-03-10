@@ -1,0 +1,196 @@
+package com.catt.wfx.repository.dao.specialSale.impl;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.wfx.repository.dao.specialSale.ActivityProductRelDao;
+import com.catt.wfx.repository.entity.specialSale.ActivityInfo;
+import com.catt.wfx.repository.entity.specialSale.ActivityProductRel;
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Repository("activityProductRelDaoImpl")
+public class ActivityProductRelDaoImpl extends BaseDaoImpl<ActivityProductRel, Long>
+		implements ActivityProductRelDao {
+
+    @Override
+    public List<Map> findActivityProductList(Long activityId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ID AS \"relId\", ");
+        sql.append(" a.I_PRODUCT_ID AS \"productId\", ");
+        sql.append(" b.S_ZH_NAME AS \"zhName\", ");
+        sql.append(" b.S_CATE_NAME AS \"cateName\", ");
+        sql.append(" SUM(a.I_ACTSALE_NUM) AS \"actsaleNum\", ");
+        sql.append(" SUM(a.I_ACTSALE_REALNUM) AS \"actsaleRealnum\" ");
+        sql.append(" FROM T_ACTIVITY_PRODUCT_REL a ");
+        sql.append(" LEFT JOIN T_PRODUCT_INFO b ON a.I_PRODUCT_ID = b.I_ID ");
+        sql.append(" WHERE a.I_ACT_ID = " + activityId);
+        sql.append(" GROUP BY a.I_ID, a.I_PRODUCT_ID, b.S_ZH_NAME,b.S_CATE_NAME");
+        return this.findListBySql(sql.toString(), null, Map.class);
+    }
+
+    @Override
+    public long countProduct(Long activityId, Date startTime, Date endTime, Long productId) {
+        Map params = new HashMap<>();
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_PRODUCT_ID AS \"productId\" ");
+        sql.append(" FROM T_ACTIVITY_PRODUCT_REL a ");
+        sql.append(" LEFT JOIN T_ACTIVITY_INFO b ON a.I_ACT_ID = b.I_ID ");
+        sql.append(" WHERE 1=1 ");
+        sql.append(" AND a.I_PRODUCT_ID = :productId ");
+        params.put("productId", productId);
+
+        sql.append(" AND a.I_ACT_ID <> :activityId ");
+        params.put("activityId", activityId);
+
+        sql.append(" AND ((b.D_START_TIME > :startTime AND b.D_START_TIME < :endTime) " +
+                "OR (:startTime > b.D_START_TIME AND :startTime < b.D_END_TIME)) ");
+        params.put("startTime", startTime);
+        params.put("endTime", endTime);
+
+        List<Integer> statusList = new ArrayList<>();
+        statusList.add(ActivityInfo.Status.Unreleased.getValue());
+        statusList.add(ActivityInfo.Status.Released.getValue());
+        statusList.add(ActivityInfo.Status.Paused.getValue());
+        sql.append(" AND b.I_STATUS IN(:statusList) ");
+        params.put("statusList", statusList);
+
+        return this.countBySql(sql.toString(), params);
+    }
+
+    @Override
+    public Map findActivityInProductRel(Long priceId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ID AS \"relId\", ");
+        sql.append(" a.I_ACT_ID AS \"actId\", ");
+        sql.append(" a.I_COST_PRICE AS \"costPrice\", ");
+        sql.append(" a.I_SALES_PRICE AS \"salesPrice\", ");
+        sql.append(" a.I_PROFIT AS \"profit\", ");
+        sql.append(" a.I_ACTSALE_NUM AS \"actsaleNum\", ");
+        sql.append(" a.I_ACTSALE_REALNUM AS \"actsaleRealnum\", ");
+        sql.append(" (a.I_ACTSALE_NUM-a.I_ACTSALE_REALNUM) AS \"stockNum\", ");
+
+        //一至五级厂家返利
+        sql.append(" a.I_REBATE_ONE AS \"rebateOne\", ");
+        sql.append(" a.I_REBATE_TWO AS \"rebateTwo\", ");
+        sql.append(" a.I_REBATE_THREE AS \"rebateThree\", ");
+        sql.append(" a.I_REBATE_FOUR AS \"rebateFour\", ");
+        sql.append(" a.I_REBATE_FIVE AS \"rebateFive\" ");
+
+        sql.append(" FROM T_ACTIVITY_PRODUCT_REL a ");
+        sql.append(" WHERE a.I_PRICE_ID = " + priceId);
+
+        sql.append(" AND EXISTS(SELECT 1 FROM T_ACTIVITY_INFO b WHERE a.I_ACT_ID = b.I_ID " +
+                " AND b.D_START_TIME <= NOW()" +
+                " AND b.D_END_TIME >= NOW()" +
+                " AND b.I_STATUS = " + ActivityInfo.Status.Released.getValue() + ") ");
+
+        List<Map> list = this.findListBySql(sql.toString(), null, Map.class);
+        if (list.size() > 0){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map> findActivityInProductRelList(Long productId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ID AS \"relId\", ");
+        sql.append(" a.I_ACT_ID AS \"actId\", ");
+        sql.append(" a.I_PRICE_ID AS \"priceId\", ");
+        sql.append(" a.I_COST_PRICE AS \"costPrice\", ");
+        sql.append(" a.I_SALES_PRICE AS \"salesPrice\", ");
+        sql.append(" a.I_PROFIT AS \"profit\", ");
+        sql.append(" a.I_ACTSALE_NUM AS \"actsaleNum\", ");
+        sql.append(" a.I_ACTSALE_REALNUM AS \"actsaleRealnum\", ");
+        sql.append(" (a.I_ACTSALE_NUM-a.I_ACTSALE_REALNUM) AS \"stockNum\" ");
+        sql.append(" FROM T_ACTIVITY_PRODUCT_REL a ");
+        sql.append(" LEFT JOIN T_ACTIVITY_INFO b ON a.I_ACT_ID = b.I_ID ");
+        sql.append(" WHERE a.I_PRODUCT_ID = " + productId);
+        sql.append(" AND b.D_START_TIME <= NOW() ");
+        sql.append(" AND b.D_END_TIME >= NOW() ");
+        sql.append(" AND b.I_STATUS = " + ActivityInfo.Status.Released.getValue());
+        return this.findListBySql(sql.toString(), null, Map.class);
+    }
+
+    @Override
+    public List<Map> countActivityProduct(List<Long> actIds) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" I_ACT_ID AS \"actId\", ");
+        sql.append(" SUM(I_ACTSALE_NUM) AS \"actsaleNum\", ");
+        sql.append(" COUNT(DISTINCT I_PRODUCT_ID) AS \"productNum\", ");
+        sql.append(" SUM(I_ACTSALE_REALNUM) AS \"actsaleRealnum\" ");
+        sql.append(" FROM T_ACTIVITY_PRODUCT_REL ");
+        sql.append(" WHERE I_ACT_ID IN (:actIds) ");
+        Map param = new HashMap<>();
+        param.put("actIds", actIds);
+        sql.append(" GROUP BY I_ACT_ID");
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    /**
+     * 通过商品标识获取参与活动的商品详情信息
+     *
+     * @param productId 商品标识
+     * @return
+     */
+    @Override
+    public Map getActivityProductDetailByProductId(Long productId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ACT_ID AS \"actId\", ");
+        sql.append(" a.I_PROFIT AS \"profit\", ");
+        sql.append(" MIN(a.I_SALES_PRICE) AS \"salesPrice\", ");
+        sql.append(" SUM(a.I_ACTSALE_NUM - a.I_ACTSALE_REALNUM) AS \"stockNum\" ");
+        sql.append(" FROM T_ACTIVITY_PRODUCT_REL a ");
+        sql.append(" LEFT JOIN T_ACTIVITY_INFO b ON a.I_ACT_ID = b.I_ID ");
+        sql.append(" WHERE a.I_PRODUCT_ID = " + productId);
+        sql.append(" AND b.D_START_TIME <= NOW() ");
+        sql.append(" AND b.D_END_TIME >= NOW() ");
+        sql.append(" AND b.I_STATUS = " + ActivityInfo.Status.Released.getValue());
+        sql.append(" GROUP BY a.I_ACT_ID,a.I_PROFIT ");
+
+        List<Map> list = this.findListBySql(sql.toString(), null, Map.class);
+        if (CollectionUtil.isNotEmpty(list)) {
+            return list.get(0);
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Map> findActivityProductRelList(Long[] productIds) {
+        Map<String, Object> params = new HashMap<>();
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_PRODUCT_ID AS \"productId\" ");
+        sql.append(" FROM T_ACTIVITY_PRODUCT_REL a ");
+        sql.append(" JOIN T_ACTIVITY_INFO b ON a.I_ACT_ID = b.I_ID ");
+        sql.append(" WHERE b.D_END_TIME >= NOW() ");
+
+//        sql.append(" AND b.I_STATUS IN(:statusList) ");
+//        List<Integer> statusList = new ArrayList<>();
+//        statusList.add(ActivityInfo.Status.Unreleased.getValue());
+//        statusList.add(ActivityInfo.Status.Released.getValue());
+//        statusList.add(ActivityInfo.Status.Paused.getValue());
+//        params.put("statusList", statusList);
+        sql.append(" AND b.I_STATUS = " + ActivityInfo.Status.Released.getValue());
+
+        if (productIds != null && productIds.length > 0){
+            sql.append(" AND a.I_PRODUCT_ID IN(:productIds) ");
+            params.put("productIds", Arrays.asList(productIds));
+        }
+        sql.append(" GROUP BY a.I_PRODUCT_ID ");
+        return this.findListBySql(sql.toString(), params, Map.class);
+    }
+}

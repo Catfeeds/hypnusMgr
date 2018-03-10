@@ -1,0 +1,25 @@
+package com.catt.wfx.service.subsidy;
+
+import com.catt.wfx.repository.entity.settlementMgr.SettlementPlan;
+
+/**
+ * 主管补贴服务接口
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-2-20 10:24:51
+ */
+public interface LeaderSubsidyService {
+
+    /**
+     * 结算主管销售奖励
+     */
+    void settleSaleReward();
+
+    /**
+     * 做任务计划
+     * @param plan 任务计划
+     */
+    void doTask(SettlementPlan plan);
+
+}

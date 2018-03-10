@@ -1,0 +1,12 @@
+package com.catt.wfx.repository.dao.extractOrder.impl;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.wfx.repository.dao.extractOrder.ExtractOrderLogDao;
+import com.catt.wfx.repository.entity.extractOrder.ExtractOrderLog;
+import org.springframework.stereotype.Repository;
+
+@Repository("extractOrderLogDaoImpl")
+public class ExtractOrderLogDaoImpl extends BaseDaoImpl<ExtractOrderLog, Long>
+		implements ExtractOrderLogDao {
+
+}

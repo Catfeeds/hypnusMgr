@@ -1,0 +1,77 @@
+package com.catt.wfx.service.orderMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.form.orderMgr.CusOrderReturnFrom;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:退货管理服务接口
+ * Created by 2017-02-17  14:49.
+ * author: Zhou mingxiang
+ */
+public interface CusOrderReturnService {
+    /**
+     * 获取退货列表
+     *
+     * @param cusOrderReturnFrom 退货from
+     * @param pageable
+     * @return
+     */
+    Page<Map> getReturnGoodsByPage(CusOrderReturnFrom cusOrderReturnFrom, Pageable pageable);
+
+    /**
+     * 获取退货单详情
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    Map getReturnGoodsDetail(Long id);
+
+    /**
+     * 获取退货单流程信息列表
+     *
+     * @param id 退货单标识
+     * @return
+     */
+    List<Map> getCusOrderReturnLogByList(Long id);
+
+
+    /**
+     * 退货单审核
+     *
+     * @param cusId       当前登录人标识
+     * @param cusName     当前登录人名称
+     * @param id          退货单标识
+     * @param auditResult 审核结果
+     * @param auditDesc   审核意见
+     */
+    void examineReturn(Long cusId, String cusName, Long id, Integer auditResult, String auditDesc);
+
+
+    /**
+     * 收到退货
+     *
+     * @param cusId       当前登录人标识
+     * @param cusName     当前登录人名称
+     * @param id 退货单标识
+     */
+    void receiveGoods(Long cusId, String cusName, Long[] id);
+
+    /**
+     * 获取退款信息
+     *
+     * @param id  退货单标识
+     * @return
+     */
+    Map getReturnTotalAmount(Long id);
+
+    /**
+     * 退款---余额退款
+     *
+     * @param param
+     */
+     void rechargeReturn(Map<String, String> param);
+}

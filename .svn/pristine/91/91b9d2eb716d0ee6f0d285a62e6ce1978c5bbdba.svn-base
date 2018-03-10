@@ -1,0 +1,92 @@
+package com.catt.wfx.web.controller.admin.shopMgr;
+
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.service.customerMgr.CusCartService;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 购物车控制器
+ * 作者：袁幸成
+ * 时间：2017-2-9 16:50:21
+ */
+@RequestMapping({"/admin/cusCart"})
+@Controller("cusCartController")
+public class CusCartController extends BaseController{
+
+    //购物车服务
+    @Resource(name = "cusCartServiceImpl")
+    public CusCartService cusCartService;
+
+    /**
+     * 获取购物车商品列表
+     *
+     * @param cusId 用户标识
+     * @param useType 使用类型 1-普通  2-进货清单
+     * @return
+     */
+    @RequestMapping(value = {"/findAll"}, method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map> findAll(@CurrentUser Long cusId, Integer useType) {
+        return cusCartService.findAll(cusId, useType);
+    }
+
+    /**
+     * 新增/修改购物车
+     * @param id 购物车标识
+     * @param cusId 客户标识
+     * @param cusName 客户名称
+     * @param priceId 商品价格标识
+     * @param num 购买数量
+     * @param useType 使用类型 1-普通  2-进货清单
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public Message save(@CurrentUser Long cusId, @CurrentUser("name") String cusName, Long id,
+                        Long priceId, Integer num, Integer useType){
+        Assert.notNull(priceId);
+        Assert.notNull(num);
+        Assert.isTrue(num > 0);
+        id = cusCartService.saveCart(cusId, cusName, id, priceId, num, useType);
+        return Message.success().addResult(id);
+    }
+
+
+    /**
+     * 删除
+     * @param cusId 客户标识
+     * @param id 购物车标识
+     * @return
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Message delete(@CurrentUser Long cusId, Long id){
+        Assert.notNull(id);
+        cusCartService.deleteCart(cusId, id);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 创建订单-初始化界面
+     * @param cusId 客户标识
+     * @param cartIds 购物车标识
+     * @return
+     */
+    @RequestMapping(value = "/getDataByCartToOrder", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getDataByCartToOrder(@CurrentUser Long cusId, Long[] cartIds){
+        Assert.notNull(cartIds);
+        return cusCartService.getDataByCartToOrder(cusId, cartIds);
+    }
+
+}

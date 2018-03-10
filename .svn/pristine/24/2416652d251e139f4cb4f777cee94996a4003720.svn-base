@@ -1,0 +1,290 @@
+package com.catt.wfx.service.impl.productMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.util.bean.BeanUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductDocumentDao;
+import com.catt.wfx.repository.dao.productMgr.ProductInfoDao;
+import com.catt.wfx.repository.dao.util.SeqUtilDao;
+import com.catt.wfx.repository.data.vo.productMgr.ProductDocumentVo;
+import com.catt.wfx.repository.entity.productMgr.ProductDocument;
+import com.catt.wfx.service.base.productMgr.ProductDocumentBaseService;
+import com.catt.wfx.service.productMgr.ProductDocumentService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:商品文案管理接口实现
+ * Created by 2017-02-06  10:27.
+ * author: Zhou mingxiang
+ */
+@Service("productDocumentServiceImpl")
+public class ProductDocumentServiceImpl implements ProductDocumentService {
+
+    //商品文案Dao接口
+    @Resource(name = "productDocumentDaoImpl")
+    private ProductDocumentDao productDocumentDao;
+
+    //商品文案服务接口
+    @Resource(name = "productDocumentBaseServiceImpl")
+    private ProductDocumentBaseService productDocumentBaseService;
+
+    //商品信息表Dao接口
+    @Resource(name = "productInfoDaoImpl")
+    private ProductInfoDao productInfoDao;
+
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    @Resource
+    private SeqUtilDao seqUtilDao;
+
+    /**
+     * 获取商品文案列表
+     *
+     * @param zhName   商品名称
+     * @param cateId   分类标识
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getProductDocumentByPage(String zhName, Long cateId, Pageable pageable) {
+        //获取商品信息
+        Page<Map> mapPage = productInfoDao.getProductDocumentInfo(zhName, cateId, pageable);
+        List<Map> mapList = mapPage.getContent();
+
+        if (mapList != null && mapList.size() > 0) {
+            //遍历将商品标识放入集合中
+            List<Long> productInfoIds = new ArrayList<Long>();
+            for (Map map : mapList) {
+                productInfoIds.add(MapUtil.getLong(map, "id"));
+            }
+
+            //获取商品对应的文案信息
+            List<Map> list = productDocumentDao.getProductDocumentByPage(productInfoIds);
+            for (Map map : mapList) {
+                Long id = MapUtil.getLong(map, "id");
+                map.put("auditNum", 0);
+                map.put("proDocTotal", 0);
+                map.put("createDate", "");
+                for (Map map1 : list) {
+                    if (id.equals(MapUtil.getLong(map1, "productId"))) {
+                        map.putAll(map1);
+                    }
+                }
+
+            }
+        }
+        mapPage.setContent(mapList);
+        return mapPage;
+    }
+
+    /**
+     * 获取商品文案详情列表
+     *
+     * @param productId 商品标识
+     * @param status    文案状态
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getDocumentDetailByPage(Long productId, Integer type, Integer status, Pageable pageable) {
+        Page<Map> mapPage = productDocumentDao.getDocumentDetailByPage(productId, type, status, pageable);
+        List<Map> mapList = mapPage.getContent();
+        for (Map map : mapList) {
+            Long id = MapUtil.getLong(map, "id");
+            Integer status1 = MapUtil.getInteger(map, "status");
+            map.put("statusName", ProductDocument.Status.getEnum(status1).getName());
+
+            //获取商品文案图片信息
+            List<Attachment> attachmentList = attachmentBaseService.getFiles(id,
+                    ProductDocument.TABLE_NAME, ProductDocument.COVER_PIC);
+            map.put("attachment", attachmentList);
+        }
+        return mapPage;
+    }
+
+    /**
+     * 获取商品文案信息
+     *
+     * @param id 商品文案标识
+     * @return
+     */
+    public Map getProductDocument(Long id) {
+        ProductDocument productDocument = productDocumentDao.find(id);
+        Map map = new HashMap<>();
+        map.put("id", productDocument.getId());  //文案标识
+        map.put("desc", productDocument.getDesc()); //文案内容
+        return map;
+    }
+
+    /**
+     * 删除商品文案
+     *
+     * @param ids 商品文案标识
+     */
+    public void delete(Long[] ids) {
+        productDocumentBaseService.delete(ids);
+    }
+
+    /**
+     * 修改商品文案信息
+     *
+     * @param productDocumentVo 商品文案vo
+     * @param coverpic          图片信息
+     */
+    @Transactional
+    public void update(ProductDocumentVo productDocumentVo, String coverpic) {
+        ProductDocument productDocument = productDocumentBaseService.find(productDocumentVo.getId());
+        productDocument.setDesc(productDocumentVo.getDesc());
+        productDocumentBaseService.update(productDocument);
+
+        //保存商品文案图片
+        this.saveFiles(productDocument.getId(), coverpic);
+    }
+
+    /**
+     * 保存商品文案信息
+     *
+     * @param id                文案创建人员标识
+     * @param name              文案创建人员名称
+     * @param productDocumentVo 商品文案vo
+     * @param coverpic          图片信息
+     */
+    @Transactional
+    public void save(Long id, String name,
+                     ProductDocumentVo productDocumentVo, String coverpic) {
+        ProductDocument productDocument = new ProductDocument();
+        BeanUtil.copyProperties(productDocument, productDocumentVo);
+        productDocument.setCreatedId(id);
+        productDocument.setCreatedName(name);
+        productDocument.setStatus(ProductDocument.Status.Audit.getValue());
+        String seqName = "S_DOC_CODE";
+        Integer curVal = seqUtilDao.getSeq(seqName);
+        productDocument.setDocCode(curVal + "");
+        productDocumentBaseService.save(productDocument);
+
+
+        //保存商品文案图片
+        this.saveFiles(productDocument.getId(), coverpic);
+    }
+
+    /**
+     * 保存图片信息
+     *
+     * @param productDocumentId 商品文案标识
+     * @param coverpic          图片地址
+     */
+    private void saveFiles(Long productDocumentId, String coverpic) {
+        if (StringUtil.isNotBlank(coverpic)) {
+            List<Map> list = JsonUtils.toList(coverpic, Map.class);
+            List<Long> list1 = new ArrayList<Long>();
+            for (Map map : list) {
+                list1.add(MapUtil.getLongValue(map, "attachmentId"));
+            }
+
+
+            attachmentBaseService.saveFiles(list1, productDocumentId, ProductDocument.TABLE_NAME, ProductDocument.COVER_PIC);
+        }
+    }
+
+    /**
+     * 审核商品文案
+     *
+     * @param ids         商品文案标识
+     * @param trueOrFalse 判断是否通过
+     */
+    public void copyAudit(Long[] ids, boolean trueOrFalse) {
+        //获取文案信息
+        List<ProductDocument> productDocumentList = productDocumentBaseService.findList(ids);
+        Integer status = null;
+
+        //判断是通过还是不通过操作
+        if (trueOrFalse) {   //发布
+            status = ProductDocument.Status.Adopt.getValue();
+        } else { //取消发布
+            status = ProductDocument.Status.Audit.getValue();
+        }
+
+        for (ProductDocument productDocument : productDocumentList) {
+            productDocument.setStatus(status);
+        }
+        productDocumentBaseService.saveOrUpdate(productDocumentList);
+
+    }
+
+    /**
+     * 店主上传文案转为官方文案
+     *
+     * @param ids 商品文案标识集合
+     */
+    @Transactional
+    public void copyOfficial(Long[] ids) {
+        //获取文案信息
+        List<ProductDocument> productDocumentList = productDocumentBaseService.findList(ids);
+        if (productDocumentList != null && productDocumentList.size() > 0) {
+
+            //文案类型--官方文案
+            Integer type = ProductDocument.Type.OfficialCopy.getValue();
+
+            //集合存放文案信息（店主文案标识:转为官方文案后文案标识）
+            Map<Long, Long> documentMap = new HashMap<Long, Long>();
+            for (ProductDocument productDocument : productDocumentList) {
+                Long id = productDocument.getId();
+
+                ProductDocument productDocument1 =  new ProductDocument();
+                BeanUtil.copyProperties(productDocument1, productDocument);
+                productDocument1.setId(null);
+                productDocument1.setCusId(null);
+                productDocument1.setType(type);
+
+                productDocument1 =  productDocumentBaseService.save(productDocument1);
+                documentMap.put(id, productDocument1.getId());
+            }
+
+            //获取文案对应图片信息
+            List<Attachment> attachmentList = attachmentBaseService.findList(null,
+                    Arrays.asList(Filter.in("relId",  Arrays.asList(ids))), null);
+
+            if (attachmentList != null && attachmentList.size() > 0) {
+                List<Attachment> attachmentList1 = new ArrayList<Attachment>();
+                for (Attachment attachment : attachmentList) {
+                    //关联标识--文案标识
+                    Long relId = attachment.getRelId();
+
+
+                    if (documentMap.containsKey(relId)){
+                        Attachment attachment1 = new Attachment();
+                        attachment1.setId(null);
+                        attachment1.setRelId(documentMap.get(relId));
+                        attachment1.setPath(attachment.getPath());
+                        attachment1.setMdeField(attachment.getMdeField());
+                        attachment1.setMdeTable(attachment.getMdeTable());
+                        attachment1.setFilename(attachment.getFilename());
+                        attachment1.setPdfPath(attachment.getPdfPath());
+                        attachment1.setType(attachment.getType());
+                        attachment1.setSize(attachment.getSize());
+                        attachment1.setSysFilename(attachment.getSysFilename());
+
+                        attachmentList1.add(attachment1);
+
+                    }
+                }
+
+                //保存文案对应的图片信息
+                attachmentBaseService.saveOrUpdate(attachmentList1);
+            }
+        }
+    }
+}

@@ -1,0 +1,7 @@
+hypnus-admin 2018-03-10 12:03:07.982 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-10 12:03:08.362 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-10 12:03:08.761 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-10 12:03:09.142 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-10 12:03:09.515 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-10 12:03:10.788 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-10 12:03:10.907 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle

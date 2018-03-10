@@ -1,0 +1,296 @@
+var productId;
+var priceList;
+var specList;
+var colNames;
+var dataList = [];
+seajs.use(['$', 'adminSystem', 'template', 'validate', 'msgBox', 'util', 'uEeditor', 'attachment', 'pageBar', 'dataGridHelp', 'jquery.json'],
+    function ($, adminSystem, template, validate, msgBox, util, UE, attachment, pageBar, dataGridHelp) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    if ($('#id').val()) {
+                        productId = $("#id").val();
+                        DataHandler.getProductInfoAndAttr({
+                            id: productId
+                        }, function (productInfo) {
+                            var headPath = productInfo.headPath;
+                            $('#shopSales').html(productInfo.shopSales);
+                            $('#zhName').html(productInfo.zhName);
+                            $('#cateId').html(productInfo.cateId);
+                            $('#cateName').html(productInfo.cateName);
+                            $('#headPath').val(headPath);
+                            $('#barCode').html(productInfo.barCode);
+                            $('#unitName').html(productInfo.unitName);
+                            $('#introduceTemp').html(productInfo.introduce);
+                            $('#brandName').html(productInfo.brandName);
+
+                            $("#factoryName").html(productInfo.factoryName);
+
+                            $('#introduce').html($('#introduceTemp').val());
+                           var status =  productInfo.status;
+                            $("#status").val(status);
+                            $("#statusName").html(status == 1 ? "待发布" :status  == 3 ? "已下架": "");
+                            CoverpicHandler.init();
+
+
+                            var attrJson = $.evalJSON(productInfo.attrJson);
+                            var specJson = $.evalJSON(productInfo.specJson);
+
+                            var html = template('paramTemp', attrJson);
+                            $('#paramFrom').html(html);
+
+
+                            var html1 = template('specTemp', specJson);
+                            $('#spec').html(html1);
+
+                            //
+                            ////修改操作时，设置相应的参数
+                            //for (var o in attrJson) {
+                            //    $("#" + o).val(attrJson[o]);
+                            //}
+                            //
+                            ////修改操作时，设置保存的规格显示为已选中
+                            //for (var o in specJson) {
+                            //    var name = specJson[o];
+                            //    if (name.length > 0) {
+                            //        for (var i in specJson[o]) {
+                            //            $("#" + o + " #" + name[i].name).addClass("on");
+                            //        }
+                            //    }
+                            //}
+                            EventHandler.loadAttr();
+                            $(window).triggerHandler('resize');
+
+                        });
+
+
+                    }
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    $('#edit').click(function(){
+                       var status =  $("#status").val();
+                        if(status != 2){
+                            window.location.href = path + '/admin/productInfo/update.html?id=' + productId;
+                        }else {
+                            msgBox.tips("已上架商品无法修改,请先下架");
+                            return;
+                        }
+
+                    })
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                loadAttr: function(){
+                    DataHandler.getSpecAndPrice({productId: productId}, function (backData) {
+                        var kucun = 0;
+                        priceList = backData.priceList;
+                        specList = backData.specList;
+                        colNames = backData.colNames;
+                        var html = template('template_dataList', {content: specList, colNames: colNames});
+                        $('#dataList').html(html);
+                        for(var i = 0; i < specList.length; i++){
+                            var spec = {};
+                            for(var k = 0; k < colNames.length; k++){
+                                spec[colNames[k]] = specList[i][k];
+                            }
+                            for(var j = 0; j < priceList.length; j++){
+                                var price = priceList[j];
+                                if($.toJSON(spec) == price.specJson){
+                                    kucun += price.stockNum;
+                                    $("#salesPrice"+i).html(price.salesPrice);
+                                    //$("#costPrice"+i).html(price.costPrice);
+                                    $("#profit"+i).html(price.profit);
+                                    $("#generalAgent"+i).html(price.generalAgent);
+                                    $("#provincialAgent"+i).html(price.provincialAgent);
+                                    $("#cityAgent"+i).html(price.cityAgent);
+                                    $("#regionalAgent"+i).html(price.regionalAgent);
+                                    $("#stockNum"+i).html(price.stockNum);
+                                    $("#saleNum"+i).html(price.saleNum);
+                                    $("#shelveNum"+i).html(price.saleNum+price.stockNum);
+
+                                    $("#rebateOne"+i).html(price.rebateOne);
+                                    $("#rebateTwo"+i).html(price.rebateTwo);
+                                    $("#rebateThree"+i).html(price.rebateThree);
+                                    $("#rebateFour"+i).html(price.rebateFour);
+                                    $("#rebateFive"+i).html(price.rebateFive);
+                                    break;
+                                }
+                            }
+                        }
+                        $("#kucun").html(kucun);
+                        var status = $("#status").val();
+                        if(status == 2){
+                            if(kucun == 0){
+                                $("#statusName").html("已售罄");
+                            }else{
+                                $("#statusName").html("销售中");
+                            }
+                        }
+                        var rows = $("#dataList").find("tr");
+                        for(var i = colNames.length-1; i >= 0; i--){
+                            var rowspanNum = 1;
+                            var index = 1;
+                            var preName = $($(rows[1]).find("td")[i]).html();
+                            for(var j = 2; j < rows.length; j++){
+                                var name = $($(rows[j]).find("td")[i]).html();
+                                if(name == preName){
+                                    $($(rows[j]).find("td")[i]).remove();
+                                } else{
+                                    $($(rows[index]).find("td")[i]).attr("rowspan", rowspanNum);
+                                    index = j;
+                                    rowspanNum = 0;
+                                }
+                                rowspanNum++;
+                                preName = name;
+                                if(j == rows.length - 1){
+                                    $($(rows[index]).find("td")[i]).attr("rowspan", rowspanNum);
+                                }
+                            }
+                        }
+                        $("#contentFrame", window.parent.document).css("height", $("body").css("height"))
+                    });
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取商品信息
+                 * @param params
+                 * @param callback
+                 */
+                getProductInfoAndAttr: function (params, callback) {
+                    $.post(path + '/admin/productInfo/getProductInfoAndAttr', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                getSpecAndPrice: function (params, callback) {
+                    $.post(path + "/admin/productMgr/publish/getSpecAndPrice", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /**
+         * 油站图片
+         */
+        var CoverpicHandler = (function () {
+            return {
+                /**
+                 * 计算图片宽高，进行等比例缩放，并计算居中值
+                 * @param result 图片信息
+                 * @param divWH  图片框宽高（正方形）
+                 * @returns {Array}
+                 */
+                initTempImg : function(result, divWH){
+                    var imgs = $("#panea_temp").find("img");
+                    var imgWH = [];
+                    $.each(imgs, function(i, item){
+                        var wh = {
+                            width: item.width,
+                            height: item.height
+                        };
+                        var temp;//比例值
+                        //重新等比例缩放图片
+                        if(wh.width >= wh.height){
+                            //宽长，高度需要调整，并计算好高度居中值
+                            temp = wh.width/divWH;
+                            wh.width = divWH;
+                            wh.height = wh.height/temp;
+                            var mid = (divWH - wh.height)/2;
+                            wh.mid = "margin-top: "+mid+"px; margin-bottom: "+mid+"px;";
+                        }else{
+                            //高长，宽度需要调整，并计算好宽度度居中值
+                            temp = wh.height/divWH;
+                            wh.height = divWH;
+                            wh.width = wh.width/temp;
+
+                            var mid = (divWH - wh.width)/2;
+                            wh.mid = "margin-left: "+mid+"px; margin-right: "+mid+"px;";
+                        }
+                        imgWH.push(wh);
+                    });
+                    return imgWH;
+                },
+                init: function () {
+                    $.get(path + "/admin/productInfo/getAttachments", {productId: $('#id').val()}, function (result) {
+                        var html = template("panea_temp_template", result);
+                        $("#panea_temp").html(html);
+                        setTimeout(function () {
+                            //隐藏的图片层，用于获取图片的真实宽高
+                            var wh = CoverpicHandler.initTempImg(result, 156);
+
+                            //初始化所有图片
+                            var itemContent = [];
+                            var headPath = $('#headPath').val();
+                            for (var i = 0; i < result.length; i++) {
+                                $.extend(result[i], wh[i]);
+
+                                if (headPath && headPath == result[i].id) { // 判断是否封面
+                                    itemContent.push("" +
+                                        "<div class='jd_box' style='width: 156px; height: 156px;'>" +
+                                        "<img src='" + result[i].url + "' style='width: " + result[i].width + "px; height: " + result[i].height + "px;" + result[i].mid + "' />" +
+                                            //"<img src='"  + result[i].url + "' style='width: 156px; height: 156px;' />" +
+                                        "<div class='cover' />" +
+                                        "</div>");
+                                } else {
+                                    itemContent.push("" +
+                                        "<div class='jd_box' style='width: 156px; height: 156px;'>" +
+                                        "<img src='" + result[i].url + "' style='width: " + result[i].width + "px; height: " + result[i].height + "px;" + result[i].mid + "' />" +
+                                            //"<img src='"  + result[i].url + "' style='width: 156px; height: 156px;' />" +
+                                        "</div>");
+                                }
+                            }
+
+                            var canshowNum = ($("div.imgDiv").outerWidth() - 86) / 230;
+                            canshowNum = Math.floor(canshowNum);
+                            //初始化面板对象
+                            panel = new BasePanel('#panea', {
+                                /**面板可视范围内显示的元素个数，如果展开后，
+                                 * 则是disItem = disItem * expanRow*/
+                                disItem: canshowNum,
+                                /**显示面板宽度*/
+                                /**面板里需要承载的html内容*/
+                                contentHtml: itemContent,
+                                /**是否显示展开按钮*/
+                                isExpan: false,
+                                /**是否自动展开*/
+                                isAutoExpan: false,
+                                /**展开后显示的行数*/
+                                expanRows: 1,
+                                /**箭头位置：top：顶部；middle：中间*/
+                                arrowAlign: 'middle',
+                                /**面板移动完成后事件*/
+                                onmoveend: function (pageNo) {
+                                }
+                            });
+                        }, 500);
+                    });
+                }
+            }
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

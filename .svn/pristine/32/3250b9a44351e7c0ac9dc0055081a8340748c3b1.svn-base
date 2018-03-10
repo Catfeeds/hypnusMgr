@@ -1,0 +1,114 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule.jsp" %>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>订单详情</title>
+<link type="text/css" rel="stylesheet" href="${path}/resources/css/common.css" />
+<link type="text/css" rel="stylesheet"  href="${path}/resources/css/activitiesDetail.css"/>
+<link type="text/css" href="${path}/resources/css/addActivities.css" rel="stylesheet" />
+<%--<script type="text/javascript" src="${path}/resources/js/setPage.js" ></script>--%>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="positionNow">
+    <a>主页 &gt; </a><a>会员管理</a> &gt; <a style="color:#ff4d4d;">详情</a></div>
+    
+     <div class="userDetail">
+   	   <h1 class="tittle">基本信息</h1>
+        <div class="activityMsn">
+            <table class="activityMsnTable">
+                <tr>
+                    <input type="hidden" value="${id}" id="id" />
+                    <td>会员昵称：</td>
+                    <th>${name}</th>
+                    <td>手机号：</td>
+                    <th>${mobile}</th>
+                </tr>
+                <tr>
+                    <td>注册时间：</td>
+                  	<th>${createDate}</th>
+                  	<td>状态：</td>
+                    <th>
+                        <c:if test="${status == 1}">
+                            <span class="bgBlue">${statusName}</span>
+                        </c:if>
+                        <c:if test="${status == 2}">
+                            <span class="bgRed">${statusName}</span>
+                        </c:if>
+                    </th>
+                </tr>
+            </table>
+        </div>
+     </div>
+     <div class="userDetail">
+   	   <h1 class="tittle">代金券信息</h1>
+        <div class="activityMsn">
+            <table class="activityMsnTable">
+                <tr>
+                    <td>代金券：</td>
+                    <th><span class="textBlue">${couponNum}张</span></th>
+                    <td>代金券面值：</td>
+                    <th>共<span class="textRed">￥${couponMoney}</span></th>
+                </tr>
+            </table>
+        </div>
+     </div>
+     <div class="userDetail">
+       <h1 class="tittle">收货地址</h1>
+        <div class="userDetail" style="padding:10px; margin-top:0px;">
+            <table class="datalistTable">
+                <tr>
+                    <th>收货人</th>
+                    <th>手机号</th>
+                    <th>收货地址</th>
+                </tr>
+                <c:forEach var="add" items="${address}">
+                    <tr>
+                        <td><span class="textBlue">${add.recipients}</span></td>
+                        <td>${add.tel}</td>
+                        <td>${add.address}</td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </div>
+     </div>
+  <div class="userDetail">
+    <h1 class="tittle">发票信息</h1>
+        <div class="userDetail" style="padding:10px; margin-top:0px;">
+            <table class="datalistTable">
+                <tr>
+                    <th>发票抬头</th>
+                </tr>
+                <c:forEach var="invoice" items="${invoices}">
+                    <tr>
+                        <td>${invoice.invoiceName}</td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </div>
+     </div>
+     <div class="userDetail">
+   	   <h1 class="tittle">消费信息</h1>
+        <div class="activityMsn">
+            <table class="activityMsnTable">
+                <tr>
+                    <td>购买订单：</td>
+                    <th><span class="textBlue">${orderNum}个</span><span class="linkText" onclick="gotoOrders('${id}')">查看购买订单>></span></th>
+                    <td>购买金额：</td>
+                    <th><span class="textRed">￥${orderMoney}</span></th>
+                </tr>
+            </table>
+        </div>
+     </div>
+</div>
+<script type="text/javascript">
+    function gotoOrders(cusId){
+        window.location='${path}/admin/orderMgr/cusOrder/index?cusId='+cusId;
+    }
+</script>
+</body>
+</html>

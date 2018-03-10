@@ -1,0 +1,296 @@
+package com.catt.wfx.repository.dao.settlementMgr.impl;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementOrderDetailDao;
+import com.catt.wfx.repository.data.comEnum.DateDimension;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturn;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Repository("settlementOrderDetailDaoImpl")
+public class SettlementOrderDetailDaoImpl extends BaseDaoImpl<SettlementOrderDetail, Long>
+        implements SettlementOrderDetailDao {
+    /**
+     * 获取店主待到账金额(APP)
+     *
+     * @param cusId 店主标识
+     * @return
+     */
+    public List<Map> findUnsettleMoney(Long cusId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_UNACCEPT_MONEY AS \"unsettleMoney\" ");
+        sql.append(" FROM T_CUS_ACCOUNT_CONSUME t1 ");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+        if (StringUtil.checkObj(cusId)) {
+            sql.append(" AND t1.I_CUS_ID = :cusId");
+            param.put("cusId", cusId);
+        }
+
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    /**
+     * 获取主管团队销售金额
+     *
+     * @param cusId 主管标识
+     * @return
+     */
+    @Override
+    public Double getTeamSaleMoney(Long cusId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" SUM(t.I_TOTAL_PAY_AMOUNT) AS \"amount\" ");
+        sql.append(" FROM T_SETTLEMENT_ORDER_DETAIL t ");
+        sql.append(" WHERE t.I_LEADER_ID = :leaderId AND t.I_ORDER_STATUS = :status");
+
+        Map param = new HashMap<>();
+        param.put("leaderId", cusId);
+        param.put("status", CusOrder.OrderStatus.Finish.getValue());
+
+        List<Map> list = this.findListBySql(sql.toString(), param, Map.class);
+        if (CollectionUtil.isNotEmpty(list)) {
+            return MapUtil.getDouble(list.get(0), "amount") == null ? NumberUtil.DOUBLE_ZERO : MapUtil.getDouble(list.get(0), "amount");
+        }
+
+        return NumberUtil.DOUBLE_ZERO;
+    }
+
+    /**
+     * 获取主管团队销售订单数
+     *
+     * @param cusId 主管标识
+     * @return
+     */
+    @Override
+    public Integer getTeamOrderNum(Long cusId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" COUNT(t.I_ID) AS \"num\" ");
+        sql.append(" FROM T_SETTLEMENT_ORDER_DETAIL t ");
+        sql.append(" WHERE t.I_LEADER_ID = :leaderId AND t.I_ORDER_STATUS = :status");
+
+        Map param = new HashMap<>();
+        param.put("leaderId", cusId);
+        param.put("status", CusOrder.OrderStatus.Finish.getValue());
+
+        List<Map> list = this.findListBySql(sql.toString(), param, Map.class);
+        if (CollectionUtil.isNotEmpty(list)) {
+            return MapUtil.getInteger(list.get(0), "num");
+        }
+
+        return NumberUtil.INTEGER_ZERO;
+    }
+
+    @Override
+    public void updateOrderStatus(List<Long> orderIds, CusOrder.OrderStatus orderStatus) {
+        String sql = "UPDATE T_SETTLEMENT_ORDER_DETAIL SET I_ORDER_STATUS = :orderStatus WHERE I_ORDER_ID IN (:orderIds) ";
+        Map params = new HashMap<>();
+        params.put("orderStatus", orderStatus.getValue());
+        params.put("orderIds", orderIds);
+        this.executeUpdateBySql(sql, params);
+    }
+
+    /**
+     * 获取店主销售订单和销售金额
+     *
+     * @param cusIds 店主标识集合
+     * @return
+     */
+     public List<Map> getShopOwnerOrderNumAndMoney(List<Long> cusIds){
+         StringBuffer sql = new StringBuffer();
+         sql.append(" SELECT ");
+         sql.append(" t1.I_SHOPKEEPER_ID AS \"cusId\", ");
+         sql.append(" COUNT(t1.I_ID) AS \"orderNum\", ");
+         sql.append(" SUM(t1.I_TOTAL_PAY_AMOUNT) AS \"salesAmount\" ");
+         sql.append(" FROM T_SETTLEMENT_ORDER_DETAIL t1 ");
+         sql.append(" WHERE 1=1 ");
+
+         Map param = new HashMap<>();
+         if (cusIds != null && cusIds.size()>0){
+             sql.append(" AND t1.I_SHOPKEEPER_ID IN (:cusIds)");
+             param.put("cusIds", cusIds);
+         }
+
+         sql.append(" AND t1.I_ORDER_STATUS = :orderStatus");
+         param.put("orderStatus", CusOrder.OrderStatus.Finish.getValue());
+
+         sql.append(" GROUP BY t1.I_SHOPKEEPER_ID");
+         return this.findListBySql(sql.toString(), param, Map.class);
+     }
+
+    /**
+     * 获取主管销售订单和销售金额
+     *
+     * @param cusIds 主管标识集合
+     * @return
+     */
+    public List<Map> getDirectorOrderNumAndMoney(List<Long> cusIds){
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_LEADER_ID AS \"leaderId\", ");
+        sql.append(" COUNT(t1.I_ID) AS \"orderNum\", ");
+        sql.append(" SUM(t1.I_TOTAL_PAY_AMOUNT) AS \"salesAmount\" ");
+        sql.append(" FROM T_SETTLEMENT_ORDER_DETAIL t1 ");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+        if (cusIds != null && cusIds.size()>0){
+            sql.append(" AND t1.I_LEADER_ID IN (:cusIds)");
+            param.put("cusIds", cusIds);
+        }
+
+        sql.append(" AND t1.I_ORDER_STATUS =  :orderStatus");
+        param.put("orderStatus", CusOrder.OrderStatus.Finish.getValue());
+
+        sql.append(" GROUP BY t1.I_LEADER_ID");
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    /**
+     * 获取统计时间范围内的订单金额与订单数量
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @param isAgent          true:只统计代理商订单 false:统计所有订单
+     * @return
+     */
+    @Override
+    public Map getAmountNum(Date startCreateDate, Date endCreateDate, boolean isAgent) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT");
+        sql.append(" COUNT(t.I_ID) AS \"num\",");
+        sql.append(" IFNULL(SUM(t.I_TOTAL_PAY_AMOUNT), 0) AS \"amount\"");
+        sql.append(" FROM T_SETTLEMENT_ORDER_DETAIL t");
+        sql.append(" WHERE");
+        sql.append(" t.D_ORDER_TIME >= :startDate");
+        sql.append(" AND t.D_ORDER_TIME <= :endDate");
+
+        Map param = new HashMap<>();
+        param.put("startDate", startCreateDate);
+        param.put("endDate", endCreateDate);
+
+        if (isAgent){
+            sql.append(" AND t.I_ORDER_TYPE = :orderType ");
+            param.put("orderType", CusOrder.OrderType.Distribution.getValue());
+        }
+
+        List<Map> list = this.findListBySql(sql.toString(), param, Map.class);
+        if (CollectionUtil.isNotEmpty(list)) {
+            return list.get(0);
+        }
+
+        // 如没有查询到数据，则返回零
+        Map map = new HashMap<>();
+        map.put("num", NumberUtil.INTEGER_ZERO);
+        map.put("amount", NumberUtil.DOUBLE_ZERO);
+        return map;
+    }
+
+    /**
+     * 订单金额统计
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @param type            统计周期
+     * @param isAgent       true:只统计代理商订单 false:统计所有订单
+     * @return
+     */
+    @Override
+    public List<Map> amountStat(Date startCreateDate, Date endCreateDate, DateDimension type, boolean isAgent) {
+        StringBuilder sql = new StringBuilder();
+        Map params = new HashMap<>();
+        params.put("startCreateDate", startCreateDate);
+        params.put("endCreateDate", endCreateDate);
+
+        switch (type) {
+            case DAY:
+                sql.append(" SELECT");
+                sql.append(" DATE_FORMAT(t.D_ORDER_TIME, '%Y-%m-%d') AS time,"); // 统计日期
+                sql.append(" IFNULL(SUM(t.I_TOTAL_PAY_AMOUNT), 0) AS amount,"); // 订单金额
+                sql.append(" IFNULL(COUNT(t.I_ID), 0) AS num"); // 订单数量
+                sql.append(" FROM T_SETTLEMENT_ORDER_DETAIL t");
+                sql.append(" WHERE");
+                sql.append(" t.D_ORDER_TIME >= :startCreateDate");
+                sql.append(" AND t.D_ORDER_TIME <= :endCreateDate");
+                if (isAgent){
+                    sql.append(" AND t.I_ORDER_TYPE = :orderType ");
+                    params.put("orderType", CusOrder.OrderType.Distribution.getValue());
+                }
+                sql.append(" GROUP BY DATE_FORMAT(t.D_ORDER_TIME, '%Y-%m-%d')");
+                break;
+            case MONTH:
+                sql.append(" SELECT");
+                sql.append(" DATE_FORMAT(t.D_ORDER_TIME, '%Y%m') AS time,"); // 统计日期
+                sql.append(" IFNULL(SUM(t.I_TOTAL_PAY_AMOUNT), 0) AS amount,"); // 订单金额
+                sql.append(" IFNULL(COUNT(t.I_ID), 0) AS num"); // 订单数量
+                sql.append(" FROM T_SETTLEMENT_ORDER_DETAIL t");
+                sql.append(" WHERE");
+                sql.append(" t.D_ORDER_TIME >= :startCreateDate");
+                sql.append(" AND t.D_ORDER_TIME <= :endCreateDate");
+                if (isAgent){
+                    sql.append(" AND t.I_ORDER_TYPE = :orderType ");
+                    params.put("orderType", CusOrder.OrderType.Distribution.getValue());
+                }
+                sql.append(" GROUP BY DATE_FORMAT(t.D_ORDER_TIME, '%Y%m')");
+                break;
+            case YEAR:
+                break;
+            default:
+                break;
+        }
+
+        return this.findListBySql(sql.toString(), params, Map.class);
+    }
+
+    @Override
+    public Page<Map> findPageByPlatDetailId(Long platDetailId, Pageable pageable) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" S_ORDER_CODE AS \"orderCode\", ");
+        sql.append(" D_CREATE_DATE AS \"createDate\", ");
+        sql.append(" I_PRODUCT_AMOUNT AS \"productAmount\", ");
+        sql.append(" I_PLAT_AMOUNT AS \"platAmount\" ");
+        sql.append(" FROM T_SETTLEMENT_ORDER_DETAIL ");
+        sql.append(" WHERE I_PLAT_DETAIL_ID = " + platDetailId);
+
+        return this.findPageBySql(sql.toString(), null, pageable, Map.class);
+    }
+
+    @Override
+    public List<Map> getAmountGroupByPayType(Date startCreateDate, Date endCreateDate) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_PAY_TYPE AS \"payType\", ");
+        sql.append(" IFNULL(SUM(a.I_TOTAL_PAY_AMOUNT), 0) AS \"amount\", ");
+        sql.append(" IFNULL(SUM(b.I_RETURN_TOTAL_AMOUNT), 0) AS \"returnAmount\" ");
+        sql.append(" FROM T_SETTLEMENT_ORDER_DETAIL a ");
+        sql.append(" LEFT JOIN T_CUS_ORDER_RETURN b ON a.I_ORDER_ID = b.I_ORDER_ID AND b.I_STATUS = " +
+                CusOrderReturn.Status.Finish.getValue());
+
+        sql.append(" WHERE 1=1 ");
+        sql.append(" AND a.D_ORDER_TIME >= :startDate");
+        sql.append(" AND a.D_ORDER_TIME <= :endDate");
+
+        Map param = new HashMap<>();
+        param.put("startDate", startCreateDate);
+        param.put("endDate", endCreateDate);
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+}

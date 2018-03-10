@@ -1,0 +1,132 @@
+package com.catt.wfx.repository.dao.productMgr.impl;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.productMgr.ProductDocumentDao;
+import com.catt.wfx.repository.entity.productMgr.ProductDocument;
+import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Repository("productDocumentDaoImpl")
+public class ProductDocumentDaoImpl extends BaseDaoImpl<ProductDocument, Long>
+        implements ProductDocumentDao {
+    /**
+     * 获取商品文案列表
+     *
+     * @param productInfoIds 商品标识集合
+     * @return
+     */
+    public List<Map> getProductDocumentByPage(List<Long> productInfoIds) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_PRODUCT_ID AS \"productId\", ");
+        sql.append(" SUM((case when t1.I_STATUS = " + ProductDocument.Status.Audit.getValue() + " then 1 else 0 end)) AS \"auditNum\", ");
+        sql.append(" COUNT(t1.I_ID) AS \" proDocTotal\", ");
+        sql.append(" MAX(t1.D_CREATE_DATE) AS \"createDate\"");
+        sql.append(" FROM T_PRODUCT_DOCUMENT t1");
+        sql.append(" where 1=1");
+
+        Map param = new HashMap<>();
+        if (productInfoIds != null && productInfoIds.size() > 0) {
+            sql.append(" AND t1.I_PRODUCT_ID in (:productInfoIds)");
+            param.put("productInfoIds", productInfoIds);
+        }
+
+
+//        if (StringUtil.checkObj(status)) {
+//            sql.append(" AND t1.I_CATE_ID = :status");
+//            param.put("status", status);
+//        }
+        sql.append(" GROUP BY t1.I_PRODUCT_ID ");
+        return this.findListBySql(sql.toString(), param, Map.class);
+
+    }
+
+    /**
+     * 获取商品文案详情列表
+     *
+     * @param productId 商品标识
+     * @param status    文案状态
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getDocumentDetailByPage(Long productId, Integer type, Integer status, Pageable pageable) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_PRODUCT_ID AS \"productId\", ");
+        sql.append(" t1.I_ID AS \" id\", ");
+        sql.append(" t1.D_CREATE_DATE AS \"createDate\",");
+        sql.append(" t1.I_STATUS AS \"status\",");
+        sql.append(" t1.S_DESC AS \"desc\",");
+        sql.append(" t1.S_CREATED_NAME AS \"createName\"");
+        sql.append(" FROM T_PRODUCT_DOCUMENT t1");
+        sql.append(" where 1=1");
+
+        Map param = new HashMap<>();
+        if (StringUtil.checkObj(productId)) {
+            sql.append(" AND t1.I_PRODUCT_ID = (:productId)");
+            param.put("productId", productId);
+        }
+
+        if (StringUtil.checkObj(type)) {
+            sql.append(" AND t1.I_TYPE = :type");
+            param.put("type", type);
+        }
+        if (StringUtil.checkObj(status)) {
+            sql.append(" AND t1.I_STATUS = :status");
+            param.put("status", status);
+        }
+        sql.append(" ORDER BY t1.D_CREATE_DATE DESC");
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    /**
+     * 获取商品文案列表
+     *
+     * @param cusId     用户标识
+     * @param productId 商品标识
+     * @param type      文案类型
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getProductDocumentByPage(Long cusId, Long productId, Integer type, Integer status, Pageable pageable) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \" id\", ");
+        sql.append(" t1.S_DESC AS \"desc\"");
+        sql.append(" FROM T_PRODUCT_DOCUMENT t1");
+        sql.append(" WHERE 1 = 1");
+
+        Map param = new HashMap<>();
+
+        if (status != null) {
+            sql.append(" AND t1.I_STATUS = :status");
+            param.put("status", status);
+        }
+
+        if (StringUtil.checkObj(productId)) {
+            sql.append(" AND t1.I_PRODUCT_ID = :productId");
+            param.put("productId", productId);
+        }
+
+        if (StringUtil.checkObj(type)) {
+            sql.append(" AND t1.I_TYPE = :type");
+            param.put("type", type);
+
+            if (type.equals(ProductDocument.Type.UserCopy.getValue())) {
+                sql.append(" AND t1.I_CUS_ID = :cusId");
+                param.put("cusId", cusId);
+            }
+        }
+
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+}

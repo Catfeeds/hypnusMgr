@@ -1,0 +1,74 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/2/23
+  Time: 15:12
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>导出明细</title>
+    <link type="text/css" rel="stylesheet" href="${path}/resources/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="${path}/resources/css/shenhe.css" />
+    <style type="text/css">
+        .jiesuan2 {
+            background: #fff none repeat scroll 0 0;
+            border: 1px solid #e5e5e5;
+            border-radius: 3px;
+            color: #999;
+            font-size: 12px;
+            height: 30px;
+            line-height: 30px;
+            margin-right: 4px;
+            padding: 0 10px;
+        }
+
+    </style>
+    <script src="${path}/resources/admin/js/statisti/orderOfFactory/export.js"></script>
+</head>
+
+<body>
+<div class="wrapper" style="min-height: 100px">
+    <%--<table class="massageTable" cellspacing="0">--%>
+        <%--<tr>--%>
+            <%--<td width="100">厂家名称：</td>--%>
+            <%--<td><input class="tkinput" style="width: 130px;" type="text" id="factoryName"/></td>--%>
+        <%--</tr>--%>
+        <%--<tr>--%>
+            <%--<td width="100">支付时间：</td>--%>
+            <%--<td><input class="tkinput" style="width: 130px;" type="text" id="startTime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endTime\', {d:-1})}'})"/></td>--%>
+            <%--<td><input class="tkinput"style="width: 130px;" type="text" id="endTime"/></td>--%>
+        <%--</tr>--%>
+
+    <%--</table>--%>
+        <div class="searchBar xw_hideBar" style="border-top:none;">
+            <div class="searchBox"> <span class="searchName">厂家名称：</span>
+                <input class="searchInputText" name="mobile"  id="factoryName" type="text" style="width:130px;" />
+            </div>
+            <div class="searchBox">
+                <span class="searchName">结算时间：</span>
+                <div class="dateDiv">
+                    <input class="zjInput" type="text" style="width:120px;" id="startTime"
+                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'endTime\', {d:-1}) || $dp.$DV(\'%y-%M-%d\')}'})"/>
+                </div>
+                <span class="formText" style="margin:8px 5px 0;">~</span>
+
+                <div class="dateDiv">
+                    <input class="zjInput" type="text" style="width:120px;" id="endTime"
+                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd', minDate:'#F{$dp.$D(\'startTime\', {d:+1})}', maxDate:'%y-%M-%d'})"/>
+                </div>
+            </div>
+        </div>
+    <div class="popBtDiv">
+        <ul>
+            <li><a class="btnGrey" style=" margin-left:10px;" id="close">取&nbsp;&nbsp;消</a></li>
+            <li><a class="btnRed" id="submit">确定</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
+

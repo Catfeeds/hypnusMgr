@@ -1,0 +1,131 @@
+
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                },
+
+
+                /** 初始化界面  */
+                initPage: function () {
+                    //动态绑定click(动态生成的html)
+                    $("#dataList").on('click', '.xw_tick', templateList.check);
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $("#sendCoupon").click(EventHandler.sendCoupon);
+                    $("#selectCus").click(EventHandler.selectCus);
+                    $("#deleteCus").click(EventHandler.deleteCus);
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                //发送代金券
+                sendCoupon : function(){
+                    var cusIds = EventHandler.getAllCus();
+                    var couponId = $("#couponId").val();
+                    DataHandler.sendCoupon({cusIds : cusIds, couponId : couponId}, function(data){
+                        msgBox.tips("发送成功");
+                        window.location.href = path + "/admin/couponMgr/index";
+                    });
+                },
+                //选择客户
+                selectCus : function(){
+                    var rangeType = $("#rangeType").val();
+                    msgBox.exWindow.open({
+                        title: '选择用户',
+                        url: path + "/admin/couponMgr/chooseCus/"+rangeType,
+                        width: '1200px',
+                        height: '530px',
+                        close: function (result) {
+                            if (result) {
+                                var obj = $.evalJSON(result);
+                                var newObj = EventHandler.filterRepetionCus(obj);
+                                var html = template("template_dataList", newObj);
+                                $("#dataList").append(html);
+                            }
+                        }
+                    });
+                },
+                //删除客户
+                deleteCus : function(){
+                    var delRows = $("#dataList").find("[class='tick xw_tick tickOn']");
+                    delRows.each(function(){
+                        $(this).parents("tr").remove();
+                    });
+                },
+                //过滤重复用户ID
+                filterRepetionCus : function(cusList){
+                    var cusIds = EventHandler.getAllCusList();
+                    var newCus = new Array();
+                    for(var i = 0; i < cusList.length; i++ ){
+                        if(cusIds.indexOf(cusList[i].cusId) == -1){
+                            newCus.push(cusList[i]);
+                        }
+                    }
+                    return newCus;
+                },
+                /**
+                 * 获取当前列表上的所有用户ID
+                 * @return String
+                 */
+                getAllCus : function(){
+                    var cusIdInputs = $("#dataList").find("input[name='cusId']");
+                    var cusIds = "";
+                    cusIdInputs.each(function(){
+                        cusIds += $(this).val() + ",";
+                    });
+                    if(cusIds.indexOf(",") != -1){
+                        cusIds = cusIds.substring(0, cusIds.length - 1);
+                    }
+                    return cusIds;
+                },
+                /**
+                 * 获取当前列表上的所有用户ID
+                 * @return Array
+                 */
+                getAllCusList : function(){
+                    var cusIdInputs = $("#dataList").find("input[name='cusId']");
+                    var cusIds = new Array();
+                    cusIdInputs.each(function(){
+                        cusIds.push($(this).val());
+                    });
+                    return cusIds;
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 发送
+                 */
+                sendCoupon: function (param, callback) {
+                    $.post(path + '/admin/couponMgr/sendCoupon', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

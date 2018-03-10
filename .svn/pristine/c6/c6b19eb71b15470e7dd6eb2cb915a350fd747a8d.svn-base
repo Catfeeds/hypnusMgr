@@ -1,0 +1,36 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+h1.who{ background:#f0f0f0; height:40px; line-height:40px; font-size:14px; color:#333; padding:0 15px; position:relative;}
+h1.who span{ display:block; width:8px; height:12px; position:absolute; top:14px; left:0; background:#ff4d4d;}
+.tongjibiao{background:#fff; padding:0 20px; border-bottom:1px solid #e5e5e5;}
+.tongjibiaoItem{overflow:hidden; background:#fff; border-bottom:1px solid #e5e5e5;}
+.tongjibiaoItem h1{float:left; font-size:14px; color:#666; line-height:50px; margin-right:10px;}
+.tongjibiaoItem h2{float:right; font-size:14px; color:#333; line-height:50px; }
+.tongjibiaoItem h3{float:left; font-size:14px; color:#f47f30; line-height:50px; width:54px;}
+.tongjibiaoItem h4{float:right; font-size:12px; color:#969696; line-height:50px; }
+.tongjiBg01{background:#ea3c34 url(../images/tongji_bg_chart.png) no-repeat center; padding:50px;}
+.tongjiBg02{background:#ea3c34 url(../images/tongji_bg_chart02.png) no-repeat center; padding:50px;}
+.tongjibiaoItem1{overflow:hidden; background:#fff;}
+.tongjibiaoItem1 h1{float:left; font-size:14px; color:#666; line-height:50px; margin-right:10px;}
+.tongjibiaoItem1 h2{float:right; font-size:14px; color:#333; line-height:50px; }
+
+.head{float:right; width:40px;height:40px; margin-top:5px;border-radius:20px;border: 1px solid #dedede;-webkit-border-radius:20px;  }
+.arrow{ float:right; height:14px; margin:18px 0px 0px 5px;}
+.neirongTop{ background:#fff; padding:30px 0px; }
+.neirongTop h2{text-align:center; font-size:16px; font-weight:normal; color:#666; }
+.neirongTop h1{text-align:center; font-size:32px; color:#333; padding-top:10px;  }
+
+
+.neirongBottom{ background:#fff; height:100px; padding:0 130px 0 90px; position:relative;}
+.timeBtn{float:left; font-size:14px;height:50px; width:100%; overflow:hidden; position:relative;  width:100%; 
+border:1px solid #ccc; border-left:none;  border-radius:0px 5px 5px 0px;}
+.neirongBottom p{ position:absolute; left:20px; top:0px;width:70px; line-height:50px; text-align:center; font-size:16px; color:#000; border:1px solid #ccc; border-right:none;  border-radius:5px 0px 0px 5px; }
+.neirongBottom a{position:absolute; right:20px; top:0px; width:95px; line-height:50px; text-align:center; font-size:14px; color:#666; border:1px solid #ccc;  border-radius:5px; }
+
+.topBiaoti{ font-size:15px; padding:10px 20px; color:#666;}
+.time{ color:#ff4d4d; text-align:center; line-height:50px; margin-top:20px;}
+.tian{ font-size:16px;}
+
+

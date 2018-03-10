@@ -1,0 +1,58 @@
+package com.catt.wfx.service.couponMgr;
+
+
+import com.catt.common.base.pojo.search.Page;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 代金券信息服务接口
+ * 
+ * @author chen chusheng
+ * @date 2017-01-16 11:10:41
+ * @version V1.0
+ */
+public interface CouponInfoService{
+
+    /**
+     * 根据ID获取代金券详情
+     * @param id
+     * @return
+     */
+    Map getCouponInfoById(Long id);
+
+    /**
+     * 保存代金券信息
+     * @param userId
+     * @param name
+     * @param paramMap
+     */
+    void saveCoupon(Long userId, String name, Map<String, Object> paramMap);
+
+    /**
+     * 删除代金券
+     * @param ids 代金券id数组
+     */
+    void deleteCouponsByIds(Long[] ids);
+
+    /**
+     * 发布代金券
+     * @param ids 代金券id数组
+     */
+    void publish(Long[] ids);
+
+    /**
+     * 获取代金券分页列表
+     * @param paramMap
+     * @return
+     */
+    Page<Map> getCouponPageByParam(Map<String, Object> paramMap);
+
+    /**
+     * 获取商品类型列表
+     * @param paramMap
+     * @return
+     */
+    List<Map> getProductCateList(Map<String, Object> paramMap);
+}

@@ -1,0 +1,91 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.data.vo.CusOrderMgr.CusOrderReturnVo;
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.orderMgr.CusOrderReturnService;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:
+ * Created by 2017-02-21  11:36.
+ * author: Zhou mingxiang
+ */
+public class CusOrderReturnServiceImplTest extends SpringTest {
+
+
+    @Resource(name = "cusOrderReturnServiceImpl")
+    private CusOrderReturnService cusOrderReturnService;
+
+    /**
+     * 申请退货(APP)
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testApplyReturnGoods() throws Exception {
+        Long cusId = 1L;
+        String cusName = "系统管理员";
+        CusOrderReturnVo cusOrderReturnVo = new CusOrderReturnVo();
+        cusOrderReturnVo.setOrderDetailId(526216611443507200L);
+        cusOrderReturnVo.setNum(1);
+        cusOrderReturnVo.setPic("512861955946446848,512861347545874432");
+        cusOrderReturnVo.setReturnReason(1L);
+        cusOrderReturnVo.setReturnDesc("过期");
+        cusOrderReturnService.applyReturnGoods(cusId, cusName, cusOrderReturnVo);
+    }
+
+    /**
+     * 获取我的退货列表（分页）(APP)
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testFindReturnGoodsByPage() throws Exception {
+        Long cusId = 1L;
+        Integer status = 1;
+        Pageable pageable = new Pageable();
+        Page<Map> mapPage = cusOrderReturnService.findReturnGoodsByPage(cusId, status, pageable);
+        System.out.print("#############" + mapPage.getContent());
+    }
+
+    /**
+     * 获取退货单详情(APP)
+     * @throws Exception
+     */
+    @Test
+    public void testFindReturnGoodsDetail() throws Exception {
+        Map map = cusOrderReturnService.findReturnGoodsDetail(528021412393254912L);
+        System.out.print("#############" + map);
+    }
+
+    /**
+     * 获取退货单流程信息列表(APP)
+     * @throws Exception
+     */
+    @Test
+    public void testFindCusOrderReturnLogByList() throws Exception {
+        List<Map> map = cusOrderReturnService.findCusOrderReturnLogByList(528021412393254912L);
+        System.out.print("#############" + map);
+    }
+
+    /**
+     * 提交退货单快递单号(APP)
+     * @throws Exception
+     */
+    @Test
+    public void testSubmitReturnNum() throws Exception {
+        Long cusId = 1L;
+        String cusName = "系统管理员";
+        CusOrderReturnVo cusOrderReturnVo = new CusOrderReturnVo();
+        cusOrderReturnVo.setReturnId(528021412393254912L);
+        cusOrderReturnVo.setLogisticsType(1);
+        cusOrderReturnVo.setLogisticsCode("5281214123932549122");
+        cusOrderReturnService.submitReturnNum(cusId, cusName, cusOrderReturnVo);
+    }
+}

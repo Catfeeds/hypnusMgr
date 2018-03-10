@@ -1,0 +1,69 @@
+@charset "utf-8";
+/* CSS Document */
+html{width:100%;height:100%;overflow-x:hidden;}
+/*body{width:100%;overflow-x:hidden;}*/
+body{font-size:14px;font-family:'微软雅黑';padding:0;margin:0;background:#f3f3f3;}
+*{padding:0;margin:0;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+ul{margin:0px;padding:0;}
+li{list-style-type:none;}
+button{border:none;background:none;cursor:pointer;outline: none;font-family:'微软雅黑';star:expression(this.onFocus=this.blur());}
+select,input{font-family:'微软雅黑';}
+h1,h2,h3,h4,h5,h6,p{margin:0;display:block;font-weight:normal;}
+a{text-decoration:none; color:#ed7e25;cursor:pointer;}
+a:hover{color:#32a6c8;}
+a:active{star:expression(this.onFocus=this.blur());}
+img{border:none;}
+u{text-decoration:none;}
+form {margin: 0;}
+textarea {display: block;resize:none;font-family:'微软雅黑';letter-spacing:1px;padding:10px;}
+input{font-family:'微软雅黑';letter-spacing:1px;height:35px;padding-left:10px;padding-right:10px;border:1px solid #e9e9e9;font-size:25px;}
+
+
+
+/*-------头部-------*/
+.top{background:#f7f7f7; clear:both;z-index:100;text-align:center; border-bottom:1px solid #dadada;}
+.top_main{margin:0 auto; width:130px; overflow:hidden; padding-top:12px;}
+.top .logo{float:left; width:28px; height:28px;}
+.top h1{width:100%;font-size:20px;color:#202020;margin:0px auto; padding-top:12px;text-align:center;}
+.top-left{float:left;position:absolute;width:38px;height:38px;top:6px;left:0%;font-size:18px;color:#FFF; z-index:998;}
+.top-left img{width:26px; height:26px;}
+.top-left:hover{opacity:0.7;}
+.top-search{background:#ebeaeb; border-radius:2px; width:68%; height:36px; margin:5px 16%; z-index:2;}
+.top-search-left{float:left; width:30%;background:#ebeaeb; border-radius:6px; z-index:2; position:relative;}
+.top-search-left font{font-size:14px; color:#797979; line-height:36px;}
+.top-search-left .hidecontent{background:#ebeaeb; z-index:10; position:absolute; top:34px; left:0; width:100%;}
+.top-search-left .hidecontent li:hover{background:#f7f7f7; color:#646464;}
+.top-search-right{float:left; border-left:1px solid #c8c8ca; width:64%; height:26px; margin-top:6px; overflow:hidden;}
+.top-search-right img{float:left; margin-left:8px; margin-top:2px;}
+/*.top-search-right input{width:58%; height:30px; color:#797979; font-size:14px; background:#ebeaeb;float:left; margin-top:-4px;}
+.top-right{float:right;position:absolute;width:38px;height:38px;top:6px;right:5px;font-size:15px;color:#e93649;}
+.top-right img:hover{opacity:0.7;}*/
+.bannerbox{background:url(../images/banner.png) center no-repeat #edfdf9; width:100%; height:60px; margin-top:2px;}
+
+/*-------搜索条-------*/
+.searchbar{background:#e5e5e5; width:100%; padding:4px 0;}
+.searchbar .searchkuang{background:#fff; width:90%; height:40px; border-radius:7px; margin:0 5%; border:1px solid #ccc; overflow:hidden;}
+.searchbar .searchbarbt{width:20px;height:20px; margin-top:10px;margin-right:20px; float:right;}
+.searchbar input{width:60%;height:40px;font-size:16px; float:left; border:none; line-height:40px; margin-left:4px;}
+
+.navLeft li:hover{opacity:0.7;}
+
+
+
+/*-------弹出的黑色透明遮罩-------*/
+.zhezhao{display:none;position:absolute;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:900;}
+
+/*-------红色按钮-------*/
+.nextstepbtn{background:#e93649; color:#fff; font-size:16px; width:90%; margin:20px 5%; height:48px; border-radius:2px; letter-spacing:2px;}
+.nextstepbtn:hover{opacity:0.7}
+
+/*-------底部-------*/
+.bottom{background:#f7f7f7; height:50px;clear:both;bottom:0; margin-top:10px; z-index:100; position:fixed; width:100%; border-top:1px solid #e5e5e5;}
+.bottom table{width:100%;height:50px;border-spacing:0; padding:4px 0;}
+.bottom table th{width:20%;height:26px;}
+.bottom table th h2{font-size:12px; color:#1f1f1f;}
+.bottom table td{color:#aeaeb0;font-size:12px;text-align:center;}
+.bottom p{color:#787878; font-size:14px; line-height:50px; margin-left:5%; float:left;}
+.bottom span{color:#e93649; font-size:16px; line-height:50px; margin-left:4px; font-weight:bold; letter-spacing:1px;}
+.bottom .ruhuobtn{background:#e93649; color:#fff; width:100px; height:34px; margin-right:5%; float:right; border-radius:2px; margin-top:8px;}
+.bottom .ruhuobtn:hover{opacity:0.7;}

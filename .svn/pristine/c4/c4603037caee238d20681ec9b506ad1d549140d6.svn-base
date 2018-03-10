@@ -1,0 +1,26 @@
+package com.catt.wfx.service.basicConfig;
+
+
+import java.util.Map;
+
+/**
+ * 平台收益设置服务接口
+ * 
+ * @author chen chusheng
+ * @date 2017-02-06 14:09:15
+ * @version V1.0
+ */
+public interface PlatIncomeSetService{
+
+    /**
+     * 获取设置信息
+     * sets : 收益梯度
+     * type : 收益类型
+     */
+    Map getPlatIncomeMap();
+
+    /**
+     * 保存设置信息
+     */
+    void saveSet(Map<String, Object> param);
+}

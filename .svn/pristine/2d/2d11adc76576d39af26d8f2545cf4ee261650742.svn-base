@@ -1,0 +1,89 @@
+package com.catt.wfx.repository.dao.orderMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.form.orderMgr.CusOrderFrom;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单信息表Dao接口
+ *
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:34
+ * @version V1.0
+ */
+public interface CusOrderDao extends BaseDao<CusOrder, Long> {
+    /**
+     * 获取订单明细对应的订单信息（APP）
+     *
+     * @param orderDetailId   订单明细标识
+     * @return
+     */
+    List<Map> findCusOrderByOrderDelId(Long orderDetailId);
+
+    /**
+     * 获取订单列表（分页）（APP）
+     * @param cusId 用户标识
+     * @param shopkeeperId 店主标识
+     * @param orderStatus 订单状态数组
+     * @param pageable 分页参数   @return
+     * @param isApp false：微信商城查询我的订单时要过滤掉进货单  true：不过滤
+     */
+    Page<Map> findOrderPage4App(Long cusId, Long shopkeeperId, Integer[] orderStatus, Pageable pageable, Boolean isApp);
+
+    /**
+     * 获取订单信息列表
+     *
+     * @param cusOrderFrom 订单from
+     * @param pageable
+     * @return
+     */
+    Page<Map> getCusOrderByPage(CusOrderFrom cusOrderFrom, Pageable pageable);
+
+    /**
+     * 获取订单详情
+     *
+     * @param id  订单标识
+     * @return
+     */
+    Map getCusOrderDetail(Long id);
+
+    /**
+     * 查询需要将状态改成已完成的订单(已签收&&超过退货时间&&不是退货中)
+     * @return
+     */
+    List<Long> findNeedFinishOrder();
+
+    /**
+     * 更新订单状态
+     * @param orderIds 订单集合
+     * @param orderStatus 订单状态
+     */
+    void updateOrderStatus(List<Long> orderIds, CusOrder.OrderStatus orderStatus);
+
+    /**
+     * 获取用户购买订单数量和总额
+     * @param cusId
+     * @return
+     */
+    Map getOrderTotal(Long cusId);
+
+    /**
+     * 获取超时订单信息
+     *
+     * @param timeout
+     * @return
+     */
+    List<Map> findTimeOutOrder(int timeout);
+
+    /**
+     * 修改超时订单状态
+     *
+     * @param orderIds 订单标识
+     */
+    void updateTimeoutOrderStatus(List<Long> orderIds);
+}

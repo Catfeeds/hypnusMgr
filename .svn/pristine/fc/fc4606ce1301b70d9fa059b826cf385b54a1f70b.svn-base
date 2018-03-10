@@ -1,0 +1,28 @@
+package com.catt.wfx.service.wechatReturn;
+
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrder;
+
+import java.util.Map;
+
+/**
+ * Description:微信退款服务
+ * Created by 2017-03-01  14:14.
+ * author: Zhou mingxiang
+ */
+public interface WechatReturnService {
+    /**
+     * 微信退款
+     *
+     * @param param
+     * @param wechatReturnOrder
+     */
+    void returnMoney(Map<String, String> param, WechatReturnOrder wechatReturnOrder);
+
+    /**
+     * 微信退款查询
+     *
+     * @param oriParam
+     * @param wechatReturnOrder
+     */
+    void queryReturn(Map<String, String> oriParam, WechatReturnOrder wechatReturnOrder);
+}

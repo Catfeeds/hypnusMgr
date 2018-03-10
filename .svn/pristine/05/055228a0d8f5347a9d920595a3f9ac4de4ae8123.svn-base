@@ -1,0 +1,152 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, template, msgBox, util, pageBar) {
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    // 初始化数据列表
+                    EventHandler.search();
+                },
+
+
+                /** 初始化界面  */
+                initPage: function () {
+                    var params = {}; //搜索条件
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $("#extracts").click(function(){
+                        EventHandler.extracts();
+                    });
+
+                    $('#search').click(function () {
+                        EventHandler.search();
+                    });
+
+                    $('#reset').click(function () {
+                        EventHandler.reset();
+                    });
+
+                    //动态绑定click(动态生成的html)
+                    $("#dataList").on('click', '.xw_tick', templateList.check);
+                    $(".xw_tickAll").click(templateList.checkAll);
+
+                    // tab标签
+                    $(".xw_select").click(function () {
+                        $(".xw_select").removeClass("selectTabs_on");
+                        $(this).addClass("selectTabs_on");
+                        var data = $(this).attr("data-value");
+                        $("#status").val(data);
+                        EventHandler.search();
+                    });
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                // 查询
+                search: function (params) {
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: 15};
+                    }
+                    params.name = $("#name").val();
+                    params.status = $("#status").val();
+                    if(params.status == "待打款"){
+                        params.status = 1;
+                    }else if(params.status == "已完成"){
+                        params.status = 2;
+                    }else if(params.status == "打款失败"){
+                        params.status = 3;
+                    }
+                    params.startDate = $("#startDate").val();
+                    params.endDate = $("#endDate").val();
+
+                    DataHandler.search(params, function (backData) {
+                        var html = template('template_dataList', backData.content);
+                        $('#dataList').html(html);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+                        setParenHei();
+                    });
+                },
+                //重置
+                reset: function () {
+                    $("#name").val("");
+                    $("#status").val("");
+                    $("#startDate").val("");
+                    $("#endDate").val("");
+                },
+                //打款
+                extracts : function(){
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length == 0) {
+                        msgBox.tips("请选择需要打款的用户");
+                        return;
+                    }else if(checked.length > 1){
+                        msgBox.tips("一次只能为一位用户打款");
+                        return;
+                    }
+                    if(checked[0].status != 1){
+                        msgBox.tips("只有待打款状态才可以进行打款");
+                        return;
+                    }
+                    msgBox.exWindow.open({
+                        title: '打款',
+                        url: path + "/admin/extractOrder/extract/" + checked[0].id,
+                        width: '600px',
+                        height: '370px',
+                        close: function (result) {
+                            if (result) {
+                                EventHandler.search();
+                            }
+                        }
+                    });
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/extractOrder/getPage', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

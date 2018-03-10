@@ -1,0 +1,111 @@
+package com.catt.wfx.repository.dao.settlementMgr;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.data.comEnum.DateDimension;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单结算统计Dao接口
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-02-16 10:10:19
+ */
+public interface SettlementOrderDetailDao extends BaseDao<SettlementOrderDetail, Long> {
+    /**
+     * 获取店主带到账金额(APP)
+     *
+     * @param cusId 店主标识
+     * @return
+     */
+    List<Map> findUnsettleMoney(Long cusId);
+
+    /**
+     * 获取主管团队销售金额
+     *
+     * @param cusId 主管标识
+     * @return
+     */
+    Double getTeamSaleMoney(Long cusId);
+
+    /**
+     * 获取主管团队销售订单数
+     *
+     * @param cusId 主管标识
+     * @return
+     */
+    Integer getTeamOrderNum(Long cusId);
+
+
+    /**
+     * 更新订单状态
+     *
+     * @param orderIds    订单集合
+     * @param orderStatus 订单状态
+     */
+    void updateOrderStatus(List<Long> orderIds, CusOrder.OrderStatus orderStatus);
+
+    /**
+     * 获取店主销售订单和销售金额
+     *
+     * @param cusIds 店主标识集合
+     * @return
+     */
+    List<Map> getShopOwnerOrderNumAndMoney(List<Long> cusIds);
+
+    /**
+     * 获取主管销售订单和销售金额
+     *
+     * @param cusIds 主管标识集合
+     * @return
+     */
+    List<Map> getDirectorOrderNumAndMoney(List<Long> cusIds);
+
+    /**
+     * 获取统计时间范围内的订单金额与订单数量
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @param isAgent true:只统计代理商订单 false:统计所有订单
+     * @return
+     */
+    Map getAmountNum(Date startCreateDate, Date endCreateDate, boolean isAgent);
+
+    /**
+     * 订单金额统计
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @param type            统计周期
+     * @param isAgent       true:只统计代理商订单 false:统计所有订单
+     * @return
+     */
+    List<Map> amountStat(Date startCreateDate, Date endCreateDate, DateDimension type, boolean isAgent);
+
+    /**
+     * 查询平台提成月份明细列表
+     *
+     * @param platDetailId  平台结算明细标识
+     * @param pageable 分页参数
+     * @return
+     */
+    Page<Map> findPageByPlatDetailId(Long platDetailId, Pageable pageable);
+
+    /**
+     * 统计在线支付、余额支付金额
+     * @return
+     * @param startCreateDate
+     * @param endCreateDate
+     */
+    List<Map> getAmountGroupByPayType(Date startCreateDate, Date endCreateDate);
+
+
+}

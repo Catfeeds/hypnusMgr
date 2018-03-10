@@ -1,0 +1,102 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>订单详情</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/dingdanxiangqing.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/admin/wechat/order/order.css"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/order/detail.js"></script>
+</head>
+
+<body class="xw_big">
+<input type="hidden" name="id" id="id" value="${fn:escapeXml(param.id)}"/>
+
+<div class="dingdantop">
+    <p id="status"></p>
+    <img class="ZTpic" style="top: 25px" src="${path}/resources/images/ic_indent_fahuo.png">
+</div>
+
+<div style="border-bottom:10px solid #f5f5f5;">
+    <div class="kuaidi">
+        <div class="weui-col-90">
+            <p id="express" style="margin-top: 25px; line-height: 20px; width: 90%"></p>
+        </div>
+        <img class="arrow" src="${path}/resources/images/login_btn_next.png">
+    </div>
+    <div class="xiangqingTop">
+        <p class="biaoti">收&nbsp;货&nbsp;人:&nbsp;&nbsp;<span class="neirong" id="receive"></span></p>
+        <p class="dizhi" id="addr"></p>
+    </div>
+</div>
+<div id="productList"></div>
+
+<div class="selectContent" style=" padding-bottom:50px;">
+    <div class="tongjibiao">
+        <ul style="padding:10px 0px;">
+            <li class="tongjibiaoItem">
+                <h1>订单编号</h1>
+                <h2 id="num"></h2>
+            </li>
+            <li class="tongjibiaoItem">
+                <h1>下单时间</h1>
+                <h2 id="time"></h2>
+            </li>
+            <li class="tongjibiaoItem">
+                <h1>商品费用</h1>
+                <h2 id="price"></h2>
+            </li>
+            <li class="tongjibiaoItem">
+                <h1>优惠金额</h1>
+                <h2 id="discount"></h2>
+            </li>
+            <li class="tongjibiaoItem">
+                <h1>代金券抵扣</h1>
+                <h2 id="voucher"></h2>
+            </li>
+            <li class="tongjibiaoItem">
+                <h1>运费</h1>
+                <h2 id="freight"></h2>
+            </li>
+            <li class="tongjibiaoItem1">
+                <h1>订单总价</h1>
+                <h2 id="totalPay"></h2>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="bottom-card"></div>
+
+<script type="text/html" id="listTemp">
+    {{each}}
+    <div class="white-card-border">
+        <div class="weui-row weui-no-gutter">
+            <div class="weui-col-33" style="text-align: center">
+                <img style="max-width:60px;width: auto;height: 60px;"
+                     src="{{$value.headPath}}">
+                <%--src="${path}/resources/images/gouwuche_pic.png">--%>
+            </div>
+            <div class="weui-col-66">
+                <p style="color: #3a3a3a;font-size: 13px">{{$value.productName}}</p>
+                <p style="color: #747474;margin: 10px 0px 10px 0px">规格：{{$value.specDesc}}</p>
+                <p style="color: #747474;"><strong>￥{{$value.salesPrice}}</strong>&nbsp;&nbsp;x{{$value.num}}</p>
+            </div>
+        </div>
+        {{if $value.canReturn==1}}
+        <div style="text-align: right;margin-top: 10px">
+            <a class="list-btn refund"
+               onclick="window.location.href=
+                       '${path}/admin/wechat/returnInfo/applyRetrunGoods.html?id={{$value.id}}&shopId=${shopId}'">退款</a>
+        </div>
+        {{/if}}
+    </div>
+    {{/each}}
+</script>
+
+</body>
+</html>

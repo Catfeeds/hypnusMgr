@@ -1,0 +1,43 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: xiazanyi
+  Date: 2017/3/8
+  Time: 下午3:01
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>修改昵称</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/denglu.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/zhucexinxi.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <!--手机观看保持比例-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/personal/modifyName.js"></script>
+</head>
+
+<body>
+<input type="hidden" value="${name}" id="oName"/>
+<form id="myForm" method="post" onsubmit="return false" action="${path}/admin/wechat/personal/modifyNameApi">
+<div class="loginList">
+    <div class="loginItem">
+        <span class="itemTitle09">昵称:</span>
+        <div class="inputBox">
+            <input name="name" id="name" class="loginInput2" style="width: 100%" placeholder="请输入新的昵称" value="${name}">
+        </div>
+    </div>
+
+
+</div>
+<div style="height:40px;"></div>
+<div class="bottomBtnBox">
+    <button type="submit" id="submit">保&nbsp;存</button>
+</div>
+</form>
+</body>
+</html>
+
+

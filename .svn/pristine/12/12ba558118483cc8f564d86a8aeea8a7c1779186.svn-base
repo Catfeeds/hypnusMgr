@@ -1,0 +1,45 @@
+package com.catt.wfx.repository.dao.settlementMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementShopRule;
+import com.catt.wfx.repository.form.productMgr.RuleForm;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 店主/主管规则Dao接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017-02-09 10:30:50
+ */
+public interface SettlementShopRuleDao extends BaseDao<SettlementShopRule, Long> {
+
+    /**
+     * 获取规则列表
+     *
+     * @param form
+     * @param pageable
+     * @return
+     */
+    Page<Map> getRulePage(RuleForm form, Pageable pageable);
+
+    /**
+     * 检查规则时间是否合法
+     *
+     * @param rule
+     * @return
+     */
+    boolean checkRule(SettlementShopRule rule);
+
+    /**
+     * 获取店主补贴规则信息
+     *
+     * @param type 规则类型
+     * @return
+     */
+    List<Map> findShopRule(Integer type);
+}

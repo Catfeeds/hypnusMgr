@@ -1,0 +1,222 @@
+.toolbar {
+  float:left;
+  background-color: #bce7f5;
+  width: 100%;
+  white-space: nowrap;
+  background: url(images/menu_center.gif) repeat-x 0 0 #bce7f5;
+  height:26px;
+  position: relative;
+}
+.toolbar_border{
+  border-left: 1px solid #429abc;
+  border-right: 1px solid #429abc;
+}
+.toolbar td {
+  vertical-align: middle;
+}
+
+.toolbar .spacer {
+  height: 12px;
+  font-size: 1px;
+  border-left: solid 1px #57bddf;
+  border-right: solid 1px #d0eef7;
+  display: block;
+  margin:4px 2px 0 2px;
+  padding: 0;
+}
+
+.toolbar .textfield {
+  padding: 2px 3px 1px 3px;
+  background: #FFFFFF url(../text-bg.gif) repeat-x 0 0;
+  border: 1px solid #B5B8C8;
+  width: 140px;
+}
+
+.toolbar .b_left,.b_right,.b_center {
+  cursor: pointer;
+}
+
+.toolbar .b_left {
+  width: 3px;
+}
+
+.toolbar .b_right {
+  width: 3px;
+}
+
+.toolbar .b_center {
+	
+}
+
+.toolbar .over .b_left {
+  background: url(images/tb_border.gif) no-repeat 1 0;
+  width: 3px;
+}
+
+.toolbar .over .b_right {
+  background: url(images/tb_border.gif) no-repeat 0 -21px;
+  width: 3px;
+}
+
+.toolbar .over .b_center {
+  background: url(images/tb_border.gif) repeat-x 0 -42px;
+
+}
+
+.toolbar .b_center button {
+  border: 0 none;
+  background: transparent;
+  height: 21px;
+  font: normal 12px tahoma, verdana, helvetica;
+  padding: 0 3px;
+  cursor: pointer;
+  margin: 0;
+  overflow: visible;
+  width: auto;
+  min-width: 20px;
+  -moz-outline: 0 none;
+  outline: 0 none;
+  *width:20px; /* Hack for IE6&7 */
+}
+
+.toolbar .down .b_left {
+  background: url(images/tb_border.gif) no-repeat 0 -63px;
+}
+
+.toolbar .down .b_right {
+  background: url(images/tb_border.gif) no-repeat 0 -84px;
+}
+
+.toolbar .down .b_center {
+  background: url(images/tb_border.gif) repeat-x 0 -105px;
+}
+
+.toolbar .filterTable {
+	position: absolute;
+	right:2px;
+	top:2px;
+}
+
+.toolbar .filter-spacer {
+  height: 21px;
+  font-size: 1px;
+  border-left: solid 1px #84A4CE;
+  border-right: solid 1px white;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.toolbar .border-center-active {
+	background: url(../Toolbar/filter-down-bg.gif) repeat-x 0 0 !important;
+}
+
+.toolbar .border-left-active {
+  background: url(../Toolbar/filter-down-border.gif) no-repeat 0 0 !important;
+}
+
+.toolbar .border-right-active {
+  background: url(../Toolbar/filter-down-border.gif) no-repeat 0 -21px !important;
+}
+
+.az {
+	display: none;
+	height: 26px;
+	line-height: 26px;
+	width: 100%;
+	background: url(../Toolbar/bg.gif) repeat-x;
+	background-color: #D6E3F3;
+	position: absolute;
+	left: 0;
+	z-index: 2;
+}
+
+.az table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.az table tr td {
+  text-align: center;
+  font-size: 11px;
+  padding:0;
+  margin:0;
+	color: #444444;
+	cursor: pointer;
+}
+.az table tr td.tdover {
+  font-weight: bold;
+  color: #23508E;
+}
+.az table tr td.tdovered {
+  font-weight: bold;
+  color: red;
+}
+
+.az-fix {
+	position: absolute;
+	display: none;
+	z-index: 3;
+}
+
+.az-fix td {
+	font-size: 1px;
+	height: 6px;
+}
+
+.az-fix .left {
+	width: 4px;
+	background: url(../Toolbar/fix_border.gif) no-repeat 0 0;
+}
+
+.az-fix .right {
+	width: 4px;
+	background: url(../Toolbar/fix_border.gif) no-repeat -5px 0;
+}
+
+.az-fix .center {
+	background: url(../Toolbar/fix_bg.gif) repeat-x;
+}
+
+.az-fix-2 {
+	position: absolute;
+	display: none;
+	z-index: 3;
+}
+
+.az-fix-2 td {
+	font-size: 1px;
+	height: 5px;
+}
+
+.az-fix-2 .left {
+	width: 4px;
+	background: url(../Toolbar/fix_border_2.gif) no-repeat 0 0;
+}
+
+.az-fix-2 .right {
+	width: 4px;
+	background: url(../Toolbar/fix_border_2.gif) no-repeat -5px 0;
+}
+
+.az-fix-2 .center {
+	background: url(../Toolbar/fix_bg_2.gif) repeat-x;
+}
+/*--�¼ӵ���ʽ--------------*/
+*{ padding:0; margin:0;}
+div.toolbar{ border-bottom:#429abc 1px solid;}
+.theFirsttable{height:26px;overflow:hidden;}
+/*position:absolute; */
+.Tooleftarrow{left:2px; top:5px; float:left; width:16px; height:16px; margin-top:5px;}
+.Tooleftarrow a{float:left; width:16px; height:16px; background:url(../Toolbar/tool_leftarrow.gif) no-repeat center center;cursor:pointer;}
+
+.Toorightarrow{right:2px; top:5px;  float:right; width:16px; height:16px; margin-top:5px;}
+.Toorightarrow a{float:left; width:16px; height:16px; background:url(../Toolbar/tool_rightarrow.gif) no-repeat center center;cursor:pointer;}
+
+ul.newul{height:24px; overflow:hidden; float:left; padding-top:3px; list-style:none;}
+ul.newul li{ float:left;}
+ul.newul li span.spacer{ float:left;}
+ul.newul li .b_left{display:block;}
+
+.toolbarTable{width:100%;border:0px;padding:0px;margin-top:-3px;}
+.toolbarTable tbody{padding:0px;}

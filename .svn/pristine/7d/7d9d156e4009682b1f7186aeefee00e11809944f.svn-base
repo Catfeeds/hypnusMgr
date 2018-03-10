@@ -1,0 +1,30 @@
+package com.catt.wfx.service.customerMgr;
+
+
+import java.util.Map;
+
+/**
+ * 代理商申请表服务接口
+ * 
+ * @author chen chusheng
+ * @date 2017-06-14 10:32:50
+ * @version V1.0
+ */
+public interface AgentInfoService {
+
+    /**
+     * 获取供应商申请信息
+     * 没有记录，则返回 status=10(未提交)
+     * @param userId
+     * @return
+     */
+    Map<String, Object> getAgentInfo(Long userId);
+
+    /**
+     * 提交代理商申请
+     * @param userId
+     * @param param
+     */
+    void appLyAgent(Long userId, Map<String, Object> param);
+
+}

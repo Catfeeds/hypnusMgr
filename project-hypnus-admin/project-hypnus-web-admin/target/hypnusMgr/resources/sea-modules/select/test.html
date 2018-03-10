@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../demo.css"/>
+    <script type="text/javascript" src="../../resources/sea-modules/jquery/1.11.2/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="../../resources/sea-modules/seajs/sea.js"></script>
+    <script type="text/javascript" src="../../resources/sea-modules/seajs/seajs-preload.js"></script>
+    <script type="text/javascript" src="../../resources/sea-modules/seajs/init.js"></script>
+    <script type="text/javascript">
+        seajs.use(['$', 'select'], function ($) {
+            $('#cc').select({
+                valueField: 'label',
+                textField: 'value',
+//                isShowQuery: true,
+                data: [{label: 'java', value: 'Java'}, {label: 'perl', value: 'Perl'}, {label: 'ruby', value: 'Ruby'}]
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="searchBar" style="position: relative; z-index: 2;">
+    <span class="spanName">test：</span>
+    <input id="cc" value="1">
+</div>
+</body>
+</html>

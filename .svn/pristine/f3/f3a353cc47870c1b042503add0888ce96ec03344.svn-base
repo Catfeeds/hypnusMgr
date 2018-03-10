@@ -1,0 +1,21 @@
+package com.catt.wfx.service.impl.wechatReturn;
+
+import com.catt.common.module.pay.data.config.AbstractAccountConfig;
+import com.catt.wfx.service.impl.wechatReturn.event.ToReturnEvent;
+
+/**
+ * 支付服务接口
+ * 
+ * @author 纪建宏
+ * @version V1.0
+ */
+public interface ReturnService<T extends AbstractAccountConfig> {
+	/**
+	 * 获取商户配置
+	 * 
+	 * @param toReturnEvent
+	 *            退款事件
+	 * @return
+	 */
+	T getAccountConfig(ToReturnEvent toReturnEvent);
+}

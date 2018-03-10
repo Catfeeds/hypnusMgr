@@ -1,0 +1,146 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+    <display-name>wfx_web_admin</display-name>
+    <description>wfx_web_admin</description>
+
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>wfx_web_adminapp.root</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath*:/applicationContext.xml,
+            classpath*:/applicationContext-project.xml
+        </param-value>
+    </context-param>
+
+    <!--<filter>-->
+        <!--<filter-name>xssFilter</filter-name>-->
+        <!--<filter-class>com.catt.common.web.filter.XssFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>xssFilter</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
+    <filter>
+        <filter-name>MDCInsertingServletFilter</filter-name>
+        <filter-class>ch.qos.logback.classic.helpers.MDCInsertingServletFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>MDCInsertingServletFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>setWebThreadLocalFilter</filter-name>
+        <filter-class>com.catt.common.web.filter.SetWebThreadLocalFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>setWebThreadLocalFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 编码过滤器 -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+
+    <!-- 资源访问过滤器 -->
+    <filter>
+        <filter-name>accessDeniedFilter</filter-name>
+        <filter-class>com.catt.common.web.filter.AccessDeniedFilter</filter-class>
+    </filter>
+
+    <!-- shiro过滤器 -->
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>accessDeniedFilter</filter-name>
+        <url-pattern>*.properties</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>accessDeniedFilter</filter-name>
+        <url-pattern>*.conf</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 防止因springmvc导致静态资源无法访问 -->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/resources/*</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- spring mvc -->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath*:/web/applicationContext-mvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- TODO 防止发生java.beans.Introspector内存泄露,应将它配置在ContextLoaderListener的前面 -->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+
+    <!-- session超时 16小时 -->
+    <session-config>
+        <session-timeout>960</session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>/index</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/common/resourceNotFound.html</location>
+    </error-page>
+
+</web-app>

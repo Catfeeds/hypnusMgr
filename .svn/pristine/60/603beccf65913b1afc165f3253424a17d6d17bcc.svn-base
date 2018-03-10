@@ -1,0 +1,42 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.common.module.pay.service.event.PaySuccessEvent;
+import com.catt.common.module.pay.service.event.ToPayEvent;
+import com.catt.common.util.crypto.RSAUtils;
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.security.PublicKey;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Description:
+ * Created by 2017-02-15
+ * author: yuanxingcheng
+ */
+public class CusOrderPayHandlerTest extends SpringTest{
+
+    //订单支付服务
+    @Resource
+    private CusOrderPayHandler cusOrderPayHandler;
+
+    /**
+     * 订单支付测试
+     * @throws Exception
+     */
+    @Test
+    public void testPay() throws Exception {
+        Map<String, String> param = new HashMap<>();
+        param.put("orderId", "525921052782493696");
+        param.put("payerId", "1");
+
+        ToPayEvent toPayEvent = cusOrderPayHandler.initPayRequestParam(param);
+        toPayEvent.setOrderNo(null);
+        cusOrderPayHandler.paySuccess(new PaySuccessEvent(toPayEvent, new Date()));
+    }
+
+}

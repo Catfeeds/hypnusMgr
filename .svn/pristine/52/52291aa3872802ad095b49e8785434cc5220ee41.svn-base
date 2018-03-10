@@ -1,0 +1,51 @@
+package com.catt.wfx.web.controller.admin.wechat.setting;
+
+import com.catt.common.web.controller.BaseController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+/**
+ * Created by JiJianhong on 2017/3/8.
+ */
+@RequestMapping({"/admin/wechat/setting"})
+@Controller("settingController")
+public class SettingController extends BaseController {
+
+    /**
+     * 设置信息界面
+     *
+     * @return
+     */
+    @RequestMapping(value = {"/index.html"}, method = RequestMethod.GET)
+    public String toIndex(Long shopId, Model model) {
+        model.addAttribute("shopId", shopId);
+        return "/admin/wechat/setting/index";
+    }
+
+    /**
+     * 设置信息界面
+     *
+     * @return
+     */
+    @RequestMapping(value = {"/aboutus.html"}, method = RequestMethod.GET)
+    public String toAboutus(Long shopId, Model model) {
+        model.addAttribute("shopId", shopId);
+        return "/admin/wechat/setting/aboutus";
+    }
+
+    /**
+     * 设置信息界面
+     *
+     * @return
+     */
+    @RequestMapping(value = {"/termService.html"}, method = RequestMethod.GET)
+    public String toTermService(Long shopId, Model model) {
+        model.addAttribute("shopId", shopId);
+        return "/admin/wechat/setting/termService";
+    }
+
+}
+
+

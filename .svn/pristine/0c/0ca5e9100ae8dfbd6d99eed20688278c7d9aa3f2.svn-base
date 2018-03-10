@@ -1,0 +1,82 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/*注册页面*/
+.login_bg_line{position:fixed; left:0; right:0; top:20px; width:100%;}
+.loginLogo{width:100%;}
+.loginLogo img{width:120px; height:120px; margin:0 auto; display:block; padding-top:30%;} 
+.loginBottom{position:fixed; bottom:30px; left:0; right:0; padding:40px; padding:0 20px; z-index:99;}
+.loginLine{background:url(../images/login_img_line.png) no-repeat center; padding-top:40px;}
+.bottomText{text-align:center; font-size:15px; color:#f13d2e;}
+.login_img_line{width:180px; margin:0 auto;}
+.loginBtn button{font-size:18px; border-radius:6px; width:48%; height:50px;}
+.zhuceBtn{background:#fff; border:1px solid #f13d2e; color:#f13d2e;float:left;}
+.zhuceBtn:hover{opacity:0.8;}
+.dengluBtn{background:#f13d2e; border:1px solid #f13d2e; color:#fff; float:right;}
+.dengluBtn:hover{background:#e13425;}
+
+/*注册列表填写*/
+.loginList{padding:0px 20px; background:#fff; }
+.loginTip{font-size:14px; color:#f13d2e;}
+.loginItem{overflow:hidden;} 
+.loginItem01{overflow:hidden; padding:5px 0px 15px 0px;}
+.itemTitle01{float:left; font-size:18px; color:#323232; width:72px; line-height:50px;}
+.itemTitle02{float:left; font-size:16px; color:#323232; width:80px; line-height:50px; letter-spacing:1px;}
+.itemTitle03{float:left; font-size:16px; color:#323232; width:80px; line-height:50px;}
+.itemTitle04{float:left; font-size:18px; color:#323232; width:80px; line-height:50px;}
+.itemTitle05{float:left; font-size:16px; color:#323232; width:100px; line-height:50px; letter-spacing:1px;}
+.itemTitle06{float:left; font-size:16px; color:#323232; width:60px; line-height:50px; letter-spacing:1px;}
+.itemTitle07{float:left; font-size:16px; color:#323232; width:120px; line-height:50px; letter-spacing:1px;}
+.itemTitle08{float:left; font-size:16px; color:#323232; width:110px; line-height:50px; }
+.itemTitle09{float:left; font-size:16px; color:#323232; width:50px; line-height:50px; letter-spacing:1px;}
+.inputBox{border-bottom:1px solid #ccc; overflow:hidden; position:relative;}
+.inputBox1{float:left; font-size:14px; color:#646464; width:60%; line-height:50px;}
+.loginInput{float:left; font-size:14px; color:#646464; width:58%; line-height:50px;}
+.loginInput1{float:left; font-size:14px; color:#646464; width:33%; line-height:50px;}
+.loginInput2{float:left; font-size:14px; color:#646464; width:85%; line-height:50px;}
+
+.scanIcon{width:24px; position:absolute; right:0px; top:12px;}
+.nextIcon{width:14px; position:absolute; right:0px; top:18px;}
+.nextBtn{background:#f13d2e; color:#fff; width:100%; height:50px; border-radius:6px; font-size:18px;}
+.nextBtn02{background:#f13d2e;color:#fff; width:90%; height:50px; border-radius:6px; font-size:18px; margin:20px 5%;}
+.nextBtn:hover{background:#e13425; cursor:pointer;}
+.nextBtn02:hover{background:#e13425;}
+.yanzhengma{background:#f13d2e; color:#fff; font-size:14px; position:absolute; top:12px; right:0; border-radius:4px; height:28px; line-height:28px; text-align:center; letter-spacing:1px; width:90px;}
+.yanzhengma:hover{background:#e13425; cursor:pointer;}
+.selectItem{float:left; margin-right:20px; margin-left:10px; overflow:hidden;}
+.imgselect{width:22px; float:left; margin-top:16px;} 
+.selectText{font-size:18px; color:#646464; float:left; line-height:50px; margin-left:6px;}
+
+.listTop2{overflow:hidden; border-bottom:1px solid #e5e5e5; background:#fff; margin-top:10px;
+border-top:10px solid #f2f2f2;}
+
+
+.inputBox p{ float:right; font-size:14px; color:#ff4d4d; line-height:40px; text-align:right; padding:0px 5px; border:1px solid #ff4d4d; border-radius:5px; margin-top:4px}
+.tianxieInput{float:left; font-size:16px; color:#646464; width:100%; line-height:50px;}
+.biaoti{background:#f5f5f5; height:40px; line-height:40px; padding:0px 20px;}
+
+.beizhu{ font-size:12px; color:#666; padding-left:80px;}
+.beizhu1{ font-size:12px; color:#666; float:right;}
+
+.pic{ width:100%;}
+
+/*勾选*/
+a.checkbox{ width:16px; height:16px; display:block; cursor:pointer;/*background:url(../images/check.png) no-repeat center center;*/ border:1px solid #ff4d4d; border-radius:30px; position:absolute; top:20px; left:20px;}
+a.checkbox02{position:absolute; left:20px; top:404px;}
+
+a.checkbox03 {
+    left: 20px;
+    position: absolute;
+    top: 337px;
+}
+a.checkboxAll{position:absolute;  left:20px;}
+/*.checkbox:hover{background:url(../images/zhifu_img_selected1.png) no-repeat center center; border:1px solid #ea3c34;}*/
+a.checked{background:url(../images/zhifu_img_selected1.png) no-repeat center center; border:1px solid #ea3c34;}
+.tickAll{ padding-left:35px; color:#323232; font-size:15px; position:relative; float:left; height:50px; line-height:50px;}
+
+.xieyi{ float:left; font-size:14px; color:#808080;  line-height:50px; padding-left:30px;}
+
+
+
+

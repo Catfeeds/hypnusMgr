@@ -1,0 +1,95 @@
+package com.catt.wfx.service.impl.settlementMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementBusinessDao;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementShopDetailDao;
+import com.catt.wfx.repository.entity.couponMgr.CouponInfo;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+import com.catt.wfx.service.base.couponMgr.CouponInfoBaseService;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import com.catt.wfx.service.settlementMgr.SettlementBusinessService;
+import com.catt.wfx.service.settlementMgr.SettlementShopDetailService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商家账户信息服务接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/2/10
+ */
+@Service("settlementBusinessServiceImpl")
+public class SettlementBusinessServiceImpl implements SettlementBusinessService {
+
+    @Resource(name = "settlementBusinessDaoImpl")
+    private SettlementBusinessDao settlementBusinessDao;
+
+    @Resource(name = "cusOrderServiceImpl")
+    private CusOrderService cusOrderService;
+
+    public List<Map> statisticsOfOrder(Long factoryId, String factoryName) {
+        return settlementBusinessDao.statisticsOfOrder(factoryId, factoryName);
+    }
+
+    public List<Map> statisticsOfOrderDetail(String[] factoryId, String factoryName, Date startDate, Date endDate) {
+
+        List<Map> list = settlementBusinessDao.statisticsOfOrderDetail(factoryId, factoryName, startDate, endDate);
+        if (CollectionUtil.isNotEmpty(list)) {
+            List<Long> orderIds = new ArrayList<Long>();
+            for (Map map : list) {
+                orderIds.add(MapUtil.getLong(map, "id"));
+            }
+            //查询订单对应的明细信息
+            if (CollectionUtil.isNotEmpty(orderIds)) {
+                List<Map> orderDetailList = cusOrderService.findOrderDetail(orderIds);
+                if (CollectionUtil.isNotEmpty(orderDetailList)) {
+
+                    for (Map map : list) {
+                        Long id = MapUtil.getLong(map, "id");
+                        Integer payType=MapUtil.getInteger(map,"payType");
+                        StringBuffer product = new StringBuffer();
+                        for (Map map1 : orderDetailList) {
+                            Long orderId = MapUtil.getLong(map1, "orderId");
+                            if (id.equals(orderId)) {
+                                String productName = MapUtil.getString(map1, "productName");
+                                Integer num = MapUtil.getInteger(map1, "num");
+                                if (StringUtil.checkStr(productName) && num != null) {
+                                    String pruductAndNum = productName + "(" + num + ")";
+                                    if (product.length() != 0) {
+                                        product.append(",");
+                                    }
+                                    product.append(pruductAndNum); //商品字段格式：商品名称（个数），...
+                                }
+
+
+                            }
+                        }
+                        map.put("product", product.toString());
+                        map.put("payTypeName", SettlementOrderDetail.PayType.getEnum(payType).getName());
+                    }
+
+                }
+            }
+
+            return list;
+        }
+
+        return null;
+    }
+
+}

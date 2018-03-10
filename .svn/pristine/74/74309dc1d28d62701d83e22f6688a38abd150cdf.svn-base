@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd"
+       default-lazy-init="true">
+    <bean id="parentRmiProxyFactoryBean" class="org.springframework.remoting.rmi.RmiProxyFactoryBean" abstract="true">
+        <property name="lookupStubOnStartup" value="false"/>
+        <property name="refreshStubOnConnectFailure" value="true"/>
+    </bean>
+
+    <!--组织架构-->
+    <bean id="staffServiceImpl" name="staffServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/staffServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.StaffService"/>
+    </bean>
+
+    <bean id="deptServiceImpl" name="deptServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/deptServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.DeptService"/>
+    </bean>
+
+    <bean  id="domainServiceImpl" name="domainServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/domainServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.DomainService"/>
+    </bean>
+
+    <bean id="moduleServiceImpl" name="moduleServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/moduleServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.ModuleService"/>
+    </bean>
+
+    <bean id="rightServiceImpl" name="rightServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/rightServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.RightService"/>
+    </bean>
+
+    <bean id="roleServiceImpl" name="roleServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/roleServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.RoleService"/>
+    </bean>
+
+    <bean id="rsaServiceImpl" name="rsaServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/rsaServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.base.service.security.RSAService"/>
+    </bean>
+
+    <!--枚举-->
+    <bean id="enumMgrServiceImpl" name="enumMgrServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/enumMgrServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.enumMgr.service.EnumMgrService"/>
+    </bean>
+
+    <bean id="enumModuleMgrServiceImpl" name="enumModuleMgrServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/enumModuleMgrServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.enumMgr.service.EnumModuleMgrService"/>
+    </bean>
+
+    <!-- 地址信息 -->
+    <bean id="countryServiceImpl" name="countryServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/countryServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.CountryService"/>
+    </bean>
+
+    <bean id="areaServiceImpl" name="areaServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/areaServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.AreaService"/>
+    </bean>
+
+    <bean id="provinceServiceImpl" name="provinceServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/provinceServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.ProvinceService"/>
+    </bean>
+
+    <bean id="cityServiceImpl" name="cityServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cityServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.CityService"/>
+    </bean>
+
+    <bean id="countyServiceImpl" name="countyServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/countyServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.CountyService"/>
+    </bean>
+
+    <!--异常-->
+    <bean id="exceptionInfoCfgServiceImpl" name="exceptionInfoCfgServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/exceptionInfoCfgServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.exception.service.ExceptionInfoCfgService"/>
+    </bean>
+
+    <!--附件模块-->
+    <bean id="attachmentServiceImpl" name="attachmentServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/attachmentServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.attachment.service.AttachmentService"/>
+    </bean>
+
+    <!--附件模块-->
+    <bean id="attachmentBaseServiceImpl" name="attachmentBaseServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/attachmentBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.attachment.service.AttachmentBaseService"/>
+    </bean>
+
+    <!--短信发送 -->
+    <bean id="commonModuleSmsServiceImpl" name="commonModuleSmsServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/commonModuleSmsServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.sms.service.SmsService"/>
+    </bean>
+
+	<!--系统登录日志 -->
+    <bean id="logLoginServiceImpl" name="logLoginServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/logLoginServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.LogLoginService"/>
+    </bean>
+    
+    <!-- 京东网关支付服务 -->
+    <bean id="jdGatewayPayServiceImpl" name="jdGatewayPayServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/jdGatewayPayServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.pay.service.jdPay.JdGatewayPayService"/>
+    </bean>
+
+    <!--短信日志服务 -->
+    <bean id="commonModuleSmsLogServiceImpl" name="commonModuleSmsLogServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/commonModuleSmsLogServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.sms.service.LogService"/>
+    </bean>
+
+    <!--支付模块-->
+    <bean id="wechatAppPayServiceImpl" name="wechatAppPayServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/wechatAppPayServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.pay.service.weChatPay.WechatAppPayService"/>
+    </bean>
+    <bean id="wechatNavtivePayServiceImpl" name="wechatNavtivePayServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/wechatNavtivePayServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.pay.service.weChatPay.WechatNavtivePayService"/>
+    </bean>
+    <bean id="wechatMicroPayServiceImpl" name="wechatMicroPayServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/wechatMicroPayServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.pay.service.weChatPay.WechatMicroPayService"/>
+    </bean>
+    <bean id="wechatHFivePayServiceImpl" name="wechatHFivePayServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/wechatHFivePayServiceImpl" />
+        <property name="serviceInterface" value="com.catt.common.module.pay.service.weChatPay.WechatHFivePayService" />
+    </bean>
+
+    <!--快递接口-->
+    <bean id="expressServiceImpl" name="expressServiceImpl" parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/expressServiceImpl" />
+        <property name="serviceInterface" value="com.catt.common.module.express.service.ExpressService"/>
+    </bean>
+</beans>

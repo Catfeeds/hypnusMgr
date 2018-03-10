@@ -1,0 +1,12 @@
+package com.catt.wfx.repository.dao.basicConfig.impl;
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.wfx.repository.dao.basicConfig.RefundsSetDao;
+import com.catt.wfx.repository.entity.basicConfig.RefundsSet;
+import org.springframework.stereotype.Repository;
+
+@Repository("refundsSetDaoImpl")
+public class RefundsSetDaoImpl extends BaseDaoImpl<RefundsSet, Long>
+		implements RefundsSetDao {
+
+}

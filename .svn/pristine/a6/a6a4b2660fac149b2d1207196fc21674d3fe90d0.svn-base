@@ -1,0 +1,98 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util, pageBar) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    var params = {}; //搜索条件
+                    //=========分页初始化start============
+                    $('#pageBar').pageBar({
+                        onSelectPage: function (page, pageSize) {
+                            params.pageNo = page;
+                            params.pageSize = pageSize;
+                            EventHandler.search(params);
+                        }
+                    });
+
+                    EventHandler.search();
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+                    $('#reset').click(EventHandler.reset);
+                    $('#search').click(function () {
+                        EventHandler.search();
+                    });
+
+                    $(".help").click(function () {
+                        layer.open({
+                            title: false,
+                            content: $("#helpContent").html(),
+                            area: ['650px', '300px']
+                        });
+                    });
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                // 查询
+                search: function (params) {
+
+                    if (typeof(params) == "undefined") {
+                        params = {pageNo: 1, pageSize: 15};
+                    }
+                    var leaderName = $("#leaderName").val();
+                    params.leaderName = leaderName;
+                    DataHandler.search(params, function (backData) {
+                        var html = template('listTemp', backData.content);
+                        $('#list').html(html);
+
+                        var page = params.pageNo;
+                        var pageSize = params.pageSize;
+
+                        $('#pageBar').pageBar({
+                            total: backData.total,
+                            pageNumber: page,
+                            pageSize: pageSize
+                        });
+
+                        $(window).triggerHandler('resize');
+                    });
+                },
+                //重置
+                reset: function () {
+                    $('#leaderName').val("");
+                },
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                search: function (param, callback) {
+                    $.post(path + '/admin/perforMgr/directorPerfor/getDirectorPerforByPage', param, function (backData) {
+                        callback(backData);
+                    });
+                },
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.catt</groupId>
+    <artifactId>project-wfx</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>project-wfx</name>
+    <url>http://maven.apache.org</url>
+    <packaging>pom</packaging>
+    <properties>
+        <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+
+        <!--测试-->
+        <hamcrest.core.version>1.3</hamcrest.core.version>
+        <mockito.core.version>1.9.5</mockito.core.version>
+        <junit.version>4.11</junit.version>
+
+        <com.catt.version>0.0.1-SNAPSHOT</com.catt.version>
+        <com.catt.module.version>1.0-SNAPSHOT</com.catt.module.version>
+        <com.catt.framwork.version>0.0.1-SNAPSHOT</com.catt.framwork.version>
+
+        <model.version>4.0.0</model.version>
+
+        <!--hibernate-->
+        <org.hibernate.validator.version>5.2.2.Final</org.hibernate.validator.version>
+        <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
+        <org.hibernate.search.version>5.5.0.Final</org.hibernate.search.version>
+        <org.hibernate.core.version>5.0.7.Final</org.hibernate.core.version>
+        <org.hibernate.entitymanager.version>5.0.7.Final</org.hibernate.entitymanager.version>
+
+        <!--数据库-->
+        <com.alibaba.druid.version>1.0.13</com.alibaba.druid.version>
+        <mysql.jdbc.version>5.1.29</mysql.jdbc.version>
+        <mssql.jdbc.version>1.2.4</mssql.jdbc.version>
+
+        <!--Spring-->
+        <org.springframework.version>4.1.4.RELEASE</org.springframework.version>
+        <org.springframework.retry.version>1.1.2.RELEASE</org.springframework.retry.version>
+
+        <!--日志-->
+        <log4j.version>1.2.17</log4j.version>
+        <org.slf4j.version>1.6.1</org.slf4j.version>
+        <commons.logging.version>1.1.3</commons.logging.version>
+
+        <!--缓存-->
+        <net.sf.ehcache.version>2.6.8</net.sf.ehcache.version>
+
+        <!--文件-->
+        <commons.fileupload.version>1.3.1</commons.fileupload.version>
+        <commons.io.version>2.4</commons.io.version>
+
+        <!--apache common-->
+        <commons.lang.version>2.6</commons.lang.version>
+        <commons.collections.version>4.1</commons.collections.version>
+        <commons.codec.version>1.9</commons.codec.version>
+
+        <!--shiro-->
+        <org.apache.shiro.version>1.2.3</org.apache.shiro.version>
+
+        <!--验证码-->
+        <com.octo.captcha.version>1.0-RC6</com.octo.captcha.version>
+
+        <!--web-->
+        <jstl.version>1.2</jstl.version>
+
+        <!--代理-->
+        <org.aspectj.version>1.7.4</org.aspectj.version>
+
+        <com.jhlabs.filters.version>2.0.235-1</com.jhlabs.filters.version>
+
+        <!--word操作-->
+        <org.apache.poi.version>3.10.1</org.apache.poi.version>
+
+        <!--网络-->
+        <org.apache.httpcomponents.version>4.3.5</org.apache.httpcomponents.version>
+
+        <!--xml-->
+        <com.thoughtworks.xstream.version>1.4.7</com.thoughtworks.xstream.version>
+
+        <!--template-->
+        <org.beetl-core.version>2.1.0</org.beetl-core.version>
+        <org.freemarker.version>2.3.20</org.freemarker.version>
+
+        <!--json-->
+        <jsonpath.version>0.9.0</jsonpath.version>
+        <org.codehaus.jackson.version>1.8.3</org.codehaus.jackson.version>
+        <jackson.version>2.3.2</jackson.version>
+        <!--代码检查-->
+        <checkstyle.version>2.17</checkstyle.version>
+        <checkstyle.jxr.version>2.5</checkstyle.jxr.version>
+        <checkstyle.config.location>${project.basedir}/etc/check/checkstyleV2.xml</checkstyle.config.location>
+    </properties>
+
+    <modules>
+        <!--  系统公共部分 -->
+        <module>project-wfx-common</module>
+
+        <!-- 后台管理 -->
+        <module>project-wfx-admin</module>
+
+        <!-- 微信web、手机接口 -->
+        <module>project-wfx-mobile</module>
+
+        <!-- 统计结算后台 -->
+        <module>project-wfx-background</module>
+    </modules>
+
+</project>

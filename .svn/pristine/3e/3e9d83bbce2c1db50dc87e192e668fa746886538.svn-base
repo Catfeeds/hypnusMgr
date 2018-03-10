@@ -1,0 +1,292 @@
+package com.catt.wfx.web.controller.safeMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.module.security.repository.entity.Dept;
+import com.catt.common.module.security.repository.entity.Staff;
+import com.catt.common.module.security.service.DeptService;
+import com.catt.common.module.security.service.StaffService;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.WebUtil;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.service.base.pub.SafeMgrBaseService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+/**
+ * <p>
+ * 技术支持：广东凯通软件开发技术有限公司 (c) 2015
+ *
+ * @author 邹佳：zoujia@gdcattsoft.com
+ * @version 1.0
+ * @date 2015年11月11日
+ * @since jdk版本：jdk1.8
+ */
+@RequestMapping({"/safeMgr/staff"})
+@Controller("safeMgr.staffController")
+public class StaffController extends BaseController {
+
+    @Resource(name = "staffServiceImpl")
+    private StaffService staffService;
+
+    @Resource(name = "deptServiceImpl")
+    private DeptService deptService;
+
+    @Resource
+    private SafeMgrBaseService safeMgrService;
+
+    /**
+     * 跳转人员首页
+     *
+     * @param model
+     * @param param 1.无参数 2.action=check 勾选返回 3.view=none 无增删改按钮
+     *              4.staffIds=id1,id2 (用,隔开id),用于回显
+     * @return
+     */
+    @RequestMapping(value = {"/index"})
+    public String index(Model model, @CurrentUser Long userId, @RequestParam Map<String, Object> param) {
+        Integer limit = MapUtil.getInteger(param, "limit");
+        if (limit != null && limit == 1) {
+            Staff staff = staffService.find(userId);
+            Dept dept = deptService.find(staff.getDept().getId());
+            if (dept.getParent() == null) {
+                param.remove("limit");
+            }
+        }
+        model.addAllAttributes(param);
+        return "/safeMgr/staff/index";
+    }
+
+    /**
+     * 跳转到个人详情的页面
+     *
+     * @param userId
+     * @return Message
+     */
+    @RequestMapping(value = "/detail.html")
+    public String toDetail(Model model, @CurrentUser Long userId) {
+        Staff staff = staffService.find(userId);
+        model.addAttribute("entity", staff);
+        return "/safeMgr/staff/view";
+    }
+
+    /**
+     * 跳转到新增修改页面
+     *
+     * @param model
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = {"/addEdit"})
+    public String addEdit(Model model, @RequestParam Map<String, Object> param) {
+        Long deptId = MapUtil.getLong(param, "deptId");
+
+        Long id = MapUtil.getLong(param, "id");
+        if (StringUtil.checkObj(id)) {
+            Staff staff = staffService.find(id);
+            Dept dept = deptService.find(staff.getDept().getId());
+            model.addAttribute("deptName", dept.getName());
+            model.addAttribute("deptId", dept.getId());
+            model.addAttribute("entity", staff);
+            Date birth = staff.getBirth();
+            if (birth != null) {
+                model.addAttribute("birth", DateUtil.format(birth, "yyyy-MM-dd"));
+            }
+        } else if (StringUtil.checkObj(deptId)) {
+            Dept dept = deptService.find(deptId);
+            model.addAttribute("deptId", dept.getId());
+            model.addAttribute("deptName", dept.getName());
+        }
+        return "/safeMgr/staff/addEdit";
+    }
+
+
+    /**
+     * 人员操作
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/list")
+    @ResponseBody
+    public Message list(@RequestParam Map<String, Object> param) {
+        Page<Map> pageList = safeMgrService.findPageByDeptOrRole(param);
+        return Message.success("").addResult(pageList);
+    }
+
+    /**
+     * 保存、更新
+     *
+     * @return
+     */
+    @SuppressWarnings("deprecation")
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public Message save(@RequestParam Map<String, Object> param) {
+        Staff staff = new Staff();
+        Long id = MapUtil.getLong(param, "id");
+        staff.setId(id);
+        staff.setAccount(MapUtil.getString(param, "account"));
+        staff.setName(MapUtil.getString(param, "name"));
+        staff.setMobile(MapUtil.getString(param, "mobile"));
+        staff.setPhone(MapUtil.getString(param, "phone"));
+        staff.setRegisterIp(WebUtil.getRequest().getRemoteHost());
+        Dept dept = new Dept();
+        dept.setId(MapUtil.getLong(param, "deptId"));
+        staff.setDept(dept);
+        staff.setInEmail(MapUtil.getString(param, "inEmail"));
+        staff.setOutEmail(MapUtil.getString(param, "outEmail"));
+        staff.setGender(MapUtil.getInteger(param, "gender"));
+        staff.setFax(MapUtil.getString(param, "fax"));
+        staff.setRemark(MapUtil.getString(param, "remark"));
+        String birthStr = MapUtil.getString(param, "birth");
+        String account = MapUtil.getString(param, "account");
+        if(staffService.checkAccountExists(account, staff)){
+            return Message.error("账号已存在,请重新输入");
+        }
+        if (StringUtil.checkObj(birthStr)) {
+            try {
+                staff.setBirth(DateUtil.parseDate(MapUtil.getString(param, "birth"), "yyyy-MM-dd"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (id == null) {
+            staff.setIsDel(false);
+            staff.setRegisterIp(WebUtil.getRequest().getRemoteAddr());
+            staff.setIsEnabled(true);
+            staff.setIsLocked(false);
+            staff.setLoginFailureCount(0);
+            staff.setAvailBeginDate(new Date());
+            staff.setAvailEndDate(new Date(2015, 1, 1));
+            staff.setPassword(DigestUtils.md5Hex("888888"));
+            staffService.save(staff);
+        } else {
+            Staff oldStaff = staffService.find(staff.getId());
+            oldStaff.setName(staff.getName());
+            oldStaff.setMobile(staff.getMobile());
+            oldStaff.setPhone(staff.getPhone());
+            oldStaff.setDept(staff.getDept());
+            oldStaff.setInEmail(staff.getInEmail());
+            oldStaff.setOutEmail(staff.getOutEmail());
+            oldStaff.setGender(staff.getGender());
+            oldStaff.setFax(staff.getFax());
+            oldStaff.setBirth(staff.getBirth());
+            oldStaff.setRemark(staff.getRemark());
+            staffService.update(oldStaff);
+        }
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 删除用户操作
+     *
+     * @param ids
+     * @return Message
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Message del(Long[] ids) {
+        List<Staff> list = staffService.findList(ids);
+        for (Staff staff : list) {
+            staff.setIsDel(true);
+            /**
+             * 删除后改账号作废，设置account为唯一随机数，避免重新添加此account时违反唯一约束
+             */
+            staff.setAccount(UUID.randomUUID().toString());
+            staffService.update(staff);
+        }
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 人员添加角色
+     *
+     * @param param id
+     * @return Message
+     */
+    @RequestMapping(value = "/addRoleStaff", method = RequestMethod.POST)
+    @ResponseBody
+    public Message addRoleStaff(@RequestParam Map<String, Object> param) {
+        staffService.addRoleStaff(param);
+
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 人员删除角色
+     *
+     * @param roleId
+     * @param staffIds
+     * @return Message
+     */
+    @RequestMapping(value = "/delRoleStaff", method = RequestMethod.POST)
+    @ResponseBody
+    public Message delRoleStaff(Long roleId, Long[] staffIds) {
+        safeMgrService.delRoleStaff(roleId, staffIds);
+        return Message.success("");
+    }
+
+    /**
+     * 验证账号是否已存在
+     *
+     * @param param id
+     * @return Message
+     */
+    @RequestMapping(value = "/checkAccount", method = RequestMethod.POST)
+    @ResponseBody
+    public Message checkAccount(@RequestParam Map<String, Object> param) {
+        String account = MapUtil.getString(param, "account");
+        Long id = MapUtil.getLong(param, "id");
+        return Message.success("").addResult(staffService.checkAccountExists(account, staffService.find(id)));
+    }
+
+    /**
+     * 修改头像
+     *
+     * @param id
+     * @param imagePath
+     * @return
+     */
+    @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
+    @ResponseBody
+    public Message uploadImage(@CurrentUser Long id, String imagePath) {
+        Staff staff = staffService.find(id);
+        staff.setImagePath(imagePath);
+        staffService.update(staff);
+        return Message.success("").addResult(new HashMap<>());
+    }
+
+    /**
+     * 获取用户
+     *
+     * @param staffIds
+     * @return
+     */
+    @RequestMapping(value = "/getStaffNames", method = RequestMethod.POST)
+    @ResponseBody
+    public Message getStaffNames(String staffIds) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.in("id", staffIds.split(",")));
+        return Message.success("").addResult(staffService.findList(null, filters, null));
+    }
+}

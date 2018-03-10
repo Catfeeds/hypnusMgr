@@ -1,0 +1,110 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusContactDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.CusContact;
+import com.catt.wfx.service.base.customerMgr.CusContactBaseService;
+import com.catt.wfx.service.customerMgr.CusContactService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 收货地址服务接口实现
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-02-14 09:48:42
+ */
+@Service("cusContactServiceImpl")
+public class CusContactServiceImpl implements CusContactService {
+
+    // 收货地址服务接口
+    @Resource(name = "cusContactBaseServiceImpl")
+    private CusContactBaseService cusContactBaseService;
+
+    // 收货地址Dao接口
+    @Resource(name = "cusContactDaoImpl")
+    private CusContactDao cusContactDao;
+
+    @Override
+    public CusContact findDefaultContact(Long cusId) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", cusId));
+        filters.add(Filter.eq("isDefault", PubEnum.YesOrNoEnum.YES.getValue()));
+        List<CusContact> cusContacts = cusContactBaseService.findList(1, filters, null);
+        if (cusContacts.size() > 0) {
+            return cusContacts.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 删除收货地址
+     *
+     * @param id 地址标识
+     */
+    @Override
+    public void delete(Long id) {
+        cusContactBaseService.delete(id);
+    }
+
+    /**
+     * 新增/编辑收货地址
+     *
+     * @param cusContact
+     */
+    @Override
+    public void saveOrUpdate(CusContact cusContact) {
+        cusContactBaseService.saveOrUpdate(cusContact);
+    }
+
+    /**
+     * 设置默认收货地址
+     *
+     * @param id    地址标识
+     * @param cusId 客户标识
+     */
+    @Override
+    public void setDefaultContact(Long id, Long cusId) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", cusId));
+        List<CusContact> list = cusContactBaseService.findList(null, filters, null);
+        if (CollectionUtil.isNotEmpty(list)) {
+            // 查询当前地址标识是否为客户所有，如有则设置为默认地址，同时将其他地址设置为否
+            filters.add(Filter.eq("id", id));
+            List<CusContact> listDefault = cusContactBaseService.findList(1, filters, null);
+            if (CollectionUtil.isNotEmpty(listDefault)) {
+                for (CusContact cusContact : list) {
+                    if (!cusContact.getId().equals(id)) {
+                        cusContact.setIsDefault(PubEnum.YesOrNoEnum.NO.getValue());
+                    } else {
+                        cusContact.setIsDefault(PubEnum.YesOrNoEnum.YES.getValue());
+                    }
+                }
+                cusContactBaseService.saveOrUpdate(list);
+            }
+        }
+    }
+
+    /**
+     * 获取收货地址列表（分页）
+     *
+     * @param cusId     客户标识
+     * @param id        地址标识
+     * @param isDefault 是否默认
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getCusContactByPage(Long cusId, Long id, Integer isDefault, Pageable pageable) {
+        return cusContactDao.getCusContactByPage(cusId, id, isDefault, pageable);
+    }
+}

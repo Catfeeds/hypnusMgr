@@ -1,0 +1,64 @@
+package com.catt.wfx.service.impl.settlementMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementShopDetailDao;
+import com.catt.wfx.repository.entity.couponMgr.CouponInfo;
+import com.catt.wfx.service.base.couponMgr.CouponInfoBaseService;
+import com.catt.wfx.service.settlementMgr.SettlementShopDetailService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 账户结算明细服务接口
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017/2/10
+ */
+@Service("settlementShopDetailServiceImpl")
+public class SettlementShopDetailServiceImpl implements SettlementShopDetailService {
+
+    @Resource(name = "settlementShopDetailDaoImpl")
+    private SettlementShopDetailDao detailDao;
+
+    @Resource(name = "couponInfoBaseServiceImpl")
+    private CouponInfoBaseService couponInfoBaseService;
+
+    /**
+     * 获取分页补贴记录
+     *
+     * @param cusName    用户名称
+     * @param rewardType 补贴类型
+     * @param type       补贴名称
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getPage(String cusName, Integer rewardType, Integer type, Pageable pageable) {
+        Page<Map> page = detailDao.getPage(cusName, rewardType, type, pageable);
+        List<Map> content = page.getContent();
+        if (CollectionUtil.isNotEmpty(content)) {
+            for (Map map : content) {
+                String couponIds = MapUtil.getString(map, "couponIds");
+                if (StringUtil.checkStr(couponIds)) { // 有代金券，则把代金券标识转换成代金券名称
+                    String couponNames = "";
+                    String[] split = couponIds.split(",");
+                    for (String couponId : split) {
+                        CouponInfo couponInfo = couponInfoBaseService.find(Long.parseLong(couponId));
+                        couponNames += couponInfo.getCouponName() + ",";
+                    }
+                    couponNames = couponNames.substring(0, couponNames.length() - 1);
+                    map.put("couponNames", couponNames);
+                }
+            }
+        }
+        return page;
+    }
+}

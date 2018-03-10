@@ -1,0 +1,339 @@
+package com.catt.wfx.web.controller.admin.specialSale;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.bean.BeanUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.entity.specialSale.ActivityInfo;
+import com.catt.wfx.repository.entity.specialSale.ActivityProductRel;
+import com.catt.wfx.service.base.specialSale.ActivityInfoBaseService;
+import com.catt.wfx.service.base.specialSale.ActivityProductRelBaseService;
+import com.catt.wfx.service.productMgr.ProductService;
+import com.catt.wfx.service.pub.PubConfigService;
+import com.catt.wfx.service.specialSale.ActivityInfoService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:特卖活动管理controller
+ * Created by 2017-3-7 14:16:37
+ * author: 袁幸成
+ */
+@Controller("admin.specialSale.activityInfo")
+@RequestMapping(value = "/admin/specialSale")
+public class ActivityInfoController extends BaseController {
+
+    //活动服务
+    @Resource(name = "activityInfoServiceImpl")
+    ActivityInfoService activityInfoService;
+
+    //活动服务
+    @Resource(name = "activityInfoBaseServiceImpl")
+    ActivityInfoBaseService activityInfoBaseService;
+
+    //活动商品关联服务
+    @Resource(name = "activityProductRelBaseServiceImpl")
+    ActivityProductRelBaseService activityProductRelBaseService;
+
+    //商品服务
+    @Resource(name = "productServiceImpl")
+    ProductService productService;
+
+    //附件服务
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    //公共配置服务
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    /**
+     * 跳转特卖管理首页
+     */
+    @RequestMapping(value = "/index.html", method = RequestMethod.GET)
+    public String toIndex() {
+        return "/admin/specialSale/index";
+    }
+
+    /**
+     * 跳转特卖新增页
+     */
+    @RequestMapping(value = "/add.html", method = RequestMethod.GET)
+    public String toAdd() {
+        return "/admin/specialSale/addEdit";
+    }
+
+    /**
+     * 跳转特卖编辑页
+     * @param id 活动标识
+     * @return
+     */
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String toEdit(Model model, @PathVariable Long id) {
+        Assert.notNull(id);
+        model.addAttribute("entity", activityInfoBaseService.find(id));
+        return "/admin/specialSale/addEdit";
+    }
+
+    /**
+     * 跳转特卖详情页面
+     */
+    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    public String toDetail(Model model, @PathVariable Long id) {
+        Assert.notNull(id);
+        ActivityInfo activityInfo = activityInfoBaseService.find(id);
+        int status = activityInfo.getStatus();
+        String statusName = "";
+        if (status == ActivityInfo.Status.Released.getValue()){
+            Date now = new Date();
+            Date startTime = activityInfo.getStartTime();
+            Date endTime = activityInfo.getEndTime();
+            if (startTime.after(now)){
+                statusName = "未开始";
+            } else if (endTime.before(now)){
+                statusName = "已结束";
+            } else {
+                statusName = "活动中";
+            }
+        } else {
+            statusName = ActivityInfo.Status.getEnum(status).getName();
+        }
+        model.addAttribute("statusName", statusName);
+        model.addAttribute("entity", activityInfo);
+        return "/admin/specialSale/detail";
+    }
+
+    /**
+     * 跳转特卖详情的商品详情页面
+     */
+    @RequestMapping(value = "/detail/{activityId}/{productId}", method = RequestMethod.GET)
+    public String toProductDetail(Model model, @PathVariable Long activityId, @PathVariable Long productId) {
+        Assert.notNull(activityId);
+        Assert.notNull(productId);
+        Map product = productService.getProductInfoAndAttr(productId);
+        product.put("id", productId);
+        model.addAttribute("entity", product);
+        model.addAttribute("activityId", activityId);
+        return "/admin/specialSale/productDetail";
+    }
+
+    /**
+     * 跳转到选择活动商品页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/selectProduct.html")
+    public String selectProduct() {
+        return "/admin/specialSale/selectProduct";
+    }
+
+    /**
+     * 跳转到选择活动商品页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/editPrice.html")
+    public String toEditPrice(Model model, Long activityId, Long productId) {
+        Assert.notNull(activityId);
+        Assert.notNull(productId);
+        Map product = productService.getProductInfoAndAttr(productId);
+        product.put("id", productId);
+        model.addAttribute("entity", product);
+        model.addAttribute("activityId", activityId);
+        return "/admin/specialSale/editPrice";
+    }
+
+    /**
+     * 保存特卖活动信息
+     * @param cusId 用户标识
+     * @param cusName 用户名称
+     * @param activityInfo 活动信息
+     * @param coverpic 活动图片
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/save"}, method = RequestMethod.POST)
+    public Message save(@CurrentUser Long cusId, @CurrentUser("name") String cusName,
+                        ActivityInfo activityInfo, String coverpic) {
+        if (activityInfo.getId() != null) {
+            activityInfo.setCreatedId(cusId);
+            activityInfo.setCreatedName(cusName);
+        }
+        Long id = activityInfoService.saveActivity(activityInfo, coverpic);
+        return Message.success().addResult(id);
+    }
+
+    /**
+     * 获取活动信息列表
+     *
+     * @param name 活动名称
+     * @param timeStatus 活动时间状态
+     * @param pageable 分页信息
+     * @return
+     */
+    @RequestMapping(value = "/findActivityPage", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> findActivityPage(String name, Integer timeStatus, Pageable pageable) {
+        return activityInfoService.findActivityPage(name, timeStatus, pageable);
+    }
+
+    /**
+     * 修改活动状态
+     *
+     * @param id 活动名称
+     * @param status 活动状态
+     * @return
+     */
+    @RequestMapping(value = "/updateStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public Message updateStatus(Long id, Integer status) {
+        Assert.notNull(id);
+        Assert.notNull(status);
+        activityInfoService.updateStatus(id, status);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 删除活动
+     *
+     * @param ids 活动标识数组
+     * @return
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Message delete(Long[] ids) {
+        Assert.notNull(ids);
+        List<ActivityInfo> activityInfoList = activityInfoBaseService.findList(ids);
+        for (ActivityInfo activityInfo : activityInfoList){
+            Integer preStatus = activityInfo.getStatus();
+            Date now = new Date();
+            if (preStatus == ActivityInfo.Status.Released.getValue() && now.before(activityInfo.getEndTime())
+                    && now.after(activityInfo.getStartTime())){
+                throw BaseException.errorByErrInfo("不能删除活动中的特卖【" + activityInfo.getName() + "】");
+            }
+            activityInfo.setStatus(ActivityInfo.Status.Deleted.getValue());
+        }
+        activityInfoBaseService.saveOrUpdate(activityInfoList);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 获取活动商品列表
+     *
+     * @param activityId 活动标识
+     * @return
+     */
+    @RequestMapping(value = "/findActivityProductList", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Map> findActivityProductList(Long activityId) {
+        Assert.notNull(activityId);
+        return activityInfoService.findActivityProductList(activityId);
+    }
+
+    /**
+     * 获取商品列表（排除已选商品、时间冲突的活动商品）
+     * @param activityId 活动标识
+     * @param zhName 商品名称
+     * @param cateId 商品分类
+     * @param pageable 分页参数
+     * @return
+     */
+    @RequestMapping(value = "/findProductPage", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> findProductPage(Long activityId, String zhName, Long cateId, Pageable pageable) {
+        return activityInfoService.findProductPage(activityId, zhName, cateId, pageable);
+    }
+
+    /**
+     * 查询活动商品规格价格
+     * @param activityId 活动标识
+     * @param productId 商品标识
+     * @return
+     */
+    @RequestMapping(value = {"/getSpecAndPrice"}, method = RequestMethod.POST)
+    @ResponseBody
+    public List<Map> getSpecAndPrice(Long activityId, Long productId) {
+        Assert.notNull(activityId);
+        Assert.notNull(productId);
+        return activityInfoService.getSpecAndPrice(activityId, productId);
+    }
+
+    /**
+     * 保存商品活动关联列表
+     * @param activityId 活动标识
+     * @param productId 商品标识
+     * @param actProRelJson 商品活动关联列表json
+     * @return
+     */
+    @RequestMapping(value = {"/saveActProRelList"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message saveActProRelList(@CurrentUser Long cusId, @CurrentUser("name") String cusName,
+                                     Long activityId, Long productId,  String actProRelJson) {
+        Assert.notNull(activityId);
+        Assert.notNull(productId);
+        Assert.hasLength(actProRelJson);
+        List<ActivityProductRel> activityProductRelList = JsonUtils.toList(actProRelJson, ActivityProductRel.class);
+        Assert.isTrue(activityProductRelList.size() > 0);
+        for (ActivityProductRel activityProductRel : activityProductRelList){
+            activityProductRel.setCreatedId(cusId);
+            activityProductRel.setCreatedName(cusName);
+        }
+        activityInfoService.saveActProRelList(activityId, productId, activityProductRelList);
+        return SUCCESS_MSG;
+    }
+
+
+    /**
+     * 删除商品活动关联列表
+     * @param relIds 商品活动关联标识数组
+     * @return
+     */
+    @RequestMapping(value = {"/delActProductRel"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message delActProductRel(Long[] relIds) {
+        activityProductRelBaseService.delete(relIds);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 获取活动图片
+     * @param relId 活动标识
+     * @return
+     */
+    @RequestMapping(value = "/getAttachments")
+    @ResponseBody
+    public List<Map> getAttachments(Long relId) {
+        Assert.notNull(relId);
+        //获取商品图片信息
+        List<Attachment> attachmentList = attachmentBaseService.getFiles(relId,
+                ActivityInfo.TABLE_NAME, ActivityInfo.PIC_PATH);
+
+        //获取图片存储地址
+        String filePath = pubConfigService.getFilePath();
+        List<Map> mapList = new ArrayList<Map>();
+        for (Attachment attachment : attachmentList) {
+            Map map = BeanUtil.describe(attachment);
+            map.put("url", filePath + attachment.getPath());
+            mapList.add(map);
+        }
+        return mapList;
+    }
+
+}

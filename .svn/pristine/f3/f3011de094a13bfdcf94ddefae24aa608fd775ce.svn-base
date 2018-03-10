@@ -1,0 +1,176 @@
+define('admin/wechat/return/applyReturnGoods', ['$', 'msgBox', 'template', 'adminSystem', 'uploader'], function (require, exports, module) {
+        var $ = require('$');
+        var template = require('template');
+        var msgBox = require('msgBox');
+        var adminSystem = require('adminSystem');
+        var Uploader = require('uploader');
+
+        function ApplyReturnGoods() {
+        }
+
+        /**
+         * 初始化
+         */
+        ApplyReturnGoods.prototype.init = function () {
+            var self = this;
+            self.form = $('#form');
+            self.num = 1;
+
+            self.bindEvent();
+            self.initNumSel();
+            self.initPicsUploader();
+
+            adminSystem.initEnumSelect([{
+                tabName: 'T_CUS_ORDER_RETURN',
+                colName: 'S_RETURN_REASON',
+                selectObj: $('#returnReason'),
+                additionValue: '',
+                additionName: '请输入退款原因'
+            }], function () {
+            });
+        };
+
+        /**
+         * 数量选择
+         */
+        ApplyReturnGoods.prototype.initNumSel = function () {
+            var self = this;
+            if (maxNum == 0) {
+                msgBox.tips("未购买当前商品");
+                window.history.back();
+                return;
+            }
+            var $refundNum = $("#refund-num");
+            var $num = $("#num");
+            var $jine = $(".jine");
+            //初始化状态
+            calculate();
+
+            $('.refund-minus').click(function () {
+                if (self.num > 1) {
+                    self.num--;
+                    calculate();
+                }
+            });
+            $('.refund-plus').click(function () {
+                if (self.num < maxNum) {
+                    self.num++;
+                    calculate();
+                }
+            });
+
+            function calculate() {
+                $refundNum.html(self.num);
+                $num.val(self.num);
+                var currentP = (parseFloat(price) * self.num).toFixed(2);
+                $jine.html("￥" + currentP);
+            }
+        };
+
+        /**
+         * 事件绑定
+         */
+        ApplyReturnGoods.prototype.bindEvent = function () {
+            var self = this;
+            //表单提交事件
+            self.form.submit(function () {
+                if ($('#returnReason').val() == "") {
+                    msgBox.warn("请选择退款原因");
+                    return false;
+                }
+
+                if ($('#returnDesc').val() == "") {
+                    msgBox.warn("请输入退款说明");
+                    return false;
+                }
+                var picsAttachmentIds = [];
+                var $picsLi = self.$pics.find('li.show');
+                $picsLi.each(function () {
+                    picsAttachmentIds.push(this.id);
+                });
+
+                if (picsAttachmentIds.length == 0) {
+                    msgBox.warn("请选择上传图片");
+                    return false;
+                }
+
+                //当前表单对象
+                var params = $(this).serializeArray();
+
+                // 相关图片的attachmentId
+                params.push({name: 'pic', value: picsAttachmentIds.join(',')});
+                // 退货数量	num
+                // 退货原因	returnReason
+                // 退货说明	returnDesc
+                // 相关图片附件标识	pic
+                $.post(path + '/admin/wechat/returnInfo/applyReturnGoods', params, function (data) {
+                    msgBox.tips(data.content);
+                    if (data.type == 'success') {
+                        window.history.back();
+                    }
+                });
+                return false;
+            });
+        };
+
+        /**
+         * 初始化相关图片上传组件
+         */
+        ApplyReturnGoods.prototype.initPicsUploader = function () {
+            var self = this;
+            self.$pics = $('#pics');
+            // 创建文件上传组件
+            self.picsUploader = new Uploader({
+                server: path + '/attachment/fileUpload.json', //上传服务地址
+                pickerSelector: '#picsPicker', //选择文件按钮选择器
+                multiplePick: true, //默认：false，是否支持多选
+                autoUpload: true, //默认：false，是否选择后自动上传
+                formData: {
+                    isDB: 1 // 上传文件时保存数据到附件表
+                }, //默认：{}，上传附带其他表单参数
+                fileFieldId: 'files', //默认：file，文件域名称
+                fileSingleSizeLimit: undefined, //默认：undefined，单文件大小限制
+                onValidateError: function (errorType, errorMsg) {
+                    msgBox.warn("图片校验失败");
+                }, //文件校验不通过事件
+                onFileUploadError: function (file, errorCode) {
+                    msgBox.warn("图片上传失败");
+                }, //文件上传出错事件
+                onFileUploadSuccess: function (file, response) {
+                    if (response.type == 'success') {
+                        $('#picsPicker').remove();
+                        var attachment = response.result[0];
+                        self.$pics.append(
+                            '<li id="' + attachment.attachmentId +
+                            '" class="show" style="float:left;list-style:none;width:110px;height:106px;text-align: center">' +
+                            '<img style="width:80px;height:80px;margin-top: 15px;" src="' + attachment.url + '"/>' +
+                            '</li>');
+
+                        // 点击移除文件
+                        var $li = $('li#' + attachment.attachmentId);
+                        $li.click(function () {
+                            $li.remove();
+                            $(window).triggerHandler('resize');
+                        });
+                        $(window).triggerHandler('resize');
+
+                        self.$pics.append(
+                            '<li id="picsPicker" style="float:left;list-style:none;width:90px;height:90px;margin-bottom: 10px;">' +
+                            '<img style="width:80px;height:80px;" src="' + path + '/resources/images/img_add.png"/>' +
+                            '</li>');
+                        self.initPicsUploader();
+                    }
+                }//文件上传成功事件
+            });
+
+        };
+
+        module.exports = new ApplyReturnGoods();
+    }
+);
+
+seajs.use(['$', 'admin/wechat/return/applyReturnGoods'], function ($, applyReturnGoods) {
+    $(function () {
+        applyReturnGoods.init();
+    });
+});

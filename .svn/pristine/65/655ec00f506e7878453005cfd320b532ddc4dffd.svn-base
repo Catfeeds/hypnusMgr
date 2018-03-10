@@ -1,0 +1,30 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+/*注册列表填写*/
+.loginList{  background:#fff; }
+.loginTip{font-size:14px; color:#f13d2e;}
+.loginItem{overflow:hidden; padding:5px 0px; border-bottom:1px solid #e5e5e5;} 
+.loginItem01{overflow:hidden; padding:5px 0px 15px 0px;}
+.itemTitle01{float:left; font-size:18px; color:#323232; width:72px; line-height:50px;}
+.itemTitle02{float:left; font-size:16px; color:#323232; width:80px; line-height:50px; letter-spacing:1px; margin-left:20px;}
+.itemTitle05{float:left; font-size:16px; color:#323232; width:100px; line-height:50px; letter-spacing:1px;}
+.itemTitle06{float:left; font-size:16px; color:#323232; width:60px; line-height:50px; letter-spacing:1px;}
+.itemTitle07{float:left; font-size:16px; color:#323232; width:120px; line-height:50px; letter-spacing:1px;}
+.itemTitle03{float:left; font-size:16px; color:#323232; width:80px; line-height:50px;}
+.itemTitle04{float:left; font-size:18px; color:#323232; width:80px; line-height:50px;}
+.itemTitle08{ font-size:16px; color:#323232; width:80px; line-height:50px; letter-spacing:1px; margin-left:20px;}
+
+.inputBox{ overflow:hidden; position:relative;}
+.inputBox1{float:left; font-size:14px; color:#646464; width:60%; line-height:50px;}
+.loginInput{float:left; font-size:16px; color:#000; width:60%; line-height:50px;}
+.loginInput1{float:left; font-size:14px; color:#646464; width:33%; line-height:50px;}
+.loginInput2{float:left; font-size:16px; color:#000; width:80%; line-height:50px;}
+.loginInput3{float:left; font-size:16px; color:#fa4b9b; width:60%; line-height:50px;}
+.tuihuoBottom{overflow:hidden; padding:5px 0px;}
+.bottomPic{ padding:0px 20px; padding-bottom:90px; border-bottom:1px solid #e5e5e5;}
+.pic{width:25%; float:left; }
+.zhaopian{ width:93%; height: 80px;}
+.tuihuo{ padding:0px 20px 20px 20px; font-size:14px; color:#999;}

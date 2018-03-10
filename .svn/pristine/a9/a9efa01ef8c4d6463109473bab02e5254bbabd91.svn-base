@@ -1,0 +1,240 @@
+package com.catt.wfx.service.impl.cusAccount;
+
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusAccountConsumeDao;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountConsume;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountDetail;
+import com.catt.wfx.repository.entity.customerMgr.SettlementPushRecord;
+import com.catt.wfx.repository.form.customerMgr.CusAccountHandlerBackData;
+import com.catt.wfx.repository.form.customerMgr.CusAccountHandlerForm;
+import com.catt.wfx.service.base.customerMgr.CusAccountConsumeBaseService;
+import com.catt.wfx.service.base.customerMgr.CusAccountDetailBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementPushRecordBaseService;
+import com.catt.wfx.service.cusAccount.CusAccountHandlerService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+
+/**
+ * 用户账号资金相关操作服务接口实现
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-2-16 15:39:26
+ */
+@Service("cusAccountHandlerServiceImpl")
+public class CusAccountHandlerServiceImpl implements CusAccountHandlerService {
+
+    //用户账户信息服务
+    @Resource(name = "cusAccountConsumeBaseServiceImpl")
+    private CusAccountConsumeBaseService cusAccountConsumeBaseService;
+
+    //用户账户明细服务
+    @Resource(name = "cusAccountDetailBaseServiceImpl")
+    private CusAccountDetailBaseService cusAccountDetailBaseService;
+
+    // 账户信息Dao
+    @Resource(name = "cusAccountConsumeDaoImpl")
+    private CusAccountConsumeDao cusAccountConsumeDao;
+
+    //返利结算记录表服务
+    @Resource(name = "settlementPushRecordBaseServiceImpl")
+    SettlementPushRecordBaseService settlementPushRecordBaseService;
+
+    /**
+     * LOG
+     */
+    private final static org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(CusAccountHandlerServiceImpl.class);
+
+    @Override
+    @Transactional
+    public CusAccountHandlerBackData handleMoney(CusAccountHandlerForm cusAccountHandlerForm) {
+        CusAccountHandlerBackData cusAccountHandlerBackData = new CusAccountHandlerBackData();
+
+        Assert.notNull(cusAccountHandlerForm);
+        Long cusId = cusAccountHandlerForm.getCusId();
+        Double money = cusAccountHandlerForm.getMoney();
+        String relId = cusAccountHandlerForm.getRelId();
+        CusAccountDetail.Type type = cusAccountHandlerForm.getType();
+
+        LOG.info("用户账号资金相关操作入参：cusId={}，type={}, money={}, relId={}",
+                cusId, type, money, relId);
+        Assert.notNull(cusId);
+        Assert.notNull(type);
+        Assert.notNull(money);
+        if (money <= 0) {
+            LOG.error("相关金额不能小于或等于0, money={}", money);
+            throw BaseException.errorByErrInfo("非法操作！");
+        }
+
+        CusAccountConsume cusAccount = this.findCusAccount(cusId);
+        if (cusAccount == null) {
+            LOG.error("用户账号不存在！");
+            throw BaseException.errorByErrInfo("非法操作！");
+        }
+
+        if (type == CusAccountDetail.Type.RemainderConsume || type == CusAccountDetail.Type.Withdrawals){ //余额消费、提现
+
+            if (type == CusAccountDetail.Type.Withdrawals){
+                cusAccount.setGetMoney(NumberUtil.moneyAdd(cusAccount.getGetMoney(), money)); //累计提现总金额
+            }
+
+            //账号余额-
+            Double remainderMoney = NumberUtil.moneySub(cusAccount.getRemainderMoney(), money);
+            if (remainderMoney < 0){
+                throw BaseException.errorByErrInfo("余额不足！");
+            }
+            cusAccount.setRemainderMoney(remainderMoney);//余额
+            cusAccountConsumeBaseService.update(cusAccount);
+
+            //新增账号明细
+            CusAccountDetail cusAccountDetail = new CusAccountDetail(cusId, type.getValue(), money,
+                    cusAccount.getRemainderMoney(), relId);
+            cusAccountDetailBaseService.save(cusAccountDetail);
+
+        }else if(type == CusAccountDetail.Type.RemainderReturn  //余额退款
+                || type == CusAccountDetail.Type.SalesCommissions //销售提成到账
+                || type == CusAccountDetail.Type.CusRegisterBonus //会员注册奖励
+                || type == CusAccountDetail.Type.ShopkeeperRegisterBonus //店主注册奖励
+                || type == CusAccountDetail.Type.ShopkeeperInviteBonus //店主邀请奖励
+                || type == CusAccountDetail.Type.ShopkeeperSaleBonus //店主销售奖励
+                || type == CusAccountDetail.Type.LeaderMgrBonus //主管管理奖励
+                || type == CusAccountDetail.Type.RebateMoneyToAccount) { //返利提成到账
+
+            if (type == CusAccountDetail.Type.SalesCommissions  //销售提成到账
+                    || type == CusAccountDetail.Type.RebateMoneyToAccount) { //返利提成到账
+
+                cusAccount.setSalesMoney(NumberUtil.moneyAdd(cusAccount.getSalesMoney(), money)); //累计销售提成金额
+                cusAccount.setTotalMoney(NumberUtil.moneyAdd(cusAccount.getTotalMoney(), money)); //累计账户总金额
+
+            } else if(type == CusAccountDetail.Type.CusRegisterBonus //会员注册奖励
+                    || type == CusAccountDetail.Type.ShopkeeperRegisterBonus //店主注册奖励
+                    || type == CusAccountDetail.Type.ShopkeeperInviteBonus //店主邀请奖励
+                    || type == CusAccountDetail.Type.ShopkeeperSaleBonus //店主销售奖励
+                    || type == CusAccountDetail.Type.LeaderMgrBonus) { //主管管理奖励
+
+                cusAccount.setGiveMoney(NumberUtil.moneyAdd(cusAccount.getGiveMoney(), money)); //累计赠送金额
+                cusAccount.setTotalMoney(NumberUtil.moneyAdd(cusAccount.getTotalMoney(), money));//累计账户总金额
+            }
+
+            //账号余额+
+            Double remainderMoney = NumberUtil.moneyAdd(cusAccount.getRemainderMoney(), money);
+            cusAccount.setRemainderMoney(remainderMoney);//余额
+            cusAccountConsumeBaseService.update(cusAccount);
+
+            //新增账号明细
+            CusAccountDetail cusAccountDetail = new CusAccountDetail(cusId, type.getValue(), money,
+                    cusAccount.getRemainderMoney(), relId);
+            cusAccountDetailBaseService.save(cusAccountDetail);
+
+            cusAccountHandlerBackData.setAccountDetailId(cusAccountDetail.getId());
+
+        }else {
+            LOG.error("不支持该操作类型入参, type={}", type);
+            throw BaseException.errorByErrInfo("非法操作！");
+        }
+        return cusAccountHandlerBackData;
+
+
+    }
+
+    @Override
+    public void handelUnAcceptMoney(Long cusId, Double money, Long orderId, Long accountDetailId,
+                                    SettlementPushRecord.Type type){
+
+        LOG.info("处理用户账号待收提成相关操作入参：cusId={}，money={}，orderId={}，accountDetailId={}，type={}",
+                cusId, money, orderId, accountDetailId, type);
+
+        Assert.notNull(cusId, "用户标识不能为空");
+        Assert.notNull(money, "相关金额不能为空");
+        Assert.notNull(type, "操作类型不能为空");
+        Assert.notNull(orderId, "订单标识不能为空");
+
+        CusAccountConsume cusAccount = this.findCusAccount(cusId);
+        if (cusAccount == null) {
+            LOG.error("用户账号不存在！");
+            throw BaseException.errorByErrInfo("非法操作！");
+        }
+        Double unAcceptMoney = cusAccount.getUnAcceptMoney();
+        if (unAcceptMoney == null) {
+            unAcceptMoney = 0.0;
+        }
+        unAcceptMoney = NumberUtil.moneyAdd(money, unAcceptMoney);
+        if (unAcceptMoney < 0) {
+            LOG.error("用户账号待收提成不能小于0！");
+            throw BaseException.errorByErrInfo("账号异常！");
+        }
+        cusAccount.setUnAcceptMoney(unAcceptMoney);
+        cusAccountConsumeBaseService.update(cusAccount);
+
+        SettlementPushRecord settlementPushRecord = new SettlementPushRecord();
+        settlementPushRecord.setAccountDetailId(accountDetailId);
+        settlementPushRecord.setType(type.getValue());
+//        settlementPushRecord.setRebateLevel(null);
+        settlementPushRecord.setPushMoney(money);
+        settlementPushRecord.setOrderId(orderId);
+        settlementPushRecord.setShopkeeperId(cusId);
+        settlementPushRecordBaseService.save(settlementPushRecord);
+
+    }
+
+    @Override
+    public void handelReciveRebateMoney(Long cusId, Double money, Long orderId, Long accountDetailId,
+                                    SettlementPushRecord.Type type, Integer rebateLevel){
+
+        LOG.info("处理用户账号待收提成相关操作入参：cusId={}，money={}，orderId={}，accountDetailId={}，type={}",
+                cusId, money, orderId, accountDetailId, type);
+
+        Assert.notNull(cusId, "用户标识不能为空");
+        Assert.notNull(money, "相关金额不能为空");
+        Assert.notNull(type, "操作类型不能为空");
+        Assert.notNull(orderId, "订单标识不能为空");
+        Assert.notNull(rebateLevel, "返利级别不能为空");
+
+        CusAccountConsume cusAccount = this.findCusAccount(cusId);
+        if (cusAccount == null) {
+            LOG.error("用户账号不存在！");
+            throw BaseException.errorByErrInfo("非法操作！");
+        }
+        Double reciveRebateMoney = cusAccount.getReciveRebateMoney();
+        if (reciveRebateMoney == null) {
+            reciveRebateMoney = 0.0;
+        }
+        reciveRebateMoney = NumberUtil.moneyAdd(money, reciveRebateMoney);
+        if (reciveRebateMoney < 0) {
+            LOG.error("用户账号厂家返利待收不能小于0！");
+            throw BaseException.errorByErrInfo("账号异常！");
+        }
+        cusAccount.setReciveRebateMoney(reciveRebateMoney);
+        cusAccountConsumeBaseService.update(cusAccount);
+
+        SettlementPushRecord settlementPushRecord = new SettlementPushRecord();
+        settlementPushRecord.setAccountDetailId(accountDetailId);
+        settlementPushRecord.setType(type.getValue());
+        settlementPushRecord.setRebateLevel(rebateLevel);
+        settlementPushRecord.setPushMoney(money);
+        settlementPushRecord.setOrderId(orderId);
+        settlementPushRecord.setShopkeeperId(cusId);
+        settlementPushRecordBaseService.save(settlementPushRecord);
+    }
+
+    /**
+     * 查询用户账号
+     * @param cusId 用户标识
+     * @return
+     */
+    private CusAccountConsume findCusAccount(Long cusId) {
+//        List<Filter> filters = new ArrayList<>();
+//        filters.add(Filter.eq("cusId", cusId));
+//        List<CusAccountConsume> list = cusAccountConsumeBaseService.findList(1, filters, null);
+//        if (list.size() > 0){
+//            return list.get(0);
+//        }
+        // 因为baseService经过处理不从事物里面查询新增的实体，所以采用数据库sql方式查询
+        return cusAccountConsumeDao.findCusAccountByCusId(cusId);
+    }
+}

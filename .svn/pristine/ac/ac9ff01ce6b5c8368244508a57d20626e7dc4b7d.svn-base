@@ -1,0 +1,232 @@
+package com.catt.wfx.web.controller.admin.productMgr;
+
+import com.catt.common.base.pojo.message.MessageConstants;
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.security.pojo.security.ExtPrincipal;
+import com.catt.common.util.bean.BeanUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.security.shiro.SecurityUtil;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.data.vo.productMgr.ProductVo;
+import com.catt.wfx.repository.entity.customerMgr.FactoryInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.repository.form.productMgr.ProductForm;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import com.catt.wfx.service.basicConfig.FactoryInfoService;
+import com.catt.wfx.service.productMgr.ProductService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:
+ * Created by 2017-01-06  14:51.
+ * author: Zhou mingxiang
+ */
+@Controller("admin.productInfo")
+@RequestMapping(value = "/admin/productInfo")
+public class ProductInfoController extends BaseController {
+
+    @Resource(name = "productServiceImpl")
+    private ProductService productService;
+
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+    @Resource(name = "factoryInfoServiceImpl")
+    private FactoryInfoService factoryInfoService;
+
+    /**
+     * 公共配置服务
+     */
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    /**
+     * 跳转商品管理首页
+     */
+    @RequestMapping(value = {"/index.html"}, method = RequestMethod.GET)
+    public String toIndex() {
+        return "/admin/productMgr/goods/index";
+    }
+
+    /**
+     * 跳转商品管理新增页面
+     */
+    @RequestMapping(value = {"/add.html", "/update.html"}, method = RequestMethod.GET)
+    public String toAddOrUpdate(Model model) {
+        ExtPrincipal principal = SecurityUtil.getPrincipal();
+        Long factoryId = null;
+        String factoryName = "";
+        Integer isSelfSell = 2;
+        if(principal != null){
+            String factoryIdStr = principal.getDeptShortName();
+            if(StringUtil.isNotBlank(factoryIdStr)){
+                factoryId = Long.parseLong(factoryIdStr);
+                FactoryInfo factory = factoryInfoService.getFactoryInfoById(factoryId);
+                factoryName = factory.getFactoryName();
+                if(Integer.compare(factory.getDelFlag(), PubEnum.YesOrNoEnum.YES.getValue()) == 0){
+                    //当前厂家已删除
+                    factoryId = null;
+                    factoryName = "";
+                }
+            }else{
+                //当前用户不存在厂家
+            }
+        }else{
+            //当前用户不存在厂家
+        }
+        //判断当前厂家是否自营
+        Long defaultFactoryId = Long.parseLong(pubSetupBaseService.getSetupByCode(PubSetup.Code.selfSupport));
+        if(Long.compare(defaultFactoryId, factoryId) == 0){//自营
+            isSelfSell = 1;
+        }
+        model.addAttribute("localFactoryId", factoryId);//当前厂家id
+        model.addAttribute("localFactoryName", factoryName);//当前厂家名称
+        model.addAttribute("isSelfSell", isSelfSell);//是否自营 1是2否
+        return "/admin/productMgr/goods/saveOrUpdate";
+    }
+
+    /**
+     * 跳转商品管理详情页面
+     */
+    @RequestMapping(value = {"/detail.html"}, method = RequestMethod.GET)
+    public String toDetail() {
+        return "/admin/productMgr/goods/detail";
+    }
+
+    /**
+     * 跳转商品管理首页
+     */
+    @RequestMapping(value = {"/productClass.html"}, method = RequestMethod.GET)
+    public String productClass() {
+        return "/admin/pub/productClass";
+    }
+
+    /**
+     * 获取商品信息列表
+     *
+     * @param productForm
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/getProductInfoByPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getProductInfoByPage(ProductForm productForm, Pageable pageable) {
+        return productService.getProductInfoByPage(productForm, pageable);
+    }
+
+    /**
+     * 获取商品信息
+     *
+     * @param id 商品标识
+     * @return
+     */
+    @RequestMapping(value = {"/getProductInfoAndAttr"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Map getProductInfoAndAttr(Long id) {
+        return productService.getProductInfoAndAttr(id);
+    }
+
+    /**
+     * 保存商品信息
+     *
+     * @param id       登录人标识
+     * @param name     登录人名称
+     * @param goods    商品信息Json
+     * @param coverpic 图片信息
+     * @param attrJson 商品参数Json
+     * @param specJson 商品规格Json
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/save"}, method = RequestMethod.POST)
+    public Message save(@CurrentUser Long id, @CurrentUser("name") String name,
+                        String goods, String coverpic, String attrJson, String specJson) {
+        ProductVo productVo = JsonUtils.toObject(goods, ProductVo.class);
+        if (StringUtil.checkObj(productVo.getId())) {
+            productService.update(productVo, coverpic, attrJson, specJson);
+        } else {
+            productVo.setId(null);
+            productVo.setCreatedId(id);
+            productVo.setCreatedName(name);
+            productService.save(productVo, coverpic, attrJson, specJson);
+        }
+
+        return new Message(MessageConstants.Type.success, "操作成功!");
+    }
+
+    /**
+     * 删除商品信息
+     *
+     * @param ids 商品标识集合
+     * @return
+     */
+    @RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Message delete(Long[] ids) {
+        productService.delete(ids);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 获取商品图片
+     */
+    @RequestMapping(value = "/getAttachments")
+    @ResponseBody
+    public List<Map> getAttachments(Long productId) {
+        //获取商品图片信息
+        List<Attachment> attachmentList = attachmentBaseService.getFiles(productId,
+                ProductInfo.TABLE_NAME, ProductInfo.PIC_PATH);
+
+        //获取图片存储地址
+        String filePath = pubConfigService.getFilePath();
+        List<Map> mapList = new ArrayList<Map>();
+        for (Attachment attachment : attachmentList) {
+            Map map = BeanUtil.describe(attachment);
+            map.put("url", filePath + attachment.getPath());
+            mapList.add(map);
+        }
+        return mapList;
+    }
+
+    //获取图片最佳宽高比例
+    @RequestMapping(value = "/getPicRatio")
+    @ResponseBody
+    public Map<String, Object> getPicRatio(){
+        Map<String, Object> result = new HashMap<>();
+        List<PubSetup> sets = pubSetupBaseService.findList(null, Arrays.asList(Filter.eq("code", PubSetup.Code.picRatioForShow.getName())), null);
+        if(sets != null && sets.size() > 0){
+            PubSetup set = sets.get(0);
+            String json = set.getValue();
+            if(StringUtil.isNotBlank(json)){
+                result = JsonUtils.toObject(json, Map.class);
+            }
+        }
+        return result;
+    }
+
+
+}

@@ -1,0 +1,550 @@
+var productList;
+var index;//当前编辑规格的商品下标
+seajs.use(['$', 'template', 'msgBox', 'jquery.json'],
+    function ($, template, msgBox) {
+
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+
+                    EventHandler.search();
+                },
+
+                /** 初始化页面 */
+                initPage: function () {
+
+                },
+
+                /** 初始化事件 */
+                initEvent: function () {
+                    //选择商品
+                    $("#dataList").on('click', '.xw_radio', function(){
+                        var index = $(this).parents(".productDataDiv").attr("data-value-index");
+                        if(productList[index].stockNum > 0 && !$("#isValid"+index).html()){
+                            $(this).toggleClass("checked");
+                            productList[index].checked = $(this).hasClass("checked") ? "checked" : "";
+                            EventHandler.countAmount();
+                        }
+                    });
+                    //数量-1
+                    $("#dataList").on('click', '.ico_minus', function(){
+                        EventHandler.saveCart($(this), -1);
+                    });
+                    //数量+1
+                    $("#dataList").on('click', '.ico_plus', function(){
+                        EventHandler.saveCart($(this), 1);
+                    });
+                    //填数量
+                    $("#dataList").on('change', '.numInput', function(){
+                        EventHandler.updateCart($(this));
+                    });
+                    $("#dataList").on('keyup afterpaste', '.numInput', function(){
+                        testPositiveNumber(this);
+                    });
+                    //删除
+                    $("#dataList").on('click', '.delBtn', function(){
+                        EventHandler.delCart($(this));
+                    });
+                    //编辑
+                    $("#edit").click(function(){
+                        $(".editPage").css("display", "block");
+                        $(".indexPage").css("display", "none");
+                    });
+                    //确定
+                    $("#sure").click(function(){
+                        $(".editPage").css("display", "none");
+                        $(".indexPage").css("display", "block");
+                    });
+                    //去结算
+                    $("#settle").click(EventHandler.toSettle);
+
+
+                    //打开选择规格页面
+                    $("#dataList").on('click', '.xw_guigeBt', function(){
+                        var $parent = $(this).parents(".productDataDiv");
+                        if($parent.attr("data-value-isValid") == 2){
+                            msgBox.tips("商品已下架");
+                            return;
+                        }
+                        index = $parent.attr("data-value-index");
+                        productId = productList[index].productId;
+                        SpecHandler.init(productList[index]);
+                    });
+                    //确定规格
+                    $("#confirmSepc").click(function(){
+                        var product = SpecHandler.confirm();
+                        if(product){
+                            productList[index] = product;
+                            DataHandler.updateCart({id: product.id, priceId: product.priceId, num: product.num}, function(backData){
+                                EventHandler.search('edit');
+                            });
+                        }
+                    });
+
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                search: function (type) {
+                    DataHandler.search({}, function(backData){
+                        if(productList){
+                            for (var i = 0; i < backData.length; i++){
+                                for (var j = 0; j < productList.length; j++){
+                                    if(backData[i].id == productList[j].id){
+                                        backData[i].checked = productList[j].checked;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        productList = backData;
+                        var html = template('template_dataList', {content: productList});
+                        $('#dataList').html(html);
+                        if(type == "edit"){
+                            $(".editPage").css("display", "block");
+                            $(".indexPage").css("display", "none");
+                        }
+                        EventHandler.countAmount();
+                    });
+                },
+                delCart: function($this){
+                    msgBox.confirm({
+                        title: '提示',
+                        msg: '确认删除该商品?',
+                        callback: function (btnType) {
+                            if (btnType == 'ok') {
+                                var dataDiv = $this.parents(".productDataDiv");
+                                var index = dataDiv.attr("data-value-index");
+                                var id = productList[index].id;
+                                DataHandler.delCart({id: id}, function(backData){
+                                    dataDiv.remove();
+                                    EventHandler.countAmount();
+                                });
+                            }
+                        }
+                    });
+                },
+                saveCart: function($this, addNum){
+                    var $parent = $this.parents(".productDataDiv");
+                    if($parent.attr("data-value-isValid") == 2){
+                        msgBox.tips("商品已下架");
+                        return;
+                    }
+                    var index = $parent.attr("data-value-index");
+
+                    var $input = $this.siblings("input");
+                    var num = parseInt($input.val()) + addNum;
+                    if(num > 0){
+                        var stockNum = productList[index].stockNum;
+                        if(num > stockNum){
+                            msgBox.tips("库存不足,最多可购买"+stockNum+"件");
+                            return;
+                        }
+                        $("#isValid" + index).remove();
+                        $input.val(num);
+                        $("#num"+index).html("X" + num);
+                        var priceId = productList[index].priceId;
+                        var id = productList[index].id;
+                        DataHandler.saveCart({id: id, priceId: priceId, num: num}, function(backData){
+                            productList[index].num = num;
+                            EventHandler.countAmount();
+                        });
+                    }
+                },
+                updateCart: function($input){
+                    var index = $parent.attr("data-value-index");
+                    var num = $input.val();
+                    if($input.val() == "" || $input.val() == 0){
+                        num = 1;
+                    }
+                    var stockNum = productList[index].stockNum;
+                    if(num > stockNum){
+                        msgBox.tips("库存不足,最多可购买"+stockNum+"件");
+                        num = stockNum;
+                    }
+                    if(num == 0){
+                        return;
+                    } else {
+                        $("#isValid" + index).remove();
+                    }
+                    $input.val(num);
+                    $("#num"+index).html("X" + num);
+                    var priceId = productList[index].priceId;
+                    var id = productList[index].id;
+                    DataHandler.saveCart({id: id, priceId: priceId, num: num}, function(backData){
+                        productList[index].num = num;
+                        EventHandler.countAmount();
+                    });
+                },
+                countAmount: function(){
+                    var checkedArr = $(".checked");
+                    var productAmount = 0;
+                    for(var i = 0; i < checkedArr.length; i++){
+                        var index = $(checkedArr[i]).parents(".productDataDiv").attr("data-value-index");
+                        var product = productList[index];
+                        productAmount += product.salesPrice * product.num;
+                    }
+                    $("#productAmount").html(productAmount.toFixed(2));
+                },
+                toSettle: function(){
+                    var checkedArr = $(".checked");
+                    if(checkedArr.length == 0){
+                        return;
+                    }
+                    var cartIds = [];
+                    for(var i = 0; i < checkedArr.length; i++){
+                        var index = $(checkedArr[i]).parents(".productDataDiv").attr("data-value-index");
+                        cartIds[i] = productList[index].id;
+                    }
+                    window.location.href = path + "/admin/wechat/cusCart/settle.html?shopId=" + shopId + "&cartIds=" + cartIds.join(",");
+                }
+            }
+        }();
+
+        /**
+         * 购物车商品规格处理器
+         */
+        var SpecHandler = function () {
+            var product;
+            var isFirstInit = true;
+            var specList;
+            var productPriceList;
+            //复制
+            function deepCopy(source) {
+                var result={};
+                for (var key in source) {
+                    result[key] = typeof source[key]==='object'? deepCopy(source[key]): source[key];
+                }
+                return result;
+            }
+            return {
+                /**
+                 * 初始化
+                 * @param cartProduct 购物车商品，新增时传{productId: productId}，
+                 *                                 修改时传{productId: productId, num: num, specJson: specJson}
+                 */
+                init: function(cartProduct){
+                    $('#specList').html("");
+                    product = deepCopy(cartProduct);
+                    var productId = product.productId;
+                    SpecHandler.openPage();
+                    SpecHandler.bindEvent();
+                    $.get(path + "/admin/wechat/product/findSpecAndPrice", {id: productId}, function(backData){
+                        specList = $.evalJSON(backData.specJson);
+                        productPriceList = backData.productPriceList;
+                        var html = template('template_specList', {content: specList});
+                        $('#specList').html(html);
+                        SpecHandler.initSpec(product.specJson);
+                        SpecHandler.handleSpec();
+                        $(".Up").removeClass("nothing").removeClass("hideLi");
+                        var listHeightPx = $("#specList").css("height");
+                        var listHeight = parseInt(listHeightPx.substr(0, listHeightPx.length-2));
+                        setTimeout(function(){//不加延时会卡？
+                            $(".guigeDiv").css("height", 150 + listHeight + "px");
+                        }, 50);
+                    });
+                },
+                initSpec: function(specJson){
+                    if(specJson){
+                        //关闭选择规格
+                        $(".close").click(function(){
+                            SpecHandler.closePage();
+                        });
+                        $("#productNum").val(product.num);
+                        for(var i = 0; i < productPriceList.length; i++){
+                            var productPrice = productPriceList[i];
+                            if(productPrice.specJson == specJson){
+                                $("#salesPrice").html(productPrice.salesPrice);
+                                $("#stockNum").html("（库存"+productPrice.stockNum+"件）");
+                                if($("#productNum").val() > productPrice.stockNum){
+                                    $("#productNum").val(productPrice.stockNum);
+                                }
+                                if(productPrice.isActivity == 1){ //特卖
+                                    $("#costPrice").html("￥" + productPrice.costPrice);
+                                }
+                                break;
+                            }
+                        }
+                        var specTarget = $.evalJSON(specJson);
+                        for(var i = 0; i < specList.length; i++){
+                            var spec = specList[i];
+                            for(var j = 0; j < spec.detail.length; j++){
+                                if(spec.detail[j] == specTarget[spec.name]){
+                                    $("#"+i+"spec"+j).addClass("Up");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                },
+                handleSpec: function(){
+                    $(".hideLi").removeClass("hideLi");
+                    $(".specLi").addClass("nothing");
+                    var upArr = []; //选中的规格
+                    for(var i = 0; i < specList.length; i++){
+                        upArr[i] = "no"; //0=="" -->true
+                        var spec = specList[i];
+                        for(var j = 0; j < spec.detail.length; j++){
+                            if($("#"+i+"spec"+j).hasClass("Up")){
+                                upArr[i] = j;
+                                break;
+                            }
+                        }
+                    }
+                    for(var i = 0; i < specList.length; i++){
+                        var spec = specList[i];
+                        for(var j = 0; j < spec.detail.length; j++){
+                            var priceList = findDetailPriceList(i, j, upArr);
+                            if(priceList.length == 0){
+                                $("#"+i+"spec"+j).addClass("hideLi");
+                            }
+                            for(var k = 0; k < priceList.length; k++){
+                                var productPrice = priceList[k];
+                                if(productPrice.stockNum > 0){
+                                    $("#"+i+"spec"+j).removeClass("nothing");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    /**
+                     * i/j--"颜色":"白色"，up--"体积":"100ML"，return {"颜色":"白色","体积":"100ML","包装":*}
+                     * i/j--"颜色":"白色"，up--none:"100ML"，return {"颜色":"白色","体积":*,"包装":*}
+                     * {"颜色":"白色","体积":"100ML","包装":"瓶装"}
+                     * @param i
+                     * @param j
+                     * @param upArr
+                     */
+                    function findDetailPriceList(i, j, upArr){
+                        var targetSpecName = specList[i].name;
+                        var targetSpecDetail = specList[i].detail[j];
+                        var backList = [];
+                        for(var k = 0; k < productPriceList.length; k++){
+                            var productPrice = productPriceList[k];
+                            var spec = $.evalJSON(productPrice.specJson);
+                            if(targetSpecDetail == spec[targetSpecName]){
+                                if(checkUp(spec, i, upArr)){
+                                    backList[backList.length] = productPrice;
+                                }
+                            }
+                        }
+                        return backList;
+                    }
+
+                    /**
+                     *
+                     * @param i
+                     * @param upArr
+                     */
+                    function checkUp(spec, i, upArr){
+                        var boo = true;
+                        for(var l = 0; l < upArr.length; l++){
+                            if(upArr[l] != "no" && i != l){
+                                if(spec[specList[l].name] != specList[l].detail[upArr[l]]){
+                                    boo = false;
+                                }
+                            }
+                        }
+                        return boo;
+                    }
+                },
+                //打开页面
+                openPage: function(){
+                    $(".xw_guigeDiv").show();
+                    var shareWid = $(document).outerWidth();
+                    var shareHei = $(document).outerHeight();
+                    $(".xw_guigeDiv").css({width:shareWid});
+                    $(".xw_guigeDiv").css({height:shareHei});
+                    $(".xw_guige").animate({'bottom':'0'});
+                },
+                //绑定事件
+                bindEvent: function(){
+                    if(isFirstInit){
+                        isFirstInit = false;
+                        //选择规格
+                        $("#specList").on('click', 'ul.xw_sizeUl li', function(){
+                            if($(this).hasClass("nothing") || $(this).hasClass("hideLi")){
+                                return;
+                            }
+                            $("#salesPrice").html("--");
+                            $("#stockNum").html("（库存--件）");
+                            $("#costPrice").html("");
+
+                            var isUp = $(this).hasClass("Up");
+                            $(this).parents("ul.xw_sizeUl").find('li').removeClass("Up");
+                            if(!isUp){
+                                $(this).addClass("Up");
+                            }
+                            var selectedArr = $("li.Up");
+                            product.specJson = "";
+                            if(specList.length == selectedArr.length){
+                                var spec = {};
+                                for(var i = 0; i < specList.length; i++) {
+                                    var selected = selectedArr[i];
+                                    spec[specList[i].name] = $(selected).html();
+                                }
+                                var specJson = $.toJSON(spec);
+                                for(var i = 0; i < productPriceList.length; i++){
+                                    var productPrice = productPriceList[i];
+                                    if(specJson == productPrice.specJson){
+                                        $("#salesPrice").html(productPrice.salesPrice);
+                                        $("#stockNum").html("（库存"+productPrice.stockNum+"件）");
+                                        if($("#productNum").val() > productPrice.stockNum && productPrice.stockNum != 0){
+                                            $("#productNum").val(productPrice.stockNum);
+                                        }
+                                        if($("#productNum").val() == 0 && productPrice.stockNum != 0){
+                                            $("#productNum").val(1);
+                                        }
+                                        if(productPrice.isActivity == 1){ //特卖
+                                            $("#costPrice").html("￥" + productPrice.costPrice);
+                                        }
+                                        product.specJson = specJson;
+                                        product.num = $("#productNum").val();
+                                        product.priceId = productPrice.id;
+                                        product.stockNum = productPrice.stockNum;
+                                        product.specDesc = productPrice.specDesc;
+                                        break;
+                                    }
+                                }
+                            }
+                            SpecHandler.handleSpec();
+                        });
+                        $("#productNum").on('keyup afterpaste', function(){
+                            testPositiveNumber(this);
+                        });
+                        //填数量
+                        $("#productNum").on('change', function(){
+                            SpecHandler.updateCart();
+                        });
+                        //-1
+                        $("#numSub").click(function(){
+                            SpecHandler.saveCart(-1);
+                        });
+                        //+1
+                        $("#numAdd").click(function(){
+                            SpecHandler.saveCart(1);
+                        });
+                    }
+                },
+                updateCart: function(){
+                    var num = parseInt($("#productNum").val() || 1);
+                    if(num == 0){
+                        num = 1;
+                    }
+                    if(product.specJson != ""){
+                        var stockNum = product.stockNum;
+                        if(num > stockNum){
+                            msgBox.tips("库存不足,最多可购买"+stockNum+"件");
+                            num = stockNum;
+                        }
+                    }
+                    $("#productNum").val(num);
+                    product.num = num;
+                },
+                //确定
+                confirm: function(){
+                    if(product.specJson == ""){
+                        msgBox.tips("请选择商品规格");
+                        return;
+                    }
+                    if(product.stockNum == 0){
+                        msgBox.tips("库存不足");
+                        return;
+                    }
+                    SpecHandler.closePage();
+                    return product;
+                },
+                closePage: function(){
+                    $(".xw_shareDiv").hide();
+                    $(".xw_guigeDiv").hide();
+                    $(".xw_share").animate({'bottom':'-250px'});
+                    $(".xw_guige").animate({'bottom':'-280px'});
+                },
+                saveCart: function(addNum){
+                    var num = parseInt($("#productNum").val()) + addNum;
+                    if(num > 0){
+                        if(!product.specJson || num <= product.stockNum){
+                            $("#productNum").val(num);
+                            product.num = num;
+                        }
+                    }
+                }
+            }
+        }();
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                //查询列表
+                search: function (param, callback) {
+                    $.get(path + "/admin/wechat/cusCart/findAll", param, function(data){
+                        callback(data);
+                    });
+                },
+                saveCart: function (param, callback) {
+                    $.post(path + "/admin/wechat/cusCart/save", param, function(data){
+                        callback(data);
+                    });
+                },
+                delCart: function (param, callback) {
+                    $.post(path + "/admin/wechat/cusCart/delete", param, function(data){
+                        callback(data);
+                    });
+                },
+                updateCart: function (param, callback) {
+                    $.post(path + "/admin/wechat/cusCart/save", param, function(data){
+                        callback(data);
+                    });
+                },
+                findSpecAndPrice: function (param, callback) {
+                    $.get(path + "/admin/wechat/product/findSpecAndPrice", param, function(data){
+                        callback(data);
+                    });
+                }
+
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    });
+
+//正整数验证
+function testPositiveNumber(ob){
+    if(ob.value.length==1){ob.value=ob.value.replace(/[^1-9]/g,'')}else{ob.value=ob.value.replace(/\D/g,'')}
+    if(ob.value == 'undefined'){
+        ob.value = '1';
+    }
+}
+
+/**
+ *删除数组指定下标或指定对象
+ */
+Array.prototype.remove=function(obj){
+    for(var i =0;i <this.length;i++){
+        var temp = this[i];
+        if(!isNaN(obj)){
+            temp=i;
+        }
+        if(temp == obj){
+            for(var j = i;j <this.length;j++){
+                this[j]=this[j+1];
+            }
+            this.length = this.length-1;
+        }
+    }
+}

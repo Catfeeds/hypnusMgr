@@ -1,0 +1,305 @@
+package com.catt.wfx.service.impl.order;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderDao;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderLogDao;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementOrderDetailDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.couponMgr.CouponCus;
+import com.catt.wfx.repository.entity.couponMgr.CouponInfo;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountDetail;
+import com.catt.wfx.repository.entity.customerMgr.SettlementPushRecord;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLog;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+import com.catt.wfx.repository.form.customerMgr.CusAccountHandlerForm;
+import com.catt.wfx.service.base.couponMgr.CouponCusBaseService;
+import com.catt.wfx.service.base.couponMgr.CouponInfoBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderBaseService;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementBusinessBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementOrderDetailBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementShopDetailBaseService;
+import com.catt.wfx.service.cusAccount.CusAccountHandlerService;
+import com.catt.wfx.service.order.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单服务
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-2-27 14:51:26
+ */
+@Service("orderServiceImpl")
+public class OrderServiceImpl implements OrderService {
+
+    //LOG
+    private static final Logger LOG = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    //订单服务
+    @Resource(name = "cusOrderBaseServiceImpl")
+    CusOrderBaseService cusOrderBaseService;
+
+    //订单Dao
+    @Resource(name = "cusOrderDaoImpl")
+    CusOrderDao cusOrderDao;
+
+    //订单结算统计Dao
+    @Resource(name = "settlementOrderDetailDaoImpl")
+    SettlementOrderDetailDao settlementOrderDetailDao;
+
+    //订单结算统计服务
+    @Resource(name = "settlementOrderDetailBaseServiceImpl")
+    SettlementOrderDetailBaseService settlementOrderDetailBaseService;
+
+    //账户结算明细服务
+    @Resource(name = "settlementShopDetailBaseServiceImpl")
+    SettlementShopDetailBaseService settlementShopDetailBaseService;
+
+    //用户账号资金相关操作服务
+    @Resource(name = "cusAccountHandlerServiceImpl")
+    CusAccountHandlerService cusAccountHandlerService;
+
+    //系统全局设置服务接口
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+
+    //用户代金券服务
+    @Resource(name = "couponCusBaseServiceImpl")
+    public CouponCusBaseService couponCusBaseService;
+
+    //代金券服务
+    @Resource(name = "couponInfoBaseServiceImpl")
+    public CouponInfoBaseService couponInfoBaseService;
+
+    //商家账户信息服务
+    @Resource(name = "settlementBusinessBaseServiceImpl")
+    private SettlementBusinessBaseService settlementBusinessBaseService;
+
+    /**订单日志*/
+    @Resource(name = "cusOrderLogDaoImpl")
+    private CusOrderLogDao cusOrderLogDao;
+
+    @Override
+    @Transactional
+    public void handleSignInOrder() {
+        LOG.info("订单超过退货期限任务开始执行。");
+        long startTimeMs = System.currentTimeMillis();
+
+        //需要将状态改成已完成的订单(已签收&&超过退货时间&&不是退货中)
+        List<Long> orderIds = cusOrderDao.findNeedFinishOrder();
+        if (orderIds.size() > 0){
+
+            Map<Long, Double> shopkeeperProfit = new HashMap<>(); //店主标识-利润
+
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.in("orderId", orderIds));
+            List<SettlementOrderDetail> settlementOrderDetails = settlementOrderDetailBaseService.findList(null, filters, null);
+            for (SettlementOrderDetail settlementOrderDetail : settlementOrderDetails){
+                //更新订单结算统计订单状态:已完成
+                settlementOrderDetail.setOrderStatus(CusOrder.OrderStatus.Finish.getValue());
+                settlementOrderDetail.setShopkeeperSettlement(PubEnum.YesOrNoEnum.YES.getValue());
+                Long shopkeeperId = settlementOrderDetail.getShopkeeperId();
+
+                Double profit = settlementOrderDetail.getShopkeeperAmount();
+
+                //结算店主利润提成(零售才有提成)
+                if (settlementOrderDetail.getOrderType() == CusOrder.OrderType.Retail.getValue() && shopkeeperId != null){
+//                    // 增加账户结算明细 （已删除）
+//                    SettlementShopDetail settlementShopDetail = new SettlementShopDetail();
+//                    settlementShopDetail.setCusId(shopkeeperId);
+//                    settlementShopDetail.setCusType(SettlementShopDetail.CusType.Shopkeeper.getValue()); // 客户类型
+//                    settlementShopDetail.setSettlementType(SettlementShopDetail.SettlementType.ShopkeeperCommissions.getValue()); // 交易类型
+//                    settlementShopDetail.setSalesMoney(profit);
+//                    settlementShopDetailBaseService.save(settlementShopDetail);
+                    shopkeeperProfit.put(shopkeeperId, NumberUtil.add(profit, MapUtil.getDouble(shopkeeperProfit, shopkeeperId, 0.0)));
+                }
+            }
+            //更新订单表订单状态
+            cusOrderDao.updateOrderStatus(orderIds, CusOrder.OrderStatus.Finish);
+
+            List<CusOrderLog> cusOrderLogs = new ArrayList<>();
+
+            orderIds.forEach(orderId -> {
+                //订单流程信息
+                CusOrderLog cusOrderLog = new CusOrderLog();
+                cusOrderLog.setOrderId(orderId);
+                cusOrderLog.setAct(CusOrderLog.Act.Finish.getValue());
+                cusOrderLog.setContent(CusOrderLog.Act.Finish.getName());
+                cusOrderLog.setOperatorId(1L);
+                cusOrderLog.setOperatorName("admin[定时任务定期进行结算]");
+                cusOrderLogs.add(cusOrderLog);
+            });
+
+            cusOrderLogDao.persist(cusOrderLogs);
+
+            settlementOrderDetailBaseService.saveOrUpdate(settlementOrderDetails);
+
+            Double totalProfit = 0.0; //利润统计
+            Map<Long, Long> accountDetailIdMap = new HashMap<>(); //店主id-账号明细id
+            for (Map.Entry<Long, Double> entry : shopkeeperProfit.entrySet()) {
+                Double profit = entry.getValue();
+                Long shopkeeperId = entry.getKey();
+                totalProfit = NumberUtil.moneyAdd(profit, totalProfit);
+                if (profit > 0){ //退货后利润可能为0
+                    CusAccountHandlerForm cusAccountHandlerForm = new CusAccountHandlerForm(shopkeeperId, profit,
+                            CusAccountDetail.Type.SalesCommissions, null);
+                    Long accountDetailId = cusAccountHandlerService.handleMoney(cusAccountHandlerForm).getAccountDetailId();
+                    accountDetailIdMap.put(shopkeeperId, accountDetailId);
+                }
+            }
+
+            double totalRebateMoney = 0.0; //返利统计
+            for (SettlementOrderDetail settlementOrderDetail : settlementOrderDetails){
+                Long shopkeeperId = settlementOrderDetail.getShopkeeperId();
+                Long orderId = settlementOrderDetail.getOrderId();
+                Double profit = settlementOrderDetail.getShopkeeperAmount();
+                //结算店主利润提成(零售才有提成)
+                if (settlementOrderDetail.getOrderType() == CusOrder.OrderType.Retail.getValue()
+                        && shopkeeperId != null && profit > 0){
+                    Long accountDetailId = accountDetailIdMap.get(shopkeeperId);
+                    //店主待收提成-
+                    cusAccountHandlerService.handelUnAcceptMoney(shopkeeperId, -profit, orderId, accountDetailId,
+                            SettlementPushRecord.Type.AcceptMoneyToAccount);
+                }
+                //处理五级返利：1）返利到账 2）待返利-
+                String rebateJson = settlementOrderDetail.getRebateJson();
+                if (StringUtil.checkStr(rebateJson)) {
+                    List<Map> rebateList = JsonUtils.toList(rebateJson, Map.class);
+                    totalRebateMoney = this.handleRebate(rebateList, 1, "i_rebate_one", orderId, totalRebateMoney);
+                    totalRebateMoney = this.handleRebate(rebateList, 2, "i_rebate_two", orderId, totalRebateMoney);
+                    totalRebateMoney = this.handleRebate(rebateList, 3, "i_rebate_three", orderId, totalRebateMoney);
+                    totalRebateMoney = this.handleRebate(rebateList, 4, "i_rebate_four", orderId, totalRebateMoney);
+                    totalRebateMoney = this.handleRebate(rebateList, 5, "i_rebate_five", orderId, totalRebateMoney);
+
+                }
+
+            }
+            if (totalProfit > 0 || totalRebateMoney > 0){
+                //修改店主累计提成金额
+                SettlementBusiness settlementBusiness = settlementBusinessBaseService.findSettlementBusiness(1L); //TODO 厂家标识
+                double totalShopMoney = NumberUtil.moneyAdd(settlementBusiness.getTotalShopMoney(), totalProfit);
+                totalShopMoney = NumberUtil.moneyAdd(totalShopMoney, totalRebateMoney);
+                settlementBusiness.setTotalShopMoney(totalShopMoney);
+                settlementBusinessBaseService.update(settlementBusiness);
+            }
+
+        }
+
+        long ms = System.currentTimeMillis() - startTimeMs;
+        LOG.info("订单超过退货期限任务完成，花费时间" + ms + "ms");
+    }
+
+    /**
+     * 返利到账处理：1）余额+ 2）未到账返利-
+     *
+     * @param rebateList       返利集合
+     * @param rebateLevel      返利级别
+     * @param columnName       返利金额字段名
+     * @param orderId          订单标识
+     * @param totalRebateMoney 返利统计
+     */
+    private double handleRebate(List<Map> rebateList, int rebateLevel, String columnName, Long orderId,
+                                double totalRebateMoney) {
+        int size = rebateList.size();
+        if (size >= rebateLevel) {
+            Map rebateMap = rebateList.get(rebateLevel - 1);
+            Long rebateShopkeeperId = MapUtil.getLong(rebateMap, "i_shopkeeper_id");
+            Double rebateMoney = MapUtil.getDouble(rebateMap, columnName);
+            if (rebateMoney > 0 && rebateShopkeeperId != null) {
+                CusAccountHandlerForm cusAccountHandlerForm = new CusAccountHandlerForm(rebateShopkeeperId,
+                        rebateMoney, CusAccountDetail.Type.RebateMoneyToAccount, null);
+                Long accountDetailId = cusAccountHandlerService.handleMoney(cusAccountHandlerForm).getAccountDetailId();
+                cusAccountHandlerService.handelReciveRebateMoney(rebateShopkeeperId, -rebateMoney, orderId,
+                        accountDetailId, SettlementPushRecord.Type.RebateMoneyToAccount, rebateLevel);
+                totalRebateMoney = NumberUtil.add(totalRebateMoney, rebateMoney);
+            }
+        }
+        return totalRebateMoney;
+    }
+
+    @Override
+    @Transactional
+    public void handleTimeoutOrder() {
+        LOG.info("订单超时处理任务开始...");
+        long start = System.currentTimeMillis();
+
+        //查询订单信息，获取超时未支付订单
+        List<Map> mapList = cusOrderDao
+                .findTimeOutOrder(pubSetupBaseService
+                        .getIntegerSetupByCode(PubSetup.Code.orderTimeoutCode));
+        if(CollectionUtil.isNotEmpty(mapList)){
+            List<Long> orderIds = new ArrayList<Long>();
+            List<Long> cusCouponId = new ArrayList<Long>();
+            for (Map map : mapList){
+                orderIds.add(MapUtil.getLong(map, "id"));
+                Long cusCouponId1 = MapUtil.getLong(map,"cusCouponId");
+                if(StringUtil.checkObj(cusCouponId1)) {
+                    cusCouponId.add(cusCouponId1);
+                }
+            }
+
+            //修改超时订单信息
+            cusOrderDao.updateTimeoutOrderStatus(orderIds);
+
+            if(CollectionUtil.isNotEmpty(cusCouponId)){
+                //获取用户代金券信息
+                List<CouponCus> couponCuses = couponCusBaseService.findList((Long[])cusCouponId.toArray(new Long[cusCouponId.size()]));
+
+
+                List<Long> couponId = new ArrayList<Long>();
+                //循环遍历设置用户代金券信息
+                for (CouponCus couponCus : couponCuses){
+                    couponCus.setIsUse(PubEnum.YesOrNoEnum.NO.getValue());
+                    couponCus.setOrderCode(null);
+                    couponId.add(couponCus.getCouponId());
+                }
+                couponCusBaseService.saveOrUpdate(couponCuses);
+
+                //代金券信息处理----统计相同标识的代金券数量
+                Map<Long, Integer> integerMap = new HashMap<Long, Integer>();
+                for (Long longEntity : couponId){
+                    integerMap.put(longEntity,  Collections.frequency(couponId, longEntity));
+                }
+
+                //获取用户代金券对应的代金券信息
+                List<CouponInfo> couponInfos =  couponInfoBaseService.findList((Long[])couponId.toArray(new Long[couponId.size()]));
+
+                //循环遍历---修改代金券使用数量
+                for (CouponInfo couponInfo : couponInfos){
+                    Long couponInfoId =  couponInfo.getId();
+                    if (integerMap.containsKey(couponInfoId)){
+                        couponInfo.setUseNum(couponInfo.getUseNum()-integerMap.get(couponInfoId).intValue());
+                    }
+                }
+                couponInfoBaseService.saveOrUpdate(couponInfos);
+            }
+
+        }
+
+
+
+        long end = System.currentTimeMillis();
+        LOG.info("订单超时处理任务结束，共处理超时订单" + mapList.size() + "条，花费时间"
+                + (end - start) + "ms");
+    }
+}

@@ -1,0 +1,22 @@
+package com.catt.wfx.service.productMgr;
+
+
+/**
+ * 店主商品服务接口
+ * 作者：袁幸成
+ * 时间：2017-1-18 9:03:47
+ */
+public interface ProductShopService {
+
+    /**
+     * 上架商品到店铺、下架店铺商品
+     *
+     * @param createdId
+     * @param createdName
+     * @param id
+     * @param status
+     */
+    void shelves(Long createdId, String createdName, Long id, Integer status);
+
+}
+

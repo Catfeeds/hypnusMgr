@@ -1,0 +1,49 @@
+package com.catt.wfx.web.controller.admin.express;
+
+import com.catt.common.module.express.data.Constats;
+import com.catt.common.module.express.data.QueryParam;
+import com.catt.common.module.express.repository.entity.ExpressLog;
+import com.catt.common.module.express.service.ExpressService;
+import com.catt.common.web.controller.BaseController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+
+/**
+ * 快递物流信息查询
+ *
+ * @author Zhang zhongtao
+ * @version 1.0.0.20170706
+ * @since JDK V1.8
+ */
+@RestController(value = "expressController")
+@RequestMapping(value = "/admin/express")
+public class ExpressController extends BaseController {
+    @Resource(name = "expressServiceImpl")
+    private ExpressService expressService;
+
+    private ExpressLog findByExCodeAndExCom(Constats.ExpressCom exCom, String exCode) {
+        QueryParam queryParam = new QueryParam();
+        queryParam.setExCom(exCom);
+        queryParam.setExCode(exCode);
+
+        ExpressLog expressLog = expressService.findByExCodeAndExCom(queryParam);
+
+        return expressLog;
+    }
+
+    /**
+     * 查询
+     *
+     * @param exCom  快递公司编号 必填
+     * @param exCode 快递编号 必填
+     * @return
+     */
+    @RequestMapping(value = "/find", method = RequestMethod.POST)
+    public ExpressLog find(Constats.ExpressCom exCom, String exCode) {
+        ExpressLog expressLog = findByExCodeAndExCom(exCom, exCode);
+        return expressLog;
+    }
+}

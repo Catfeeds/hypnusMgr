@@ -1,0 +1,53 @@
+package com.catt.wfx.security.shiro.validate.impl;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.repository.entity.BaseUserEntity;
+import com.catt.common.web.security.shiro.token.ExtAuthenticationToken;
+import com.catt.common.web.security.shiro.validate.ObtainUserData;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * <pre>
+ *
+ * @author : Zhang zhongtao
+ * @version : Ver 1.0
+ * </pre>
+ */
+@Service("obtainDataCusInfo")
+public class ObtainCusInfo implements ObtainUserData {
+
+    /**
+     * 用户服务
+     */
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    @Override
+    public <T extends BaseUserEntity> T getUser(ExtAuthenticationToken token) {
+        String account = token.getUsername();
+        Assert.notNull(account);
+        String password = (token.getPassword() == null ? "" : new String(token.getPassword()));
+        Assert.notNull(password);
+
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("account", account));
+        filters.add(Filter.eq("pwd", DigestUtils.md5Hex(password)));
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        List<CusInfo> list = cusInfoBaseService.findList(null, filters, null);
+        if (list == null || list.size() == 0) {
+            throw new IncorrectCredentialsException();
+        }
+        return (T) list.get(0);
+    }
+
+}

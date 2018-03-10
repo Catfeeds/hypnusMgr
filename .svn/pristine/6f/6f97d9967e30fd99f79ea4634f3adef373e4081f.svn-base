@@ -1,0 +1,126 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>确认订单</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/querendingdan.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/wodedaijinquan.css"/>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/cart/settle.js"></script>
+</head>
+<style type="text/css">
+    .hidePage{
+        display: none;
+    }
+</style>
+<script>
+    var cartIds = '${cartIds}';
+</script>
+<body style="background:#fff; display: none">
+<div style="height:47px;"></div>
+<div id="orderPage" class="pageDiv">
+    <div class="top header">
+        <button class="top-left" onClick="window.location=history.go(-1)">
+            <img class="top_btn_back" src="${path}/resources/images/top_btn_back.png">
+        </button>
+        <h1>确认订单</h1>
+        <input type="hidden" id="contactId" value="${entity.defaultContact.id}">
+        <input type="hidden" id="productAmount" value="${entity.productAmount}">
+        <input type="hidden" id="logisticsCost" value="${entity.logisticsCost}">
+    </div>
+
+    <div class="xiangqingTop"  id="toContact">
+        <c:if test="${entity.defaultContact == null}">
+            <p class="biaoti">收&nbsp;货&nbsp;人：<span style="font-size: 8px;color: #808080">请填写收货人信息</span></p>
+            <p class="dizhi"></p>
+        </c:if>
+        <c:if test="${entity.defaultContact != null}">
+            <p class="biaoti">收&nbsp;货&nbsp;人：<span class="neirong">${entity.defaultContact.recipients}  ${entity.defaultContact.tel}</span></p>
+            <p class="dizhi" style="font-size: 13px">${entity.defaultContact.provinceName}${entity.defaultContact.cityName}
+                    ${entity.defaultContact.regionName}${entity.defaultContact.address}</p>
+        </c:if>
+    </div>
+    <c:forEach items="${entity.productList}" var="product">
+        <div class="goodType">
+            <div class="goodsList">
+                <div class="goods">
+                    <h2>
+                        <font class="biaotiLeft">${product.productName}</font>
+                    </h2>
+                    <h3>规格：${product.specDesc}</h3>
+                    <p class="jiage">￥${product.salesPrice}<span class="shuliang">&nbsp;&nbsp;x${product.num}</span></p>
+                    <img style="width: 100px;height: 110px" class="gouwuchePic" src="${product.headPath}">
+                </div>
+            </div>
+        </div>
+    </c:forEach>
+
+    <div class="selectContent">
+        <ul class="DDPrice">
+            <li>
+                <h1>商品费用</h1>
+                <h2>￥<fmt:formatNumber value='${entity.productAmount}' pattern='0.00'/></h2>
+            </li>
+            <li>
+                <h1>优惠金额</h1>
+                <h2>￥<fmt:formatNumber value='${entity.totalDiscountAmount}' pattern='0.00'/></h2>
+            </li>
+            <li style=" cursor:pointer;" class="pageTurn">
+                <h1>代金券抵扣</h1>
+                <input type="hidden" id="cusCouponId">
+                <h2 style="padding-right:10px;">￥<span id="maxDeduction">0.00</span>
+                    <img src="${path}/resources/images/login_btn_next.png" width="16" height="16">
+                </h2>
+            </li>
+            <li>
+                <h1>运费</h1>
+                <c:if test="${entity.logisticsCost == 0}">
+                    <h2>包邮</h2>
+                </c:if>
+                <c:if test="${entity.logisticsCost != 0}">
+                    ￥<fmt:formatNumber value='${entity.logisticsCost}' pattern='0.00'/>
+                </c:if>
+            </li>
+        </ul>
+    </div>
+
+    <div style="height:50px;"></div>
+    <div class="zhifuBottom">
+        <p class="priceText">￥<span class="textPink priceNum" id="totalPayAmount">
+            <fmt:formatNumber value='${entity.productAmount}' pattern='0.00'/></span>
+        </p>
+        <button class="zhifuBtn">确认订单</button>
+    </div>
+</div>
+<div id="couponPage" class="pageDiv hidePage">
+    <div class="top header">
+        <button class="top-left pageTurn">
+            <img class="top_btn_back" src="${path}/resources/images/top_btn_back.png">
+        </button>
+        <h1>可用代金券</h1>
+    </div>
+    <div class="store_main xw_store_main">
+       <c:forEach items="${couponList}" var="coupon">
+           <div class="daijinquanTop" data-value-id="${coupon.id}"
+                data-value-maxDeduction="<fmt:formatNumber value='${coupon.maxDeduction}' pattern='0.00'/>">
+               <h1>${coupon.couponName}</h1>
+               <h2>${coupon.typeLimitDesc}</h2>
+               <h3>使用期限 <fmt:formatDate value="${coupon.createDate}" pattern="yyyy.MM.dd"/>-
+                   <fmt:formatDate value="${coupon.invalidTime}" pattern="yyyy.MM.dd"/></h3>
+               <span class="shue">
+                   <span style="font-size:19px;">￥</span>
+                   <fmt:formatNumber value='${coupon.faceValue}' pattern='0'/>
+               </span>
+               <span class="guize">
+                    <c:if test="${coupon.moneyLimit == 1}">
+                        满<fmt:formatNumber value='${coupon.orderMoney}' pattern='0'/>元可用
+                    </c:if>
+               </span>
+               <img class="topPic" src="${path}/resources/images/daijinquan_pic.png">
+           </div>
+       </c:forEach>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+package com.catt.wfx.service.impl.base.settlementMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.wfx.repository.dao.settlementMgr.SettlementBusinessDao;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementBusiness;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import com.catt.wfx.service.base.settlementMgr.SettlementBusinessBaseService;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 商家账户信息服务接口实现
+ *
+ * @author 袁幸成
+ * @date 2017-02-23 11:38:28
+ * @version V1.0
+ */
+@Service("settlementBusinessBaseServiceImpl")
+public class SettlementBusinessBaseServiceImpl extends
+	BaseServiceImpl<SettlementBusiness, Long> implements SettlementBusinessBaseService {
+
+	@Resource(name = "settlementBusinessDaoImpl")
+	private SettlementBusinessDao settlementBusinessDao;
+
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+	@Resource
+	public void setBaseDao(SettlementBusinessDao settlementBusinessDao) {
+		super.setBaseDao(settlementBusinessDao);
+	}
+
+    @Override
+    public SettlementBusiness findSettlementBusiness(Long factoryId) {
+        Assert.notNull(factoryId);
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("factoryId", factoryId));
+        List<SettlementBusiness> list = this.findList(1, filters, null);
+        if (list == null || list.size() == 0){
+            throw BaseException.errorByErrInfo("商家账户信息不存在");
+        }
+        return list.get(0);
+    }
+
+    @Override
+    public SettlementBusiness findSettlementBusiness4SelfSupport() {
+        String strFactoryId = pubSetupBaseService.getSetupByCode(PubSetup.Code.selfSupport);
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("factoryId", Long.parseLong(strFactoryId)));
+        List<SettlementBusiness> list = this.findList(1, filters, null);
+        if (list == null || list.size() == 0){
+            throw BaseException.errorByErrInfo("自营商家账户信息不存在，ID={0}", strFactoryId);
+        }
+        return list.get(0);
+    }
+
+}

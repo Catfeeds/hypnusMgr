@@ -1,0 +1,157 @@
+package util;
+
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.wfx.repository.data.comEnum.DateDimension;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 数据统计工具
+ *
+ * @author 邹佳
+ * @version V1.0
+ * @date 2016/10/18
+ */
+public class StatUtil {
+
+    /**
+     * 是否需要当天的统计数据
+     * 1、统计本月数据，返回true，在进行数据统计时需要从原始表将当天的统计数据查出，并组装到从统计表查询的数据中
+     * 2、统计本年数据，返回true，在进行数据统计时需要从原始表将当天的统计数据查出，并组装到从统计表查询的数据中
+     * 3、否则，返回false，无需查询原始表
+     *
+     * @param dateStr   日期字符串
+     * @param dimension 统计周期
+     * @return
+     */
+    public static boolean isNeedTodayData(String dateStr, DateDimension dimension) {
+        boolean flag = false;
+        String now = "";
+        if (DateDimension.MONTH.equals(dimension)) {
+            now = DateUtil.format(new Date(), "yyyyMM");
+        } else if (DateDimension.YEAR.equals(dimension)) {
+            now = DateUtil.format(new Date(), "yyyy");
+        }
+        if (now.equals(dateStr)) {
+            flag = true;
+        }
+        return flag;
+    }
+
+    /**
+     * 获取统计图横坐标日期数据
+     * 1、统计周期为月时，返回统计月所有格式为yyyyMMdd日期数据（如统计当前月，则只返回当天【包含当天】之前的日期
+     * 2、统计周期为年时，返回统计年所有格式为yyyyMM月份数据（如统计当前年，则只返回当月【包含当月】之前的月份
+     * PS: (如统计周期不存在，则提示非法操作, 如日期格式化错误，则提示非法操作)
+     *
+     * @param dateStr   日期字符串
+     * @param dimension 统计周期
+     * @return
+     */
+    public static List<String> getDateData4Stat(String dateStr, DateDimension dimension) {
+        List<String> returnList = new ArrayList<String>();
+
+        try {
+            if (DateDimension.MONTH.equals(dimension)) { // 统计周期为月时，返回统计月所有格式为yyyyMMdd日期数据（如统计当前月，则只返回当天【包含当天】之前的日期）
+                Date date = DateUtil.parseDate(dateStr, "yyyyMM");
+                Date monthFirstDateTime = DateUtil.getMonthFirstDateTime(date);
+                Date monthLastDateTime = DateUtil.getMonthLastDateTime(date);
+                Date now = new Date();
+                if (now.before(monthFirstDateTime)) {
+                    throw BaseException.errorByErrInfo("非法操作");
+                }
+                if (now.before(monthLastDateTime)) {
+                    monthLastDateTime = now;
+                }
+
+                int betweenDay = DateUtil.getDaysBetween(monthFirstDateTime, monthLastDateTime);
+                for (int i = 0; i <= betweenDay; i++) {
+                    returnList.add(DateUtil.getNearByDay("yyyyMMdd", monthFirstDateTime, i));
+                }
+            } else if (DateDimension.YEAR.equals(dimension)) { // 统计周期为年时，返回统计年所有格式为yyyyMM月份数据（如统计当前年，则只返回当月【包含当月】之前的月份）
+                Date yyyy = DateUtil.parseDate(dateStr, "yyyy");
+                Date now = new Date();
+                String nowYear = DateUtil.format(now, "yyyy");
+                Integer nowMonth = Integer.parseInt(DateUtil.format(now, "MM"));
+
+                if (now.before(yyyy)) {
+                    throw BaseException.errorByErrInfo("非法操作");
+                }
+
+                if (nowYear.equals(dateStr)) {
+                    for (int i = 0; i < nowMonth; i++) {
+                        returnList.add(DateUtil.getNearByMonth("yyyyMM", yyyy, i));
+                    }
+                } else {
+                    for (int i = 0; i < 12; i++) {
+                        returnList.add(DateUtil.getNearByMonth("yyyyMM", yyyy, i));
+                    }
+                }
+            } else { // 如统计周期不存在，则提示非法操作
+                throw BaseException.errorByErrInfo("非法操作");
+            }
+        } catch (Exception e) { // 如日期格式化错误，则提示非法操作
+            throw BaseException.errorByErrInfo("非法操作");
+        }
+
+        return returnList;
+    }
+
+    /**
+     * 获取统计时间横坐标
+     * 日返回格式(yyyy-MM-dd)
+     * 月返回格式(yyyyMM)
+     *
+     * @param startCreateDate 统计开始时间
+     * @param endCreateDate   统计结束时间
+     * @param dateDimension   时间维度
+     * @param showDays        最多展示天数
+     * @param showMonths      最多展示月数
+     * @return
+     */
+    public static List<String> getStatTime(Date startCreateDate, Date endCreateDate, DateDimension dateDimension, Integer showDays, Integer showMonths) {
+        List<String> resultList = new ArrayList<>();
+        switch (dateDimension) {
+            case DAY:
+                // 时间差大于最多展示天数时，返回最多展示天数
+                int betweenDay = DateUtil.getDaysBetween(startCreateDate, endCreateDate);
+                if (betweenDay > showDays) {
+                    for (int i = 0; i <= showDays; i++) {
+                        resultList.add(DateUtil.getNearByDay("yyyy-MM-dd", startCreateDate, i));
+                    }
+                } else {
+                    for (int i = 0; i <= betweenDay; i++) {
+                        resultList.add(DateUtil.getNearByDay("yyyy-MM-dd", startCreateDate, i));
+                    }
+                }
+                break;
+            case MONTH:
+                // 时间差大于最多展示月数时，返回最多展示月数
+                Calendar calStart = DateUtil.toCalendar(startCreateDate);
+                Calendar calEnd = DateUtil.toCalendar(endCreateDate);
+                calStart.set(Calendar.DAY_OF_MONTH, 0);
+                calEnd.set(Calendar.DAY_OF_MONTH, 0);
+                Long betweenMonth = DateUtil.getMonthsBetween(calStart.getTime(), calEnd.getTime());
+                if (betweenMonth > showMonths) {
+                    for (int i = 0; i < showMonths; i++) {
+                        resultList.add(DateUtil.getNearByMonth("yyyyMM", startCreateDate, i));
+                    }
+                } else {
+                    for (int i = 0; i <= betweenMonth; i++) {
+                        resultList.add(DateUtil.getNearByMonth("yyyyMM", startCreateDate, i));
+                    }
+                }
+                break;
+            case YEAR:
+                break;
+            default:
+                break;
+        }
+        return resultList;
+    }
+
+}

@@ -1,0 +1,65 @@
+package com.catt.wfx.service.couponMgr;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.wfx.repository.entity.couponMgr.CouponCus;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * 用户代金券服务接口
+ * 
+ * @author yuanxingcheng
+ * @date 2017-01-16 11:10:41
+ * @version V1.0
+ */
+public interface CouponCusService{
+
+    /**
+     * 获取用户代金券列表
+     * @param cusId 用户标识
+     * @return
+     */
+    List<CouponCus> findCusCouponList(Long cusId);
+
+    /**
+     * 创建订单-可用代金券列表（分页）
+     * @param cusId 客户标识
+     * @param cartIds 购物车标识
+     * @param pageNo 页码
+     * @param pageSize 每页记录数
+     * @return
+     */
+    Page<Map> getUsableCoupon(Long cusId, Long[] cartIds, Integer pageNo, Integer pageSize);
+
+    /**
+     * 判断代金券是否能使用
+     * @param productList 购买的商品列表
+     * @param couponCus 代金券
+     * @param couponData 代金券信息
+     * @return
+     */
+    boolean checkCanUseCouponCus(List<Map> productList, CouponCus couponCus, Map couponData);
+
+    /**
+     * 获取购物车商品列表（中某些分类的）总额
+     * @param productList 商品列表
+     * @param cateIds 分类集合（可为空）
+     * @param priceAmount 价格标识--商品总价（可为空）
+     * @return
+     */
+    Double getAmount(List<Map> productList,  Set<Long> cateIds, Map<Long, Double> priceAmount);
+
+    /**
+     * 获取用户代金券列表（分页）（APP）
+     *
+     * @param cusId    用户标识
+     * @param status   状态
+     * @param pageNo   页码
+     * @param pageSize 每页记录数
+     * @return
+     */
+    Page<Map> findCusCoupon(Long cusId, Integer status, Integer pageNo, Integer pageSize);
+}

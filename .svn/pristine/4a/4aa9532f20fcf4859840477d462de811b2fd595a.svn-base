@@ -1,0 +1,13 @@
+package com.catt.wfx.repository.dao.wechatReturn.impl;
+
+
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.wfx.repository.dao.wechatReturn.WechatReturnOrderLogDao;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrderLog;
+import org.springframework.stereotype.Repository;
+
+@Repository("returnWechatOrderLogDaoImpl")
+public class WechatReturnOrderLogDaoImpl extends BaseDaoImpl<WechatReturnOrderLog, Long>
+		implements WechatReturnOrderLogDao {
+
+}

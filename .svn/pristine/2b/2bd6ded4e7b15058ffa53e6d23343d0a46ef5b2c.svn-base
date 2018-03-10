@@ -1,0 +1,45 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: xiazanyi
+  Date: 2017/3/8
+  Time: 下午4:12
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <meta charset="utf-8">
+    <title>选择收货地址</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/dizhi.css"/>
+    <script type="text/javascript" src="${path}/resources/js/admin/wechat/personal/selectAddress.js"></script>
+
+</head>
+<body style="background:#f2f2f2;">
+<div style="height:47px;"></div>
+<div class="top header">
+    <button class="top-left" id="btnBack">
+        <img class="top_btn_back" src="${path}/resources/images/top_btn_back.png"></button>
+    <h1>选择收货地址</h1>
+</div>
+
+<div class="dizhiBox">
+    <ul id="dataList">
+
+    </ul>
+</div>
+</body>
+</html>
+<script type="text/html" id="template_dataList">
+    {{each content as item i}}
+    <li class="dataLi" data-value-index="{{i}}">
+        <div class="dizhiMsg">
+            <p class="dizhiText"><span class="textBlue">{{item.recipients}}</span> {{item.tel}}</p>
+            <p class="dizhiText">{{item.provinceName + ' ' + item.cityName + ' '+ item.regionName + ' ' + item.address}}</p>
+        </div>
+    </li>
+    {{/each}}
+</script>
+
+

@@ -1,0 +1,16 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*成功或者失败页面*/
+.chenggongBox{background:#fff; box-shadow:0 4px 10px #ccc; margin:20px; padding:20px;}
+.tipImg{width:80px; height:80px; margin:10px auto; margin-top:20px; display:block;}
+.chenggongTitle{font-size:18px; color:#1a1a1a; text-align: center; line-height:30px; letter-spacing:1px;}
+.chenggongIntro{font-size:14px; color:#969696; line-height:24px; text-align:center;}
+.chenggongBtn{margin-top:20px; height:52px;}
+.caozuoBtn{width:100%; height:50px; background:#f13d2e; color:#fff; font-size:16px; border-radius:4px;}
+.caozuoBtn:hover{background:#e13425;}
+.textBtn{width:100%; height:40px; color:#646464; font-size:15px; border-radius:4px;}
+.caozuoBtnRight{width:100%; height:48px; background:#ff4d4d; border:1px solid #f47f30; color:#fff; font-size:16px; border-radius:4px;}
+.caozuoBtnRight:hover{background:#ff7db8;}
+.caozuoBtnLeft{width:49%; float:left; height:48px; background:#fafafa; border:1px solid #e5e5e5; color:#646464; font-size:16px; border-radius:4px;}
+.caozuoBtnLeft:hover{background:#ff7db8;}

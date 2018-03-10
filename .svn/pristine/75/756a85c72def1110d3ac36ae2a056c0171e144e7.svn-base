@@ -1,0 +1,53 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/3/16
+  Time: 9:43
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>收益说明</title>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/public1.css"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/wodeyeji.css"/>
+
+    <!--<script type="text/javascript" src="js/tongjicharts02.js"></script>-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+</head>
+
+<body>
+<div style="height:47px;"></div>
+<%--<div class="head">--%>
+    <%--<button class="top-left" onClick="window.location='3-4-2tixian.html';"><img class="top_btn_back" src="images/top_btn_back.png"></button>--%>
+    <%--<h1>收益说明</h1>--%>
+<%--</div>--%>
+<div>
+    <h1 class="wenti">1、什么是收益？有什么用？</h1>
+    <p class="daan">
+        收益是店主或主管使用微分销APP销售商品获得利润。收益可提现到银行卡，也可以用来购买商品。
+    </p>
+    <h1 class="wenti">2、收益怎么来的？</h1>
+    <p class="daan" style="margin:0;">
+        a.店主卖出商品之后，店主就能获得商品的利润。
+    </p>
+    <p class="daan">
+        b.店主的销售业绩达到奖励标准之后，也会获得额外的奖励收益。
+    </p>
+    <h1 class="wenti">3、订单利润什么时候到账？</h1>
+    <p class="daan">
+        订单支付15天后，店主就会收到订单利润。届时退款还未完成的订单将不发放奖励。
+    </p>
+    <h1 class="wenti">4、销售利润什么时候到账？</h1>
+    <p class="daan">
+        销售奖励周期结束的15天后，系统会自动计算店主的销售额。届时退款还未完成的订单不计入店主的销售额内。销售额满足奖励标准的，会在奖励周期结束后15天发放奖励。
+    </p>
+</div>
+
+
+</body>
+</html>

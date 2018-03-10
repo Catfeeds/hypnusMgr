@@ -1,0 +1,313 @@
+var specList;
+seajs.use(['$', 'template',  'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox,  util) {
+        var productId;
+        var activityId;
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    productId = $("#productId").val();
+                    activityId = $("#activityId").val();
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    CoverpicHandler.init();
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                    //当服务器异常时，禁用的按钮给予恢复
+                    $(window.top).ajaxError(function(event,data) {
+                        $('#submit').button('reset');
+                    });
+
+                    //动态绑定click(动态生成的html)
+                    $("#dataList").on('click', '.xw_tick', templateList.check);
+
+                    $("#dataList").on('keyup afterpaste', '.money', function(){
+                        testMoney(this);
+                    });
+                    $("#dataList").on('keyup afterpaste', '.num', function(){
+                        testPositiveNumber(this);
+                    });
+                    //保存
+                    $('#submit').click(function () {
+                        EventHandler.save();
+                    })
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                    EventHandler.loadSpecList();
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                //
+                loadSpecList: function(){
+                    DataHandler.getSpecAndPrice({activityId: activityId, productId: productId}, function (backData) {
+                        if(backData){
+                            for(var i = 0, size = backData.length; i < size; i++){
+                                //if(backData[i].id){//修改
+                                //    backData[i].rebateOne = backData[i].rebateOne_spe;
+                                //    backData[i].rebateTwo = backData[i].rebateTwo_spe;
+                                //    backData[i].rebateThree = backData[i].rebateThree_spe;
+                                //    backData[i].rebateFour = backData[i].rebateFour_spe;
+                                //    backData[i].rebateFive = backData[i].rebateFive_spe;
+                                //}else{//新增
+                                //    backData[i].rebateOne = backData[i].rebateOne_pro;
+                                //    backData[i].rebateTwo = backData[i].rebateTwo_pro;
+                                //    backData[i].rebateThree = backData[i].rebateThree_pro;
+                                //    backData[i].rebateFour = backData[i].rebateFour_pro;
+                                //    backData[i].rebateFive = backData[i].rebateFive_pro;
+                                //}
+                                backData[i].rebateOne = backData[i].rebateOne_spe;
+                                backData[i].rebateTwo = backData[i].rebateTwo_spe;
+                                backData[i].rebateThree = backData[i].rebateThree_spe;
+                                backData[i].rebateFour = backData[i].rebateFour_spe;
+                                backData[i].rebateFive = backData[i].rebateFive_spe;
+                            }
+                        }
+                        addSepcStr(backData);
+                        specList = backData;
+                        var stockNum = 0;
+                        for(var i = 0; i < specList.length; i++){
+                            stockNum += specList[i].stockNum;
+                        }
+                        $('#stockNum').html(stockNum);
+                        var html = template('template_dataList', {content: backData});
+                        $('#dataList').html(html);
+                        $(window).triggerHandler('resize');
+                    });
+                },
+                /**
+                 * 保存
+                 */
+                save: function () {
+                    var checked = $(".tickOn");
+                    if (checked.length == 0) {
+                        msgBox.tips("请勾选需要特卖的商品规格");
+                        return;
+                    }
+                    var actProRelList = []; //商品活动关联
+                    for(var i = 0; i < checked.length; i++){
+                        var index = $(checked[i]).attr("data-value-index");
+                        var spec = specList[index];
+                        var actProRel = {actId: activityId, productId: productId};
+                        actProRel.id = spec.id;
+                        actProRel.priceId = spec.priceId;
+                        actProRel.costPrice = spec.salesPrice;
+                        var actsaleNum = $("#actsaleNum"+index).val();
+                        if(actsaleNum == ""){
+                            $("#actsaleNum"+index).focus();
+                            msgBox.tips("请输入特卖数量");
+                            return;
+                        }
+                        if(actsaleNum > spec.stockNum){
+                            $("#actsaleNum"+index).focus();
+                            msgBox.tips("特卖数量不能大于剩余数量");
+                            return;
+                        }
+                        actProRel.actsaleNum = actsaleNum;
+                        var actSalesPrice = $("#actSalesPrice"+index).val();
+                        if(actSalesPrice == ""){
+                            $("#actSalesPrice"+index).focus();
+                            msgBox.tips("请输入特卖价格");
+                            return;
+                        }
+                        actProRel.salesPrice = actSalesPrice;
+                        var actProfit = $("#actProfit"+index).val();
+                        if(actProfit == ""){
+                            $("#actProfit"+index).focus();
+                            msgBox.tips("请输入特卖利润");
+                            return;
+                        }
+                        if(parseFloat(actSalesPrice) <= parseFloat(actProfit)){
+                            $("#actProfit"+index).focus();
+                            msgBox.tips("特卖利润要小于特卖售价");
+                            return;
+                        }
+
+                        //返利
+                        actProRel.rebateOne = $("#rebateOne"+index).val();
+                        actProRel.rebateTwo = $("#rebateTwo"+index).val();
+                        actProRel.rebateThree = $("#rebateThree"+index).val();
+                        actProRel.rebateFour = $("#rebateFour"+index).val();
+                        actProRel.rebateFive = $("#rebateFive"+index).val();
+                        if((actProRel.rebateFive && (!actProRel.rebateOne || !actProRel.rebateTwo || !actProRel.rebateThree || !actProRel.rebateFour)) ||
+                            (actProRel.rebateFour && (!actProRel.rebateOne || !actProRel.rebateTwo || !actProRel.rebateThree)) ||
+                            (actProRel.rebateThree && (!actProRel.rebateOne || !actProRel.rebateTwo)) ||
+                            (actProRel.rebateTwo && !actProRel.rebateOne)){
+                            $("#rebateOne"+i).focus();
+                            msgBox.tips("上级返利不能为空");
+                            return;
+                        }
+                        if(parseFloat(actSalesPrice) <= parseFloat(actProRel.rebateOne)){
+                            $("#rebateOne"+index).focus();
+                            msgBox.tips("返利要小于特卖售价");
+                            return;
+                        }
+                        if(parseFloat(actSalesPrice) <= parseFloat(actProRel.rebateTwo)){
+                            $("#rebateTwo"+index).focus();
+                            msgBox.tips("返利要小于特卖售价");
+                            return;
+                        }
+                        if(parseFloat(actSalesPrice) <= parseFloat(actProRel.rebateThree)){
+                            $("#rebateThree"+index).focus();
+                            msgBox.tips("返利要小于特卖售价");
+                            return;
+                        }
+                        if(parseFloat(actSalesPrice) <= parseFloat(actProRel.rebateFour)){
+                            $("#rebateFour"+index).focus();
+                            msgBox.tips("返利要小于特卖售价");
+                            return;
+                        }
+                        if(parseFloat(actSalesPrice) <= parseFloat(actProRel.rebateFive)){
+                            $("#rebateFive"+index).focus();
+                            msgBox.tips("返利要小于特卖售价");
+                            return;
+                        }
+
+                        actProRel.profit = actProfit;
+                        actProRelList[i] = actProRel;
+                    }
+                    if(actProRelList.length == 0){
+                        msgBox.tips("请选择商品规格");
+                        return;
+                    }
+                    $('#submit').button('loading');
+                    var param = {activityId: activityId, productId: productId};
+                    param.actProRelJson = $.toJSON(actProRelList);
+                    DataHandler.save(param, function (result) {
+                        $('#submit').button('reset');
+                        if (result.type == "success") {
+                            msgBox.tips("操作成功", 1, function () {
+                                window.location.href = path + "/admin/specialSale/edit/" + activityId;
+                            });
+                        }
+                    });
+                }
+
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取活动商品规格、价格
+                 * @param params
+                 * @param callback
+                 */
+                getSpecAndPrice: function (params, callback) {
+                    $.post(path + "/admin/specialSale/getSpecAndPrice", params, function (result) {
+                        callback(result);
+                    });
+                },
+                /**
+                 * 保存活动商品价格
+                 * @param params
+                 * @param callback
+                 */
+                save: function (params, callback) {
+                    $.post(path + "/admin/specialSale/saveActProRelList", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /**
+         * 油站图片
+         */
+        var CoverpicHandler = (function () {
+            return {
+                init: function () {
+                    $.get(path + "/admin/productInfo/getAttachments", {productId: productId}, function (result) {
+
+                        //初始化所有图片
+                        var itemContent = [];
+                        var headPath = $('#headPath').val();
+                        for (var i = 0; i < result.length; i++) {
+                            if (headPath && headPath == result[i].path) { // 判断是否封面
+                                itemContent.push("" +
+                                "<div class='jd_box'>" +
+                                "<img class='pic1' src='"  + result[i].url + "' style='width: 100%; height: 100%;' />" +
+                                "<div class='cover' />" +
+                                    //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + result[i].fileName + "</div>" +
+                                "</div>");
+                            } else {
+                                itemContent.push("" +
+                                "<div class='jd_box'>" +
+                                "<img class='pic1' src='"+ result[i].url + "' style='width: 100%; height: 100%;' />" +
+                                    //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + result[i].fileName + "</div>" +
+                                "</div>");
+                            }
+                        }
+
+                        var canshowNum = ($("div.imgDiv").outerWidth() - 86) / 230;
+                        canshowNum = Math.floor(canshowNum);
+                        //初始化面板对象
+                        panel = new BasePanel('#panea', {
+                            /**面板可视范围内显示的元素个数，如果展开后，
+                             * 则是disItem = disItem * expanRow*/
+                            disItem: canshowNum,
+                            /**显示面板宽度*/
+                            /**面板里需要承载的html内容*/
+                            contentHtml: itemContent,
+                            /**是否显示展开按钮*/
+                            isExpan: false,
+                            /**是否自动展开*/
+                            isAutoExpan: false,
+                            /**展开后显示的行数*/
+                            expanRows: 1,
+                            /**箭头位置：top：顶部；middle：中间*/
+                            arrowAlign: 'middle',
+                            /**面板移动完成后事件*/
+                            onmoveend: function (pageNo) {
+                            }
+                        });
+
+                    });
+                }
+            }
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });
+
+function addSepcStr(arr){
+    for(var i = 0; i < arr.length; i++){
+        var spec = $.evalJSON(arr[i].specJson);
+        var str = "";
+        for(var o in spec){
+            str += "_" + spec[o];
+        }
+        arr[i].specStr = str.substr(1);
+    }
+}
+
+//金额验证
+function testMoney(ob){
+    if (!ob.value.match(/^[0-9]+(.[0-9]{0,2})?$/)) ob.value = ob.t_value; else ob.t_value = ob.value;
+    if (ob.value.match(/^[0-9]+(.[0-9]{0,2})?$/)) ob.o_value = ob.value;
+    if(ob.value == 'undefined'){
+        ob.value = '';
+    }
+}
+
+//正整数验证
+function testPositiveNumber(ob){
+    if(ob.value.length==1){ob.value=ob.value.replace(/[^1-9]/g,'')}else{ob.value=ob.value.replace(/\D/g,'')}
+    if(ob.value == 'undefined'){
+        ob.value = '';
+    }
+}

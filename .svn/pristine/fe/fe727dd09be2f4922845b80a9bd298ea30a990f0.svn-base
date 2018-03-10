@@ -1,0 +1,386 @@
+package com.catt.wfx.service.impl.wechatReturn.event;
+
+import com.catt.common.module.pay.weChatSDK.common.Signature;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.entity.wechatReturn.OrderReturnReqData;
+import com.catt.wfx.repository.entity.wechatReturn.QueryReturnReqData;
+import com.catt.wfx.repository.entity.wechatReturn.QueryWechatReturnResult;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrderLog;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnResultNotify;
+import org.springframework.util.Assert;
+
+import java.util.Map;
+
+public class WeChatReturnUtil {
+
+	/**
+	 * 交易成功标志
+	 */
+	public static final String WECHAT_DEAL_SUCCESS = "SUCCESS";
+
+	/**
+	 * 交易处理失败
+	 */
+	public static final String WECHAT_DEAL_FAIL = "FAIL";
+
+	/**
+	 * 微信调用结果反参 $n下标定义
+	 */
+	private static final String $n = "0";
+	/**
+	 * 微信调用结果反参 $M下标定义
+	 */
+	private static final String $m = "0";
+
+
+
+	public static OrderReturnReqData getFullReturnParam(Map<String, String> param,
+			String key) {
+		String appid = param.get("appid");
+		String mch_id = param.get("mch_id");
+		String device_info = param.get("device_info");
+		String nonce_str = param.get("nonce_str");
+		String transaction_id = param.get("transaction_id");
+		String out_trade_no = param.get("out_trade_no");
+		String out_refund_no = param.get("out_refund_no");
+		String refund_fee = param.get("refund_fee");
+		String total_fee = param.get("total_fee");
+		String refund_fee_type = param.get("refund_fee_type");
+		String op_user_id = param.get("op_user_id");
+
+		String openid = param.get("openid");
+		Assert.hasText(appid);
+		Assert.hasText(mch_id);
+		Assert.hasText(nonce_str);
+		Assert.hasText(total_fee);
+		Assert.hasText(out_refund_no);
+
+		Assert.hasText(total_fee);
+		Assert.hasText(refund_fee);
+		Assert.hasText(op_user_id);
+
+		if(!StringUtil.isNotBlank(transaction_id)){
+			Assert.hasText(out_trade_no);
+		}
+
+		if(!StringUtil.isNotBlank(out_trade_no)){
+			Assert.hasText(transaction_id);
+		}
+
+		OrderReturnReqData orderReturnReqData = new OrderReturnReqData(appid, mch_id,
+				device_info, nonce_str, null, transaction_id, out_trade_no, out_refund_no,
+				refund_fee, total_fee, refund_fee_type, op_user_id, openid);
+		// 签名
+		String sign;
+		try {
+			sign = Signature.getSign(orderReturnReqData, key);
+			orderReturnReqData.setSign(sign);
+			return orderReturnReqData;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+	public static QueryReturnReqData getQueryReturnParam(Map<String, String> param,
+														String key) {
+		String appid = param.get("appid");
+		String mch_id = param.get("mch_id");
+		String device_info = param.get("device_info");
+		String nonce_str = param.get("nonce_str");
+		String transaction_id = param.get("transaction_id");
+		String out_trade_no = param.get("out_trade_no");
+		String out_refund_no = param.get("out_refund_no");
+		String refund_id = param.get("refund_id");
+
+
+		Assert.hasText(appid);
+		Assert.hasText(mch_id);
+		Assert.hasText(nonce_str);
+
+
+		if(!StringUtil.isNotBlank(transaction_id) && !StringUtil.isNotBlank(out_refund_no)
+				&& !StringUtil.isNotBlank(refund_id)){
+			Assert.hasText(out_trade_no);
+		}
+		if(!StringUtil.isNotBlank(out_trade_no) && !StringUtil.isNotBlank(out_refund_no)
+				&& !StringUtil.isNotBlank(refund_id)){
+			Assert.hasText(transaction_id);
+		}
+
+		if(!StringUtil.isNotBlank(transaction_id) && !StringUtil.isNotBlank(out_trade_no)
+				&& !StringUtil.isNotBlank(refund_id)){
+			Assert.hasText(out_refund_no);
+		}
+
+		if(!StringUtil.isNotBlank(transaction_id) && !StringUtil.isNotBlank(out_refund_no)
+				&& !StringUtil.isNotBlank(out_trade_no)){
+			Assert.hasText(refund_id);
+		}
+
+		QueryReturnReqData queryReturnReqData = new QueryReturnReqData(appid, mch_id,
+				device_info, nonce_str, null, transaction_id, out_trade_no, out_refund_no,
+				refund_id);
+		// 签名
+		String sign;
+		try {
+			sign = Signature.getSign(queryReturnReqData, key);
+			queryReturnReqData.setSign(sign);
+			return queryReturnReqData;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 校验签名
+	 *
+	 * @param result
+	 * @param key
+	 * @return
+	 */
+	public static boolean verifyResult(Map<String, Object> result, String key) {
+		String resultSign = (String) result.get("sign");
+		result.remove("sign");
+		String paramSign;
+
+		paramSign = Signature.getSign(result, key);
+		result.put("resultSign", resultSign);
+		if (StringUtil.equals(resultSign, paramSign)) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+
+	public static WechatReturnOrderLog getBeanFromReturnBean(OrderReturnReqData param) {
+		WechatReturnOrderLog bean = new WechatReturnOrderLog();
+		bean.setAppId(param.getAppid());
+		bean.setMchId(param.getMch_id());
+		bean.setNonceStr(param.getNonce_str());
+		bean.setOutTradeNo(param.getOut_trade_no());
+		bean.setTotalFee(Integer.valueOf(param.getTotal_fee()));
+		bean.setRefundFeeType(param.getRefund_fee_type());
+		bean.setOutRefundNo(param.getOut_refund_no());
+		bean.setRefundFee(Integer.valueOf(param.getRefund_fee()));
+		return bean;
+	}
+
+
+	public static WechatReturnResultNotify getWechatReturnResultNotifyBean(
+			Map<String, Object> param) {
+		WechatReturnResultNotify bean = new WechatReturnResultNotify();
+		String return_code = (String) param.get("return_code");
+		String return_msg = (String) param.get("return_msg");
+		String result_code = (String) param.get("result_code");
+		String err_code = (String) param.get("err_code");
+		String err_code_des = (String) param.get("err_code_des");
+
+		String appid = (String) param.get("appid");
+		String mch_id = (String) param.get("mch_id");
+		String device_info = (String) param.get("device_info");
+		String nonce_str = (String) param.get("nonce_str");
+		String sign = (String) param.get("sign");
+		String transaction_id = (String) param.get("transaction_id");
+		String out_trade_no = (String) param.get("out_trade_no");
+		//商户退款单号
+		String out_refund_no = (String) param.get("out_refund_no");
+		//微信退款单号
+		String refund_id = (String) param.get("refund_id");
+		String refund_fee = (String) param.get("refund_fee");
+		String settlement_refund_fee = (String) param.get("settlement_refund_fee");
+		String total_fee = (String) param.get("total_fee");
+		String settlement_total_fee = (String) param.get("settlement_total_fee");
+		String fee_type = (String) param.get("fee_type");
+		String cash_fee = (String) param.get("cash_fee");
+		String cash_fee_type  = (String) param.get("cash_fee_type");
+		String cash_refund_fee  = (String) param.get("cash_refund_fee");
+		String coupon_type_$n   = (String) param.get("coupon_type_"+$n);
+		String coupon_refund_fee   = (String) param.get("coupon_refund_fee");
+		String coupon_refund_fee_$n   = (String) param.get("coupon_refund_fee_"+$n);
+		String coupon_refund_count   = (String) param.get("coupon_refund_count");
+		String coupon_refund_id_$n   = (String) param.get("coupon_refund_id_"+$n);
+
+
+		bean.setReturnCode(return_code);
+		bean.setReturnMsg(return_msg);
+		bean.setResultCode(result_code);
+		bean.setErrCode(err_code);
+		bean.setErrCodeDes(err_code_des);
+
+		bean.setAppid(appid);
+		bean.setMchId(mch_id);
+		bean.setDeviceInfo(device_info);
+		bean.setNonceStr(nonce_str);
+		bean.setSign(sign);
+		bean.setTransactionId(transaction_id);
+		bean.setOutTradeNo(out_trade_no);
+		bean.setOutRefundNo(out_refund_no);
+		bean.setRefundId(refund_id);
+		if (null != refund_fee && !refund_fee.equals("")) {
+			bean.setRefundFee(Integer.valueOf(refund_fee));
+		}
+		if (null != settlement_refund_fee && !settlement_refund_fee.equals("")) {
+			bean.setSettlementRefundFee(Integer.valueOf(settlement_refund_fee));
+		}
+		if (null != settlement_total_fee && !settlement_total_fee.equals("")) {
+			bean.setSettlementTotalFee(Integer.valueOf(settlement_total_fee));
+		}
+		if (null != total_fee && !total_fee.equals("")) {
+			bean.setTotalFee(Integer.valueOf(total_fee));
+		}
+		bean.setFeeType(fee_type);
+
+		bean.setCashFeeType(cash_fee_type);
+		if (null != cash_fee && !cash_fee.equals("")) {
+			bean.setCashFee(Integer.valueOf(cash_fee));
+		}
+
+		if (null != cash_refund_fee && !cash_refund_fee.equals("")) {
+			bean.setCashRefundFee(Integer.valueOf(cash_refund_fee));
+		}
+
+		bean.setCouponType$n(coupon_type_$n);
+		if (null != coupon_refund_fee && !coupon_refund_fee.equals("")) {
+			bean.setCouponRefundFee(Integer.valueOf(coupon_refund_fee));
+		}
+		if (null != coupon_refund_count && !coupon_refund_count.equals("")) {
+			bean.setCouponRefundCount(Integer.valueOf(coupon_refund_count));
+		}
+
+		bean.setCouponRefundId$n(coupon_refund_id_$n);
+		if (null != coupon_refund_fee_$n && !coupon_refund_fee_$n.equals("")) {
+			bean.setCouponRefundFee$n(Integer.valueOf(coupon_refund_fee_$n));
+		}
+
+
+		return bean;
+	}
+
+
+	/**
+	 * 将查询微信退款接口返回的数据转为微信查询退款结果实体
+	 *
+	 * @param param
+	 * @return
+     */
+	public static QueryWechatReturnResult getQueryWechatReturnResultBean(
+			Map<String, Object> param) {
+		QueryWechatReturnResult bean = new QueryWechatReturnResult();
+		String return_code = (String) param.get("return_code");
+		String return_msg = (String) param.get("return_msg");
+		String result_code = (String) param.get("result_code");
+		String err_code = (String) param.get("err_code");
+		String err_code_des = (String) param.get("err_code_des");
+
+		String appid = (String) param.get("appid");
+		String mch_id = (String) param.get("mch_id");
+		String device_info = (String) param.get("device_info");
+		String nonce_str = (String) param.get("nonce_str");
+		String sign = (String) param.get("sign");
+		String transaction_id = (String) param.get("transaction_id");
+		String out_trade_no = (String) param.get("out_trade_no");
+		String total_fee = (String) param.get("total_fee");
+		String settlement_total_fee = (String) param.get("settlement_total_fee");
+		String fee_type = (String) param.get("fee_type");
+		String cash_fee = (String) param.get("cash_fee");
+		String refund_count = (String) param.get("refund_count");
+
+		//商户退款单号
+		String out_refund_no_$n = (String) param.get("out_refund_no_"+$n);
+		//微信退款单号
+		String refund_id_$n = (String) param.get("refund_id_"+$n);
+		String refund_channel_$n = (String) param.get("refund_channel_"+$n);
+		String refund_fee_$n = (String) param.get("refund_fee_"+$n);
+		String settlement_refund_fee_$n = (String) param.get("settlement_refund_fee_"+$n);
+
+
+
+
+		String coupon_type_$n   = (String) param.get("coupon_type_"+$n);
+		String coupon_refund_fee_$n   = (String) param.get("coupon_refund_fee_"+$n);
+		String coupon_refund_count_$n   = (String) param.get("coupon_refund_count_"+$n);
+		String coupon_refund_id_$n_$m   = (String) param.get("coupon_refund_id_"+$n+"_"+$m);
+		String coupon_refund_fee_$n_$m   = (String) param.get("coupon_refund_fee_"+$n+"_"+$m);
+
+
+
+		String	refund_status_$n   = (String) param.get("refund_status_"+$n);
+
+
+		String refund_account_$n   = (String) param.get("refund_account_"+$n);
+		String refund_recv_accout_$n   = (String) param.get("refund_recv_accout_"+$n);
+		String refund_accout_$n   = (String) param.get("refund_accout_"+$n);
+
+
+		bean.setReturnCode(return_code);
+		bean.setReturnMsg(return_msg);
+		bean.setResultCode(result_code);
+		bean.setErrCode(err_code);
+		bean.setErrCodeDes(err_code_des);
+
+		bean.setAppid(appid);
+		bean.setMchId(mch_id);
+		bean.setDeviceInfo(device_info);
+		bean.setNonceStr(nonce_str);
+		bean.setSign(sign);
+		bean.setTransactionId(transaction_id);
+		bean.setOutTradeNo(out_trade_no);
+		bean.setOutRefundNo$n(out_refund_no_$n);
+		bean.setRefundId$n(refund_id_$n);
+		bean.setRefundChann$n(refund_channel_$n);
+
+		if (null != cash_fee && !cash_fee.equals("")) {
+			bean.setCashFee(Integer.valueOf(cash_fee));
+		}
+
+		if (null != refund_count && !refund_count.equals("")) {
+			bean.setRefountCount(Integer.valueOf(refund_count));
+		}
+		if (null != refund_fee_$n && !refund_fee_$n.equals("")) {
+			bean.setRefundFee$n(Integer.valueOf(refund_fee_$n));
+		}
+		if (null != settlement_total_fee && !settlement_total_fee.equals("")) {
+			bean.setSettlementTotalFee(Integer.valueOf(settlement_total_fee));
+		}
+		if (null != total_fee && !total_fee.equals("")) {
+			bean.setTotalFee(Integer.valueOf(total_fee));
+		}
+		bean.setFeeType(fee_type);
+
+		if (null != coupon_refund_fee_$n && !coupon_refund_fee_$n.equals("")) {
+			bean.setCouponRefundFee$n(Integer.valueOf(coupon_refund_fee_$n));
+		}
+
+		if (null != settlement_refund_fee_$n && !settlement_refund_fee_$n.equals("")) {
+			bean.setSettlementRefundFee$n(Integer.valueOf(settlement_refund_fee_$n));
+		}
+
+		if (null != coupon_type_$n && !coupon_type_$n.equals("")) {
+			bean.setCouponType$n(Integer.valueOf(coupon_type_$n));
+		}
+
+		if (null != coupon_refund_count_$n && !coupon_refund_count_$n.equals("")) {
+			bean.setCouponRefundCount$n(Integer.valueOf(coupon_refund_count_$n));
+		}
+
+		bean.setCouponRefundId$n$m(coupon_refund_id_$n_$m);
+
+		if (null != coupon_refund_fee_$n_$m && !coupon_refund_fee_$n_$m.equals("")) {
+			bean.setCouponRefundFee$n$m(Integer.valueOf(coupon_refund_fee_$n_$m));
+		}
+
+		bean.setRefundStatus$n(refund_status_$n);
+		bean.setRefundAccount$n(refund_account_$n);
+		bean.setRefundRecvAccount$n(refund_recv_accout_$n);
+		bean.setRefundAccout$n(refund_accout_$n);
+
+
+
+		return bean;
+	}
+}

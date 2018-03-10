@@ -1,0 +1,97 @@
+package com.catt.wfx.web.controller.admin.wechat.specialSale;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.web.controller.BaseController;
+import com.catt.wfx.service.specialSale.ActivityInfoService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * 精选商品控制器
+ * 作者：邹佳
+ * 时间：2017-03-01
+ */
+@Controller("admin.wechat.product.activityInfoController")
+@RequestMapping(value = "/admin/wechat/activity")
+public class ActivityInfoController extends BaseController {
+
+    // 活动信息表服务
+    @Resource(name = "activityInfoServiceImpl")
+    private ActivityInfoService activityInfoService;
+
+    /**
+     * 特卖列表页面
+     *
+     * @param shopId 店主店铺标识
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = {"/index.html"}, method = RequestMethod.GET)
+    public String toIndex(Long shopId, Model model) {
+        model.addAttribute("shopId", shopId);
+        return "/admin/wechat/specialSale/index";
+    }
+
+
+    /**
+     * 特卖详细页面
+     *
+     * @param shopId 店主店铺标识
+     * @param id     特卖标识
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = {"/detail.html"}, method = RequestMethod.GET)
+    public String toDetail(Long shopId, Long id, Model model) {
+        Assert.notNull(id, "商品标识不能为空");
+        model.addAttribute("shopId", shopId);
+        model.addAllAttributes(activityInfoService.getDetail4Wechat(id));
+        return "/admin/wechat/specialSale/detail";
+    }
+
+    /**
+     * 获取特卖列表
+     *
+     * @return
+     */
+    @RequestMapping(value = {"/findPage4Wechat"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> findPage4Wechat(Integer status, Pageable pageable) {
+        return activityInfoService.findPage4Wechat(status, pageable);
+    }
+
+
+    /**
+     * 获取特卖商品
+     *
+     * @param id       活动标识
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/getActivityProducts"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getActivityProducts(Long id, Pageable pageable) {
+        return activityInfoService.getActivityProducts(id, pageable);
+    }
+
+    /**
+     * 获取特卖详情
+     *
+     * @param id       活动标识
+     * @return
+     */
+    @RequestMapping(value = {"/getDetail"}, method = RequestMethod.GET)
+    @ResponseBody
+    public Map getDetail(Long id) {
+        return activityInfoService.getDetail4Wechat(id);
+    }
+
+}

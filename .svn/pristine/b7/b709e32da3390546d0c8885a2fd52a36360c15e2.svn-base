@@ -1,0 +1,167 @@
+package com.catt.wfx.web.controller.admin.wechat.order;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.service.couponMgr.CouponCusService;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * 订单控制器
+ * 作者：袁幸成
+ * 时间：2017-3-2 11:12:00
+ */
+@RequestMapping({"/admin/wechat/cusOrder/"})
+@Controller("cusOrderController")
+public class CusOrderController extends BaseController {
+
+    //订单服务
+    @Resource(name = "cusOrderServiceImpl")
+    public CusOrderService cusOrderService;
+
+    //用户代金券服务
+    @Resource(name = "couponCusServiceImpl")
+    public CouponCusService couponCusService;
+
+    /**
+     * 跳转订单列表
+     */
+    @RequestMapping(value = "/index.html", method = RequestMethod.GET)
+    public String toIndex(Long shopId, Model model) {
+        model.addAttribute("shopId", shopId);
+        return "/admin/wechat/order/index";
+    }
+
+    /**
+     * 跳转订单详情
+     */
+    @RequestMapping(value = "/detail.html", method = RequestMethod.GET)
+    public String toDetail(Long shopId, Model model) {
+        model.addAttribute("shopId", shopId);
+        return "/admin/wechat/order/detail";
+    }
+
+    /**
+     * 支付成功页面
+     *
+     * @param model   model
+     * @param shopId  店铺标识
+     * @param orderId 订单标识
+     * @return
+     */
+    @RequestMapping(value = "/paySuccess.html", method = RequestMethod.GET)
+    public String toPaySuccess(Model model, Long shopId, Long orderId) {
+        Assert.notNull(orderId);
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("entity", cusOrderService.findOrderInfo(orderId));
+        return "/admin/wechat/order/paySuccess";
+    }
+
+    /**
+     * 创建订单-可用代金券列表（分页）
+     *
+     * @param cusId    客户标识
+     * @param cartIds  购物车标识
+     * @param pageNo   页码
+     * @param pageSize 每页记录数
+     * @return
+     */
+    @RequestMapping(value = "/getUsableCoupon", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Map> getUsableCoupon(@CurrentUser Long cusId, Long[] cartIds, Integer pageNo, Integer pageSize) {
+        Assert.notNull(cartIds);
+        if (pageNo == null) {
+            pageNo = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 20;
+        }
+        return couponCusService.getUsableCoupon(cusId, cartIds, pageNo, pageSize);
+    }
+
+    /**
+     * 创建订单
+     *
+     * @param cusId       客户标识
+     * @param cartIds     购物车标识数组
+     * @param contactId   收货地址标识
+     * @param cusCouponId 用户代金券标识
+     * @param shopId      店铺标识
+     * @return
+     */
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ResponseBody
+    public Map create(@CurrentUser Long cusId, Long[] cartIds, Long contactId, Long cusCouponId, Long shopId) {
+        Assert.notNull(cartIds);
+        Assert.isTrue(cartIds.length > 0);
+        Assert.notNull(contactId);
+        Assert.notNull(shopId);
+        return cusOrderService.create(cusId, cartIds, contactId, cusCouponId, shopId);
+    }
+
+    /**
+     * 获取我的订单列表（分页）
+     *
+     * @param cusId       用户标识
+     * @param orderStatus 订单状态
+     * @param pageNo      页码
+     * @param pageSize    每页记录数
+     * @return
+     */
+    @RequestMapping(value = "/findMyOrderPage", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Map> findMyOrderPage(@CurrentUser Long cusId, Integer[] orderStatus, Integer pageNo, Integer pageSize) {
+        return cusOrderService.findMyOrderPage(cusId, orderStatus, new Pageable(pageNo, pageSize), false);
+    }
+
+    /**
+     * 获取订单基本信息
+     *
+     * @param id 订单标识
+     * @return
+     */
+    @RequestMapping(value = "/findOrderInfo", method = RequestMethod.GET)
+    @ResponseBody
+    public Map findOrderInfo(Long id) {
+        Assert.notNull(id);
+        return cusOrderService.findOrderInfo(id);
+    }
+
+    /**
+     * 获取订单详细信息
+     *
+     * @param id 订单标识
+     * @return
+     */
+    @RequestMapping(value = "/findOrderDetail", method = RequestMethod.GET)
+    @ResponseBody
+    public Map findOrderDetail(Long id) {
+        Assert.notNull(id);
+        return cusOrderService.findOrderDetail(id);
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param orderId 订单标识
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/cancelCusOrder", method = RequestMethod.POST)
+    public Message cancelCusOrder(@CurrentUser Long cusId, @CurrentUser("name") String cusName, Long orderId) {
+        Assert.notNull(orderId, "订单标识不能为空");
+        cusOrderService.cancelCusOrder(cusId, cusName, orderId);
+        return Message.success("");
+    }
+}

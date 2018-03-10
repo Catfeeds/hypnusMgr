@@ -1,0 +1,163 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+        var pageNo = 1;
+        var pageSize = 5;
+        // 数据容器
+        var container = $('#container');
+        // 初始化滚动刷新控件
+        var scrollControl = $('#scrollControl');
+
+        //是否是  下拉刷新 ，false 否  ，true  是
+        var freshFlag = false;
+
+        //是否是 滚动刷新 ，false 否 ，true  是
+        var scrollFlag = false;
+
+        /**
+         * 初始化处理器
+         */
+        var InitHandler = function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initEvent();
+                    this.initPage();
+                },
+                /** 初始化界面  */
+                initPage: function () {
+                    // 初始化数据列表
+                    EventHandler.search();
+                },
+                /** 初始化事件 */
+                initEvent: function () {
+                    $("#weuiDiv").pullToRefresh().on("pull-to-refresh", function () {
+                        if (freshFlag) return;
+                        pageNo = 1;
+                        freshFlag = true;
+                        EventHandler.search();
+                    });
+
+                    //滚动条事件
+                    $(window).scroll(function () {
+                        //判断滚动条是否在顶部
+                        if ($(document.body).scrollTop() == 0) {
+                            //添加下拉刷新事件
+                            $('#weuiDiv').pullToRefresh().on("pull-to-refresh", function () {
+                                if (freshFlag) return;
+                                pageNo = 1;
+                                freshFlag = true;
+                                EventHandler.search();
+                            });
+                        } else {  //滚动条不在顶部
+                            $('#weuiDiv').off();  //移除下拉刷新事件
+                        }
+                    });
+
+                    $(document.body).infinite().on("infinite", function () {
+                        if (scrollFlag) return;
+                        scrollFlag = true;
+                        EventHandler.search();
+                    });
+
+                }
+            }
+        }();
+
+        /**
+         * 事件处理器
+         */
+        var EventHandler = function () {
+            return {
+                // 查询
+                search: function () {
+                    var params = {pageNo: pageNo, pageSize: pageSize, cateId: cateId, productName: productName};
+                    DataHandler.findProductInfoByPage(params, function (data) {
+                        //如果是下拉刷新，则结束下拉刷新，并初始化滚动刷新
+                        if (freshFlag) {
+                            container.html("");
+                            $("#weuiDiv").pullToRefreshDone();
+                            freshFlag = false;
+                            $(document.body).infinite();
+                        }
+                        //如果是滚动刷新，则结束滚动刷新
+                        if (scrollFlag) {
+                            scrollFlag = false;
+                        }
+                        var html = template('templateList', data.content);
+                        //结尾插入数据
+                        container.append(html);
+
+                        //加载完列表，对图片进行等比缩放 成正方形
+                        var imgs = $("#container").find("[name='proImg']");
+                        $.each(imgs, function(i, item){
+                            var par = $(item).parent().parent();
+                            var divWH = par[0].clientWidth;
+                            var wh = {
+                                width: item.width,
+                                height: item.height
+                            };//图片原本宽高
+
+                            var temp;//比例值
+                            //重新等比例缩放图片
+                            if(wh.width >= wh.height){
+                                //宽长，高度需要调整，并计算好高度居中值
+                                temp = wh.width/divWH;
+                                wh.width = divWH;
+                                wh.height = wh.height/temp;
+                                var mid = (divWH - wh.height)/2;
+                                wh.mid = mid;
+                                wh.midStyle = "margin-top: "+mid+"px; margin-bottom: "+mid+"px;";
+                            }else{
+                                //高长，宽度需要调整，并计算好宽度度居中值
+                                temp = wh.height/divWH;
+                                wh.height = divWH;
+                                wh.width = wh.width/temp;
+                                var mid = (divWH - wh.width)/2;
+                                wh.mid = mid;
+                                wh.midStyle = "margin-left: "+mid+"px; margin-right: "+mid+"px;";
+                            }
+                            wh.style = "width: "+wh.width+"px; height: "+wh.height+"; " + wh.midStyle;
+                            $(item).attr("style", wh.style);
+                        });
+
+                        //当数据量 大于所请求的数据量时，需要在后面加入一个滚动刷新的控件
+                        if (pageNo * pageSize < data.total) {
+                            scrollControl.hide();
+                            pageNo++;
+                        } else {
+                            $(document.body).destroyInfinite();
+                            scrollControl.show();
+                            scrollControl.empty().append("<span style='color: darkgray'>" + lastPageText + "</span>");
+                        }
+                        if (container.html() == "") {
+                            scrollControl.hide();
+                            var msg = "<center ><br/><span style='vertical-align: middle!important;color: darkgray'>" + emptyDataText + "</span></center>";
+                            container.html(msg);
+                        }
+                    });
+                }
+            }
+        }();
+
+
+        /**
+         * 数据处理器
+         */
+        var DataHandler = function () {
+            return {
+                /**
+                 * 获取数据列表
+                 */
+                findProductInfoByPage: function (param, callback) {
+                    $.post(path + '/admin/wechat/product/findProductInfoByPage', param, function (backData) {
+                        callback(backData);
+                    });
+                }
+            }
+        }();
+
+        $(function () {
+            InitHandler.init();
+        })
+    }
+);

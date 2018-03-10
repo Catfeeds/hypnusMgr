@@ -1,0 +1,83 @@
+package com.catt.wfx.service.orderMgr;
+
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLogistics;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderPay;
+import com.catt.wfx.repository.form.orderMgr.CusOrderFrom;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单信息表服务接口
+ *
+ * @author Zhou mingxiang
+ * @version V1.0
+ * @date 2017-02-22 08:56:52
+ */
+public interface CusOrderService {
+    /**
+     * 获取订单基本信息（店主APP）
+     *
+     * @param id 订单标识
+     * @return
+     */
+    Map findOrderInfo(Long id);
+
+    /**
+     * 查询订单明细
+     * @return
+     */
+    List<Map> findOrderDetail(List<Long> orderIds);
+
+    /**
+     * 获取订单信息列表
+     *
+     * @param cusOrderFrom 订单from
+     * @param pageable
+     * @return
+     */
+    Page<Map> getCusOrderByPage(CusOrderFrom cusOrderFrom, Pageable pageable);
+
+    /**
+     * 获取订单详情
+     *
+     * @param id  订单标识
+     * @return
+     */
+    Map getCusOrderDetail(Long id, Long factoryId);
+
+    /**
+     * 取出第一条订单详情
+     * @param id
+     * @return
+     */
+    Map getFirstCusOrderDetail(Long id);
+
+    /**
+     * 发货
+     *
+     * @param id                订单标识
+     * @param cusOrderLogistics 配送信息
+     */
+    void deliverGoods(Long cusId, String cusName, Long id, CusOrderLogistics cusOrderLogistics);
+
+    /**
+     * 获取退款单对应订单的支付方式
+     *
+     * @param param
+     * @return
+     */
+    CusOrderPay getPayTypeByOrderId(Map<String, String> param);
+
+    /**
+     * 确认收货
+     *
+     * @param cusId    操作人员标识
+     * @param cusName 操作人员名称
+     * @param ids 订单标识集合
+     */
+    void confirmDeliver(Long cusId, String cusName,Long[] ids);
+}

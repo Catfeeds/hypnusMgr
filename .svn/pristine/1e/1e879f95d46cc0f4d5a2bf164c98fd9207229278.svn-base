@@ -1,0 +1,74 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!doctype html>
+<html>
+<head>
+<%@include file="/common/headModule.jsp" %>
+<meta charset="utf-8">
+<title>特卖活动</title>
+<link rel="stylesheet" type="text/css" href="${path}/resources/css/public1.css"/>
+<link rel="stylesheet" type="text/css" href="${path}/resources/css/temai.css"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+<script type="text/javascript" src="${path}/resources/js/admin/wechat/specialSale/index.js"></script>
+</head>
+
+<body>
+<div class="storte_top">
+<%--
+    <div style="height:47px;"></div>
+    <div class="head">
+        <button class="top-left" onClick="window.location='${path}/index?shopId=${shopId}';"><img class="top_btn_back" src="${path}/resources/images/top_btn_back.png"></button>
+        <h1>特卖列表</h1>
+    </div>
+--%>
+    <%--下拉刷新控件--%>
+    <div class="weui-pull-to-refresh-layer">
+        <div class="pull-to-refresh-arrow"></div> <!-- 上下拉动的时候显示的箭头 -->
+        <div class="pull-to-refresh-preloader"></div> <!-- 正在刷新的菊花 -->
+        <div class="down">下拉刷新</div><!-- 下拉过程显示的文案 -->
+        <div class="up">释放刷新</div><!-- 下拉超过50px显示的文案 -->
+        <div class="refresh">正在刷新...</div><!-- 正在刷新时显示的文案 -->
+    </div>
+
+    <div class="store_main xw_store_main">
+        <input type="hidden" value="1" id="status">
+        <table class="goodsType">
+            <tr>
+                <td>
+                    <a class="lion xw_li" data-values="1">进行中</a>
+                </td>
+                <td>
+                    <a class="xw_li" data-values="2">未开始</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <%--列表显示容器--%>
+    <div class="store_main xw_store_main">
+        <div class="goodsList xw_goodsList" id="container"></div>
+    </div>
+
+    <%--滚动刷新控件--%>
+    <div class="weui-infinite-scroll" id="scrollControl" style="display: none">
+        <div class="infinite-preloader"></div><!-- 菊花 -->
+        正在加载... <!-- 文案，可以自行修改 -->
+    </div>
+
+</div>
+
+<%--列表显示模板--%>
+<script id="templateList" type="text/html">
+    {{each}}
+        <div class="saleDiv" onclick="window.location='${path}/admin/wechat/activity/detail.html?id={{$value.id}}&shopId=${shopId}'">
+            <img class="banner" src="{{$value.coverPath}}">
+            <h1>{{$value.name}}</h1>
+            <h2>
+                <span class="floatLeft">活动时间：{{$value.startTime.substring(0, 11)}} 到 {{$value.endTime.substring(0, 11)}}</span>
+            </h2>
+        </div>
+    {{/each}}
+</script>
+</body>
+</html>

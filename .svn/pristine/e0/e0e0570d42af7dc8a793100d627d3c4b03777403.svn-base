@@ -1,0 +1,362 @@
+package com.catt.wfx.repository.dao.orderMgr.impl;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderDao;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLog;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderReturn;
+import com.catt.wfx.repository.form.orderMgr.CusOrderFrom;
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 订单信息表Dao接口实现
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-02-13 17:26:34
+ */
+@Repository("cusOrderDaoImpl")
+public class CusOrderDaoImpl extends BaseDaoImpl<CusOrder, Long>
+        implements CusOrderDao {
+
+    /**
+     * 获取订单明细对应的订单信息（APP）
+     *
+     * @param orderDetailId 订单明细标识
+     * @return
+     */
+    public List<Map> findCusOrderByOrderDelId(Long orderDetailId) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ORDER_ID AS \"orderId\", ");
+        sql.append(" t1.I_FACTORY_ID AS \"factoryId\", ");
+        sql.append(" t1.I_CATE_ID AS \"cateId\", ");
+        sql.append(" t1.S_CATE_NAME AS \"cateName\", ");
+        sql.append(" t1.I_REL_ID AS \"relId\", ");
+        sql.append(" t1.I_TYPE AS \"type\", ");
+        sql.append(" t1.S_PRODUCT_NAME AS \"productName\", ");
+        sql.append(" t1.S_CODE AS \"code\", ");
+        sql.append(" t1.S_BAR_CODE AS \"barCode\", ");
+        sql.append(" t1.S_HEAD_PATH AS \"headPath\", ");
+        sql.append(" t1.S_SPEC_JSON AS \"specJson\", ");
+        sql.append(" t1.I_PAY_PRICE AS \"payPrice\", ");
+        sql.append(" t1.I_NUM AS \"num\", ");
+        sql.append(" t1.I_RETURN_NUM AS \"returnNum\", ");
+        sql.append(" t2.I_CUS_ID AS \"cusId\", ");
+        sql.append(" t2.S_CUS_NAME AS \"cusName\", ");
+        sql.append(" t2.S_ORDER_CODE AS \"orderCode\", ");
+        sql.append(" t2.D_SIGNIN_DATE AS \"signinDate\", ");
+        sql.append(" t2.I_RETURN_VALIDITY AS \"returnValidity\" ");
+        sql.append(" FROM  T_CUS_ORDER_DETAIL t1");
+        sql.append(" LEFT JOIN T_CUS_ORDER t2 ON t1.I_ORDER_ID = t2.I_ID");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+        if (StringUtil.checkObj(orderDetailId)) {
+            sql.append(" AND t1.I_ID = :orderDetailId");
+            param.put("orderDetailId", orderDetailId);
+        }
+
+        sql.append(" AND t2.I_ORDER_STATUS = :orderStatus");
+        param.put("orderStatus", CusOrder.OrderStatus.TakedDelivery.getValue());
+
+        List<Integer> map = new ArrayList<Integer>();
+        map.add(CusOrder.OrderType.Distribution.getValue());
+        map.add(CusOrder.OrderType.Retail.getValue());
+
+        sql.append(" AND t2.I_ORDER_TYPE IN (:orderType)");
+        param.put("orderType", map);
+
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    /**
+     * 获取订单信息列表
+     *
+     * @param cusOrderFrom 订单from
+     * @param pageable
+     * @return
+     */
+    public Page<Map> getCusOrderByPage(CusOrderFrom cusOrderFrom, Pageable pageable) {
+        String orderCode = cusOrderFrom.getOrderCode();
+        //购买用户
+        String buyUser = cusOrderFrom.getBuyUser();
+        Date startTime = cusOrderFrom.getStartTime();
+        Date endTime = cusOrderFrom.getEndTime();
+        Integer status = cusOrderFrom.getStatus();
+        Integer orderType = cusOrderFrom.getOrderType();
+        Long shopkeeperId = cusOrderFrom.getShopkeeperId();
+        Integer[] orderTypes = {};
+        if (orderType != null && orderType.equals(CusOrderFrom.ORDER_TYPE_AGENT)) {
+            Integer[] temp = {2};
+            orderTypes = temp;
+        } else if (orderType != null && orderType.equals(CusOrderFrom.ORDER_TYPE_COMMON)) {
+            Integer[] temp = {1, 3, 4};
+            orderTypes = temp;
+        }
+        Long cusId = cusOrderFrom.getCusId();
+
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"id\", ");
+        sql.append(" t1.S_ORDER_CODE AS \"orderCode\", ");
+        sql.append(" t1.I_ORDER_STATUS AS \"orderStatus\", ");
+        sql.append(" t1.I_ORDER_TYPE AS \"orderType\", ");
+        sql.append(" t1.D_CREATE_DATE AS \"createDate\", ");
+        sql.append(" t1.I_TOTAL_AMOUNT AS \"totalAmount\", ");
+        sql.append(" t2.S_MOBILE AS \"mobile\", ");
+        sql.append(" t2.S_NAME AS \"cusName\",");
+        sql.append(" t3.D_CREATE_DATE AS \"deliveryTime\"");
+        sql.append(" FROM  T_CUS_ORDER t1");
+        sql.append(" LEFT JOIN T_CUS_INFO t2 ON t1.I_CUS_ID = t2.I_ID");
+        sql.append(" LEFT JOIN T_CUS_ORDER_LOG t3 ON (t1.I_ID = t3.I_ORDER_ID AND t3.I_ACT = :act)");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+        param.put("act", CusOrderLog.Act.Delivery.getValue());
+        if (StringUtil.checkObj(cusId)) {
+            sql.append(" AND t1.I_CUS_ID = :cusId");
+            param.put("cusId", cusId);
+        }
+
+        if (orderTypes.length > 0) {
+            sql.append(" AND t1.I_ORDER_TYPE IN (:orderType)");
+            param.put("orderType", Arrays.asList(orderTypes));
+        }
+
+        if (StringUtil.isNotBlank(orderCode)) {
+            sql.append(" AND t1.S_ORDER_CODE like (:orderCode)");
+            param.put("orderCode", orderCode + "%");
+        }
+
+        //查询用户昵称或者手机号
+        if (StringUtil.isNotBlank(buyUser)) {
+            sql.append(" AND (t2.S_NAME like (:buyUser)");
+            sql.append(" OR t2.S_MOBILE like (:buyUser))");
+            param.put("buyUser", buyUser + "%");
+        }
+
+        if (StringUtil.checkObj(status)) {
+            sql.append(" AND t1.I_ORDER_STATUS = :orderStatus");
+            param.put("orderStatus", status);
+        }
+
+        if (StringUtil.checkObj(startTime)) {
+            sql.append(" AND t1.D_CREATE_DATE >= :startTime");
+            param.put("startTime", startTime);
+        }
+
+        if (StringUtil.checkObj(endTime)) {
+            sql.append(" AND t1.D_CREATE_DATE <= :endTime");
+            param.put("endTime", endTime);
+        }
+
+        if(shopkeeperId != null){
+            sql.append(" AND t1.I_SHOPKEEPER_ID = :shopkeeperId");
+            param.put("shopkeeperId", shopkeeperId);
+        }
+
+        sql.append(" ORDER BY t1.D_CREATE_DATE DESC");
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+
+    /**
+     * 获取订单详情
+     *
+     * @param id 订单标识
+     * @return
+     */
+    public Map getCusOrderDetail(Long id) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"id\", ");
+        sql.append(" t1.S_ORDER_CODE AS \"orderCode\", ");
+        sql.append(" t1.I_ORDER_STATUS AS \"orderStatus\", ");
+        sql.append(" t1.I_ORDER_TYPE AS \"orderType\", ");
+        sql.append(" t1.I_TOTAL_PAY_AMOUNT AS \"totalPayAmount\", "); // 实际支付金额
+        sql.append(" t1.I_COUPON_MONEY AS \"couponMoney\", ");     //代金券抵扣金额
+        sql.append(" t1.I_LOGISTICS_COST AS \"logisticsCost\", ");  //运费
+        sql.append(" t1.D_CREATE_DATE AS \"createDate\", ");       //订单创建时间
+        sql.append(" t1.I_PRODUCT_AMOUNT AS \"productAmount\", ");
+        sql.append(" t1.I_CUS_ID AS \"cusId\", ");
+        sql.append(" t1.I_SHOPKEEPER_ID AS \"shopkeeperId\",");
+        sql.append(" t1.S_RECIPIENT_NAME AS \"recipientName\",");
+        sql.append(" t1.S_RECIPIENT_TEL AS \"recipientTel\",");
+        sql.append(" t1.S_PROVINCE_NAME AS \"provinceName\",");
+        sql.append(" t1.S_CITY_NAME AS \"cityName\",");
+        sql.append(" t1.S_REGION_NAME AS \"regionName\",");
+        sql.append(" t1.S_RECIPIENT_ADDRESS AS \"recipientAddress\",");
+        sql.append(" t2.I_PAY_TYPE AS \"payType\",");
+        sql.append(" t2.I_RECHARGE_MONEY AS \"rechargeMoney\",");
+        sql.append(" t2.I_PAY_MONEY AS \"payMoney\",");
+        sql.append(" t2.D_CREATE_DATE AS \"payTime\",");   //订单支付时间
+        sql.append(" t3.I_STATUS AS \"status\",");
+        sql.append(" t3.I_LOGISTICS_TYPE AS \"logisticsType\",");
+        sql.append(" t3.S_LOGISTICS_CODE AS \"logisticsCode\"");
+        sql.append(" FROM  T_CUS_ORDER t1");
+        sql.append(" LEFT JOIN T_CUS_ORDER_PAY t2 ON t1.I_ID = t2.I_ORDER_ID");
+        sql.append(" LEFT JOIN T_CUS_ORDER_LOGISTICS t3 ON t1.I_ID = t3.I_ORDER_ID");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+        if (StringUtil.checkObj(id)) {
+            sql.append(" AND t1.I_ID = :id");
+            param.put("id", id);
+        }
+
+        List<Map> mapList = this.findListBySql(sql.toString(), param, Map.class);
+        if (mapList != null && mapList.size() > 0) {
+            return mapList.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public Page<Map> findOrderPage4App(Long cusId, Long shopkeeperId, Integer[] orderStatus, Pageable pageable, Boolean isApp) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" I_ID AS \"id\", ");
+        sql.append(" S_ORDER_CODE AS \"orderCode\", ");
+        sql.append(" I_ORDER_STATUS AS \"orderStatus\", ");
+        sql.append(" D_CREATE_DATE AS \"createDate\", ");
+        sql.append(" I_PRODUCT_AMOUNT AS \"productAmount\", ");
+        sql.append(" I_COUPON_MONEY AS \"couponMoney\", ");
+        sql.append(" I_LOGISTICS_COST AS \"logisticsCost\", ");
+        sql.append(" I_TOTAL_AMOUNT AS \"totalAmount\", ");
+        sql.append(" I_TOTAL_PAY_AMOUNT AS \"totalPayAmount\" ");
+        sql.append(" FROM T_CUS_ORDER");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+        if (cusId != null) {
+            sql.append(" AND I_CUS_ID = :cusId");
+            param.put("cusId", cusId);
+
+            if (isApp != null && !isApp){ //微信商城查询我的订单时要过滤掉进货单
+                sql.append(" AND I_ORDER_TYPE <> :orderType ");
+                param.put("orderType", CusOrder.OrderType.Distribution.getValue());
+            }
+        }
+        if (shopkeeperId != null) {
+            sql.append(" AND I_SHOPKEEPER_ID = :shopkeeperId");
+            param.put("shopkeeperId", shopkeeperId);
+        }
+        if (orderStatus != null && orderStatus.length > 0) {
+            sql.append(" AND I_ORDER_STATUS in (:orderStatus)");
+            param.put("orderStatus", Arrays.asList(orderStatus));
+        }
+        sql.append(" ORDER BY D_CREATE_DATE DESC");
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    @Override
+    public List<Long> findNeedFinishOrder() {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ID AS \"id\" ");
+        sql.append(" FROM T_CUS_ORDER a ");
+        sql.append(" LEFT JOIN T_CUS_ORDER_RETURN b ON a.I_ID = b.I_ID AND b.I_STATUS IN (:returningStatus)");
+        sql.append(" WHERE 1=1 ");
+        sql.append(" AND a.I_ORDER_STATUS = " + CusOrder.OrderStatus.TakedDelivery.getValue());
+        sql.append(" AND DATE_ADD(a.D_SIGNIN_DATE, INTERVAL a.I_RETURN_VALIDITY day) <= NOW() ");
+        sql.append(" AND b.I_ID IS NULL ");
+        sql.append(" GROUP BY a.I_ID ");
+
+        Map params = new HashMap<>();
+        List<Integer> returningStatus = new ArrayList<>(); //退货中的状态
+        returningStatus.add(CusOrderReturn.Status.PendAudit.getValue());
+        returningStatus.add(CusOrderReturn.Status.ToDelivery.getValue());
+        returningStatus.add(CusOrderReturn.Status.ToTakeDelivery.getValue());
+        returningStatus.add(CusOrderReturn.Status.PendRefund.getValue());
+        params.put("returningStatus", returningStatus);
+
+        List<Map> list = this.findListBySql(sql.toString(), params, Map.class);
+        List<Long> orderIds = new ArrayList<>();
+        for (Map map : list) {
+            orderIds.add(MapUtil.getLong(map, "id"));
+        }
+        return orderIds;
+    }
+
+    @Override
+    public void updateOrderStatus(List<Long> orderIds, CusOrder.OrderStatus orderStatus) {
+        String sql = "UPDATE T_CUS_ORDER SET I_ORDER_STATUS = :orderStatus WHERE I_ID IN (:orderIds) ";
+        Map params = new HashMap<>();
+        params.put("orderStatus", orderStatus.getValue());
+        params.put("orderIds", orderIds);
+        this.executeUpdateBySql(sql, params);
+    }
+
+    /**
+     * 获取用户购买订单数量和总额
+     *
+     * @param cusId
+     * @return
+     */
+    @Override
+    public Map getOrderTotal(Long cusId) {
+        if (StringUtil.checkObj(cusId)) {
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT ");
+            sql.append(" COUNT(t.I_ID) as \"totalNum\", ");//数量
+            sql.append(" SUM(t.I_TOTAL_PAY_AMOUNT) as \"totalMoney\" ");//实付总金额
+            sql.append(" FROM T_CUS_ORDER t");
+            sql.append(" WHERE t.I_CUS_ID = " + cusId);
+
+            List<Map> result = this.findListBySql(sql.toString(), null, Map.class);
+            if (result != null && result.size() > 0) {
+                return result.get(0);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取超时订单信息
+     *
+     * @param timeout
+     * @return
+     */
+    public List<Map> findTimeOutOrder(int timeout) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"id\", ");
+        sql.append(" t1.I_CUS_COUPON_ID AS \"cusCouponId\" ");
+        sql.append(" FROM T_CUS_ORDER t1 ");
+        sql.append(" WHERE 1=1 ");
+
+        Map param = new HashMap<>();
+        sql.append(" AND t1.I_ORDER_STATUS = :orderStatus");
+        sql.append(" AND t1.D_CREATE_DATE <= :minCreateDate");
+        param.put("orderStatus", CusOrder.OrderStatus.ToPay.getValue());
+        param.put("minCreateDate",
+                DateUtil.addMinutes(new Date(), timeout * -1));
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    /**
+     * 修改超时订单状态
+     *
+     * @param orderIds 订单标识
+     */
+    public void updateTimeoutOrderStatus(List<Long> orderIds) {
+        String sql = "UPDATE T_CUS_ORDER t1 set t1.I_ORDER_STATUS = :orderStatus  WHERE t1.I_ID IN (:list) ";
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderStatus", CusOrder.OrderStatus.Cancel.getValue());
+        params.put("list", orderIds);
+        this.executeUpdateBySql(sql, params);
+    }
+}

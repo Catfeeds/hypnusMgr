@@ -1,0 +1,16 @@
+package com.catt.wfx.repository.dao.wechatReturn;
+
+
+import com.catt.common.base.repository.dao.BaseDao;
+import com.catt.wfx.repository.entity.wechatReturn.QueryWechatReturnResult;
+
+/**
+ * 微信查询退款结果Dao接口
+ * 
+ * @author 周明祥
+ * @date 2017-03-02 15:15:26
+ * @version V1.0
+ */
+public interface QueryWechatReturnResultDao extends BaseDao<QueryWechatReturnResult, Long> {
+
+}

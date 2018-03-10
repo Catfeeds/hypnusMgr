@@ -1,0 +1,110 @@
+package com.catt.wfx.repository.dao.specialSale.impl;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.specialSale.ActivityInfoDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.specialSale.ActivityInfo;
+import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Repository("activityInfoDaoImpl")
+public class ActivityInfoDaoImpl extends BaseDaoImpl<ActivityInfo, Long>
+        implements ActivityInfoDao {
+
+    /**
+     * 获取特卖列表(微信商城接口)
+     *
+     * @param status   活动状态，1-进行中，2-未开始
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> findPage4Wechat(Integer status, Pageable pageable) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" t1.I_ID AS \"id\",");
+        sql.append(" t1.S_NAME AS \"name\",");
+        sql.append(" t1.S_COVER_PATH AS \"coverPath\",");
+        sql.append(" t1.D_START_TIME AS \"startTime\",");
+        sql.append(" t1.D_END_TIME AS \"endTime\"");
+        sql.append(" FROM T_ACTIVITY_INFO t1 ");
+        sql.append(" WHERE 1 = 1 AND t1.D_END_TIME > NOW()");
+
+        if (StringUtil.checkObj(status)) {
+            if (PubEnum.YesOrNoEnum.YES.getValue() == status) {
+                sql.append(" AND t1.D_START_TIME <= NOW()");
+            } else if (PubEnum.YesOrNoEnum.NO.getValue() == status){
+                sql.append(" AND t1.D_START_TIME > NOW()");
+            }
+        }
+
+        Map param = new HashMap<>();
+		sql.append(" AND t1.I_STATUS = :status");
+		param.put("status", ActivityInfo.Status.Released.getValue());
+
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    /**
+     * 获取特卖商品(微信商城接口)
+     *
+     * @param id       活动标识
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Map> getActivityProducts(Long id, Pageable pageable) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT");
+        sql.append(" t1.I_PRODUCT_ID AS \"productId\",");
+        sql.append(" t2.S_ZH_NAME AS \"productName\",");
+        sql.append(" t2.S_HEAD_PATH AS \"headPath\",");
+        sql.append(" t2.I_UNIT AS \"unit\", ");
+        sql.append(" MIN(t1.I_SALES_PRICE) AS \"salesPrice\",");
+        sql.append(" MAX(t1.I_PROFIT) AS \"profit\",");
+        sql.append(" SUM(t1.I_ACTSALE_NUM - t1.I_ACTSALE_REALNUM) AS \"totalStockNum\"");
+        sql.append(" FROM T_ACTIVITY_PRODUCT_REL t1");
+        sql.append(" LEFT JOIN T_PRODUCT_INFO t2 on t1.I_PRODUCT_ID = t2.I_ID");
+        sql.append(" WHERE 1 = 1 ");
+        sql.append(" AND t1.I_ACT_ID = :actId");
+
+        sql.append(" GROUP BY t1.I_PRODUCT_ID, t2.S_ZH_NAME, t2.S_HEAD_PATH, t2.I_UNIT");
+        Map param = new HashMap<>();
+        param.put("actId", id);
+
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+    @Override
+    public Page<Map> findPage(String name, Integer timeStatus, Pageable pageable) {
+        StringBuffer sql = new StringBuffer();
+        sql.append(" SELECT ");
+        sql.append(" a.I_ID AS \"id\", ");
+        sql.append(" a.D_CREATE_DATE AS \"createDate\", ");
+        sql.append(" a.S_NAME AS \"name\", ");
+        sql.append(" a.I_STATUS AS \"status\", ");
+        sql.append(" a.D_START_TIME AS \"startTime\", ");
+        sql.append(" a.D_END_TIME AS \"endTime\", ");
+        sql.append(" a.S_COVER_PATH AS \"coverPath\", ");
+        sql.append(" IF(a.D_START_TIME>NOW(),1,IF(a.D_END_TIME<NOW(),3,2)) AS \"timeStatus\" ");//1-未开始 2-活动中 3-已结束
+        sql.append(" FROM T_ACTIVITY_INFO a ");
+        sql.append(" WHERE a.I_STATUS <> " + ActivityInfo.Status.Deleted.getValue());
+        Map param = new HashMap<>();
+        if (timeStatus != null){
+            sql.append(" AND IF(a.D_START_TIME>NOW(),1,IF(a.D_END_TIME<NOW(),3,2)) = :status ");
+            param.put("status", timeStatus);
+        }
+        if (StringUtil.checkObj(name)){
+            sql.append(" AND a.S_NAME like :name ");
+            param.put("name", "%" + name + "%");
+        }
+        sql.append(" ORDER BY a.D_CREATE_DATE DESC ");
+        return this.findPageBySql(sql.toString(), param, pageable, Map.class);
+    }
+
+}

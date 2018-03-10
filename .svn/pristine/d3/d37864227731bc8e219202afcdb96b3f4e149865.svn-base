@@ -1,0 +1,13 @@
+# config properties
+#------------ System ------------
+#\u8bb0\u5f55\u6162\u8bf7\u6c42
+slowRequestMillis=3000
+
+#------------ Cookie ------------
+cookiePath=/
+cookieDomain=
+
+
+
+
+

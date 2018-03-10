@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <bean id="registry" class="org.springframework.remoting.rmi.RmiRegistryFactoryBean">
+        <property name="port" value="${rmi.registryPort}"/>
+    </bean>
+
+    <bean id="baseRmiServiceExporter" abstract="true">
+        <property name="registry" ref="registry"/>
+        <property name="servicePort" value="${rmi.servicePort}"/>
+    </bean>
+
+    <!--组织架构-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="staffServiceImpl"/>
+        <property name="serviceName" value="staffServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.StaffService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="deptServiceImpl"/>
+        <property name="serviceName" value="deptServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.DeptService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="domainServiceImpl"/>
+        <property name="serviceName" value="domainServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.DomainService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="moduleServiceImpl"/>
+        <property name="serviceName" value="moduleServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.ModuleService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="rightServiceImpl"/>
+        <property name="serviceName" value="rightServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.RightService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="roleServiceImpl"/>
+        <property name="serviceName" value="roleServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.RoleService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="economyMgrServiceImpl"/>
+        <property name="serviceName" value="economyMgrServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.EconomyMgrService"/>
+    </bean>
+
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="rsaServiceImpl"/>
+        <property name="serviceName" value="rsaServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.base.service.security.RSAService"/>
+    </bean>
+
+    <!--枚举-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="enumMgrServiceImpl"/>
+        <property name="serviceName" value="enumMgrServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.enumMgr.service.EnumMgrService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="enumModuleMgrServiceImpl"/>
+        <property name="serviceName" value="enumModuleMgrServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.enumMgr.service.EnumModuleMgrService"/>
+    </bean>
+
+    <!-- 地址信息 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="countryServiceImpl"/>
+        <property name="serviceName" value="countryServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.CountryService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="areaServiceImpl"/>
+        <property name="serviceName" value="areaServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.AreaService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="provinceServiceImpl"/>
+        <property name="serviceName" value="provinceServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.ProvinceService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="cityServiceImpl"/>
+        <property name="serviceName" value="cityServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.CityService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="countyServiceImpl"/>
+        <property name="serviceName" value="countyServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.CountyService"/>
+    </bean>
+
+    <!--异常配置信息-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="exceptionInfoCfgServiceImpl"/>
+        <property name="serviceName" value="exceptionInfoCfgServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.exception.service.ExceptionInfoCfgService"/>
+    </bean>
+
+    <!--附件模块配置信息-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="attachmentServiceImpl"/>
+        <property name="serviceName" value="attachmentServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.attachment.service.AttachmentService"/>
+    </bean>
+
+    <!--短信发送 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="commonModuleSmsServiceImpl"/>
+        <property name="serviceName" value="commonModuleSmsServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.sms.service.SmsService"/>
+    </bean>
+
+    <!--系统登录日志 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="logLoginServiceImpl"/>
+        <property name="serviceName" value="logLoginServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.security.service.LogLoginService"/>
+    </bean>
+
+    <!-- 附件服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="attachmentBaseServiceImpl"/>
+        <property name="serviceName" value="attachmentBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.attachment.service.AttachmentBaseService"/>
+    </bean>
+    <!-- 附件服务 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="storagePluginServiceImpl"/>
+        <property name="serviceName" value="storagePluginServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.attachment.service.StoragePluginService"/>
+    </bean>
+
+    <!--移动端版本模块配置信息-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="appPublishLogBaseServiceImpl"/>
+        <property name="serviceName" value="appPublishLogBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.mobile.service.AppPublishLogBaseService"/>
+    </bean>
+
+    <!--移动端启动页模块配置信息-->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="loadingPageSettingBaseServiceImpl"/>
+        <property name="serviceName" value="loadingPageSettingBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.common.module.mobile.service.LoadingPageSettingBaseService"/>
+    </bean>
+</beans>

@@ -1,0 +1,94 @@
+var specList = [];
+var specIndex;
+var cateId;
+seajs.use(['$', 'msgBox', 'util', 'jquery.json'],
+    function ($, msgBox, util) {
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+                    //基础信息保存
+                    $("#saveBtn").click(EventHandler.save);
+
+                    // 返回
+                    $('#cancleBtn').click(function () {
+                        msgBox.exWindow.close(0);
+                    });
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                    msgBox.exWindow.getExtraParams(function (result) {
+                        specList = result.specList;
+                        cateId = result.cateId;
+                        specIndex = result.specIndex;
+                    });
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                /**
+                 * 保存
+                 */
+                save: function () {
+                    var name = $("#name").val();
+                    if(name == ""){
+                        $("#name").focus();
+                        msgBox.tips("请输入规格明细");
+                        return;
+                    }
+                    var specDetailList = specList[specIndex].detail;
+                    for(var i = 0; i < specDetailList.length; i++){
+                        if(specDetailList[i] == name){
+                            $("#name").focus();
+                            msgBox.tips("请勿重复添加相同名称的规格明细！");
+                            return;
+                        }
+                    }
+                    specDetailList[specDetailList.length] = name;
+                    var param = {cateId: cateId, type: 1, specJson: $.toJSON(specList)};
+                    DataHandler.saveCateAttr(param, function (backData) {
+                        msgBox.tips("操作成功");
+                        msgBox.exWindow.close(specList);
+                    });
+                }
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 保存规格
+                 */
+                saveCateAttr: function (param, callback) {
+                    $.post(path + "/admin/basicConfig/productCate/saveCateAttr", param, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });

@@ -1,0 +1,205 @@
+package com.catt.wfx.web.controller.admin.couponMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.common.web.Message;
+import com.catt.common.web.controller.BaseController;
+import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.wfx.service.couponMgr.CouponCusService;
+import com.catt.wfx.service.couponMgr.CouponInfoService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Description:
+ * Created by 2017-01-16  14:51.
+ * author: Chen chusheng
+ */
+@Controller("admin.couponInfo")
+@RequestMapping(value = "/admin/couponMgr")
+public class CouponInfoController extends BaseController {
+
+    //代金券信息服务接口
+    @Resource(name = "couponInfoServiceImpl")
+    private CouponInfoService couponInfoService;
+
+    //代金券用户服务接口
+    @Resource(name = "couponCusServiceImpl")
+    private CouponCusService couponCusService;
+
+    /**
+     * 跳转代金券管理首页
+     */
+    @RequestMapping(value = "/index")
+    public String toIndex() {
+        return "/admin/couponMgr/index";
+    }
+
+    /**
+     * 跳转代金券选择页面
+     */
+    @RequestMapping(value = "/check.html")
+    public String check(Integer rangeType, Model model) {
+        model.addAttribute("rangeType", rangeType);
+        return "/admin/couponMgr/checkCoupon";
+    }
+
+    /**
+     * 跳转代金券详情页面
+     */
+    @RequestMapping(value = "/detail/{id}")
+    public String toDetail(@PathVariable("id") Long id, Model model) {
+        if(id != null && id != 0){
+            Map entity = couponInfoService.getCouponInfoById(id);
+            model.addAttribute("entity", entity);
+        }
+        return "/admin/couponMgr/detail";
+    }
+
+    /**
+     * 跳转新增修改页面
+     */
+    @RequestMapping(value = "/addOrEdit/{id}")
+    public String toAddOrEdit(@PathVariable("id") Long id, Model model) {
+        if(id != null && id != 0){
+            Map entity = couponInfoService.getCouponInfoById(id);
+            model.addAttribute("entity", entity);
+        }
+        return "/admin/couponMgr/addOrEdit";
+    }
+
+    /**
+     * 发送代金券页面
+     * @param id
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/sendCoupon/{id}")
+    public String toSendCoupon(@PathVariable("id") Long id, Model model){
+        if(id != null){
+            Map entity = couponInfoService.getCouponInfoById(id);
+            model.addAttribute("entity", entity);
+        }
+        return "/admin/couponMgr/sendCoupon";
+    }
+
+    /**
+     * 选择用户页面
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/chooseCus/{rangeType}")
+    public String toChooseCus(@PathVariable("rangeType") Integer rangeType, Model model){
+        model.addAttribute("rangeType", rangeType);
+        return "/admin/couponMgr/chooseCusForSendCoupon";
+    }
+
+    /**
+     * 发送
+     */
+    @RequestMapping(value = "/sendCoupon")
+    @ResponseBody
+    public Message sendCoupon(@CurrentUser("id") Long userId, @CurrentUser("name") String name, @RequestParam Map<String, Object> paramMap) {
+        couponCusService.sendCoupon(userId, name, paramMap);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping(value = "/save")
+    @ResponseBody
+    public Message save(@CurrentUser("id") Long userId, @CurrentUser("name") String name, @RequestParam Map<String, Object> paramMap) {
+        couponInfoService.saveCoupon(userId, name, paramMap);
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping(value = "/delete")
+    @ResponseBody
+    public Message delete(@RequestParam Map<String, Object> paramMap) {
+        String idStr = MapUtil.getString(paramMap, "ids");
+        Long[] ids = getLongIds(idStr);
+        if(ids != null && ids.length > 0){
+            couponInfoService.deleteCouponsByIds(ids);
+        }
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 发布
+     */
+    @RequestMapping(value = "/publish")
+    @ResponseBody
+    public Message publish(@RequestParam Map<String, Object> paramMap) {
+        String idStr = MapUtil.getString(paramMap, "ids");
+        Long[] ids = getLongIds(idStr);
+        if(ids != null && ids.length > 0){
+            couponInfoService.publish(ids);
+        }
+        return SUCCESS_MSG;
+    }
+
+    /**
+     * 查询
+     */
+    @RequestMapping(value = "/search")
+    @ResponseBody
+    public Page searchCoupon(@RequestParam Map<String, Object> paramMap) {
+        return couponInfoService.getCouponPageByParam(paramMap);
+    }
+
+    /**
+     * 获取商品类型
+     */
+    @RequestMapping(value = "/getProductCate")
+    @ResponseBody
+    public List getProductCate(@RequestParam Map<String, Object> paramMap) {
+        return couponInfoService.getProductCateList(paramMap);
+    }
+
+    /**
+     * 获取用户
+     */
+    @RequestMapping(value = "/searchCus")
+    @ResponseBody
+    public Page getCusList(@RequestParam Map<String, Object> paramMap) {
+        return couponCusService.getCusPageList(paramMap);
+    }
+
+    /**
+     * 解析id字符串为数组
+     * @param idStr
+     * @return
+     */
+    public Long[] getLongIds(String idStr){
+        Long[] ids = null;
+        if(StringUtil.checkObj(idStr)) {
+            if (idStr.indexOf(",") != -1) {
+                String[] idStrs = idStr.split(",");
+                ids = new Long[idStrs.length];
+                int count = 0;
+                for (String sId : idStrs) {
+                    if (StringUtil.checkObj(sId)) {
+                        ids[count++] = Long.parseLong(sId);
+                    }
+                }
+            } else {
+                ids = new Long[]{Long.parseLong(idStr)};
+            }
+        }
+        return ids;
+    }
+
+}

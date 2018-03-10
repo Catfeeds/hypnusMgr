@@ -1,0 +1,53 @@
+package com.catt.wfx.service.impl.base.basicConfig;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.basicConfig.RefundsSetDao;
+import com.catt.wfx.repository.entity.basicConfig.RefundsSet;
+import com.catt.wfx.service.base.basicConfig.RefundsSetBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+@Service("refundsSetBaseServiceImpl")
+public class RefundsSetBaseServiceImpl extends
+        BaseServiceImpl<RefundsSet, Long> implements RefundsSetBaseService {
+
+    @Resource(name = "refundsSetDaoImpl")
+    private RefundsSetDao refundsSetDao;
+
+    @Resource
+    public void setBaseDao(RefundsSetDao refundsSetDao) {
+        super.setBaseDao(refundsSetDao);
+    }
+
+    /**
+     * 获取当前的退货设置
+     *
+     * @return
+     */
+    @Override
+    public RefundsSet getCurrentSet() {
+        List<RefundsSet> list = this.findList(1, null, null);
+        if (CollectionUtil.isNotEmpty(list)) {
+            return list.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前设置的退货天数
+     *
+     * @return
+     */
+    @Override
+    public Integer getRefundDays() {
+        RefundsSet refundsSet = this.getCurrentSet();
+        if (StringUtil.checkObj(refundsSet)) {
+            return refundsSet.getRefundDays();
+        }
+        return 7;
+    }
+}

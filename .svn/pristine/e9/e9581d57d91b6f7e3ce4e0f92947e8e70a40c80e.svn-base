@@ -1,0 +1,1280 @@
+package com.catt.wfx.service.impl.orderMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.module.enumMgr.pojo.EnumTransformData;
+import com.catt.common.module.enumMgr.service.EnumMgrService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.dao.customerMgr.CusCartDao;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderDao;
+import com.catt.wfx.repository.dao.orderMgr.CusOrderDetailDao;
+import com.catt.wfx.repository.dao.specialSale.ActivityProductRelDao;
+import com.catt.wfx.repository.dao.util.SeqUtilDao;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.couponMgr.CouponCus;
+import com.catt.wfx.repository.entity.couponMgr.CouponInfo;
+import com.catt.wfx.repository.entity.customerMgr.CusAccountDetail;
+import com.catt.wfx.repository.entity.customerMgr.CusCart;
+import com.catt.wfx.repository.entity.customerMgr.CusContact;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.entity.customerMgr.CusShop;
+import com.catt.wfx.repository.entity.orderMgr.CusOrder;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderDetail;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLog;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderLogistics;
+import com.catt.wfx.repository.entity.orderMgr.CusOrderPay;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductPackage;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+import com.catt.wfx.repository.entity.settlementMgr.SettlementOrderDetail;
+import com.catt.wfx.repository.entity.specialSale.ActivityProductRel;
+import com.catt.wfx.repository.form.customerMgr.CusAccountHandlerForm;
+import com.catt.wfx.service.base.basicConfig.RefundsSetBaseService;
+import com.catt.wfx.service.base.couponMgr.CouponCusBaseService;
+import com.catt.wfx.service.base.couponMgr.CouponInfoBaseService;
+import com.catt.wfx.service.base.customerMgr.CusContactBaseService;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.base.customerMgr.CusShopBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderDetailBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderLogBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderLogisticsBaseService;
+import com.catt.wfx.service.base.orderMgr.CusOrderPayBaseService;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPackageBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPriceBaseService;
+import com.catt.wfx.service.base.specialSale.ActivityProductRelBaseService;
+import com.catt.wfx.service.couponMgr.CouponCusService;
+import com.catt.wfx.service.cusAccount.CusAccountHandlerService;
+import com.catt.wfx.service.customerMgr.CusCartService;
+import com.catt.wfx.service.customerMgr.CusShopService;
+import com.catt.wfx.service.orderMgr.CusOrderDetailService;
+import com.catt.wfx.service.orderMgr.CusOrderService;
+import com.catt.wfx.service.productMgr.ProductPackageService;
+import com.catt.wfx.service.settlementMgr.SettlementOrderDetailService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+/**
+ * 订单信息表服务接口实现
+ *
+ * @author 袁幸成
+ * @version V1.0
+ * @date 2017-02-14 08:56:52
+ */
+@Service("cusOrderServiceImpl")
+public class CusOrderServiceImpl implements CusOrderService {
+
+    //订单号连续数字最大值（订单号为：年与日时分秒+4位连续数字（从1000开始））
+    private static final int ORDER_CODE_MAX_VALUE = 9999;
+
+    //订单号连续数字最小值（订单号为：年与日时分秒+4位连续数字（从1000开始））
+    private static final int ORDER_CODE_MIN_VALUE = 1000;
+
+    //订单信息Dao
+    @Resource(name = "cusOrderDaoImpl")
+    private CusOrderDao cusOrderDao;
+
+    //订单详情服务
+    @Resource(name = "cusOrderDetailServiceImpl")
+    private CusOrderDetailService cusOrderDetailService;
+
+    //订单详情Dao
+    @Resource(name = "cusOrderDetailDaoImpl")
+    private CusOrderDetailDao cusOrderDetailDao;
+
+    //用户服务
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    //用户收货地址服务
+    @Resource(name = "cusContactBaseServiceImpl")
+    private CusContactBaseService cusContactBaseService;
+
+    //用户订单服务
+    @Resource(name = "cusOrderBaseServiceImpl")
+    private CusOrderBaseService cusOrderBaseService;
+
+    //店铺信息服务
+    @Resource(name = "cusShopBaseServiceImpl")
+    private CusShopBaseService cusShopBaseService;
+
+    //用户代金券服务
+    @Resource(name = "couponCusServiceImpl")
+    public CouponCusService couponCusService;
+
+    //用户代金券服务
+    @Resource(name = "couponCusBaseServiceImpl")
+    public CouponCusBaseService couponCusBaseService;
+
+    //代金券服务
+    @Resource(name = "couponInfoBaseServiceImpl")
+    public CouponInfoBaseService couponInfoBaseService;
+
+    //购物车DAO
+    @Resource(name = "cusCartDaoImpl")
+    private CusCartDao cusCartDao;
+
+    //用户订单服务
+    @Resource(name = "cusCartServiceImpl")
+    private CusCartService cusCartService;
+
+    //商品价格服务
+    @Resource(name = "productPriceBaseServiceImpl")
+    private ProductPriceBaseService productPriceBaseService;
+
+    //订单日志服务
+    @Resource(name = "cusOrderLogBaseServiceImpl")
+    private CusOrderLogBaseService cusOrderLogBaseService;
+
+    // 商品信息表服务接口
+    @Resource(name = "productInfoBaseServiceImpl")
+    private ProductInfoBaseService productInfoBaseService;
+
+    // 订单详情服务接口
+    @Resource(name = "cusOrderDetailBaseServiceImpl")
+    private CusOrderDetailBaseService cusOrderDetailBaseService;
+
+    // 开店套餐服务接口
+    @Resource(name = "productPackageServiceImpl")
+    private ProductPackageService productPackageService;
+
+    // 退货设置服务接口
+    @Resource(name = "refundsSetBaseServiceImpl")
+    private RefundsSetBaseService refundsSetBaseService;
+
+    // 用户账号资金相关操作服务接口
+    @Resource(name = "cusAccountHandlerServiceImpl")
+    private CusAccountHandlerService cusAccountHandlerService;
+
+    //订单支付服务
+    @Resource(name = "cusOrderPayBaseServiceImpl")
+    private CusOrderPayBaseService cusOrderPayBaseService;
+
+    //订单结算统计服务
+    @Resource(name = "settlementOrderDetailServiceImpl")
+    SettlementOrderDetailService settlementOrderDetailService;
+
+    // 用户店铺接口
+    @Resource(name = "cusShopServiceImpl")
+    private CusShopService cusShopService;
+
+    //商品活动关联表Dao
+    @Resource(name = "activityProductRelDaoImpl")
+    ActivityProductRelDao activityProductRelDao;
+
+    //商品活动关联表服务
+    @Resource(name = "activityProductRelBaseServiceImpl")
+    ActivityProductRelBaseService activityProductRelBaseService;
+
+    // 配送信息服务
+    @Resource(name = "cusOrderLogisticsBaseServiceImpl")
+    CusOrderLogisticsBaseService cusOrderLogisticsBaseService;
+
+    //枚举服务
+    @Resource(name = "enumMgrServiceImpl")
+    private EnumMgrService enumMgrService;
+
+    @Resource
+    private SeqUtilDao seqUtilDao;
+
+    // 开店套餐服务接口
+    @Resource(name = "productPackageBaseServiceImpl")
+    private ProductPackageBaseService productPackageBaseService;
+
+    @Override
+    @Transactional
+    public Map create(Long cusId, Long[] cartIds, Long contactId, Long cusCouponId, Long shopId) {
+        CusInfo cusInfo = cusInfoBaseService.find(cusId);
+        Integer type = cusInfo.getType(); //客户类型
+
+        List<Map> productList = cusCartDao.findProductByCartIds(cartIds);
+        this.checkProductStatus(productList);
+        Integer useType = this.checkUseType(productList);
+        if (useType == CusCart.UseType.PURCHASE_LIST.getValue()) { //进货
+            if (cusCouponId != null) { //进货商品不能使用代金券
+                throw BaseException.errorByErrInfo("非法操作");
+            }
+        }
+
+        for (Map product : productList) {
+            if (useType == CusCart.UseType.SHOPPING_CART.getValue()) { //普通购买
+                //判断是否特卖，若是取特卖价格、库存
+                Map activityProductRel = activityProductRelDao.findActivityInProductRel(MapUtil.getLong(product, "priceId"));
+                if (activityProductRel != null) {
+                    product.put("costPrice", MapUtil.getDouble(activityProductRel, "costPrice"));
+                    product.put("salesPrice", MapUtil.getDouble(activityProductRel, "salesPrice"));
+                    product.put("profit", MapUtil.getDouble(activityProductRel, "profit"));
+                    Integer stockNum = MapUtil.getInteger(activityProductRel, "stockNum"); //商品库存
+                    Integer actStockNum = MapUtil.getInteger(activityProductRel, "stockNum"); //特卖库存
+                    product.put("stockNum", stockNum > actStockNum ? actStockNum : stockNum);
+                    product.put("relId", MapUtil.getLong(activityProductRel, "relId"));
+                    product.put("actId", MapUtil.getLong(activityProductRel, "actId"));
+
+                    //一至五级厂家返利
+                    product.put("rebateOne", MapUtil.getDouble(activityProductRel, "rebateOne"));
+                    product.put("rebateTwo", MapUtil.getDouble(activityProductRel, "rebateTwo"));
+                    product.put("rebateThree", MapUtil.getDouble(activityProductRel, "rebateThree"));
+                    product.put("rebateFour", MapUtil.getDouble(activityProductRel, "rebateFour"));
+                    product.put("rebateFive", MapUtil.getDouble(activityProductRel, "rebateFive"));
+                }
+
+            } else if (useType == CusCart.UseType.PURCHASE_LIST.getValue()) { //进货
+                // 销售价取用户代理商级别对应的销售价
+                Double salesPrice;
+                if (type == CusInfo.Type.TotalAgent.getValue()) { //总代
+                    salesPrice = MapUtil.getDouble(product, "generalAgent");
+
+                } else if (type == CusInfo.Type.ProvinceAgent.getValue()) { //省代
+                    salesPrice = MapUtil.getDouble(product, "provincialAgent");
+
+                } else if (type == CusInfo.Type.CityAgent.getValue()) { //市代
+                    salesPrice = MapUtil.getDouble(product, "cityAgent");
+
+                } else if (type == CusInfo.Type.AreaAgent.getValue()) { //区代
+                    salesPrice = MapUtil.getDouble(product, "regionalAgent");
+                } else {
+                    throw BaseException.errorByErrInfo("非法操作");
+                }
+                product.put("salesPrice", salesPrice);
+                product.put("profit", 0.0);
+                //进货无厂家返利
+                product.put("rebateOne", 0.0);
+                product.put("rebateTwo", 0.0);
+                product.put("rebateThree", 0.0);
+                product.put("rebateFour", 0.0);
+                product.put("rebateFive", 0.0);
+            }
+        }
+
+        Double productAmount = couponCusService.getAmount(productList, null, null);
+        Double couponMoney = 0.0;
+        CusOrder cusOrder = new CusOrder();
+        if (cusCouponId != null) {
+            CouponCus couponCus = couponCusBaseService.find(cusCouponId);
+            Assert.isTrue(cusId == couponCus.getCusId().longValue());
+            Assert.isTrue(couponCus.getIsUse() == PubEnum.YesOrNoEnum.NO.getValue());
+            if (couponCus.getInvalidTime().before(new Date())) {
+                throw BaseException.errorByErrInfo("代金券已过期");
+            }
+            Map couponData = new HashMap<>();
+            if (!couponCusService.checkCanUseCouponCus(productList, couponCus, couponData)) {
+                throw BaseException.errorByErrInfo("不能使用该代金券");
+            }
+            Double maxDeduction = MapUtil.getDouble(couponData, "maxDeduction");
+            couponMoney = maxDeduction > productAmount ? productAmount : maxDeduction;
+
+            // 7)修改用户代金券状态
+            couponCus.setIsUse(PubEnum.YesOrNoEnum.YES.getValue());
+            couponCus.setOrderCode(cusOrder.getOrderCode());
+            couponCusBaseService.update(couponCus);
+
+            // 8)修改代金券使用数量
+            CouponInfo couponInfo = couponInfoBaseService.find(couponCus.getCouponId());
+            couponInfo.setUseNum(couponInfo.getUseNum() + 1);
+            couponInfoBaseService.update(couponInfo);
+        }
+
+        String cusName = cusInfo.getName();
+        CusContact cusContact = cusContactBaseService.find(contactId);
+
+        CusShop cusShop; //店主店铺
+        Long shopkeeperId = cusId;
+        String shopkeeperName = cusName;
+        String invitationPath = null;
+        if (shopId == null) { //店主APP下单
+            cusShop = this.findCusShop(cusId);
+            shopId = cusShop.getId();
+            CusInfo shopkeeper = cusInfoBaseService.find(cusId);
+            invitationPath = shopkeeper.getInvitationPath();
+
+        } else {
+            cusShop = cusShopBaseService.find(shopId);
+            CusInfo shopkeeper = cusInfoBaseService.find(cusShop.getCusId());
+            shopkeeperId = shopkeeper.getId();
+            shopkeeperName = shopkeeper.getName();
+            invitationPath = shopkeeper.getInvitationPath();
+        }
+
+//        String orderCode = DateUtil.format(new Date(), "yyyyMMdd") + IdWorker.getId() + "";    // 单号生成
+        String orderCode = this.generateOrderCode();
+
+        Double logisticsCost = 0.0; //TODO 目前暂时采用免邮的方式进行？
+        Double totalAmount = NumberUtil.add(productAmount, logisticsCost);
+        Double totalPayAmount = NumberUtil.sub(totalAmount, couponMoney);
+        Integer returnValidity = refundsSetBaseService.getRefundDays();
+        Integer orderType = CusOrder.OrderType.Retail.getValue(); //零售
+        if (useType == CusCart.UseType.PURCHASE_LIST.getValue()) { //进货==分销
+            orderType = CusOrder.OrderType.Distribution.getValue();
+        }
+        Integer source = CusOrder.Source.Self.getValue();
+
+        // 1)保存订单表
+        cusOrder.setOrderStatus(CusOrder.OrderStatus.ToPay.getValue());
+        cusOrder.setOrderCode(orderCode);
+        cusOrder.setProductAmount(productAmount);
+        cusOrder.setCusCouponId(cusCouponId);
+        cusOrder.setCouponMoney(couponMoney);
+        cusOrder.setLogisticsCost(logisticsCost);
+        cusOrder.setTotalAmount(totalAmount);
+        cusOrder.setTotalPayAmount(totalPayAmount);
+        cusOrder.setCusType(cusInfo.getType());
+        cusOrder.setCusId(cusId);
+        cusOrder.setCusName(cusName);
+        cusOrder.setReturnValidity(returnValidity);
+        cusOrder.setRecipientName(cusContact.getRecipients());
+        cusOrder.setRecipientTel(cusContact.getTel());
+        cusOrder.setProvinceId(cusContact.getProvinceId());
+        cusOrder.setProvinceName(cusContact.getProvinceName());
+        cusOrder.setCityId(cusContact.getCityId());
+        cusOrder.setCityName(cusContact.getCityName());
+        cusOrder.setRegionId(cusContact.getRegionId());
+        cusOrder.setRegionName(cusContact.getRegionName());
+        cusOrder.setRecipientAddress(cusContact.getAddress());
+        cusOrder.setOrderType(orderType);
+        cusOrder.setSource(source);
+        cusOrder.setDelFlag(PubEnum.YesOrNoEnum.NO.getValue());
+
+        if (useType == CusCart.UseType.PURCHASE_LIST.getValue()) { //进货==分销
+            cusOrder.setAgentId(cusId);
+
+        } else if (useType == CusCart.UseType.SHOPPING_CART.getValue()) { //普通购买
+            //与订单结算相关
+            cusOrder.setShopkeeperId(shopkeeperId);
+            cusOrder.setShopkeeperName(shopkeeperName);
+            cusOrder.setShopId(shopId);
+        }
+
+        cusOrder.setSettlementSyn(PubEnum.YesOrNoEnum.NO.getValue());
+        cusOrder.setCreatedId(cusId);
+        cusOrder.setCreatedName(cusName);
+        cusOrderBaseService.save(cusOrder);
+
+        Long orderId = cusOrder.getId();
+
+        //最后一个商品使用代金券金额=总的-前面使用的
+        Double preCouponMoney = 0.0; //前面n-1个商品使用的代金券金额
+        int size = productList.size();
+        for (int i = 0; i < size; i++) {
+            Map product = productList.get(i);
+            Long priceId = MapUtil.getLong(product, "priceId");
+            Long productId = MapUtil.getLong(product, "productId");
+            String specJson = MapUtil.getString(product, "specJson");
+            Double salesPrice = MapUtil.getDouble(product, "salesPrice");
+            Double costPrice = MapUtil.getDouble(product, "costPrice");
+            Double profit = MapUtil.getDouble(product, "profit");
+            Integer num = MapUtil.getInteger(product, "num");
+            Integer stockNum = MapUtil.getInteger(product, "stockNum");
+
+            if (num > stockNum) {
+                String productName = MapUtil.getString(product, "productName");
+                throw BaseException.errorByErrInfo("商品【" + productName + "】库存不足");
+            }
+
+            ProductInfo productInfo = productInfoBaseService.find(productId);
+            Double totalSalesAmount = NumberUtil.mul(salesPrice, num);
+            Double totalDiscountAmount = NumberUtil.mul(NumberUtil.sub(costPrice, salesPrice), num);
+
+            // 3）新增订单详情
+            Double singleCouponMoney = 0.0; //单个规格商品使用的代金券金额
+            Double totalCouponMoney = 0.0; //单个规格商品使用的代金券金额 * num
+            if (couponMoney > 0) {
+                Double useCouponPercent = MapUtil.getDouble(product, "useCouponPercent");
+                if (useCouponPercent != null && useCouponPercent > 0) {
+                    if (i == size - 1) { //最后一个商品
+                        totalCouponMoney = NumberUtil.moneySub(couponMoney, preCouponMoney);
+                        singleCouponMoney = NumberUtil.div(totalCouponMoney, num.doubleValue());
+                    } else {
+                        totalCouponMoney = NumberUtil.mul(couponMoney, useCouponPercent);
+                        singleCouponMoney = NumberUtil.div(totalCouponMoney, num.doubleValue());
+                        totalCouponMoney = NumberUtil.round(totalCouponMoney, 2);
+                        preCouponMoney = NumberUtil.moneyAdd(totalCouponMoney, preCouponMoney);
+                    }
+                }
+            }
+            CusOrderDetail cusOrderDetail = new CusOrderDetail();
+            cusOrderDetail.setOrderId(orderId);
+            cusOrderDetail.setActId(MapUtil.getLong(product, "actId")); //特卖活动标识
+//            cusOrderDetail.setFactoryId();
+            cusOrderDetail.setCateId(productInfo.getCateId());
+            cusOrderDetail.setCateName(productInfo.getCateName());
+            cusOrderDetail.setRelId(productId);
+            cusOrderDetail.setPriceId(priceId);
+            cusOrderDetail.setSpecJson(specJson);
+//            cusOrderDetail.setGeneralAgent();
+//            cusOrderDetail.setRegionalAgent();
+//            cusOrderDetail.setProvincialAgent();
+//            cusOrderDetail.setCityAgent();
+            cusOrderDetail.setProfit(NumberUtil.mul(num, profit));
+            cusOrderDetail.setType(productInfo.getType());
+            cusOrderDetail.setProductName(productInfo.getZhName());
+            cusOrderDetail.setCode(productInfo.getCode());
+            cusOrderDetail.setBarCode(productInfo.getBarCode());
+            cusOrderDetail.setHeadPath(productInfo.getHeadPath());
+            cusOrderDetail.setCostPrice(costPrice);
+            cusOrderDetail.setSalesPrice(salesPrice);
+            cusOrderDetail.setPayPrice(NumberUtil.sub(salesPrice, singleCouponMoney));
+            cusOrderDetail.setNum(num);
+            cusOrderDetail.setTotalSalesAmount(totalSalesAmount);
+            cusOrderDetail.setTotalPayAmount(NumberUtil.sub(totalSalesAmount, totalCouponMoney));
+            cusOrderDetail.setTotalDiscountAmount(totalDiscountAmount);
+            cusOrderDetail.setReturnNum(0);
+            cusOrderDetail.setCreatedId(cusId);
+            cusOrderDetail.setCreatedName(cusName);
+
+            if (useType == CusCart.UseType.SHOPPING_CART.getValue()) { //普通购买
+                //一至五级厂家返利
+                Double rebateOne = MapUtil.getDouble(product, "rebateOne", 0.0);
+                Double rebateTwo = MapUtil.getDouble(product, "rebateTwo", 0.0);
+                Double rebateThree = MapUtil.getDouble(product, "rebateThree", 0.0);
+                Double rebateFour = MapUtil.getDouble(product, "rebateFour", 0.0);
+                Double rebateFive = MapUtil.getDouble(product, "rebateFive", 0.0);
+
+                if (rebateOne > 0) {
+                    String[] shopkeeperIdsStr = null;
+                    if (StringUtil.checkStr(invitationPath)) {
+                        shopkeeperIdsStr = invitationPath.split("/");
+                    }
+                    List<Map> rebateList = new ArrayList<>();
+                    Map rebateOneMap = new HashMap<>();
+                    rebateOneMap.put("i_rebate_one_price", rebateOne);//返利单价
+                    rebateOneMap.put("i_rebate_one", NumberUtil.mul(num, rebateOne));//返利总价
+                    rebateOneMap.put("i_shopkeeper_id", this.getShopkeeperId(1, shopkeeperIdsStr));//返利店主id
+                    rebateList.add(rebateOneMap);
+
+                    Map rebateTwoMap = new HashMap<>();
+                    rebateTwoMap.put("i_rebate_two_price", rebateTwo);//返利单价
+                    rebateTwoMap.put("i_rebate_two", NumberUtil.mul(num, rebateTwo));//返利总价
+                    rebateTwoMap.put("i_shopkeeper_id", this.getShopkeeperId(2, shopkeeperIdsStr));//返利店主id
+                    rebateList.add(rebateTwoMap);
+
+                    Map rebateThreeMap = new HashMap<>();
+                    rebateThreeMap.put("i_rebate_three_price", rebateThree);//返利单价
+                    rebateThreeMap.put("i_rebate_three", NumberUtil.mul(num, rebateThree));//返利总价
+                    rebateThreeMap.put("i_shopkeeper_id", this.getShopkeeperId(3, shopkeeperIdsStr));//返利店主id
+                    rebateList.add(rebateThreeMap);
+
+                    Map rebateFourMap = new HashMap<>();
+                    rebateFourMap.put("i_rebate_four_price", rebateFour);//返利单价
+                    rebateFourMap.put("i_rebate_four", NumberUtil.mul(num, rebateFour));//返利总价
+                    rebateFourMap.put("i_shopkeeper_id", this.getShopkeeperId(4, shopkeeperIdsStr));//返利店主id
+                    rebateList.add(rebateFourMap);
+
+                    Map rebateFiveMap = new HashMap<>();
+                    rebateFiveMap.put("i_rebate_five_price", rebateFive);//返利单价
+                    rebateFiveMap.put("i_rebate_five", NumberUtil.mul(num, rebateFive));//返利总价
+                    rebateFiveMap.put("i_shopkeeper_id", this.getShopkeeperId(5, shopkeeperIdsStr));//返利店主id
+                    rebateList.add(rebateFiveMap);
+
+                    cusOrderDetail.setRebateJson(JsonUtils.toJson(rebateList));
+                }
+            }
+            cusOrderDetailBaseService.save(cusOrderDetail);
+        }
+
+        // 5）新增订单流程信息
+        CusOrderLog cusOrderLog = new CusOrderLog();
+        cusOrderLog.setOrderId(orderId);
+        cusOrderLog.setAct(CusOrderLog.Act.Create.getValue());
+        cusOrderLog.setOperatorId(cusId);
+        cusOrderLog.setOperatorName(cusName);
+        cusOrderLogBaseService.save(cusOrderLog);
+
+        // 6）删除购物车
+        for (Long cartId : cartIds) {
+            cusCartService.deleteCart(cusId, cartId);
+        }
+
+        if (cusOrder.getTotalPayAmount() == 0) { //支付金额为0，订单变成支付完成
+            this.paySuccess(cusOrder, null, null);
+        }
+
+        Map backData = new HashMap<>();
+        backData.put("orderId", orderId);
+        backData.put("orderCode", orderCode);
+        backData.put("orderStatus", cusOrder.getOrderStatus());
+        return backData;
+    }
+
+    /**
+     * 获取店主id
+     * @param i 第i级返利
+     * @param shopkeeperIdsStr 店主ids：[1, 2，3，4]
+     * @return
+     */
+    private Long getShopkeeperId(int i, String[] shopkeeperIdsStr) {
+        if (shopkeeperIdsStr != null && shopkeeperIdsStr.length >= i) {
+            String shopkeeperIdStr = shopkeeperIdsStr[shopkeeperIdsStr.length - i];
+            if (StringUtil.checkStr(shopkeeperIdStr)) {
+                return Long.parseLong(shopkeeperIdStr);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 判断购物车商品的使用类型是否一致
+     *
+     * @param productList 购物车商品列表
+     * @return
+     */
+    private Integer checkUseType(List<Map> productList) {
+        if (productList.size() == 0) {
+            throw BaseException.errorByErrInfo("购物车商品已不存在");
+        }
+        Integer useType = MapUtil.getInteger(productList.get(0), "useType");
+        Assert.notNull(useType, "商品异常");
+        int size = productList.size();
+        for (int i = 1; i < size; i++) {
+            if (useType != MapUtil.getInteger(productList.get(i), "useType")) { //使用类型不一致
+                throw BaseException.errorByErrInfo("非法操作");
+            }
+        }
+        return useType;
+    }
+
+    /**
+     * 下单时验证商品状态
+     *
+     * @param productList 商品列表
+     */
+    private void checkProductStatus(List<Map> productList) {
+        int size = productList.size();
+        if (size == 0) {
+            throw BaseException.errorByErrInfo("商品不存在");
+        }
+        Set productIdsSet = new HashSet<>();
+        for (int i = 0; i < size; i++) {
+            Map product = productList.get(i);
+            productIdsSet.add(MapUtil.getLong(product, "productId"));
+        }
+        Long[] productIds = new Long[productIdsSet.size()];
+        productIds = (Long[]) productIdsSet.toArray(productIds);
+        List<ProductInfo> productInfos = productInfoBaseService.findList(productIds);
+        for (ProductInfo productInfo : productInfos) {
+            if (!(productInfo.getStatus() == ProductInfo.Status.OnSale.getValue()
+                    && productInfo.getDelFlag() == PubEnum.YesOrNoEnum.NO.getValue())) {
+                throw BaseException.errorByErrInfo("商品【" + productInfo.getZhName() + "】已下架");
+            }
+        }
+    }
+
+    /**
+     * 生成订单号
+     * 年与日时分秒+4位连续数字（从1000开始）
+     *
+     * @return
+     */
+    private synchronized String generateOrderCode() {
+        String seqName = "S_ORDER_CODE";
+        Integer curVal = seqUtilDao.getSeq(seqName);
+        if (curVal > ORDER_CODE_MAX_VALUE) {
+            seqUtilDao.updateCurVal(seqName, ORDER_CODE_MIN_VALUE);
+            curVal = ORDER_CODE_MIN_VALUE;
+        }
+        return DateUtil.format(new Date(), "yyyyMMddHHmmss") + curVal;
+    }
+
+    @Override
+    public Map findOrderInfo(Long id) {
+        CusOrder cusOrder = cusOrderBaseService.find(id);
+        Map map = new HashMap<>();
+        map.put("id", id);
+        map.put("orderCode", cusOrder.getOrderCode());
+        map.put("orderStatus", cusOrder.getOrderStatus());
+        map.put("productAmount", cusOrder.getProductAmount());
+        map.put("couponMoney", cusOrder.getCouponMoney());
+        map.put("logisticsCost", cusOrder.getLogisticsCost());
+        map.put("totalAmount", cusOrder.getTotalAmount());
+        map.put("totalPayAmount", cusOrder.getTotalPayAmount());
+        map.put("totalDiscountAmount", cusOrderDetailDao.countDiscountAmount(id));
+        return map;
+    }
+
+    /**
+     * 获取店铺信息
+     *
+     * @param cusId 店主ID
+     * @return
+     */
+    private CusShop findCusShop(Long cusId) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", cusId));
+//        filters.add(Filter.eq("status", CusShop.Status.Normal.getValue()));
+        List<CusShop> list = cusShopBaseService.findList(1, filters, null);
+        if (list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 注册（需要购买套餐）-购买套餐下单
+     *
+     * @param cusOrder
+     * @param cusId     用户标志
+     * @param contactId 收获地址标志
+     * @return
+     */
+    @Override
+    @Transactional
+    public Map order4BuyPackage(CusOrder cusOrder, Long cusId, Long contactId) {
+        String cusName = null;
+        if (StringUtil.checkObj(cusId)) { // 店铺续费购买套餐时，此值不为空
+            CusContact cusContact = cusContactBaseService.find(contactId);
+            Assert.notNull(cusContact);
+            cusOrder.setRecipientName(cusContact.getRecipients());
+            cusOrder.setRecipientTel(cusContact.getTel());
+            cusOrder.setProvinceId(cusContact.getProvinceId());
+            cusOrder.setProvinceName(cusContact.getProvinceName());
+            cusOrder.setCityId(cusContact.getCityId());
+            cusOrder.setCityName(cusContact.getCityName());
+            cusOrder.setRegionId(cusContact.getRegionId());
+            cusOrder.setRegionName(cusContact.getRegionName());
+            cusOrder.setRecipientAddress(cusContact.getAddress());
+            cusName = cusInfoBaseService.find(cusId).getName();
+        } else {
+            Assert.hasText(cusOrder.getRecipientName(), "收货人不能为空");
+            Assert.hasText(cusOrder.getRecipientTel(), "手机号码不能为空");
+            Assert.hasText(cusOrder.getRecipientAddress(), "详细地址不能为空");
+        }
+
+        // 查询已上架的开店套餐
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("type", ProductInfo.Type.Package.getValue()));
+        filters.add(Filter.eq("status", ProductInfo.Status.OnSale.getValue()));
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        List<ProductInfo> packages = productInfoBaseService.findList(null, filters, null);
+        if (CollectionUtil.isNotEmpty(packages)) {
+            ProductInfo productInfo = packages.get(0);
+            // 查询套餐库存量是否足够
+            Integer stockNum4Package = productPackageService.getStockNum(productInfo.getId());
+            if (stockNum4Package < 1) {
+                throw BaseException.errorByErrInfo("开店套餐库存量不足");
+            }
+
+            filters.clear();
+            filters.add(Filter.eq("productId", productInfo.getId()));
+            List<ProductPrice> prices = productPriceBaseService.findList(1, filters, null);
+            Double productAmount = NumberUtil.DOUBLE_ZERO;
+            if (CollectionUtil.isNotEmpty(prices)) {
+                productAmount = prices.get(0).getSalesPrice();
+            } else {
+                throw BaseException.errorByErrInfo("开店套餐价格查询异常");
+            }
+            ProductPrice price = prices.get(0);
+//            String orderCode = DateUtil.format(new Date(), "yyyyMMdd") + IdWorker.getId() + "";    // 单号生成
+            String orderCode = generateOrderCode();
+
+            Double logisticsCost = NumberUtil.DOUBLE_ZERO; //TODO 目前暂时采用免邮的方式进行？
+            Double totalAmount = NumberUtil.add(productAmount, logisticsCost);
+            Double totalPayAmount = totalAmount;
+            Integer returnValidity = refundsSetBaseService.getRefundDays();
+            Integer orderType = CusOrder.OrderType.Register.getValue();
+            Integer source = CusOrder.Source.Self.getValue();
+
+            if (StringUtil.checkObj(cusId)) { // 店铺续费购买套餐
+                orderType = CusOrder.OrderType.Renew.getValue();
+            }
+
+            // 1)保存订单表
+            cusOrder.setOrderStatus(CusOrder.OrderStatus.ToPay.getValue());
+            cusOrder.setOrderCode(orderCode);
+            cusOrder.setProductAmount(productAmount);
+            cusOrder.setLogisticsCost(logisticsCost);
+            cusOrder.setTotalAmount(totalAmount);
+            cusOrder.setTotalPayAmount(totalPayAmount);
+            cusOrder.setReturnValidity(returnValidity);
+            cusOrder.setOrderType(orderType);
+            cusOrder.setSource(source);
+            cusOrder.setDelFlag(PubEnum.YesOrNoEnum.NO.getValue());
+            cusOrder.setSettlementSyn(PubEnum.YesOrNoEnum.NO.getValue());
+            cusOrder.setCusId(cusId);
+            cusOrder.setCusName(cusName);
+            cusOrderBaseService.save(cusOrder);
+
+            Long orderId = cusOrder.getId();
+            Double costPrice = productPackageService.getPackageCostPrice(productInfo.getId()); // 获取套餐原价 = 套餐下各商品的售价总和
+
+            // 2）新增订单详情
+            CusOrderDetail detail = new CusOrderDetail();
+            detail.setOrderId(orderId);
+            detail.setCateId(productInfo.getCateId());
+            detail.setCateName(productInfo.getCateName());
+            detail.setRelId(productInfo.getId());
+            detail.setPriceId(price.getId());
+            detail.setGeneralAgent(price.getGeneralAgent());
+            detail.setRegionalAgent(price.getRegionalAgent());
+            detail.setProvincialAgent(price.getProvincialAgent());
+            detail.setCityAgent(price.getCityAgent());
+            detail.setProfit(price.getProfit());
+            detail.setType(CusOrderDetail.Type.Package.getValue());
+            detail.setProductName(productInfo.getZhName());
+            detail.setCode(productInfo.getCode());
+            detail.setBarCode(productInfo.getBarCode());
+            detail.setHeadPath(productInfo.getHeadPath());
+            detail.setCostPrice(costPrice); // 商品原价
+            detail.setSalesPrice(price.getSalesPrice()); // 商品销售价
+            detail.setPayPrice(price.getSalesPrice()); // 实付单价
+            detail.setNum(1);
+            detail.setTotalSalesAmount(price.getSalesPrice()); // 商品销售总价
+            detail.setTotalPayAmount(price.getSalesPrice()); // 实付总价
+            detail.setTotalDiscountAmount(NumberUtil.sub(detail.getCostPrice(), detail.getTotalSalesAmount())); // 优惠总价 = 套餐原价 - 套餐销售价
+            cusOrderDetailBaseService.save(detail);
+
+            // 3）新增订单流程信息
+            CusOrderLog cusOrderLog = new CusOrderLog();
+            cusOrderLog.setOrderId(orderId);
+            cusOrderLog.setAct(CusOrderLog.Act.Create.getValue());
+            cusOrderLog.setOperatorId(cusId);
+            cusOrderLog.setOperatorName(cusName);
+            cusOrderLogBaseService.save(cusOrderLog);
+
+            Map backData = new HashMap<>();
+            backData.put("orderId", orderId);
+            backData.put("orderCode", orderCode);
+            backData.put("orderStatus", cusOrder.getOrderStatus());
+            return backData;
+        } else {
+            throw BaseException.errorByErrInfo("未上架开店套餐");
+        }
+
+    }
+
+    @Override
+    @Transactional
+    public void payByRemainderMoney(Long cusId, Long orderId, String payPwd) {
+        CusInfo cusInfo = cusInfoBaseService.find(cusId);
+        if (!StringUtil.equals(cusInfo.getPayPwd(), DigestUtils.md5Hex(payPwd))) {
+            throw BaseException.errorByErrInfo("支付密码错误！");
+        }
+        CusOrder cusOrder = cusOrderBaseService.find(orderId);
+        Assert.isTrue(cusId == cusOrder.getCusId().longValue());
+        if (cusOrder.getOrderStatus() != CusOrder.OrderStatus.ToPay.getValue()) {
+            throw BaseException.errorByErrInfo("该订单已经不允许支付！");
+        }
+        // 1) 修改余额
+        Double totalPayAmount = cusOrder.getTotalPayAmount();
+        if (totalPayAmount > 0) { //代金券金额>=商品金额时，支付金额为0
+            CusAccountHandlerForm cusAccountHandlerForm = new CusAccountHandlerForm(cusId, totalPayAmount,
+                    CusAccountDetail.Type.RemainderConsume, orderId.toString());
+            cusAccountHandlerService.handleMoney(cusAccountHandlerForm);
+        }
+
+        //支付成功操作
+        this.paySuccess(cusOrder, null, null);
+
+    }
+
+    /**
+     * 余额支付【店铺续费】(APP）
+     *
+     * @param cusId   客户标识
+     * @param orderId 订单标识
+     * @param payPwd  支付密码
+     * @return
+     */
+    @Override
+    @Transactional
+    public void payByRemainderMoney4Renew(Long cusId, Long orderId, String payPwd) {
+        this.payByRemainderMoney(cusId, orderId, payPwd);
+
+        // 店主店铺时间延长
+        cusShopService.updateExpireTime(cusId);
+    }
+
+    /**
+     * 取消订单(APP）
+     *
+     * @param orderId 订单标识
+     */
+    @Transactional
+    public void cancelCusOrder(Long cusId, String cusName, Long orderId) {
+        CusOrder cusOrder = cusOrderBaseService.find(orderId);
+
+        //待支付订单
+        if (cusOrder.getOrderStatus().equals(CusOrder.OrderStatus.ToPay.getValue())) {
+            Long cusCoupomId = cusOrder.getCusCouponId();
+
+            cusOrder.setOrderStatus(CusOrder.OrderStatus.Cancel.getValue());
+            cusOrderBaseService.update(cusOrder);
+
+            //取消订单，对应商品库存、销售数量修改
+//            this.updateProductPrice(orderId);
+
+            if (StringUtil.checkObj(cusCoupomId)) {
+                this.updateCusCoupon(cusCoupomId);
+            }
+
+            //保存订单流程信息
+            Integer status = CusOrderLog.Act.Cancel.getValue();
+            this.saveCusOrderLog(cusId, cusName, orderId, status);
+
+        }
+    }
+
+    @Override
+    public Page<Map> findMyOrderPage(Long cusId, Integer[] orderStatus, Pageable pageable, boolean isApp) {
+        Page<Map> page = cusOrderDao.findOrderPage4App(cusId, null, orderStatus, pageable, isApp);
+        for (Map order : page.getContent()) {
+            Long orderId = MapUtil.getLong(order, "id");
+            Integer status = MapUtil.getInteger(order, "orderStatus");
+            order.put("orderStatusName", CusOrder.OrderStatus.getEnum(status).getName());
+            Integer canCancel = PubEnum.YesOrNoEnum.NO.getValue();
+            if (status == CusOrder.OrderStatus.ToPay.getValue()) {
+                canCancel = PubEnum.YesOrNoEnum.YES.getValue();
+            }
+            order.put("canCancel", canCancel);
+            order.put("productList", cusOrderDetailService.findDetailByOrderId(orderId));
+        }
+
+        addLogisticsData(page);
+
+        return page;
+    }
+
+    private void addLogisticsData(Page<Map> page) {
+        if (page == null || CollectionUtil.isEmpty(page.getContent())) {
+            return;
+        }
+
+        List<Long> orderIds =
+                page.getContent().stream().mapToLong(value -> MapUtil.getLong(value, "id")).boxed().collect(Collectors.toList());
+
+        List<CusOrderLogistics> cusOrderLogisticsList = null;
+
+        if (CollectionUtil.isNotEmpty(orderIds)) {
+            List<Filter> filters = new ArrayList<>();
+            Filter filter = null;
+
+            if (orderIds.size() == 1) {
+                filter = Filter.eq("orderId", orderIds.get(0));
+            } else {
+                filter = Filter.in("orderId", orderIds);
+            }
+
+            filters.add(filter);
+
+            cusOrderLogisticsList = cusOrderLogisticsBaseService.findList(null, filters, null);
+        }
+
+        if (CollectionUtil.isEmpty(cusOrderLogisticsList)) {
+            return;
+        }
+
+        final List<CusOrderLogistics> tempList = cusOrderLogisticsList;
+
+        page.getContent().parallelStream().forEach(map -> tempList.stream()
+                .filter(cusOrderLogistics -> Objects.equals(cusOrderLogistics.getOrderId(), MapUtil.getLong(map, "id")))
+                .findAny()
+                .ifPresent(cusOrderLogistics -> {
+                    map.put("logisticsType", cusOrderLogistics.getLogisticsType());
+                    map.put("logisticsCode", cusOrderLogistics.getLogisticsCode());
+                }));
+    }
+
+    @Override
+    public Page<Map> findShopOrderPage(Long shopkeeperId, Integer[] orderStatus, Pageable pageable) {
+        Page<Map> page = cusOrderDao.findOrderPage4App(null, shopkeeperId, orderStatus, pageable, null);
+        //获取图片访问地址
+        for (Map order : page.getContent()) {
+            Long orderId = MapUtil.getLong(order, "id");
+            Integer status = MapUtil.getInteger(order, "orderStatus");
+            order.put("orderStatusName", CusOrder.OrderStatus.getEnum(status).getName());
+            Integer canCancel = PubEnum.YesOrNoEnum.NO.getValue();
+            if (status == CusOrder.OrderStatus.ToPay.getValue()) {
+                canCancel = PubEnum.YesOrNoEnum.YES.getValue();
+            }
+            order.put("canCancel", canCancel);
+            List<Map> productList = cusOrderDetailService.findDetailByOrderId(orderId);
+            Double totalProfit = 0.0;
+            for (Map product : productList) {
+                totalProfit = NumberUtil.add(MapUtil.getDouble(product, "profit", 0.0), totalProfit);
+            }
+            order.put("totalProfit", totalProfit); //店主总利润
+            order.put("productList", productList);
+        }
+        addLogisticsData(page);
+        return page;
+    }
+
+    @Override
+    public Map findOrderDetail(Long id) {
+        CusOrder cusOrder = cusOrderBaseService.find(id);
+        Map map = new HashMap<>();
+        map.put("id", id);
+        map.put("orderCode", cusOrder.getOrderCode());
+        map.put("orderStatus", cusOrder.getOrderStatus());
+        Integer orderStatus = cusOrder.getOrderStatus();
+        map.put("orderStatusName", CusOrder.OrderStatus.getEnum(orderStatus).getName());
+        Integer canCancel = PubEnum.YesOrNoEnum.NO.getValue();
+        if (orderStatus == CusOrder.OrderStatus.ToPay.getValue()) {
+            canCancel = PubEnum.YesOrNoEnum.YES.getValue();
+        }
+        map.put("canCancel", canCancel);
+        map.put("createDate", cusOrder.getCreateDate());
+        map.put("productAmount", cusOrder.getProductAmount());
+        map.put("couponMoney", cusOrder.getCouponMoney());
+        map.put("logisticsCost", cusOrder.getLogisticsCost());
+        map.put("totalAmount", cusOrder.getTotalAmount());
+        map.put("totalPayAmount", cusOrder.getTotalPayAmount());
+        map.put("recipientName", cusOrder.getRecipientName());
+        map.put("recipientTel", cusOrder.getRecipientTel());
+        map.put("provinceName", cusOrder.getProvinceName());
+        map.put("cityName", cusOrder.getCityName());
+        map.put("regionName", cusOrder.getRegionName());
+        map.put("recipientAddress", cusOrder.getRecipientAddress());
+
+        String logisticsInfo = null; //订单最新配送信息 TODO 从物流、快递取
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("orderId", id));
+        List<CusOrderLogistics> cusOrderLogisticsList = cusOrderLogisticsBaseService.findList(1, filters, null);
+        if (cusOrderLogisticsList.size() > 0) {
+            CusOrderLogistics cusOrderLogistics = cusOrderLogisticsList.get(0);
+            Map logisticsMap = new HashMap<>();
+            logisticsMap.put("logisticsType", cusOrderLogistics.getLogisticsType());
+            logisticsMap.put("logisticsCode", cusOrderLogistics.getLogisticsCode());
+            map.put("logisticsType", cusOrderLogistics.getLogisticsType());
+            map.put("logisticsCode", cusOrderLogistics.getLogisticsCode());
+            //枚举翻译， 物流公司
+            enumMgrService.transformEnum(logisticsMap,
+                    new ArrayList<EnumTransformData>() {
+                        {
+                            add(new EnumTransformData("T_CUS_ORDER_RETURN",
+                                    "I_LOGISTICS_TYPE", "logisticsType",
+                                    "logisticsTypeName"));
+                        }
+                    });
+            logisticsInfo = "配送物流：" + logisticsMap.get("logisticsTypeName") + "，快递单号：" + cusOrderLogistics.getLogisticsCode();
+        }
+        map.put("latestLogisticsInfo", logisticsInfo);
+
+        List<Map> productList = cusOrderDetailService.findDetailByOrderId(id);
+        map.put("productList", productList);
+        Double totalDiscountAmount = 0.0;
+
+        boolean canReturn = false; //是否允许退货
+        Integer orderType = cusOrder.getOrderType();
+        Date now = new Date();
+        if (orderStatus == CusOrder.OrderStatus.TakedDelivery.getValue() //已收货
+                && now.before(DateUtil.addDays(cusOrder.getSigninDate(), cusOrder.getReturnValidity()))) { //未超过退货期限
+            if (orderType == CusOrder.OrderType.Distribution.getValue()
+                    || orderType == CusOrder.OrderType.Retail.getValue()) {//分销、零售
+                canReturn = true;
+            }
+        }
+
+        for (Map product : productList) {
+            Integer num = MapUtil.getInteger(product, "num");
+            Integer returnNum = MapUtil.getInteger(product, "returnNum", 0);
+            if (canReturn && num > returnNum) { //购买数量>已退货数量
+                product.put("canReturn", PubEnum.YesOrNoEnum.YES.getValue());
+            } else {
+                product.put("canReturn", PubEnum.YesOrNoEnum.NO.getValue());
+            }
+            totalDiscountAmount = NumberUtil.add(totalDiscountAmount,
+                    MapUtil.getDouble(product, "totalDiscountAmount", 0.0));
+        }
+        map.put("totalDiscountAmount", totalDiscountAmount);
+        return map;
+    }
+
+    @Override
+    public void paySuccess(CusOrder cusOrder, CusOrderPay.PayType payType, String tradeNo) {
+        Long cusId = cusOrder.getCusId();
+        Long orderId = cusOrder.getId();
+        String orderNo = cusOrder.getOrderCode();
+
+        // 1) 修改订单状态
+        cusOrder.setOrderStatus(CusOrder.OrderStatus.ToDelivery.getValue());
+        cusOrderBaseService.save(cusOrder);
+
+        CusInfo cusInfo = cusInfoBaseService.find(cusId);
+        String cusName = cusInfo.getName();
+
+        // 2）新增订单流程信息
+        CusOrderLog cusOrderLog = new CusOrderLog();
+        cusOrderLog.setOrderId(orderId);
+        cusOrderLog.setAct(CusOrderLog.Act.Pay.getValue());
+        cusOrderLog.setOperatorId(cusId);
+        cusOrderLog.setOperatorName(cusName);
+        cusOrderLogBaseService.save(cusOrderLog);
+
+        SettlementOrderDetail.PayType orderPayType; //支付方式：1-在线支付  2-余额支付
+
+        // 3）新增订单支付
+        CusOrderPay cusOrderPay = new CusOrderPay();
+        cusOrderPay.setOrderId(orderId);
+        cusOrderPay.setCusId(cusId);
+        cusOrderPay.setCusName(cusName);
+        cusOrderPay.setCreditMoney(0.0);
+        if (payType == null) { //余额支付/支付金额为0
+            cusOrderPay.setTradeNo(orderNo);
+            cusOrderPay.setRechargeMoney(cusOrder.getTotalPayAmount()); //余额使用
+            cusOrderPay.setPayMoney(0.0); //在线支付金额
+
+            orderPayType = SettlementOrderDetail.PayType.REMAINDER;//2-余额支付
+
+        } else { //微信支付
+            cusOrderPay.setPayType(payType.getValue());
+            cusOrderPay.setTradeNo(tradeNo);
+            cusOrderPay.setRechargeMoney(0.0);
+            cusOrderPay.setPayMoney(cusOrder.getTotalPayAmount());
+
+            orderPayType = SettlementOrderDetail.PayType.ONLINE;//1-在线支付
+        }
+        cusOrderPayBaseService.save(cusOrderPay);
+
+        // 4）新增订单结算统计、5）修改商家账户信息的订单量、销售额等
+        settlementOrderDetailService.addSettlementOrderDetail(cusOrder, orderPayType);
+
+        if (cusOrder.getOrderType() == CusOrder.OrderType.Distribution.getValue() ||
+                cusOrder.getOrderType() == CusOrder.OrderType.Retail.getValue()) { //单品
+
+            // 6）修改商品库存、销量
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("orderId", orderId));
+            List<CusOrderDetail> orderDetails = cusOrderDetailBaseService.findList(null, filters, null);
+            for (CusOrderDetail cusOrderDetail : orderDetails) {
+                Integer num = cusOrderDetail.getNum();
+                Long priceId = cusOrderDetail.getPriceId();
+                ProductPrice productPrice = productPriceBaseService.find(priceId);
+                productPrice.setStockNum(productPrice.getStockNum() - num);
+                productPrice.setSaleNum(productPrice.getSaleNum() + num);
+                productPriceBaseService.update(productPrice);
+
+                Long actId = cusOrderDetail.getActId();
+                if (actId != null) { //特卖
+                    filters.clear();
+                    filters.add(Filter.eq("actId", actId));
+                    filters.add(Filter.eq("priceId", priceId));
+                    ActivityProductRel activityProductRel = activityProductRelBaseService.findList(1, filters, null).get(0);
+                    activityProductRel.setActsaleRealnum(activityProductRel.getActsaleRealnum() + num);
+                    activityProductRelBaseService.update(activityProductRel);
+                }
+            }
+
+            // 7）修改店铺信息的订单数、订单金额
+            Long shopId = cusOrder.getShopId();
+            if (shopId != null) {
+                CusShop cusShop = cusShopBaseService.find(shopId);
+                cusShop.setOrderNum(cusShop.getOrderNum() + 1);
+                Double totalAmount = NumberUtil.add(cusOrder.getProductAmount(), cusOrder.getLogisticsCost());
+                cusShop.setOrderMoney(NumberUtil.add(cusShop.getOrderMoney(), totalAmount));
+                cusShopBaseService.update(cusShop);
+            }
+        } else if (cusOrder.getOrderType() == CusOrder.OrderType.Register.getValue() ||
+                cusOrder.getOrderType() == CusOrder.OrderType.Renew.getValue()) { // 套餐
+            // 修改套餐下各商品的库存、销量
+            List<Filter> filters = new ArrayList<>();
+            filters.add(Filter.eq("type", ProductInfo.Type.Package.getValue()));
+            filters.add(Filter.eq("status", ProductInfo.Status.OnSale.getValue()));
+            filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+            List<ProductInfo> packages = productInfoBaseService.findList(null, filters, null);
+            if (CollectionUtil.isNotEmpty(packages)) {
+                ProductInfo productInfo = packages.get(0);
+                filters.clear();
+                filters.add(Filter.eq("packageProid", productInfo.getId()));
+                List<ProductPackage> productPackages = productPackageBaseService.findList(null, filters, null);
+
+                // 套餐下各商品库存数量减1、销量加1
+                for (ProductPackage productPackage : productPackages) {
+                    Long priceId = productPackage.getPriceId();
+                    ProductPrice productPrice = productPriceBaseService.find(priceId);
+                    productPrice.setStockNum(productPrice.getStockNum() - 1);
+                    productPrice.setSaleNum(productPrice.getSaleNum() + 1);
+                    productPriceBaseService.update(productPrice);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void modifyOrderContact(Long orderId, Long contactId) {
+        CusOrder cusOrder = cusOrderBaseService.find(orderId);
+        if (cusOrder.getOrderStatus() != CusOrder.OrderStatus.ToPay.getValue()) {
+            throw BaseException.errorByErrInfo("待支付的订单才可以修改收货人地址");
+        }
+        CusContact cusContact = cusContactBaseService.find(contactId);
+        cusOrder.setRecipientName(cusContact.getRecipients());
+        cusOrder.setRecipientTel(cusContact.getTel());
+        cusOrder.setProvinceId(cusContact.getProvinceId());
+        cusOrder.setProvinceName(cusContact.getProvinceName());
+        cusOrder.setCityId(cusContact.getCityId());
+        cusOrder.setCityName(cusContact.getCityName());
+        cusOrder.setRegionId(cusContact.getRegionId());
+        cusOrder.setRegionName(cusContact.getRegionName());
+        cusOrder.setRecipientAddress(cusContact.getAddress());
+        cusOrderBaseService.update(cusOrder);
+    }
+
+    /**
+     * 订单取消，对应商品库存、销售数量修改
+     *
+     * @param orderId 订单标识
+     */
+    private void updateProductPrice(Long orderId) {
+        //查询订单对应的订单明细信息
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(Filter.eq("orderId", orderId));
+        List<CusOrderDetail> cusOrderDetailList = cusOrderDetailBaseService.findList(null, filters, null);
+
+        // 根据订单明细中的商品价格定义标识查询商品价格定义信息
+        if (cusOrderDetailList != null && cusOrderDetailList.size() > 0) {
+            //商品价格定义标识集合
+
+            List<Long> priceIds = new ArrayList<Long>();
+            //商品价格定义标识集合
+            List<Long> actIds = new ArrayList<Long>();
+            //特卖商品价格定义标识集合
+            List<Long> activityPriceIds = new ArrayList<Long>();
+
+            Map<String, CusOrderDetail> map = new HashMap<>();
+
+
+            for (CusOrderDetail cusOrderDetail : cusOrderDetailList) {
+                Long actId = cusOrderDetail.getActId();
+                Long priceId = cusOrderDetail.getPriceId();
+
+                //判断是否是特价活动商品订单
+                if (StringUtil.checkObj(cusOrderDetail.getActId())) {
+                    actIds.add(cusOrderDetail.getActId());
+                    activityPriceIds.add(cusOrderDetail.getPriceId());
+                    map.put(actId + "_" + priceId, cusOrderDetail);
+                } else {
+                    priceIds.add(priceId);
+                    map.put(priceId + "", cusOrderDetail);
+                }
+            }
+
+
+            //库存数量
+            Integer stockNum = 0;
+            //销售数量
+            Integer saleNum = 0;
+            //订单商品数量
+            Integer num = 0;
+
+            if (priceIds != null && priceIds.size() > 0) {
+                Long[] longs = new Long[priceIds.size()];
+                longs = priceIds.toArray(longs);
+                //获取订单对应的商品价格定义信息
+                List<ProductPrice> product = productPriceBaseService.findList(longs);
+
+                if (product != null && product.size() > 0) {
+                    //循环遍历订单明细信息和查询商品价格定义信息, 设置商品库存数量和销售数量
+                    for (ProductPrice productPrice : product) {
+                        Long priceId = productPrice.getId();
+                        stockNum = productPrice.getStockNum();
+                        saleNum = productPrice.getSaleNum();
+                        if (map.containsKey(priceId)) {
+                            num = map.get(priceId).getNum();
+                            stockNum = stockNum + num;
+                            saleNum = saleNum - num;
+                        }
+
+                        productPrice.setStockNum(stockNum);
+                        productPrice.setSaleNum(saleNum);
+                    }
+
+                    productPriceBaseService.saveOrUpdate(product);
+
+
+                }
+
+            }
+
+            if (actIds != null && actIds.size() > 0) {
+                //清理list集合
+                filters.clear();
+
+                //查询对应特卖活动和价格的特卖信息
+                filters.add(Filter.in("actId", actIds));
+                filters.add(Filter.in("priceId", activityPriceIds));
+                List<ActivityProductRel> activityProductRels = activityProductRelBaseService.findList(null, filters, null);
+
+                if (activityProductRels != null && activityProductRels.size() > 0) {
+                    //遍历集合修改对应活动销售数量
+                    for (ActivityProductRel activityProductRel : activityProductRels) {
+                        //活动标识
+                        Long actId = activityProductRel.getActId();
+                        //套餐商品价格标识
+                        Long priceId = activityProductRel.getPriceId();
+                        //拼接key， 以便从map中获取对应订单信息
+                        String key = actId + "_" + priceId;
+
+                        if (map.containsKey(key)) {
+                            num = map.get(key).getNum();
+                            activityProductRel.setActsaleRealnum(activityProductRel.getActsaleRealnum() - num);
+                        }
+
+                    }
+
+                    activityProductRelBaseService.saveOrUpdate(activityProductRels);
+                }
+
+            }
+
+
+        }
+
+    }
+
+
+    /**
+     * 修改代金券相关信息
+     *
+     * @param cusCouponId
+     */
+    private void updateCusCoupon(Long cusCouponId) {
+        CouponCus couponCus = couponCusBaseService.find(cusCouponId);
+
+        // 7)修改用户代金券状态
+        couponCus.setIsUse(PubEnum.YesOrNoEnum.NO.getValue());
+        couponCus.setOrderCode(null);
+        couponCusBaseService.update(couponCus);
+
+        // 8)修改代金券使用数量
+        CouponInfo couponInfo = couponInfoBaseService.find(couponCus.getCouponId());
+        couponInfo.setUseNum(couponInfo.getUseNum() - 1);
+        couponInfoBaseService.update(couponInfo);
+    }
+
+
+    /**
+     * 保存
+     *
+     * @param cusId   操作人标识
+     * @param cusName 操作人名称
+     * @param orderId 订单标识
+     * @param status  操作环节
+     */
+    private void saveCusOrderLog(Long cusId, String cusName, Long orderId, Integer status) {
+        CusOrderLog cusOrderLog = new CusOrderLog();
+        cusOrderLog.setOrderId(orderId);
+        cusOrderLog.setAct(status);
+        cusOrderLog.setOperatorId(cusId);
+        cusOrderLog.setOperatorName(cusName);
+        cusOrderLogBaseService.save(cusOrderLog);
+    }
+}

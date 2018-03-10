@@ -1,0 +1,84 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>开店套餐详情</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/activities_list.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/activitiesDetail.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/addActivities.css" rel="stylesheet"/>
+    <link type="text/css" href="${path}/resources/css/flipsnap.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="${path}/resources/js/flipsnap.js"></script>
+    <script type="text/javascript" src="${path}/resources/admin/common/config.js"></script>
+    <script src="${path}/resources/admin/common/temDataGrid.js"></script>
+    <script src="${path}/resources/admin/js/productMgr/package/detail.js"></script>
+
+</head>
+<body>
+<div class="wrapper">
+    <div class="positionNow"> <a>主页 &gt; </a>
+        <a onclick="history.go(-1)">开店套餐设置</a> &gt;
+        <a style="color:#ff4d4d;">详情</a>
+    </div>
+    <div class="userDetail">
+        <h1 class="tittle">基本信息</h1>
+        <input type="hidden" name="id" id="id" value="${entity.id}"/>
+        <input type="hidden" name="headPath" id="headPath" value="${entity.headPath}"/>
+        <div class="activityMsn">
+            <table class="activityMsnTable">
+                <tr>
+                    <td>套餐名称：</td>
+                    <th>${entity.zhName}</th>
+                </tr>
+                <tr>
+                    <td>商品类型：</td>
+                    <th>${entity.cateName}</th>
+                    <td>套餐价格(元)：</td>
+                    <th>${packagePrice.salesPrice}</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="userDetail">
+        <h1 class="tittle">商品图片</h1>
+        <div class="imgDiv">
+            <ul class="in_imgDiv" id='panea'></ul>
+        </div>
+    </div>
+    <div class="userDetail">
+        <h1 class="tittle">商品简介</h1>
+        <div class="userDetailMain">
+            <p>${entity.introduce}</p>
+        </div>
+    </div>
+    <div class="userDetail">
+        <h1 class="tittle">
+            套餐商品
+        </h1>
+        <div class="userDetail" style="padding:0px 10px 10px 10px;">
+            <table class="datalistTable no">
+                <tr>
+                    <th height="44">商品名称</th>
+                    <th>规格</th>
+                    <th>原售价（元）</th>
+                    <th>库存</th>
+                </tr>
+               <tbody id="dataList"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/html" id="template_dataList">
+    {{each content as item i}}
+    <tr>
+        <td><span class="textBlue">{{item.zhName}}</span></td>
+        <td>{{item.specStr}}</td>
+        <td>{{item.salesPrice}}</td>
+        <td>{{item.stockNum}}</td>
+    </tr>
+    {{/each}}
+</script>

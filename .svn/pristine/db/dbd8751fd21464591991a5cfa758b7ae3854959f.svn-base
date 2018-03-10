@@ -1,0 +1,24 @@
+package com.catt.wfx.service.impl.base.wechatReturn;
+
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.wechatReturn.QueryWechatReturnResultDao;
+import com.catt.wfx.repository.entity.wechatReturn.QueryWechatReturnResult;
+import com.catt.wfx.service.base.wechatReturn.QueryWechatReturnResultBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+@Service("queryWechatReturnResultBaseServiceImpl")
+public class QueryWechatReturnResultBaseServiceImpl extends
+		BaseServiceImpl<QueryWechatReturnResult, Long> implements QueryWechatReturnResultBaseService {
+
+	@Resource(name = "queryWechatReturnResultDaoImpl")
+	private QueryWechatReturnResultDao queryWechatReturnResultDao;
+
+	@Resource
+	public void setBaseDao(QueryWechatReturnResultDao queryWechatReturnResultDao) {
+		super.setBaseDao(queryWechatReturnResultDao);
+	}
+
+}

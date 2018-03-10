@@ -1,0 +1,94 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Admin
+  Date: 2017/3/28
+  Time: 16:24
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%@include file="/common/headModule.jsp" %>
+    <title>首页</title>
+    <link type="text/css" rel="stylesheet" href="${path}/resources/css/public.css"/>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/index.css"/>
+    <link type="text/css" href="${path}/resources/css/timeChange.css" rel="stylesheet" />
+    <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
+    <script src="${path}/resources/js/jquery-formatcurrency/jquery.formatCurrency.js" type="text/javascript"></script>
+    <script src="${path}/resources/js/jquery-formatcurrency/i18n/jquery.formatCurrency.all.js" type="text/javascript"></script>
+
+
+    <script src="${path}/resources/admin/js/statisti/couponStatisti/index.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="positionNow">主页 &gt; <a>代金券发放统计</a></div>
+
+    <table class="tableChart" cellspacing="none">
+        <tr>
+            <td width="20%" style="padding-bottom:6px;">
+                <div class="sectionC">
+                    <h3><span id="allFaceValue" class="fmMoney">0</span><font size="-1">元</font></h3>
+                    <h4><span id="allSendNum">0</span><font size="-1">张</font></h4>
+                    <h2>代金券发放数量</h2>
+                </div>
+            </td>
+            <td width="20%" style="padding-bottom:6px;">
+                <div class="sectionE">
+                    <h3><span id="notUseFaceValue"  class="fmMoney">0</span><font size="-1">元</font></h3>
+                    <h4><span id="notUseNum">0</span><font size="-1">张</font></h4>
+                    <h2>未使用代金券数量</h2>
+                </div>
+            </td>
+            <td width="20%" style="padding-bottom:6px;">
+                <div class="sectionD">
+                    <h3><span id="shopkeeperRegisterBonusFaceValue"  class="fmMoney">0</span><font size="-1">元</font></h3>
+                    <h4><span id="shopkeeperRegisterBonusNum">0</span><font size="-1">张</font></h4>
+                    <h2>店主注册奖励发放数量</h2>
+                </div>
+            </td>
+            <td width="20%" style="padding-bottom:6px; padding-right:0px;">
+                <div class="sectionA">
+                    <h3><span id="ShopkeeperInviteBonusFaceValue"  class="fmMoney">0</span><font size="-1">元</font></h3>
+                    <h4><span id="shopkeeperInviteBonusNum">0</span><font size="-1">张</font></h4>
+                    <h2>店主邀请奖励发放数量</h2>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="sectionC">
+                    <h3><span id="useFaceValue"  class="fmMoney">0</span><font size="-1">元</font></h3>
+                    <h4><span id="useNum">0</span><font size="-1">张</font></h4>
+                    <h2>已使用代金券数量</h2>
+                </div>
+            </td>
+            <td>
+                <div class="sectionE">
+                    <h3><span id="overFaceValue"  class="fmMoney">0</span><font size="-1">元</font></h3>
+                    <h4><span id="overdueNum">0</span><font size="-1">张</font></h4>
+                    <h2>已过期代金券数量</h2>
+                </div>
+            </td>
+            <td>
+                <div class="sectionD">
+                    <h3><span id="shopkeeperSaleBonusFaceValue"  class="fmMoney">0</span><font size="-1">元</font></h3>
+                    <h4><span id="shopkeeperSaleBonusNum">0</span><font size="-1">张</font></h4>
+                    <h2>店主销售奖励发放数量</h2>
+                </div>
+            </td>
+            <td style="padding-right:0px;">
+                <div class="sectionA">
+                    <h3><span id="leaderMgrBonusFaceValue"  class="fmMoney">0</span><font size="-1">元</font></h3>
+                    <h4><span id="leaderMgrBonusNum">0</span>张</h4>
+                    <h2>主管管理奖励发放数量</h2>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

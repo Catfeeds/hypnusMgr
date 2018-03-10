@@ -1,0 +1,49 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <%@include file="/common/headModule.jsp" %>
+    <title>开店配置</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="${path}/resources/css/quan.css"/>
+
+    <script src="${path}/resources/admin/js/basicConfig/baseSet/openStoreIndex.js"></script>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="positionNow">主页 &gt; <a>开店配置</a></div>
+    <div class="addActivities">
+        <div class="userDetail">
+            <h1 class="tittle">开店设置</h1>
+            <div class="userDetailMain">
+                <div class="bonusBox">
+                    <div class="eachLine xw_eachLine">
+                        <input id="needBuyForRegister" name="needBuyForRegister" type="hidden" class="hiddenValue" value="${needBuyForRegister == null ? 1 : needBuyForRegister}"/>
+                        <div class="lineLeft" style="width:200px;">注册店主是否需要购买套餐：</div>
+                        <div class="activitiestype xw_activitiestype <c:if test="${needBuyForRegister == 1 || needBuyForRegister == null}">on</c:if>" data-value="1"><span class="tickB"></span>是</div>
+                        <div class="activitiestype xw_activitiestype <c:if test="${needBuyForRegister == 2}">on</c:if>" data-value="2"><span class="tickB"></span>否</div>
+                    </div>
+                    <div class="eachLine xw_eachLine">
+                        <input id="needBuyForRenew" name="needBuyForRenew" type="hidden" class="hiddenValue" value="${needBuyForRenew == null ? 1 : needBuyForRenew}"/>
+                        <div class="lineLeft" style="width:200px;">续费是否需要购买套餐：</div>
+                        <div class="activitiestype xw_activitiestype <c:if test="${needBuyForRenew == 1 || needBuyForRenew == null}">on</c:if>" data-value="1"><span class="tickB"></span>是</div>
+                        <div class="activitiestype xw_activitiestype <c:if test="${needBuyForRenew == 2}">on</c:if>" data-value="2"><span class="tickB"></span> 否</div>
+                    </div>
+                    <div class="eachLine">
+                        <div class="lineLeft" style="width:200px;">每次注册或续费的开店时长：</div>
+                        <input class="tkinput" value="${validity}" type="text" style="width:80px;" id="validity"/>
+                        <div class="lineText">年。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="saveBar">
+        <span class="btnRed" id="save">保存</span>
+    </div>
+</div>
+</div>
+</body>
+</html>

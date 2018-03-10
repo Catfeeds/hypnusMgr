@@ -1,0 +1,35 @@
+package com.catt.wfx.service.impl.base.wechatReturn;
+
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.wechatReturn.WechatReturnOrderLogDao;
+import com.catt.wfx.repository.entity.wechatReturn.WechatReturnOrderLog;
+import com.catt.wfx.service.base.wechatReturn.WechatReturnOrderLogBaseService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
+
+@Service("returnWechatOrderLogBaseServiceImpl")
+public class WechatReturnOrderLogBaseServiceImpl extends
+		BaseServiceImpl<WechatReturnOrderLog, Long> implements WechatReturnOrderLogBaseService {
+
+	@Resource(name = "returnWechatOrderLogDaoImpl")
+	private WechatReturnOrderLogDao returnWechatOrderLogDao;
+
+	@Resource
+	public void setBaseDao(WechatReturnOrderLogDao returnWechatOrderLogDao) {
+		super.setBaseDao(returnWechatOrderLogDao);
+	}
+	public WechatReturnOrderLog getWechatReturnOrderLog(String out_refund_no) {
+		List<WechatReturnOrderLog> list = 	this.findList(1,
+				Arrays.asList(Filter.eq("outRefundNo", out_refund_no)), null);
+		if (list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
+	}
+
+}

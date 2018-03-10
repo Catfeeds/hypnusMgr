@@ -1,0 +1,17 @@
+package com.catt.wfx.service.statisti;
+
+import java.util.Map;
+
+/**
+ * Description:代金券发放统计
+ * Created by 2017-03-28  10:24.
+ * author: Zhou mingxiang
+ */
+public interface CouponStatistiService {
+    /**
+     * 获取代金券发放统计信息
+     *
+     * @return
+     */
+    Map getCouponStatisti();
+}

@@ -1,0 +1,357 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.module.attachment.repository.entity.Attachment;
+import com.catt.common.module.attachment.service.AttachmentBaseService;
+import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.CollectionUtil;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.json.JsonUtils;
+import com.catt.common.util.lang.DateUtil;
+import com.catt.common.util.lang.NumberUtil;
+import com.catt.common.util.lang.StringUtil;
+import com.catt.wfx.repository.data.comEnum.PubEnum;
+import com.catt.wfx.repository.entity.customerMgr.CusContact;
+import com.catt.wfx.repository.entity.customerMgr.CusInfo;
+import com.catt.wfx.repository.entity.customerMgr.CusShop;
+import com.catt.wfx.repository.entity.productMgr.ProductInfo;
+import com.catt.wfx.repository.entity.productMgr.ProductPrice;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.service.base.customerMgr.CusContactBaseService;
+import com.catt.wfx.service.base.customerMgr.CusInfoBaseService;
+import com.catt.wfx.service.base.customerMgr.CusShopBaseService;
+import com.catt.wfx.service.base.productMgr.ProductInfoBaseService;
+import com.catt.wfx.service.base.productMgr.ProductPriceBaseService;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import com.catt.wfx.service.customerMgr.CusShopService;
+import com.catt.wfx.service.productMgr.ProductPackageService;
+import com.catt.wfx.service.pub.PubConfigService;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.*;
+
+/**
+ * Description:用户店铺接口实现
+ * Created by 2017-02-15  9:50.
+ * author: Zhou mingxiang
+ */
+@Service("cusShopServiceImpl")
+public class CusShopServiceImpl implements CusShopService {
+
+    @Resource(name = "cusShopBaseServiceImpl")
+    private CusShopBaseService cusShopBaseService;
+
+    //用户信息服务接口
+    @Resource(name = "cusInfoBaseServiceImpl")
+    private CusInfoBaseService cusInfoBaseService;
+
+    // 系统全局设置服务接口
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+    @Resource(name = "attachmentBaseServiceImpl")
+    private AttachmentBaseService attachmentBaseService;
+
+    /**
+     * 公共配置服务
+     */
+    @Resource(name = "pubConfigServiceImpl")
+    private PubConfigService pubConfigService;
+
+    @Resource(name = "productInfoBaseServiceImpl")
+    private ProductInfoBaseService productInfoBaseService;
+
+    @Resource(name = "productPriceBaseServiceImpl")
+    private ProductPriceBaseService productPriceBaseService;
+
+    @Resource(name = "productPackageServiceImpl")
+    private ProductPackageService productPackageService;
+
+    @Resource(name = "cusContactBaseServiceImpl")
+    private CusContactBaseService cusContactBaseService;
+
+
+    /**
+     * 获取登录用户店铺信息
+     *
+     * @param cusId 用户标识
+     * @return
+     */
+    public Map findCusShop(Long cusId) {
+        Map map = new HashMap<>();
+
+        //查询用户店铺信息
+        List<CusShop> cusShopList = this.findCusShopListByCusId(cusId);
+
+
+        if (cusShopList != null && cusShopList.size() > 0) {
+            CusShop cusShop = cusShopList.get(0);
+            //店铺状态
+            Integer status = cusShop.getStatus();
+            //开通时间
+            Date openTime = cusShop.getOpenTime();
+            //到期时间
+            Date expireTime = cusShop.getExpireTime();
+            //当前时间
+            Date nowDate = new Date();
+
+            //店铺到期提示时间（天数）
+            Integer day = Integer.valueOf(PubSetup.Code.openStoreTimeOut.getDefaultValue());
+
+            //允许续费时间
+            Date allowRenewDate =  null;
+
+            if (StringUtil.checkObj(expireTime)) {
+                map.put("leftTime", DateUtil.getDaysBetween(nowDate, expireTime)); //剩余开店时间（天）
+                allowRenewDate = DateUtil.getNearByDay(expireTime, -day);
+
+                //判断允许续费时间是否小于当前时间（即只有当前时间大于等于允许续费的才可以续费）
+                if(allowRenewDate.before(nowDate)){
+                    map.put("canContinue", PubEnum.YesOrNoEnum.YES.getValue());
+                }else {
+                    map.put("canContinue", PubEnum.YesOrNoEnum.NO.getValue());
+                }
+            } else {
+                map.put("canContinue", PubEnum.YesOrNoEnum.NO.getValue());
+                map.put("leftTime", "--"); //剩余开店时间（天）
+            }
+
+
+            map.put("id", cusShop.getId());
+            map.put("shopName", cusShop.getShopName());
+            map.put("status", status);
+            map.put("statusName", CusShop.Status.getEnum(status).getName()); //店铺状态枚举翻译
+
+            //如果过期时间小于当前时间---设置状态为过期，剩余天数为--
+            if(expireTime.before(nowDate)){
+                map.put("status", CusShop.Status.Overdue.getValue());
+                map.put("statusName", CusShop.Status.Overdue.getName()); //店铺状态枚举翻译
+                map.put("leftTime", "--"); //剩余开店时间（天）
+            }
+
+            map.put("shopUrl", cusShop.getShopUrl());
+            map.put("openTime", openTime);
+            map.put("expireTime", expireTime);
+
+
+            map.put("orderNum", cusShop.getOrderNum());
+            map.put("orderMoney", cusShop.getOrderMoney());
+
+            //获取店铺背景图片路径
+            List<Attachment> files = attachmentBaseService.getFiles(cusShop.getId(), CusShop.TABLE_NAME, CusShop.BACKGROUDURL);
+            if (files != null && files.size() > 0) {
+                //获取图片存储地址
+                String filePath = pubConfigService.getFilePath();
+                map.put("backgroundUrl", filePath+files.get(0).getPath());
+            } else { // 如无头像，则置空
+                map.put("backgroundUrl", StringUtils.EMPTY);
+            }
+        }
+        return map;
+    }
+
+
+    /**
+     * 修改店铺背景图片
+     *
+     * @param cusId         用户标识
+     * @param backgroundUrl 店铺背景图片
+     */
+    public void modifyShopBgUrl(Long cusId, Long backgroundUrl) {
+        //查询用户店铺信息
+        List<CusShop> cusShopList = this.findCusShopListByCusId(cusId);
+        if (cusShopList != null && cusShopList.size() > 0) {
+            CusShop cusShop = cusShopList.get(0);
+            attachmentBaseService.saveFile(backgroundUrl, cusShop.getId(), CusShop.TABLE_NAME, CusShop.BACKGROUDURL);
+        }
+
+    }
+
+    /**
+     * 店铺续费（无需购买套餐）
+     *
+     * @param cusId 用户标识
+     */
+    public void shopRenewals(Long cusId) {
+       CusInfo cusInfo = cusInfoBaseService.find(cusId);
+        if (cusInfo.getType().equals(CusInfo.Type.ShopOwner.getValue())){
+            List<CusShop> cusShopList  =  this.findCusShopListByCusId(cusId);
+            if (cusShopList != null && cusShopList.size()>0){
+                CusShop cusShop = cusShopList.get(0);
+
+                //店铺到期提示时间（天数）
+                Integer day = Integer.valueOf(PubSetup.Code.openStoreTimeOut.getDefaultValue());
+                //开店时间
+                Date expireTime = cusShop.getExpireTime();
+
+                //当前时间
+                Date nowDate =  new Date();
+                //允许续费时间
+                Date allowRenewDate =  DateUtil.getNearByDay(expireTime, -day);
+
+                String openStoreSet = pubSetupBaseService
+                        .getSetupByCode(PubSetup.Code.openStoreSet);
+
+                // 开店年限
+                int validity = MapUtil.getIntValue(
+                        JsonUtils.toObject(openStoreSet, Map.class),
+                        "validity");
+
+                //判断允许续费时间是否小于当前时间（即只有当前时间大于等于允许续费的才可以续费）
+                if(allowRenewDate.before(nowDate)){
+                    Date newExpireTime = null;
+
+                    //过期时间小于当前时间（即店铺已过期）
+                    if(expireTime.before(nowDate)){
+                        cusShop.setStatus(CusShop.Status.Normal.getValue());
+                        newExpireTime = DateUtil.getNearByYear(nowDate, +validity);
+
+                    }else {
+                        newExpireTime = DateUtil.getNearByYear(expireTime, +validity);
+                    }
+                    cusShop.setExpireTime(newExpireTime);
+                    cusShopBaseService.update(cusShop);
+                }else {
+                    throw BaseException.errorByErrInfo("还没到续费时间");
+                }
+
+            }else {
+                throw BaseException.errorByErrInfo("该用户没有开通店铺");
+            }
+
+
+        }else {
+            throw BaseException.errorByErrInfo("该用户店铺不需要续费");
+        }
+    }
+
+
+    /**
+     * 查询用户店铺信息
+     *
+     * @param cusId 用户标识
+     * @return
+     */
+    private List<CusShop> findCusShopListByCusId(Long cusId) {
+        //查询用户店铺信息
+        List<Filter> filterList = new ArrayList<Filter>();
+        filterList.add(Filter.eq("cusId", cusId));
+        List<CusShop> cusShopList = cusShopBaseService.findList(1, filterList, null);
+        return cusShopList;
+    }
+
+    /**
+     * 店铺续费（需要购买套餐）-创建订单-初始化界面
+     *
+     * @return
+     */
+    @Override
+    public Map renewInit(Long cusId) {
+        // 查询已上架的开店套餐
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("type", ProductInfo.Type.Package.getValue()));
+        filters.add(Filter.eq("status", ProductInfo.Status.OnSale.getValue()));
+        filters.add(Filter.eq("delFlag", PubEnum.YesOrNoEnum.NO.getValue()));
+        List<ProductInfo> packages = productInfoBaseService.findList(null, filters, null);
+        if (CollectionUtil.isNotEmpty(packages)) {
+            Map result = new HashMap<>();
+            ProductInfo info = packages.get(0);
+            Long infoId = info.getId();
+
+            // 获取套餐封面图片
+            String headPath = info.getHeadPath();
+            if (StringUtil.checkStr(headPath)) {
+                //获取图片存储地址
+                String filePath = pubConfigService.getFilePath();
+                headPath = filePath + attachmentBaseService.find(Long.parseLong(headPath)).getPath();
+            }
+
+            filters.clear();
+            filters.add(Filter.eq("productId", infoId));
+            List<ProductPrice> prices = productPriceBaseService.findList(1, filters, null);
+            Double salesPrice = NumberUtil.DOUBLE_ZERO;
+            Long priceId = NumberUtil.LONG_ZERO;
+            if (CollectionUtil.isNotEmpty(prices)) {
+                salesPrice = prices.get(0).getSalesPrice();
+                priceId = prices.get(0).getId();
+            }
+
+            result.put("productAmount", salesPrice); // 商品费用
+            result.put("totalDiscountAmount", NumberUtil.DOUBLE_ZERO); // 优惠总价
+            result.put("logisticsCost", NumberUtil.DOUBLE_ZERO); // 运费 TODO 目前暂时采用免邮的方式进行
+
+            // 默认收货地址
+            filters.clear();
+            filters.add(Filter.eq("isDefault", PubEnum.YesOrNoEnum.YES.getValue()));
+            filters.add(Filter.eq("cusId", cusId));
+            List<CusContact> contacts = cusContactBaseService.findList(1, filters, null);
+            if (CollectionUtil.isNotEmpty(contacts)) {
+                CusContact cusContact = contacts.get(0);
+                Map defaultContact = new HashMap<>();
+                defaultContact.put("id", cusContact.getId());
+                defaultContact.put("recipients", cusContact.getRecipients());
+                defaultContact.put("tel", cusContact.getTel());
+                defaultContact.put("provinceName", cusContact.getProvinceName());
+                defaultContact.put("cityName", cusContact.getCityName());
+                defaultContact.put("regionName", cusContact.getRegionName());
+                defaultContact.put("address", cusContact.getAddress());
+                result.put("defaultContact", defaultContact);
+            }
+
+            // 套餐信息
+            Map product = new HashMap<>();
+            product.put("id", ""); // 购物车标识，购买套餐时不经过购物车，故为空
+            product.put("cateId", info.getCateId()); // 商品标识
+            product.put("cateName", info.getCateName()); // 商品标识
+            product.put("productId", infoId); // 商品标识
+            product.put("productName", info.getZhName()); // 商品名称
+            product.put("code", info.getCode()); // 商品编码
+            product.put("barCode", info.getBarCode()); // 商品条码
+            product.put("num", NumberUtil.INTEGER_ONE); // 购买数量，套餐续费购买数量为1
+            product.put("priceId", priceId); // 商品价格标识
+            product.put("specJson", ""); // 商品规格，套餐无规格
+            product.put("specDesc", ""); // 商品规格描述，同上
+            product.put("costPrice", ""); // 商品原价
+            product.put("salesPrice", salesPrice); // 商品销售价
+            product.put("stockNum", productPackageService.getStockNum(infoId)); // 库存数量
+            product.put("headPath", headPath); // 购买数量，套餐续费购买数量为1
+            List<Map> productList = new ArrayList<>();
+            productList.add(product);
+            result.put("productList", productList);
+
+            return result;
+        } else {
+            throw BaseException.errorByErrInfo("未上架开店套餐");
+        }
+    }
+
+    /**
+     * 续费后更新店铺到期时间
+     *
+     * @param cusId
+     */
+    @Override
+    public void updateExpireTime(Long cusId) {
+        List<Filter> filters = new ArrayList<>();
+        filters.add(Filter.eq("cusId", cusId));
+        List<CusShop> cusShops = cusShopBaseService.findList(1, filters, null);
+        if (CollectionUtil.isNotEmpty(cusShops)) {
+            CusShop cusShop = cusShops.get(0);
+            Date expireTime = cusShop.getExpireTime(); // 到期时间
+            Date now = new Date(); // 当前时间
+
+            String openStoreSet = pubSetupBaseService.getSetupByCode(PubSetup.Code.openStoreSet);
+            // 开店年限
+            int validity = MapUtil.getIntValue(JsonUtils.toObject(openStoreSet, Map.class), "validity");
+
+            if (now.before(expireTime)) { // 还没到期，则将到期时间延长开店年限
+                cusShop.setExpireTime(DateUtil.addYears(expireTime, validity));
+            } else { // 已到期，从当前时间重新设置开店年限
+                cusShop.setExpireTime(DateUtil.addYears(now, validity));
+            }
+            cusShopBaseService.update(cusShop);
+        }
+    }
+}

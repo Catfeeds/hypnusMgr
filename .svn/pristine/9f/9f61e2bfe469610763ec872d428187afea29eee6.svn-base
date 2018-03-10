@@ -1,0 +1,44 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/*-------头部-------*/
+.head{ height:47px; position:fixed; top:0; left:0; width:100%; z-index:999; background:#fff;}
+.top-left{ position:absolute;width:38px;height:38px;top:6px;left:0%;font-size:18px;color:#FFF;}
+.top-left img{width:26px; height:26px;}
+
+.top-right{ position:absolute;width:38px;height:38px;top:6px;right:8px;font-size:18px;color:#FFF; }
+.top-right-text{ position:absolute;width:50px;height:38px;top:6px;right:8px;font-size:16px;color:#fff; }
+.top-right img{width:30px; height:30px;}
+.top-right02{ position:absolute;width:38px;height:38px;top:6px;right:52px;font-size:18px;color:#FFF;}
+.top-right02 img{width:30px; height:30px;}
+.top-right03{ position:absolute;width:38px;height:38px;top:6px;right:94px;font-size:18px;color:#FFF;}
+.top-right03 img{width:30px; height:30px;}
+.top-right:hover{opacity:0.7;}
+.top-right_send{float:right; position:absolute; width:100px; height:40px; top:4px; right:5px; font-size:18px; color:#fff; text-align:center; line-height:40px; background:#8bcc46;}
+.head h1{width:100%; font-size:18px;color:#323232;margin:0px auto; line-height:46px; text-align:center; border-bottom:1px solid #e5e5e5;position:absolute;  border-bottom:none; color:#fff; z-index:-1;}
+
+
+.tongjibiao{background:#fff; padding:0 20px; border-bottom:1px solid #e5e5e5;}
+.tongjibiaoItem{overflow:hidden; background:#fff; border-bottom:1px solid #e5e5e5;}
+.tongjibiaoItem h1{float:left; font-size:14px; color:#666; line-height:50px; margin-right:10px;}
+.tongjibiaoItem h2{float:right; font-size:14px; color:#333; line-height:50px; }
+.tongjibiaoItem h3{float:left; font-size:14px; color:#f47f30; line-height:50px; width:54px;}
+.tongjibiaoItem h4{float:right; font-size:12px; color:#969696; line-height:50px; }
+.tongjiBg01{background:#ea3c34 url(../images/tongji_bg_chart.png) no-repeat center; padding:50px;}
+.tongjiBg02{background:#ea3c34 url(../images/tongji_bg_chart02.png) no-repeat center; padding:50px;}
+.tongjibiaoItem1{overflow:hidden; background:#fff;}
+.tongjibiaoItem1 h1{float:left; font-size:14px; color:#666; line-height:50px; margin-right:10px;}
+.tongjibiaoItem1 h2{float:right; font-size:14px; color:#333; line-height:50px; }
+
+.arrow{ float:right; height:14px; margin:18px 0px 0px 5px;}
+.neirongTop{ background:#fff; padding:30px 0px; }
+.neirongTop h2{text-align:center; font-size:16px; font-weight:normal; color:#666; }
+.neirongTop h1{text-align:center; font-size:32px; color:#333; padding-top:10px;  }
+
+
+/*------销售记录-----*/
+.yejiBg{ background:#ff6ba0; height:180px; width:100%; margin-bottom:10px;}
+.yeji{ width:200px; text-align:center; color:#fff; margin:0 auto; padding-top:50px;}
+.yeji h1{ height:30px; line-height:30px; font-size:36px; letter-spacing:1px; margin-bottom:5px;}
+.yeji h2{ height:20px; line-height:20px; font-size:14px;}

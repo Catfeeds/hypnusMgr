@@ -1,0 +1,72 @@
+package com.catt.wfx.service.impl.customterMgr;
+
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
+import com.catt.wfx.service.SpringTest;
+import com.catt.wfx.service.customerMgr.CusAccountService;
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.Map;
+
+/**
+ * Description:用户账户服务单元测试
+ * Created by 2017-02-15  15:55.
+ * author: Zhou mingxiang
+ */
+public class CusAccountServiceImplTest extends SpringTest {
+    //用户账户服务接口
+    @Resource(name = "cusAccountServiceImpl")
+    private CusAccountService cusAccountService;
+//
+
+    /**
+     * 获取我的账户信息
+     * @throws Exception
+     */
+    @Test
+    public void testFindCusAccount() throws Exception {
+        Map map = cusAccountService.findCusAccount(1L, 1);
+        System.out.print("########" + map);
+    }
+
+    /**
+     * 获取我的收益统计（分页）
+     * @throws Exception
+     */
+    @Test
+    public void testGetMyIncomeStatistics() throws Exception{
+        Long cusId = 1l;
+        Integer pageNo = 1;
+        Integer pageSize = 10;
+        Page<Map> page = cusAccountService.getMyIncomeStatistics(cusId, pageNo, pageSize);
+        Assert.assertNotNull(page.getContent());
+        System.out.println("=======================================================");
+        System.out.println("=======================================================");
+        System.out.println("page: "+page.getContent());
+        System.out.println("=======================================================");
+        System.out.println("=======================================================");
+    }
+    /**
+     * 获取我的收益统计（分页）
+     * @throws Exception
+     */
+    @Test
+    public void testFindTransactionRecord() throws Exception{
+        Long cusId = 1l;
+        String type = "1,2";
+        Date createDateBegin = null;
+        Date createDateEnd = null;
+        Pageable pageable = new Pageable();
+        Page<Map> page = cusAccountService.findTransactionRecord(cusId,type,createDateBegin, createDateEnd, pageable);
+        Assert.assertNotNull(page.getContent());
+        System.out.println("=======================================================");
+        System.out.println("=======================================================");
+        System.out.println("page: "+page.getContent());
+        System.out.println("=======================================================");
+        System.out.println("=======================================================");
+    }
+
+}

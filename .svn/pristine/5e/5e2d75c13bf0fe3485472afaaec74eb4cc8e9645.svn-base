@@ -1,0 +1,55 @@
+<%-- 微信端公共头部,不包含adminLTE框架 --%>
+<%@ page language="java" pageEncoding="utf-8" %>
+<%@ page isELIgnored="false" %>
+<%@ include file="jstlLib.jsp" %>
+<meta name="renderer" content="webkit">
+<meta name="author" content="catt">
+<meta name="copyright" content="catt">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<%-- 禁用页面缓存，对微信内置浏览器的【返回】按钮貌似无效 --%>
+<meta http-equiv="Expires" content="0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-control" content="no-cache">
+<meta http-equiv="Cache" content="no-cache">
+
+<!--jquery-weui样式-->
+<link rel="stylesheet" href="${path}/resources/jquery-weui/lib/weui.min.css">
+<link rel="stylesheet" href="${path}/resources/jquery-weui/css/jquery-weui.min.css">
+
+<!--项目自定义样式-->
+<link rel="stylesheet" href="${path}/resources/css/application.css">
+
+<script type="text/javascript" src="${path}/resources/sea-modules/seajs/sea.js"></script>
+<script src="${path}/resources/sea-modules/jquery/2.0.3/jquery.js"></script>
+<script type="text/javascript" src="${path}/resources/sea-modules/seajs/seajs-preload.js"></script>
+<script type="text/javascript" src="${path}/resources/project-modules/seajs/init.js"></script>
+
+<!--jquery-weui相关js-->
+<script src="${path}/resources/jquery-weui/js/jquery-weui.min.js"></script>
+<script src="${path}/resources/jquery-weui/js/swiper.min.js"></script>
+
+<script type="text/javascript">
+    var path = '${path}';
+    var basePath = '${basePath}';
+    var shopId = '${shopId}';
+
+    // 空数据显示文本
+    var emptyDataText = "目前还没有数据哦~";
+    // 达到最后一页显示文本
+    var lastPageText = "没有更多数据了哦~";
+
+    seajs.use(['$'], function ($) {
+        $(document).ready(function () {
+            $('[autofocus="autofocus"]').focus();
+
+//            if (top['Pace']) {
+//                $(document).ajaxStart(function () {
+//                    top['Pace'].restart();
+//                });
+//            }
+        });
+    });
+</script>
+

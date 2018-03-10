@@ -1,0 +1,14 @@
+package com.catt.wfx.web.service;
+
+/**
+ * @author Zhang zhongtao
+ * @version Ver 1.0
+ * @since JDK V1.8
+ */
+public interface MessageHandlerService {
+    void subscribe(String openId, String publicAccountId);
+
+    void unSubscribe(String openId, String publicAccountId);
+
+    void saveRef(String openId, String publicAccountId, String unionId, String bisId);
+}

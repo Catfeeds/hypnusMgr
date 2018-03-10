@@ -1,0 +1,49 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/*.topBg{position:absolute; top:0; left:0; width:100%;z-index:1; }
+.top .top-left{ z-index:99;}
+.top h1{position:absolute; z-index:59; border-bottom:none; color:#fff;}
+.top .top-right{ z-index:29;}
+.headPic{position:absolute; top:50px; z-index:29;}
+*/
+
+/*-------头部-------*/
+.head{ height:47px; position:fixed; top:0; left:0; width:100%; z-index:999;}
+.top-left{ position:absolute;width:38px;height:38px;top:6px;left:2%;font-size:18px;color:#FFF;}
+.top-left img{width:26px; height:26px;}
+
+.top-right{ position:absolute;width:38px;height:38px;top:6px;right:8px;font-size:18px;color:#FFF; }
+.top-right-text{ position:absolute;width:50px;height:38px;top:6px;right:8px;font-size:16px;color:#ff4d4d; }
+.top-right img{width:30px; height:30px;}
+.top-right02{ position:absolute;width:38px;height:38px;top:6px;right:52px;font-size:18px;color:#FFF;}
+.top-right02 img{width:30px; height:30px;}
+.top-right03{ position:absolute;width:38px;height:38px;top:6px;right:94px;font-size:18px;color:#FFF;}
+.top-right03 img{width:30px; height:30px;}
+.top-right:hover{opacity:0.7;}
+.top-right_send{float:right; position:absolute; width:100px; height:40px; top:4px; right:5px; font-size:18px; color:#fff; text-align:center; line-height:40px; background:#8bcc46;}
+.head h1{width:100%; font-size:18px;color:#323232;margin:0px auto; line-height:46px; text-align:center; border-bottom:1px solid #e5e5e5;position:absolute;  border-bottom:none; color:#222;}
+
+/*---*/
+table{ border-collapse:collapse; width:100%;}
+.floatLeft{ float:left;}
+.floatRight{ float:right;}
+
+h1.tips{ height:30px; line-height:20px; font-size:12px; color:#888; letter-spacing:1px; padding:0 10px;}
+/*-------单品管理-------*/
+table.goodsType{ width:100%; height:35px; background:#fff; border-bottom:1px solid #e5e5e5; margin-bottom:10px;}
+table.goodsType td a{ display:block; margin:0 10%; height:40px; line-height:40px; text-align:center; font-size:16px; color:#222; cursor:pointer;}
+table.goodsType td a.lion{ border-bottom:3px solid #ff4d4d; color:#ff4d4d;}
+.goodsList{ border-top:1px solid #e5e5e5;}
+
+
+.danpinDiv{ padding:10px 40px 10px 125px; position:relative; height:120px; background:#fff; border-bottom:1px solid #efefef;}
+.danpinDiv img.shang{ position:absolute; top:15px; left:15px;}
+.danpinDiv h1{ height:30px; line-height:30px; font-size:16px; color:#222; margin-top:40px; overflow:hidden;}
+span.move{ display:block; width:24px; height:24px; position:absolute; top:58px; right:10px;}
+
+.temaiDiv{ background:#fff;}
+.temaiDiv img.shang{ width:100%;}
+.temaiDiv h1{ height:40px; line-height:34px; font-size:18px; color:#222; padding-right:34px; padding-left:15px; overflow:hidden; position:relative;}
+span.move02{ display:block; width:24px; height:12px; position:absolute; top:-1px; right:10px;}

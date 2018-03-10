@@ -1,0 +1,68 @@
+package com.catt.wfx.service;
+
+import com.catt.common.module.wechat.pojo.Consts;
+import com.catt.common.module.wechat.pojo.EnumConstants;
+import com.catt.common.module.wechat.pojo.api.Menu;
+import com.catt.common.module.wechat.pojo.api.MenuMsg;
+import com.catt.common.module.wechat.pojo.api.ResultMsg;
+import com.catt.common.module.wechat.service.api.MenuService;
+import com.catt.common.util.json.JsonUtils;
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.Objects;
+
+/**
+ * 微分销微信公众号菜单配置
+ * author: Ji Jianhong
+ */
+public class WfxWechatMenu extends SpringTest {
+
+    /**
+     * 微信公众号ID
+     */
+    private final static String PUBLIC_ACCOUNT_ID = "2";
+    /**
+     * 服务器地址
+     */
+    private final static String SERVER_PATH = "http://wfx.tunnel.qydev.com/wfxWechatShop";
+
+    @Resource(name = "wxApiMenuServiceImpl")
+    private MenuService menuService;
+
+    @Test
+    public void testGet() throws Exception {
+        MenuMsg menu = menuService.get(PUBLIC_ACCOUNT_ID);
+        System.out.println(JsonUtils.toJson(menu));
+        Assert.assertNotNull(menu);
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        ResultMsg resultMsg = menuService.delete(PUBLIC_ACCOUNT_ID);
+        System.out.println(JsonUtils.toJson(resultMsg));
+    }
+
+    /**
+     * 运行注意事项，数据库配置一定为对应的库，即有公众号配置的库
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testCreate() throws Exception {
+        Menu menu = new Menu();
+        menu.setButtons(Arrays.asList(
+                new Menu.MenuButton(EnumConstants.MenuType.view, "商城", "product", SERVER_PATH + "/admin/wechat/product/index.html?shopId=1"),
+                new Menu.MenuButton(EnumConstants.MenuType.view, "特卖", "activity", SERVER_PATH + "/admin/wechat/activity/index.html?shopId=1"),
+                new Menu.MenuButton(EnumConstants.MenuType.view, "我的", "index", SERVER_PATH + "?shopId=1")
+        ));
+
+        System.out.println("菜单配置【" + JsonUtils.toJson(menu) + "】");
+        ResultMsg resultMsg = menuService.create(PUBLIC_ACCOUNT_ID, menu);
+        System.out.println("创建菜单结果【" + JsonUtils.toJson(resultMsg) + "】");
+        Assert.assertTrue(Objects.equals(resultMsg.getErrcode(), Consts.SUCCESS_CODE));
+    }
+
+}

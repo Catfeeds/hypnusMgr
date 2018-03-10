@@ -1,0 +1,275 @@
+package com.catt.wfx.repository.entity.specialSale;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import java.util.Date;
+
+/**
+ * 活动信息表实体类
+ * 注意：同一时间可以有多个活动，但同一时间的同一个商品不能存在多个活动
+ * @author 邹佳
+ * @version V1.0
+ * @date 2017-03-08 16:18:02
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_ACTIVITY_INFO")
+public class ActivityInfo extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 用于从附件表获取附件
+     */
+    public static final String TABLE_NAME = "T_ACTIVITY_INFO";
+    public static final String PIC_PATH = "S_PIC_PATH";
+
+    /**
+     * <pre>
+     * 活动名称
+     * </pre>
+     */
+    private String name;
+    /**
+     * <pre>
+     * 活动类型
+     * 0-美食
+     * 1-家居
+     * 2-化妆品
+     * 3-服装
+     * </pre>
+     */
+    private Integer type;
+    /**
+     * <pre>
+     * 活动状态
+     * 0-未发布   1-发布中(显示在商城)  2-已暂停  3-已取消（不可再恢复） 4-已删除
+     * </pre>
+     */
+    private Integer status;
+    /**
+     * <pre>
+     * 活动开始时间
+     * </pre>
+     */
+    private Date startTime;
+    /**
+     * <pre>
+     * 活动结束时间
+     * </pre>
+     */
+    private Date endTime;
+    /**
+     * <pre>
+     * 活动描述
+     * </pre>
+     */
+    private String desc;
+    /**
+     * <pre>
+     * 封面图片
+     * </pre>
+     */
+    private String coverPath;
+    /**
+     * <pre>
+     * 活动图片
+     * </pre>
+     */
+    private String picPath;
+    /**
+     * <pre>
+     * 创建人员标识
+     * 创建人员标识
+     * </pre>
+     */
+    private Long createdId;
+    /**
+     * <pre>
+     * 创建人员名称
+     * 创建人员名称
+     * </pre>
+     */
+    private String createdName;
+
+    @Column(name = "S_NAME", length = 64)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Column(name = "I_TYPE")
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    @Column(name = "I_STATUS")
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    @Column(name = "D_START_TIME")
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    @Column(name = "D_END_TIME")
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    @Column(name = "S_DESC", length = 4000)
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    @Column(name = "S_COVER_PATH", length = 512)
+    public String getCoverPath() {
+        return coverPath;
+    }
+
+    public void setCoverPath(String coverPath) {
+        this.coverPath = coverPath;
+    }
+
+    @Column(name = "S_PIC_PATH", length = 512)
+    public String getPicPath() {
+        return picPath;
+    }
+
+    public void setPicPath(String picPath) {
+        this.picPath = picPath;
+    }
+
+    @Column(name = "I_CREATED_ID")
+    public Long getCreatedId() {
+        return createdId;
+    }
+
+    public void setCreatedId(Long createdId) {
+        this.createdId = createdId;
+    }
+
+    @Column(name = "S_CREATED_NAME", length = 32)
+    public String getCreatedName() {
+        return createdName;
+    }
+
+    public void setCreatedName(String createdName) {
+        this.createdName = createdName;
+    }
+
+    /**
+     * 活动状态
+     * 0-未发布   1- 发布中(显示在商城)  2-已暂停  3-已取消 4-已删除
+     */
+    public enum Status {
+        /**
+         * 未发布
+         */
+        Unreleased(0, "未发布"),
+
+        /**
+         * 发布中
+         */
+        Released(1, "发布中"),
+        /**
+         * 已暂停
+         */
+        Paused(2, "已暂停"),
+        /**
+         * 已取消
+         */
+        Canceled(3, "已取消"),
+        /**
+         * 已删除
+         */
+        Deleted(4, "已删除");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举中文
+         */
+        private String name;
+
+        /**
+         * 构造方法
+         *
+         * @param value 枚举值
+         * @param name  枚举中文
+         */
+        Status(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 由数字得是否多实例枚举对象
+         *
+         * @param value 枚举值
+         * @return 返回中文
+         */
+        public static Status getEnum(int value) {
+            Status[] source = Status.values();
+            for (int i = 0; i < source.length; i++) {
+                if (source[i].getValue() == value) {
+                    return source[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 取值
+         *
+         * @return 返回枚举值
+         */
+        public int getValue() {
+            return this.value;
+        }
+
+        /**
+         * 取中文名称
+         *
+         * @return 返回枚举中文
+         */
+        public String getName() {
+            return this.name;
+        }
+
+    }
+
+}
+

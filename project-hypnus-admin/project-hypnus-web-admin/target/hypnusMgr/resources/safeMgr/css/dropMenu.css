@@ -1,0 +1,29 @@
+@charset "utf-8";
+/* CSS Document */
+.searchBox{ position:relative; margin-right:5px;}
+.ulhide{ display:none; position:absolute; top:32px; right:5px; width:105px; border: 1px solid #e5e5e5; background: #f7f7f7; border-top:0px; z-index:10;}
+.ulhide li{ margin-left:0px;width:105px; height:28px; line-height:28px; font-size:14px; float:left; text-align:center; margin-left:0px; cursor:pointer; color:#666;}
+.ulhide li:hover{ background:#ddf3ff; color:#2ba4d8;}
+
+.ulhide200{ display:none; position:absolute; top:32px; right:5px; width:205px; border: 1px solid #e5e5e5; background: #f7f7f7; border-top:0px; z-index:10;}
+.ulhide200 li{ margin-left:0px;width:205px; height:28px; line-height:28px; font-size:14px; float:left; text-align:center; margin-left:0px; cursor:pointer; color:#666;}
+.ulhide200 li:hover{ background:#ddf3ff; color:#2ba4d8;}
+
+.searchInputSelect240{
+	float:left;
+	display:block;
+	height:28px;
+	line-height:28px;
+	width:240px;
+	border:1px #ececec solid;
+	border-radius:3px;
+	padding-left:5px;
+	background:url(../images/id_triangle.png) no-repeat 220px 8px;
+	color:#666;
+	font-size:12px;
+	cursor:default;}
+ul.ulhide02{ display:none; position:absolute; top:30px; right:5px; width:73px; border: 1px solid #e5e5e5; background: #f7f7f7; border-top:0px; z-index:10;}
+ul.ulhide02 li{ margin-left:0px;width:73px; height:24px; line-height:24px; font-size:12px; float:left; text-align:center; margin-left:0px; cursor:pointer; color:#666;}
+ul.ulhide245{ display:none; position:absolute; top:30px; right:0px; width:245px; border: 1px solid #e5e5e5; background: #f7f7f7; border-top:0px; z-index:10;}
+ul.ulhide245 li{ margin-left:0px;width:245px; height:24px; line-height:24px; font-size:12px; float:left; text-align:center; margin-left:0px; cursor:pointer; color:#666;}
+.ulhide245 li:hover{ background:#ddf3ff; color:#2ba4d8;}

@@ -1,0 +1,22 @@
+package com.catt.wfx.service.impl.base.extractOrder;
+
+import com.catt.common.base.service.impl.BaseServiceImpl;
+import com.catt.wfx.repository.dao.extractOrder.ExtractOrderLogDao;
+import com.catt.wfx.repository.entity.extractOrder.ExtractOrderLog;
+import com.catt.wfx.service.base.extractOrder.ExtractOrderLogBaseService;
+import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
+
+@Service("extractOrderLogBaseServiceImpl")
+public class ExtractOrderLogBaseServiceImpl extends
+	BaseServiceImpl<ExtractOrderLog, Long> implements ExtractOrderLogBaseService {
+
+	@Resource(name = "extractOrderLogDaoImpl")
+	private ExtractOrderLogDao extractOrderLogDao;
+
+	@Resource
+	public void setBaseDao(ExtractOrderLogDao extractOrderLogDao) {
+		super.setBaseDao(extractOrderLogDao);
+	}
+
+}

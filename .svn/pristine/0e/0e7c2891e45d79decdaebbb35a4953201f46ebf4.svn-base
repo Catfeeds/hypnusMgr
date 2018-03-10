@@ -1,0 +1,124 @@
+seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, adminSystem, template, msgBox, util) {
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    //退货单单标识
+                    var id = $('#id').val();
+                    if (id) {
+                        EventHandler.getReturnTotalAmount();
+                    }
+
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+
+                    $("#submit").click(function () {
+                        EventHandler.submit()
+                    });
+
+                    $("#close").click(function () {
+                        msgBox.exWindow.close();
+                    });
+
+                    //$("#returnAmount").keyup(function(){
+                    //
+                    //    if(!/^d*(?:.d{0,2})?$/.test($("#returnAmount").val())){
+                    //        $("#returnAmount").val("");
+                    //        msgBox.tips('只能输入数字,小数点后只能保留两位');}
+                    //})
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+
+                //获取退货单信息
+                getReturnTotalAmount: function () {
+                    DataHandler.getReturnTotalAmount({
+                        id: $('#id').val()
+                    }, function (cusOrderReturnDetail) {
+                        if (cusOrderReturnDetail) {
+                            $('#returnTotalAmount').html(cusOrderReturnDetail.returnTotalAmount);
+                            $('#orderId').val(cusOrderReturnDetail.orderId);
+                        }
+                    });
+
+                },
+
+                submit : function(){
+                    var param = {};
+                   var returnAmount = $('#returnAmount').val();
+                    param.orderId =$('#orderId').val();
+                    param.returnAmount =$('#returnAmount').val();
+                    if(returnAmount =="" || parseFloat(returnAmount)<=parseFloat(0)){
+                        msgBox.tips("退款金额必须大于零")
+                    }
+                    param.returnId =$('#id').val();
+
+
+                    DataHandler.returnMoney(param, function (result) {
+                        //$('#submit').button('reset');
+                        if (result.type == "success") {
+                            msgBox.tips("操作成功", 1, function () {
+                                msgBox.exWindow.close($.toJSON(result));
+                            });
+                        }
+                    });
+                }
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取退货信息详情
+                 * @param params
+                 * @param callback
+                 */
+                getReturnTotalAmount: function (params, callback) {
+                    $.post(path + '/admin/orderMgr/cusOrderReturn/getReturnTotalAmount', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 申请退款
+                 * @param params
+                 * @param callback
+                 */
+                returnMoney: function (params, callback) {
+                    $.post(path + "/admin/orderMgr/cusOrderReturn/returnMoney", params, function (result) {
+                        callback(result);
+                    });
+                },
+            };
+        })();
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    })
+;
+function checkNumber(e) {
+    var re = /^\d+(?=\.{0,2}\d+$|$)/
+    if (e.value != "") {
+        if (!re.test(e.value)) {
+            alert("请输入正确的数字");
+            e.value = "";
+            e.focus();
+        }
+    }
+}

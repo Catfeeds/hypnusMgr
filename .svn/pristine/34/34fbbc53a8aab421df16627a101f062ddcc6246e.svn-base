@@ -1,0 +1,80 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: houhuateng
+  Date: 2017/3/7
+  Time: 10:35
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <%@include file="/common/headModule2.jsp" %>
+    <title>身份信息审核</title>
+    <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet" />
+    <link type="text/css" href="${path}/resources/css/shenhe.css" rel="stylesheet" />
+    <link type="text/css" href="${path}/resources/css/user_list.css" rel="stylesheet" />
+    <link type="text/css" href="${path}/resources/css/dropMenu02.css" rel="stylesheet" />
+    <script src="${path}/resources/admin/js/customerMgr/agentInfo/auditPass.js" type="text/javascript"></script>
+</head>
+<body  class="bg-gray-light">
+<section class="content">
+    <div class="box box-solid">
+        <div class="box-body">
+            <input type="hidden" id="id" value="${id}"/>
+            <table class="massageTable" cellspacing="0">
+                <tr>
+                    <td width="100">审核结果：</td>
+                    <td>通过</td>
+                </tr>
+                <tr>
+                    <td width="100">代理级别：</td>
+                    <td>
+                        <input id="agencyLevel" type="hidden" value="${entity.agencyLevel}" />
+                        <ul class="optionUl xw_optionUlsingle" id="agencyLevels">
+                            <li <c:if test="${entity.agencyLevel == 1}">class="on"</c:if>>总代理</li>
+                            <li <c:if test="${entity.agencyLevel == 2}">class="on"</c:if>>省级</li>
+                            <li <c:if test="${entity.agencyLevel == 3}">class="on"</c:if>>市级</li>
+                            <li <c:if test="${entity.agencyLevel == 4}">class="on"</c:if>>区级</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>选择地区：</td>
+                    <td class="xw_xuanze">
+                        <div class="searchBox 80 xw_searchBox" id="province_div" style="display: none;">
+                            <input class="searchInputSelect80 xw_input" data-value-id="${entity.provinceId}"
+                                   value="${entity.provinceName == null ? '选择省' : entity.provinceName}"  id="province" type="text" readonly/>
+                            <ul class="ulhide80 xw_choice" id="provinceSel" style="max-height: 200px; min-height: 30px;">
+                            </ul>
+                        </div>
+                        <div class="searchBox 80 xw_searchBox" id="city_div" style="display: none;">
+                            <input class="searchInputSelect80 xw_input" data-value-id="${entity.cityId}"
+                                   value="${entity.cityName == null ? '选择市' : entity.cityName}"  id="city" type="text" readonly/>
+                            <ul class="ulhide80 xw_choice" id="citySel" style="max-height: 200px; min-height: 30px;">
+                            </ul>
+                        </div>
+                        <div class="searchBox xw_searchBox" id="region_div" style="display: none;">
+                            <input class="searchInputSelect80 xw_input" data-value-id="${entity.regionId}"
+                                   value="${entity.regionName == null ? '选择区' : entity.regionName}"  id="county" type="text" readonly/>
+                            <ul class="ulhide80 xw_choice" id="countySel" style="max-height: 200px; min-height: 30px;">
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="popBtDiv" style="height:45px;">
+        <ul>
+            <li><a class="btnGrey" style=" margin-left:10px;" id="cancel">取&nbsp;&nbsp;消</a></li>
+            <li><a class="btnRed" id="save">提交</a></li>
+        </ul>
+    </div>
+</section>
+<script type="text/html" id="template_dataList">
+    {{each}}
+    <li data-value-id="{{$value.addrCode}}">{{$value.name}}</li>
+    {{/each}}
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+var dataList = [];
+seajs.use(['$', 'template', 'msgBox', 'jquery.json'],
+    function ($, template, msgBox) {
+
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+
+                /** 初始化界面 */
+                initPage: function () {
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                },
+
+                /** 初始化数据加载 */
+                initData: function () {
+                    if ($('#id').val() != "") {
+                        CoverpicHandler.init();
+                        EventHandler.loadPackageProduct();
+                    }
+                }
+            };
+
+        })();
+
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                loadPackageProduct: function(){
+                    var params = {id : $("#id").val()};
+                    DataHandler.getPackageProduct(params, function (backData) {
+                        dataList = backData;
+                        addSepcStr(dataList);
+                        var html = template('template_dataList', {content: dataList});
+                        $('#dataList').html(html);
+                        $("#contentFrame", window.parent.document).css("height", $("body").css("height"));
+                    });
+                }
+            };
+        })();
+
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                getPackageProduct: function (params, callback) {
+                    $.post(path + "/admin/productMgr/package/getPackageProduct", params, function (result) {
+                        callback(result);
+                    });
+                }
+            };
+        })();
+
+        /**
+         * 图片
+         */
+        var CoverpicHandler = (function () {
+            return {
+                init: function () {
+                    $.get(path + "/admin/productInfo/getAttachments", {productId: $("#id").val()}, function (result) {
+
+                        //初始化所有图片
+                        var itemContent = [];
+                        var headPath = $('#headPath').val();
+                        for (var i = 0; i < result.length; i++) {
+                            if (headPath && headPath == result[i].id) { // 判断是否封面
+                                itemContent.push("" +
+                                "<div class='jd_box'>" +
+                                "<img class='pic1' src='"  + result[i].url + "' style='width: 100%; height: 100%;' />" +
+                                "<div class='cover' />" +
+                                    //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + result[i].fileName + "</div>" +
+                                "</div>");
+                            } else {
+                                itemContent.push("" +
+                                "<div class='jd_box'>" +
+                                "<img class='pic1' src='"+ result[i].url + "' style='width: 100%; height: 100%;' />" +
+                                    //"<div class='eachtit' style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis'>" + result[i].fileName + "</div>" +
+                                "</div>");
+                            }
+                        }
+
+                        var canshowNum = ($("div.imgDiv").outerWidth() - 86) / 230;
+                        canshowNum = Math.floor(canshowNum);
+                        //初始化面板对象
+                        panel = new BasePanel('#panea', {
+                            /**面板可视范围内显示的元素个数，如果展开后，
+                             * 则是disItem = disItem * expanRow*/
+                            disItem: canshowNum,
+                            /**显示面板宽度*/
+                            /**面板里需要承载的html内容*/
+                            contentHtml: itemContent,
+                            /**是否显示展开按钮*/
+                            isExpan: false,
+                            /**是否自动展开*/
+                            isAutoExpan: false,
+                            /**展开后显示的行数*/
+                            expanRows: 1,
+                            /**箭头位置：top：顶部；middle：中间*/
+                            arrowAlign: 'middle',
+                            /**面板移动完成后事件*/
+                            onmoveend: function (pageNo) {
+                            }
+                        });
+
+                    });
+                }
+            }
+        })();
+
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+
+    });
+
+function addSepcStr(arr){
+    for(var i = 0; i < arr.length; i++){
+        var spec = $.evalJSON(arr[i].specJson);
+        var str = "";
+        for(var o in spec){
+            str += "_" + spec[o];
+        }
+        arr[i].specStr = str.substr(1);
+    }
+}

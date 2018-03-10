@@ -1,0 +1,28 @@
+package com.catt.wfx.service.impl.wechatReturn;
+
+import com.catt.wfx.service.SpringTest;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Description:
+ * Created by 2017-03-01  14:08.
+ * author: Zhou mingxiang
+ */
+public class WechatReturnServiceImplTest extends SpringTest{
+
+    @Resource
+    private WechatReturnServiceImpl wechatReturnService;
+    @Test
+    public void testRun() throws Exception {
+        Map<String, String> param = new HashMap<>();
+        param.put("returnId", 530538051911286784L+"");
+        param.put("returnAmount", 230+"");
+        param.put("businessType","cusOrderReturnHandler");
+
+        wechatReturnService.returnMoney(param,null);
+    }
+}

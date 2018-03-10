@@ -1,0 +1,185 @@
+seajs.use(['$', 'template', 'msgBox', 'util', 'jquery.json'],
+    function ($, template, msgBox, util) {
+        var $productTb = null;
+        /** 初始化处理器 */
+        var InitHandler = (function () {
+            return {
+                /** 初始化入口 */
+                init: function () {
+                    this.initPage();
+                    this.initEvent();
+                    this.initData();
+                },
+                /** 初始化界面 */
+                initPage: function () {
+                    // 初始化数据列表
+                    EventHandler.search();
+                },
+                /** 初始化事件绑定 */
+                initEvent: function () {
+                },
+                /** 初始化数据加载 */
+                initData: function () {
+                }
+            };
+        })();
+        /** 事件处理器 */
+        var EventHandler = (function () {
+            return {
+                search: function () {
+                    DataHandler.findStatisticalData({}, function (backData) {
+                        var totalGetMoney = backData.totalGetMoney;//商家发放金额
+                        var totalMoney = backData.totalMoney;//商家发放金额已提现金额
+                        var totalPlatMoney = backData.totalPlatMoney;//平台提成金额
+                        var platGetMoney = backData.platGetMoney;//平台已提现总金额
+                        var salesCommissions = backData.salesCommissions;//商品提成利润
+                        var shopkeeperRegisterBonus = backData.shopkeeperRegisterBonus;//店主注册奖励
+                        var shopkeeperInviteBonus = backData.shopkeeperInviteBonus;//店主邀请奖励
+                        var shopkeeperSaleBonus = backData.shopkeeperSaleBonus;//店主销售奖励
+                        var leaderMgrBonus = backData.leaderMgrBonus;//主管管理奖励
+                        var totalDistributionMoney = backData.totalDistributionMoney; //分销总金额
+                        var withdrawals = backData.withdrawals; //分销已提现
+                        $("#busPercent").css("width", totalGetMoney*100/totalMoney + "%");
+                        $("#platPercent").css("width", platGetMoney*100/totalPlatMoney + "%");
+                        $("#disPercent").css("width", withdrawals*100/totalDistributionMoney + "%");
+                        for(var key in backData){
+                            $("#" + key).html(backData[key].toFixed(2));
+                        }
+
+                        //发放总金额PIE
+                        $('#moneyGiven_pie').highcharts({
+                            chart: {
+                                plotBackgroundColor: null,
+                                plotBorderWidth: null,
+                                plotShadow: false,
+                                type: 'pie',
+                                backgroundColor: ''
+                            },
+                            title: {
+                                text: '发放总金额'
+                            },
+                            tooltip: {
+                                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                            },
+                            credits: {
+                                enabled: false
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: {
+                                        enabled: true,
+                                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                        style: {
+                                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                        }
+                                    }
+                                }
+                            },
+                            series: [{
+                                name: "比例",
+                                colorByPoint: true,
+                                data: [{
+                                    name: "分销利润",
+                                    y: totalDistributionMoney,
+                                    color:'#f3c445',
+                                    sliced: true,
+                                    selected: true
+                                }, {
+                                    name: "平台提成金额",
+                                    y: totalPlatMoney,
+                                    color:'#ff6868'
+                                }]
+                            }]
+                        });
+                        //分销利润PIE
+                        $('#profit_pie').highcharts({
+                            chart: {
+                                plotBackgroundColor: null,
+                                plotBorderWidth: null,
+                                plotShadow: false,
+                                type: 'pie',
+                                backgroundColor: ''
+                            },
+                            title: {
+                                text: '分销利润'
+                            },
+                            tooltip: {
+                                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                            },
+                            credits: {
+                                enabled: false
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: {
+                                        enabled: true,
+                                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                        style: {
+                                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                        }
+                                    }
+                                }
+                            },
+                            series: [{
+                                name: "比例",
+                                colorByPoint: true,
+                                data: [{
+                                    name: "店主注册奖励",
+                                    y: shopkeeperRegisterBonus,
+                                    color:'#41b6f2'
+                                }, {
+                                    name: "店主邀请奖励",
+                                    y: shopkeeperInviteBonus,
+                                    color:'#3eccb0'
+                                }, {
+                                    name: "商品提成利润",
+                                    y: salesCommissions,
+                                    color:'#f89a5a',
+                                    sliced: true,
+                                    selected: true
+                                }, {
+                                    name: "店主销售奖励",
+                                    y: shopkeeperSaleBonus,
+                                    color:'#ff6868'
+                                }, {
+                                    name: "主管管理奖励",
+                                    y: leaderMgrBonus,
+                                    color:'#f9d302',
+                                    sliced: true,
+                                    selected: true
+                                }]
+                            }]
+                        });
+
+                        $('.fmMoney').formatCurrency({ roundToDecimalPlace: 2, region:'zh'});
+
+                    });
+                }
+
+            };
+        })();
+        /** 数据处理器 */
+        var DataHandler = (function () {
+            return {
+                /**
+                 * 获取统计数据
+                 * @param params
+                 * @param callback
+                 */
+                findStatisticalData: function (params, callback) {
+                    $.post(path + '/admin/statisti/cashGive/findStatisticalData', params, function (backData) {
+                        callback(backData);
+                    });
+                }
+            };
+        })();
+
+        /** 页面入口 */
+        $(function () {
+            InitHandler.init();
+        });
+    });

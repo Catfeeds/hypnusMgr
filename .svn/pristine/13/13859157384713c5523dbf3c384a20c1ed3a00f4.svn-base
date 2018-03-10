@@ -1,0 +1,118 @@
+package com.catt.wfx.repository.entity.productMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 套餐详情实体类
+ *
+ * @author 周明祥
+ * @version V1.0
+ * @date 2017-01-09 11:37:12
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_PRODUCT_PACKAGE")
+public class ProductPackage extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+
+    /**
+     * <pre>
+     * 商品标识
+     * </pre>
+     */
+    private Long productId;
+    /**
+     * <pre>
+     * 套餐商品标识
+     * </pre>
+     */
+    private Long packageProid;
+    /**
+     * <pre>
+     * 套餐商品价格标识
+     * </pre>
+     */
+    private Long priceId;
+    /**
+     * <pre>
+     * 创建人员标识
+     * </pre>
+     */
+    private Long createdId;
+    /**
+     * <pre>
+     * 创建人员名称
+     * </pre>
+     */
+    private String createdName;
+    /**
+     * <pre>
+     * 备注
+     * </pre>
+     */
+    private String remark;
+
+    @Column(name = "I_PRODUCT_ID")
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    @Column(name = "I_PACKAGE_PROID")
+    public Long getPackageProid() {
+        return packageProid;
+    }
+
+    public void setPackageProid(Long packageProid) {
+        this.packageProid = packageProid;
+    }
+
+    @Column(name = "I_PRICE_ID")
+    public Long getPriceId() {
+        return priceId;
+    }
+
+    public void setPriceId(Long priceId) {
+        this.priceId = priceId;
+    }
+
+    @Column(name = "I_CREATED_ID")
+    public Long getCreatedId() {
+        return createdId;
+    }
+
+    public void setCreatedId(Long createdId) {
+        this.createdId = createdId;
+    }
+
+    @Column(name = "S_CREATED_NAME", length = 32)
+    public String getCreatedName() {
+        return createdName;
+    }
+
+    public void setCreatedName(String createdName) {
+        this.createdName = createdName;
+    }
+
+
+    @Column(name = "S_REMARK", length = 1024)
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+}
+

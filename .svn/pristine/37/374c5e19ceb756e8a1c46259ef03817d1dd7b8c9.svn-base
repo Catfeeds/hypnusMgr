@@ -1,0 +1,120 @@
+package com.catt.wfx.repository.entity.productMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 商品扩展实体类
+ * 
+ * @author 周明祥
+ * @date 2017-01-09 11:37:12
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_PRODUCT_ATTR")
+public class ProductAttr extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * <pre>
+	 * 商品标识
+	 * </pre>
+	 */
+	private Long productId;
+	/**
+	 * <pre>
+	 * 商品属性
+	 * </pre>
+	 */
+	private String attrJson;
+	/**
+	 * <pre>
+	 * 商品规格
+	 * </pre>
+	 */
+	private String specJson;
+
+	/**
+	 * <pre>
+	 * 创建人员标识
+	 * </pre>
+	 */
+	private Long createdId;
+	/**
+	 * <pre>
+	 * 创建人员名称
+	 * </pre>
+	 */
+	private String createdName;
+
+	/**
+	 * <pre>
+	 * 备注
+	 * </pre>
+	 */
+	private String remark;
+
+	@Column(name = "I_PRODUCT_ID")
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	@Column(name = "S_ATTR_JSON", length = 4000)
+	public String getAttrJson() {
+		return attrJson;
+	}
+
+	public void setAttrJson(String attrJson) {
+		this.attrJson = attrJson;
+	}
+
+	@Column(name = "S_SPEC_JSON", length = 4000)
+	public String getSpecJson() {
+		return specJson;
+	}
+
+	public void setSpecJson(String specJson) {
+		this.specJson = specJson;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+
+	@Column(name = "S_REMARK", length = 1024)
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+}
+

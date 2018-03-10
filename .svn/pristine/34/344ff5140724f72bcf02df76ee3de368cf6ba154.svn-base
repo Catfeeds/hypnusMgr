@@ -1,0 +1,348 @@
+package com.catt.wfx.repository.entity.orderMgr;
+
+import com.catt.common.base.repository.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.Date;
+
+/**
+ * 配送信息实体类
+ * 
+ * @author 袁幸成
+ * @date 2017-02-13 17:26:34
+ * @version V1.0
+ */
+@Entity
+@JsonAutoDetect
+@Table(name = "T_CUS_ORDER_LOGISTICS")
+public class CusOrderLogistics extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * 单据标识
+	 */
+	private Long orderId;
+	/**
+	 * 状态<p><br>
+	 * 1-配送中 2-已收货
+	 */
+	private Integer status;
+	/**
+	 * 运输方式<p><br>
+	 * 1-快递 2-货运
+	 */
+	private Integer transportType;
+	/**
+	 * 物流公司<p><br>
+	 *  值对应 快递物流模块的
+	 *  @see  com.catt.common.module.express.data.Constats.ExpressCom 枚举
+	 */
+	private Integer logisticsType;
+	/**
+	 * 运单编号
+	 */
+	private String logisticsCode;
+	/**
+	 * 运费
+	 */
+	private Double luggage;
+	/**
+	 * 收货人
+	 */
+	private String recipients;
+	/**
+	 * 联系电话
+	 */
+	private String tel;
+	/**
+	 * 所属省份编码
+	 */
+	private String provinceId;
+	/**
+	 * 所属省份名称
+	 */
+	private String provinceName;
+	/**
+	 * 所属城市编码
+	 */
+	private String cityId;
+	/**
+	 * 所属城市名称
+	 */
+	private String cityName;
+	/**
+	 * 所属区/县编码
+	 */
+	private String regionId;
+	/**
+	 * 所属区/县名称
+	 */
+	private String regionName;
+	/**
+	 * 详细地址
+	 */
+	private String address;
+	/**
+	 * 发货时间
+	 */
+	private Date sendDate;
+	/**
+	 * 创建人员标识<p><br>
+	 * 创建人员标识
+	 */
+	private Long createdId;
+	/**
+	 * 创建人员名称<p><br>
+	 * 创建人员名称
+	 */
+	private String createdName;
+
+	@Column(name = "I_ORDER_ID")
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
+	@Column(name = "I_STATUS")
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	@Column(name = "I_TRANSPORT_TYPE")
+	public Integer getTransportType() {
+		return transportType;
+	}
+
+	public void setTransportType(Integer transportType) {
+		this.transportType = transportType;
+	}
+
+	@Column(name = "I_LOGISTICS_TYPE")
+	public Integer getLogisticsType() {
+		return logisticsType;
+	}
+
+	/**
+	 *  @see  com.catt.common.module.express.data.Constats.ExpressCom 枚举
+	 * @param logisticsType
+	 */
+	public void setLogisticsType(Integer logisticsType) {
+		this.logisticsType = logisticsType;
+	}
+
+	@Column(name = "S_LOGISTICS_CODE", length = 128)
+	public String getLogisticsCode() {
+		return logisticsCode;
+	}
+
+	public void setLogisticsCode(String logisticsCode) {
+		this.logisticsCode = logisticsCode;
+	}
+
+	@Column(name = "I_LUGGAGE")
+	public Double getLuggage() {
+		return luggage;
+	}
+
+	public void setLuggage(Double luggage) {
+		this.luggage = luggage;
+	}
+
+	@Column(name = "S_RECIPIENTS", length = 64)
+	public String getRecipients() {
+		return recipients;
+	}
+
+	public void setRecipients(String recipients) {
+		this.recipients = recipients;
+	}
+
+	@Column(name = "S_TEL", length = 64)
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	@Column(name = "S_PROVINCE_ID", length = 32)
+	public String getProvinceId() {
+		return provinceId;
+	}
+
+	public void setProvinceId(String provinceId) {
+		this.provinceId = provinceId;
+	}
+
+	@Column(name = "S_PROVINCE_NAME", length = 128)
+	public String getProvinceName() {
+		return provinceName;
+	}
+
+	public void setProvinceName(String provinceName) {
+		this.provinceName = provinceName;
+	}
+
+	@Column(name = "S_CITY_ID", length = 32)
+	public String getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
+	}
+
+	@Column(name = "S_CITY_NAME", length = 128)
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+	@Column(name = "S_REGION_ID", length = 32)
+	public String getRegionId() {
+		return regionId;
+	}
+
+	public void setRegionId(String regionId) {
+		this.regionId = regionId;
+	}
+
+	@Column(name = "S_REGION_NAME", length = 128)
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+
+	@Column(name = "S_ADDRESS", length = 128)
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	@Column(name = "D_SEND_DATE")
+	public Date getSendDate() {
+		return sendDate;
+	}
+
+	public void setSendDate(Date sendDate) {
+		this.sendDate = sendDate;
+	}
+
+	@Column(name = "I_CREATED_ID")
+	public Long getCreatedId() {
+		return createdId;
+	}
+
+	public void setCreatedId(Long createdId) {
+		this.createdId = createdId;
+	}
+
+	@Column(name = "S_CREATED_NAME", length = 32)
+	public String getCreatedName() {
+		return createdName;
+	}
+
+	public void setCreatedName(String createdName) {
+		this.createdName = createdName;
+	}
+
+	/**
+	 * 状态<p><br>
+	 * 1-配送中 2-已收货
+	 */
+	public enum Status {
+
+		/**
+		 * 配送中
+		 */
+		Distribution(1, "配送中"),
+
+		/**
+		 * 已收货
+		 */
+		ReceivedGoods(2, "已收货"),
+
+		/**
+		 * 零售
+		 */
+		Retail(3, "零售");
+
+		/**
+		 * 枚举值
+		 */
+		private Integer value;
+
+		/**
+		 * 枚举中文
+		 */
+		private String name;
+
+		/**
+		 * 构造方法
+		 *
+		 * @param value 枚举值
+		 * @param name  枚举中文
+		 */
+		Status(Integer value, String name) {
+			this.value = value;
+			this.name = name;
+		}
+
+		/**
+		 * 由数字得是否多实例枚举对象
+		 *
+		 * @param value 枚举值
+		 * @return 返回中文
+		 */
+		public static Status getEnum(int value) {
+			Status[] source = Status.values();
+			for (int i = 0; i < source.length; i++) {
+				if (source[i].getValue() == value) {
+					return source[i];
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * 取值
+		 *
+		 * @return 返回枚举值
+		 */
+		public int getValue() {
+			return this.value;
+		}
+
+		/**
+		 * 取中文名称
+		 *
+		 * @return 返回枚举中文
+		 */
+		public String getName() {
+			return this.name;
+		}
+	}
+}
+

@@ -1,0 +1,136 @@
+package com.catt.wfx.service.impl;
+
+import com.catt.common.module.sms.service.SmsService;
+import com.catt.common.util.ConfigUtils;
+import com.catt.common.util.spring.SpringUtils;
+import com.catt.wfx.repository.entity.pub.PubSetup;
+import com.catt.wfx.service.LoginSmsService;
+import com.catt.wfx.service.base.pub.PubSetupBaseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+/**
+ * <pre>
+ * 登录短信发送及校验，短信验证码会保存到缓存中，有效期10分钟，详见配置文件
+ * @author : Zhang zhongtao
+ * @version : Ver 1.0`
+ * </pre>
+ */
+@Service(value = LoginSmsServiceImpl.SERVICE_NAME)
+public class LoginSmsServiceImpl implements LoginSmsService {
+
+    /**
+     * 服务名称
+     */
+    public static final String SERVICE_NAME = "loginSmsServiceImpl";
+
+    /**
+     * 缓存块名称
+     */
+    private static final String CACHE_LOGIN_NAME = "loginSmsCache";
+
+    /**
+     * 日志
+     */
+    private static Logger logger = LoggerFactory.getLogger(LoginSmsServiceImpl.class);
+
+    /**
+     * 6位短信验证码
+     */
+    private static final Integer CODE_SIZE = 1000000;
+
+    /**
+     * config.sms.login.scene.enum：短信场景配置
+     */
+    @Value("${config.sms.login.scene.enum}")
+    private String loginSceneEnum;
+
+    @Resource(name = "commonModuleSmsServiceImpl")
+    private SmsService smsService;
+
+    @Resource(name = "pubSetupBaseServiceImpl")
+    private PubSetupBaseService pubSetupBaseService;
+
+    public String getLoginSceneEnum() {
+        return ConfigUtils.config.getProperty("config.sms.login.scene.enum");
+//        return loginSceneEnum;
+    }
+
+    public void setLoginSceneEnum(String loginSceneEnum) {
+        this.loginSceneEnum = loginSceneEnum;
+    }
+
+    /**
+     * 生成6位短信验证码
+     *
+     * @return String 6位短信验证码
+     */
+    private String buildCode() {
+        //短信验证码随机生成6位数
+        return String.valueOf(Math.round(Math.random() * CODE_SIZE));
+    }
+
+    /**
+     * 根据模块及短信验证码生成短信内容
+     *
+     * @param code 短信验证码
+     * @return String 短信验证码（用于缓存、也可以进行外部比较）
+     */
+    private String buildSmsContent(String contentTemplate, String code) {
+        //组装短信内容
+        return String.format(contentTemplate, code);
+    }
+
+    @Override
+    @Cacheable(value = CACHE_LOGIN_NAME, key = "#mobileNo")
+    public String sendLoginSms(String mobileNo, String contentTemplate) {
+        //短信验证码随机生成6位数
+        String code = buildCode();
+
+        int isAuditing = pubSetupBaseService.getIntegerSetupByCode(PubSetup.Code.isStoreAuditing);
+        if (isAuditing == 1) {
+            String mobileNos = pubSetupBaseService.getSetupByCode(PubSetup.Code.storeTestUsername);
+            if (mobileNos != null && mobileNos.contains(mobileNo)) {
+                code = pubSetupBaseService.getSetupByCode(PubSetup.Code.storeTestSmsCode);
+            }
+        }
+
+        //组装短信内容
+        String content = buildSmsContent(contentTemplate, code);
+        logger.info("短信验证码:{}", code);
+        try {
+            //调用短信发送模块发送短信
+            smsService.sendSms(mobileNo, content, getLoginSceneEnum());
+        } catch (Exception e) {
+            logger.error("sendLoginSms", e);
+        }
+
+        return code;
+    }
+
+    @Override
+    public boolean loginMobileNoCheck(String mobileNo, String code, String contentTemplate) {
+        LoginSmsService loginSmsService = SpringUtils.getBean(SERVICE_NAME);
+        String cacheCode = loginSmsService.sendLoginSms(mobileNo, contentTemplate);
+        Boolean isTrue = code.equalsIgnoreCase(cacheCode);
+
+        //校验通过后，清理缓存
+        if (isTrue) {
+            loginSmsService.clearLoginSms(mobileNo);
+        }
+
+        return isTrue;
+    }
+
+    @Override
+    @CacheEvict(value = CACHE_LOGIN_NAME, key = "#mobileNo")
+    public void clearLoginSms(String mobileNo) {
+        logger.warn("清理手机:{},登录短信缓存", mobileNo);
+    }
+}
