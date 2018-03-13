@@ -1,5 +1,5 @@
 /**
- * 一些控件初始化配置 by houhuateng on 2015/11/27.
+ * 一些控件初始化配置 by runtime on 2015/11/27.
  */
 
 var ueditor = {};
