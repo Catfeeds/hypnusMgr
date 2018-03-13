@@ -1,6 +1,6 @@
 /**
  * H5的桌面提醒
- * Created by Zhang zhongtao on 2016/4/21.
+ * Created by runtime on 2016/4/21.
  */
 define('notification/1.0/notification', ['$'], function (require, exports, module) {
     //提醒组件的版本

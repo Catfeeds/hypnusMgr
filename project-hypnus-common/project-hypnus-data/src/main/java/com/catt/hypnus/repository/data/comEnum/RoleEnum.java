@@ -3,7 +3,7 @@ package com.catt.hypnus.repository.data.comEnum;
 /**
  * 角色枚举类
  *
- * @author 邹佳
+ * @author runtime
  * @version V1.0
  * @date 2016-08-03
  */

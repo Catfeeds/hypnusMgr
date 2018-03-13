@@ -1,5 +1,5 @@
 /**
- * Created by Zhang zhongtao on 2016/5/17.
+ * Created by runtime on 2016/5/17.
  */
 define('{projectModuleBase}/dataGridHelp/1.0/dataGridHelp', ['$'], function (require, exports, module) {
         'use strict';

@@ -1,5 +1,5 @@
 /**
- * Created by Zhang zhongtao on 2016/10/17.
+ * Created by runtime on 2016/10/17.
  */
 
 seajs.use(['$', 'template'], function ($, template) {

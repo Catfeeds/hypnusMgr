@@ -43,7 +43,7 @@ import java.util.Set;
  * <p>
  * 技术支持：广东凯通软件开发技术有限公司 (c) 2015
  *
- * @author 邹佳：zoujia@gdcattsoft.com
+ * @author runtime：zoujia@gdcattsoft.com
  * @version 1.0
  * @date 2015年11月11日
  * @since jdk版本：jdk1.8

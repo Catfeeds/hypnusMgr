@@ -1,6 +1,6 @@
 /**
  * 解决在不兼容consoel的浏览器，避免console报错
- * Created by Zhang zhongtao on 2016/4/22.
+ * Created by runtime on 2016/4/22.
  */
 define('consoleHack/1.0/consolehack', ['$'], function (require, exports, module) {
     if (!window.console) {

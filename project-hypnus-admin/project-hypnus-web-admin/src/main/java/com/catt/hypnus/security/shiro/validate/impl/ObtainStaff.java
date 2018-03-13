@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 账号密码登录时获取用户信息
  *
- * @author 邹佳：zoujia@gdcattsoft.com
+ * @author runtime：zoujia@gdcattsoft.com
  * @version 1.0
  * @date 2016年3月25日
  * @since jdk版本：jdk1.8

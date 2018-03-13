@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * <pre>
  * 针对ajax退出操作时进行输出提示
- * @author : Zhang zhongtao
+ * @author : runtime
  * @version : Ver 1.0
  * </pre>
  */

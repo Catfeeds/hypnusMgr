@@ -6,7 +6,7 @@ import com.catt.hypnus.repository.entity.customerMgr.FactoryAgent;
 /**
  * 代理商信息Dao接口
  * 
- * @author 袁幸成
+ * @author runtime
  * @date 2017-02-13 16:15:31
  * @version V1.0
  */

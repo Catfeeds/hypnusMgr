@@ -10,7 +10,7 @@ import javax.persistence.Table;
 /**
  * 厂家信息表实体类
  * 
- * @author 袁幸成
+ * @author runtime
  * @date 2017-02-13 16:15:31
  * @version V1.0
  */

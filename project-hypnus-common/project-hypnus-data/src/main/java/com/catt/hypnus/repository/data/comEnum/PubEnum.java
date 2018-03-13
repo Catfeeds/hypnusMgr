@@ -6,14 +6,14 @@ import java.util.Map;
 
 /**
  * 系统业务公共枚举
- * @author  houhuateng on 2016/6/20.
+ * @author  runtime on 2016/6/20.
  */
 public class PubEnum {
 
     /**
      * 通用是否枚举
      *
-     * @author houhuateng
+     * @author runtime
      *
      */
     public enum YesOrNoEnum {

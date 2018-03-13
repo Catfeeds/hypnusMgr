@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * 系统管理服务接口
  *
- * @author 袁幸成
+ * @author runtime
  * @version V1.0
  * @date 2015年12月2日 14:46:09
  */

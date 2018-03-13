@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 /**
  * 用户团队关联表服务接口实现
  *
- * @author 袁幸成
+ * @author runtime
  * @date 2017-02-13 16:15:30
  * @version V1.0
  */

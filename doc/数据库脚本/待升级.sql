@@ -4,22 +4,22 @@ ALTER TABLE `t_cus_order`
 ADD COLUMN `I_PARENT_ID`  bigint(20),
 ADD COLUMN `I_FACTORY_ID`  bigint(20);
 
--- 09/26 订单结算统计表增加字段  -袁幸成
+-- 09/26 订单结算统计表增加字段  -runtime
 ALTER TABLE `T_SETTLEMENT_ORDER_DETAIL` ADD COLUMN `I_PAY_TYPE`  int(11);
 UPDATE T_SETTLEMENT_ORDER_DETAIL a LEFT JOIN t_cus_order_pay b ON a.I_ORDER_ID = b.I_ORDER_ID  SET a.I_PAY_TYPE = 1 WHERE b.I_PAY_TYPE = 1 OR b.I_PAY_TYPE = 2;
 UPDATE T_SETTLEMENT_ORDER_DETAIL a LEFT JOIN t_cus_order_pay b ON a.I_ORDER_ID = b.I_ORDER_ID  SET a.I_PAY_TYPE = 2 WHERE ISNULL(b.I_PAY_TYPE);
 
 
--- 用户表添加新字段  2017-08-23 zhoumingxiang
+-- 用户表添加新字段  2017-08-23 runtime
 ALTER TABLE `t_cus_info`
 ADD COLUMN `S_INVITATION_PATH`  varchar(4000) NULL AFTER `I_WEIX_ID`;
 
--- 枚举添加数据--配送信息--运输方式  2017-08-23 zhoumingxiang
+-- 枚举添加数据--配送信息--运输方式  2017-08-23 runtime
 INSERT INTO `t_whs_enum_tbl` (`I_ID`, `D_CREATE_DATE`, `D_MODIFY_DATE`, `I_DOMAIN_ID`, `I_ENUM_VALUE`, `I_REL_ENUM_ID`, `S_ENUM_CN_NAME`, `S_ENUM_COL_NAME`, `S_ENUM_NAME`, `S_ENUM_TBL_NAME`, `S_REFERENCE_NAME`, `S_REL_ENUM_NAME`, `S_REMARK`, `I_IS_ENABLED`, `I_MODULE_ID`) VALUES ('98', '2017-08-23 14:11:14', '2017-08-23 14:11:16', '1', '1', NULL, '运输方式', 'I_TRANSPORT_TYPE', '快递', 'T_CUS_ORDER_RETURN', NULL, NULL, NULL, '1', '1');
 INSERT INTO `t_whs_enum_tbl` (`I_ID`, `D_CREATE_DATE`, `D_MODIFY_DATE`, `I_DOMAIN_ID`, `I_ENUM_VALUE`, `I_REL_ENUM_ID`, `S_ENUM_CN_NAME`, `S_ENUM_COL_NAME`, `S_ENUM_NAME`, `S_ENUM_TBL_NAME`, `S_REFERENCE_NAME`, `S_REL_ENUM_NAME`, `S_REMARK`, `I_IS_ENABLED`, `I_MODULE_ID`) VALUES ('99', '2017-08-23 14:11:14', '2017-08-23 14:11:16', '1', '1', NULL, '运输方式', 'I_TRANSPORT_TYPE', '货运', 'T_CUS_ORDER_RETURN', '', '', '', '1', '1');
 
 
--- 08/22 厂家返利相关模型修改 -袁幸成
+-- 08/22 厂家返利相关模型修改 -runtime
 -- 商品价格定义增加字段（一、二、三、四、五级返利）
 ALTER TABLE `t_product_price`
 ADD COLUMN `I_REBATE_ONE`  double,

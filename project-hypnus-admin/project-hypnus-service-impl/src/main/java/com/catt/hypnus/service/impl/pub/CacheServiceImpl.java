@@ -12,7 +12,7 @@ import java.util.Collection;
 /**
  * 系统缓存业务接口实现
  *
- * @author 邹佳
+ * @author runtime
  * @version V1.0
  * @date 2016-03-14 15:26:28
  */

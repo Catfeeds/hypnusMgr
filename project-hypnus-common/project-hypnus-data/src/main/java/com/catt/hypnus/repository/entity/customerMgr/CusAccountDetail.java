@@ -10,7 +10,7 @@ import javax.persistence.Table;
 /**
  * 账户明细记录实体类
  *
- * @author 周明祥
+ * @author runtime
  * @version V1.0
  * @date 2017-02-10 14:30:14
  */

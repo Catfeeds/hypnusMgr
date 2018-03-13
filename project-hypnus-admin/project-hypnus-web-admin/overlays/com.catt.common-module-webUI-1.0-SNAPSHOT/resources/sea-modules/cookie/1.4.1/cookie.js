@@ -1,7 +1,7 @@
 /**
  *<pre>
  * Description:cookie 插件
- * Author：Zhang zhongtao
+ * Author：runtime
  * Date：2014-11-05 11:47
  *</pre>
  */

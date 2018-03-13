@@ -10,7 +10,7 @@ import java.util.Map;
 
 /** List转Map工具类（list、map各项转换都可以放在此类中）
  * @version   1.0
- * @author    houhuateng
+ * @author    runtime
  * @since     2015-1-22 11:00:00 PM  jdk版本：jdk1.8
  *
  */

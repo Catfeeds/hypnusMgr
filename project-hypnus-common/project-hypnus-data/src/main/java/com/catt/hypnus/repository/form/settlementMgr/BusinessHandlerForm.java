@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * 商家账户信息相关操作入参
  *
- * @author 袁幸成
+ * @author runtime
  * @version V1.0
  * @date 2017-2-16 15:14:02
  */

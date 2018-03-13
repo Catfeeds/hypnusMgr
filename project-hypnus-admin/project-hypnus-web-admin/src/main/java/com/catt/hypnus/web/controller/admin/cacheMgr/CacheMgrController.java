@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 /**
  * 系统缓存控制器
  *
- * @author 邹佳
+ * @author runtime
  * @version V1.0
  * @date 2016-03-14 15:26:28
  */

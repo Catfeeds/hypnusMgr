@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * 用户信息接口
- * 作者：邹佳
+ * 作者：runtime
  * 时间：2017-02-27
  */
 public interface CusInfoService {

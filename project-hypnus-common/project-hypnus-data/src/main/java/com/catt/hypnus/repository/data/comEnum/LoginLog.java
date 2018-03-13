@@ -2,7 +2,7 @@ package com.catt.hypnus.repository.data.comEnum;
 
 /**
  * 登录日志类型
- * Created by houhuateng on 2016/1/7.
+ * Created by runtime on 2016/1/7.
  */
 public class LoginLog {
     /**

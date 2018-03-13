@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * 用户账号资金相关操作返回的参数，需要返回什么参数，在下面加
  *
- * @author 袁幸成
+ * @author runtime
  * @version V1.0
  * @date 2017-2-16 15:14:11
  */

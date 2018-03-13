@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 /**
  * <pre>
  * Description: 枚举管理类
- * Author: Zhang zhongtao
+ * Author: runtime
  * Version:
  * Since: Ver 1.1
  * Date: 2014-11-15 12:20

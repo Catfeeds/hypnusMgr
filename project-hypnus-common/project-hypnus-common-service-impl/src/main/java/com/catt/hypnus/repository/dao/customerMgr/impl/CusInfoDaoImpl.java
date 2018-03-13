@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * 用户信息Dao接口实现
  *
- * @author 袁幸成
+ * @author runtime
  * @version V1.0
  * @date 2017-02-10 09:47:36
  */

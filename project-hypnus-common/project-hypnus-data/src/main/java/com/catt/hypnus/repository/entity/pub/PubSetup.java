@@ -10,7 +10,7 @@ import javax.persistence.Table;
 /**
  * 系统全局设置实体类
  *
- * @author 周明祥
+ * @author runtime
  * @version V1.0
  * @date 2015-11-19 15:29:44
  */

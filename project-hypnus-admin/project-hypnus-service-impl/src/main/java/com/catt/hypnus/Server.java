@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 /**
- * Created by Zhang zhongtao on 2015/7/1.
+ * Created by runtime on 2015/7/1.
  */
 @Configuration
 @ImportResource(value = {"classpath*:applicationContext.xml", "classpath*:applicationContext-project.xml"})

@@ -24,7 +24,7 @@ import java.util.Map;
 
 /**
  * 用户信息控制器
- * 作者：邹佳
+ * 作者：runtime
  * 时间：2017-02-27
  */
 @Controller("admin.CusInfoController")

@@ -6,7 +6,7 @@ import com.catt.hypnus.repository.entity.customerMgr.CusShop;
 /**
  * 店铺信息表服务接口
  * 
- * @author 袁幸成
+ * @author runtime
  * @date 2017-02-13 16:15:30
  * @version V1.0
  */

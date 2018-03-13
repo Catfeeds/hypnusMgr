@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 系统管理Dao接口
  *
- * @author 袁幸成
+ * @author runtime
  * @date 2015年12月2日 14:55:07
  * @version V1.0
  */

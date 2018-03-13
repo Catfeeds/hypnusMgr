@@ -18,6 +18,8 @@ import java.util.List;
 public class ListObjectsSample {
     
     //private static String endpoint = "<endpoint>";
+
+
 	//private static String accessKeyId = "<accessKeyId>";
 	//private static String accessKeySecret = "<accessKeySecret>";
     //private static String bucketName = "<bucketName>";

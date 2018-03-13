@@ -3,7 +3,7 @@ package com.catt.hypnus.service.pub;
 /**
  * 系统缓存业务接口
  *
- * @author 邹佳
+ * @author runtime
  * @version V1.0
  * @date 2016-03-14 15:26:28
  */

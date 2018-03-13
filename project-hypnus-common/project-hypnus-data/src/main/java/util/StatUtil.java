@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 数据统计工具
  *
- * @author 邹佳
+ * @author runtime
  * @version V1.0
  * @date 2016/10/18
  */

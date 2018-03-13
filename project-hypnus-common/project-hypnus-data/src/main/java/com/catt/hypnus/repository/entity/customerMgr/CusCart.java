@@ -10,7 +10,7 @@ import javax.persistence.Table;
 /**
  * 购物车信息实体类
  * 
- * @author 袁幸成
+ * @author runtime
  * @date 2017-02-10 08:50:22
  * @version V1.0
  */

@@ -10,7 +10,7 @@ import javax.persistence.Table;
 /**
  * 提成/返利结算记录表实体类
  * 
- * @author 袁幸成
+ * @author runtime
  * @date 2017-08-22 15:12:48
  * @version V1.0
  */

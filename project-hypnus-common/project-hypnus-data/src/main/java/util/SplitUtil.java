@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by houhuateng on 2016/4/12.
+ * Created by runtime on 2016/4/12.
  */
 public class SplitUtil {
     /**

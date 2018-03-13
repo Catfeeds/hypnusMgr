@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * 银行卡绑定Dao接口实现
  *
- * @author 袁幸成
+ * @author runtime
  * @date 2017-02-13 16:15:31
  * @version V1.0
  */
