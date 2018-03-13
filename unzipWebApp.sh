@@ -5,6 +5,4 @@ BASEDIR=$(dirname $0)
 cd $BASEDIR
 
 unzip hypnusMgr.war -d hypnusMgr
-unzip hypnusMobile.war -d hypnusMobile
-unzip hypnusWechatShop.war -d hypnusWechatShop
 
