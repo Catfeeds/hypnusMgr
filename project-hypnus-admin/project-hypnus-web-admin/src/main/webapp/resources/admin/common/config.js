@@ -14,6 +14,7 @@ ueditor.config = {
         'preview', 'fullscreen'
     ]],
     //serverUrl: path + '/attachment/upload',
+
     wordCount:false,
     enableAutoSave: false
 };
