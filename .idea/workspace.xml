@@ -1,60 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="a0c6b9c2-7df1-444d-81bf-b0280905b36c" name="Default" comment="1，百度富文本框；">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/doc/微分销移动端接口.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/doc/微分销账户说明.xlsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/doc/数据库脚本/初始化数据库脚本/1-初始化[库表结构].sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/doc/数据库脚本/初始化数据库脚本/2-初始化[基础数据].sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/doc/数据库脚本/初始化数据库脚本/3-初始化[基础数据]-行政区划.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/doc/数据库脚本/初始化数据库脚本/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/doc/数据库脚本/待升级.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/doc/退款公共框架.pdm" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-04/log2018-03-04-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-04/log2018-03-04-sql-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-05/log2018-03-05-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-05/log2018-03-05-sql-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-06/log2018-03-06-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-06/log2018-03-06-sql-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-07/log2018-03-07-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-07/log2018-03-07-sql-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-08/log2018-03-08-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-08/log2018-03-08-sql-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-09/log2018-03-09-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/2018-03-09/log2018-03-09-sql-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/hypnus-admin-lzb-access.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/hypnus-admin-lzb-sql.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/hypnus-admin-lzb.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/wfx-admin-Admin-access.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/wfx-admin-Admin-sql.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/wfx-admin-Admin.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/wfx-admin-lzb-access.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/wfx-admin-lzb-sql.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/wfx-admin-lzb.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/wfx-mobile-lzb-access.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/wfx-mobile-lzb-sql.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/wfx-mobile-lzb.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/packageWfx-MAC.sh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/log/2017-09-25/log2017-09-25-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/log/2017-09-25/log2017-09-25-sql-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/log/wfx-admin-Admin-access.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/log/wfx-admin-Admin-sql.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/log/wfx-admin-Admin.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/2018-03-04/log2018-03-04-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/2018-03-04/log2018-03-04-web-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/2018-03-05/log2018-03-05-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/2018-03-05/log2018-03-05-web-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/2018-03-06/log2018-03-06-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/2018-03-08/log2018-03-08-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/2018-03-08/log2018-03-08-web-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/2018-03-09/log2018-03-09-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/2018-03-09/log2018-03-09-web-0.log.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/dmshMgr-Admin-web.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/dmshMgr-Admin.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/dmshMgr-lzb-web.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/log/dmshMgr-lzb.log" afterPath="" />
+    <list default="true" readonly="true" id="a0c6b9c2-7df1-444d-81bf-b0280905b36c" name="Default" comment="TEST">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduMap/1.5/baiduMap.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduMap/2.0/baiduMap.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduMapConvertor/1.0/baiduMapConvertor.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/Uploader.swf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.custom.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.custom.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.fis.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.flashonly.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.flashonly.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.html5only.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.html5only.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.noimage.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.noimage.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.nolog.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.nolog.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.withoutimage.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduUploader/0.1.5/webuploader.withoutimage.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/pay/1.0/pay.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/unzipWebApp.sh" afterPath="$PROJECT_DIR$/unzipWebApp.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/wechat/1.0/wechat.js" afterPath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/wechat/1.0/wechat.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.runtime.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduMap/2.0/baiduMap.js" afterPath="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.runtime.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduMap/2.0/baiduMap.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service-impl/src/main/java/com/catt/hypnus/repository/dao/pub/PubSetupBaseDao.java" afterPath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service-impl/src/main/java/com/catt/hypnus/repository/dao/pub/PubSetupBaseDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service-impl/src/main/java/com/catt/hypnus/repository/dao/pub/impl/PubSetupBaseDaoImpl.java" afterPath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service-impl/src/main/java/com/catt/hypnus/repository/dao/pub/impl/PubSetupBaseDaoImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service-impl/src/main/java/com/catt/hypnus/service/impl/base/pub/PubSetupBaseServiceImpl.java" afterPath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service-impl/src/main/java/com/catt/hypnus/service/impl/base/pub/PubSetupBaseServiceImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service/src/main/java/com/catt/hypnus/service/base/pub/PubSetupBaseService.java" afterPath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service/src/main/java/com/catt/hypnus/service/base/pub/PubSetupBaseService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-data/src/main/java/util/CryptUtil.java" afterPath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-data/src/main/java/util/CryptUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-data/src/main/java/util/MaskUtil.java" afterPath="$PROJECT_DIR$/project-hypnus-common/project-hypnus-data/src/main/java/util/MaskUtil.java" />
     </list>
     <ignored path="$PROJECT_DIR$/project-wfx-background/project-wfx-returnQuery/target/" />
     <ignored path="$PROJECT_DIR$/project-wfx-mobile/project-wfx-service-impl-mobile/target/" />
@@ -96,108 +73,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="config.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/src/main/webapp/resources/admin/common/config.js">
+      <file leaf-file-name="PubSetupBaseService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service/src/main/java/com/catt/hypnus/service/base/pub/PubSetupBaseService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="15" column="45" lean-forward="false" selection-start-line="15" selection-start-column="45" selection-end-line="15" selection-end-column="45" />
+            <state relative-caret-position="145">
+              <caret line="10" column="18" lean-forward="false" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="18" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/project-hypnus-common/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="0">
-                <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-                <folding />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="project-hypnus-common.iml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/project-hypnus-common/project-hypnus-common.iml">
+      <file leaf-file-name="wechat.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/wechat/1.0/wechat.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
+            <state relative-caret-position="-924">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="init-db.bat" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/db/init-db.bat">
+      <file leaf-file-name="SafeMgrBaseService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service/src/main/java/com/catt/hypnus/service/base/pub/SafeMgrBaseService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="233">
+              <caret line="21" column="17" lean-forward="false" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="startup.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/src/main/resources/startup.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="startup.bat" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/src/main/resources/startup.bat">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="unzipWebApp.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/unzipWebApp.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="6" column="32" lean-forward="false" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="stopBackground.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/stopBackground.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="startBackground.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/startBackground.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="0">
-                <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-                <folding />
-              </first_editor>
-              <second_editor />
             </state>
           </provider>
         </entry>
@@ -206,7 +107,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>type</find>
       <find>runtime</find>
       <find>catt</find>
       <find>logoutFilter</find>
@@ -236,6 +136,7 @@
       <find>zhoumingxiang</find>
       <find>houhuateng</find>
       <find>zhang zhongtao</find>
+      <find>纪建宏</find>
     </findStrings>
     <replaceStrings>
       <replace>catt</replace>
@@ -297,6 +198,8 @@
         <option value="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/src/main/java/com/catt/hypnus/Server.java" />
         <option value="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/src/main/webapp/resources/admin/common/config.js" />
         <option value="$PROJECT_DIR$/unzipWebApp.sh" />
+        <option value="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduMap/2.0/baiduMap.js" />
+        <option value="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/wechat/1.0/wechat.js" />
       </list>
     </option>
   </component>
@@ -733,101 +636,70 @@
             <path>
               <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
               <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-service" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-service" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-service-impl" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-service-impl" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-service-impl" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-service-impl" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-web-admin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-web-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-web-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-web-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
               <item name="project-hypnus-common" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
               <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
               <item name="project-hypnus-common" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-common-service-impl" type="462c0819:PsiDirectoryNode" />
+              <item name="project-hypnus-common-service" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
               <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
               <item name="project-hypnus-common" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-common-service-impl" type="462c0819:PsiDirectoryNode" />
+              <item name="project-hypnus-common-service" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
               <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
               <item name="project-hypnus-common" type="462c0819:PsiDirectoryNode" />
-              <item name="project-hypnus-common-service-impl" type="462c0819:PsiDirectoryNode" />
+              <item name="project-hypnus-common-service" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
+              <item name="project-hypnus-common" type="462c0819:PsiDirectoryNode" />
+              <item name="project-hypnus-common-service" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
+              <item name="project-hypnus-common" type="462c0819:PsiDirectoryNode" />
+              <item name="project-hypnus-common-service" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
+              <item name="project-hypnus-common" type="462c0819:PsiDirectoryNode" />
+              <item name="project-hypnus-common-service" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="project-hypnus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="project-hypnus" type="462c0819:PsiDirectoryNode" />
+              <item name="project-hypnus-common" type="462c0819:PsiDirectoryNode" />
+              <item name="project-hypnus-common-service" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+              <item name="pub" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -839,7 +711,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../common-GenCode" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../generateCode" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -1026,7 +898,7 @@
       <workItem from="1520775429819" duration="773000" />
       <workItem from="1520852249045" duration="2251000" />
       <workItem from="1520949246585" duration="2331000" />
-      <workItem from="1520952176801" duration="1169000" />
+      <workItem from="1520952176801" duration="3370000" />
     </task>
     <task id="LOCAL-00001" summary="1，百度富文本框；">
       <created>1520951745683</created>
@@ -1049,11 +921,18 @@
       <option name="project" value="LOCAL" />
       <updated>1520953021149</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="1，删除多余文件；">
+      <created>1520953373894</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1520953373894</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="66226000" />
+    <option name="totallyTimeSpent" value="68427000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="886" extended-state="6" />
@@ -1074,13 +953,14 @@
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5103448" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32965517" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32965517" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292011" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22429305" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3958869" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32969153" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827586" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1089,7 +969,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.75206614" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32827586" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1134,7 +1013,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="1，百度富文本框；" />
-    <option name="LAST_COMMIT_MESSAGE" value="1，百度富文本框；" />
+    <MESSAGE value="1，删除多余文件；" />
+    <MESSAGE value="TEST" />
+    <option name="LAST_COMMIT_MESSAGE" value="TEST" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1151,34 +1032,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/project-hypnus-common/project-hypnus-data/src/main/java/com/catt/hypnus/repository/entity/pub/PubSetup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5852">
-          <caret line="293" column="22" lean-forward="false" selection-start-line="293" selection-start-column="22" selection-end-line="293" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/src/main/java/com/catt/hypnus/web/controller/safeMgr/StaffMgrController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1518">
-          <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/src/main/resources/config.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/filters/dev.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/src/main/webapp/common/resourceNotFound.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="522">
@@ -1504,6 +1357,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/src/main/resources/startup.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/src/main/resources/startup.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1512,9 +1373,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl/src/main/resources/startup.bat">
+    <entry file="file://$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service/src/main/java/com/catt/hypnus/service/base/pub/SafeMgrBaseService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state relative-caret-position="233">
+          <caret line="21" column="17" lean-forward="false" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service/src/main/java/com/catt/hypnus/service/base/pub/PubSetupBaseService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="10" column="18" lean-forward="false" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/baiduMap/2.0/baiduMap.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" column="29" lean-forward="false" selection-start-line="1" selection-start-column="29" selection-end-line="1" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project-hypnus-admin/project-hypnus-web-admin/overlays/com.catt.common-module-webUI-1.0-SNAPSHOT/resources/sea-modules/wechat/1.0/wechat.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-924">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>

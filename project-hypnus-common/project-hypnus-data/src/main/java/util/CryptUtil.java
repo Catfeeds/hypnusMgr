@@ -5,7 +5,7 @@ import com.catt.common.util.crypto.DESUtil;
 /**
  * 和普乐加解密工具类
  * 
- * @author 纪建宏
+ * @author runtime
  *
  */
 public class CryptUtil {

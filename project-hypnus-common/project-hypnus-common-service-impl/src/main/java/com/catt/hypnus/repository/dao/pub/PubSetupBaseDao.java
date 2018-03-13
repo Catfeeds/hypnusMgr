@@ -7,7 +7,7 @@ import com.catt.hypnus.repository.entity.pub.PubSetup;
 /**
  * 系统全局设置Dao接口
  *
- * @author 纪建宏
+ * @author runtime
  * @version V1.0
  * @date 2015-11-19 11:26:28
  */

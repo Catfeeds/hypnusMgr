@@ -3,7 +3,7 @@ package util;
 /**
  * 字符串遮掩工具类
  * 
- * @author 纪建宏
+ * @author runtime
  *
  */
 public class MaskUtil {

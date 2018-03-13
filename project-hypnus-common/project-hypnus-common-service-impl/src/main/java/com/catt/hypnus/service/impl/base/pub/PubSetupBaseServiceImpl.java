@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * 系统全局设置服务接口实现
  *
- * @author 纪建宏
+ * @author runtime
  * @version V1.0
  * @date 2015-11-19 11:26:28
  */

@@ -1,5 +1,5 @@
 /**
- * Description:封装百度地图为模块(key为纪建宏负责)
+ * Description:封装百度地图为模块(key为runtime负责)
  * 假如加载到页面中有错误时，重新更新api的内容到本地
  * api: http://developer.baidu.com/map/jsdemo.htm#b_07
  * key: 92afe77c33ce05f451f579b6c29867ab

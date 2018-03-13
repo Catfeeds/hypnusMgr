@@ -8,7 +8,7 @@ import com.catt.hypnus.repository.entity.pub.PubSetup.Code;
 /**
  * 系统全局设置服务接口
  *
- * @author 纪建宏
+ * @author runtime
  * @version V1.0
  * @date 2015-11-19 11:26:28
  */
