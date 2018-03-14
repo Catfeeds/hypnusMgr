@@ -17,5 +17,12 @@
         <property name="serviceInterface" value="com.catt.hypnus.service.pub.CacheService"/>
     </bean>
 
+    <!-- 设备 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="deviceServiceImpl"/>
+        <property name="serviceName" value="deviceServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.deviceMgr.DeviceService"/>
+    </bean>
+
 
 </beans>

@@ -48,10 +48,10 @@
     </bean>
 
 
-    <!-- 代理商基础服务 -->
-    <bean id="agentInfoBaseServiceImpl" name="agentInfoBaseServiceImpl"
+    <!-- 设备服务 -->
+    <bean id="deviceServiceImpl" name="deviceServiceImpl"
           parent="parentRmiProxyFactoryBean">
-        <property name="serviceUrl" value="${service.rmi.url}/agentInfoBaseServiceImpl"/>
+        <property name="serviceUrl" value="${service.rmi.url}/deviceServiceImpl"/>
         <property name="serviceInterface" value="com.catt.hypnus.service.base.customerMgr.AgentInfoBaseService"/>
     </bean>
 
@@ -60,7 +60,7 @@
     <bean id="cacheServiceImpl" name="cacheServiceImpl"
           parent="parentRmiProxyFactoryBean">
         <property name="serviceUrl" value="${service.rmi.url}/cacheServiceImpl"/>
-        <property name="serviceInterface" value="com.catt.hypnus.service.pub.CacheService"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.deviceMgr.DeviceService"/>
     </bean>
 
 

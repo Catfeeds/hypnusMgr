@@ -92,7 +92,7 @@ public class Device extends BaseEntity {
         this.model = model;
     }
 
-    @Column(name = "PRODUCTDATE")
+
     public Date getProductdate() {
         return productdate;
     }
