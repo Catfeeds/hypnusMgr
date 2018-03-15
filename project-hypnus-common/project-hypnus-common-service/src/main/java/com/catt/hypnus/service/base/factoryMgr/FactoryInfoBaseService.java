@@ -1,13 +1,14 @@
-package com.catt.hypnus.service.base.customerMgr;
+package com.catt.hypnus.service.base.factoryMgr;
+
 
 import com.catt.common.base.service.BaseService;
-import com.catt.hypnus.repository.entity.customerMgr.FactoryInfo;
+import com.catt.hypnus.repository.entity.factoryMgr.FactoryInfo;
 
 /**
- * 厂家信息表服务接口
+ * factory_info基础服务接口
  * 
  * @author runtime
- * @date 2017-02-13 16:15:31
+ * @date 2018-03-15 22:25:18
  * @version V1.0
  */
 public interface FactoryInfoBaseService extends BaseService<FactoryInfo, Long> {

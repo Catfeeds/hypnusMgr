@@ -41,9 +41,9 @@ import java.util.Set;
 /**
  * 用户Controller 1、用户的同步
  * <p>
- * 技术支持：广东凯通软件开发技术有限公司 (c) 2015
+ * 技术支持：runtime (c) 2015
  *
- * @author runtime：zoujia@gdcattsoft.com
+ * @author runtime：
  * @version 1.0
  * @date 2015年11月11日
  * @since jdk版本：jdk1.8

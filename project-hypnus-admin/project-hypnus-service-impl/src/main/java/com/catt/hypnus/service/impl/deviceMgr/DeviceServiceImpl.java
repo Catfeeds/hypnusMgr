@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 @Service("deviceServiceImpl")
 public class DeviceServiceImpl implements DeviceService {
 
-    @Resource(name = "cacheManager")
+    @Resource(name = "deviceDaoImpl")
     private DeviceDao deviceDao;
 
     public Page<Device> findPage(Pageable pageable) {

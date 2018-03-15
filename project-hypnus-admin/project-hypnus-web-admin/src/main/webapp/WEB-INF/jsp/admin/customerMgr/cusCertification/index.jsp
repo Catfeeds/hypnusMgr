@@ -50,7 +50,8 @@
                     <th>提交时间</th>
                     <th>状态</th>
                 </tr>
-                <tbody id="dataList"></tbody>
+                <tbody id="dataList">
+                </tbody>
             </table>
         </div>
         <!--页码-->

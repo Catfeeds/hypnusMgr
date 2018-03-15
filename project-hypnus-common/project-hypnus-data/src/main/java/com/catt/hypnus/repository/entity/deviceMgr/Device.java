@@ -57,13 +57,13 @@ public class Device extends BaseEntity {
      * 经销商标识
      * </pre>
      */
-    private String factoryId;
+    private Long factoryId;
     /**
      * <pre>
      * 用户标识
      * </pre>
      */
-    private String cusId;
+    private Long cusId;
 
     @Column(name = "DEVICE_ID", length = 32)
     public String getDeviceId() {
@@ -102,20 +102,20 @@ public class Device extends BaseEntity {
     }
 
     @Column(name = "FACTORY_ID", length = 32)
-    public String getFactoryId() {
+    public Long getFactoryId() {
         return factoryId;
     }
 
-    public void setFactoryId(String factoryId) {
+    public void setFactoryId(Long factoryId) {
         this.factoryId = factoryId;
     }
 
     @Column(name = "CUS_ID", length = 32)
-    public String getCusId() {
+    public Long getCusId() {
         return cusId;
     }
 
-    public void setCusId(String cusId) {
+    public void setCusId(Long cusId) {
         this.cusId = cusId;
     }
 

@@ -96,7 +96,6 @@
     <orderEntry type="library" name="Maven: com.catt:common-module-sms-data:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.catt:common-module-sms-repository-dao-impl:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.catt:common-module-sms-repository-dao:1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-web:4.3.0.RELEASE" level="project" />
     <orderEntry type="module" module-name="project-hypnus-service" />
     <orderEntry type="module" module-name="project-hypnus-data" />
     <orderEntry type="library" name="Maven: com.catt:common-module-enum-data:1.0-SNAPSHOT" level="project" />
@@ -178,6 +177,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:4.1.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:4.1.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.8.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:4.1.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.retry:spring-retry:1.1.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.aliyun.oss:aliyun-sdk-oss:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.4.1" level="project" />
