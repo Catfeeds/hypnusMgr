@@ -21,8 +21,8 @@ import javax.annotation.Resource;
  * date: 2015-10-09 09:23:12
  * </pre>
  */
-@Controller("admin.DeviceController")
-@RequestMapping(value = "/admin/device")
+@Controller
+@RequestMapping(value = "/admin/deviceMgr")
 public class DeviceController extends BaseController {
 
     // 设备信息
@@ -32,7 +32,7 @@ public class DeviceController extends BaseController {
     /**
      * 设备首页
      */
-    @RequestMapping(value = {"/device/index.html"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/index.html"}, method = RequestMethod.GET)
     public String toIndex() {
         return "/admin/device/index";
     }

@@ -52,7 +52,7 @@
     <bean id="deviceServiceImpl" name="deviceServiceImpl"
           parent="parentRmiProxyFactoryBean">
         <property name="serviceUrl" value="${service.rmi.url}/deviceServiceImpl"/>
-        <property name="serviceInterface" value="com.catt.hypnus.service.base.customerMgr.AgentInfoBaseService"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.deviceMgr.DeviceService"/>
     </bean>
 
 
