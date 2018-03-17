@@ -71,6 +71,11 @@ public class FactoryInfo extends BaseEntity {
      */
     private String avater;
 
+    /**
+     * 关联系统用户标识
+     */
+    private Long relUserId;
+
     @Column(name = "NAME", length = 100)
     public String getName() {
         return name;
@@ -141,6 +146,15 @@ public class FactoryInfo extends BaseEntity {
 
     public void setAvater(String avater) {
         this.avater = avater;
+    }
+
+    @Column(name = "REL_USER_ID")
+    public Long getRelUserId() {
+        return relUserId;
+    }
+
+    public void setRelUserId(Long relUserId) {
+        this.relUserId = relUserId;
     }
 
 }

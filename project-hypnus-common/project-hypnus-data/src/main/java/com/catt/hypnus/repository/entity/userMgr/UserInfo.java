@@ -108,6 +108,11 @@ public class UserInfo extends BaseEntity {
      */
     private Integer status;
 
+    /**
+     * 关联系统用户标识
+     */
+    private Long relUserId;
+
     @Column(name = "ACCOUNT", length = 32)
     public String getAccount() {
         return account;
@@ -233,6 +238,13 @@ public class UserInfo extends BaseEntity {
     public void setStatus(Integer status) {
         this.status = status;
     }
+    @Column(name = "REL_USER_ID")
+    public Long getRelUserId() {
+        return relUserId;
+    }
 
+    public void setRelUserId(Long relUserId) {
+        this.relUserId = relUserId;
+    }
 }
 
