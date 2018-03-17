@@ -25,4 +25,12 @@
     </bean>
 
 
+    <!-- 经销商 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="factoryServiceImpl"/>
+        <property name="serviceName" value="factoryServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.factoryMgr.FactoryService"/>
+    </bean>
+
+
 </beans>

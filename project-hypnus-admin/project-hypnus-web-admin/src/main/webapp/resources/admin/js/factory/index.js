@@ -69,8 +69,6 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     if (typeof(params) == "undefined") {
                         params = {pageNo: 1, pageSize: 15};
                     }
-                    params.snId = $("#snId").val();
-                    params.userMobile = $("#userMobile").val();
                     params.factoryMobile = $("#factoryMobile").val();
 
                     DataHandler.search(params, function (backData) {
@@ -90,8 +88,6 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                 },
                 //重置
                 reset: function () {
-                    $("#snId").val("");
-                    $("#userMobile").val("");
                     $("#factoryMobile").val("");
                 },
                 //审核
@@ -133,7 +129,7 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                  * 获取数据列表
                  */
                 search: function (param, callback) {
-                    $.post(path + '/admin/deviceMgr/getPageDevice', param, function (backData) {
+                    $.post(path + '/admin/factoryMgr/getPage', param, function (backData) {
                         callback(backData);
                     });
                 },

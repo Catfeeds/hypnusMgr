@@ -60,7 +60,15 @@
     <bean id="cacheServiceImpl" name="cacheServiceImpl"
           parent="parentRmiProxyFactoryBean">
         <property name="serviceUrl" value="${service.rmi.url}/cacheServiceImpl"/>
-        <property name="serviceInterface" value="com.catt.hypnus.service.deviceMgr.DeviceService"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.pub.CacheService"/>
+    </bean>
+
+
+    <!-- 经销商服务 -->
+    <bean id="factoryServiceImpl" name="factoryServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/factoryServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.factoryMgr.FactoryService"/>
     </bean>
 
 

@@ -25,8 +25,6 @@ public class DeviceServiceImplTest extends SpringTest {
     @Test
     public void findPage() throws Exception {
         Pageable pageable = new Pageable(1, 10);
-        Page<Device> page = deviceService.findPage(pageable);
-        System.out.println(page.getContent().size());
 
     }
 

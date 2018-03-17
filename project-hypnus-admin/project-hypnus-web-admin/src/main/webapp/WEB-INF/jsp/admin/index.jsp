@@ -168,7 +168,7 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <iframe id="contentFrame" name="contentFrame"
-                src="${path}/admin/productInfo/index.html" style="overflow:visible;" scrolling="no" frameborder="no" height="100%"
+                src="${path}/admin/deviceMgr/index.html" style="overflow:visible;" scrolling="no" frameborder="no" height="100%"
                 width="100%"
                 onload="autoSizeFrame();"></iframe>
     </div>

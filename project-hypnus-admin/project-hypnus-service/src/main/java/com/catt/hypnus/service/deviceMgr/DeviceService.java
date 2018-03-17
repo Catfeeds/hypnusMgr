@@ -6,6 +6,7 @@ import com.catt.common.base.pojo.search.Pageable;
 import com.catt.hypnus.repository.entity.customerMgr.CusInfo;
 import com.catt.hypnus.repository.entity.deviceMgr.Device;
 import com.catt.hypnus.repository.form.customerMgr.CusInfoForm;
+import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
 
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public interface DeviceService {
      * @param pageable
      * @return
      */
-    Page<Device> findPage(Pageable pageable);
+    Page<Map> findPage(DeviceForm deviceForm,Pageable pageable);
 
 }
 
