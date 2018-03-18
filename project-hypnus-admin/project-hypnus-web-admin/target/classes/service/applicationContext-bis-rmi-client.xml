@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd"
+       default-lazy-init="true">
+
+    <!-- 系统全局设置服务设置 -->
+    <bean id="pubSetupBaseServiceImpl" name="pubSetupBaseServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/pubSetupBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.base.pub.PubSetupBaseService"/>
+    </bean>
+
+    <!-- 公共配置服务接口 -->
+    <bean id="pubConfigServiceImpl" name="pubConfigServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/pubConfigServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.pub.PubConfigService"/>
+    </bean>
+
+
+    <!-- 用户信息服务 -->
+    <bean id="cusInfoServiceImpl" name="cusInfoServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusInfoServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.customerMgr.CusInfoService"/>
+    </bean>
+
+    <!-- 用户信息服务 -->
+    <bean id="cusInfoBaseServiceImpl" name="cusInfoBaseServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusInfoBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.base.customerMgr.CusInfoBaseService"/>
+    </bean>
+
+    <!-- 身份信息认证服务 -->
+    <bean id="cusCertificationServiceImpl" name="cusCertificationServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusCertificationServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.customerMgr.CusCertificationService"/>
+    </bean>
+
+    <!-- 用户统计服务 -->
+    <bean id="cusStatistiServiceImpl" name="cusStatistiServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cusStatistiServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.statisti.CusStatistiService"/>
+    </bean>
+
+
+    <!-- 设备服务 -->
+    <bean id="deviceServiceImpl" name="deviceServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/deviceServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.deviceMgr.DeviceService"/>
+    </bean>
+
+
+    <!-- 缓存服务 -->
+    <bean id="cacheServiceImpl" name="cacheServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/cacheServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.pub.CacheService"/>
+    </bean>
+
+
+    <!-- 经销商服务 -->
+    <bean id="factoryServiceImpl" name="factoryServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/factoryServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.factoryMgr.FactoryService"/>
+    </bean>
+
+
+</beans>

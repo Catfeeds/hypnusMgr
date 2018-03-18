@@ -1,0 +1,53 @@
+@charset "utf-8";
+/* CSS Document */
+html,body{font-size:14px;font-family:'微软雅黑';padding:0;margin:0;color:#3e3a39; position:relative; background:#fff;}
+*{padding:0;margin:0;}
+ul{margin:0px;padding:0;}
+li{list-style-type:none;}
+button{border:none;background:none;cursor:pointer;outline: none;font-family:'微软雅黑';star:expression(this.onFocus=this.blur());}
+select,input{font-family:'微软雅黑';}
+h1,h2,h3,h4,h5,h6{margin:0;display:block;font-weight:normal;font-size:14px;}
+a{text-decoration:none; color:#f05f33;cursor:pointer;outline:none;}
+a:hover{color:#32a6c8;}
+a:active{star:expression(this.onFocus=this.blur());outline:none;}
+img{border:none;}
+u,s{text-decoration:none;}
+textarea{font-size:14px;font-family:'微软雅黑';padding:10px;line-height:24px;border:1px solid #bebebe;background:#f8f8f8;color:#595757;}
+textarea:focus{border:1px solid #39a5e9;background:#fff;}
+body{ overflow:hidden;}
+
+/*login登录注册*/
+div.loginMain{ height:500px; width:100%; position:absolute; left:0px; top:0px;}
+
+.img_logo{padding:18px 0;overflow:hidden; width:1000px; margin:0 auto;}
+.img_logo img{float:right; margin-right:10px;}
+.mainbox{height:1000px; background:url(../images/bg_login_banner.png) center no-repeat; overflow:hidden;}
+.mainmid{width:1000px; margin:0 auto; padding-right:20px;}
+.inputbox{background:#f0f0f0; width:350px; height:350px; border:10px solid #fff; float:right; margin-top:320px; position:relative; box-shadow:0 4px 12px #ccc;}
+.welcomeText{position:absolute; left:30px; top:30px; font-size:16px; color:#323232;}
+.welcomeBar{position:absolute; left:0px; top:32px; }
+.inputbox ul{position:absolute; left:30px; top:76px;}
+.inputbox ul li{margin-bottom:10px; overflow:hidden;}
+.inputbox ul li h1{font-size:14px; color:#323232;letter-spacing:2px;}
+.inputbox ul li.inputkuang{width:270px; height:30px; border:#fff 1px solid; background:#fff; padding:5px 10px; border-radius:2px; border-radius:2px;}
+.inputbox ul li.inputkuang:hover{border:1px solid #fdb874;}
+.inputbox ul li.inputkuang input{border:none; font-size:14px; width:160px; height:30px; line-height:40px; padding-left:30px;}
+.bg_user{background:url(../images/img_login_geren.png) no-repeat left center;}
+.bg_psw{background:url(../images/img_login_mima.png) no-repeat left center;}
+.bg_yzm{background:url(../images/img_login_yanzheng.png) no-repeat left center;}
+.inputbox ul li.zidongdenglu{float:left; background:#fff; border-radius:2px;}
+.autodenglu i{float:left;width:18px; height:18px; border:1px solid #fff; border-radius:2px;}
+.autodenglu i:hover{border:1px solid #fdb874;}
+.buzidong{background:url(../images/img_gou.png) no-repeat center #FFF; display:none;}
+.zidong{background:#FFF;}
+.autodenglu font{margin-left:10px; }
+.zhuceselect .autodenglu{float:left;font-size:12px;color:#949494;}
+.inputbox ul li div.zidongdenglu span{width:20px; height:20px; background:#fff; border:1px #dedede solid; float:left;line-height:24px;}
+.inputbox ul li div.zidongdenglu font{ font-size:14px; color:#969696; float:left; margin-left:8px; line-height:20px;}
+.inputbox ul li a.forgetpsw{float:right; font-size:14px; color:#969696; display:block;}
+.inputbox ul li a.huoquyanzhengma{float:right; display:block;}
+.inputbox ul li button{width:290px; height:40px; border-radius:2px; background:#f13d2e;color:#fff; font-size:16px; letter-spacing:2px; margin:0 auto; display:block; margin-top:10px; }
+.inputbox ul li button:hover{background:#e73324;}
+.bottom{ overflow:hidden; clear:both; height:70px;}
+.bottom font{width:500px; margin:20px auto; display:block; color:#969696; font-size:12px;}
+

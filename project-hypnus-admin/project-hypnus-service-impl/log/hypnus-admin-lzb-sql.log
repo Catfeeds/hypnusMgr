@@ -1,0 +1,468 @@
+hypnus-admin 2018-03-15 21:51:07.208 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-15 21:51:07.619 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-15 21:51:08.012 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-15 21:51:08.400 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-15 21:51:08.794 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-15 21:51:09.672 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:51:09.826 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:51:12.575 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:51:12.699 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:51:12.706 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2018-03-15 21:51:12.706 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2018-03-15 21:51:12.752 [main] ERROR druid.sql.Statement - [] {conn-10005, pstmt-20000} execute error. select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'device0_.I_ID' in 'field list'
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_131]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_131]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_131]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_131]
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.Util.getInstance(Util.java:386) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1054) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4237) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4169) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2617) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2778) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2834) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2156) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2313) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2714) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.wall.WallFilter.preparedStatement_executeQuery(WallFilter.java:609) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterAdapter.preparedStatement_executeQuery(FilterAdapter.java:1064) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeQuery(PreparedStatementProxyImpl.java:132) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:227) [druid-1.0.13.jar:1.0.13]
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.extract(ResultSetReturnImpl.java:70) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.getResultSet(Loader.java:2116) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:1899) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:1875) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doQuery(Loader.java:919) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:336) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doList(Loader.java:2611) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doList(Loader.java:2594) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.listIgnoreQueryCache(Loader.java:2423) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.list(Loader.java:2418) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.hql.QueryLoader.list(QueryLoader.java:501) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.list(QueryTranslatorImpl.java:371) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.engine.query.spi.HQLQueryPlan.performList(HQLQueryPlan.java:216) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.internal.SessionImpl.list(SessionImpl.java:1326) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.internal.QueryImpl.list(QueryImpl.java:87) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.jpa.internal.QueryImpl.list(QueryImpl.java:606) [hibernate-entitymanager-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.jpa.internal.QueryImpl.getSingleResult(QueryImpl.java:529) [hibernate-entitymanager-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.jpa.criteria.compile.CriteriaQueryTypeQueryAdapter.getSingleResult(CriteriaQueryTypeQueryAdapter.java:54) [hibernate-entitymanager-5.0.7.Final.jar:5.0.7.Final]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_131]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_131]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_131]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_131]
+	at org.springframework.orm.jpa.SharedEntityManagerCreator$DeferredQueryInvocationHandler.invoke(SharedEntityManagerCreator.java:362) [spring-orm-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at com.sun.proxy.$Proxy72.getSingleResult(Unknown Source) [na:na]
+	at com.catt.common.base.repository.dao.impl.JpaApiBaseDaoImpl.count(JpaApiBaseDaoImpl.java:152) [framework-base-repository-dao-impl-0.0.1-SNAPSHOT.jar:na]
+	at com.catt.common.base.repository.dao.impl.JpaApiBaseDaoImpl.findPage(JpaApiBaseDaoImpl.java:108) [framework-base-repository-dao-impl-0.0.1-SNAPSHOT.jar:na]
+	at com.catt.common.base.repository.dao.impl.JpaApiBaseDaoImpl.findPage(JpaApiBaseDaoImpl.java:75) [framework-base-repository-dao-impl-0.0.1-SNAPSHOT.jar:na]
+	at com.catt.hypnus.service.impl.deviceMgr.DeviceServiceImpl.findPage(DeviceServiceImpl.java:27) [classes/:na]
+	at com.catt.hypnus.service.impl.deviceMgr.DeviceServiceImplTest.findPage(DeviceServiceImplTest.java:28) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_131]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_131]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_131]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_131]
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47) [junit-4.11.jar:na]
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12) [junit-4.11.jar:na]
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:44) [junit-4.11.jar:na]
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.statements.RunBeforeTestMethodCallbacks.evaluate(RunBeforeTestMethodCallbacks.java:73) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:82) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:73) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:271) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:217) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:83) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:68) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:309) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:163) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:160) [junit-4.11.jar:na]
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70) [junit-rt.jar:na]
+hypnus-admin 2018-03-15 21:51:12.759 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-15 21:51:12.760 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:51:12.800 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-15 21:51:12.802 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-15 21:51:12.803 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-15 21:51:12.805 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-15 21:51:12.805 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-15 21:51:12.806 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-15 21:53:37.350 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-15 21:53:37.739 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-15 21:53:38.130 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-15 21:53:38.534 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-15 21:53:38.965 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-15 21:53:39.807 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:53:39.906 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:53:42.486 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:53:42.594 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:53:42.600 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2018-03-15 21:53:42.600 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2018-03-15 21:53:42.635 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:53:42.635 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 35.300039 millis. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:53:42.635 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-15 21:53:42.637 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [col_0_0_]
+hypnus-admin 2018-03-15 21:53:42.641 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [0]
+hypnus-admin 2018-03-15 21:53:42.644 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-15 21:53:42.644 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-15 21:53:42.645 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:53:42.660 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-15 21:53:42.661 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-15 21:53:42.661 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-15 21:53:42.662 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-15 21:53:42.663 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-15 21:53:42.663 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-15 21:54:22.458 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-15 21:54:22.856 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-15 21:54:23.242 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-15 21:54:23.634 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-15 21:54:24.031 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-15 21:54:24.901 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:54:24.981 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:54:27.441 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:54:27.595 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:54:27.611 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2018-03-15 21:54:27.612 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2018-03-15 21:54:27.646 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:54:27.646 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 40.076815 millis. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:54:27.646 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-15 21:54:27.650 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [col_0_0_]
+hypnus-admin 2018-03-15 21:54:27.656 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [1]
+hypnus-admin 2018-03-15 21:54:27.661 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-15 21:54:27.662 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-15 21:54:27.663 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:54:27.677 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:54:27.681 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created. 
+select device0_.I_ID as I_ID1_0_, device0_.D_CREATE_DATE as D_CREATE2_0_, device0_.D_MODIFY_DATE as D_MODIFY3_0_, device0_.CUS_ID as CUS_ID4_0_, device0_.DEVICE_ID as DEVICE_I5_0_, device0_.FACTORY_ID as FACTORY_6_0_, device0_.MODEL as MODEL7_0_, device0_.PRODUCTDATE as PRODUCTD8_0_, device0_.SN_ID as SN_ID9_0_ from device_info device0_ where 1=1 order by device0_.D_CREATE_DATE desc limit ?
+hypnus-admin 2018-03-15 21:54:27.682 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : [10]
+hypnus-admin 2018-03-15 21:54:27.682 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : [INTEGER]
+hypnus-admin 2018-03-15 21:54:27.729 [main] ERROR druid.sql.Statement - [] {conn-10005, pstmt-20001} execute error. select device0_.I_ID as I_ID1_0_, device0_.D_CREATE_DATE as D_CREATE2_0_, device0_.D_MODIFY_DATE as D_MODIFY3_0_, device0_.CUS_ID as CUS_ID4_0_, device0_.DEVICE_ID as DEVICE_I5_0_, device0_.FACTORY_ID as FACTORY_6_0_, device0_.MODEL as MODEL7_0_, device0_.PRODUCTDATE as PRODUCTD8_0_, device0_.SN_ID as SN_ID9_0_ from device_info device0_ where 1=1 order by device0_.D_CREATE_DATE desc limit ?
+com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'device0_.D_CREATE_DATE' in 'field list'
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_131]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_131]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_131]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_131]
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.Util.getInstance(Util.java:386) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1054) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4237) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4169) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2617) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2778) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2834) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2156) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2313) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2714) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.wall.WallFilter.preparedStatement_executeQuery(WallFilter.java:609) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterAdapter.preparedStatement_executeQuery(FilterAdapter.java:1064) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeQuery(PreparedStatementProxyImpl.java:132) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:227) [druid-1.0.13.jar:1.0.13]
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.extract(ResultSetReturnImpl.java:70) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.getResultSet(Loader.java:2116) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:1899) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:1875) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doQuery(Loader.java:919) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:336) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doList(Loader.java:2611) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doList(Loader.java:2594) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.listIgnoreQueryCache(Loader.java:2423) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.list(Loader.java:2418) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.hql.QueryLoader.list(QueryLoader.java:501) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.list(QueryTranslatorImpl.java:371) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.engine.query.spi.HQLQueryPlan.performList(HQLQueryPlan.java:216) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.internal.SessionImpl.list(SessionImpl.java:1326) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.internal.QueryImpl.list(QueryImpl.java:87) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.jpa.internal.QueryImpl.list(QueryImpl.java:606) [hibernate-entitymanager-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.jpa.internal.QueryImpl.getResultList(QueryImpl.java:483) [hibernate-entitymanager-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.jpa.criteria.compile.CriteriaQueryTypeQueryAdapter.getResultList(CriteriaQueryTypeQueryAdapter.java:50) [hibernate-entitymanager-5.0.7.Final.jar:5.0.7.Final]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_131]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_131]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_131]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_131]
+	at org.springframework.orm.jpa.SharedEntityManagerCreator$DeferredQueryInvocationHandler.invoke(SharedEntityManagerCreator.java:362) [spring-orm-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at com.sun.proxy.$Proxy72.getResultList(Unknown Source) [na:na]
+	at com.catt.common.base.repository.dao.impl.JpaApiBaseDaoImpl.findPage(JpaApiBaseDaoImpl.java:117) [framework-base-repository-dao-impl-0.0.1-SNAPSHOT.jar:na]
+	at com.catt.common.base.repository.dao.impl.JpaApiBaseDaoImpl.findPage(JpaApiBaseDaoImpl.java:75) [framework-base-repository-dao-impl-0.0.1-SNAPSHOT.jar:na]
+	at com.catt.hypnus.service.impl.deviceMgr.DeviceServiceImpl.findPage(DeviceServiceImpl.java:27) [classes/:na]
+	at com.catt.hypnus.service.impl.deviceMgr.DeviceServiceImplTest.findPage(DeviceServiceImplTest.java:28) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_131]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_131]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_131]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_131]
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47) [junit-4.11.jar:na]
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12) [junit-4.11.jar:na]
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:44) [junit-4.11.jar:na]
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.statements.RunBeforeTestMethodCallbacks.evaluate(RunBeforeTestMethodCallbacks.java:73) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:82) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:73) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:271) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:217) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:83) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:68) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:309) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:163) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:160) [junit-4.11.jar:na]
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70) [junit-rt.jar:na]
+hypnus-admin 2018-03-15 21:54:27.733 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters. 
+hypnus-admin 2018-03-15 21:54:27.734 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:54:27.759 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-15 21:54:27.760 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-15 21:54:27.761 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-15 21:54:27.762 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-15 21:54:27.762 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-15 21:54:27.762 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2018-03-15 21:54:27.763 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-15 21:56:11.419 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-15 21:56:11.826 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-15 21:56:12.229 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-15 21:56:12.619 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-15 21:56:13.019 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-15 21:56:13.841 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:56:13.935 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:56:16.538 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:56:16.674 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:56:16.680 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2018-03-15 21:56:16.680 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2018-03-15 21:56:16.716 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:56:16.717 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 38.339566 millis. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:56:16.717 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-15 21:56:16.719 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [col_0_0_]
+hypnus-admin 2018-03-15 21:56:16.723 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [1]
+hypnus-admin 2018-03-15 21:56:16.727 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-15 21:56:16.727 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-15 21:56:16.728 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:56:16.741 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:56:16.747 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created. 
+select device0_.I_ID as I_ID1_0_, device0_.D_CREATE_DATE as D_CREATE2_0_, device0_.D_MODIFY_DATE as D_MODIFY3_0_, device0_.CUS_ID as CUS_ID4_0_, device0_.DEVICE_ID as DEVICE_I5_0_, device0_.FACTORY_ID as FACTORY_6_0_, device0_.MODEL as MODEL7_0_, device0_.PRODUCTDATE as PRODUCTD8_0_, device0_.SN_ID as SN_ID9_0_ from device_info device0_ where 1=1 order by device0_.D_CREATE_DATE desc limit ?
+hypnus-admin 2018-03-15 21:56:16.749 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : [10]
+hypnus-admin 2018-03-15 21:56:16.749 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : [INTEGER]
+hypnus-admin 2018-03-15 21:56:16.799 [main] ERROR druid.sql.Statement - [] {conn-10005, pstmt-20001} execute error. select device0_.I_ID as I_ID1_0_, device0_.D_CREATE_DATE as D_CREATE2_0_, device0_.D_MODIFY_DATE as D_MODIFY3_0_, device0_.CUS_ID as CUS_ID4_0_, device0_.DEVICE_ID as DEVICE_I5_0_, device0_.FACTORY_ID as FACTORY_6_0_, device0_.MODEL as MODEL7_0_, device0_.PRODUCTDATE as PRODUCTD8_0_, device0_.SN_ID as SN_ID9_0_ from device_info device0_ where 1=1 order by device0_.D_CREATE_DATE desc limit ?
+com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'device0_.D_MODIFY_DATE' in 'field list'
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_131]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_131]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_131]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_131]
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.Util.getInstance(Util.java:386) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1054) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4237) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4169) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2617) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2778) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2834) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2156) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2313) ~[mysql-connector-java-5.1.29.jar:na]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2714) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.wall.WallFilter.preparedStatement_executeQuery(WallFilter.java:609) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterAdapter.preparedStatement_executeQuery(FilterAdapter.java:1064) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2711) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeQuery(PreparedStatementProxyImpl.java:132) [druid-1.0.13.jar:1.0.13]
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:227) [druid-1.0.13.jar:1.0.13]
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.extract(ResultSetReturnImpl.java:70) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.getResultSet(Loader.java:2116) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:1899) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:1875) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doQuery(Loader.java:919) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:336) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doList(Loader.java:2611) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.doList(Loader.java:2594) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.listIgnoreQueryCache(Loader.java:2423) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.Loader.list(Loader.java:2418) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.loader.hql.QueryLoader.list(QueryLoader.java:501) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.list(QueryTranslatorImpl.java:371) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.engine.query.spi.HQLQueryPlan.performList(HQLQueryPlan.java:216) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.internal.SessionImpl.list(SessionImpl.java:1326) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.internal.QueryImpl.list(QueryImpl.java:87) [hibernate-core-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.jpa.internal.QueryImpl.list(QueryImpl.java:606) [hibernate-entitymanager-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.jpa.internal.QueryImpl.getResultList(QueryImpl.java:483) [hibernate-entitymanager-5.0.7.Final.jar:5.0.7.Final]
+	at org.hibernate.jpa.criteria.compile.CriteriaQueryTypeQueryAdapter.getResultList(CriteriaQueryTypeQueryAdapter.java:50) [hibernate-entitymanager-5.0.7.Final.jar:5.0.7.Final]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_131]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_131]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_131]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_131]
+	at org.springframework.orm.jpa.SharedEntityManagerCreator$DeferredQueryInvocationHandler.invoke(SharedEntityManagerCreator.java:362) [spring-orm-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at com.sun.proxy.$Proxy72.getResultList(Unknown Source) [na:na]
+	at com.catt.common.base.repository.dao.impl.JpaApiBaseDaoImpl.findPage(JpaApiBaseDaoImpl.java:117) [framework-base-repository-dao-impl-0.0.1-SNAPSHOT.jar:na]
+	at com.catt.common.base.repository.dao.impl.JpaApiBaseDaoImpl.findPage(JpaApiBaseDaoImpl.java:75) [framework-base-repository-dao-impl-0.0.1-SNAPSHOT.jar:na]
+	at com.catt.hypnus.service.impl.deviceMgr.DeviceServiceImpl.findPage(DeviceServiceImpl.java:27) [classes/:na]
+	at com.catt.hypnus.service.impl.deviceMgr.DeviceServiceImplTest.findPage(DeviceServiceImplTest.java:28) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_131]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_131]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_131]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_131]
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47) [junit-4.11.jar:na]
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12) [junit-4.11.jar:na]
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:44) [junit-4.11.jar:na]
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.statements.RunBeforeTestMethodCallbacks.evaluate(RunBeforeTestMethodCallbacks.java:73) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:82) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:73) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:271) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:217) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:83) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53) [junit-4.11.jar:na]
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:68) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:309) [junit-4.11.jar:na]
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:163) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:160) [junit-4.11.jar:na]
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242) [junit-rt.jar:na]
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70) [junit-rt.jar:na]
+hypnus-admin 2018-03-15 21:56:16.806 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters. 
+hypnus-admin 2018-03-15 21:56:16.806 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:56:16.839 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-15 21:56:16.840 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-15 21:56:16.840 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-15 21:56:16.841 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-15 21:56:16.841 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-15 21:56:16.841 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2018-03-15 21:56:16.842 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-15 21:56:49.663 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-15 21:56:50.072 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-15 21:56:50.473 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-15 21:56:50.873 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-15 21:56:51.279 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-15 21:56:52.082 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:56:52.161 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:56:54.760 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:56:54.870 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:56:54.876 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2018-03-15 21:56:54.876 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2018-03-15 21:56:54.913 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:56:54.914 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 37.746764 millis. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:56:54.914 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-15 21:56:54.916 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [col_0_0_]
+hypnus-admin 2018-03-15 21:56:54.920 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [1]
+hypnus-admin 2018-03-15 21:56:54.923 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-15 21:56:54.923 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-15 21:56:54.924 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:56:54.935 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:56:54.939 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created. 
+select device0_.I_ID as I_ID1_0_, device0_.D_CREATE_DATE as D_CREATE2_0_, device0_.D_MODIFY_DATE as D_MODIFY3_0_, device0_.CUS_ID as CUS_ID4_0_, device0_.DEVICE_ID as DEVICE_I5_0_, device0_.FACTORY_ID as FACTORY_6_0_, device0_.MODEL as MODEL7_0_, device0_.PRODUCTDATE as PRODUCTD8_0_, device0_.SN_ID as SN_ID9_0_ from device_info device0_ where 1=1 order by device0_.D_CREATE_DATE desc limit ?
+hypnus-admin 2018-03-15 21:56:54.940 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : [10]
+hypnus-admin 2018-03-15 21:56:54.940 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : [INTEGER]
+hypnus-admin 2018-03-15 21:56:54.997 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed. 
+SELECT device0_.I_ID AS I_ID1_0_, device0_.D_CREATE_DATE AS D_CREATE2_0_, device0_.D_MODIFY_DATE AS D_MODIFY3_0_, device0_.CUS_ID AS CUS_ID4_0_, device0_.DEVICE_ID AS DEVICE_I5_0_
+	, device0_.FACTORY_ID AS FACTORY_6_0_, device0_.MODEL AS MODEL7_0_, device0_.PRODUCTDATE AS PRODUCTD8_0_, device0_.SN_ID AS SN_ID9_0_
+FROM device_info device0_
+WHERE 1 = 1
+ORDER BY device0_.D_CREATE_DATE DESC
+LIMIT 10
+hypnus-admin 2018-03-15 21:56:54.997 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50001} query executed. 57.726457 millis. 
+select device0_.I_ID as I_ID1_0_, device0_.D_CREATE_DATE as D_CREATE2_0_, device0_.D_MODIFY_DATE as D_MODIFY3_0_, device0_.CUS_ID as CUS_ID4_0_, device0_.DEVICE_ID as DEVICE_I5_0_, device0_.FACTORY_ID as FACTORY_6_0_, device0_.MODEL as MODEL7_0_, device0_.PRODUCTDATE as PRODUCTD8_0_, device0_.SN_ID as SN_ID9_0_ from device_info device0_ where 1=1 order by device0_.D_CREATE_DATE desc limit ?
+hypnus-admin 2018-03-15 21:56:54.997 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} open
+hypnus-admin 2018-03-15 21:56:54.998 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Header: [i_id, d_create_date, d_modify_date, cus_id, device_id, factory_id, model, productDate, sn_id]
+hypnus-admin 2018-03-15 21:56:55.008 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [0, 2018-03-15 21:55:58.0, 2018-03-29 21:56:00.0, null, 010203040b0b0b0b0c0c0c0c, null, null, null, null]
+hypnus-admin 2018-03-15 21:56:55.024 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} closed
+hypnus-admin 2018-03-15 21:56:55.024 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters. 
+hypnus-admin 2018-03-15 21:56:55.024 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:56:55.040 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-15 21:56:55.041 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-15 21:56:55.041 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-15 21:56:55.042 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-15 21:56:55.042 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-15 21:56:55.042 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2018-03-15 21:56:55.043 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-15 21:58:45.687 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-15 21:58:46.080 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-15 21:58:46.482 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-15 21:58:46.880 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-15 21:58:47.271 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-15 21:58:48.136 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:58:48.241 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:58:50.810 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:58:50.941 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:58:50.949 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2018-03-15 21:58:50.949 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2018-03-15 21:58:50.983 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:58:50.984 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 36.822823 millis. 
+select count(device0_.I_ID) as col_0_0_ from device_info device0_ where 1=1
+hypnus-admin 2018-03-15 21:58:50.984 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-15 21:58:50.986 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [col_0_0_]
+hypnus-admin 2018-03-15 21:58:50.989 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [1]
+hypnus-admin 2018-03-15 21:58:50.993 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-15 21:58:50.993 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-15 21:58:50.994 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:58:51.004 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:58:51.008 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created. 
+select device0_.I_ID as I_ID1_0_, device0_.D_CREATE_DATE as D_CREATE2_0_, device0_.D_MODIFY_DATE as D_MODIFY3_0_, device0_.CUS_ID as CUS_ID4_0_, device0_.DEVICE_ID as DEVICE_I5_0_, device0_.FACTORY_ID as FACTORY_6_0_, device0_.MODEL as MODEL7_0_, device0_.PRODUCTDATE as PRODUCTD8_0_, device0_.SN_ID as SN_ID9_0_ from device_info device0_ where 1=1 order by device0_.D_CREATE_DATE desc limit ?
+hypnus-admin 2018-03-15 21:58:51.009 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : [10]
+hypnus-admin 2018-03-15 21:58:51.009 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : [INTEGER]
+hypnus-admin 2018-03-15 21:58:51.063 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed. 
+SELECT device0_.I_ID AS I_ID1_0_, device0_.D_CREATE_DATE AS D_CREATE2_0_, device0_.D_MODIFY_DATE AS D_MODIFY3_0_, device0_.CUS_ID AS CUS_ID4_0_, device0_.DEVICE_ID AS DEVICE_I5_0_
+	, device0_.FACTORY_ID AS FACTORY_6_0_, device0_.MODEL AS MODEL7_0_, device0_.PRODUCTDATE AS PRODUCTD8_0_, device0_.SN_ID AS SN_ID9_0_
+FROM device_info device0_
+WHERE 1 = 1
+ORDER BY device0_.D_CREATE_DATE DESC
+LIMIT 10
+hypnus-admin 2018-03-15 21:58:51.063 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50001} query executed. 53.841905 millis. 
+select device0_.I_ID as I_ID1_0_, device0_.D_CREATE_DATE as D_CREATE2_0_, device0_.D_MODIFY_DATE as D_MODIFY3_0_, device0_.CUS_ID as CUS_ID4_0_, device0_.DEVICE_ID as DEVICE_I5_0_, device0_.FACTORY_ID as FACTORY_6_0_, device0_.MODEL as MODEL7_0_, device0_.PRODUCTDATE as PRODUCTD8_0_, device0_.SN_ID as SN_ID9_0_ from device_info device0_ where 1=1 order by device0_.D_CREATE_DATE desc limit ?
+hypnus-admin 2018-03-15 21:58:51.064 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} open
+hypnus-admin 2018-03-15 21:58:51.064 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Header: [i_id, d_create_date, d_modify_date, cus_id, device_id, factory_id, model, productDate, sn_id]
+hypnus-admin 2018-03-15 21:58:51.069 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [0, 2018-03-15 21:55:58.0, 2018-03-29 21:56:00.0, null, 010203040b0b0b0b0c0c0c0c, null, null, null, null]
+hypnus-admin 2018-03-15 21:58:51.083 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} closed
+hypnus-admin 2018-03-15 21:58:51.083 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters. 
+hypnus-admin 2018-03-15 21:58:51.083 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:58:51.102 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-15 21:58:51.103 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-15 21:58:51.104 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-15 21:58:51.104 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-15 21:58:51.104 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-15 21:58:51.105 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2018-03-15 21:58:51.105 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed

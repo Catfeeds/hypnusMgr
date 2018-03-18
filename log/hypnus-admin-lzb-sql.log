@@ -1,0 +1,467 @@
+hypnus-admin 2018-03-15 21:42:00.150 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-15 21:42:00.560 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-15 21:42:00.950 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-15 21:42:01.351 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-15 21:42:01.752 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-15 21:42:02.913 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:42:03.060 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:42:07.721 [main] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-15 21:42:07.721 [main] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-15 21:42:07.721 [main] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-15 21:42:07.722 [main] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-15 21:42:07.722 [main] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-15 21:44:26.275 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-15 21:44:26.675 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-15 21:44:27.064 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-15 21:44:27.490 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-15 21:44:27.901 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-15 21:44:28.903 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:44:29.015 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:46:57.938 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:46:57.974 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:46:58.639 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+select pubsetup0_.S_ID as S_ID1_33_, pubsetup0_.D_CREATE_DATE as D_CREATE2_33_, pubsetup0_.D_MODIFY_DATE as D_MODIFY3_33_, pubsetup0_.S_CODE as S_CODE4_33_, pubsetup0_.S_NAME as S_NAME5_33_, pubsetup0_.S_VALUE as S_VALUE6_33_ from T_PUB_SETUP pubsetup0_ where pubsetup0_.S_CODE=? order by pubsetup0_.D_CREATE_DATE desc limit ?
+hypnus-admin 2018-03-15 21:46:58.649 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [platform_name, 1]
+hypnus-admin 2018-03-15 21:46:58.650 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR, INTEGER]
+hypnus-admin 2018-03-15 21:46:58.710 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+SELECT pubsetup0_.S_ID AS S_ID1_33_, pubsetup0_.D_CREATE_DATE AS D_CREATE2_33_, pubsetup0_.D_MODIFY_DATE AS D_MODIFY3_33_, pubsetup0_.S_CODE AS S_CODE4_33_, pubsetup0_.S_NAME AS S_NAME5_33_
+	, pubsetup0_.S_VALUE AS S_VALUE6_33_
+FROM T_PUB_SETUP pubsetup0_
+WHERE pubsetup0_.S_CODE = 'platform_name'
+ORDER BY pubsetup0_.D_CREATE_DATE DESC
+LIMIT 1
+hypnus-admin 2018-03-15 21:46:58.710 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 63.941439 millis. 
+select pubsetup0_.S_ID as S_ID1_33_, pubsetup0_.D_CREATE_DATE as D_CREATE2_33_, pubsetup0_.D_MODIFY_DATE as D_MODIFY3_33_, pubsetup0_.S_CODE as S_CODE4_33_, pubsetup0_.S_NAME as S_NAME5_33_, pubsetup0_.S_VALUE as S_VALUE6_33_ from T_PUB_SETUP pubsetup0_ where pubsetup0_.S_CODE=? order by pubsetup0_.D_CREATE_DATE desc limit ?
+hypnus-admin 2018-03-15 21:46:58.711 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-15 21:46:58.714 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [S_ID, D_CREATE_DATE, D_MODIFY_DATE, S_CODE, S_NAME, S_VALUE]
+hypnus-admin 2018-03-15 21:46:58.721 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-15 21:46:58.721 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-15 21:46:58.802 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:46:58.803 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:46:58.903 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:46:58.911 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:46:58.944 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:46:58.977 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [admin_login_link, 1]
+hypnus-admin 2018-03-15 21:46:58.977 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR, INTEGER]
+hypnus-admin 2018-03-15 21:46:59.014 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+SELECT pubsetup0_.S_ID AS S_ID1_33_, pubsetup0_.D_CREATE_DATE AS D_CREATE2_33_, pubsetup0_.D_MODIFY_DATE AS D_MODIFY3_33_, pubsetup0_.S_CODE AS S_CODE4_33_, pubsetup0_.S_NAME AS S_NAME5_33_
+	, pubsetup0_.S_VALUE AS S_VALUE6_33_
+FROM T_PUB_SETUP pubsetup0_
+WHERE pubsetup0_.S_CODE = 'admin_login_link'
+ORDER BY pubsetup0_.D_CREATE_DATE DESC
+LIMIT 1
+hypnus-admin 2018-03-15 21:46:59.014 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50001} query executed. 36.620817 millis. 
+select pubsetup0_.S_ID as S_ID1_33_, pubsetup0_.D_CREATE_DATE as D_CREATE2_33_, pubsetup0_.D_MODIFY_DATE as D_MODIFY3_33_, pubsetup0_.S_CODE as S_CODE4_33_, pubsetup0_.S_NAME as S_NAME5_33_, pubsetup0_.S_VALUE as S_VALUE6_33_ from T_PUB_SETUP pubsetup0_ where pubsetup0_.S_CODE=? order by pubsetup0_.D_CREATE_DATE desc limit ?
+hypnus-admin 2018-03-15 21:46:59.014 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50001} open
+hypnus-admin 2018-03-15 21:46:59.014 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50001} Header: [S_ID, D_CREATE_DATE, D_MODIFY_DATE, S_CODE, S_NAME, S_VALUE]
+hypnus-admin 2018-03-15 21:46:59.015 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50001} closed
+hypnus-admin 2018-03-15 21:46:59.015 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-15 21:46:59.047 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:46:59.047 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:46:59.147 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:46:59.187 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:46:59.221 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:46:59.257 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [admin_login_copyright, 1]
+hypnus-admin 2018-03-15 21:46:59.257 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR, INTEGER]
+hypnus-admin 2018-03-15 21:46:59.291 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+SELECT pubsetup0_.S_ID AS S_ID1_33_, pubsetup0_.D_CREATE_DATE AS D_CREATE2_33_, pubsetup0_.D_MODIFY_DATE AS D_MODIFY3_33_, pubsetup0_.S_CODE AS S_CODE4_33_, pubsetup0_.S_NAME AS S_NAME5_33_
+	, pubsetup0_.S_VALUE AS S_VALUE6_33_
+FROM T_PUB_SETUP pubsetup0_
+WHERE pubsetup0_.S_CODE = 'admin_login_copyright'
+ORDER BY pubsetup0_.D_CREATE_DATE DESC
+LIMIT 1
+hypnus-admin 2018-03-15 21:46:59.291 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50002} query executed. 33.872406 millis. 
+select pubsetup0_.S_ID as S_ID1_33_, pubsetup0_.D_CREATE_DATE as D_CREATE2_33_, pubsetup0_.D_MODIFY_DATE as D_MODIFY3_33_, pubsetup0_.S_CODE as S_CODE4_33_, pubsetup0_.S_NAME as S_NAME5_33_, pubsetup0_.S_VALUE as S_VALUE6_33_ from T_PUB_SETUP pubsetup0_ where pubsetup0_.S_CODE=? order by pubsetup0_.D_CREATE_DATE desc limit ?
+hypnus-admin 2018-03-15 21:46:59.291 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50002} open
+hypnus-admin 2018-03-15 21:46:59.291 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50002} Header: [S_ID, D_CREATE_DATE, D_MODIFY_DATE, S_CODE, S_NAME, S_VALUE]
+hypnus-admin 2018-03-15 21:46:59.291 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50002} closed
+hypnus-admin 2018-03-15 21:46:59.291 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-15 21:46:59.324 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:46:59.324 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:46:59.425 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:47:08.444 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:47:08.484 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:47:08.545 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created. 
+select staff0_.I_ID as I_ID1_24_, staff0_.D_CREATE_DATE as D_CREATE2_24_, staff0_.D_MODIFY_DATE as D_MODIFY3_24_, staff0_.S_ACCOUNT as S_ACCOUN4_24_, staff0_.S_NAME as S_NAME5_24_, staff0_.ATTRIBUTE_VALUE0 as ATTRIBUT6_24_, staff0_.ATTRIBUTE_VALUE1 as ATTRIBUT7_24_, staff0_.ATTRIBUTE_VALUE2 as ATTRIBUT8_24_, staff0_.ATTRIBUTE_VALUE3 as ATTRIBUT9_24_, staff0_.ATTRIBUTE_VALUE4 as ATTRIBU10_24_, staff0_.ATTRIBUTE_VALUE5 as ATTRIBU11_24_, staff0_.ATTRIBUTE_VALUE6 as ATTRIBU12_24_, staff0_.ATTRIBUTE_VALUE7 as ATTRIBU13_24_, staff0_.ATTRIBUTE_VALUE8 as ATTRIBU14_24_, staff0_.ATTRIBUTE_VALUE9 as ATTRIBU15_24_, staff0_.D_AVAIL_BEGIN_DATE as D_AVAIL16_24_, staff0_.D_AVAIL_END_DATE as D_AVAIL17_24_, staff0_.D_BIRTHDAY as D_BIRTH18_24_, staff0_.I_DEPT_ID as I_DEPT_41_24_, staff0_.I_DOMAIN_ID as I_DOMAI42_24_, staff0_.S_FAXCODE as S_FAXCO19_24_, staff0_.I_SEX as I_SEX20_24_, staff0_.S_IMAGE_PATH as S_IMAGE21_24_, staff0_.S_IN_EMAIL as S_IN_EM22_24_, staff0_.I_DEL_FLAG as I_DEL_F23_24_, staff0_.I_IS_ENABLED as I_IS_EN24_24_, staff0_.I_IS_LOCKED as I_IS_LO25_24_, staff0_.I_IS_SYNCH as I_IS_SY26_24_, staff0_.I_IS_SYSTEM as I_IS_SY27_24_, staff0_.I_KNOWLEDGE as I_KNOWL28_24_, staff0_.D_LOCK_DATE as D_LOCK_29_24_, staff0_.D_LOGIN_DATE as D_LOGIN30_24_, staff0_.I_LOGIN_FAILURE_COUNT as I_LOGIN31_24_, staff0_.S_LOGIN_IP as S_LOGIN32_24_, staff0_.S_MOBILE as S_MOBIL33_24_, staff0_.S_OUT_EMAIL as S_OUT_E34_24_, staff0_.S_PASSWORD as S_PASSW35_24_, staff0_.S_TELPHONE as S_TELPH36_24_, staff0_.S_REGISTER_IP as S_REGIS37_24_, staff0_.S_REMARK as S_REMAR38_24_, staff0_.D_UPDATE_PASS_TIME as D_UPDAT39_24_, staff0_.S_WORK_ADDRESS as S_WORK_40_24_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Staff' and e.s_enum_col_name = 'iSex' and e.i_enum_value = staff0_.I_SEX ) as formula1_ from t_Hr_Staff staff0_ where staff0_.S_ACCOUNT=? and staff0_.I_DEL_FLAG=0 order by staff0_.D_CREATE_DATE desc
+hypnus-admin 2018-03-15 21:47:08.546 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : [admin]
+hypnus-admin 2018-03-15 21:47:08.546 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : [VARCHAR]
+hypnus-admin 2018-03-15 21:47:08.669 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed. 
+SELECT staff0_.I_ID AS I_ID1_24_, staff0_.D_CREATE_DATE AS D_CREATE2_24_, staff0_.D_MODIFY_DATE AS D_MODIFY3_24_, staff0_.S_ACCOUNT AS S_ACCOUN4_24_, staff0_.S_NAME AS S_NAME5_24_
+	, staff0_.ATTRIBUTE_VALUE0 AS ATTRIBUT6_24_, staff0_.ATTRIBUTE_VALUE1 AS ATTRIBUT7_24_, staff0_.ATTRIBUTE_VALUE2 AS ATTRIBUT8_24_, staff0_.ATTRIBUTE_VALUE3 AS ATTRIBUT9_24_, staff0_.ATTRIBUTE_VALUE4 AS ATTRIBU10_24_
+	, staff0_.ATTRIBUTE_VALUE5 AS ATTRIBU11_24_, staff0_.ATTRIBUTE_VALUE6 AS ATTRIBU12_24_, staff0_.ATTRIBUTE_VALUE7 AS ATTRIBU13_24_, staff0_.ATTRIBUTE_VALUE8 AS ATTRIBU14_24_, staff0_.ATTRIBUTE_VALUE9 AS ATTRIBU15_24_
+	, staff0_.D_AVAIL_BEGIN_DATE AS D_AVAIL16_24_, staff0_.D_AVAIL_END_DATE AS D_AVAIL17_24_, staff0_.D_BIRTHDAY AS D_BIRTH18_24_, staff0_.I_DEPT_ID AS I_DEPT_41_24_, staff0_.I_DOMAIN_ID AS I_DOMAI42_24_
+	, staff0_.S_FAXCODE AS S_FAXCO19_24_, staff0_.I_SEX AS I_SEX20_24_, staff0_.S_IMAGE_PATH AS S_IMAGE21_24_, staff0_.S_IN_EMAIL AS S_IN_EM22_24_, staff0_.I_DEL_FLAG AS I_DEL_F23_24_
+	, staff0_.I_IS_ENABLED AS I_IS_EN24_24_, staff0_.I_IS_LOCKED AS I_IS_LO25_24_, staff0_.I_IS_SYNCH AS I_IS_SY26_24_, staff0_.I_IS_SYSTEM AS I_IS_SY27_24_, staff0_.I_KNOWLEDGE AS I_KNOWL28_24_
+	, staff0_.D_LOCK_DATE AS D_LOCK_29_24_, staff0_.D_LOGIN_DATE AS D_LOGIN30_24_, staff0_.I_LOGIN_FAILURE_COUNT AS I_LOGIN31_24_, staff0_.S_LOGIN_IP AS S_LOGIN32_24_, staff0_.S_MOBILE AS S_MOBIL33_24_
+	, staff0_.S_OUT_EMAIL AS S_OUT_E34_24_, staff0_.S_PASSWORD AS S_PASSW35_24_, staff0_.S_TELPHONE AS S_TELPH36_24_, staff0_.S_REGISTER_IP AS S_REGIS37_24_, staff0_.S_REMARK AS S_REMAR38_24_
+	, staff0_.D_UPDATE_PASS_TIME AS D_UPDAT39_24_, staff0_.S_WORK_ADDRESS AS S_WORK_40_24_, (
+		SELECT e.s_enum_name
+		FROM T_WHS_ENUM_TBL e
+		WHERE e.s_enum_tbl_name = 't_Hr_Staff'
+			AND e.s_enum_col_name = 'iSex'
+			AND e.i_enum_value = staff0_.I_SEX
+		) AS formula1_
+FROM t_Hr_Staff staff0_
+WHERE staff0_.S_ACCOUNT = 'admin'
+	AND staff0_.I_DEL_FLAG = 0
+ORDER BY staff0_.D_CREATE_DATE DESC
+hypnus-admin 2018-03-15 21:47:08.670 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50003} query executed. 124.28793 millis. 
+select staff0_.I_ID as I_ID1_24_, staff0_.D_CREATE_DATE as D_CREATE2_24_, staff0_.D_MODIFY_DATE as D_MODIFY3_24_, staff0_.S_ACCOUNT as S_ACCOUN4_24_, staff0_.S_NAME as S_NAME5_24_, staff0_.ATTRIBUTE_VALUE0 as ATTRIBUT6_24_, staff0_.ATTRIBUTE_VALUE1 as ATTRIBUT7_24_, staff0_.ATTRIBUTE_VALUE2 as ATTRIBUT8_24_, staff0_.ATTRIBUTE_VALUE3 as ATTRIBUT9_24_, staff0_.ATTRIBUTE_VALUE4 as ATTRIBU10_24_, staff0_.ATTRIBUTE_VALUE5 as ATTRIBU11_24_, staff0_.ATTRIBUTE_VALUE6 as ATTRIBU12_24_, staff0_.ATTRIBUTE_VALUE7 as ATTRIBU13_24_, staff0_.ATTRIBUTE_VALUE8 as ATTRIBU14_24_, staff0_.ATTRIBUTE_VALUE9 as ATTRIBU15_24_, staff0_.D_AVAIL_BEGIN_DATE as D_AVAIL16_24_, staff0_.D_AVAIL_END_DATE as D_AVAIL17_24_, staff0_.D_BIRTHDAY as D_BIRTH18_24_, staff0_.I_DEPT_ID as I_DEPT_41_24_, staff0_.I_DOMAIN_ID as I_DOMAI42_24_, staff0_.S_FAXCODE as S_FAXCO19_24_, staff0_.I_SEX as I_SEX20_24_, staff0_.S_IMAGE_PATH as S_IMAGE21_24_, staff0_.S_IN_EMAIL as S_IN_EM22_24_, staff0_.I_DEL_FLAG as I_DEL_F23_24_, staff0_.I_IS_ENABLED as I_IS_EN24_24_, staff0_.I_IS_LOCKED as I_IS_LO25_24_, staff0_.I_IS_SYNCH as I_IS_SY26_24_, staff0_.I_IS_SYSTEM as I_IS_SY27_24_, staff0_.I_KNOWLEDGE as I_KNOWL28_24_, staff0_.D_LOCK_DATE as D_LOCK_29_24_, staff0_.D_LOGIN_DATE as D_LOGIN30_24_, staff0_.I_LOGIN_FAILURE_COUNT as I_LOGIN31_24_, staff0_.S_LOGIN_IP as S_LOGIN32_24_, staff0_.S_MOBILE as S_MOBIL33_24_, staff0_.S_OUT_EMAIL as S_OUT_E34_24_, staff0_.S_PASSWORD as S_PASSW35_24_, staff0_.S_TELPHONE as S_TELPH36_24_, staff0_.S_REGISTER_IP as S_REGIS37_24_, staff0_.S_REMARK as S_REMAR38_24_, staff0_.D_UPDATE_PASS_TIME as D_UPDAT39_24_, staff0_.S_WORK_ADDRESS as S_WORK_40_24_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Staff' and e.s_enum_col_name = 'iSex' and e.i_enum_value = staff0_.I_SEX ) as formula1_ from t_Hr_Staff staff0_ where staff0_.S_ACCOUNT=? and staff0_.I_DEL_FLAG=0 order by staff0_.D_CREATE_DATE desc
+hypnus-admin 2018-03-15 21:47:08.672 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50003} open
+hypnus-admin 2018-03-15 21:47:08.672 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50003} Header: [I_ID, D_CREATE_DATE, D_MODIFY_DATE, S_ACCOUNT, S_NAME, ATTRIBUTE_VALUE0, ATTRIBUTE_VALUE1, ATTRIBUTE_VALUE2, ATTRIBUTE_VALUE3, ATTRIBUTE_VALUE4, ATTRIBUTE_VALUE5, ATTRIBUTE_VALUE6, ATTRIBUTE_VALUE7, ATTRIBUTE_VALUE8, ATTRIBUTE_VALUE9, D_AVAIL_BEGIN_DATE, D_AVAIL_END_DATE, D_BIRTHDAY, I_DEPT_ID, I_DOMAIN_ID, S_FAXCODE, I_SEX, S_IMAGE_PATH, S_IN_EMAIL, I_DEL_FLAG, I_IS_ENABLED, I_IS_LOCKED, I_IS_SYNCH, I_IS_SYSTEM, I_KNOWLEDGE, D_LOCK_DATE, D_LOGIN_DATE, I_LOGIN_FAILURE_COUNT, S_LOGIN_IP, S_MOBILE, S_OUT_EMAIL, S_PASSWORD, S_TELPHONE, S_REGISTER_IP, S_REMARK, D_UPDATE_PASS_TIME, S_WORK_ADDRESS, formula1_]
+hypnus-admin 2018-03-15 21:47:08.681 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50003} Result: [1, 2014-10-25 20:52:58.0, 2018-03-14 19:50:40.0, admin, 系统管理员, null, null, null, null, null, null, null, null, null, null, 2014-09-17 22:30:27.0, 2099-01-01 08:00:00.0, null, 1, 1, null, 2, null, , false, true, false, false, true, null, null, 2018-03-14 19:50:40.0, 0, 172.31.44.136, , , 8792f7d1ceed2e81ea9514b657e193e2, null, 127.0.0.1, , 2014-09-17 22:30:27.0, null, null]
+hypnus-admin 2018-03-15 21:47:08.720 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50003} closed
+hypnus-admin 2018-03-15 21:47:08.721 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters. 
+hypnus-admin 2018-03-15 21:47:08.846 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:47:08.847 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:47:09.152 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:47:09.311 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:47:09.312 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:47:09.468 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} created. 
+select staff0_.I_ID as I_ID1_24_0_, staff0_.D_CREATE_DATE as D_CREATE2_24_0_, staff0_.D_MODIFY_DATE as D_MODIFY3_24_0_, staff0_.S_ACCOUNT as S_ACCOUN4_24_0_, staff0_.S_NAME as S_NAME5_24_0_, staff0_.ATTRIBUTE_VALUE0 as ATTRIBUT6_24_0_, staff0_.ATTRIBUTE_VALUE1 as ATTRIBUT7_24_0_, staff0_.ATTRIBUTE_VALUE2 as ATTRIBUT8_24_0_, staff0_.ATTRIBUTE_VALUE3 as ATTRIBUT9_24_0_, staff0_.ATTRIBUTE_VALUE4 as ATTRIBU10_24_0_, staff0_.ATTRIBUTE_VALUE5 as ATTRIBU11_24_0_, staff0_.ATTRIBUTE_VALUE6 as ATTRIBU12_24_0_, staff0_.ATTRIBUTE_VALUE7 as ATTRIBU13_24_0_, staff0_.ATTRIBUTE_VALUE8 as ATTRIBU14_24_0_, staff0_.ATTRIBUTE_VALUE9 as ATTRIBU15_24_0_, staff0_.D_AVAIL_BEGIN_DATE as D_AVAIL16_24_0_, staff0_.D_AVAIL_END_DATE as D_AVAIL17_24_0_, staff0_.D_BIRTHDAY as D_BIRTH18_24_0_, staff0_.I_DEPT_ID as I_DEPT_41_24_0_, staff0_.I_DOMAIN_ID as I_DOMAI42_24_0_, staff0_.S_FAXCODE as S_FAXCO19_24_0_, staff0_.I_SEX as I_SEX20_24_0_, staff0_.S_IMAGE_PATH as S_IMAGE21_24_0_, staff0_.S_IN_EMAIL as S_IN_EM22_24_0_, staff0_.I_DEL_FLAG as I_DEL_F23_24_0_, staff0_.I_IS_ENABLED as I_IS_EN24_24_0_, staff0_.I_IS_LOCKED as I_IS_LO25_24_0_, staff0_.I_IS_SYNCH as I_IS_SY26_24_0_, staff0_.I_IS_SYSTEM as I_IS_SY27_24_0_, staff0_.I_KNOWLEDGE as I_KNOWL28_24_0_, staff0_.D_LOCK_DATE as D_LOCK_29_24_0_, staff0_.D_LOGIN_DATE as D_LOGIN30_24_0_, staff0_.I_LOGIN_FAILURE_COUNT as I_LOGIN31_24_0_, staff0_.S_LOGIN_IP as S_LOGIN32_24_0_, staff0_.S_MOBILE as S_MOBIL33_24_0_, staff0_.S_OUT_EMAIL as S_OUT_E34_24_0_, staff0_.S_PASSWORD as S_PASSW35_24_0_, staff0_.S_TELPHONE as S_TELPH36_24_0_, staff0_.S_REGISTER_IP as S_REGIS37_24_0_, staff0_.S_REMARK as S_REMAR38_24_0_, staff0_.D_UPDATE_PASS_TIME as D_UPDAT39_24_0_, staff0_.S_WORK_ADDRESS as S_WORK_40_24_0_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Staff' and e.s_enum_col_name = 'iSex' and e.i_enum_value = staff0_.I_SEX ) as formula1_0_ from t_Hr_Staff staff0_ where staff0_.I_ID=?
+hypnus-admin 2018-03-15 21:47:09.471 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} Parameters : [1]
+hypnus-admin 2018-03-15 21:47:09.472 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} Types : [BIGINT]
+hypnus-admin 2018-03-15 21:47:09.735 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} executed. 
+SELECT staff0_.I_ID AS I_ID1_24_0_, staff0_.D_CREATE_DATE AS D_CREATE2_24_0_, staff0_.D_MODIFY_DATE AS D_MODIFY3_24_0_, staff0_.S_ACCOUNT AS S_ACCOUN4_24_0_, staff0_.S_NAME AS S_NAME5_24_0_
+	, staff0_.ATTRIBUTE_VALUE0 AS ATTRIBUT6_24_0_, staff0_.ATTRIBUTE_VALUE1 AS ATTRIBUT7_24_0_, staff0_.ATTRIBUTE_VALUE2 AS ATTRIBUT8_24_0_, staff0_.ATTRIBUTE_VALUE3 AS ATTRIBUT9_24_0_, staff0_.ATTRIBUTE_VALUE4 AS ATTRIBU10_24_0_
+	, staff0_.ATTRIBUTE_VALUE5 AS ATTRIBU11_24_0_, staff0_.ATTRIBUTE_VALUE6 AS ATTRIBU12_24_0_, staff0_.ATTRIBUTE_VALUE7 AS ATTRIBU13_24_0_, staff0_.ATTRIBUTE_VALUE8 AS ATTRIBU14_24_0_, staff0_.ATTRIBUTE_VALUE9 AS ATTRIBU15_24_0_
+	, staff0_.D_AVAIL_BEGIN_DATE AS D_AVAIL16_24_0_, staff0_.D_AVAIL_END_DATE AS D_AVAIL17_24_0_, staff0_.D_BIRTHDAY AS D_BIRTH18_24_0_, staff0_.I_DEPT_ID AS I_DEPT_41_24_0_, staff0_.I_DOMAIN_ID AS I_DOMAI42_24_0_
+	, staff0_.S_FAXCODE AS S_FAXCO19_24_0_, staff0_.I_SEX AS I_SEX20_24_0_, staff0_.S_IMAGE_PATH AS S_IMAGE21_24_0_, staff0_.S_IN_EMAIL AS S_IN_EM22_24_0_, staff0_.I_DEL_FLAG AS I_DEL_F23_24_0_
+	, staff0_.I_IS_ENABLED AS I_IS_EN24_24_0_, staff0_.I_IS_LOCKED AS I_IS_LO25_24_0_, staff0_.I_IS_SYNCH AS I_IS_SY26_24_0_, staff0_.I_IS_SYSTEM AS I_IS_SY27_24_0_, staff0_.I_KNOWLEDGE AS I_KNOWL28_24_0_
+	, staff0_.D_LOCK_DATE AS D_LOCK_29_24_0_, staff0_.D_LOGIN_DATE AS D_LOGIN30_24_0_, staff0_.I_LOGIN_FAILURE_COUNT AS I_LOGIN31_24_0_, staff0_.S_LOGIN_IP AS S_LOGIN32_24_0_, staff0_.S_MOBILE AS S_MOBIL33_24_0_
+	, staff0_.S_OUT_EMAIL AS S_OUT_E34_24_0_, staff0_.S_PASSWORD AS S_PASSW35_24_0_, staff0_.S_TELPHONE AS S_TELPH36_24_0_, staff0_.S_REGISTER_IP AS S_REGIS37_24_0_, staff0_.S_REMARK AS S_REMAR38_24_0_
+	, staff0_.D_UPDATE_PASS_TIME AS D_UPDAT39_24_0_, staff0_.S_WORK_ADDRESS AS S_WORK_40_24_0_, (
+		SELECT e.s_enum_name
+		FROM T_WHS_ENUM_TBL e
+		WHERE e.s_enum_tbl_name = 't_Hr_Staff'
+			AND e.s_enum_col_name = 'iSex'
+			AND e.i_enum_value = staff0_.I_SEX
+		) AS formula1_0_
+FROM t_Hr_Staff staff0_
+WHERE staff0_.I_ID = 1
+hypnus-admin 2018-03-15 21:47:09.735 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002, rs-50004} query executed. 263.360418 millis. 
+select staff0_.I_ID as I_ID1_24_0_, staff0_.D_CREATE_DATE as D_CREATE2_24_0_, staff0_.D_MODIFY_DATE as D_MODIFY3_24_0_, staff0_.S_ACCOUNT as S_ACCOUN4_24_0_, staff0_.S_NAME as S_NAME5_24_0_, staff0_.ATTRIBUTE_VALUE0 as ATTRIBUT6_24_0_, staff0_.ATTRIBUTE_VALUE1 as ATTRIBUT7_24_0_, staff0_.ATTRIBUTE_VALUE2 as ATTRIBUT8_24_0_, staff0_.ATTRIBUTE_VALUE3 as ATTRIBUT9_24_0_, staff0_.ATTRIBUTE_VALUE4 as ATTRIBU10_24_0_, staff0_.ATTRIBUTE_VALUE5 as ATTRIBU11_24_0_, staff0_.ATTRIBUTE_VALUE6 as ATTRIBU12_24_0_, staff0_.ATTRIBUTE_VALUE7 as ATTRIBU13_24_0_, staff0_.ATTRIBUTE_VALUE8 as ATTRIBU14_24_0_, staff0_.ATTRIBUTE_VALUE9 as ATTRIBU15_24_0_, staff0_.D_AVAIL_BEGIN_DATE as D_AVAIL16_24_0_, staff0_.D_AVAIL_END_DATE as D_AVAIL17_24_0_, staff0_.D_BIRTHDAY as D_BIRTH18_24_0_, staff0_.I_DEPT_ID as I_DEPT_41_24_0_, staff0_.I_DOMAIN_ID as I_DOMAI42_24_0_, staff0_.S_FAXCODE as S_FAXCO19_24_0_, staff0_.I_SEX as I_SEX20_24_0_, staff0_.S_IMAGE_PATH as S_IMAGE21_24_0_, staff0_.S_IN_EMAIL as S_IN_EM22_24_0_, staff0_.I_DEL_FLAG as I_DEL_F23_24_0_, staff0_.I_IS_ENABLED as I_IS_EN24_24_0_, staff0_.I_IS_LOCKED as I_IS_LO25_24_0_, staff0_.I_IS_SYNCH as I_IS_SY26_24_0_, staff0_.I_IS_SYSTEM as I_IS_SY27_24_0_, staff0_.I_KNOWLEDGE as I_KNOWL28_24_0_, staff0_.D_LOCK_DATE as D_LOCK_29_24_0_, staff0_.D_LOGIN_DATE as D_LOGIN30_24_0_, staff0_.I_LOGIN_FAILURE_COUNT as I_LOGIN31_24_0_, staff0_.S_LOGIN_IP as S_LOGIN32_24_0_, staff0_.S_MOBILE as S_MOBIL33_24_0_, staff0_.S_OUT_EMAIL as S_OUT_E34_24_0_, staff0_.S_PASSWORD as S_PASSW35_24_0_, staff0_.S_TELPHONE as S_TELPH36_24_0_, staff0_.S_REGISTER_IP as S_REGIS37_24_0_, staff0_.S_REMARK as S_REMAR38_24_0_, staff0_.D_UPDATE_PASS_TIME as D_UPDAT39_24_0_, staff0_.S_WORK_ADDRESS as S_WORK_40_24_0_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Staff' and e.s_enum_col_name = 'iSex' and e.i_enum_value = staff0_.I_SEX ) as formula1_0_ from t_Hr_Staff staff0_ where staff0_.I_ID=?
+hypnus-admin 2018-03-15 21:47:09.736 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50004} open
+hypnus-admin 2018-03-15 21:47:09.736 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50004} Header: [I_ID, D_CREATE_DATE, D_MODIFY_DATE, S_ACCOUNT, S_NAME, ATTRIBUTE_VALUE0, ATTRIBUTE_VALUE1, ATTRIBUTE_VALUE2, ATTRIBUTE_VALUE3, ATTRIBUTE_VALUE4, ATTRIBUTE_VALUE5, ATTRIBUTE_VALUE6, ATTRIBUTE_VALUE7, ATTRIBUTE_VALUE8, ATTRIBUTE_VALUE9, D_AVAIL_BEGIN_DATE, D_AVAIL_END_DATE, D_BIRTHDAY, I_DEPT_ID, I_DOMAIN_ID, S_FAXCODE, I_SEX, S_IMAGE_PATH, S_IN_EMAIL, I_DEL_FLAG, I_IS_ENABLED, I_IS_LOCKED, I_IS_SYNCH, I_IS_SYSTEM, I_KNOWLEDGE, D_LOCK_DATE, D_LOGIN_DATE, I_LOGIN_FAILURE_COUNT, S_LOGIN_IP, S_MOBILE, S_OUT_EMAIL, S_PASSWORD, S_TELPHONE, S_REGISTER_IP, S_REMARK, D_UPDATE_PASS_TIME, S_WORK_ADDRESS, formula1_0_]
+hypnus-admin 2018-03-15 21:47:09.737 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50004} Result: [1, 2014-10-25 20:52:58.0, 2018-03-14 19:50:40.0, admin, 系统管理员, null, null, null, null, null, null, null, null, null, null, 2014-09-17 22:30:27.0, 2099-01-01 08:00:00.0, null, 1, 1, null, 2, null, , false, true, false, false, true, null, null, 2018-03-14 19:50:40.0, 0, 172.31.44.136, , , 8792f7d1ceed2e81ea9514b657e193e2, null, 127.0.0.1, , 2014-09-17 22:30:27.0, null, null]
+hypnus-admin 2018-03-15 21:47:09.741 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50004} closed
+hypnus-admin 2018-03-15 21:47:09.741 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} clearParameters. 
+hypnus-admin 2018-03-15 21:47:09.779 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20003} created. 
+update t_Hr_Staff set D_MODIFY_DATE=?, S_ACCOUNT=?, S_NAME=?, ATTRIBUTE_VALUE0=?, ATTRIBUTE_VALUE1=?, ATTRIBUTE_VALUE2=?, ATTRIBUTE_VALUE3=?, ATTRIBUTE_VALUE4=?, ATTRIBUTE_VALUE5=?, ATTRIBUTE_VALUE6=?, ATTRIBUTE_VALUE7=?, ATTRIBUTE_VALUE8=?, ATTRIBUTE_VALUE9=?, D_AVAIL_BEGIN_DATE=?, D_AVAIL_END_DATE=?, D_BIRTHDAY=?, I_DEPT_ID=?, I_DOMAIN_ID=?, S_FAXCODE=?, I_SEX=?, S_IMAGE_PATH=?, S_IN_EMAIL=?, I_DEL_FLAG=?, I_IS_ENABLED=?, I_IS_LOCKED=?, I_IS_SYNCH=?, I_IS_SYSTEM=?, I_KNOWLEDGE=?, D_LOCK_DATE=?, D_LOGIN_DATE=?, I_LOGIN_FAILURE_COUNT=?, S_LOGIN_IP=?, S_MOBILE=?, S_OUT_EMAIL=?, S_PASSWORD=?, S_TELPHONE=?, S_REMARK=?, D_UPDATE_PASS_TIME=?, S_WORK_ADDRESS=? where I_ID=?
+hypnus-admin 2018-03-15 21:47:10.206 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20003} executed. 
+UPDATE t_Hr_Staff
+SET D_MODIFY_DATE = '2018-03-15 21:47:09.758', S_ACCOUNT = 'admin', S_NAME = '系统管理员', ATTRIBUTE_VALUE0 = NULL, ATTRIBUTE_VALUE1 = NULL, ATTRIBUTE_VALUE2 = NULL, ATTRIBUTE_VALUE3 = NULL, ATTRIBUTE_VALUE4 = NULL, ATTRIBUTE_VALUE5 = NULL, ATTRIBUTE_VALUE6 = NULL, ATTRIBUTE_VALUE7 = NULL, ATTRIBUTE_VALUE8 = NULL, ATTRIBUTE_VALUE9 = NULL, D_AVAIL_BEGIN_DATE = '2014-09-17 22:30:27.000', D_AVAIL_END_DATE = '2099-01-01 08:00:00.000', D_BIRTHDAY = NULL, I_DEPT_ID = 1, I_DOMAIN_ID = 1, S_FAXCODE = NULL, I_SEX = 2, S_IMAGE_PATH = NULL, S_IN_EMAIL = '', I_DEL_FLAG = false, I_IS_ENABLED = true, I_IS_LOCKED = false, I_IS_SYNCH = false, I_IS_SYSTEM = true, I_KNOWLEDGE = NULL, D_LOCK_DATE = NULL, D_LOGIN_DATE = '2018-03-14 19:50:40.000', I_LOGIN_FAILURE_COUNT = 1, S_LOGIN_IP = '172.31.44.136', S_MOBILE = '', S_OUT_EMAIL = '', S_PASSWORD = '8792f7d1ceed2e81ea9514b657e193e2', S_TELPHONE = NULL, S_REMARK = '', D_UPDATE_PASS_TIME = '2014-09-17 22:30:27.000', S_WORK_ADDRESS = NULL
+WHERE I_ID = 1
+hypnus-admin 2018-03-15 21:47:10.206 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20003} batch executed. 418.848612 millis. 
+update t_Hr_Staff set D_MODIFY_DATE=?, S_ACCOUNT=?, S_NAME=?, ATTRIBUTE_VALUE0=?, ATTRIBUTE_VALUE1=?, ATTRIBUTE_VALUE2=?, ATTRIBUTE_VALUE3=?, ATTRIBUTE_VALUE4=?, ATTRIBUTE_VALUE5=?, ATTRIBUTE_VALUE6=?, ATTRIBUTE_VALUE7=?, ATTRIBUTE_VALUE8=?, ATTRIBUTE_VALUE9=?, D_AVAIL_BEGIN_DATE=?, D_AVAIL_END_DATE=?, D_BIRTHDAY=?, I_DEPT_ID=?, I_DOMAIN_ID=?, S_FAXCODE=?, I_SEX=?, S_IMAGE_PATH=?, S_IN_EMAIL=?, I_DEL_FLAG=?, I_IS_ENABLED=?, I_IS_LOCKED=?, I_IS_SYNCH=?, I_IS_SYSTEM=?, I_KNOWLEDGE=?, D_LOCK_DATE=?, D_LOGIN_DATE=?, I_LOGIN_FAILURE_COUNT=?, S_LOGIN_IP=?, S_MOBILE=?, S_OUT_EMAIL=?, S_PASSWORD=?, S_TELPHONE=?, S_REMARK=?, D_UPDATE_PASS_TIME=?, S_WORK_ADDRESS=? where I_ID=?
+hypnus-admin 2018-03-15 21:47:10.207 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20003} clearParameters. 
+hypnus-admin 2018-03-15 21:47:10.347 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:47:10.348 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:47:10.383 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:47:10.432 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:47:10.433 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:47:10.691 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20004} created. 
+select exceptioni0_.I_ID as I_ID1_14_, exceptioni0_.D_CREATE_DATE as D_CREATE2_14_, exceptioni0_.D_MODIFY_DATE as D_MODIFY3_14_, exceptioni0_.I_CREATOR_ID as I_CREATO4_14_, exceptioni0_.S_ERR_CODE as S_ERR_CO5_14_, exceptioni0_.S_ERR_INFO as S_ERR_IN6_14_, exceptioni0_.S_CODE as S_CODE7_14_, exceptioni0_.I_ERR_LEVEL as I_ERR_LE8_14_, exceptioni0_.S_ERR_SOLVE_DESC as S_ERR_SO9_14_, exceptioni0_.I_IS_ENABLE_I18N as I_IS_EN10_14_, exceptioni0_.PARAMS as PARAMS11_14_, exceptioni0_.S_REMARK as S_REMAR12_14_ from T_EXCEPTION_INFO_CFG exceptioni0_ order by exceptioni0_.D_CREATE_DATE desc
+hypnus-admin 2018-03-15 21:47:10.691 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20004} Parameters : []
+hypnus-admin 2018-03-15 21:47:10.691 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20004} Types : []
+hypnus-admin 2018-03-15 21:47:10.818 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20004} executed. 
+select exceptioni0_.I_ID as I_ID1_14_, exceptioni0_.D_CREATE_DATE as D_CREATE2_14_, exceptioni0_.D_MODIFY_DATE as D_MODIFY3_14_, exceptioni0_.I_CREATOR_ID as I_CREATO4_14_, exceptioni0_.S_ERR_CODE as S_ERR_CO5_14_, exceptioni0_.S_ERR_INFO as S_ERR_IN6_14_, exceptioni0_.S_CODE as S_CODE7_14_, exceptioni0_.I_ERR_LEVEL as I_ERR_LE8_14_, exceptioni0_.S_ERR_SOLVE_DESC as S_ERR_SO9_14_, exceptioni0_.I_IS_ENABLE_I18N as I_IS_EN10_14_, exceptioni0_.PARAMS as PARAMS11_14_, exceptioni0_.S_REMARK as S_REMAR12_14_ from T_EXCEPTION_INFO_CFG exceptioni0_ order by exceptioni0_.D_CREATE_DATE desc
+hypnus-admin 2018-03-15 21:47:10.819 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20004, rs-50005} query executed. 128.131326 millis. 
+select exceptioni0_.I_ID as I_ID1_14_, exceptioni0_.D_CREATE_DATE as D_CREATE2_14_, exceptioni0_.D_MODIFY_DATE as D_MODIFY3_14_, exceptioni0_.I_CREATOR_ID as I_CREATO4_14_, exceptioni0_.S_ERR_CODE as S_ERR_CO5_14_, exceptioni0_.S_ERR_INFO as S_ERR_IN6_14_, exceptioni0_.S_CODE as S_CODE7_14_, exceptioni0_.I_ERR_LEVEL as I_ERR_LE8_14_, exceptioni0_.S_ERR_SOLVE_DESC as S_ERR_SO9_14_, exceptioni0_.I_IS_ENABLE_I18N as I_IS_EN10_14_, exceptioni0_.PARAMS as PARAMS11_14_, exceptioni0_.S_REMARK as S_REMAR12_14_ from T_EXCEPTION_INFO_CFG exceptioni0_ order by exceptioni0_.D_CREATE_DATE desc
+hypnus-admin 2018-03-15 21:47:10.819 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20004, rs-50005} open
+hypnus-admin 2018-03-15 21:47:10.819 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20004, rs-50005} Header: [I_ID, D_CREATE_DATE, D_MODIFY_DATE, I_CREATOR_ID, S_ERR_CODE, S_ERR_INFO, S_CODE, I_ERR_LEVEL, S_ERR_SOLVE_DESC, I_IS_ENABLE_I18N, PARAMS, S_REMARK]
+hypnus-admin 2018-03-15 21:47:10.820 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20004, rs-50005} closed
+hypnus-admin 2018-03-15 21:47:10.821 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20004} clearParameters. 
+hypnus-admin 2018-03-15 21:47:10.961 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:47:10.961 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:47:10.994 [RMI TCP Connection(2)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:47:34.526 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:47:34.558 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:47:34.594 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : [admin]
+hypnus-admin 2018-03-15 21:47:34.595 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : [VARCHAR]
+hypnus-admin 2018-03-15 21:47:34.635 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed. 
+SELECT staff0_.I_ID AS I_ID1_24_, staff0_.D_CREATE_DATE AS D_CREATE2_24_, staff0_.D_MODIFY_DATE AS D_MODIFY3_24_, staff0_.S_ACCOUNT AS S_ACCOUN4_24_, staff0_.S_NAME AS S_NAME5_24_
+	, staff0_.ATTRIBUTE_VALUE0 AS ATTRIBUT6_24_, staff0_.ATTRIBUTE_VALUE1 AS ATTRIBUT7_24_, staff0_.ATTRIBUTE_VALUE2 AS ATTRIBUT8_24_, staff0_.ATTRIBUTE_VALUE3 AS ATTRIBUT9_24_, staff0_.ATTRIBUTE_VALUE4 AS ATTRIBU10_24_
+	, staff0_.ATTRIBUTE_VALUE5 AS ATTRIBU11_24_, staff0_.ATTRIBUTE_VALUE6 AS ATTRIBU12_24_, staff0_.ATTRIBUTE_VALUE7 AS ATTRIBU13_24_, staff0_.ATTRIBUTE_VALUE8 AS ATTRIBU14_24_, staff0_.ATTRIBUTE_VALUE9 AS ATTRIBU15_24_
+	, staff0_.D_AVAIL_BEGIN_DATE AS D_AVAIL16_24_, staff0_.D_AVAIL_END_DATE AS D_AVAIL17_24_, staff0_.D_BIRTHDAY AS D_BIRTH18_24_, staff0_.I_DEPT_ID AS I_DEPT_41_24_, staff0_.I_DOMAIN_ID AS I_DOMAI42_24_
+	, staff0_.S_FAXCODE AS S_FAXCO19_24_, staff0_.I_SEX AS I_SEX20_24_, staff0_.S_IMAGE_PATH AS S_IMAGE21_24_, staff0_.S_IN_EMAIL AS S_IN_EM22_24_, staff0_.I_DEL_FLAG AS I_DEL_F23_24_
+	, staff0_.I_IS_ENABLED AS I_IS_EN24_24_, staff0_.I_IS_LOCKED AS I_IS_LO25_24_, staff0_.I_IS_SYNCH AS I_IS_SY26_24_, staff0_.I_IS_SYSTEM AS I_IS_SY27_24_, staff0_.I_KNOWLEDGE AS I_KNOWL28_24_
+	, staff0_.D_LOCK_DATE AS D_LOCK_29_24_, staff0_.D_LOGIN_DATE AS D_LOGIN30_24_, staff0_.I_LOGIN_FAILURE_COUNT AS I_LOGIN31_24_, staff0_.S_LOGIN_IP AS S_LOGIN32_24_, staff0_.S_MOBILE AS S_MOBIL33_24_
+	, staff0_.S_OUT_EMAIL AS S_OUT_E34_24_, staff0_.S_PASSWORD AS S_PASSW35_24_, staff0_.S_TELPHONE AS S_TELPH36_24_, staff0_.S_REGISTER_IP AS S_REGIS37_24_, staff0_.S_REMARK AS S_REMAR38_24_
+	, staff0_.D_UPDATE_PASS_TIME AS D_UPDAT39_24_, staff0_.S_WORK_ADDRESS AS S_WORK_40_24_, (
+		SELECT e.s_enum_name
+		FROM T_WHS_ENUM_TBL e
+		WHERE e.s_enum_tbl_name = 't_Hr_Staff'
+			AND e.s_enum_col_name = 'iSex'
+			AND e.i_enum_value = staff0_.I_SEX
+		) AS formula1_
+FROM t_Hr_Staff staff0_
+WHERE staff0_.S_ACCOUNT = 'admin'
+	AND staff0_.I_DEL_FLAG = 0
+ORDER BY staff0_.D_CREATE_DATE DESC
+hypnus-admin 2018-03-15 21:47:34.635 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50006} query executed. 40.824803 millis. 
+select staff0_.I_ID as I_ID1_24_, staff0_.D_CREATE_DATE as D_CREATE2_24_, staff0_.D_MODIFY_DATE as D_MODIFY3_24_, staff0_.S_ACCOUNT as S_ACCOUN4_24_, staff0_.S_NAME as S_NAME5_24_, staff0_.ATTRIBUTE_VALUE0 as ATTRIBUT6_24_, staff0_.ATTRIBUTE_VALUE1 as ATTRIBUT7_24_, staff0_.ATTRIBUTE_VALUE2 as ATTRIBUT8_24_, staff0_.ATTRIBUTE_VALUE3 as ATTRIBUT9_24_, staff0_.ATTRIBUTE_VALUE4 as ATTRIBU10_24_, staff0_.ATTRIBUTE_VALUE5 as ATTRIBU11_24_, staff0_.ATTRIBUTE_VALUE6 as ATTRIBU12_24_, staff0_.ATTRIBUTE_VALUE7 as ATTRIBU13_24_, staff0_.ATTRIBUTE_VALUE8 as ATTRIBU14_24_, staff0_.ATTRIBUTE_VALUE9 as ATTRIBU15_24_, staff0_.D_AVAIL_BEGIN_DATE as D_AVAIL16_24_, staff0_.D_AVAIL_END_DATE as D_AVAIL17_24_, staff0_.D_BIRTHDAY as D_BIRTH18_24_, staff0_.I_DEPT_ID as I_DEPT_41_24_, staff0_.I_DOMAIN_ID as I_DOMAI42_24_, staff0_.S_FAXCODE as S_FAXCO19_24_, staff0_.I_SEX as I_SEX20_24_, staff0_.S_IMAGE_PATH as S_IMAGE21_24_, staff0_.S_IN_EMAIL as S_IN_EM22_24_, staff0_.I_DEL_FLAG as I_DEL_F23_24_, staff0_.I_IS_ENABLED as I_IS_EN24_24_, staff0_.I_IS_LOCKED as I_IS_LO25_24_, staff0_.I_IS_SYNCH as I_IS_SY26_24_, staff0_.I_IS_SYSTEM as I_IS_SY27_24_, staff0_.I_KNOWLEDGE as I_KNOWL28_24_, staff0_.D_LOCK_DATE as D_LOCK_29_24_, staff0_.D_LOGIN_DATE as D_LOGIN30_24_, staff0_.I_LOGIN_FAILURE_COUNT as I_LOGIN31_24_, staff0_.S_LOGIN_IP as S_LOGIN32_24_, staff0_.S_MOBILE as S_MOBIL33_24_, staff0_.S_OUT_EMAIL as S_OUT_E34_24_, staff0_.S_PASSWORD as S_PASSW35_24_, staff0_.S_TELPHONE as S_TELPH36_24_, staff0_.S_REGISTER_IP as S_REGIS37_24_, staff0_.S_REMARK as S_REMAR38_24_, staff0_.D_UPDATE_PASS_TIME as D_UPDAT39_24_, staff0_.S_WORK_ADDRESS as S_WORK_40_24_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Staff' and e.s_enum_col_name = 'iSex' and e.i_enum_value = staff0_.I_SEX ) as formula1_ from t_Hr_Staff staff0_ where staff0_.S_ACCOUNT=? and staff0_.I_DEL_FLAG=0 order by staff0_.D_CREATE_DATE desc
+hypnus-admin 2018-03-15 21:47:34.640 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50006} open
+hypnus-admin 2018-03-15 21:47:34.641 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50006} Header: [I_ID, D_CREATE_DATE, D_MODIFY_DATE, S_ACCOUNT, S_NAME, ATTRIBUTE_VALUE0, ATTRIBUTE_VALUE1, ATTRIBUTE_VALUE2, ATTRIBUTE_VALUE3, ATTRIBUTE_VALUE4, ATTRIBUTE_VALUE5, ATTRIBUTE_VALUE6, ATTRIBUTE_VALUE7, ATTRIBUTE_VALUE8, ATTRIBUTE_VALUE9, D_AVAIL_BEGIN_DATE, D_AVAIL_END_DATE, D_BIRTHDAY, I_DEPT_ID, I_DOMAIN_ID, S_FAXCODE, I_SEX, S_IMAGE_PATH, S_IN_EMAIL, I_DEL_FLAG, I_IS_ENABLED, I_IS_LOCKED, I_IS_SYNCH, I_IS_SYSTEM, I_KNOWLEDGE, D_LOCK_DATE, D_LOGIN_DATE, I_LOGIN_FAILURE_COUNT, S_LOGIN_IP, S_MOBILE, S_OUT_EMAIL, S_PASSWORD, S_TELPHONE, S_REGISTER_IP, S_REMARK, D_UPDATE_PASS_TIME, S_WORK_ADDRESS, formula1_]
+hypnus-admin 2018-03-15 21:47:34.643 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50006} Result: [1, 2014-10-25 20:52:58.0, 2018-03-15 21:47:10.0, admin, 系统管理员, null, null, null, null, null, null, null, null, null, null, 2014-09-17 22:30:27.0, 2099-01-01 08:00:00.0, null, 1, 1, null, 2, null, , false, true, false, false, true, null, null, 2018-03-14 19:50:40.0, 1, 172.31.44.136, , , 8792f7d1ceed2e81ea9514b657e193e2, null, 127.0.0.1, , 2014-09-17 22:30:27.0, null, null]
+hypnus-admin 2018-03-15 21:47:34.647 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50006} closed
+hypnus-admin 2018-03-15 21:47:34.647 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters. 
+hypnus-admin 2018-03-15 21:47:34.679 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:47:34.679 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:47:34.777 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:47:34.819 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:47:34.820 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:47:34.853 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} Parameters : [1]
+hypnus-admin 2018-03-15 21:47:34.853 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} Types : [BIGINT]
+hypnus-admin 2018-03-15 21:47:34.891 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} executed. 
+SELECT staff0_.I_ID AS I_ID1_24_0_, staff0_.D_CREATE_DATE AS D_CREATE2_24_0_, staff0_.D_MODIFY_DATE AS D_MODIFY3_24_0_, staff0_.S_ACCOUNT AS S_ACCOUN4_24_0_, staff0_.S_NAME AS S_NAME5_24_0_
+	, staff0_.ATTRIBUTE_VALUE0 AS ATTRIBUT6_24_0_, staff0_.ATTRIBUTE_VALUE1 AS ATTRIBUT7_24_0_, staff0_.ATTRIBUTE_VALUE2 AS ATTRIBUT8_24_0_, staff0_.ATTRIBUTE_VALUE3 AS ATTRIBUT9_24_0_, staff0_.ATTRIBUTE_VALUE4 AS ATTRIBU10_24_0_
+	, staff0_.ATTRIBUTE_VALUE5 AS ATTRIBU11_24_0_, staff0_.ATTRIBUTE_VALUE6 AS ATTRIBU12_24_0_, staff0_.ATTRIBUTE_VALUE7 AS ATTRIBU13_24_0_, staff0_.ATTRIBUTE_VALUE8 AS ATTRIBU14_24_0_, staff0_.ATTRIBUTE_VALUE9 AS ATTRIBU15_24_0_
+	, staff0_.D_AVAIL_BEGIN_DATE AS D_AVAIL16_24_0_, staff0_.D_AVAIL_END_DATE AS D_AVAIL17_24_0_, staff0_.D_BIRTHDAY AS D_BIRTH18_24_0_, staff0_.I_DEPT_ID AS I_DEPT_41_24_0_, staff0_.I_DOMAIN_ID AS I_DOMAI42_24_0_
+	, staff0_.S_FAXCODE AS S_FAXCO19_24_0_, staff0_.I_SEX AS I_SEX20_24_0_, staff0_.S_IMAGE_PATH AS S_IMAGE21_24_0_, staff0_.S_IN_EMAIL AS S_IN_EM22_24_0_, staff0_.I_DEL_FLAG AS I_DEL_F23_24_0_
+	, staff0_.I_IS_ENABLED AS I_IS_EN24_24_0_, staff0_.I_IS_LOCKED AS I_IS_LO25_24_0_, staff0_.I_IS_SYNCH AS I_IS_SY26_24_0_, staff0_.I_IS_SYSTEM AS I_IS_SY27_24_0_, staff0_.I_KNOWLEDGE AS I_KNOWL28_24_0_
+	, staff0_.D_LOCK_DATE AS D_LOCK_29_24_0_, staff0_.D_LOGIN_DATE AS D_LOGIN30_24_0_, staff0_.I_LOGIN_FAILURE_COUNT AS I_LOGIN31_24_0_, staff0_.S_LOGIN_IP AS S_LOGIN32_24_0_, staff0_.S_MOBILE AS S_MOBIL33_24_0_
+	, staff0_.S_OUT_EMAIL AS S_OUT_E34_24_0_, staff0_.S_PASSWORD AS S_PASSW35_24_0_, staff0_.S_TELPHONE AS S_TELPH36_24_0_, staff0_.S_REGISTER_IP AS S_REGIS37_24_0_, staff0_.S_REMARK AS S_REMAR38_24_0_
+	, staff0_.D_UPDATE_PASS_TIME AS D_UPDAT39_24_0_, staff0_.S_WORK_ADDRESS AS S_WORK_40_24_0_, (
+		SELECT e.s_enum_name
+		FROM T_WHS_ENUM_TBL e
+		WHERE e.s_enum_tbl_name = 't_Hr_Staff'
+			AND e.s_enum_col_name = 'iSex'
+			AND e.i_enum_value = staff0_.I_SEX
+		) AS formula1_0_
+FROM t_Hr_Staff staff0_
+WHERE staff0_.I_ID = 1
+hypnus-admin 2018-03-15 21:47:34.891 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002, rs-50007} query executed. 38.45435 millis. 
+select staff0_.I_ID as I_ID1_24_0_, staff0_.D_CREATE_DATE as D_CREATE2_24_0_, staff0_.D_MODIFY_DATE as D_MODIFY3_24_0_, staff0_.S_ACCOUNT as S_ACCOUN4_24_0_, staff0_.S_NAME as S_NAME5_24_0_, staff0_.ATTRIBUTE_VALUE0 as ATTRIBUT6_24_0_, staff0_.ATTRIBUTE_VALUE1 as ATTRIBUT7_24_0_, staff0_.ATTRIBUTE_VALUE2 as ATTRIBUT8_24_0_, staff0_.ATTRIBUTE_VALUE3 as ATTRIBUT9_24_0_, staff0_.ATTRIBUTE_VALUE4 as ATTRIBU10_24_0_, staff0_.ATTRIBUTE_VALUE5 as ATTRIBU11_24_0_, staff0_.ATTRIBUTE_VALUE6 as ATTRIBU12_24_0_, staff0_.ATTRIBUTE_VALUE7 as ATTRIBU13_24_0_, staff0_.ATTRIBUTE_VALUE8 as ATTRIBU14_24_0_, staff0_.ATTRIBUTE_VALUE9 as ATTRIBU15_24_0_, staff0_.D_AVAIL_BEGIN_DATE as D_AVAIL16_24_0_, staff0_.D_AVAIL_END_DATE as D_AVAIL17_24_0_, staff0_.D_BIRTHDAY as D_BIRTH18_24_0_, staff0_.I_DEPT_ID as I_DEPT_41_24_0_, staff0_.I_DOMAIN_ID as I_DOMAI42_24_0_, staff0_.S_FAXCODE as S_FAXCO19_24_0_, staff0_.I_SEX as I_SEX20_24_0_, staff0_.S_IMAGE_PATH as S_IMAGE21_24_0_, staff0_.S_IN_EMAIL as S_IN_EM22_24_0_, staff0_.I_DEL_FLAG as I_DEL_F23_24_0_, staff0_.I_IS_ENABLED as I_IS_EN24_24_0_, staff0_.I_IS_LOCKED as I_IS_LO25_24_0_, staff0_.I_IS_SYNCH as I_IS_SY26_24_0_, staff0_.I_IS_SYSTEM as I_IS_SY27_24_0_, staff0_.I_KNOWLEDGE as I_KNOWL28_24_0_, staff0_.D_LOCK_DATE as D_LOCK_29_24_0_, staff0_.D_LOGIN_DATE as D_LOGIN30_24_0_, staff0_.I_LOGIN_FAILURE_COUNT as I_LOGIN31_24_0_, staff0_.S_LOGIN_IP as S_LOGIN32_24_0_, staff0_.S_MOBILE as S_MOBIL33_24_0_, staff0_.S_OUT_EMAIL as S_OUT_E34_24_0_, staff0_.S_PASSWORD as S_PASSW35_24_0_, staff0_.S_TELPHONE as S_TELPH36_24_0_, staff0_.S_REGISTER_IP as S_REGIS37_24_0_, staff0_.S_REMARK as S_REMAR38_24_0_, staff0_.D_UPDATE_PASS_TIME as D_UPDAT39_24_0_, staff0_.S_WORK_ADDRESS as S_WORK_40_24_0_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Staff' and e.s_enum_col_name = 'iSex' and e.i_enum_value = staff0_.I_SEX ) as formula1_0_ from t_Hr_Staff staff0_ where staff0_.I_ID=?
+hypnus-admin 2018-03-15 21:47:34.895 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50007} open
+hypnus-admin 2018-03-15 21:47:34.895 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50007} Header: [I_ID, D_CREATE_DATE, D_MODIFY_DATE, S_ACCOUNT, S_NAME, ATTRIBUTE_VALUE0, ATTRIBUTE_VALUE1, ATTRIBUTE_VALUE2, ATTRIBUTE_VALUE3, ATTRIBUTE_VALUE4, ATTRIBUTE_VALUE5, ATTRIBUTE_VALUE6, ATTRIBUTE_VALUE7, ATTRIBUTE_VALUE8, ATTRIBUTE_VALUE9, D_AVAIL_BEGIN_DATE, D_AVAIL_END_DATE, D_BIRTHDAY, I_DEPT_ID, I_DOMAIN_ID, S_FAXCODE, I_SEX, S_IMAGE_PATH, S_IN_EMAIL, I_DEL_FLAG, I_IS_ENABLED, I_IS_LOCKED, I_IS_SYNCH, I_IS_SYSTEM, I_KNOWLEDGE, D_LOCK_DATE, D_LOGIN_DATE, I_LOGIN_FAILURE_COUNT, S_LOGIN_IP, S_MOBILE, S_OUT_EMAIL, S_PASSWORD, S_TELPHONE, S_REGISTER_IP, S_REMARK, D_UPDATE_PASS_TIME, S_WORK_ADDRESS, formula1_0_]
+hypnus-admin 2018-03-15 21:47:34.896 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50007} Result: [1, 2014-10-25 20:52:58.0, 2018-03-15 21:47:10.0, admin, 系统管理员, null, null, null, null, null, null, null, null, null, null, 2014-09-17 22:30:27.0, 2099-01-01 08:00:00.0, null, 1, 1, null, 2, null, , false, true, false, false, true, null, null, 2018-03-14 19:50:40.0, 1, 172.31.44.136, , , 8792f7d1ceed2e81ea9514b657e193e2, null, 127.0.0.1, , 2014-09-17 22:30:27.0, null, null]
+hypnus-admin 2018-03-15 21:47:34.898 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50007} closed
+hypnus-admin 2018-03-15 21:47:34.898 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} clearParameters. 
+hypnus-admin 2018-03-15 21:47:35.001 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20003} executed. 
+UPDATE t_Hr_Staff
+SET D_MODIFY_DATE = '2018-03-15 21:47:34.899', S_ACCOUNT = 'admin', S_NAME = '系统管理员', ATTRIBUTE_VALUE0 = NULL, ATTRIBUTE_VALUE1 = NULL, ATTRIBUTE_VALUE2 = NULL, ATTRIBUTE_VALUE3 = NULL, ATTRIBUTE_VALUE4 = NULL, ATTRIBUTE_VALUE5 = NULL, ATTRIBUTE_VALUE6 = NULL, ATTRIBUTE_VALUE7 = NULL, ATTRIBUTE_VALUE8 = NULL, ATTRIBUTE_VALUE9 = NULL, D_AVAIL_BEGIN_DATE = '2014-09-17 22:30:27.000', D_AVAIL_END_DATE = '2099-01-01 08:00:00.000', D_BIRTHDAY = NULL, I_DEPT_ID = 1, I_DOMAIN_ID = 1, S_FAXCODE = NULL, I_SEX = 2, S_IMAGE_PATH = NULL, S_IN_EMAIL = '', I_DEL_FLAG = false, I_IS_ENABLED = true, I_IS_LOCKED = false, I_IS_SYNCH = false, I_IS_SYSTEM = true, I_KNOWLEDGE = NULL, D_LOCK_DATE = NULL, D_LOGIN_DATE = '2018-03-15 21:47:34.788', I_LOGIN_FAILURE_COUNT = 0, S_LOGIN_IP = '172.31.44.134', S_MOBILE = '', S_OUT_EMAIL = '', S_PASSWORD = '8792f7d1ceed2e81ea9514b657e193e2', S_TELPHONE = NULL, S_REMARK = '', D_UPDATE_PASS_TIME = '2014-09-17 22:30:27.000', S_WORK_ADDRESS = NULL
+WHERE I_ID = 1
+hypnus-admin 2018-03-15 21:47:35.001 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20003} batch executed. 101.306845 millis. 
+update t_Hr_Staff set D_MODIFY_DATE=?, S_ACCOUNT=?, S_NAME=?, ATTRIBUTE_VALUE0=?, ATTRIBUTE_VALUE1=?, ATTRIBUTE_VALUE2=?, ATTRIBUTE_VALUE3=?, ATTRIBUTE_VALUE4=?, ATTRIBUTE_VALUE5=?, ATTRIBUTE_VALUE6=?, ATTRIBUTE_VALUE7=?, ATTRIBUTE_VALUE8=?, ATTRIBUTE_VALUE9=?, D_AVAIL_BEGIN_DATE=?, D_AVAIL_END_DATE=?, D_BIRTHDAY=?, I_DEPT_ID=?, I_DOMAIN_ID=?, S_FAXCODE=?, I_SEX=?, S_IMAGE_PATH=?, S_IN_EMAIL=?, I_DEL_FLAG=?, I_IS_ENABLED=?, I_IS_LOCKED=?, I_IS_SYNCH=?, I_IS_SYSTEM=?, I_KNOWLEDGE=?, D_LOCK_DATE=?, D_LOGIN_DATE=?, I_LOGIN_FAILURE_COUNT=?, S_LOGIN_IP=?, S_MOBILE=?, S_OUT_EMAIL=?, S_PASSWORD=?, S_TELPHONE=?, S_REMARK=?, D_UPDATE_PASS_TIME=?, S_WORK_ADDRESS=? where I_ID=?
+hypnus-admin 2018-03-15 21:47:35.002 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20003} clearParameters. 
+hypnus-admin 2018-03-15 21:47:35.034 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:47:35.035 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:47:35.071 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:47:35.087 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:47:35.120 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:47:35.157 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} Parameters : [1]
+hypnus-admin 2018-03-15 21:47:35.158 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} Types : [BIGINT]
+hypnus-admin 2018-03-15 21:47:35.198 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} executed. 
+SELECT staff0_.I_ID AS I_ID1_24_0_, staff0_.D_CREATE_DATE AS D_CREATE2_24_0_, staff0_.D_MODIFY_DATE AS D_MODIFY3_24_0_, staff0_.S_ACCOUNT AS S_ACCOUN4_24_0_, staff0_.S_NAME AS S_NAME5_24_0_
+	, staff0_.ATTRIBUTE_VALUE0 AS ATTRIBUT6_24_0_, staff0_.ATTRIBUTE_VALUE1 AS ATTRIBUT7_24_0_, staff0_.ATTRIBUTE_VALUE2 AS ATTRIBUT8_24_0_, staff0_.ATTRIBUTE_VALUE3 AS ATTRIBUT9_24_0_, staff0_.ATTRIBUTE_VALUE4 AS ATTRIBU10_24_0_
+	, staff0_.ATTRIBUTE_VALUE5 AS ATTRIBU11_24_0_, staff0_.ATTRIBUTE_VALUE6 AS ATTRIBU12_24_0_, staff0_.ATTRIBUTE_VALUE7 AS ATTRIBU13_24_0_, staff0_.ATTRIBUTE_VALUE8 AS ATTRIBU14_24_0_, staff0_.ATTRIBUTE_VALUE9 AS ATTRIBU15_24_0_
+	, staff0_.D_AVAIL_BEGIN_DATE AS D_AVAIL16_24_0_, staff0_.D_AVAIL_END_DATE AS D_AVAIL17_24_0_, staff0_.D_BIRTHDAY AS D_BIRTH18_24_0_, staff0_.I_DEPT_ID AS I_DEPT_41_24_0_, staff0_.I_DOMAIN_ID AS I_DOMAI42_24_0_
+	, staff0_.S_FAXCODE AS S_FAXCO19_24_0_, staff0_.I_SEX AS I_SEX20_24_0_, staff0_.S_IMAGE_PATH AS S_IMAGE21_24_0_, staff0_.S_IN_EMAIL AS S_IN_EM22_24_0_, staff0_.I_DEL_FLAG AS I_DEL_F23_24_0_
+	, staff0_.I_IS_ENABLED AS I_IS_EN24_24_0_, staff0_.I_IS_LOCKED AS I_IS_LO25_24_0_, staff0_.I_IS_SYNCH AS I_IS_SY26_24_0_, staff0_.I_IS_SYSTEM AS I_IS_SY27_24_0_, staff0_.I_KNOWLEDGE AS I_KNOWL28_24_0_
+	, staff0_.D_LOCK_DATE AS D_LOCK_29_24_0_, staff0_.D_LOGIN_DATE AS D_LOGIN30_24_0_, staff0_.I_LOGIN_FAILURE_COUNT AS I_LOGIN31_24_0_, staff0_.S_LOGIN_IP AS S_LOGIN32_24_0_, staff0_.S_MOBILE AS S_MOBIL33_24_0_
+	, staff0_.S_OUT_EMAIL AS S_OUT_E34_24_0_, staff0_.S_PASSWORD AS S_PASSW35_24_0_, staff0_.S_TELPHONE AS S_TELPH36_24_0_, staff0_.S_REGISTER_IP AS S_REGIS37_24_0_, staff0_.S_REMARK AS S_REMAR38_24_0_
+	, staff0_.D_UPDATE_PASS_TIME AS D_UPDAT39_24_0_, staff0_.S_WORK_ADDRESS AS S_WORK_40_24_0_, (
+		SELECT e.s_enum_name
+		FROM T_WHS_ENUM_TBL e
+		WHERE e.s_enum_tbl_name = 't_Hr_Staff'
+			AND e.s_enum_col_name = 'iSex'
+			AND e.i_enum_value = staff0_.I_SEX
+		) AS formula1_0_
+FROM t_Hr_Staff staff0_
+WHERE staff0_.I_ID = 1
+hypnus-admin 2018-03-15 21:47:35.198 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002, rs-50008} query executed. 40.990938 millis. 
+select staff0_.I_ID as I_ID1_24_0_, staff0_.D_CREATE_DATE as D_CREATE2_24_0_, staff0_.D_MODIFY_DATE as D_MODIFY3_24_0_, staff0_.S_ACCOUNT as S_ACCOUN4_24_0_, staff0_.S_NAME as S_NAME5_24_0_, staff0_.ATTRIBUTE_VALUE0 as ATTRIBUT6_24_0_, staff0_.ATTRIBUTE_VALUE1 as ATTRIBUT7_24_0_, staff0_.ATTRIBUTE_VALUE2 as ATTRIBUT8_24_0_, staff0_.ATTRIBUTE_VALUE3 as ATTRIBUT9_24_0_, staff0_.ATTRIBUTE_VALUE4 as ATTRIBU10_24_0_, staff0_.ATTRIBUTE_VALUE5 as ATTRIBU11_24_0_, staff0_.ATTRIBUTE_VALUE6 as ATTRIBU12_24_0_, staff0_.ATTRIBUTE_VALUE7 as ATTRIBU13_24_0_, staff0_.ATTRIBUTE_VALUE8 as ATTRIBU14_24_0_, staff0_.ATTRIBUTE_VALUE9 as ATTRIBU15_24_0_, staff0_.D_AVAIL_BEGIN_DATE as D_AVAIL16_24_0_, staff0_.D_AVAIL_END_DATE as D_AVAIL17_24_0_, staff0_.D_BIRTHDAY as D_BIRTH18_24_0_, staff0_.I_DEPT_ID as I_DEPT_41_24_0_, staff0_.I_DOMAIN_ID as I_DOMAI42_24_0_, staff0_.S_FAXCODE as S_FAXCO19_24_0_, staff0_.I_SEX as I_SEX20_24_0_, staff0_.S_IMAGE_PATH as S_IMAGE21_24_0_, staff0_.S_IN_EMAIL as S_IN_EM22_24_0_, staff0_.I_DEL_FLAG as I_DEL_F23_24_0_, staff0_.I_IS_ENABLED as I_IS_EN24_24_0_, staff0_.I_IS_LOCKED as I_IS_LO25_24_0_, staff0_.I_IS_SYNCH as I_IS_SY26_24_0_, staff0_.I_IS_SYSTEM as I_IS_SY27_24_0_, staff0_.I_KNOWLEDGE as I_KNOWL28_24_0_, staff0_.D_LOCK_DATE as D_LOCK_29_24_0_, staff0_.D_LOGIN_DATE as D_LOGIN30_24_0_, staff0_.I_LOGIN_FAILURE_COUNT as I_LOGIN31_24_0_, staff0_.S_LOGIN_IP as S_LOGIN32_24_0_, staff0_.S_MOBILE as S_MOBIL33_24_0_, staff0_.S_OUT_EMAIL as S_OUT_E34_24_0_, staff0_.S_PASSWORD as S_PASSW35_24_0_, staff0_.S_TELPHONE as S_TELPH36_24_0_, staff0_.S_REGISTER_IP as S_REGIS37_24_0_, staff0_.S_REMARK as S_REMAR38_24_0_, staff0_.D_UPDATE_PASS_TIME as D_UPDAT39_24_0_, staff0_.S_WORK_ADDRESS as S_WORK_40_24_0_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Staff' and e.s_enum_col_name = 'iSex' and e.i_enum_value = staff0_.I_SEX ) as formula1_0_ from t_Hr_Staff staff0_ where staff0_.I_ID=?
+hypnus-admin 2018-03-15 21:47:35.200 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50008} open
+hypnus-admin 2018-03-15 21:47:35.201 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50008} Header: [I_ID, D_CREATE_DATE, D_MODIFY_DATE, S_ACCOUNT, S_NAME, ATTRIBUTE_VALUE0, ATTRIBUTE_VALUE1, ATTRIBUTE_VALUE2, ATTRIBUTE_VALUE3, ATTRIBUTE_VALUE4, ATTRIBUTE_VALUE5, ATTRIBUTE_VALUE6, ATTRIBUTE_VALUE7, ATTRIBUTE_VALUE8, ATTRIBUTE_VALUE9, D_AVAIL_BEGIN_DATE, D_AVAIL_END_DATE, D_BIRTHDAY, I_DEPT_ID, I_DOMAIN_ID, S_FAXCODE, I_SEX, S_IMAGE_PATH, S_IN_EMAIL, I_DEL_FLAG, I_IS_ENABLED, I_IS_LOCKED, I_IS_SYNCH, I_IS_SYSTEM, I_KNOWLEDGE, D_LOCK_DATE, D_LOGIN_DATE, I_LOGIN_FAILURE_COUNT, S_LOGIN_IP, S_MOBILE, S_OUT_EMAIL, S_PASSWORD, S_TELPHONE, S_REGISTER_IP, S_REMARK, D_UPDATE_PASS_TIME, S_WORK_ADDRESS, formula1_0_]
+hypnus-admin 2018-03-15 21:47:35.211 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50008} Result: [1, 2014-10-25 20:52:58.0, 2018-03-15 21:47:35.0, admin, 系统管理员, null, null, null, null, null, null, null, null, null, null, 2014-09-17 22:30:27.0, 2099-01-01 08:00:00.0, null, 1, 1, null, 2, null, , false, true, false, false, true, null, null, 2018-03-15 21:47:35.0, 0, 172.31.44.134, , , 8792f7d1ceed2e81ea9514b657e193e2, null, 127.0.0.1, , 2014-09-17 22:30:27.0, null, null]
+hypnus-admin 2018-03-15 21:47:35.225 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50008} closed
+hypnus-admin 2018-03-15 21:47:35.226 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} clearParameters. 
+hypnus-admin 2018-03-15 21:47:35.258 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:47:35.258 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:47:35.355 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:47:35.373 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:47:35.409 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:47:35.461 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20005} created. 
+select dept0_.I_ID as I_ID1_18_0_, dept0_.D_CREATE_DATE as D_CREATE2_18_0_, dept0_.D_MODIFY_DATE as D_MODIFY3_18_0_, dept0_.S_DEPT_CODE as S_DEPT_C4_18_0_, dept0_.S_DUTYDESCRIPTION as S_DUTYDE5_18_0_, dept0_.S_DISP_NAME as S_DISP_N6_18_0_, dept0_.I_DOMAIN_ID as I_DOMAI15_18_0_, dept0_.I_DEL_FLAG as I_DEL_FL7_18_0_, dept0_.I_DEPT_LEVEL as I_DEPT_L8_18_0_, dept0_.S_DEPT_NAME as S_DEPT_N9_18_0_, dept0_.I_PARENT_ID as I_PAREN16_18_0_, dept0_.S_PATH_ID as S_PATH_10_18_0_, dept0_.S_REMARK as S_REMAR11_18_0_, dept0_.I_SEQ as I_SEQ12_18_0_, dept0_.S_SHORT_NAME as S_SHORT13_18_0_, dept0_.I_DEPT_TYPE as I_DEPT_14_18_0_ from t_Hr_Department dept0_ where dept0_.I_ID=?
+hypnus-admin 2018-03-15 21:47:35.462 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20005} Parameters : [1]
+hypnus-admin 2018-03-15 21:47:35.462 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20005} Types : [BIGINT]
+hypnus-admin 2018-03-15 21:47:35.501 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20005} executed. 
+SELECT dept0_.I_ID AS I_ID1_18_0_, dept0_.D_CREATE_DATE AS D_CREATE2_18_0_, dept0_.D_MODIFY_DATE AS D_MODIFY3_18_0_, dept0_.S_DEPT_CODE AS S_DEPT_C4_18_0_, dept0_.S_DUTYDESCRIPTION AS S_DUTYDE5_18_0_
+	, dept0_.S_DISP_NAME AS S_DISP_N6_18_0_, dept0_.I_DOMAIN_ID AS I_DOMAI15_18_0_, dept0_.I_DEL_FLAG AS I_DEL_FL7_18_0_, dept0_.I_DEPT_LEVEL AS I_DEPT_L8_18_0_, dept0_.S_DEPT_NAME AS S_DEPT_N9_18_0_
+	, dept0_.I_PARENT_ID AS I_PAREN16_18_0_, dept0_.S_PATH_ID AS S_PATH_10_18_0_, dept0_.S_REMARK AS S_REMAR11_18_0_, dept0_.I_SEQ AS I_SEQ12_18_0_, dept0_.S_SHORT_NAME AS S_SHORT13_18_0_
+	, dept0_.I_DEPT_TYPE AS I_DEPT_14_18_0_
+FROM t_Hr_Department dept0_
+WHERE dept0_.I_ID = 1
+hypnus-admin 2018-03-15 21:47:35.502 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20005, rs-50009} query executed. 39.027896 millis. 
+select dept0_.I_ID as I_ID1_18_0_, dept0_.D_CREATE_DATE as D_CREATE2_18_0_, dept0_.D_MODIFY_DATE as D_MODIFY3_18_0_, dept0_.S_DEPT_CODE as S_DEPT_C4_18_0_, dept0_.S_DUTYDESCRIPTION as S_DUTYDE5_18_0_, dept0_.S_DISP_NAME as S_DISP_N6_18_0_, dept0_.I_DOMAIN_ID as I_DOMAI15_18_0_, dept0_.I_DEL_FLAG as I_DEL_FL7_18_0_, dept0_.I_DEPT_LEVEL as I_DEPT_L8_18_0_, dept0_.S_DEPT_NAME as S_DEPT_N9_18_0_, dept0_.I_PARENT_ID as I_PAREN16_18_0_, dept0_.S_PATH_ID as S_PATH_10_18_0_, dept0_.S_REMARK as S_REMAR11_18_0_, dept0_.I_SEQ as I_SEQ12_18_0_, dept0_.S_SHORT_NAME as S_SHORT13_18_0_, dept0_.I_DEPT_TYPE as I_DEPT_14_18_0_ from t_Hr_Department dept0_ where dept0_.I_ID=?
+hypnus-admin 2018-03-15 21:47:35.502 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20005, rs-50009} open
+hypnus-admin 2018-03-15 21:47:35.503 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20005, rs-50009} Header: [I_ID, D_CREATE_DATE, D_MODIFY_DATE, S_DEPT_CODE, S_DUTYDESCRIPTION, S_DISP_NAME, I_DOMAIN_ID, I_DEL_FLAG, I_DEPT_LEVEL, S_DEPT_NAME, I_PARENT_ID, S_PATH_ID, S_REMARK, I_SEQ, S_SHORT_NAME, I_DEPT_TYPE]
+hypnus-admin 2018-03-15 21:47:35.504 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20005, rs-50009} Result: [1, 2014-10-25 20:52:58.0, 2014-10-25 20:52:58.0, null, 系统部门，不能删除, 系统部门, 1, false, 1, 系统部门, null, /, null, 1, 1, 0]
+hypnus-admin 2018-03-15 21:47:35.508 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20005, rs-50009} closed
+hypnus-admin 2018-03-15 21:47:35.509 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20005} clearParameters. 
+hypnus-admin 2018-03-15 21:47:35.542 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:47:35.542 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:47:35.644 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:47:35.735 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:47:35.768 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:47:35.800 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} Parameters : [1]
+hypnus-admin 2018-03-15 21:47:35.800 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} Types : [BIGINT]
+hypnus-admin 2018-03-15 21:47:35.840 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} executed. 
+SELECT staff0_.I_ID AS I_ID1_24_0_, staff0_.D_CREATE_DATE AS D_CREATE2_24_0_, staff0_.D_MODIFY_DATE AS D_MODIFY3_24_0_, staff0_.S_ACCOUNT AS S_ACCOUN4_24_0_, staff0_.S_NAME AS S_NAME5_24_0_
+	, staff0_.ATTRIBUTE_VALUE0 AS ATTRIBUT6_24_0_, staff0_.ATTRIBUTE_VALUE1 AS ATTRIBUT7_24_0_, staff0_.ATTRIBUTE_VALUE2 AS ATTRIBUT8_24_0_, staff0_.ATTRIBUTE_VALUE3 AS ATTRIBUT9_24_0_, staff0_.ATTRIBUTE_VALUE4 AS ATTRIBU10_24_0_
+	, staff0_.ATTRIBUTE_VALUE5 AS ATTRIBU11_24_0_, staff0_.ATTRIBUTE_VALUE6 AS ATTRIBU12_24_0_, staff0_.ATTRIBUTE_VALUE7 AS ATTRIBU13_24_0_, staff0_.ATTRIBUTE_VALUE8 AS ATTRIBU14_24_0_, staff0_.ATTRIBUTE_VALUE9 AS ATTRIBU15_24_0_
+	, staff0_.D_AVAIL_BEGIN_DATE AS D_AVAIL16_24_0_, staff0_.D_AVAIL_END_DATE AS D_AVAIL17_24_0_, staff0_.D_BIRTHDAY AS D_BIRTH18_24_0_, staff0_.I_DEPT_ID AS I_DEPT_41_24_0_, staff0_.I_DOMAIN_ID AS I_DOMAI42_24_0_
+	, staff0_.S_FAXCODE AS S_FAXCO19_24_0_, staff0_.I_SEX AS I_SEX20_24_0_, staff0_.S_IMAGE_PATH AS S_IMAGE21_24_0_, staff0_.S_IN_EMAIL AS S_IN_EM22_24_0_, staff0_.I_DEL_FLAG AS I_DEL_F23_24_0_
+	, staff0_.I_IS_ENABLED AS I_IS_EN24_24_0_, staff0_.I_IS_LOCKED AS I_IS_LO25_24_0_, staff0_.I_IS_SYNCH AS I_IS_SY26_24_0_, staff0_.I_IS_SYSTEM AS I_IS_SY27_24_0_, staff0_.I_KNOWLEDGE AS I_KNOWL28_24_0_
+	, staff0_.D_LOCK_DATE AS D_LOCK_29_24_0_, staff0_.D_LOGIN_DATE AS D_LOGIN30_24_0_, staff0_.I_LOGIN_FAILURE_COUNT AS I_LOGIN31_24_0_, staff0_.S_LOGIN_IP AS S_LOGIN32_24_0_, staff0_.S_MOBILE AS S_MOBIL33_24_0_
+	, staff0_.S_OUT_EMAIL AS S_OUT_E34_24_0_, staff0_.S_PASSWORD AS S_PASSW35_24_0_, staff0_.S_TELPHONE AS S_TELPH36_24_0_, staff0_.S_REGISTER_IP AS S_REGIS37_24_0_, staff0_.S_REMARK AS S_REMAR38_24_0_
+	, staff0_.D_UPDATE_PASS_TIME AS D_UPDAT39_24_0_, staff0_.S_WORK_ADDRESS AS S_WORK_40_24_0_, (
+		SELECT e.s_enum_name
+		FROM T_WHS_ENUM_TBL e
+		WHERE e.s_enum_tbl_name = 't_Hr_Staff'
+			AND e.s_enum_col_name = 'iSex'
+			AND e.i_enum_value = staff0_.I_SEX
+		) AS formula1_0_
+FROM t_Hr_Staff staff0_
+WHERE staff0_.I_ID = 1
+hypnus-admin 2018-03-15 21:47:35.840 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002, rs-50010} query executed. 39.321276 millis. 
+select staff0_.I_ID as I_ID1_24_0_, staff0_.D_CREATE_DATE as D_CREATE2_24_0_, staff0_.D_MODIFY_DATE as D_MODIFY3_24_0_, staff0_.S_ACCOUNT as S_ACCOUN4_24_0_, staff0_.S_NAME as S_NAME5_24_0_, staff0_.ATTRIBUTE_VALUE0 as ATTRIBUT6_24_0_, staff0_.ATTRIBUTE_VALUE1 as ATTRIBUT7_24_0_, staff0_.ATTRIBUTE_VALUE2 as ATTRIBUT8_24_0_, staff0_.ATTRIBUTE_VALUE3 as ATTRIBUT9_24_0_, staff0_.ATTRIBUTE_VALUE4 as ATTRIBU10_24_0_, staff0_.ATTRIBUTE_VALUE5 as ATTRIBU11_24_0_, staff0_.ATTRIBUTE_VALUE6 as ATTRIBU12_24_0_, staff0_.ATTRIBUTE_VALUE7 as ATTRIBU13_24_0_, staff0_.ATTRIBUTE_VALUE8 as ATTRIBU14_24_0_, staff0_.ATTRIBUTE_VALUE9 as ATTRIBU15_24_0_, staff0_.D_AVAIL_BEGIN_DATE as D_AVAIL16_24_0_, staff0_.D_AVAIL_END_DATE as D_AVAIL17_24_0_, staff0_.D_BIRTHDAY as D_BIRTH18_24_0_, staff0_.I_DEPT_ID as I_DEPT_41_24_0_, staff0_.I_DOMAIN_ID as I_DOMAI42_24_0_, staff0_.S_FAXCODE as S_FAXCO19_24_0_, staff0_.I_SEX as I_SEX20_24_0_, staff0_.S_IMAGE_PATH as S_IMAGE21_24_0_, staff0_.S_IN_EMAIL as S_IN_EM22_24_0_, staff0_.I_DEL_FLAG as I_DEL_F23_24_0_, staff0_.I_IS_ENABLED as I_IS_EN24_24_0_, staff0_.I_IS_LOCKED as I_IS_LO25_24_0_, staff0_.I_IS_SYNCH as I_IS_SY26_24_0_, staff0_.I_IS_SYSTEM as I_IS_SY27_24_0_, staff0_.I_KNOWLEDGE as I_KNOWL28_24_0_, staff0_.D_LOCK_DATE as D_LOCK_29_24_0_, staff0_.D_LOGIN_DATE as D_LOGIN30_24_0_, staff0_.I_LOGIN_FAILURE_COUNT as I_LOGIN31_24_0_, staff0_.S_LOGIN_IP as S_LOGIN32_24_0_, staff0_.S_MOBILE as S_MOBIL33_24_0_, staff0_.S_OUT_EMAIL as S_OUT_E34_24_0_, staff0_.S_PASSWORD as S_PASSW35_24_0_, staff0_.S_TELPHONE as S_TELPH36_24_0_, staff0_.S_REGISTER_IP as S_REGIS37_24_0_, staff0_.S_REMARK as S_REMAR38_24_0_, staff0_.D_UPDATE_PASS_TIME as D_UPDAT39_24_0_, staff0_.S_WORK_ADDRESS as S_WORK_40_24_0_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Staff' and e.s_enum_col_name = 'iSex' and e.i_enum_value = staff0_.I_SEX ) as formula1_0_ from t_Hr_Staff staff0_ where staff0_.I_ID=?
+hypnus-admin 2018-03-15 21:47:35.841 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50010} open
+hypnus-admin 2018-03-15 21:47:35.841 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50010} Header: [I_ID, D_CREATE_DATE, D_MODIFY_DATE, S_ACCOUNT, S_NAME, ATTRIBUTE_VALUE0, ATTRIBUTE_VALUE1, ATTRIBUTE_VALUE2, ATTRIBUTE_VALUE3, ATTRIBUTE_VALUE4, ATTRIBUTE_VALUE5, ATTRIBUTE_VALUE6, ATTRIBUTE_VALUE7, ATTRIBUTE_VALUE8, ATTRIBUTE_VALUE9, D_AVAIL_BEGIN_DATE, D_AVAIL_END_DATE, D_BIRTHDAY, I_DEPT_ID, I_DOMAIN_ID, S_FAXCODE, I_SEX, S_IMAGE_PATH, S_IN_EMAIL, I_DEL_FLAG, I_IS_ENABLED, I_IS_LOCKED, I_IS_SYNCH, I_IS_SYSTEM, I_KNOWLEDGE, D_LOCK_DATE, D_LOGIN_DATE, I_LOGIN_FAILURE_COUNT, S_LOGIN_IP, S_MOBILE, S_OUT_EMAIL, S_PASSWORD, S_TELPHONE, S_REGISTER_IP, S_REMARK, D_UPDATE_PASS_TIME, S_WORK_ADDRESS, formula1_0_]
+hypnus-admin 2018-03-15 21:47:35.842 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50010} Result: [1, 2014-10-25 20:52:58.0, 2018-03-15 21:47:35.0, admin, 系统管理员, null, null, null, null, null, null, null, null, null, null, 2014-09-17 22:30:27.0, 2099-01-01 08:00:00.0, null, 1, 1, null, 2, null, , false, true, false, false, true, null, null, 2018-03-15 21:47:35.0, 0, 172.31.44.134, , , 8792f7d1ceed2e81ea9514b657e193e2, null, 127.0.0.1, , 2014-09-17 22:30:27.0, null, null]
+hypnus-admin 2018-03-15 21:47:35.844 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50010} closed
+hypnus-admin 2018-03-15 21:47:35.845 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} clearParameters. 
+hypnus-admin 2018-03-15 21:47:35.876 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:47:35.876 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:47:35.972 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:47:36.377 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:47:36.409 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:47:36.441 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [platform_name, 1]
+hypnus-admin 2018-03-15 21:47:36.442 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR, INTEGER]
+hypnus-admin 2018-03-15 21:47:36.475 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+SELECT pubsetup0_.S_ID AS S_ID1_33_, pubsetup0_.D_CREATE_DATE AS D_CREATE2_33_, pubsetup0_.D_MODIFY_DATE AS D_MODIFY3_33_, pubsetup0_.S_CODE AS S_CODE4_33_, pubsetup0_.S_NAME AS S_NAME5_33_
+	, pubsetup0_.S_VALUE AS S_VALUE6_33_
+FROM T_PUB_SETUP pubsetup0_
+WHERE pubsetup0_.S_CODE = 'platform_name'
+ORDER BY pubsetup0_.D_CREATE_DATE DESC
+LIMIT 1
+hypnus-admin 2018-03-15 21:47:36.475 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50011} query executed. 34.155214 millis. 
+select pubsetup0_.S_ID as S_ID1_33_, pubsetup0_.D_CREATE_DATE as D_CREATE2_33_, pubsetup0_.D_MODIFY_DATE as D_MODIFY3_33_, pubsetup0_.S_CODE as S_CODE4_33_, pubsetup0_.S_NAME as S_NAME5_33_, pubsetup0_.S_VALUE as S_VALUE6_33_ from T_PUB_SETUP pubsetup0_ where pubsetup0_.S_CODE=? order by pubsetup0_.D_CREATE_DATE desc limit ?
+hypnus-admin 2018-03-15 21:47:36.479 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50011} open
+hypnus-admin 2018-03-15 21:47:36.479 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50011} Header: [S_ID, D_CREATE_DATE, D_MODIFY_DATE, S_CODE, S_NAME, S_VALUE]
+hypnus-admin 2018-03-15 21:47:36.479 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50011} closed
+hypnus-admin 2018-03-15 21:47:36.480 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-15 21:47:36.513 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:47:36.513 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:47:36.609 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-15 21:47:37.148 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-15 21:47:37.180 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-15 21:47:37.219 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} Parameters : [1]
+hypnus-admin 2018-03-15 21:47:37.219 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} Types : [BIGINT]
+hypnus-admin 2018-03-15 21:47:37.256 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} executed. 
+SELECT staff0_.I_ID AS I_ID1_24_0_, staff0_.D_CREATE_DATE AS D_CREATE2_24_0_, staff0_.D_MODIFY_DATE AS D_MODIFY3_24_0_, staff0_.S_ACCOUNT AS S_ACCOUN4_24_0_, staff0_.S_NAME AS S_NAME5_24_0_
+	, staff0_.ATTRIBUTE_VALUE0 AS ATTRIBUT6_24_0_, staff0_.ATTRIBUTE_VALUE1 AS ATTRIBUT7_24_0_, staff0_.ATTRIBUTE_VALUE2 AS ATTRIBUT8_24_0_, staff0_.ATTRIBUTE_VALUE3 AS ATTRIBUT9_24_0_, staff0_.ATTRIBUTE_VALUE4 AS ATTRIBU10_24_0_
+	, staff0_.ATTRIBUTE_VALUE5 AS ATTRIBU11_24_0_, staff0_.ATTRIBUTE_VALUE6 AS ATTRIBU12_24_0_, staff0_.ATTRIBUTE_VALUE7 AS ATTRIBU13_24_0_, staff0_.ATTRIBUTE_VALUE8 AS ATTRIBU14_24_0_, staff0_.ATTRIBUTE_VALUE9 AS ATTRIBU15_24_0_
+	, staff0_.D_AVAIL_BEGIN_DATE AS D_AVAIL16_24_0_, staff0_.D_AVAIL_END_DATE AS D_AVAIL17_24_0_, staff0_.D_BIRTHDAY AS D_BIRTH18_24_0_, staff0_.I_DEPT_ID AS I_DEPT_41_24_0_, staff0_.I_DOMAIN_ID AS I_DOMAI42_24_0_
+	, staff0_.S_FAXCODE AS S_FAXCO19_24_0_, staff0_.I_SEX AS I_SEX20_24_0_, staff0_.S_IMAGE_PATH AS S_IMAGE21_24_0_, staff0_.S_IN_EMAIL AS S_IN_EM22_24_0_, staff0_.I_DEL_FLAG AS I_DEL_F23_24_0_
+	, staff0_.I_IS_ENABLED AS I_IS_EN24_24_0_, staff0_.I_IS_LOCKED AS I_IS_LO25_24_0_, staff0_.I_IS_SYNCH AS I_IS_SY26_24_0_, staff0_.I_IS_SYSTEM AS I_IS_SY27_24_0_, staff0_.I_KNOWLEDGE AS I_KNOWL28_24_0_
+	, staff0_.D_LOCK_DATE AS D_LOCK_29_24_0_, staff0_.D_LOGIN_DATE AS D_LOGIN30_24_0_, staff0_.I_LOGIN_FAILURE_COUNT AS I_LOGIN31_24_0_, staff0_.S_LOGIN_IP AS S_LOGIN32_24_0_, staff0_.S_MOBILE AS S_MOBIL33_24_0_
+	, staff0_.S_OUT_EMAIL AS S_OUT_E34_24_0_, staff0_.S_PASSWORD AS S_PASSW35_24_0_, staff0_.S_TELPHONE AS S_TELPH36_24_0_, staff0_.S_REGISTER_IP AS S_REGIS37_24_0_, staff0_.S_REMARK AS S_REMAR38_24_0_
+	, staff0_.D_UPDATE_PASS_TIME AS D_UPDAT39_24_0_, staff0_.S_WORK_ADDRESS AS S_WORK_40_24_0_, (
+		SELECT e.s_enum_name
+		FROM T_WHS_ENUM_TBL e
+		WHERE e.s_enum_tbl_name = 't_Hr_Staff'
+			AND e.s_enum_col_name = 'iSex'
+			AND e.i_enum_value = staff0_.I_SEX
+		) AS formula1_0_
+FROM t_Hr_Staff staff0_
+WHERE staff0_.I_ID = 1
+hypnus-admin 2018-03-15 21:47:37.256 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002, rs-50012} query executed. 37.312168 millis. 
+select staff0_.I_ID as I_ID1_24_0_, staff0_.D_CREATE_DATE as D_CREATE2_24_0_, staff0_.D_MODIFY_DATE as D_MODIFY3_24_0_, staff0_.S_ACCOUNT as S_ACCOUN4_24_0_, staff0_.S_NAME as S_NAME5_24_0_, staff0_.ATTRIBUTE_VALUE0 as ATTRIBUT6_24_0_, staff0_.ATTRIBUTE_VALUE1 as ATTRIBUT7_24_0_, staff0_.ATTRIBUTE_VALUE2 as ATTRIBUT8_24_0_, staff0_.ATTRIBUTE_VALUE3 as ATTRIBUT9_24_0_, staff0_.ATTRIBUTE_VALUE4 as ATTRIBU10_24_0_, staff0_.ATTRIBUTE_VALUE5 as ATTRIBU11_24_0_, staff0_.ATTRIBUTE_VALUE6 as ATTRIBU12_24_0_, staff0_.ATTRIBUTE_VALUE7 as ATTRIBU13_24_0_, staff0_.ATTRIBUTE_VALUE8 as ATTRIBU14_24_0_, staff0_.ATTRIBUTE_VALUE9 as ATTRIBU15_24_0_, staff0_.D_AVAIL_BEGIN_DATE as D_AVAIL16_24_0_, staff0_.D_AVAIL_END_DATE as D_AVAIL17_24_0_, staff0_.D_BIRTHDAY as D_BIRTH18_24_0_, staff0_.I_DEPT_ID as I_DEPT_41_24_0_, staff0_.I_DOMAIN_ID as I_DOMAI42_24_0_, staff0_.S_FAXCODE as S_FAXCO19_24_0_, staff0_.I_SEX as I_SEX20_24_0_, staff0_.S_IMAGE_PATH as S_IMAGE21_24_0_, staff0_.S_IN_EMAIL as S_IN_EM22_24_0_, staff0_.I_DEL_FLAG as I_DEL_F23_24_0_, staff0_.I_IS_ENABLED as I_IS_EN24_24_0_, staff0_.I_IS_LOCKED as I_IS_LO25_24_0_, staff0_.I_IS_SYNCH as I_IS_SY26_24_0_, staff0_.I_IS_SYSTEM as I_IS_SY27_24_0_, staff0_.I_KNOWLEDGE as I_KNOWL28_24_0_, staff0_.D_LOCK_DATE as D_LOCK_29_24_0_, staff0_.D_LOGIN_DATE as D_LOGIN30_24_0_, staff0_.I_LOGIN_FAILURE_COUNT as I_LOGIN31_24_0_, staff0_.S_LOGIN_IP as S_LOGIN32_24_0_, staff0_.S_MOBILE as S_MOBIL33_24_0_, staff0_.S_OUT_EMAIL as S_OUT_E34_24_0_, staff0_.S_PASSWORD as S_PASSW35_24_0_, staff0_.S_TELPHONE as S_TELPH36_24_0_, staff0_.S_REGISTER_IP as S_REGIS37_24_0_, staff0_.S_REMARK as S_REMAR38_24_0_, staff0_.D_UPDATE_PASS_TIME as D_UPDAT39_24_0_, staff0_.S_WORK_ADDRESS as S_WORK_40_24_0_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Staff' and e.s_enum_col_name = 'iSex' and e.i_enum_value = staff0_.I_SEX ) as formula1_0_ from t_Hr_Staff staff0_ where staff0_.I_ID=?
+hypnus-admin 2018-03-15 21:47:37.257 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50012} open
+hypnus-admin 2018-03-15 21:47:37.257 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50012} Header: [I_ID, D_CREATE_DATE, D_MODIFY_DATE, S_ACCOUNT, S_NAME, ATTRIBUTE_VALUE0, ATTRIBUTE_VALUE1, ATTRIBUTE_VALUE2, ATTRIBUTE_VALUE3, ATTRIBUTE_VALUE4, ATTRIBUTE_VALUE5, ATTRIBUTE_VALUE6, ATTRIBUTE_VALUE7, ATTRIBUTE_VALUE8, ATTRIBUTE_VALUE9, D_AVAIL_BEGIN_DATE, D_AVAIL_END_DATE, D_BIRTHDAY, I_DEPT_ID, I_DOMAIN_ID, S_FAXCODE, I_SEX, S_IMAGE_PATH, S_IN_EMAIL, I_DEL_FLAG, I_IS_ENABLED, I_IS_LOCKED, I_IS_SYNCH, I_IS_SYSTEM, I_KNOWLEDGE, D_LOCK_DATE, D_LOGIN_DATE, I_LOGIN_FAILURE_COUNT, S_LOGIN_IP, S_MOBILE, S_OUT_EMAIL, S_PASSWORD, S_TELPHONE, S_REGISTER_IP, S_REMARK, D_UPDATE_PASS_TIME, S_WORK_ADDRESS, formula1_0_]
+hypnus-admin 2018-03-15 21:47:37.258 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50012} Result: [1, 2014-10-25 20:52:58.0, 2018-03-15 21:47:35.0, admin, 系统管理员, null, null, null, null, null, null, null, null, null, null, 2014-09-17 22:30:27.0, 2099-01-01 08:00:00.0, null, 1, 1, null, 2, null, , false, true, false, false, true, null, null, 2018-03-15 21:47:35.0, 0, 172.31.44.134, , , 8792f7d1ceed2e81ea9514b657e193e2, null, 127.0.0.1, , 2014-09-17 22:30:27.0, null, null]
+hypnus-admin 2018-03-15 21:47:37.259 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20002, rs-50012} closed
+hypnus-admin 2018-03-15 21:47:37.259 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20002} clearParameters. 
+hypnus-admin 2018-03-15 21:47:37.266 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20006} created. 
+select rights0_.I_STAFF_ID as I_STAFF_1_25_1_, rights0_.I_RIGHT_ID as I_RIGHT_2_25_1_, right1_.I_ID as I_ID1_21_0_, right1_.D_CREATE_DATE as D_CREATE2_21_0_, right1_.D_MODIFY_DATE as D_MODIFY3_21_0_, right1_.I_APP_ID as I_APP_ID4_21_0_, right1_.S_ICON as S_ICON5_21_0_, right1_.I_IS_BLANK_TARGET as I_IS_BLA6_21_0_, right1_.I_IS_ENABLED as I_IS_ENA7_21_0_, right1_.I_MODULE_ID as I_MODUL15_21_0_, right1_.S_RIGHT_NAME as S_RIGHT_8_21_0_, right1_.I_PARENT_ID as I_PAREN16_21_0_, right1_.S_PATH_ID as S_PATH_I9_21_0_, right1_.S_PERMISSION as S_PERMI10_21_0_, right1_.S_REMARK as S_REMAR11_21_0_, right1_.I_SEQ as I_SEQ12_21_0_, right1_.I_TYPE as I_TYPE13_21_0_, right1_.S_URL as S_URL14_21_0_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Right' and e.s_enum_col_name = 'iType' and e.i_enum_value = right1_.I_TYPE ) as formula0_0_ from T_HR_STAFF_REL_RIGHT rights0_ inner join t_Hr_Right right1_ on rights0_.I_RIGHT_ID=right1_.I_ID where rights0_.I_STAFF_ID=?
+hypnus-admin 2018-03-15 21:47:37.266 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20006} Parameters : [1]
+hypnus-admin 2018-03-15 21:47:37.266 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20006} Types : [BIGINT]
+hypnus-admin 2018-03-15 21:47:37.300 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20006} executed. 
+SELECT rights0_.I_STAFF_ID AS I_STAFF_1_25_1_, rights0_.I_RIGHT_ID AS I_RIGHT_2_25_1_, right1_.I_ID AS I_ID1_21_0_, right1_.D_CREATE_DATE AS D_CREATE2_21_0_, right1_.D_MODIFY_DATE AS D_MODIFY3_21_0_
+	, right1_.I_APP_ID AS I_APP_ID4_21_0_, right1_.S_ICON AS S_ICON5_21_0_, right1_.I_IS_BLANK_TARGET AS I_IS_BLA6_21_0_, right1_.I_IS_ENABLED AS I_IS_ENA7_21_0_, right1_.I_MODULE_ID AS I_MODUL15_21_0_
+	, right1_.S_RIGHT_NAME AS S_RIGHT_8_21_0_, right1_.I_PARENT_ID AS I_PAREN16_21_0_, right1_.S_PATH_ID AS S_PATH_I9_21_0_, right1_.S_PERMISSION AS S_PERMI10_21_0_, right1_.S_REMARK AS S_REMAR11_21_0_
+	, right1_.I_SEQ AS I_SEQ12_21_0_, right1_.I_TYPE AS I_TYPE13_21_0_, right1_.S_URL AS S_URL14_21_0_, (
+		SELECT e.s_enum_name
+		FROM T_WHS_ENUM_TBL e
+		WHERE e.s_enum_tbl_name = 't_Hr_Right'
+			AND e.s_enum_col_name = 'iType'
+			AND e.i_enum_value = right1_.I_TYPE
+		) AS formula0_0_
+FROM T_HR_STAFF_REL_RIGHT rights0_
+	INNER JOIN t_Hr_Right right1_ ON rights0_.I_RIGHT_ID = right1_.I_ID
+WHERE rights0_.I_STAFF_ID = 1
+hypnus-admin 2018-03-15 21:47:37.300 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20006, rs-50013} query executed. 34.080075 millis. 
+select rights0_.I_STAFF_ID as I_STAFF_1_25_1_, rights0_.I_RIGHT_ID as I_RIGHT_2_25_1_, right1_.I_ID as I_ID1_21_0_, right1_.D_CREATE_DATE as D_CREATE2_21_0_, right1_.D_MODIFY_DATE as D_MODIFY3_21_0_, right1_.I_APP_ID as I_APP_ID4_21_0_, right1_.S_ICON as S_ICON5_21_0_, right1_.I_IS_BLANK_TARGET as I_IS_BLA6_21_0_, right1_.I_IS_ENABLED as I_IS_ENA7_21_0_, right1_.I_MODULE_ID as I_MODUL15_21_0_, right1_.S_RIGHT_NAME as S_RIGHT_8_21_0_, right1_.I_PARENT_ID as I_PAREN16_21_0_, right1_.S_PATH_ID as S_PATH_I9_21_0_, right1_.S_PERMISSION as S_PERMI10_21_0_, right1_.S_REMARK as S_REMAR11_21_0_, right1_.I_SEQ as I_SEQ12_21_0_, right1_.I_TYPE as I_TYPE13_21_0_, right1_.S_URL as S_URL14_21_0_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Right' and e.s_enum_col_name = 'iType' and e.i_enum_value = right1_.I_TYPE ) as formula0_0_ from T_HR_STAFF_REL_RIGHT rights0_ inner join t_Hr_Right right1_ on rights0_.I_RIGHT_ID=right1_.I_ID where rights0_.I_STAFF_ID=?
+hypnus-admin 2018-03-15 21:47:37.300 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20006, rs-50013} open
+hypnus-admin 2018-03-15 21:47:37.300 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20006, rs-50013} Header: [I_STAFF_ID, I_RIGHT_ID, I_ID, D_CREATE_DATE, D_MODIFY_DATE, I_APP_ID, S_ICON, I_IS_BLANK_TARGET, I_IS_ENABLED, I_MODULE_ID, S_RIGHT_NAME, I_PARENT_ID, S_PATH_ID, S_PERMISSION, S_REMARK, I_SEQ, I_TYPE, S_URL, formula0_0_]
+hypnus-admin 2018-03-15 21:47:37.306 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20006, rs-50013} closed
+hypnus-admin 2018-03-15 21:47:37.306 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20006} clearParameters. 
+hypnus-admin 2018-03-15 21:47:37.308 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20007} created. 
+select roles0_.I_STAFF_ID as I_STAFF_1_26_1_, roles0_.I_ROLE_ID as I_ROLE_I2_26_1_, role1_.I_ID as I_ID1_22_0_, role1_.D_CREATE_DATE as D_CREATE2_22_0_, role1_.D_MODIFY_DATE as D_MODIFY3_22_0_, role1_.I_APP_ID as I_APP_ID4_22_0_, role1_.S_CODE as S_CODE5_22_0_, role1_.S_ROLE_NAME as S_ROLE_N6_22_0_, role1_.I_PARENT_ID as I_PARENT9_22_0_, role1_.S_PATH_ID as S_PATH_I7_22_0_, role1_.S_REMARK as S_REMARK8_22_0_ from T_HR_STAFF_REL_ROLE roles0_ inner join t_Hr_Role role1_ on roles0_.I_ROLE_ID=role1_.I_ID where roles0_.I_STAFF_ID=?
+hypnus-admin 2018-03-15 21:47:37.308 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20007} Parameters : [1]
+hypnus-admin 2018-03-15 21:47:37.308 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20007} Types : [BIGINT]
+hypnus-admin 2018-03-15 21:47:37.342 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20007} executed. 
+SELECT roles0_.I_STAFF_ID AS I_STAFF_1_26_1_, roles0_.I_ROLE_ID AS I_ROLE_I2_26_1_, role1_.I_ID AS I_ID1_22_0_, role1_.D_CREATE_DATE AS D_CREATE2_22_0_, role1_.D_MODIFY_DATE AS D_MODIFY3_22_0_
+	, role1_.I_APP_ID AS I_APP_ID4_22_0_, role1_.S_CODE AS S_CODE5_22_0_, role1_.S_ROLE_NAME AS S_ROLE_N6_22_0_, role1_.I_PARENT_ID AS I_PARENT9_22_0_, role1_.S_PATH_ID AS S_PATH_I7_22_0_
+	, role1_.S_REMARK AS S_REMARK8_22_0_
+FROM T_HR_STAFF_REL_ROLE roles0_
+	INNER JOIN t_Hr_Role role1_ ON roles0_.I_ROLE_ID = role1_.I_ID
+WHERE roles0_.I_STAFF_ID = 1
+hypnus-admin 2018-03-15 21:47:37.343 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20007, rs-50014} query executed. 34.890364 millis. 
+select roles0_.I_STAFF_ID as I_STAFF_1_26_1_, roles0_.I_ROLE_ID as I_ROLE_I2_26_1_, role1_.I_ID as I_ID1_22_0_, role1_.D_CREATE_DATE as D_CREATE2_22_0_, role1_.D_MODIFY_DATE as D_MODIFY3_22_0_, role1_.I_APP_ID as I_APP_ID4_22_0_, role1_.S_CODE as S_CODE5_22_0_, role1_.S_ROLE_NAME as S_ROLE_N6_22_0_, role1_.I_PARENT_ID as I_PARENT9_22_0_, role1_.S_PATH_ID as S_PATH_I7_22_0_, role1_.S_REMARK as S_REMARK8_22_0_ from T_HR_STAFF_REL_ROLE roles0_ inner join t_Hr_Role role1_ on roles0_.I_ROLE_ID=role1_.I_ID where roles0_.I_STAFF_ID=?
+hypnus-admin 2018-03-15 21:47:37.343 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20007, rs-50014} open
+hypnus-admin 2018-03-15 21:47:37.343 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20007, rs-50014} Header: [I_STAFF_ID, I_ROLE_ID, I_ID, D_CREATE_DATE, D_MODIFY_DATE, I_APP_ID, S_CODE, S_ROLE_NAME, I_PARENT_ID, S_PATH_ID, S_REMARK]
+hypnus-admin 2018-03-15 21:47:37.343 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20007, rs-50014} Result: [1, 1, 1, 2014-10-25 20:52:58.0, 2014-10-25 20:52:58.0, null, null, 系统管理员, null, /, 系统管理员]
+hypnus-admin 2018-03-15 21:47:37.344 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20007, rs-50014} closed
+hypnus-admin 2018-03-15 21:47:37.344 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20007} clearParameters. 
+hypnus-admin 2018-03-15 21:47:37.384 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20008} created. 
+select right0_.I_ID as I_ID1_21_, right0_.D_CREATE_DATE as D_CREATE2_21_, right0_.D_MODIFY_DATE as D_MODIFY3_21_, right0_.I_APP_ID as I_APP_ID4_21_, right0_.S_ICON as S_ICON5_21_, right0_.I_IS_BLANK_TARGET as I_IS_BLA6_21_, right0_.I_IS_ENABLED as I_IS_ENA7_21_, right0_.I_MODULE_ID as I_MODUL15_21_, right0_.S_RIGHT_NAME as S_RIGHT_8_21_, right0_.I_PARENT_ID as I_PAREN16_21_, right0_.S_PATH_ID as S_PATH_I9_21_, right0_.S_PERMISSION as S_PERMI10_21_, right0_.S_REMARK as S_REMAR11_21_, right0_.I_SEQ as I_SEQ12_21_, right0_.I_TYPE as I_TYPE13_21_, right0_.S_URL as S_URL14_21_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Right' and e.s_enum_col_name = 'iType' and e.i_enum_value = right0_.I_TYPE ) as formula0_ from t_Hr_Right right0_ where 1=1 and (exists (select right1_.I_ID from t_Hr_Right right1_ inner join T_HR_ROLE_REL_RIGHT roles2_ on right1_.I_ID=roles2_.I_RIGHT_ID inner join t_Hr_Role role3_ on roles2_.I_ROLE_ID=role3_.I_ID where right1_.I_ID=right0_.I_ID and (role3_.I_ID in (?)))) and (right0_.I_TYPE in (1 , 4)) order by right0_.I_SEQ asc
+hypnus-admin 2018-03-15 21:47:37.384 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20008} Parameters : [1]
+hypnus-admin 2018-03-15 21:47:37.384 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20008} Types : [BIGINT]
+hypnus-admin 2018-03-15 21:47:37.420 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20008} executed. 
+SELECT right0_.I_ID AS I_ID1_21_, right0_.D_CREATE_DATE AS D_CREATE2_21_, right0_.D_MODIFY_DATE AS D_MODIFY3_21_, right0_.I_APP_ID AS I_APP_ID4_21_, right0_.S_ICON AS S_ICON5_21_
+	, right0_.I_IS_BLANK_TARGET AS I_IS_BLA6_21_, right0_.I_IS_ENABLED AS I_IS_ENA7_21_, right0_.I_MODULE_ID AS I_MODUL15_21_, right0_.S_RIGHT_NAME AS S_RIGHT_8_21_, right0_.I_PARENT_ID AS I_PAREN16_21_
+	, right0_.S_PATH_ID AS S_PATH_I9_21_, right0_.S_PERMISSION AS S_PERMI10_21_, right0_.S_REMARK AS S_REMAR11_21_, right0_.I_SEQ AS I_SEQ12_21_, right0_.I_TYPE AS I_TYPE13_21_
+	, right0_.S_URL AS S_URL14_21_, (
+		SELECT e.s_enum_name
+		FROM T_WHS_ENUM_TBL e
+		WHERE e.s_enum_tbl_name = 't_Hr_Right'
+			AND e.s_enum_col_name = 'iType'
+			AND e.i_enum_value = right0_.I_TYPE
+		) AS formula0_
+FROM t_Hr_Right right0_
+WHERE 1 = 1
+	AND EXISTS (SELECT right1_.I_ID
+		FROM t_Hr_Right right1_
+			INNER JOIN T_HR_ROLE_REL_RIGHT roles2_ ON right1_.I_ID = roles2_.I_RIGHT_ID
+			INNER JOIN t_Hr_Role role3_ ON roles2_.I_ROLE_ID = role3_.I_ID
+		WHERE right1_.I_ID = right0_.I_ID
+			AND role3_.I_ID IN (1))
+	AND right0_.I_TYPE IN (1, 4)
+ORDER BY right0_.I_SEQ ASC
+hypnus-admin 2018-03-15 21:47:37.420 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20008, rs-50015} query executed. 36.039342 millis. 
+select right0_.I_ID as I_ID1_21_, right0_.D_CREATE_DATE as D_CREATE2_21_, right0_.D_MODIFY_DATE as D_MODIFY3_21_, right0_.I_APP_ID as I_APP_ID4_21_, right0_.S_ICON as S_ICON5_21_, right0_.I_IS_BLANK_TARGET as I_IS_BLA6_21_, right0_.I_IS_ENABLED as I_IS_ENA7_21_, right0_.I_MODULE_ID as I_MODUL15_21_, right0_.S_RIGHT_NAME as S_RIGHT_8_21_, right0_.I_PARENT_ID as I_PAREN16_21_, right0_.S_PATH_ID as S_PATH_I9_21_, right0_.S_PERMISSION as S_PERMI10_21_, right0_.S_REMARK as S_REMAR11_21_, right0_.I_SEQ as I_SEQ12_21_, right0_.I_TYPE as I_TYPE13_21_, right0_.S_URL as S_URL14_21_, ( select e.s_enum_name from T_WHS_ENUM_TBL e where e.s_enum_tbl_name = 't_Hr_Right' and e.s_enum_col_name = 'iType' and e.i_enum_value = right0_.I_TYPE ) as formula0_ from t_Hr_Right right0_ where 1=1 and (exists (select right1_.I_ID from t_Hr_Right right1_ inner join T_HR_ROLE_REL_RIGHT roles2_ on right1_.I_ID=roles2_.I_RIGHT_ID inner join t_Hr_Role role3_ on roles2_.I_ROLE_ID=role3_.I_ID where right1_.I_ID=right0_.I_ID and (role3_.I_ID in (?)))) and (right0_.I_TYPE in (1 , 4)) order by right0_.I_SEQ asc
+hypnus-admin 2018-03-15 21:47:37.420 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20008, rs-50015} open
+hypnus-admin 2018-03-15 21:47:37.420 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20008, rs-50015} Header: [I_ID, D_CREATE_DATE, D_MODIFY_DATE, I_APP_ID, S_ICON, I_IS_BLANK_TARGET, I_IS_ENABLED, I_MODULE_ID, S_RIGHT_NAME, I_PARENT_ID, S_PATH_ID, S_PERMISSION, S_REMARK, I_SEQ, I_TYPE, S_URL, formula0_]
+hypnus-admin 2018-03-15 21:47:37.421 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20008, rs-50015} Result: [668035623491207168, 2018-03-14 19:10:46.0, 2018-03-14 19:10:46.0, null, null, false, true, null, 设备列表, 665919476746682368, /665919476746682368/, null, , 1, 1, /admin/deviceMgr/index.html, null]
+hypnus-admin 2018-03-15 21:47:37.421 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20008, rs-50015} Result: [190, 2017-01-06 14:56:54.0, 2017-01-06 14:56:56.0, 731165342112209, , false, true, 1, 个人中心, 19, /19/, , 个人中心, 1, 1, /admin/economyMgr/index.html, null]
+hypnus-admin 2018-03-15 21:47:37.422 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20008, rs-50015} Result: [665919476746682368, 2018-03-08 23:01:57.0, 2018-03-08 23:01:57.0, null, fa-server, false, true, null, 设备管理, null, /, null, , 2, 1, /sys/equ, null]
+hypnus-admin 2018-03-15 21:47:37.422 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20008, rs-50015} Result: [191, 2017-01-06 14:56:54.0, 2017-01-06 14:56:56.0, 256594126075745, , false, true, 1, 权限管理, 19, /19/, , 权限管理, 3, 1, /safeMgr/rightMgr/tree, null]
+hypnus-admin 2018-03-15 21:47:37.423 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20008, rs-50015} Result: [19, 2017-01-06 14:56:54.0, 2017-01-06 14:56:56.0, 34166349392387, fa-gear, false, true, 1, 系统管理, null, /, , 系统管理, 13, 1, null, null]
+hypnus-admin 2018-03-15 21:47:37.425 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20008, rs-50015} closed
+hypnus-admin 2018-03-15 21:47:37.425 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20008} clearParameters. 
+hypnus-admin 2018-03-15 21:47:37.461 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-15 21:47:37.461 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-15 21:47:37.557 [RMI TCP Connection(3)-127.0.0.1] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle

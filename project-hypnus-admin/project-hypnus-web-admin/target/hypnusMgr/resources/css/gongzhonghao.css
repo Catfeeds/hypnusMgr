@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.xianyu{ background:#fff; height:120px; width:240px; border:1px solid #efefef; cursor:pointer; float:left; margin-right:10px; position:relative;}
+.gongzhonghaoLogo{position:absolute; left:20px; top:20px;}
+.xianyu:hover{ background:#f8f8f8;}
+.gongzhonghaoDiv{ padding:5px 5px 5px 100px; letter-spacing:1px;}
+.gongzhonghaoDiv h1{ font-size:16px; color:#323232; font-weight:normal;position:absolute; left:100px; top:30px;}
+.gongzhonghaoDiv h2{ font-size:14px; color:#666; background:url(../images/renzheng.png) no-repeat left center; height:20px; line-height:20px;position:absolute; left:100px; top:54px; padding-left:28px}
+
+.addgongzhong{ background:url(../images/bg_circle_add.png) no-repeat center center #e5e5e5; height:120px; width:240px; border:1px solid #efefef; cursor:pointer; float:left;}

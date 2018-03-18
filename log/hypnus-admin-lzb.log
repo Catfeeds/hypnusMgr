@@ -1,0 +1,171 @@
+hypnus-admin 2018-03-15 21:41:56.724 [main] INFO  com.catt.AbstractMain - [] 
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+服务启动中,当前时间:2018-03-15 21:41:56
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+hypnus-admin 2018-03-15 21:41:57.096 [main] INFO  org.springframework.context.annotation.AnnotationConfigApplicationContext - [] Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@52bf72b5: startup date [Thu Mar 15 21:41:57 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-15 21:41:57.229 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/applicationContext.xml]
+hypnus-admin 2018-03-15 21:41:57.956 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/applicationContext-project.xml]
+hypnus-admin 2018-03-15 21:41:57.976 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/service/applicationContext-framework-rmi.xml]
+hypnus-admin 2018-03-15 21:41:58.003 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/service/applicationContext-bis-rmi.xml]
+hypnus-admin 2018-03-15 21:41:58.019 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/service/applicationContext-bis-rmi-client.xml]
+hypnus-admin 2018-03-15 21:41:58.713 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
+hypnus-admin 2018-03-15 21:41:58.714 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
+hypnus-admin 2018-03-15 21:42:01.869 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
+hypnus-admin 2018-03-15 21:42:01.949 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
+hypnus-admin 2018-03-15 21:42:02.032 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-15 21:42:02.097 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+hypnus-admin 2018-03-15 21:42:02.279 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
+hypnus-admin 2018-03-15 21:42:02.283 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
+hypnus-admin 2018-03-15 21:42:02.285 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
+hypnus-admin 2018-03-15 21:42:02.427 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+hypnus-admin 2018-03-15 21:42:02.940 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+hypnus-admin 2018-03-15 21:42:03.969 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
+hypnus-admin 2018-03-15 21:42:04.992 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
+hypnus-admin 2018-03-15 21:42:05.554 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
+hypnus-admin 2018-03-15 21:42:05.701 [main] INFO  org.springframework.remoting.rmi.RmiRegistryFactoryBean - [] Looking for RMI registry at port '7788'
+hypnus-admin 2018-03-15 21:42:06.722 [main] INFO  org.springframework.remoting.rmi.RmiRegistryFactoryBean - [] Could not detect RMI registry - creating new one
+hypnus-admin 2018-03-15 21:42:07.043 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'staffServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.096 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'deptServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.141 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'domainServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.180 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'moduleServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.220 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'rightServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.258 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'roleServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.305 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'economyMgrServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.312 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'rsaServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.369 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'enumMgrServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.403 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'enumModuleMgrServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.432 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'countryServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.470 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'areaServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.577 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'provinceServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.583 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'cityServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.585 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'countyServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.617 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'exceptionInfoCfgServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.624 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'commonModuleSmsServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.650 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'logLoginServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.679 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'pubSetupBaseServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.683 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'cacheServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:42:07.696 [main] WARN  org.springframework.context.annotation.AnnotationConfigApplicationContext - [] Exception encountered during context initialization - cancelling refresh attempt
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.remoting.rmi.RmiServiceExporter#20' defined in URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/service/applicationContext-bis-rmi.xml]: Cannot resolve reference to bean 'deviceServiceImpl' while setting bean property 'service'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'deviceServiceImpl': Injection of resource dependencies failed; nested exception is org.springframework.beans.factory.BeanNotOfRequiredTypeException: Bean named 'cacheManager' must be of type [com.catt.hypnus.repository.dao.deviceMgr.DeviceDao], but was actually of type [org.springframework.cache.ehcache.EhCacheCacheManager]
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:359) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:108) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1469) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:762) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:757) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:480) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:84) [spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at com.catt.AbstractMain.start(AbstractMain.java:39) [framework-base-service-impl-0.0.1-SNAPSHOT.jar:na]
+	at com.catt.hypnus.Server.main(Server.java:15) [classes/:na]
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'deviceServiceImpl': Injection of resource dependencies failed; nested exception is org.springframework.beans.factory.BeanNotOfRequiredTypeException: Bean named 'cacheManager' must be of type [com.catt.hypnus.repository.dao.deviceMgr.DeviceDao], but was actually of type [org.springframework.cache.ehcache.EhCacheCacheManager]
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.postProcessPropertyValues(CommonAnnotationBeanPostProcessor.java:308) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1202) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:351) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	... 15 common frames omitted
+Caused by: org.springframework.beans.factory.BeanNotOfRequiredTypeException: Bean named 'cacheManager' must be of type [com.catt.hypnus.repository.dao.deviceMgr.DeviceDao], but was actually of type [org.springframework.cache.ehcache.EhCacheCacheManager]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:375) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.autowireResource(CommonAnnotationBeanPostProcessor.java:461) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.getResource(CommonAnnotationBeanPostProcessor.java:435) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor$ResourceElement.getResourceToInject(CommonAnnotationBeanPostProcessor.java:559) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.annotation.InjectionMetadata$InjectedElement.inject(InjectionMetadata.java:169) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.postProcessPropertyValues(CommonAnnotationBeanPostProcessor.java:305) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
+	... 23 common frames omitted
+hypnus-admin 2018-03-15 21:42:07.703 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'cacheServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.703 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'pubSetupBaseServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.704 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'logLoginServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.704 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'commonModuleSmsServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.704 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'exceptionInfoCfgServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.704 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'countyServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.704 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'cityServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.705 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'provinceServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.705 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'areaServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.705 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'countryServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.706 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'enumModuleMgrServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.706 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'enumMgrServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.706 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'rsaServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.706 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'economyMgrServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.706 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'roleServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.706 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'rightServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.706 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'moduleServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.707 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'domainServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.707 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'deptServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.707 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Unbinding RMI service 'staffServiceImpl' from registry
+hypnus-admin 2018-03-15 21:42:07.707 [main] INFO  org.springframework.remoting.rmi.RmiRegistryFactoryBean - [] Unexporting RMI registry
+hypnus-admin 2018-03-15 21:42:07.708 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
+hypnus-admin 2018-03-15 21:42:07.716 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-15 21:42:07.723 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
+hypnus-admin 2018-03-15 21:44:21.582 [main] INFO  com.catt.AbstractMain - [] 
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+服务启动中,当前时间:2018-03-15 21:44:21
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+hypnus-admin 2018-03-15 21:44:22.237 [main] INFO  org.springframework.context.annotation.AnnotationConfigApplicationContext - [] Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@52bf72b5: startup date [Thu Mar 15 21:44:22 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-15 21:44:22.550 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/applicationContext.xml]
+hypnus-admin 2018-03-15 21:44:24.017 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/applicationContext-project.xml]
+hypnus-admin 2018-03-15 21:44:24.084 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/service/applicationContext-framework-rmi.xml]
+hypnus-admin 2018-03-15 21:44:24.165 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/service/applicationContext-bis-rmi.xml]
+hypnus-admin 2018-03-15 21:44:24.203 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/service/applicationContext-bis-rmi-client.xml]
+hypnus-admin 2018-03-15 21:44:24.980 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
+hypnus-admin 2018-03-15 21:44:24.981 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
+hypnus-admin 2018-03-15 21:44:28.019 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
+hypnus-admin 2018-03-15 21:44:28.130 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
+hypnus-admin 2018-03-15 21:44:28.186 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-15 21:44:28.223 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+hypnus-admin 2018-03-15 21:44:28.422 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
+hypnus-admin 2018-03-15 21:44:28.425 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
+hypnus-admin 2018-03-15 21:44:28.427 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
+hypnus-admin 2018-03-15 21:44:28.528 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+hypnus-admin 2018-03-15 21:44:28.930 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+hypnus-admin 2018-03-15 21:44:29.961 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
+hypnus-admin 2018-03-15 21:44:31.055 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
+hypnus-admin 2018-03-15 21:44:31.565 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
+hypnus-admin 2018-03-15 21:44:31.703 [main] INFO  org.springframework.remoting.rmi.RmiRegistryFactoryBean - [] Looking for RMI registry at port '7788'
+hypnus-admin 2018-03-15 21:44:32.721 [main] INFO  org.springframework.remoting.rmi.RmiRegistryFactoryBean - [] Could not detect RMI registry - creating new one
+hypnus-admin 2018-03-15 21:44:33.017 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'staffServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.064 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'deptServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.105 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'domainServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.147 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'moduleServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.194 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'rightServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.239 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'roleServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.293 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'economyMgrServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.304 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'rsaServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.358 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'enumMgrServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.393 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'enumModuleMgrServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.426 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'countryServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.474 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'areaServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.580 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'provinceServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.583 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'cityServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.586 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'countyServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.622 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'exceptionInfoCfgServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.631 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'commonModuleSmsServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.661 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'logLoginServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.696 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'pubSetupBaseServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.701 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'cacheServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.720 [main] INFO  org.springframework.remoting.rmi.RmiServiceExporter - [] Binding service 'deviceServiceImpl' to RMI registry: RegistryImpl[UnicastServerRef [liveRef: [endpoint:[localhost:7788](local),objID:[0:0:0, 0]]]]
+hypnus-admin 2018-03-15 21:44:33.741 [main] INFO  com.catt.AbstractMain - [] 
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+服务启动完成，当前进程ID：11244，当前时间：2018-03-15 21:44:33， 耗时：12151ms
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+hypnus-admin 2018-03-15 21:44:33.742 [main] INFO  com.catt.AbstractMain - [] Server ip：localhost 
+hypnus-admin 2018-03-15 21:44:33.746 [main] INFO  com.catt.AbstractMain - [] Server Started
+hypnus-admin 2018-03-15 21:46:58.155 [RMI TCP Connection(2)-127.0.0.1] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
+hypnus-admin 2018-03-15 21:46:58.722 [RMI TCP Connection(2)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：platform_name
+hypnus-admin 2018-03-15 21:46:59.015 [RMI TCP Connection(2)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：admin_login_link
+hypnus-admin 2018-03-15 21:46:59.292 [RMI TCP Connection(2)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：admin_login_copyright
+hypnus-admin 2018-03-15 21:47:36.480 [RMI TCP Connection(3)-127.0.0.1] WARN  com.catt.hypnus.service.impl.base.pub.PubSetupBaseServiceImpl - [] T_PUB_SETUP表中未配置：platform_name

@@ -1,0 +1,84 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*活动*/
+
+.huodongBox table{background:#f2f2f2; margin-bottom:10px; width:100%;}
+.huodongBox table tr th{margin-left:10px; width:33.3%}
+.huodongList{margin-right:10px; background:#fff; padding:10px; margin-top:10px;}
+.huodongList:hover{background:#fffce5; cursor:pointer;}
+.huodongimgBox{position:relative;}
+.zongchouTip{position:absolute; left:-20px; top:-20px; width:50px; height:50px;}
+.huodongImg{width:100%;}
+.huodongTitle{font-size:16px; height:32px; line-height:32px; background:#000; opacity:0.7; padding:0 10px; overflow:hidden; position:absolute; bottom:0px; left:0; right:0; color:#fff; font-weight:normal;}
+.huodongMen{ overflow:hidden;}
+.huodongmenImg{width:40px; height:40px; border:1px solid #e5e5e5; border-radius:20px; float:left;}
+.huodongmenMsg{border-bottom:1px solid #e5e5e5;padding-left:20px; position:relative;font-size:14px; color:#646464; line-height:32px; padding-left:22px; letter-spacing:1px;}
+.huodongmenMsg h1{font-size:16px; color:#323232;}
+.huodongmenMsg span{font-size:14px; color:#969696;}
+.huodongMsg{margin-top:10px;}
+.huodongmenMsg p{ position:relative;}
+.huodongmenMsg img{width:18px; height:18px; position:absolute;left:0; top:8px;}
+.priceTip{margin-left:10px; padding:0 4px; font-size:12px; border-radius:4px; letter-spacing:1px;}
+.huodongTipRed{ height:22px;line-height:22px;color:#f36155; font-size:12px; border:1px solid #f36155; padding:0 3px; border-radius:4px; position:absolute; top:4px; right:0; font-weight:normal;}
+.tickBar{overflow:hidden; margin-bottom:10px;}
+.huodongtick{float:left; margin-top:10px;}
+.fabuDate{font-size:14px; color:#646464; margin-left:8px; margin-top:8px; float:left; display:block;}
+.tipRight{font-size:12px; float:right; margin-top:6px; }
+.tuijianTip{position:absolute; left:-1px; top:-1px;}
+.numBox{
+	float:left;
+	width:50%;}
+.totalNum01,.totalNum02{
+	height:32px;
+	line-height:32px;
+	margin-top:10px;
+	color:#cd2848;
+	font-size:24px;
+	font-family:Arial, Helvetica, sans-serif;
+	letter-spacing:1px;
+	text-align:center;}
+.totalNum01{
+	color:#cd2848;}
+.totalNum02{
+	color:#6190ab;}
+.numBox h5{
+	line-height:24px;
+	height:24px;
+	color:#888;
+	font-size:14px;
+	font-weight:normal;
+	letter-spacing:1px;
+	text-align:center;}
+/*报名详情*/
+.baomingList{background:#fff; margin-top:10px;}
+.baodaoTip{position:absolute; right:0; top:0; font-size:12px; border-radius:4px; padding:2px 4px; letter-spacing:1px;}
+.zhifuBottom{position:fixed; bottom:0; left:0; right:0; height:50px; overflow:hidden; background:#fff; box-shadow:0 -1px 6px #b7b7b7;}
+.baomingNum{float:right; line-height:40px; margin-right:20px;}
+.priceText{float:left; font-size:14px; color:#646464; line-height:50px; padding-left:20px; letter-spacing:1px;}
+.priceNum{font-size:28px; font-weight:bold;}
+.zhifuBtn{float:right; width:120px; font-size:16px; letter-spacing:1px; line-height:50px; background:#f13d2e; color:#fff;}
+
+/*我要报名*/
+.huodongTip{font-size:14px; color:#f13d2e;}
+.huodongItem{overflow:hidden; margin-top:10px;}
+.itemTitle01{float:left; font-size:18px; color:#323232; width:72px; line-height:50px;}
+.itemTitle02{float:left; font-size:18px; color:#323232; width:62px; line-height:50px;}
+.itemTitle03{float:left; font-size:18px; color:#323232; width:80px; line-height:50px;}
+.inputBox{border-bottom:1px solid #ccc; overflow:hidden; position:relative;}
+.loginInput{float:left; font-size:16px; color:#646464; width:100%; line-height:50px;}
+.scanIcon{width:24px; position:absolute; right:0px; top:12px;}
+.nextIcon{width:14px; position:absolute; right:0px; top:18px;}
+.nextBtn{background:#f13d2e;color:#fff; width:100%; height:50px; border-radius:6px; font-size:18px;}
+.nextBtn:hover{background:#e13425;}
+.selectItem{float:left; margin-right:40px; margin-left:20px; overflow:hidden;}
+.imgselect{width:22px; float:left; margin-top:16px;} 
+.selectText{font-size:18px; color:#646464; float:left; line-height:50px; margin-left:6px;}
+
+
+
+/*扫二维码*/
+.chenggongTip img{width:120px; display:block; margin:20px auto; text-align:center;}
+.chenggongTip h1{text-align:center; font-size:16px; color:#fff; margin-top:2px; border:1px solid #fff; width:110px; padding:4px 0; margin:10px auto; border-radius:4px;}
+.chenggongTip h2{text-align:center; font-size:12px; color:#ccc; margin-top:2px;}
+

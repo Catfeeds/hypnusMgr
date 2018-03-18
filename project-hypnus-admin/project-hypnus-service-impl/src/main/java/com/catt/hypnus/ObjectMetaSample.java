@@ -1,4 +1,4 @@
-package com.catt.hypnus.demo;
+package com.catt.hypnus;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
@@ -11,52 +11,51 @@ import java.io.IOException;
 /**
  * 文件元信息使用方法
  * 功能：指定key和content，创建object并put到bucket中。创建完后可删除。
- * 
  */
 public class ObjectMetaSample {
-    
+
 //    private static String endpoint = "<endpoint, http://oss-cn-hangzhou.aliyuncs.com>";
 //    private static String accessKeyId = "<accessKeyId>";
 //    private static String accessKeySecret = "<accessKeySecret>";
 //    private static String bucketName = "<bucketName>";
-	
-	private static String endpoint = "oss-cn-shanghai.aliyuncs.com";
+
+    private static String endpoint = "oss-cn-shanghai.aliyuncs.com";
     private static String accessKeyId = "LTAI5hvCHzOiuJ3f";
     private static String accessKeySecret = "FByHanHd0WtP2NBJbUReztPhI5GWoA";
     private static String bucketName = "hypnus-device-data-bucket";
-    
+
     private static String key = "testKey";
     private static String content = "Hello OSS";
-    
-    
+
+
     public static void main(String[] args) throws IOException {
         /*
          * Constructs a client instance with your account for accessing OSS
          */
         OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-                
+
         try {
             ObjectMetadata meta = new ObjectMetadata();
-            
+
             // 设置上传内容类型
             meta.setContentType("text/plain");
             // 设置MD5校验，请使用基础出的真实值
             meta.setContentMD5("");
             // 设置自定义元信息name的值为my-data
             meta.addUserMetadata("meta", "meta-value");
-            
+
             // 上传文件
-            ossClient.putObject(bucketName, key, 
+            ossClient.putObject(bucketName, key,
                     new ByteArrayInputStream(content.getBytes()), meta);
-           
+
             // 获取文件的元信息
             ObjectMetadata metadata = ossClient.getObjectMetadata(bucketName, key);
             System.out.println(metadata.getContentType());
             System.out.println(metadata.getLastModified());
-            System.out.println(metadata.getUserMetadata().get("meta")); 
-            
+            System.out.println(metadata.getUserMetadata().get("meta"));
+
             //ossClient.deleteObject(bucketName, key);
-            
+
         } catch (OSSException oe) {
             System.out.println("Caught an OSSException, which means your request made it to OSS, "
                     + "but was rejected with an error response for some reason.");
@@ -69,15 +68,14 @@ public class ObjectMetaSample {
                     + "a serious internal problem while trying to communicate with OSS, "
                     + "such as not being able to access the network.");
             System.out.println("Error Message: " + ce.getMessage());
-        } catch(Exception e){
-        	e.printStackTrace();
-        }
-        finally {
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             /*
              * Do not forget to shut down the client finally to release all allocated resources.
              */
             ossClient.shutdown();
         }
     }
-    
+
 }

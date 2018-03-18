@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="./../../js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="./../../sea-modules/seajs/sea.js"></script>
+    <script type="text/javascript" src="./../../sea-modules/seajs/seajs-preload.js"></script>
+    <script type="text/javascript" src="./../seajs/init.js"></script>
+
+    <script type="text/javascript" src="./../js/template.js"></script>
+    <title>template</title>
+    <style type="text/css">
+        table tr th,td {
+            border: 1px solid;
+        }
+        table tr td pre{
+            line-height:68%
+        }
+    </style>
+</head>
+<body>
+<h2 align="center">template插件简易使用教程</h2>
+<h4>简介：template模板用来加载后台返回的未知个数的数据</h4>
+<table>
+    <col width="8%" />
+    <col width="50%" />
+    <col width="40%" />
+    <th>样例</th>
+    <th>源码</th>
+    <th>说明</th>
+    <tr>
+        <td>
+            <input type="button" id="showTemplate" value="展示template内容"/>
+            <div id="show">
+            </div>
+            <script id="template1" type="text/html">
+                <div>
+                    <table>
+                        <thead>
+                        <th>姓名</th>
+                        <th>身份证</th>
+                        <th>电子邮箱</th>
+                        <th>电话号码</th>
+                        </thead>
+                        {{each list as value i}}
+                        <tr class="hang" data-value-id="{{value.id}}">
+                            <td>{{value.name}}</td>
+                            <td>{{value.idNum}}</td>
+                            <td>{{value.email}}</td>
+                            <td>{{value.tel}}</td>
+                        </tr>
+                        {{/each}}
+                    </table>
+                </div>
+            </script>
+        </td>
+        <td>
+            <textarea style="border: none" rows="40" cols="65">
+html：
+<div id="show">
+</div>
+<script id="template1" type="text/html">
+    <div>
+    <table>
+        <thead>
+        <th>姓名</th>
+        <th>身份证</th>
+        <th>电子邮箱</th>
+        <th>电话号码</th>
+        </thead>
+        {{each list as value i}}
+        <tr class="hang" data-value-id="{{value.id}}">
+            <td>{{value.name}}</td>
+            <td>{{value.idNum}}</td>
+            <td>{{value.email}}</td>
+            <td>{{value.tel}}</td>
+        </tr>
+        {{/each}}
+    </table>
+    </div>
+</script>
+**********************************************
+js1：
+var html = template('template1', jsonData);
+$('#show').html(html);
+js2:
+$('#show').on('click', '.hang', function(){
+    var id= $(this).attr('data-value-id');
+    window.location.href = "./detail.html?id=" + id ;
+});
+            </textarea>
+        </td>
+        <td>
+            <textarea style="border: none" rows="40" cols="60">
+一、显示模板
+1、首先定义一个<div id="show">用以显示模板内容；
+2、其次定义一个<table>用以嵌套模板；
+   将<tr>放在{{each list as value i}}{{/each}}中，
+   这里的list必须与传入数据中的数组名相同！；
+3、接着在js中调用template(param1,param2),第一个参数表示
+   模板初始化的对象的id，第二个参数是对象，其中至少一个属性
+   要是数组类型；返回值是一个填充好内容的<div>；
+4、最后只需将填充好内容的返回值写入页面上的<div>中即可。
+二、点击显示详情
+1、首先将模板中加入class属性用以触发绑定事件<tr class="hang">
+   以及加入变量data-value-id用以保存当前行数据(这里只使用一个变量说明)；
+2、在js页面中绑定事件、对象、处理方法；
+3、通过$(this).attr('data-value-id')将点击的数据取出；
+4、将取出的值添加到URL中；
+5、在详情页面用util.Request.getUrlParam('id')方法将数据取出即可。
+            </textarea>
+        </td>
+    </tr>
+</table>
+<input type="button" onclick="javaScript:history.back(-1)" value="返回主页"/>
+
+</body>
+</html>

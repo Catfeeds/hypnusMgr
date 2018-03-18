@@ -1,0 +1,78 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.activityMsn{ padding:10px; position:relative;}
+table.activityMsnTable{width:100%; border-collapse:collapse;}
+table.activityMsnTable th,table.activityMsnTable td{ height:30px; padding:5px; font-size:14px; font-weight:normal;}
+table.activityMsnTable th{ text-align:left; color:#666; letter-spacing:1px; width:38%;}
+table.activityMsnTable td{ text-align:right; color:#999; width:12%;}
+
+.touxiangDiv{ position:absolute; top:20px; left:20px; width:170px; height:130px;}
+.touxiangDiv img{ border-radius:3px;}
+.touxiangDiv h1{ font-size:14px; color:#666; padding-left:25px; padding-top:3px; font-weight:normal;}
+.keyword{ text-align:center; padding:0;}
+
+.huodongPost{width:290px; height:80px;}
+.chanpinPost{width:200px; height:200px;}
+/*审核管理*/
+.shenheBox{width:100%; font-size:14px; color:#646464; height:90px;}
+/*图片上传-begin*/
+.imgDiv{
+    height: 200px;
+	padding-top:10px;
+    position: relative;}
+.jd_box{ height:156px; width:235px;margin-right:10px;border: 1px solid #e4e9ea;border-radius: 3px;position:relative;background:#efefef url(../images/imgbg.png) no-repeat center 45px;}
+.jd_box:hover{border:#C2D7D8 1px solid;}
+.imgtick{ position:absolute; top:0px; left:0px;height:20px;width:20px; background:url(../images/gouxuan.png);}
+.pictickOn{ position:absolute; top:0px; left:0px;height:20px;width:20px; background:url(../images/gouxuan02.png);}
+.dqsjtit{ height:40px; line-height:40px; background:#21b3bc;-webkit-border-radius:3px 3px 0 0;-moz-border-radius:3px 3px 0 0;border-radius:3px 3px 0 0;padding:0 22px 0 22px;color:#FFF; font-size:18px;}
+.pagebtn_box{ height:30px; width:120px; float:right; margin-top:5px; margin-right:-20px;}
+.pagebtn_pre,.pagebtn_next{ height:30px;width:30px; display:block; cursor:pointer;}
+.pagebtn_dot{ display:block; float:left; margin:12px 0 0 8px;}
+.pagebtn_dot li{ height:8px; width:8px; border-radius:4px; display:block; float:left; margin-right:5px;cursor:pointer;}
+.normal_dot{ background:#fff;}
+.selected_dot,.pagebtn_dot li:hover{ background:#fae05d;}
+.in_imgDiv{background:transparent;height:186px;padding:10px;overflow:hidden;}
+.eachtit{ position:absolute; width:100%;text-align:center; bottom:0px;color:#FFF;background: url(../images/gray75.png); border-radius:0 0 0 3px;}
+.pic1{ width:235px; height:156px;}
+.cover{ display:block;position:absolute; top:0px; right:5px;height:30px;width:40px; background:url(../images/cover.png);}
+/*图片上传-end*/
+/*-----物流信息--------*/
+div.flowDiv{  background:url(../images/flow_line.png) repeat-y -18px 0;}
+div.flowDivBar{clear:both; margin-bottom:8px; padding-left:47px; /*padding-right:80px;*/ height:40px; position:relative; }
+
+div.flowDivBarMain{position:relative;clear:both; height:40px; padding:0 5px 0 100px; background:#F8F8F8;border-radius:0px 6px 6px 0px;}
+div.flowDivBarLeft{ position:absolute; top:0px; left:0px; height:40px; width:100px; background:#18B4F2;}
+div.flowDivBarLeft h3{ height:24px;line-height:24px;color:#fff; font-size:16px; text-align:center;font-weight:normal; }
+div.flowDivBarLeft h5{ height:16px;line-height:16px;color:#fff; font-size:12px; font-weight:normal; text-align:center; }
+div.flowDivBarLeft02{ position:absolute; top:0px; left:0px; height:40px; width:100px; background:#A3CF0A;}
+div.flowDivBarLeft02 h3{ height:24px;line-height:24px;color:#fff; font-size:16px; text-align:center;font-weight:normal; }
+div.flowDivBarLeft02 h5{ height:16px;line-height:16px;color:#fff; font-size:12px; font-weight:normal; text-align:center; }
+div.flowDivBarMain h1{ clear:both; padding-top:0px; height:24px; line-height:26px; padding-left:5px;
+font-family:'微软雅黑'; font-size:12px;letter-spacing:1px; color:#484949; font-weight:bold;}
+.carNum{
+	position:absolute;
+	left:110px;
+	top:7px;
+	width:90px;
+	height:24px;
+	line-height:24px;
+	border:1px solid #18b4f2;
+	border-radius:5px;
+	font-size:14px;
+	letter-spacing:1px;
+	text-align:center;
+	color:#18b4f2;
+	background:#fff;}
+.carNum.finish{
+	color:#749502;
+	border:1px solid #a3cf0a;}
+div.flowDivBarMain p{ line-height:40px; text-indent:10px; font-size:12px; color:#666;}
+
+div.flowDivBarPass{background:url(../images/flow_left_blue.png) no-repeat 0px -20px;}
+div.flowDivBarPass a.stactFlag{ background-color:#18b4f2;}
+
+div.flowDivBarNow{background:url(../images/flow_left_green.png) no-repeat 0px center;}
+div.flowDivBarNow a.stactFlag{ background-color:#63be5e;}
+/*物流信息-end*/

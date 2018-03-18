@@ -1,0 +1,116 @@
+/*--------页码----------*/
+
+div.pageBar {
+    clear: both;
+    height: 25px;
+    padding: 5px 0px;
+    background:#fff;}
+.snPages {
+    float: right;
+    height: 25px;
+    padding-right: 10px;}
+.snPages a, .snPages a:visited, .snPages span, .snPages div {
+    color: #333;
+    display: inline;
+    float: left;
+    margin-left: 4px;
+    position: relative;}
+.snPages span {
+    margin: 0 10px;}
+.snPages div {
+    height: 29px;
+    line-height: 26px;
+    margin-top: -1px;
+    overflow: hidden;
+    padding-left: 30px;
+    font-size: 12px;}
+.snPages a, .snPages a:visited {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #d7d7d7;
+    border-radius: 4px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 8px;
+    text-align: center;
+    font-size:12px;}
+.snPages a.current {
+    color: #ff6061;}
+.snPages a.prev, .snPages a.next, .snPages a.prev, .snPages a.next:visited {
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    padding: 0;
+    width: 20px;}
+.snPages a.prev, .snPages span.prev {
+    text-indent: 6px;}
+.snPages a.next, .snPages span.next {
+    margin-left: 4px;
+    text-indent: -6px;}
+.snPages span.prev, .snPages span.next {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #d7d7d7;
+    border-radius: 4px;
+    color: #b1b1b1;
+    display: inline;
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin: 0;
+    overflow: hidden;
+    text-align: center;
+    width: 20px;}
+.snPages span.prev {}
+.snPages span.next {
+    margin-left: 4px;}
+.snPages b {
+    border-color: #fff #333 #fff #fff;
+    border-style: solid;
+    border-width: 5px;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    margin-top: -2px;
+    position: absolute;
+    width: 0;}
+.snPages a.prev b {
+    left: 1px;
+    top: 8px;}
+.snPages a.next b {
+    border-color: #fff #fff #fff #333;
+    right: 1px;
+    top: 8px;}
+.snPages span.prev b {
+    border-color: #fff #b1b1b1 #fff #fff;
+    left: 1px;
+    top: 8px;}
+.snPages span.next b {
+    border-color: #fff #fff #fff #b1b1b1;
+    right: 1px;
+    top: 10px;}
+.snPages div input {
+    border: 1px solid #d7d7d7;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 3px;
+    overflow: hidden;
+    text-align: center;
+    width: 32px;}
+.snPages div input.pagesubmit {
+    background:#ff6061;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline;
+    float: right;
+    height: 22px;
+    border:none;
+    margin-top:2px;
+    color:#fff;
+    font-size: 12px;
+    font-size:14px;
+    overflow: hidden;
+    position: relative;
+    width: 45px;}
+.snPages div input.pagesubmit:hover {
+    text-decoration: underline;}
+.snPages a:hover {
+    color: #ff6061;}/*页码*/

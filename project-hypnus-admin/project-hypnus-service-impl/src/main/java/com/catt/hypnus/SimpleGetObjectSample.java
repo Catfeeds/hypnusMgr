@@ -1,4 +1,4 @@
-package com.catt.hypnus.demo;
+package com.catt.hypnus;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
@@ -9,6 +9,7 @@ import com.aliyun.oss.model.PutObjectRequest;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,58 +19,40 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 /**
- * This sample demonstrates how to upload/download an object to/from 
+ * This sample demonstrates how to upload/download an object to/from
  * Aliyun OSS using the OSS SDK for Java.
  */
 public class SimpleGetObjectSample {
-    
+
 //    private static String endpoint = "*** Provide OSS endpoint ***";
 //    private static String accessKeyId = "*** Provide your AccessKeyId ***";
 //    private static String accessKeySecret = "*** Provide your AccessKeySecret ***";
 //    
 //    private static String bucketName = "*** Provide bucket name ***";
-	
-	private static String endpoint = "oss-cn-shanghai.aliyuncs.com";
+
+    private static String endpoint = "oss-cn-shanghai.aliyuncs.com";
     private static String accessKeyId = "LTAI5hvCHzOiuJ3f";
     private static String accessKeySecret = "FByHanHd0WtP2NBJbUReztPhI5GWoA";
     private static String bucketName = "hypnus-device-data-bucket";
-    
+
     private static String key = "athenaTestkey";
-    
+
     public static void main(String[] args) throws IOException {
         /*
          * Constructs a client instance with your account for accessing OSS
          */
         OSSClient client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-        
+
         try {
-            
+
             /**
              * Note that there are two ways of uploading an object to your bucket, the one 
              * by specifying an input stream as content source, the other by specifying a file.
              */
-            
-            /*
-             * Upload an object to your bucket from an input stream
-             */
-            System.out.println("Uploading a new object to OSS from an input stream\n");
-            String content = "Thank you for using Aliyun Object Storage Service";
-            client.putObject(bucketName, key, new ByteArrayInputStream(content.getBytes()));
-            
-            /*
-             * Upload an object to your bucket from a file
-             */
-            System.out.println("Uploading a new object to OSS from a file\n");
-            client.putObject(new PutObjectRequest(bucketName, key, createSampleFile()));
-            
-            /*
-             * Download an object from your bucket
-             */
-            System.out.println("Downloading an object");
-            OSSObject object = client.getObject(new GetObjectRequest(bucketName, key));
-            System.out.println("Content-Type: "  + object.getObjectMetadata().getContentType());
-            displayTextInputStream(object.getObjectContent());
-            
+            String key = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/flow.edf";
+//            String key = "0a0a0a0a0b0b0b0b0c0c0c0c/2016-02-09 16:26:00/t_log_login.sql";
+            downLoadFile(client, key);
+
         } catch (OSSException oe) {
             System.out.println("Caught an OSSException, which means your request made it to OSS, "
                     + "but was rejected with an error response for some reason.");
@@ -89,7 +72,51 @@ public class SimpleGetObjectSample {
             client.shutdown();
         }
     }
-    
+
+    /**
+     * Download an object from your bucket
+     *
+     * @param client
+     * @param key
+     * @throws IOException
+     */
+    public static void downLoadFile(OSSClient client, String key) throws IOException {
+        System.out.println("Downloading an object");
+        OSSObject object = client.getObject(new GetObjectRequest(bucketName, key));
+        InputStream inputStream = object.getObjectContent();
+        byte[] bytes = input2byte(inputStream);
+        for (byte b : bytes) {
+            System.out.println(b);
+        }
+        System.out.println("Content-Type: " + object.getObjectMetadata().getContentType());
+//        displayTextInputStream(object.getObjectContent());
+    }
+
+    /**
+     * Upload an object to your bucket from an input stream
+     *
+     * @param client
+     * @param key
+     * @throws IOException
+     */
+    public static void uploadFileOfStream(OSSClient client, String key) throws IOException {
+        System.out.println("Uploading a new object to OSS from an input stream\n");
+        String content = "Thank you for using Aliyun Object Storage Service";
+        client.putObject(bucketName, key, new ByteArrayInputStream(content.getBytes()));
+    }
+
+    /**
+     * Upload an object to your bucket from a file
+     *
+     * @param client
+     * @param key
+     * @throws IOException
+     */
+    public static void uploadFile(OSSClient client, String key) throws IOException {
+        System.out.println("Uploading a new object to OSS from a file\n");
+        client.putObject(new PutObjectRequest(bucketName, key, createSampleFile()));
+    }
+
     private static File createSampleFile() throws IOException {
         File file = File.createTempFile("oss-java-sdk-", ".txt");
         file.deleteOnExit();
@@ -114,5 +141,17 @@ public class SimpleGetObjectSample {
 
         reader.close();
     }
-    
+
+    public static final byte[] input2byte(InputStream inStream)
+            throws IOException {
+        ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+        byte[] buff = new byte[100];
+        int rc = 0;
+        while ((rc = inStream.read(buff, 0, 100)) > 0) {
+            swapStream.write(buff, 0, rc);
+        }
+        byte[] in2b = swapStream.toByteArray();
+        return in2b;
+    }
+
 }

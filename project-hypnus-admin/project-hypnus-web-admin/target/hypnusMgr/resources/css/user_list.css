@@ -1,0 +1,59 @@
+@charset "utf-8";
+/* CSS Document */
+.userTable{ width:100%; margin-top:10px;}
+.userTable td{ padding:0px 10px 10px 0px;}
+td.paddingR0{ padding-right:0px;}
+.userDiv{
+	position:relative;
+	height:120px;
+	padding:10px;
+	border:1px #e8e8e8 solid;
+	border-radius:5px;
+	background: url(../images/userdivbg.png) repeat-x;
+	cursor:pointer;
+	}
+.userDivTop{
+	height:70px;
+	width:160px;
+	margin:auto;}
+.userImg{
+	float:left;
+	margin-right:15px;
+	height:60px;
+	width:60px;
+	border-radius:30px;
+	background: url(../images/userphoto60.png);
+	box-shadow: 0px 3px 0px #sCCC;
+	}
+.userInfo{
+	}
+.userInfo h2{
+	display:block;
+	color:#333;
+	font-size:16px;
+	font-weight:normal;
+	}
+.userInfo h3{
+	color:#6f6f6f;
+	font-size:12px;
+	font-weight:normal;
+	}
+.userDivBottom{
+	margin:auto;
+	color:#6f6f6f;
+	font-size:12px;
+	width:100%;}
+.userDivBottom td{ padding:0px;}
+.userDivBottom tr td:first-child{
+	text-align:right;}
+.userDivBottom tr td:last-child{
+	color:#3b9bc5;}
+/*18*18状态小图标*/
+.female{
+	display:block;
+	float:left;
+	height:18px;
+	width:18px;
+	background:url(../images/female.png) no-repeat;}
+	
+table.datalistTable tr td{ cursor:pointer;}

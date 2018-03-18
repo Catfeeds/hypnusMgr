@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	updateCheck="false">
+
+	<diskStore path="C:\\Users\\lzb\\AppData\\Local\\Temp\\/${system.project_name}/cache" />
+
+	<cache name="menus" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="menus2" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="enumCache" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="authorization" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="propertiesListCache" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+	<cache name="homeTodoCount" maxElementsInMemory="100" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false" />
+    <cache name="pubSetupCache" maxElementsInMemory="100" timeToLiveSeconds="15" eternal="false" overflowToDisk="false"/>
+
+	<!--微信缓存配置-->
+	<cache name="weChat_PublicAccountCache" maxElementsInMemory="2000" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false"/>
+	<cache name="weChat_PageAuthCache" maxElementsInMemory="2000" timeToLiveSeconds="3600" eternal="false" overflowToDisk="false"/>
+	<!--票据在微信平台(微信官方服务器)的有效期为7200秒，缓存有效期为7000秒-->
+	<cache name="weChat_ApiTicketCache" maxElementsInMemory="2000" timeToLiveSeconds="7000" eternal="false" overflowToDisk="false"/>
+
+</ehcache>

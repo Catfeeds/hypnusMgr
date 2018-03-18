@@ -1,0 +1,52 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*用户管理*/
+.mainbox{ position:relative; padding:10px 10px 10px 244px;}
+.boxtop{ height:38px; position:relative;border-bottom:1px solid #dfdfdf; background:#f8f7f7;}
+.boxhide{ height:68px; background:#f1f1f1; position:absolute; top:38px; left:-1px;border:1px solid #dfdfdf; width:100%; display:none;}
+.hidetable{width:100%; }
+.hidetable td{ height:22px; }
+.boxtit{ height:28px; line-height:28px; color:#4b4b4b; font-size:16px;display:block; position:absolute;top:5px; left:0px; padding:0 10px;}
+.boxtop_right{ width:220px; height:38px;position:absolute;top:0px; right:0px;}
+.search_more{ display:block; height:38px; line-height:38px; position:absolute; top:0px; right:240px; cursor:pointer; font-size:12px;}
+.search_more:hover{ color:#F93;}
+.mainboxleft{ width:180px; position:absolute; left:20px; top:0px; background:#f1f1f1; border:1px solid #dfdfdf; border-radius:4px;}
+.ztreebox{ height:393px;border-top:1px solid #f9f8f8;}
+.mainboxright{background:#f1f1f1; border:1px solid #dfdfdf; border-radius:3px; padding-left:190px;}
+.mainboxleft .btn_a,.mainboxleft .btn_b{margin:5px 0 0 5px;}
+.mainboxright_bottom{ padding:10px;border-top: 1px solid #f9f8f8;}
+.person_list{ width:100%; background:#ffffff;border-top:1px solid #f9f8f8; margin-top:10px;}
+.person_list tr:hover{background:#eaf2ff; cursor:pointer;}
+.person_list th{height:26px; background:#f5f5f5;border-bottom:1px solid #dfdfdf;}
+.person_list td{height:26px;border-bottom:1px dotted #dfdfdf;}
+.person_list tr:last-child td{ border-bottom:0px;}
+
+.search_part{ width:218px; height:38px; float:right;}
+.person_search{ float:left;width:140px; height:24px; margin-top:3px;border:1px solid #dfdfdf; border-radius:3px 0 0 3px; padding:3px 10px; background:#fff; font-size:12px; color:#646464;}
+.search_btn_gray{ float:left;width:44px; height:32px;cursor:pointer; margin:3px 0 0 0; background:#3cabd8;border-radius:0 3px 3px 0; text-align:center; line-height:32px; color:#fff;}
+div.pageBar{ clear:both;height:23px; padding:5px 0;background:#f8f7f7;/* margin-top:22px;*/}
+
+/*用户信息*/
+.userTop{background:#fff; margin-top:10px; border:1px solid #e5e5e5; padding:10px; overflow:hidden;}
+.userTop img{float:left; margin-right:10px;}
+.userMsg{float:left;}
+.userMsg h1{font-size:18px; color:#323232; line-height:50px; letter-spacing:1px;}
+.userMsg p{font-size:12px; color:#646464; line-height:20px;}
+.userMsg span{font-size:12px; color:#3cabd8; line-height:20px; font-weight:bold;}
+.userdetail{width:100%; border-collapse:collapse; font-size:14px;}
+.userdetail tr th{width:16.6%; background:#3cabd8; color:#fff; line-height:36px;}
+.userdetail tr td{width:16.6%; text-align:center; line-height:30px; color:#646464;}
+.userdetail span{color:#3cabd8;}
+.usertabsbox{border-bottom:1px solid #e5e5e5; background:#f5f5f5;}
+.usertabs{border-collapse:collapse;}
+.usertabs tr th{border-bottom:3px solid #f5f5f5; padding:0 30px; line-height:36px; height:36px; color:#646464; cursor:pointer; letter-spacing:1px; font-size:14px;}
+.usertabs tr th:hover{border-bottom:3px solid #3cabd8; color:#3cabd8; background:#fff;}
+.usertabs tr th.thon{border-bottom:3px solid #3cabd8; color:#3cabd8; background:#fff;}
+.usertabsdetail{width:100%; border-collapse:collapse; border:1px solid #e5e5e5; margin-top:10px;}
+.usertabsdetail tr th{border-bottom:1px solid #f7f7f7; line-height:36px; height:36px; color:#646464; width:16.6%; background:#f7f7f7; font-size:12px; font-weight:normal;}
+.usertabsdetail tr td{line-height:36px; height:36px; color:#646464; text-align:center; border-bottom:1px dashed #e5e5e5; font-size:12px;}
+.state_red{color:#f05918;}
+.state_green{color:#3cabd8;}
+.bottomText{font-size:12px; line-height:30px; height:30px; color:#646464; text-align:right;}
+.bottomText span{color:#f05918; padding:0 2px; font-weight:bold;}
