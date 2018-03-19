@@ -32,5 +32,25 @@
         <property name="serviceInterface" value="com.catt.hypnus.service.factoryMgr.FactoryService"/>
     </bean>
 
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="factoryInfoBaseServiceImpl"/>
+        <property name="serviceName" value="factoryInfoBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.base.factoryMgr.FactoryInfoBaseService"/>
+    </bean>
+
+
+    <!-- 用户信息 -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="userServiceImpl"/>
+        <property name="serviceName" value="userServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.userMgr.UserService"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="userInfoBaseServiceImpl"/>
+        <property name="serviceName" value="userInfoBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.base.userMgr.UserInfoBaseService"/>
+    </bean>
+
 
 </beans>

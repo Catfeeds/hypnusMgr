@@ -4,7 +4,6 @@ import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
 import com.catt.common.web.controller.BaseController;
 import com.catt.common.web.spring.resolver.annotation.CurrentUser;
-import com.catt.hypnus.repository.entity.deviceMgr.Device;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
 import com.catt.hypnus.service.deviceMgr.DeviceService;
 import org.springframework.stereotype.Controller;

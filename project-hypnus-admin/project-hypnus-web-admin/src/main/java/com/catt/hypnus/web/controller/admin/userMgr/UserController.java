@@ -1,13 +1,13 @@
-package com.catt.hypnus.web.controller.admin.factoryMgr;
+package com.catt.hypnus.web.controller.admin.userMgr;
 
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
 import com.catt.common.web.Message;
 import com.catt.common.web.spring.resolver.annotation.CurrentUser;
-import com.catt.hypnus.repository.entity.factoryMgr.FactoryInfo;
-import com.catt.hypnus.repository.form.factoryMgr.FactoryForm;
-import com.catt.hypnus.service.base.factoryMgr.FactoryInfoBaseService;
-import com.catt.hypnus.service.factoryMgr.FactoryService;
+import com.catt.hypnus.repository.entity.userMgr.UserInfo;
+import com.catt.hypnus.repository.form.userMgr.UserForm;
+import com.catt.hypnus.service.base.userMgr.UserInfoBaseService;
+import com.catt.hypnus.service.userMgr.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +25,8 @@ import java.util.Objects;
  * @Desc:
  **/
 @Controller
-@RequestMapping(value="/admin/factoryMgr")
-public class FactoryInfoController
+@RequestMapping(value="/admin/userMgr")
+public class UserController
 {
 
     /**
@@ -34,55 +34,55 @@ public class FactoryInfoController
      */
     @RequestMapping(value = {"/index.html"}, method = RequestMethod.GET)
     public String toIndex() {
-        return "/admin/factory/index";
+        return "/admin/user/index";
     }
 
 
     @RequestMapping(value="/add.html",method = RequestMethod.GET)
     public String toAdd(){
-        return "/admin/factory/addEdit";
+        return "/admin/user/addEdit";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Message save(FactoryInfo factoryInfo) {
-        if(Objects.isNull(factoryInfo.getId())){
-            factoryInfoBaseService.save(factoryInfo);
+    public Message save(UserInfo userInfo) {
+        if(Objects.isNull(userInfo.getId())){
+            userInfoBaseService.save(userInfo);
         }else{
-            factoryInfoBaseService.update(factoryInfo);
+            userInfoBaseService.update(userInfo);
         }
         return Message.success("", new Object[0]);
     }
 
     @RequestMapping(value="/edit.html")
     public String toEdit(Long id, HttpServletRequest request, Model model){
-        FactoryInfo info = factoryInfoBaseService.find(id);
+        UserInfo info = userInfoBaseService.find(id);
         model.addAttribute("info",info);
-        return "/admin/factory/addEdit";
+        return "/admin/user/addEdit";
     }
 
     @RequestMapping(value="/delete",method = RequestMethod.DELETE)
     public Message delete(Long id,HttpServletRequest request){
-        factoryInfoBaseService.delete(id);
+        userInfoBaseService.delete(id);
         return Message.success("", new Object[0]);
     }
 
     /**
-     * 获取经销商分页数据
+     * 获取用户分页数据
      *
      * @param pageable
      * @return
      */
     @RequestMapping(value = {"/getPage"}, method = RequestMethod.POST)
     @ResponseBody
-    public Page<Map> getPageShopOwner(FactoryForm factoryForm, Pageable pageable, @CurrentUser Long id) {
-        return factoryService.queryList(factoryForm.getFactoryMobile(),pageable);
+    public Page<Map> getPageShopOwner(UserForm form, Pageable pageable, @CurrentUser Long id) {
+        return userService.queryList(form.getPhone(),pageable);
     }
 
-    @Resource(name="factoryServiceImpl")
-    private FactoryService factoryService;
+    @Resource(name="userServiceImpl")
+    private UserService userService;
 
-    @Resource(name="factoryInfoBaseServiceImpl")
-    private FactoryInfoBaseService factoryInfoBaseService;
+    @Resource(name="userInfoBaseServiceImpl")
+    private UserInfoBaseService userInfoBaseService;
 
 }

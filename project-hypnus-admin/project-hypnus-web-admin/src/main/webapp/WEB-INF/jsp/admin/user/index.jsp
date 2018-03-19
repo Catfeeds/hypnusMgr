@@ -4,21 +4,21 @@
 <head>
 <%@include file="/common/headModule.jsp" %>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>经销商列表</title>
+<title>用户列表</title>
 <link type="text/css" href="${path}/resources/css/common.css" rel="stylesheet" />
 <link type="text/css" href="${path}/resources/css/user_list.css" rel="stylesheet" />
 <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
 <script src="${path}/resources/js/member.js" type="text/javascript"></script>
     <script src="${path}/resources/admin/common/temDataGrid.js"></script>
-    <script src="${path}/resources/admin/js/factory/index.js" type="text/javascript"></script>
+    <script src="${path}/resources/admin/js/user/index.js" type="text/javascript"></script>
 </head>
 <body>
 	<div class="wrapper">
-    	<div class="positionNow">主页 &gt; <a>经销商列表</a></div>
+    	<div class="positionNow">主页 &gt; <a>用户列表</a></div>
         <div class="searchBar">
             <div class="searchBox">
                 <span class="searchName">手机号：</span>
-                <input class="searchInputText" id="factoryMobile" type="text" style="width:130px;" />
+                <input class="searchInputText" id="phone" type="text" style="width:130px;" />
             </div>
             <span class="btnGrey" style="margin-left:5px;" id="reset">重置</span>
             <span class="btnRed" id="search">查询</span>
@@ -28,10 +28,12 @@
             <table class="datalistTable xw_shenfen">
                 <tr>
                     <th width="40px"><div class="tickAll xw_tickAll"></div></th>
-                    <th>经销商名称</th>
-                    <th>联系人</th>
+                    <th>用户账号</th>
+                    <th>用户生日</th>
                     <th>手机号码</th>
                     <th>邮箱</th>
+                    <th>身高</th>
+                    <th>体重</th>
                     <th>联系地址</th>
                     <th>操作</th>
                 </tr>
@@ -48,11 +50,13 @@
         {{each}}
         <tr>
             <td><span class="tick xw_tick"></span></td>
-            <td>{{$value.name}}</td>
-            <td>{{$value.connector}}</td>
+            <td>{{$value.account}}</td>
+            <td>{{$value.birthday}}</td>
             <td>{{$value.phone}}</td>
             <td>{{$value.email}}</td>
-            <td>{{$value.ddress}}</td>
+            <td>{{$value.height}}cm</td>
+            <td>{{$value.weight}}kg</td>
+            <td>{{$value.address}}</td>
             <td>
                 <li><a href="<c:url value="/admin/factoryMgr/add.html"/>" id="add">新&nbsp;&nbsp;增</a></li>
                 <li><a href="<c:url value="/admin/factoryMgr/edit.html?id={{$value.i_id}}"/>" id="modify">修改</a></li>

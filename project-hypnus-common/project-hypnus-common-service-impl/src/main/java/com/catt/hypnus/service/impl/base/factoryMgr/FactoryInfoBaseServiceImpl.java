@@ -1,12 +1,12 @@
 package com.catt.hypnus.service.impl.base.factoryMgr;
 
-import javax.annotation.Resource;
-
 import com.catt.common.base.service.impl.BaseServiceImpl;
 import com.catt.hypnus.repository.dao.factoryMgr.FactoryInfoDao;
 import com.catt.hypnus.repository.entity.factoryMgr.FactoryInfo;
 import com.catt.hypnus.service.base.factoryMgr.FactoryInfoBaseService;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 
 

@@ -71,5 +71,25 @@
         <property name="serviceInterface" value="com.catt.hypnus.service.factoryMgr.FactoryService"/>
     </bean>
 
+    <bean id="factoryInfoBaseServiceImpl" name="factoryInfoBaseServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/factoryInfoBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.base.factoryMgr.FactoryInfoBaseService"/>
+    </bean>
+
+
+    <!-- 用户服务 -->
+    <bean id="userServiceImpl" name="userServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/userServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.userMgr.UserService"/>
+    </bean>
+
+    <bean id="userInfoBaseServiceImpl" name="userInfoBaseServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/userInfoBaseServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.base.userMgr.UserInfoBaseService"/>
+    </bean>
+
 
 </beans>
