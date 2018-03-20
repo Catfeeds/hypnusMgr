@@ -130,7 +130,7 @@ public class FactoryInfo extends BaseEntity {
         this.status = status;
     }
 
-    @Column(name = "DDRESS", length = 100)
+    @Column(name = "ADDRESS", length = 100)
     public String getDdress() {
         return ddress;
     }
@@ -139,7 +139,7 @@ public class FactoryInfo extends BaseEntity {
         this.ddress = ddress;
     }
 
-    @Column(name = "AVATER", length = 100)
+    @Column(name = "HEAD_PATH", length = 100)
     public String getAvater() {
         return avater;
     }

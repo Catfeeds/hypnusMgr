@@ -99,6 +99,7 @@ input:hover{border:1px solid #fdb874;}
 	font-size:14px;
 	text-align:center;
 	background:#2ba4d8;
+	border:1px solid #2ba4d8;
 	cursor:pointer;
 	padding:0 13px;}
 .btnBlue:hover{background:#2eade3;}

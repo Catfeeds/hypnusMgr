@@ -39,6 +39,11 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     $('#auditCus').click(function () {
                         EventHandler.auditCus();
                     });
+                    
+                    $("#dataList").on("click",".editUser",function () {
+                        var dataId = $(this).attr("data-id");
+                        EventHandler.editUser(dataId);
+                    });
 
                     //动态绑定click(动态生成的html)
                     $("#dataList").on('click', '.xw_tick', templateList.check);
@@ -89,6 +94,19 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                 //重置
                 reset: function () {
                     $("#factoryMobile").val("");
+                },
+                editUser:function (dataId) {
+                    msgBox.exWindow.open({
+                        title: '修改用户信息',
+                        url: path + "/admin/userMgr/edit.html?id=" + dataId,
+                        width: '600px',
+                        height: '325px',
+                        close: function (result) {
+                            if (result) {
+                                EventHandler.search();
+                            }
+                        }
+                    });
                 },
                 //审核
                 auditCus: function () {

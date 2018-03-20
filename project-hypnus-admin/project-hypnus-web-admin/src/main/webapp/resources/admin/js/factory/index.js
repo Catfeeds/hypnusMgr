@@ -35,6 +35,15 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     $('#reset').click(function () {
                         EventHandler.reset();
                     });
+                    
+                    $("#addFactory").click(function () {
+                        EventHandler.addFactory();
+                    });
+
+                    $("#dataList").on("click",".editFactory",function () {
+                        var dataId = $(this).attr("data-id");
+                        EventHandler.editFactory(dataId);
+                    });
 
                     $('#auditCus').click(function () {
                         EventHandler.auditCus();
@@ -89,6 +98,32 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                 //重置
                 reset: function () {
                     $("#factoryMobile").val("");
+                },
+                addFactory:function () {
+                    msgBox.exWindow.open({
+                        title: '新增经销商',
+                        url: path + '/admin/factoryMgr/add.html',
+                        width: '1000px',
+                        height: '600px',
+                        close: function (result) {
+                            if (result) {
+                                EventHandler.search();
+                            }
+                        }
+                    });
+                },
+                editFactory:function (dataId) {
+                    msgBox.exWindow.open({
+                        title: '修改信息',
+                        url: path + "/admin/factoryMgr/edit.html?id=" + dataId,
+                        width: '1000px',
+                        height: '600px',
+                        close: function (result) {
+                            if (result) {
+                                EventHandler.search();
+                            }
+                        }
+                    });
                 },
                 //审核
                 auditCus: function () {

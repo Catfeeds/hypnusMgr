@@ -20,6 +20,7 @@
                 <span class="searchName">手机号：</span>
                 <input class="searchInputText" id="phone" type="text" style="width:130px;" />
             </div>
+            <span class="btnBlue" style="margin-left: 5px" id="addUser">新增用户</span>
             <span class="btnGrey" style="margin-left:5px;" id="reset">重置</span>
             <span class="btnRed" id="search">查询</span>
         </div>
@@ -57,10 +58,9 @@
             <td>{{$value.height}}cm</td>
             <td>{{$value.weight}}kg</td>
             <td>{{$value.address}}</td>
-            <td>
-                <li><a href="<c:url value="/admin/factoryMgr/add.html"/>" id="add">新&nbsp;&nbsp;增</a></li>
-                <li><a href="<c:url value="/admin/factoryMgr/edit.html?id={{$value.i_id}}"/>" id="modify">修改</a></li>
-                <li><a href="<c:url value="/admin/factoryMgr/edit.html?id={{$value.i_id}}"/>" id="delete">删&nbsp;&nbsp;除</a></li>
+            <td style="width: 18%">
+                <span class="btnRed deleteUser" style="margin-left: 5px" data-id="{{$value.i_id}}">删除</span>
+                <span class="btnBlue editUser" data-id="{{$value.i_id}}">修改</span>
             </td>
             <input type="hidden" name="id" value="{{$value.i_id}}" param="param">
         </tr>
