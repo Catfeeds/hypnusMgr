@@ -2,6 +2,7 @@ package com.catt.hypnus.repository.entity.factoryMgr;
 
 import com.catt.common.base.repository.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -58,23 +59,35 @@ public class FactoryInfo extends BaseEntity {
      * </pre>
      */
     private Integer status;
+
+    private Integer groupId;
     /**
      * <pre>
      * ddress
      * </pre>
      */
-    private String ddress;
+    private String address;
     /**
      * <pre>
      * avater
      * </pre>
      */
-    private String avater;
+    private String headPath;
 
     /**
      * 关联系统用户标识
      */
     private Long relUserId;
+
+    public void updatePwd(String password){
+        this.password = DigestUtils.md5Hex(password);
+    }
+
+    public void init(){
+        this.password = DigestUtils.md5Hex("888888");
+        this.status =1 ;
+        this.groupId =1;
+    }
 
     @Column(name = "NAME", length = 100)
     public String getName() {
@@ -131,22 +144,25 @@ public class FactoryInfo extends BaseEntity {
     }
 
     @Column(name = "ADDRESS", length = 100)
-    public String getDdress() {
-        return ddress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDdress(String ddress) {
-        this.ddress = ddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     @Column(name = "HEAD_PATH", length = 100)
-    public String getAvater() {
-        return avater;
+    public String getHeadPath() {
+        return headPath;
     }
 
-    public void setAvater(String avater) {
-        this.avater = avater;
+    public void setHeadPath(String headPath) {
+        this.headPath = headPath;
     }
+
+
+
 
     @Column(name = "REL_USER_ID")
     public Long getRelUserId() {
@@ -157,5 +173,13 @@ public class FactoryInfo extends BaseEntity {
         this.relUserId = relUserId;
     }
 
+    @Column(name = "GROUP_ID")
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
 }
 

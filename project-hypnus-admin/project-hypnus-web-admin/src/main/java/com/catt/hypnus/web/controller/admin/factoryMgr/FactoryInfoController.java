@@ -43,13 +43,26 @@ public class FactoryInfoController
         return "/admin/factory/addEdit";
     }
 
+    @RequestMapping(value="/editPwd.html")
+    public String toUpdatePws(Long id,Model model) {
+        model.addAttribute("id",id);
+        return "/admin/factory/pwd";
+    }
+
+    @RequestMapping(value = "/pwd", method = RequestMethod.POST)
+    @ResponseBody
+    public Message updatePwd(Long id,String password){
+        factoryService.updatePassword(id,password);
+        return Message.success("", new Object[0]);
+    }
+
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public Message save(FactoryInfo factoryInfo) {
         if(Objects.isNull(factoryInfo.getId())){
-            factoryInfoBaseService.save(factoryInfo);
+            factoryService.addFactoryInfo(factoryInfo);
         }else{
-            factoryInfoBaseService.update(factoryInfo);
+            factoryService.updateFactoryInfo(factoryInfo);
         }
         return Message.success("", new Object[0]);
     }
@@ -63,7 +76,7 @@ public class FactoryInfoController
 
     @RequestMapping(value="/delete",method = RequestMethod.DELETE)
     public Message delete(Long id,HttpServletRequest request){
-        factoryInfoBaseService.delete(id);
+        factoryService.deleteFactory(id);
         return Message.success("", new Object[0]);
     }
 

@@ -41,14 +41,18 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     });
 
                     $("#dataList").on("click",".editFactory",function () {
-                        var dataId = $(this).attr("data-id");
+                        var dataId = $(this).parent().attr("data-id");
                         EventHandler.editFactory(dataId);
                     });
-
-                    $('#auditCus').click(function () {
-                        EventHandler.auditCus();
+                    $("#dataList").on("click",".deleteFactory",function () {
+                        var dataId = $(this).parent().attr("data-id");
+                        EventHandler.deleteFactory(dataId);
                     });
 
+                    $("#dataList").on("click",".editPwd",function () {
+                        var dataId = $(this).parent().attr("data-id");
+                        EventHandler.editPwd(dataId);
+                    });
                     //动态绑定click(动态生成的html)
                     $("#dataList").on('click', '.xw_tick', templateList.check);
                     $(".xw_tickAll").click(templateList.checkAll);
@@ -125,23 +129,28 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                         }
                     });
                 },
+                deleteFactory:function(dataId){
+                    var flag = window.confirm("您确定要删除该经销商吗？");
+                    if(flag){
+                        $.ajax({
+                            type:"delete",
+                            url:path+"/admin/factoryMgr/delete?id="+dataId,
+                            success:function(){
+                                EventHandler.search();
+                            },
+                            error:function(){
+                                EventHandler.search();
+                            }
+                        })
+                    }else{
+                        alert(dataId);
+                    }
+                },
                 //审核
-                auditCus: function () {
-                    var checked = templateList.getChecked("dataList", "tr");
-                    if (checked.length <= 0) {
-                        msgBox.tips("请选择需要审核的用户");
-                        return;
-                    }else if(checked.length > 1){
-                        msgBox.tips("一次只能审核一位用户");
-                        return;
-                    }
-                    if (checked[0].status != 1) {
-                        msgBox.tips("只能审核待审核状态的用户");
-                        return;
-                    }
+                editPwd:function (dataId) {
                     msgBox.exWindow.open({
-                        title: '审核',
-                        url: path + "/admin/cusCertification/auditPage/" + checked[0].id,
+                        title: '修改密码',
+                        url: path + "/admin/factoryMgr/editPwd.html?id=" + dataId,
                         width: '600px',
                         height: '325px',
                         close: function (result) {
@@ -150,7 +159,8 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                             }
                         }
                     });
-                }
+                },
+
             }
         }();
 

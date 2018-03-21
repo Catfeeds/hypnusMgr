@@ -27,4 +27,5 @@ public class FactoryInfoDaoImpl extends BaseDaoImpl<FactoryInfo, Long>
         }
         return this.findPageBySql(sb.toString(),param,pageable,Map.class);
     }
+
 }

@@ -53,10 +53,11 @@
             <td>{{$value.connector}}</td>
             <td>{{$value.phone}}</td>
             <td>{{$value.email}}</td>
-            <td>{{$value.ddress}}</td>
-            <td style="width: 18%">
-                <span class="btnRed deleteFactory" style="margin-left: 5px" data-id="{{$value.i_id}}">删除</span>
-                <span class="btnBlue editFactory" data-id="{{$value.i_id}}">修改</span>
+            <td>{{$value.address}}</td>
+            <td style="width: 18%" data-id="{{$value.i_id}}">
+                <span class="btnRed deleteFactory" style="margin-left: 5px">删除</span>
+                <span class="btnBlue editFactory" style="margin-left: 5px">修改</span>
+                <span class="btnBlue editPwd">修改密码</span>
             </td>
             <input type="hidden" name="id" value="{{$value.i_id}}" param="param">
         </tr>

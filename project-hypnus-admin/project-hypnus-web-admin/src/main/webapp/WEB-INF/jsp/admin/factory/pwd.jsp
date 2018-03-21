@@ -16,7 +16,7 @@
     <link type="text/css" rel="stylesheet" href="${path}/resources/css/addnew.css"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/safeMgr/css/shijianchanpin.css"/>
 
-	<script type="text/javascript" src="${path}/resources/admin/js/factory/addEdit.js"></script>
+	<script type="text/javascript" src="${path}/resources/admin/js/factory/pwd.js"></script>
   <!--End-->
 </head>
 <!--日历控件引入-->
@@ -28,51 +28,28 @@
             <div class="objBoxContB" style=" margin-bottom:0px;">        
             	<form id="saveForm" method="post">
                     <div class="addFormCont" style="padding-top:0px;">
-                   		<input id="id" type="hidden" name="id" value="${info.id}"/>
+                   		<input id="id" type="hidden" name="id" value="${id}"/>
                     	<div class="addFormContHead">
-		                    <h1 class="addFormConthText"><font>1</font>填写基本信息</h1>
+		                    <h1 class="addFormConthText"><font>1</font>修改密码</h1>
 		                </div>
 	                    <div class="addFormContBody">
 							<table class="addFormTable">
 								<tr>
-									<th>经销商名称:</th>
+									<th>新密码:</th>
 									<td>
-										<input id="name" name="name" value="${info.name}" class="proInput" type="text" style="width:241px;height:38px"
-											   data-rule-required="true" data-msg-required="经销商名称不能为空"/>
-										<font class="redstar">*</font>
-									</td>
-
-									<th>联系人名称:</th>
-									<td>
-										<input id="connector" name="connector" value="${info.connector}" class="proInput" type="text" style="width:241px;height:38px"
-											   data-rule-required="true" data-msg-required="联系人名称不能为空"/>
+										<input id="password" name="password"  class="proInput" type="password" style="width:241px;height:38px"
+											   data-rule-required="true" data-msg-required="新密码不能为空"/>
 										<font class="redstar">*</font>
 									</td>
 								</tr>
 
 								<tr>
-									<th>内部邮箱:</th>
+									<th>确认密码:</th>
 									<td>
-										<input id="email" name="email" value="${info.email}" class="proInput" style="width:241px;height:38px"/>
+										<input id="confirmPwd" name="confirmPwd"  class="proInput" style="width:241px;height:38px" data-msg-required="确认密码不能为空"/>
 									</td>
 
-									<th>移动号码:</th>
-									<td>
-										<input id="phone" name="phone" value="${info.phone}" class="proInput" style="width:241px;height:38px"/>
-										<font class="redstar">*</font>
-									</td>
 								</tr>
-
-								<tr>
-									<th>联系地址:</th>
-									<td>
-	                                        <textarea class="textareaStyle"
-													  style="width:90%; height:80px;" id="address" name="address"
-													  data-rule-maxlength="500" data-msg-maxlength="备注不超过500个字节">${info.address}</textarea>
-									</td>
-								</tr>
-
-
 							</table>
 	                    </div>
                 </div>

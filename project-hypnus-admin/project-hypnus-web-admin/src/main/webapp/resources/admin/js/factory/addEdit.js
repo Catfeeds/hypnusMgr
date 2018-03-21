@@ -49,7 +49,7 @@ var InitHandler = (function() {
 	    },
 		initForm : function(){
 			//绑定表单验证
-			$("#signupForm").validate({
+			$("#saveForm").validate({
 				ignore: ".ignore",
 				errorPlacement: function (error, element) {
 				},
@@ -72,7 +72,6 @@ var InitHandler = (function() {
 			$('#btnCancel').click(function() {
                 goIndex();
 			});
-			$('#checkType').click(EventHandler.checkType);
 		}
 	};
 })();
@@ -84,30 +83,24 @@ var InitHandler = (function() {
 var EventHandler = function(){
 	return {
 		save : function(){
-            if($("#signupForm").valid()){
-                var param = _util.FormUtil.getFormJson('#signupForm');
-                var mobile = param.mobile;
+            if($("#saveForm").valid()){
+                var param = _util.FormUtil.getFormJson('#saveForm');
+                var mobile = param.phone;
                 var reg = /^0?1[3|4|5|8][0-9]\d{8}$/;
                 if (mobile != '' && !reg.test(mobile)){
                     _msgBox.tips("移动号码格式不对");
-                    $("#mobile").focus();
+                    $("#phone").focus();
                     return;
                 }
-                var inEmail = param.inEmail;
+                var inEmail = param.email;
                 reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
                 if (inEmail != '' && !reg.test(inEmail)){
                     _msgBox.tips("内部邮箱格式不对");
-                    $("#inEmail").focus();
+                    $("#email").focus();
                     return;
                 }
-                var outEmail = param.outEmail;
-                if (outEmail != '' && !reg.test(outEmail)){
-                    _msgBox.tips("外部邮箱格式不对");
-                    $("#outEmail").focus();
-                    return;
-                }
-                //return;
-                $.post(path + "/safeMgr/staffMgr/save", param, function(backData) {
+
+                $.post(path + "/admin/factoryMgr/save", param, function(backData) {
                     _msgBox.tips("操作成功");
                     if (backData.type == 'success') {
                         goIndex(backData.type);
@@ -115,19 +108,6 @@ var EventHandler = function(){
                 });
             }
 		},
-		getDept : function(){
-			_msgBox.exWindow.open({
-	              title: '部门管理',
-	              width: '480px',
-	              height : '550px',
-	              url: path + "/safeMgr/deptMgr/index?action=check",
-	              close: function (data) {
-	            	  var param = $.parseJSON(data);
-	            	  $("#deptName").val(param.name);
-		              $("#deptId").val(param.id);
-	              }
-	          });
-		}
 	}
 }();
 
