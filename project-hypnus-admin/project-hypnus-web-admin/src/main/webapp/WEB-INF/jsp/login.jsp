@@ -15,7 +15,7 @@
 <body>
 <div class="navigation">
     <div class="in_navigation">
-        <config:Config key="admin_login_link" defaultValue="<span class='phoneNumber'>热线电话<span class='textOrange'>400-123-123</span></span><span class='followUs'>关注我们</span>"/>
+        <config:Config key="admin_login_link" defaultValue="<span class='phoneNumber'>热线电话<span class='textOrange'>400-123-123</span></span><span class='followUs'> 用户注册</span>"/>
     </div>
 </div>
 <div class="login">

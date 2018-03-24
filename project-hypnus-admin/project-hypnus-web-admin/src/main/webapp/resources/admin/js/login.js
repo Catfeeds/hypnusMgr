@@ -38,6 +38,7 @@ seajs.use(['$', 'msgBox', 'validate', 'base64', 'util', 'rsa', 'cookie', 'jquery
             },
             bindEvent: function () {
                 $('#login').bind('click', EventHandler.login);
+                $(".followUs").bind('click',EventHandler.register);
                 $(document).bind("keydown", function (e) {
                     // 兼容FF和IE和Opera
                     var theEvent = e || window.event;
@@ -105,6 +106,9 @@ seajs.use(['$', 'msgBox', 'validate', 'base64', 'util', 'rsa', 'cookie', 'jquery
                         }
                     });
                 }
+            },
+            register:function(){
+                window.location = path+'/user/register.html';
             }
 
         }

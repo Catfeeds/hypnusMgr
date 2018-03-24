@@ -10,14 +10,14 @@ import com.catt.hypnus.service.base.factoryMgr.FactoryInfoBaseService;
 import com.catt.hypnus.service.factoryMgr.FactoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @Author:lyz
@@ -28,6 +28,15 @@ import java.util.Objects;
 @RequestMapping(value="/admin/factoryMgr")
 public class FactoryInfoController
 {
+
+    @ModelAttribute("parameter")
+    public FactoryInfo bindInfo(@RequestParam("id") Optional<Long> id, Model model){
+        FactoryInfo info  = new FactoryInfo();
+        if(id.isPresent()){
+            info = factoryInfoBaseService.find(id.get());
+        }
+        return info;
+    }
 
     /**
      * 经销商首页
@@ -58,7 +67,7 @@ public class FactoryInfoController
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Message save(FactoryInfo factoryInfo) {
+    public Message save(@ModelAttribute("parameter") FactoryInfo factoryInfo) {
         if(Objects.isNull(factoryInfo.getId())){
             factoryService.addFactoryInfo(factoryInfo);
         }else{
@@ -74,7 +83,7 @@ public class FactoryInfoController
         return "/admin/factory/addEdit";
     }
 
-    @RequestMapping(value="/delete",method = RequestMethod.DELETE)
+    @RequestMapping(value="/delete",method = RequestMethod.POST)
     public Message delete(Long id,HttpServletRequest request){
         factoryService.deleteFactory(id);
         return Message.success("", new Object[0]);

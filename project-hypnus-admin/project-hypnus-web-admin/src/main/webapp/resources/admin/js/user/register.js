@@ -73,6 +73,9 @@ var InitHandler = (function() {
                 goIndex();
 			});
 			$('#checkType').click(EventHandler.checkType);
+
+
+            EventHandler.initFileInput("inputFile", path+"/user/image");
 		}
 	};
 })();
@@ -115,6 +118,35 @@ var EventHandler = function(){
                 });
             }
 		},
+        initFileInput:function(ctrlName, uploadUrl){
+            var control = $('#' + ctrlName);
+            control.fileinput({
+                language: 'zh', //设置语言
+                uploadUrl: uploadUrl,  //上传地址
+                showUpload:false, //是否显示上传按钮
+
+                showRemove :false, //显示移除按钮
+                uploadAsync: true, //默认异步上传
+                dropZoneEnabled: false,
+                showCaption: true,//是否显示标题
+                allowedPreviewTypes: ['image'],
+                allowedFileTypes: ['image'],
+                allowedFileExtensions:  ['jpg', 'png'],
+                maxFileSize : 2000,
+                maxFileCount: 1,
+            });
+            console.log(control.fileinput);
+                control.on("filebatchselected", function(event, files) {
+                console.log("上传");
+            });
+                    control.on("fileuploaded", function(event, data) {
+                debugger;
+                    console.log("上传晚餐");
+                });
+                        control.on("fileerror", function(event, data) {
+                console.log("上传失败");
+            });
+        },
 		getDept : function(){
 			_msgBox.exWindow.open({
 	              title: '部门管理',

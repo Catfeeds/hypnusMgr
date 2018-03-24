@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @Author:lyz
@@ -40,25 +39,14 @@ public class UserController
 
     @RequestMapping(value="/add.html",method = RequestMethod.GET)
     public String toAdd(){
-        return "/admin/user/addEdit";
-    }
-
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @ResponseBody
-    public Message save(UserInfo userInfo) {
-        if(Objects.isNull(userInfo.getId())){
-            userInfoBaseService.save(userInfo);
-        }else{
-            userInfoBaseService.update(userInfo);
-        }
-        return Message.success("", new Object[0]);
+        return "/admin/user/register";
     }
 
     @RequestMapping(value="/edit.html")
     public String toEdit(Long id, HttpServletRequest request, Model model){
         UserInfo info = userInfoBaseService.find(id);
         model.addAttribute("info",info);
-        return "/admin/user/addEdit";
+        return "/admin/user/register";
     }
 
     @RequestMapping(value="/delete",method = RequestMethod.DELETE)

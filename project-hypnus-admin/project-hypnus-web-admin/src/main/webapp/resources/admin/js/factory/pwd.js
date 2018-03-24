@@ -68,7 +68,7 @@ var EventHandler = function(){
                     $("#password").focus();
                     return;
 				}
-                var reg = new RegExp("[ `~@#$%^&*()=|{}':;',\\[\\].<>/~@#￥%……&*（）——|{}【】‘；：”“’。，、？！]|\n|\r|\t");
+                var reg = /^(?=.{6,16}$)(?![0-9]+$)(?!.*(.).*\1)[0-9a-zA-Z@!+-?]+$/;
                 if (password != '' && !reg.test(password)){
                     _msgBox.tips("密码格式不对");
                     $("#password").focus();
