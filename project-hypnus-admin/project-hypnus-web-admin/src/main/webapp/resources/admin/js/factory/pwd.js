@@ -63,14 +63,9 @@ var EventHandler = function(){
             if($("#saveForm").valid()){
                 var param = _util.FormUtil.getFormJson('#saveForm');
                 var password = param.password;
-                if(password.trim().length<6||password.trim().length>14){
-                    _msgBox.tips("密码长度请控制在6-14位");
-                    $("#password").focus();
-                    return;
-				}
-                var reg = /^(?=.{6,16}$)(?![0-9]+$)(?!.*(.).*\1)[0-9a-zA-Z@!+-?]+$/;
+                var reg = /^(?=.{6,14}$)[0-9a-zA-Z@!+-?]+$/;
                 if (password != '' && !reg.test(password)){
-                    _msgBox.tips("密码格式不对");
+                    _msgBox.tips("密码必须在6-14位且不能含有非法字符");
                     $("#password").focus();
                     return;
                 }

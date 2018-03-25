@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService
 
     @Override
     public void addUserInfo(UserInfo info) {
+        info.init();
         userInfoDao.saveOrUpdate(info);
     }
 

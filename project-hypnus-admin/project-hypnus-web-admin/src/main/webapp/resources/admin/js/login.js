@@ -108,7 +108,7 @@ seajs.use(['$', 'msgBox', 'validate', 'base64', 'util', 'rsa', 'cookie', 'jquery
                 }
             },
             register:function(){
-                window.location = path+'/user/register.html';
+                window.location = path+'/dmz/user/register.html';
             }
 
         }

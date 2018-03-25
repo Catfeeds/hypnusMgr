@@ -20,7 +20,7 @@
                 <span class="searchName">手机号：</span>
                 <input class="searchInputText" id="phone" type="text" style="width:130px;" />
             </div>
-            <span class="btnBlue" style="margin-left: 5px" id="addUser">新增用户</span>
+           <%-- <span class="btnBlue" style="margin-left: 5px" id="addUser">新增用户</span>--%>
             <span class="btnGrey" style="margin-left:5px;" id="reset">重置</span>
             <span class="btnRed" id="search">查询</span>
         </div>
@@ -36,7 +36,7 @@
                     <th>身高</th>
                     <th>体重</th>
                     <th>联系地址</th>
-                    <th>操作</th>
+                   <%-- <th>操作</th>--%>
                 </tr>
                 <tbody id="dataList"></tbody>
             </table>
@@ -58,10 +58,10 @@
             <td>{{$value.height}}cm</td>
             <td>{{$value.weight}}kg</td>
             <td>{{$value.address}}</td>
-            <td style="width: 18%">
+           <%-- <td style="width: 18%">
                 <span class="btnRed deleteUser" style="margin-left: 5px" data-id="{{$value.i_id}}">删除</span>
                 <span class="btnBlue editUser" data-id="{{$value.i_id}}">修改</span>
-            </td>
+            </td>--%>
             <input type="hidden" name="id" value="{{$value.i_id}}" param="param">
         </tr>
         {{/each}}

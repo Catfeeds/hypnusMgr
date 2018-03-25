@@ -130,21 +130,25 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     });
                 },
                 deleteFactory:function(dataId){
-                    var flag = window.confirm("您确定要删除该经销商吗？");
-                    if(flag){
-                        $.ajax({
-                            type:"delete",
-                            url:path+"/admin/factoryMgr/delete?id="+dataId,
-                            success:function(){
-                                EventHandler.search();
-                            },
-                            error:function(){
-                                EventHandler.search();
+                    msgBox.confirm({
+                        title: '提示',
+                        msg: '您确定要删除该经销商吗?',
+                        callback: function (btnType) {
+                            if (btnType == 'ok') {
+                                $.ajax({
+                                    type:"post",
+                                    url:path+"/admin/factoryMgr/delete",
+                                    data:{"id":dataId},
+                                    success:function(){
+                                        EventHandler.search();
+                                    },
+                                    error:function(){
+                                        EventHandler.search();
+                                    }
+                                })
                             }
-                        })
-                    }else{
-                        alert(dataId);
-                    }
+                        }
+                    });
                 },
                 //审核
                 editPwd:function (dataId) {

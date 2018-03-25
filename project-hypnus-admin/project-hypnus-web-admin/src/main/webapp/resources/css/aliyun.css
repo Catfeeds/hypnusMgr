@@ -113,10 +113,11 @@ font-family:"微软雅黑"; font-size:14px; font-weight:normal; color:#666; marg
 .huise{ height:485px; width:100%; background-color:#FFF; border-top:1px solid #CCC; border-bottom:1px solid #CCC;}
 .intermediate{ border-collapse:collapse; line-height:60px; width:68px;
  font-family:"微软雅黑"; font-size:12px; font-weight:normal; color:#666;}
-.kuang01,.kuang02{ height:40px; line-height:40px; width:216px; padding:0px 10px 0px 40px;border:1px solid #e6e6e6; margin:0px 20px 10px 30px; border-radius:3px;color:#b8b8b8;font-size:14px;}
+.kuang01,.kuang02,.kuang04{ height:40px; line-height:40px; width:216px; padding:0px 10px 0px 40px;border:1px solid #e6e6e6; margin:0px 20px 10px 30px; border-radius:3px;color:#b8b8b8;font-size:14px;}
 .kuang01{ margin-top:24px;background:#f2f0f0 url(../images/rentou.png) 5px 9px no-repeat;}
 .kuang02{background:#f2f0f0 url(../images/suo.png) no-repeat 5px 9px;}
 .kuang03{ float:left;height:40px; line-height:40px; width:146px; padding:0px 10px 0px 10px;border:1px solid #e6e6e6;margin:0 10px 10px 30px; border-radius:3px;color:#b8b8b8;font-size:14px;background:#f2f0f0}
+.kuang04{background:#f2f0f0 url(../images/rentou.png) no-repeat 5px 9px;}
 .yanzhengma{ display:block; float:left; height:40px; line-height:40px; text-align:center; width:88px; background:#e9f9fe; border:1px #b7edfc solid; border-radius:5px; font-size:16px; letter-spacing:1px; text-align:center; color:#0ab4e4;}
 .loginbtn{
 	display:block;

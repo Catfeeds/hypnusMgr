@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * @Author:lyz
@@ -62,7 +61,7 @@ public class FactoryInfoController
     @ResponseBody
     public Message updatePwd(Long id,String password){
         factoryService.updatePassword(id,password);
-        return Message.success("", new Object[0]);
+        return Message.success();
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -73,7 +72,7 @@ public class FactoryInfoController
         }else{
             factoryService.updateFactoryInfo(factoryInfo);
         }
-        return Message.success("", new Object[0]);
+        return Message.success();
     }
 
     @RequestMapping(value="/edit.html")
@@ -84,9 +83,10 @@ public class FactoryInfoController
     }
 
     @RequestMapping(value="/delete",method = RequestMethod.POST)
-    public Message delete(Long id,HttpServletRequest request){
+    @ResponseBody
+    public Message delete(Long id){
         factoryService.deleteFactory(id);
-        return Message.success("", new Object[0]);
+        return Message.success();
     }
 
     /**

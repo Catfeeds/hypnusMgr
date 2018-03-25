@@ -38,7 +38,7 @@ function countDown(obj, _delay,callback) {
                 obj.removeAttr("disabled").find("span").text("获取验证码");
             }
         }, 1000);
-        callback();
+        callback;
     } else {
         return false;
     }

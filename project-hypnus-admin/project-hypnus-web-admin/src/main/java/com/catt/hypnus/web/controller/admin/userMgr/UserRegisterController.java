@@ -4,11 +4,11 @@ import com.catt.common.web.Message;
 import com.catt.hypnus.repository.entity.userMgr.UserInfo;
 import com.catt.hypnus.service.userMgr.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Objects;
 
 /**
  * @Author:lyz
@@ -16,7 +16,7 @@ import java.util.Objects;
  * @Desc:
  **/
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/dmz/user")
 public class UserRegisterController
 {
 
@@ -28,16 +28,9 @@ public class UserRegisterController
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
     public Message save(UserInfo userInfo) {
-        userService.addUserInfo(userInfo);
+       userService.addUserInfo(userInfo);
         return Message.success("", new Object[0]);
     }
-
-    @RequestMapping(value="/image")
-    @ResponseBody
-    public String hehe(@RequestParam(value="file")MultipartFile file){
-        return "haha";
-    }
-
     @Resource(name="userServiceImpl")
     private UserService userService;
 }

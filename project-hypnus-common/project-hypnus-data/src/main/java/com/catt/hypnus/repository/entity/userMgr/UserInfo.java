@@ -114,6 +114,12 @@ public class UserInfo extends BaseEntity {
      */
     private Long relUserId;
 
+    public void init(){
+        this.account = this.phone;
+        this.password = DigestUtils.md5Hex(password);
+        this.status = 1;
+    }
+
     public void updatePwd(String password){
         this.password = DigestUtils.md5Hex(password);
     }

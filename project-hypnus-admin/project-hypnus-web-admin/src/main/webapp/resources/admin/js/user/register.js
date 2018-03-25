@@ -2,6 +2,7 @@
  * Created by yxc on 2015-10-12 16:03:20.
  */
 var _msgBox = {};
+var reNext = false,reClick = false;
 var _util = {};
 seajs.use([ '$', 'template', 'msgBox', 'easyuiDatagrid', 'easyuiPagination',
 	'validate', 'select', 'util', 'jquery.json'], function($, template, msgBox, easyuiDatagrid,
@@ -19,67 +20,70 @@ seajs.use([ '$', 'template', 'msgBox', 'easyuiDatagrid', 'easyuiPagination',
 var InitHandler = (function() {
 	return {
 		init : function() {
-			this.initPage();
 			this.initEvent();
 			this.initForm();
-			this.loadEnum();
 		},
-		//加载查询框的枚举值
-		loadEnum : function(){
-            var gender = [{value:1, name: "女性"},{value:2, name: "男性"}]
-            $('#gender').select({valueField: 'value', textField: 'name', data: gender});
-	        //var aData = [];
-	        //aData.push({tabName:"T_HR_STAFF",colName:"ISEX"});
-	        //var param = {};
-	        //param.whsEnum = $.toJSON(aData);
-	        //param.type = 2;
-	        //this.getEnumList(param, function(backData){
-	        //    var data = backData.result;
-	        //    var gender = data['T_HR_STAFF-ISEX'].sEnumMapping;
-	        //    $('#gender').select({valueField: 'value', textField: 'name', data: gender});
-	        //});
-		},
-		/**
-	     * 获取枚举信息
-	     */
-	    getEnumList : function(param, callback){
-	      $.post(path + '/pub/enumMgr/findEnumListBusi', param, function(backData) {
-	        callback(backData);
-	      });
-	    },
 		initForm : function(){
-			//绑定表单验证
-			$("#signupForm").validate({
-				ignore: ".ignore",
-				errorPlacement: function (error, element) {
-				},
-				invalidHandler: function (event, validator) {
-					for (v in validator.errorMap) {
-						$('#' + v).focus();
-						_msgBox.warn(validator.errorMap[v]);
-						break;
-					}
-				}
-			});
-		},
-		initPage : function() {
-
 		},
 		initEvent : function() {
-
 		    //监听倒计时
             monitor($("#getCodeBtn"));
-			//保存
-			$('#btnSubmit').click(EventHandler.save);
-			//取消
-			$('#btnCancel').click(function() {
-                goIndex();
-			});
-			$('#checkType').click(EventHandler.checkType);
 
+            $("#goToLogin").bind("click",EventHandler.goLogin);
+            //获取验证码
 			$("#getCodeBtn").click(function () {
-                countDown($(this),100,EventHandler.getCode);
-            })
+                var reg = /^0?1[3|4|5|6|7|8|9][0-9]\d{8}$/;
+			    var phone = $("#phone");
+			    if(phone.val()==null||phone.val().trim()==""||!reg.test(phone.val())){
+                    _msgBox.tips("请输入正确的手机号码");
+                    phone.focus();
+                    return ;
+                }
+                countDown($(this),60,EventHandler.getCode);
+            });
+
+			//下一步
+			$("#nextBtn").click(function(){
+			    console.log("aaa")
+			    if(!reNext){
+                    var phone = $("#phone");
+                    var authCode = $("#authCode");
+                    if(phone.val() == null || phone.val().trim()==""){
+                        _msgBox.tips("请输入手机号码");
+                        phone.focus();
+                        return;
+                    }
+                    if (authCode.val() == null || authCode.val().trim() == "") {
+                        _msgBox.tips("请输入您接收到的短信验证码");
+                        authCode.focus();
+                        return;
+                    }
+                    reNext = true;
+                    EventHandler.validationFnc(phone.val(),authCode.val());
+                }
+            });
+
+			//注册
+            $("#register").click(function(){
+                if(!reClick){
+                    reClick = true;
+                    var pwdHtml = $("#password");
+                    var phone = $("#finalPhone").val();
+                    var confirmPwdHtml = $("#confirmPwd");
+                    var reg = /^(?=.{6,14}$)[0-9a-zA-Z@!+-?]+$/;
+                    if(!reg.test(pwdHtml.val())){
+                        _msgBox.tips("密码必须在6-14位且不能含有非法字符");
+                        pwdHtml.focus();
+                        return;
+                    }
+                    if(confirmPwdHtml.val()!=pwdHtml.val()){
+                        _msgBox.tips("两次输入的密码不一致");
+                        confirmPwdHtml.focus();
+                        return;
+                    }
+                    EventHandler.register(phone,pwdHtml.val());
+                }
+            });
 
 		}
 	};
@@ -91,71 +95,61 @@ var InitHandler = (function() {
  */
 var EventHandler = function(){
 	return {
-		save : function(){
-            if($("#signupForm").valid()){
-                var param = _util.FormUtil.getFormJson('#signupForm');
-                var mobile = param.mobile;
-                var reg = /^0?1[3|4|5|8][0-9]\d{8}$/;
-                if (mobile != '' && !reg.test(mobile)){
-                    _msgBox.tips("移动号码格式不对");
-                    $("#mobile").focus();
-                    return;
+       getCode:function(phone){
+           var phone = $("#phone").val();
+           $.post(path + "/dmz/authCode/get", {"phone":phone}, function(backData) {
+               if (backData.type == 'success') {
+                   _msgBox.tips("发送成功,请注意查收");
+               }else{
+                   _msgBox.tips(backData.content);
+               }
+           });
+       },
+       validationFnc:function(phone,authCode){
+           $.ajax({
+               type:"post",
+               data:{"phone":phone,"authCode":authCode},
+               url:path+"/dmz/authCode/validation",
+               success:function(){
+                   $("#firstStep").addClass("none");
+                   $("#secondStep").removeClass("none");
+                   $(".huanyin").text("2.设置密码");
+                   $("#finalPhone").val(phone);
+               },
+               error:function(backData){
+                   _msgBox.tips(backData.content);
+               },
+               complete:function () {
+                   reNext=false;
+               }
+           })
+       },
+        register:function(phone,password){
+            $.ajax({
+                type:"post",
+                data:{"phone":phone,"password":password},
+                url:path + "/dmz/user/register",
+                success:function(){
+                    _msgBox.tips("注册成功,2秒后跳转至登陆页");
+                    setTimeout(function () {
+                        window.location.href=path+"/login";
+                    },2000);
+                },
+                error:function(backData){
+                    _msgBox.tips(backData.content);
+                },
+                complete:function () {
+                    reClick=false;
                 }
-                var inEmail = param.inEmail;
-                reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-                if (inEmail != '' && !reg.test(inEmail)){
-                    _msgBox.tips("内部邮箱格式不对");
-                    $("#inEmail").focus();
-                    return;
-                }
-                var outEmail = param.outEmail;
-                if (outEmail != '' && !reg.test(outEmail)){
-                    _msgBox.tips("外部邮箱格式不对");
-                    $("#outEmail").focus();
-                    return;
-                }
-                //return;
-                $.post(path + "/safeMgr/staffMgr/save", param, function(backData) {
-                    _msgBox.tips("操作成功");
-                    if (backData.type == 'success') {
-                        goIndex(backData.type);
-                    }
-                });
-            }
-		},
-		getDept : function(){
-			_msgBox.exWindow.open({
-	              title: '部门管理',
-	              width: '480px',
-	              height : '550px',
-	              url: path + "/safeMgr/deptMgr/index?action=check",
-	              close: function (data) {
-	            	  var param = $.parseJSON(data);
-	            	  $("#deptName").val(param.name);
-		              $("#deptId").val(param.id);
-	              }
-	          });
-		},
-       getCode:function(){
-
-       }
+            });
+        },
+        goLogin:function(){
+            window.location.href=path+"/login";
+        }
 	}
 }();
 
-/**
- * 数据处理器
- */
-var DataHandler = function(){
-    return {
-    	checkAccount : function(param, callback){
-            $.post(path + '/safeMgr/staffMgr/checkAccount', param, function(backData) {
-                callback(backData);
-            });
-        }
-    };
-}();
 
 function goIndex(backData){
     _msgBox.exWindow.close(backData);
-    //location.href = path + "/safeMgr/staff/index";
 }

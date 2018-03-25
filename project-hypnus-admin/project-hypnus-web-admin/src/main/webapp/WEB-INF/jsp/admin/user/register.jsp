@@ -23,8 +23,11 @@
         .denglu #getCodeBtn{
             float: right;
         }
-        .denglu .firstStep > div,.denglu .secondStep > div{
+        .denglu .firstStep > div{
             margin-top: 20px;
+        }
+        .denglu .secondStep > div{
+            margin-top: 10px;
         }
         .denglu #getCodeBtn span{
             display: block;
@@ -71,17 +74,16 @@
 <body>
 <div class="navigation">
     <div class="in_navigation">
-        <config:Config key="admin_login_link" defaultValue="<span class='phoneNumber'>热线电话<span class='textOrange'>400-123-123</span></span><span class='followUs'> 去登陆</span>"/>
+        <config:Config key="admin_login_link" defaultValue="<span class='phoneNumber'>热线电话<span class='textOrange'>400-123-123</span></span><span class='followUs' id='goToLogin'> 去登陆</span>"/>
     </div>
 </div>
 <div class="login">
-    <form id="saveForm">
         <div class="zhongbu">
             <div class="denglu">
                     <h1 class="huanyin">1.验证手机</h1>
-                <div class="firstStep ">
+                <div id="firstStep" class="firstStep">
                     <div class="phoneDiv">
-                        <input id="phone" name="phone" type="text" placeholder="请输入您的手机号码" class="kuang02"/>
+                        <input id="phone" name="phone" type="text" placeholder="请输入您的手机号码" class="kuang04"/>
                     </div>
                     <div class="authCodeDiv">
                         <input id="authCode" name="authCode" type="text" placeholder="请输入手机验证码" class="kuang02"/>
@@ -94,7 +96,10 @@
                         <%--<a class="btn registerBtn none" id="register">注册</a>--%>
                     </div>
                 </div>
-                <div class="secondStep none">
+                <div id="secondStep" class="secondStep none">
+                    <div>
+                        <input id="finalPhone" value="18520661698" class="kuang04" readonly/>
+                    </div>
                     <div>
                         <input id="password" name="password" type="password" placeholder="请输入您的密码" class="kuang02"/>
                     </div>
@@ -115,7 +120,6 @@
 
             </div>
         </div>
-    </form>
     <div class="copyRight" style="margin-top:145px;"><config:Config key="admin_login_copyright" defaultValue="Copyright ©2018 和普乐 版权所有"/> </div>
 </div>
 </body>
