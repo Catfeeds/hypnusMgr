@@ -2,6 +2,7 @@ package com.catt.hypnus.repository.entity.userMgr;
 
 import com.catt.common.base.repository.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +35,7 @@ public class UserInfo extends BaseEntity {
      * assword
      * </pre>
      */
-    private String assword;
+    private String password;
     /**
      * <pre>
      * head_path
@@ -113,6 +114,10 @@ public class UserInfo extends BaseEntity {
      */
     private Long relUserId;
 
+    public void updatePwd(String password){
+        this.password = DigestUtils.md5Hex(password);
+    }
+
     @Column(name = "ACCOUNT", length = 32)
     public String getAccount() {
         return account;
@@ -122,13 +127,13 @@ public class UserInfo extends BaseEntity {
         this.account = account;
     }
 
-    @Column(name = "ASSWORD", length = 32)
-    public String getAssword() {
-        return assword;
+    @Column(name = "PASSWORD", length = 32)
+    public String getPassword() {
+        return password;
     }
 
-    public void setAssword(String assword) {
-        this.assword = assword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Column(name = "HEAD_PATH", length = 100)

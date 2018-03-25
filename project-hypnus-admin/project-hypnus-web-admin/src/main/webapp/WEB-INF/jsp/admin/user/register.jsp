@@ -15,6 +15,55 @@
     <script type="text/javascript" src="${path}/resources/sea-modules/My97DatePicker/4.8/WdatePicker.js"></script>
     <!--日历控件引入 END-->
        <script type="text/javascript" src="${path}/resources/admin/js/user/register.js"></script>
+    <script type="text/javascript" src="${path}/resources/admin/js/user/getCode.js"></script>
+    <style type="text/css">
+        .denglu {
+            width: 40%;
+        }
+        .denglu #getCodeBtn{
+            float: right;
+        }
+        .denglu .firstStep > div,.denglu .secondStep > div{
+            margin-top: 20px;
+        }
+        .denglu #getCodeBtn span{
+            display: block;
+            margin-top: 5px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 3px;
+            color: #FFF;
+            text-align: center;
+            background: #fdc202;
+            border: 1px solid #fdc202;
+            cursor: pointer;
+        }
+        .denglu .btn{
+            display: block;
+            width: 270px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 3px;
+            margin: 10px 20px 10px 30px;
+            padding-bottom: 1px;
+            color: #FFF;
+            text-align: center;
+            letter-spacing: 4px;
+            cursor: pointer;
+        }
+        .denglu .nextBtn{
+            background: #0ab4e4;
+            border: 1px solid #0ab4e4;
+        }
+        .denglu .registerBtn{
+            background: #ff4d4d;
+            border: 1px solid #dd2963;
+        }
+        .none{
+            display: none !important;
+        }
+
+    </style>
 
 
 </head>
@@ -29,16 +78,41 @@
     <form id="saveForm">
         <div class="zhongbu">
             <div class="denglu">
-
-                <input id="phone" name="phone" type="password" placeholder="请输入您的手机号码" class="kuang02"/>
-                <input id="password" name="password" type="password" placeholder="请输入您的密码" class="kuang02"/>
-                <input id="confirmPwd" name="confirmPwd" type="text" placeholder="请确认您的密码" class="kuang02"/>
-                <input id="authCode" name="authCode" type="text" placeholder="请输入验证码" class="kuang02"/>
-
-
-                <div class="liubai">
-                    <a class="loginbtn" id="register">注册</a>
+                    <h1 class="huanyin">1.验证手机</h1>
+                <div class="firstStep ">
+                    <div class="phoneDiv">
+                        <input id="phone" name="phone" type="text" placeholder="请输入您的手机号码" class="kuang02"/>
+                    </div>
+                    <div class="authCodeDiv">
+                        <input id="authCode" name="authCode" type="text" placeholder="请输入手机验证码" class="kuang02"/>
+                        <div id="getCodeBtn" data-rel="register">
+                            <span>获取验证码</span>
+                        </div>
+                    </div>
+                    <div class="liubai">
+                        <a class="btn nextBtn" id="nextBtn">下一步</a>
+                        <%--<a class="btn registerBtn none" id="register">注册</a>--%>
+                    </div>
                 </div>
+                <div class="secondStep none">
+                    <div>
+                        <input id="password" name="password" type="password" placeholder="请输入您的密码" class="kuang02"/>
+                    </div>
+                    <div>
+                        <input id="confirmPwd" name="confirmPwd" type="password" placeholder="请确认您的密码" class="kuang02"/>
+                    </div>
+                    <div class="liubai">
+                        <a class="btn registerBtn" id="register">注册</a>
+                    </div>
+                </div>
+
+
+
+                <%--<input id="confirmPwd" name="confirmPwd" type="text" placeholder="请确认您的密码" class="kuang02"/>
+                <input id="authCode" name="authCode" type="text" placeholder="请输入验证码" class="kuang02"/>--%>
+
+
+
             </div>
         </div>
     </form>
