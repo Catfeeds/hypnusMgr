@@ -2,6 +2,7 @@ package com.catt.hypnus.web.controller.admin.deviceMgr;
 
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.web.Message;
 import com.catt.common.web.controller.BaseController;
 import com.catt.common.web.spring.resolver.annotation.CurrentUser;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
@@ -50,6 +51,58 @@ public class DeviceController extends BaseController {
     @ResponseBody
     public Page<Map> getPageShopOwner(DeviceForm deviceForm, Pageable pageable, @CurrentUser Long id) {
         return deviceService.findPage(deviceForm,pageable);
+    }
+
+    @RequestMapping(value="/bindFactory",method = RequestMethod.POST)
+    @ResponseBody
+    public Message bindFactory(Long id,Long factoryId){
+        try{
+            deviceService.bindFactory(id,factoryId);
+            return Message.success();
+        }catch (RuntimeException e){
+            return Message.error(e.getMessage());
+        }catch (Exception e){
+            return  Message.error("系统异常");
+        }
+    }
+
+    @RequestMapping(value="/bindUser",method = RequestMethod.POST)
+    @ResponseBody
+    public Message bindUser(Long id,Long userId){
+        try{
+            deviceService.bindUser(id,userId);
+            return Message.success();
+        }catch (RuntimeException e){
+            return Message.error(e.getMessage());
+        }catch (Exception e){
+            return  Message.error("系统异常");
+        }
+    }
+
+    @RequestMapping(value="/unbindUser",method = RequestMethod.POST)
+    @ResponseBody
+    public Message unbindUser(Long id){
+        try{
+            deviceService.unbindUser(id);
+            return Message.success();
+        }catch (RuntimeException e){
+            return Message.error(e.getMessage());
+        }catch (Exception e){
+            return  Message.error("系统异常");
+        }
+    }
+
+    @RequestMapping(value="/unbindFactory",method = RequestMethod.POST)
+    @ResponseBody
+    public Message unbindFactory(Long id){
+        try{
+            deviceService.unbindFactory(id);
+            return Message.success();
+        }catch (RuntimeException e){
+            return Message.error(e.getMessage());
+        }catch (Exception e){
+            return  Message.error("系统异常");
+        }
     }
 
 }

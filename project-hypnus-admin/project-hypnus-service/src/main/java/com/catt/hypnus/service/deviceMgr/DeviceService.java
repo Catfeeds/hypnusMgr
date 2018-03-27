@@ -20,5 +20,13 @@ public interface DeviceService {
      */
     Page<Map> findPage(DeviceForm deviceForm,Pageable pageable);
 
+    void bindUser(Long id,Long userId);
+
+    void bindFactory(Long id,Long factoryId);
+
+    void unbindUser(Long id);
+
+    void unbindFactory(Long id);
+
 }
 

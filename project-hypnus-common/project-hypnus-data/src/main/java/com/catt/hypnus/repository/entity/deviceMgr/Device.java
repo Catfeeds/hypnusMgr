@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * 设备表实体类
@@ -64,6 +65,28 @@ public class Device extends BaseEntity {
      * </pre>
      */
     private Long cusId;
+
+    public void unbindFactory(){
+        this.factoryId = null;
+    }
+
+    public void unbindUser(){
+        this.cusId = null;
+    }
+
+    public void bindFactory(Long factoryId){
+        if(Objects.nonNull(factoryId)){
+            throw new RuntimeException("该设备已经有绑定经销商,请先解绑");
+        }
+        this.factoryId=factoryId;
+    }
+
+    public void bindUser(Long userId){
+        if(Objects.nonNull(userId)){
+            throw new RuntimeException("该设备已经有绑定用户,请先解绑");
+        }
+        this.cusId = userId;
+    }
 
     @Column(name = "DEVICE_ID", length = 32)
     public String getDeviceId() {
