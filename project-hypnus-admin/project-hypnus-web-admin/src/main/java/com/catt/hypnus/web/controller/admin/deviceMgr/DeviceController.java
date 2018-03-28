@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * <pre>
  * Description:Admin公共Controller
- * Author: Chen zeming
+ * Author: runtime
  * Version:
  * Since: Ver 1.1
  * date: 2015-10-09 09:23:12

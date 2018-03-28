@@ -3,7 +3,9 @@ package com.catt.hypnus.service.deviceMgr;
 
 import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 使用记录接口
@@ -20,6 +22,8 @@ public interface UsetimeService {
      * @return
      */
     List<Usetime> findList(String deviceId, String startTime, String endTime);
+
+    Map getDateFromOss(String deviceId, String startTime, int timeType) throws IOException;
 
 }
 

@@ -293,7 +293,7 @@ define('msgBox/pc/2.0/msgBox', ['$', 'layer', 'msgBox/pc/2.0/css/msgBox.css'],
                  *  result:'回传的结果，可以自定义'
                  * }
                  *
-                 * 2015-12-03   梁展鹏
+                 * 2015-12-03   runtime
                  * 1. A页打开B页，B页回传参数到A页，B页插入如下代码：
                  var point = {
                     longitude: longitude,
