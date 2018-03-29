@@ -17,4 +17,6 @@ import java.util.Map;
  */
 public interface UserInfoDao extends BaseDao<UserInfo, Long> {
     Page<Map> queryList(String phone, Pageable pageable);
+
+    Page<Map> queryListByNonBind(String phone, Pageable pageable);
 }

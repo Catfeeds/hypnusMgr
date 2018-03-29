@@ -51,6 +51,11 @@
         <property name="serviceName" value="userInfoBaseServiceImpl"/>
         <property name="serviceInterface" value="com.catt.hypnus.service.base.userMgr.UserInfoBaseService"/>
     </bean>
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter" parent="baseRmiServiceExporter">
+        <property name="service" ref="usetimeServiceImpl"/>
+        <property name="serviceName" value="usetimeServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.deviceMgr.UsetimeService"/>
+    </bean>
 
 
 </beans>

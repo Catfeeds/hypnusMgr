@@ -49,7 +49,8 @@ public class SimpleGetObjectSample {
              * Note that there are two ways of uploading an object to your bucket, the one 
              * by specifying an input stream as content source, the other by specifying a file.
              */
-            String key = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/flow.edf";
+//            String key = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/flow.edf";
+            String key = "0a0a0a0a0b0b0b0b0c0c0c0c/2016-02-09 16:26:00/pressure.edf";
 //            String key = "0a0a0a0a0b0b0b0b0c0c0c0c/2016-02-09 16:26:00/t_log_login.sql";
             downLoadFile(client, key);
 
@@ -75,7 +76,7 @@ public class SimpleGetObjectSample {
 
     /**
      * Download an object from your bucket
-     *
+     *  下载
      * @param client
      * @param key
      * @throws IOException
@@ -94,7 +95,7 @@ public class SimpleGetObjectSample {
 
     /**
      * Upload an object to your bucket from an input stream
-     *
+     *  上传
      * @param client
      * @param key
      * @throws IOException

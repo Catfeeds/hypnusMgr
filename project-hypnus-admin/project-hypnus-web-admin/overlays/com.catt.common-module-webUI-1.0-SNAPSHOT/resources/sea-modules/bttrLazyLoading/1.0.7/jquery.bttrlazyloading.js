@@ -1,8 +1,8 @@
 /**
- * Created by Chen zeming on 2014/08/05.
+ * Created by runtime on 2014/08/05.
  */
 /**
- * Í¼Æ¬ÑÓ³Ù¼ÓÔØ£¬¶¯»­Ð§¹ûÒÀÀµÓÚAnimate.css
+ * Í¼Æ¬ï¿½Ó³Ù¼ï¿½ï¿½Ø£ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Animate.css
  */
 define('bttrLazyLoading/1.0.7/jquery.bttrlazyloading',
 	[

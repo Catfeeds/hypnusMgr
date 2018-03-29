@@ -1,5 +1,5 @@
 /**
- * Created by Chen zeming on 2014/11/10.
+ * Created by runtime on 2014/11/10.
  */
 /**
  * 截图插件

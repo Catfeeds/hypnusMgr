@@ -91,5 +91,11 @@
         <property name="serviceInterface" value="com.catt.hypnus.service.base.userMgr.UserInfoBaseService"/>
     </bean>
 
+    <bean id="usetimeServiceImpl" name="usetimeServiceImpl"
+          parent="parentRmiProxyFactoryBean">
+        <property name="serviceUrl" value="${service.rmi.url}/usetimeServiceImpl"/>
+        <property name="serviceInterface" value="com.catt.hypnus.service.deviceMgr.UsetimeService"/>
+    </bean>
+
 
 </beans>

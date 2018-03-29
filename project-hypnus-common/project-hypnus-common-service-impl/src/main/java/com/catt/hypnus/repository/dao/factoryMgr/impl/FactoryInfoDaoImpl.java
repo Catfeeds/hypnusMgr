@@ -28,4 +28,16 @@ public class FactoryInfoDaoImpl extends BaseDaoImpl<FactoryInfo, Long>
         return this.findPageBySql(sb.toString(),param,pageable,Map.class);
     }
 
+    @Override
+    public Page<Map> queryListNonBind(String phone, Pageable pageable) {
+        StringBuffer sb = new StringBuffer();
+        Map param = new HashMap();
+        sb.append("select * from factory_info where i_id not in ( select factory_id from device_info where factory_id != null) ");
+        if(StringUtil.isNotBlank(phone)){
+            sb.append(" and phone = :phone");
+            param.put("phone",phone);
+        }
+        return this.findPageBySql(sb.toString(),param,pageable,Map.class);
+    }
+
 }

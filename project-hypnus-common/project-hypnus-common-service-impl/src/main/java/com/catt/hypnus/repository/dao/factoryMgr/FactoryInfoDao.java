@@ -17,4 +17,7 @@ import java.util.Map;
  */
 public interface FactoryInfoDao extends BaseDao<FactoryInfo, Long> {
     Page<Map>  queryList(String phone, Pageable pageable);
-}
+
+    Page<Map> queryListNonBind(String phone,Pageable pageable);
+
+ }
