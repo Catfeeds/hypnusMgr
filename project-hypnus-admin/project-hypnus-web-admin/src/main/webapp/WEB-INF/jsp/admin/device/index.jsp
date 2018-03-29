@@ -32,17 +32,25 @@
             <span class="btnRed" id="search">查询</span>
         </div>
 
+        <div class="resultBar">
+            <span class="btnRed" style="margin-left:6px;" id="unbindUser">解绑用户</span>
+            <span class="btnRed" style="margin-left:6px;" id="unbindFactory">解绑经销商</span>
+            <span class="btnGrey" style="margin-left:6px;" id="bindUser">绑定用户</span>
+            <span class="btnGrey" style="margin-left:6px;" id="bindFactory">绑定经销商</span>
+        </div>
+
         <div class="userDetail">
-            <table class="datalistTable xw_shenfen">
+            <table class="datalistTable">
                 <tr>
-                    <th width="40px"><div class="tickAll xw_tickAll"></div></th>
+                    <th width="40px"><div class=""></div></th>
                     <th>设备序列号</th>
                     <th>设备型号</th>
                     <th>绑定用户手机</th>
                     <th>绑定经销商名称</th>
                     <th>绑定经销商手机</th>
                     <th>出厂日期</th>
-                    <th>操作</th>
+                    <th>是否绑定经销商</th>
+                    <th>是否绑定用户</th>
                 </tr>
                 <tbody id="dataList"></tbody>
             </table>
@@ -64,13 +72,23 @@
             <td>{{$value.phone}}</td>
             <td>{{$value.productDate}}</td>
             <td>
-                <span
-                    class="{{if $value.status == 1}}bgGrey{{/if}}{{if $value.status == 2}}bgBlue{{/if}}{{if $value.status == 3}}bgRed{{/if}}">
-                {{$value.statusName}}
-                </span>
+                {{if $value.factory_id == ''}}
+                <span class="bgRed">未绑定</span>
+                {{else}}
+                <span class="bgBlue">已绑定</span>
+                {{/if}}
+            </td>
+            <td>
+                {{if $value.cus_id == ''}}
+                <span class="bgRed">未绑定</span>
+                {{else}}
+                <span class="bgBlue">已绑定</span>
+                {{/if}}
             </td>
             <input type="hidden" name="id" value="{{$value.i_id}}" param="param">
             <input type="hidden" name="deviceId" value="{{$value.device_id}}" param="param">
+            <input type="hidden" name="factoryId" value="{{$value.factory_id}}" param="param">
+            <input type="hidden" name="userId" value="{{$value.cus_id}}" param="param">
         </tr>
         {{/each}}
     </script>

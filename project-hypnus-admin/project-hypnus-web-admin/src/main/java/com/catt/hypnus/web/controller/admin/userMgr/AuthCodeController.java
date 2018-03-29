@@ -1,6 +1,9 @@
 package com.catt.hypnus.web.controller.admin.userMgr;
 
+import com.catt.common.base.pojo.search.Filter;
 import com.catt.common.web.Message;
+import com.catt.hypnus.repository.entity.userMgr.UserInfo;
+import com.catt.hypnus.service.userMgr.UserService;
 import com.catt.hypnus.web.controller.admin.authCode.AuthCode;
 import com.catt.hypnus.web.controller.admin.authCode.service.SmsService;
 import com.catt.hypnus.web.controller.admin.exception.AuthCodeException;
@@ -10,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -26,6 +31,10 @@ public class AuthCodeController
     public Message getAuthCode(HttpServletRequest request,String phone){
         if (phone == null || phone.trim().equals("")) {
             return Message.error("手机号码不能为空");
+        }
+        UserInfo info = userService.findOne(Arrays.asList(Filter.eq("phone", phone+"")));
+        if(Objects.nonNull(info)){
+            return Message.error("该手机号码已经注册过用户");
         }
         AuthCode auth = (AuthCode) WebUtil.getSessionAttribute(request,phone);
         if(Objects.nonNull(auth)&&auth.countSurplusTime()>0){
@@ -57,4 +66,7 @@ public class AuthCodeController
 
     @Autowired
     private SmsService smsService;
+
+    @Resource(name="userServiceImpl")
+    private UserService userService;
 }

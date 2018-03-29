@@ -95,7 +95,7 @@ var InitHandler = (function() {
  */
 var EventHandler = function(){
 	return {
-       getCode:function(phone){
+       getCode:function(){
            var phone = $("#phone").val();
            $.post(path + "/dmz/authCode/get", {"phone":phone}, function(backData) {
                if (backData.type == 'success') {

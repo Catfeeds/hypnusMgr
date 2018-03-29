@@ -1,7 +1,9 @@
 package com.catt.hypnus.service.impl.factoryMgr;
 
+import com.catt.common.base.pojo.search.Filter;
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.service.impl.BaseServiceImpl;
 import com.catt.hypnus.repository.dao.factoryMgr.FactoryInfoDao;
 import com.catt.hypnus.repository.entity.factoryMgr.FactoryInfo;
 import com.catt.hypnus.service.factoryMgr.FactoryService;
@@ -9,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @Author:lyz
@@ -18,7 +22,7 @@ import java.util.Map;
  **/
 @Service("factoryServiceImpl")
 @Transactional
-public class FactoryServiceImpl implements FactoryService
+public class FactoryServiceImpl extends BaseServiceImpl<FactoryInfo,Long> implements FactoryService
 {
     @Resource(name = "factoryInfoDaoImpl")
     private FactoryInfoDao factoryInfoDao;
@@ -31,11 +35,19 @@ public class FactoryServiceImpl implements FactoryService
     @Override
     public void addFactoryInfo(FactoryInfo info) {
         info.init();
+        FactoryInfo oldInfo = this.findOne(Arrays.asList(Filter.eq("phone",info.getPhone())));
+        if(Objects.nonNull(oldInfo)){
+            throw new RuntimeException("该手机号码的经销商已经存在");
+        }
         factoryInfoDao.saveOrUpdate(info);
     }
 
     @Override
     public void updateFactoryInfo(FactoryInfo info) {
+       /* FactoryInfo oldInfo = this.findOne(Arrays.asList(Filter.eq("phone",info.getPhone())));
+        if(Objects.nonNull(oldInfo)&&!oldInfo.getId().equals(info.getId())){
+            throw new RuntimeException("该手机号码的经销商已经存在");
+        }*/
         factoryInfoDao.saveOrUpdate(info);
     }
 

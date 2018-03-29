@@ -2,6 +2,7 @@ package com.catt.hypnus.service.impl.userMgr;
 
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.service.impl.BaseServiceImpl;
 import com.catt.hypnus.repository.dao.userMgr.UserInfoDao;
 import com.catt.hypnus.repository.entity.userMgr.UserInfo;
 import com.catt.hypnus.service.userMgr.UserService;
@@ -18,7 +19,7 @@ import java.util.Map;
  **/
 @Service(value="userServiceImpl")
 @Transactional
-public class UserServiceImpl implements UserService
+public class UserServiceImpl extends BaseServiceImpl<UserInfo,Long> implements UserService
 {
     @Override
     public Page<Map> queryList(String phone, Pageable pageable) {
