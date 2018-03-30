@@ -28,7 +28,6 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                 /** 初始化事件 */
                 initEvent: function () {
                     $('#search').click(function () {
-                        debugger
                         EventHandler.search();
                     });
 
@@ -36,22 +35,21 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                         EventHandler.reset();
                     });
 
-                    $('#auditCus').click(function () {
-                        EventHandler.auditCus();
+                    $("#bindUser").click(function(){
+                        EventHandler.bindUser();
+                    });
+                    $("#bindFactory").click(function(){
+                        EventHandler.bindFactory();
+                    });
+                    $("#unbindUser").click(function(){
+                        EventHandler.unbindUser();
+                    });
+                    $("#unbindFactory").click(function(){
+                        EventHandler.unbindFactory();
                     });
 
                     //动态绑定click(动态生成的html)
                     $("#dataList").on('click', '.xw_tick', templateList.check);
-                    $(".xw_tickAll").click(templateList.checkAll);
-
-                    // tab标签
-                  /*  $(".xw_select").click(function () {
-                        $(".xw_select").removeClass("selectTabs_on");
-                        $(this).addClass("selectTabs_on");
-                        var data = $(this).attr("data-value");
-                        $("#status").val(data);
-                        EventHandler.search();
-                    });*/
 
                 }
             }
@@ -93,6 +91,74 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     $("#snId").val("");
                     $("#userMobile").val("");
                     $("#factoryMobile").val("");
+                },
+
+                bindUser:function(){
+                    debugger;
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length != 1 || checked[0].userId != "") {
+                        msgBox.tips("请选择一台还未绑定用户的设备");
+                        return;
+                    }
+                },
+                bindFactory:function(){
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length != 1 || checked[0].factoryId != "") {
+                        msgBox.tips("请选择一台还未绑定经销商的设备");
+                        return;
+                    }
+                },
+                unbindUser:function(){
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length != 1 || checked[0].userId == "") {
+                        msgBox.tips("请选择一台已经绑定了用户的设备进行操作");
+                        return;
+                    }
+                    msgBox.confirm({
+                        title: '提示',
+                        msg: '您确定要解除该设备绑定的用户吗？',
+                        callback: function (btnType) {
+                            if (btnType == 'ok') {
+                                $.ajax({
+                                    type:"post",
+                                    url:path+"/admin/deviceMgr/unbindUser",
+                                    data:{"id":checked[0].id},
+                                    success:function(){
+                                        EventHandler.search();
+                                    },
+                                    error:function(){
+                                        msgBox.tips("操作失败");
+                                    }
+                                })
+                            }
+                        }
+                    });
+                },
+                unbindFactory:function(){
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length != 1 || checked[0].factoryId == "") {
+                        msgBox.tips("请选择一台已经绑定了经销商的设备进行操作");
+                        return;
+                    }
+                    msgBox.confirm({
+                        title: '提示',
+                        msg: '您确定要解除该设备绑定的经销商吗？',
+                        callback: function (btnType) {
+                            if (btnType == 'ok') {
+                                $.ajax({
+                                    type:"post",
+                                    url:path+"/admin/deviceMgr/unbindFactory",
+                                    data:{"id":checked[0].id},
+                                    success:function(){
+                                        EventHandler.search();
+                                    },
+                                    error:function(){
+                                        msgBox.tips("操作失败");
+                                    }
+                                })
+                            }
+                        }
+                    });
                 },
                 //审核
                 auditCus: function () {
@@ -137,14 +203,6 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                         callback(backData);
                     });
                 },
-                /**
-                 * 审核
-                 */
-                auditCus: function (param, callback) {
-                    $.post(path + '/admin/cusCertification/audit', param, function (backData) {
-                        callback(backData);
-                    });
-                }
             }
         }();
 

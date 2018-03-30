@@ -2,6 +2,7 @@ package com.catt.hypnus.service.factoryMgr;
 
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.base.service.BaseService;
 import com.catt.hypnus.repository.entity.factoryMgr.FactoryInfo;
 
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
  * @Date: 2018/3/17 16:33
  * @Desc:
  **/
-public interface FactoryService
+public interface FactoryService extends BaseService<FactoryInfo,Long>
 {
     Page<Map> queryList(String phone, Pageable pageable);
 
