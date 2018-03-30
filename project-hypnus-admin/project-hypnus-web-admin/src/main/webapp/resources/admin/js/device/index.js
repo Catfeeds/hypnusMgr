@@ -94,19 +94,40 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                 },
 
                 bindUser:function(){
-                    debugger;
                     var checked = templateList.getChecked("dataList", "tr");
                     if (checked.length != 1 || checked[0].userId != "") {
                         msgBox.tips("请选择一台还未绑定用户的设备");
                         return;
                     }
+                    msgBox.exWindow.open({
+                        title: '选择绑定用户',
+                        url: path + "/admin/deviceMgr/selectUserPage/" + checked[0].id,
+                        width: '1000px',
+                        height: '400px',
+                        close: function (result) {
+                            if (result) {
+                                EventHandler.search();
+                            }
+                        }
+                    });
                 },
                 bindFactory:function(){
                     var checked = templateList.getChecked("dataList", "tr");
                     if (checked.length != 1 || checked[0].factoryId != "") {
                         msgBox.tips("请选择一台还未绑定经销商的设备");
                         return;
-                    }
+                    };
+                    msgBox.exWindow.open({
+                        title: '选择绑定经销商',
+                        url: path + "/admin/deviceMgr/selectFactoryPage/" + checked[0].id,
+                        width: '1000px',
+                        height: '400px',
+                        close: function (result) {
+                            if (result) {
+                                EventHandler.search();
+                            }
+                        }
+                    });
                 },
                 unbindUser:function(){
                     var checked = templateList.getChecked("dataList", "tr");

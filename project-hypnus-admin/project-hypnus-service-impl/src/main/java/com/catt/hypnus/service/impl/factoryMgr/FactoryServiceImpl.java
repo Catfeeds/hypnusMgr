@@ -33,6 +33,11 @@ public class FactoryServiceImpl extends BaseServiceImpl<FactoryInfo,Long> implem
     }
 
     @Override
+    public Page<Map> queryListNonBind(String phone, Pageable pageable) {
+        return factoryInfoDao.queryListNonBind(phone,pageable);
+    }
+
+    @Override
     public void addFactoryInfo(FactoryInfo info) {
         info.init();
         FactoryInfo oldInfo = this.findOne(Arrays.asList(Filter.eq("phone",info.getPhone())));

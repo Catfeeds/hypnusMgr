@@ -16,6 +16,8 @@ public interface FactoryService extends BaseService<FactoryInfo,Long>
 {
     Page<Map> queryList(String phone, Pageable pageable);
 
+    Page<Map> queryListNonBind(String phone,Pageable pageable);
+
     void addFactoryInfo(FactoryInfo info);
 
     void updateFactoryInfo(FactoryInfo info);

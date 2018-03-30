@@ -16,6 +16,8 @@ public interface UserService extends BaseService<UserInfo, Long>
 {
     Page<Map> queryList(String phone, Pageable pageable);
 
+    Page<Map> queryListNonBind(String phone,Pageable pageable);
+
     void addUserInfo(UserInfo info);
 
     void updateUserInfo(UserInfo info);

@@ -11,6 +11,6 @@ import org.springframework.stereotype.Service;
 public class SmsService
 {
     public String smsAuthCode(String phone) {
-        return null;
+        return "123456";
     }
 }

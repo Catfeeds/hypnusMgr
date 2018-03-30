@@ -25,6 +25,7 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long>
 			sb.append(" and phone = :phone");
 			param.put("phone",phone);
 		}
+		sb.append(" order by d_modify_date desc");
 		return this.findPageBySql(sb.toString(),param,pageable,Map.class);
 	}
 
@@ -32,11 +33,12 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long>
 	public Page<Map> queryListByNonBind(String phone, Pageable pageable) {
 		StringBuffer sb = new StringBuffer();
 		Map param = new HashMap();
-		sb.append("select * from user_info where i_id not in ( select cus_id from device_info where cus_id != null) ");
+		sb.append("select * from user_info where i_id not in ( select cus_id from device_info where cus_id != '' group by cus_id) ");
 		if(StringUtil.isNotBlank(phone)){
 			sb.append(" and phone = :phone");
 			param.put("phone",phone);
 		}
+		sb.append(" order by d_modify_date desc");
 		return this.findPageBySql(sb.toString(),param,pageable,Map.class);
 	}
 }

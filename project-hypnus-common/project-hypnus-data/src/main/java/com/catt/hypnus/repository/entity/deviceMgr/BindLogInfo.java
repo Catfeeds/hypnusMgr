@@ -29,13 +29,13 @@ public class BindLogInfo extends BaseEntity {
      * 普通用户，经销商
      * </pre>
      */
-    private Integer userId;
+    private Long userId;
     /**
      * <pre>
      * 设备标识
      * </pre>
      */
-    private Integer deviceId;
+    private Long deviceId;
     /**
      * <pre>
      * 类型
@@ -57,21 +57,57 @@ public class BindLogInfo extends BaseEntity {
      */
     private Date unbindDate;
 
+    public BindLogInfo(){
+
+    }
+
+    public BindLogInfo(Long userId,Long deviceId){
+        this.userId = userId;
+        this.deviceId = deviceId;
+    }
+
+    public static BindLogInfo buildBindUserLog(Long userId,Long deviceId){
+        BindLogInfo info = new BindLogInfo(userId,deviceId);
+        info.setStatus(1);
+        info.setType(1);
+        return info;
+    }
+    public static BindLogInfo buildBindFactoryLog(Long userId,Long deviceId){
+        BindLogInfo info = new BindLogInfo(userId,deviceId);
+        info.setStatus(1);
+        info.setType(2);
+        return info;
+    }
+    public static BindLogInfo buildUnBindUserLog(Long userId,Long deviceId){
+        BindLogInfo info = new BindLogInfo(userId,deviceId);
+        info.setStatus(2);
+        info.setType(1);
+        info.setUnbindDate(new Date());
+        return info;
+    }
+    public static BindLogInfo buildUnBindFactoryLog(Long userId,Long deviceId){
+        BindLogInfo info = new BindLogInfo(userId,deviceId);
+        info.setType(2);
+        info.setStatus(2);
+        info.setUnbindDate(new Date());
+        return info;
+    }
+
     @Column(name = "USER_ID")
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
     @Column(name = "DEVICE_ID")
-    public Integer getDeviceId() {
+    public Long getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(Integer deviceId) {
+    public void setDeviceId(Long deviceId) {
         this.deviceId = deviceId;
     }
 

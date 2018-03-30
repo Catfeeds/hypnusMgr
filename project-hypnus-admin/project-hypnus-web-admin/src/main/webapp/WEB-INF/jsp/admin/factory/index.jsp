@@ -54,7 +54,7 @@
             <td>{{$value.phone}}</td>
             <td>{{$value.email}}</td>
             <td>{{$value.address}}</td>
-            <td style="width: 18%" data-id="{{$value.i_id}}">
+            <td style="width: 300px" data-id="{{$value.i_id}}">
                 <span class="btnRed deleteFactory" style="margin-left: 5px">删除</span>
                 <span class="btnBlue editFactory" style="margin-left: 5px">修改</span>
                 <span class="btnBlue editPwd">修改密码</span>

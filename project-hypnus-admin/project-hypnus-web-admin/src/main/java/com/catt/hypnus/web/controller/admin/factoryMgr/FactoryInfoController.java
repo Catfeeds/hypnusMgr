@@ -57,6 +57,24 @@ public class FactoryInfoController
         return "/admin/factory/pwd";
     }
 
+    /**
+     * 获取经销商分页数据
+     *
+     * @param pageable
+     * @return
+     */
+    @RequestMapping(value = {"/getPage"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getPageShopOwner(FactoryForm factoryForm, Pageable pageable, @CurrentUser Long id) {
+        return factoryService.queryList(factoryForm.getFactoryMobile(),pageable);
+    }
+
+    @RequestMapping(value = {"/searchFactory"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> searchFactory(FactoryForm factoryForm, Pageable pageable){
+        return factoryService.queryListNonBind(factoryForm.getFactoryMobile(),pageable);
+    }
+
     @RequestMapping(value = "/pwd", method = RequestMethod.POST)
     @ResponseBody
     public Message updatePwd(Long id,String password){
@@ -89,17 +107,6 @@ public class FactoryInfoController
         return Message.success();
     }
 
-    /**
-     * 获取经销商分页数据
-     *
-     * @param pageable
-     * @return
-     */
-    @RequestMapping(value = {"/getPage"}, method = RequestMethod.POST)
-    @ResponseBody
-    public Page<Map> getPageShopOwner(FactoryForm factoryForm, Pageable pageable, @CurrentUser Long id) {
-        return factoryService.queryList(factoryForm.getFactoryMobile(),pageable);
-    }
 
     @Resource(name="factoryServiceImpl")
     private FactoryService factoryService;

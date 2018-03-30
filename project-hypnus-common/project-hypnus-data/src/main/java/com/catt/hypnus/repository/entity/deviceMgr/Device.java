@@ -75,14 +75,14 @@ public class Device extends BaseEntity {
     }
 
     public void bindFactory(Long factoryId){
-        if(Objects.nonNull(factoryId)){
+        if(Objects.nonNull(this.factoryId)){
             throw new RuntimeException("该设备已经有绑定经销商,请先解绑");
         }
         this.factoryId=factoryId;
     }
 
     public void bindUser(Long userId){
-        if(Objects.nonNull(userId)){
+        if(Objects.nonNull(this.cusId)){
             throw new RuntimeException("该设备已经有绑定用户,请先解绑");
         }
         this.cusId = userId;

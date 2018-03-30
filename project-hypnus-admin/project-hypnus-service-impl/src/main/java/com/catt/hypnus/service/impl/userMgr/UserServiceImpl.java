@@ -27,6 +27,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserInfo,Long> implements U
     }
 
     @Override
+    public Page<Map> queryListNonBind(String phone, Pageable pageable) {
+        return userInfoDao.queryListByNonBind(phone,pageable);
+    }
+
+    @Override
     public void addUserInfo(UserInfo info) {
         info.init();
         userInfoDao.saveOrUpdate(info);

@@ -49,12 +49,6 @@ public class UserController
         return "/admin/user/register";
     }
 
-    @RequestMapping(value="/delete",method = RequestMethod.DELETE)
-    public Message delete(Long id,HttpServletRequest request){
-        userInfoBaseService.delete(id);
-        return Message.success("", new Object[0]);
-    }
-
     /**
      * 获取用户分页数据
      *
@@ -66,6 +60,19 @@ public class UserController
     public Page<Map> getPageShopOwner(UserForm form, Pageable pageable, @CurrentUser Long id) {
         return userService.queryList(form.getPhone(),pageable);
     }
+
+    @RequestMapping(value = {"/searchCus"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> searchCus(UserForm form, Pageable pageable){
+        return userService.queryListNonBind(form.getPhone(),pageable);
+    }
+
+    @RequestMapping(value="/delete",method = RequestMethod.DELETE)
+    public Message delete(Long id,HttpServletRequest request){
+        userInfoBaseService.delete(id);
+        return Message.success("", new Object[0]);
+    }
+
 
     @Resource(name="userServiceImpl")
     private UserService userService;
