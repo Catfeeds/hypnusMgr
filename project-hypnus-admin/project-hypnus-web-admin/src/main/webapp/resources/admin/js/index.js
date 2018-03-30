@@ -2,7 +2,7 @@
  * Created by runtime on 2016/10/17.
  */
 
-seajs.use(['$', 'template'], function ($, template) {
+seajs.use(['$', 'template','msgBox'], function ($, template,msgBox) {
 
     $(function () {
         initData();
