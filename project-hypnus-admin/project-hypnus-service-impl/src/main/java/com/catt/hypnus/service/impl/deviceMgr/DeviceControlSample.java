@@ -12,8 +12,7 @@ import java.util.List;
 
 public class DeviceControlSample {
 
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
         String productKey = "TeapvKrZpFA";
         String accessKey = "LTAI5hvCHzOiuJ3f";
         String accessSecret = "FByHanHd0WtP2NBJbUReztPhI5GWoA";
@@ -21,12 +20,12 @@ public class DeviceControlSample {
             DefaultProfile.addEndpoint("cn-shanghai",
                     "cn-shanghai", "Iot", "iot.cn-shanghai.aliyuncs.com");
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         IClientProfile profile = DefaultProfile.getProfile("cn-shanghai", accessKey, accessSecret);
         DefaultAcsClient client = new DefaultAcsClient(profile); //初始化SDK客户端
+
 
 //        PubRequest request = new PubRequest();
 //        request.setProductKey("productKey");
@@ -60,7 +59,7 @@ public class DeviceControlSample {
                     request2.setDeviceNames(names);
                     BatchGetDeviceStateResponse response2 = client.getAcsResponse(request2);
                     if (response2 != null && response2.getSuccess() != false) {
-                        System.out.println("state :"  + response2.getDeviceStatusList().get(0).getStatus());
+                        System.out.println("state :" + response2.getDeviceStatusList().get(0).getStatus());
                     } else {
                         System.out.println("查询设备失败！requestId:" + response.getRequestId() + "原因：" + response.getErrorMessage());
                     }
@@ -72,7 +71,7 @@ public class DeviceControlSample {
                     GetDeviceShadowResponse response3 = client.getAcsResponse(request3);
                     if (response != null && response.getSuccess() != false) {
                         System.out.println("shadowMessage:" + response3.getShadowMessage());
-                        if (response3.getShadowMessage() != null	) {
+                        if (response3.getShadowMessage() != null) {
                             shadowObject = JSONObject.parseObject(response3.getShadowMessage());
                             System.out.println(request3.getShadowMessage());
                         }
@@ -111,11 +110,9 @@ public class DeviceControlSample {
             } else {
                 System.out.println("查询设备失败！requestId:" + response.getRequestId() + "原因：" + response.getErrorMessage());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-
 
 
     }
