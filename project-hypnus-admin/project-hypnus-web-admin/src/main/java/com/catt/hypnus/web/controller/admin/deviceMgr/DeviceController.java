@@ -39,6 +39,14 @@ public class DeviceController extends BaseController {
         return "/admin/device/index";
     }
 
+    /**
+     * 设备首页
+     */
+    @RequestMapping(value = {"/list.html"}, method = RequestMethod.GET)
+    public String toRelList() {
+        return "/admin/device/list";
+    }
+
 
     @RequestMapping(value="/selectUserPage/{deviceId}",method = RequestMethod.GET)
     public String toSelectUserPage(@PathVariable("deviceId")String deviceId,
@@ -53,6 +61,12 @@ public class DeviceController extends BaseController {
                                       HttpServletRequest request, Model model){
         model.addAttribute("deviceId",deviceId);
         return "/admin/device/chooseFactory";
+    }
+
+    @RequestMapping(value = {"/getPageList"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Map> getRelPageList(DeviceForm deviceForm, Pageable pageable, @CurrentUser Long id){
+        return deviceService.findRelPage(deviceForm,id,pageable);
     }
     /**
      * 获取设备分页数据

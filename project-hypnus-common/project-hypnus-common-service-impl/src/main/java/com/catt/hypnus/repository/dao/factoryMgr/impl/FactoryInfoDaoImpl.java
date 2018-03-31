@@ -60,6 +60,21 @@ public class FactoryInfoDaoImpl extends BaseDaoImpl<FactoryInfo, Long>
         }
     }
 
+    @Override
+    public FactoryInfo findByRelUserId(Long relUserId) {
+        if(relUserId==null){
+            return null;
+        }else{
+            try{
+                String jql = "select f from FactoryInfo f where f.relUserId = :relUserId";
+                return (FactoryInfo) entityManager.createQuery(jql,FactoryInfo.class).setParameter("relUserId",relUserId).getSingleResult();
+            }catch (Exception e){
+                return null;
+            }
+
+        }
+    }
+
     @PersistenceContext
     protected EntityManager entityManager;
 

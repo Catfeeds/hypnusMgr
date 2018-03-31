@@ -94,6 +94,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserInfo,Long> implements U
     }
 
     @Override
+    public UserInfo findByRelUserId(Long relUserId) {
+        return userInfoDao.findByRelUserId(relUserId);
+    }
+
+    @Override
     public boolean checkMobileIsUsed(String phone) {
         UserInfo userInfo = userInfoDao.findByMobile(phone);
         FactoryInfo factoryInfo = factoryInfoDao.findByMobile(phone);

@@ -145,6 +145,11 @@
                         </a>
                     </li>
                     <li>
+                        <a id="editUser">
+                            <i class="glyphicon  glyphicon-edit"></i>
+                        </a>
+                    </li>
+                    <li id="#logoutLi">
                         <a href="${path}/logout">
                             <i class="glyphicon  glyphicon-log-out"></i>
                         </a>
@@ -169,9 +174,9 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <iframe id="contentFrame" name="contentFrame"
-                src="${path}/admin/deviceMgr/index.html" style="overflow:visible;" scrolling="no" frameborder="no" height="100%"
+                 style="overflow:visible;" scrolling="no" frameborder="no" height="100%"
                 width="100%"
-                onload="autoSizeFrame();"></iframe>
+                ></iframe>
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer hide">

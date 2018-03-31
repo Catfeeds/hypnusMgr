@@ -20,23 +20,15 @@
             	<span class="searchName">设备序列号：</span>
             	<input class="searchInputText" id="snId" type="text" style="width:130px;" />
             </div>
-            <div class="searchBox" >
-            	<span class="searchName">用户手机号：</span>
-            	<input class="searchInputText" id="userMobile" type="text" style="width:130px;" />
-            </div>
-            <div class="searchBox">
-                <span class="searchName">经销商手机号：</span>
-                <input class="searchInputText" id="factoryMobile" type="text" style="width:130px;" />
-            </div>
             <span class="btnGrey" style="margin-left:5px;" id="reset">重置</span>
             <span class="btnRed" id="search">查询</span>
         </div>
 
         <div class="resultBar">
-            <span class="btnRed" style="margin-left:6px;" id="unbindUser">解绑用户</span>
+           <%-- <span class="btnRed" style="margin-left:6px;" id="unbindUser">解绑用户</span>
             <span class="btnRed" style="margin-left:6px;" id="unbindFactory">解绑经销商</span>
             <span class="btnGrey" style="margin-left:6px;" id="bindUser">绑定用户</span>
-            <span class="btnGrey" style="margin-left:6px;" id="bindFactory">绑定经销商</span>
+            <span class="btnGrey" style="margin-left:6px;" id="bindFactory">绑定经销商</span>--%>
         </div>
 
         <div class="userDetail">

@@ -21,4 +21,6 @@ public interface UserInfoDao extends BaseDao<UserInfo, Long> {
     Page<Map> queryListByNonBind(String phone, Pageable pageable);
 
     UserInfo findByMobile(String phone);
+
+    UserInfo findByRelUserId(Long relUserId);
 }

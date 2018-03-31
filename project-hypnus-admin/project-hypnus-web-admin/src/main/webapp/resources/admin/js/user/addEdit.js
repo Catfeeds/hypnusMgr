@@ -22,7 +22,6 @@ var InitHandler = (function() {
 			this.initPage();
 			this.initEvent();
 			this.initForm();
-			this.loadEnum();
 		},
 		//加载查询框的枚举值
 		loadEnum : function(){
@@ -68,6 +67,8 @@ var InitHandler = (function() {
 		initEvent : function() {
 			//保存
 			$('#btnSubmit').click(EventHandler.save);
+
+			$("#editPwd").click(EventHandler.editPwd);
 			//取消
 			$('#btnCancel').click(function() {
                 goIndex();
@@ -95,21 +96,24 @@ var EventHandler = function(){
                 var inEmail = param.email;
                 reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
                 if (inEmail != '' && !reg.test(inEmail)){
-                    _msgBox.tips("内部邮箱格式不对");
+                    _msgBox.tips("邮箱格式不对");
                     $("#email").focus();
                     return;
                 }
-                var params = {};
-                params.name = param.name;
-                params.connector = param.connector;
-                params.email = param.email;
-                params.phone = param.phone;
-                params.address = param.address;
-                if(param.id!=null&&param.id!=""){
-                    params.id = param.id;
+                reg = /^[0-9]+$/;
+                var height = param.height;
+                if(height!=""&&!reg.test(height)){
+                    _msgBox.tips("身高请输入正整数");
+                    $("#height").focus();
+                    return;
+                }
+                var weight = param.weight;
+                if(weight!=""&&!reg.test(weight)){
+                    _msgBox.tips("体重请输入正整数");
+                    $("#weight").focus();
+                    return;
 				}
-
-                $.post(path + "/admin/factoryMgr/save", params, function(backData) {
+                $.post(path + "/admin/userMgr/update", param, function(backData) {
                     _msgBox.tips("操作成功");
                     if (backData.type == 'success') {
                         goIndex(backData.type);
@@ -117,6 +121,21 @@ var EventHandler = function(){
                 });
             }
 		},
+		editPwd:function(){
+			var dataId = $("#id").val();
+            _msgBox.exWindow.open({
+                title: '修改密码',
+                url: path + "/admin/userMgr/editPwd.html?id=" + dataId,
+                width: '600px',
+                height: '325px',
+                close: function (result) {
+                    if (result) {
+                        EventHandler.exWindow.close(result);
+                    }
+                }
+            });
+		}
+
 	}
 }();
 
@@ -125,11 +144,6 @@ var EventHandler = function(){
  */
 var DataHandler = function(){
     return {
-    	checkAccount : function(param, callback){
-            $.post(path + '/safeMgr/staffMgr/checkAccount', param, function(backData) {
-                callback(backData);
-            });
-        }
     };
 }();
 

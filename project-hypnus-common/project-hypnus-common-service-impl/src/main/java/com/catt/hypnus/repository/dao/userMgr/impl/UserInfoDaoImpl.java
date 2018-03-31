@@ -57,4 +57,19 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long>
 
 		}
 	}
+
+	@Override
+	public UserInfo findByRelUserId(Long relUserId) {
+		if(relUserId==null){
+			return null;
+		}else{
+			try{
+				String jql = "select f from UserInfo f where f.relUserId = :relUserId";
+				return (UserInfo) entityManager.createQuery(jql,UserInfo.class).setParameter("relUserId",relUserId).getSingleResult();
+			}catch (Exception e){
+				return null;
+			}
+
+		}
+	}
 }

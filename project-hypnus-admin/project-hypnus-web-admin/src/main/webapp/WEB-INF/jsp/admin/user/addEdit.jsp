@@ -8,7 +8,7 @@
 <html >
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>经销商管理</title>
+  <title>用户管理</title>
     <%@include file="/common/headRefModule.jsp" %>
 
     <link rel="stylesheet" type="text/css" href="${path}/resources/safeMgr/css/ziyuanDetail_ctr.css" />
@@ -16,7 +16,28 @@
     <link type="text/css" rel="stylesheet" href="${path}/resources/css/addnew.css"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/safeMgr/css/shijianchanpin.css"/>
 
-	<script type="text/javascript" src="${path}/resources/admin/js/factory/addEdit.js"></script>
+	<style>
+		#editpwd{
+			float: left;
+			margin: 12px 5px;
+			height: 26px;
+			line-height: 26px;
+			padding: 0 10px;
+			background: #3CABD8;
+			border-bottom: 2px solid #309FCC;
+			cursor: pointer;
+			border-radius: 3px;
+		}
+		#editpwd a{
+			height: 26px;
+			line-height: 26px;
+			color: #fff;
+			font-family: '微软雅黑';
+			text-align: center;
+			letter-spacing: 1px;
+		}
+	</style>
+	<script type="text/javascript" src="${path}/resources/admin/js/user/addEdit.js"></script>
   <!--End-->
 </head>
 <!--日历控件引入-->
@@ -35,40 +56,48 @@
 	                    <div class="addFormContBody">
 							<table class="addFormTable">
 								<tr>
-									<th>经销商名称:</th>
+									<th>用户手机:</th>
 									<td>
-										<input id="name" name="name" value="${info.name}" class="proInput" type="text" style="width:241px;height:38px"
-											   data-rule-required="true" data-msg-required="经销商名称不能为空"/>
+										<input id="phone" name="phone" value="${info.phone}" class="proInput" type="text" style="width:241px;height:38px"
+											   data-rule-required="true" data-msg-required="用户手机不能为空" readonly/>
 										<font class="redstar">*</font>
-									</td>
-
-									<th>联系人名称:</th>
-									<td>
-										<input id="connector" name="connector" value="${info.connector}" class="proInput" type="text" style="width:241px;height:38px"
-											   data-rule-required="true" data-msg-required="联系人名称不能为空"/>
-										<font class="redstar">*</font>
+										<span id="editPwd"><a>修改密码</a></span>
 									</td>
 								</tr>
-
 								<tr>
 									<th>邮箱:</th>
 									<td>
 										<input id="email" name="email" value="${info.email}" class="proInput" style="width:241px;height:38px"/>
 									</td>
-
-									<th>移动号码:</th>
+								</tr>
+								<tr>
+									<th>出生日期:</th>
 									<td>
-										<input id="phone" name="phone" value="${info.phone}" class="proInput" style="width:241px;height:38px"/>
-										<font class="redstar">*</font>
+										<div class="mohusearch" style="float: left; margin-left: 3px; margin-top: 3px;width: 230px">
+											<input style="width: 220px" id="birthday" name="birthday" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'new Date()'})" value="<fmt:formatDate value="${info.birthday}" pattern="yyyy-MM-dd"/>" class="searchSimpleInputb xw_searchInput timeInput" value="" type="text" onClick="WdatePicker()">
+										</div>
 									</td>
 								</tr>
+								<tr>
+									<th>身高:</th>
+									<td>
+										<input id="height" name="height" value="${info.height}" class="proInput" style="width:241px;height:38px"/><span style="margin: 20px 5px;float:left;">cm</span>
+									</td>
+								</tr>
+								<tr>
+									<th>体重:</th>
+									<td>
+										<input id="weight" name="weight" value="${info.weight}" class="proInput" style="width:241px;height:38px"/><span style="margin: 20px 5px;float:left;">kg</span>
+									</td>
+								</tr>
+
 
 								<tr>
 									<th>联系地址:</th>
 									<td>
 	                                        <textarea class="textareaStyle"
 													  style="width:90%; height:80px;" id="address" name="address"
-													  data-rule-maxlength="500" data-msg-maxlength="备注不超过500个字节">${info.address}</textarea>
+													  data-rule-maxlength="500" data-msg-maxlength="联系地址不超过500个字节">${info.address}</textarea>
 									</td>
 								</tr>
 

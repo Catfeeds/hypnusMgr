@@ -28,5 +28,7 @@ public interface UserService extends BaseService<UserInfo, Long>
 
     UserInfo findByMobile(String phone);
 
+    UserInfo findByRelUserId(Long relUserId);
+
     boolean checkMobileIsUsed(String phone);
 }

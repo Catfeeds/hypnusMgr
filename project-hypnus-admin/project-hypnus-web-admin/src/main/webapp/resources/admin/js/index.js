@@ -21,6 +21,32 @@ seajs.use(['$', 'template','msgBox'], function ($, template,msgBox) {
             $(this).addClass('active');
             e.stopPropagation();
         });
+
+        $(document).on('click','#editUser',function(e){
+            e.stopPropagation();
+            $.post(path+'/admin/userMgr/check',null,function(data){
+                if(data.type="success"){
+                    var sysUserId = data.content;
+                    if(sysUserId=="-1"){
+                        window.location.reload(true);
+                    }else{
+                        msgBox.exWindow.open({
+                            title: '修改信息',
+                            url: path + "/admin/userMgr/edit.html?id=" + sysUserId,
+                            width: '1000px',
+                            height: '600px',
+                            close: function (result) {
+                                if (result) {
+                                    msgBox.exWindow.close(result);
+                                }
+                            }
+                        });
+                    }
+                }else{
+                    window.location.reload(true);
+                }
+            })
+        })
     }
     
     function initData() {

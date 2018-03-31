@@ -22,4 +22,6 @@ public interface FactoryInfoDao extends BaseDao<FactoryInfo, Long> {
 
     FactoryInfo findByMobile(String phone);
 
+    FactoryInfo findByRelUserId(Long relUserId);
+
  }

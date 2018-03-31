@@ -16,7 +16,7 @@
     <link type="text/css" rel="stylesheet" href="${path}/resources/css/addnew.css"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/safeMgr/css/shijianchanpin.css"/>
 
-	<script type="text/javascript" src="${path}/resources/admin/js/factory/pwd.js"></script>
+	<script type="text/javascript" src="${path}/resources/admin/js/user/pwd.js"></script>
   <!--End-->
 </head>
 <!--日历控件引入-->

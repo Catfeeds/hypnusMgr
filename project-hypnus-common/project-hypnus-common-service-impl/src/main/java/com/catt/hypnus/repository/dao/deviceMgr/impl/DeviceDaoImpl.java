@@ -9,7 +9,6 @@ import com.catt.hypnus.repository.entity.deviceMgr.Device;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -35,6 +34,23 @@ public class DeviceDaoImpl extends BaseDaoImpl<Device, Long>
 			sql.append(" and d.sn_id like (:snId)");
 			param.put("snId",snId+"%");
 		}
+		sql.append(" order by d_modify_date desc");
+		return this.findPageBySql(sql.toString(),param,pageable,Map.class);
+	}
+
+	@Override
+	public Page<Map> queryRelPageList(String snId, Long userId, Pageable pageable) {
+		StringBuffer sql = new StringBuffer();
+		Map param = new HashMap<>();
+
+		sql.append("select d.*,f.phone,f.name,u.phone as userPhone from device_info d left join factory_info f on d.factory_id = f.i_id left join user_info u on d.cus_id = u.i_id where (d.cus_id = :userId or d.factory_id = :userId) ");
+		param.put("userId",userId);
+		if(StringUtil.isNotBlank(snId)){
+			sql.append(" and d.sn_id like (:snId)");
+			param.put("snId",snId+"%");
+		}
+		sql.append(" order by d_modify_date desc");
+
 		return this.findPageBySql(sql.toString(),param,pageable,Map.class);
 	}
 }
