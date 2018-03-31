@@ -88,35 +88,39 @@ public class UsetimeServiceImpl implements UsetimeService {
         List<Usetime> usetimeList = this.findList(deviceId, startTime, null);
         usetimeList.removeAll(Collections.singleton(null));
         if (CollectionUtils.isEmpty(usetimeList)) {
-            throw new BaseException("未查询到相关数据");
+            throw new BaseException("次设备无使用记录");
         }
         usetimeList.forEach(usetime -> {
             String start = usetime.getStarttime();
             usetimeStrList.add(start);
 
         });
-
-
         String keyPre = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/";
+        if (StringUtil.checkStr(deviceId) && StringUtil.checkStr(startTime)) {
+            keyPre = deviceId + "/" + startTime + "/";
+        }
         List<String> fileList = OssDataHandler.listOfObject(keyPre);
-        fileList.forEach(packageStr -> {
-            packages.add(packageStr);
-        });
-        String pressureKey = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/pressure.edf";
-        String flowKey = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/flow.edf";
-        String difleakKey = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/difleak.edf";
-        String tvKey = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/mvtvbra.edf";
-        String brKey = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/pressure.edf";
-        String biKey = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/pressure.edf";
-        packages.forEach(filekey -> {
-
-        });
-        byte[] pressureBytes = OssDataHandler.getObjectData(pressureKey);
-//        byte[] flowBytes = OssDataHandler.getObjectData(flowKey);
-//        byte[] difleakBytes = OssDataHandler.getObjectData(difleakKey);
-//        byte[] tvBytes = OssDataHandler.getObjectData(tvKey);
-//        byte[] brBytes = OssDataHandler.getObjectData(brKey);
-//        byte[] biBytes = OssDataHandler.getObjectData(biKey);
+        if (CollectionUtils.isEmpty(fileList)) {
+            throw new BaseException("OSS中无数据文件");
+        }
+        short[] pressureBytes = null;
+        byte[] flowBytes = null;
+        byte[] difleakBytes = null;
+        short[] tvBytes = null;
+        for (String fileName : fileList) {
+            if (fileName.contains("pressure.edf")) {
+                pressureBytes = OssDataHandler.getObjectData(fileName);
+            }
+            if (fileName.contains("flow.edf")) {
+                flowBytes = OssDataHandler.getObjectData2Byte(fileName);
+            }
+            if (fileName.contains("difleak.edf")) {
+                difleakBytes = OssDataHandler.getObjectData2Byte(fileName);
+            }
+            if (fileName.contains("mvtvbr.edf")) {
+                tvBytes = OssDataHandler.getObjectData(fileName);
+            }
+        }
         List presureList = new ArrayList<>();
         try {
             List<String> timeList = new ArrayList<>();
@@ -132,9 +136,23 @@ public class UsetimeServiceImpl implements UsetimeService {
                 timeList.add(str);
                 List dataList = new ArrayList<>();
                 dataList.add(timeList.get(i));
-                if (i <= pressureBytes.length) {
+                //压力数据
+                if (pressureBytes != null && i <= pressureBytes.length) {
                     dataList.add(pressureBytes[i]);
                 }
+                //气流
+                if (flowBytes != null && i <= flowBytes.length) {
+                    dataList.add(flowBytes[i]);
+                }
+                //漏气
+                if (difleakBytes != null && i <= difleakBytes.length) {
+                    dataList.add(difleakBytes[i]);
+                }
+                //tv
+                if (tvBytes != null && i <= tvBytes.length) {
+                    dataList.add(tvBytes[i]);
+                }
+
                 presureList.add(dataList);
                 str = dt2;
             }

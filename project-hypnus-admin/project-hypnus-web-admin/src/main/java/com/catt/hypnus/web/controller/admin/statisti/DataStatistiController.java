@@ -40,6 +40,8 @@ public class DataStatistiController extends BaseController {
     @Resource(name="usetimeServiceImpl")
     private UsetimeService usetimeService;
 
+
+
     /**
      * 跳转到统计首页
      */

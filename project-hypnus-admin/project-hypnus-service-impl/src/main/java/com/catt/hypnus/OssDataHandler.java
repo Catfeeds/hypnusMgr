@@ -34,14 +34,48 @@ public class OssDataHandler {
 
     private static String bucketName = "hypnus-device-data-bucket";
 
-    public static byte[] getObjectData(String key) throws IOException {
+    /**
+     * 文件转为short数组
+     *
+     * @param key
+     * @return
+     * @throws IOException
+     */
+    public static short[] getObjectData(String key) throws IOException {
+        OSSClient client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        short[] bytes = null;
+        try {
+            bytes = downLoadFile(client, key);
+        } catch (OSSException oe) {
+            System.out.println("Caught an OSSException, which means your request made it to OSS, "
+                    + "but was rejected with an error response for some reason.");
+            System.out.println("Error Message: " + oe.getErrorCode());
+            System.out.println("Error Code:       " + oe.getErrorCode());
+            System.out.println("Request ID:      " + oe.getRequestId());
+            System.out.println("Host ID:           " + oe.getHostId());
+        } catch (ClientException ce) {
+            System.out.println("Caught an ClientException, which means the client encountered "
+                    + "a serious internal problem while trying to communicate with OSS, "
+                    + "such as not being able to access the network.");
+            System.out.println("Error Message: " + ce.getMessage());
+        } finally {
+            client.shutdown();
+        }
+        return bytes;
+    }
+
+    /**
+     * 文件转为字节数组
+     *
+     * @param key
+     * @return
+     * @throws IOException
+     */
+    public static byte[] getObjectData2Byte(String key) throws IOException {
         OSSClient client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
         byte[] bytes = null;
         try {
-//            String key = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/flow.edf";
-//            key = "0a0a0a0a0b0b0b0b0c0c0c0c/2016-02-09 16:26:00/pressure.edf";
-//            String key = "0a0a0a0a0b0b0b0b0c0c0c0c/2016-02-09 16:26:00/t_log_login.sql";
-            bytes = downLoadFile(client, key);
+            bytes = downLoadFile2Byte(client, key);
         } catch (OSSException oe) {
             System.out.println("Caught an OSSException, which means your request made it to OSS, "
                     + "but was rejected with an error response for some reason.");
@@ -68,7 +102,7 @@ public class OssDataHandler {
 //            keyPrefix = "0a0a0a0a0b0b0b0b0c0c0c0c/2016-02-09 16:26:00/pressure.edf";
 //            String key = "0a0a0a0a0b0b0b0b0c0c0c0c/2016-02-09 16:26:00/t_log_login.sql";
             ObjectListing objectListing = listOfObjectWithPrefix(client, bucketName, keyPrefix);
-            if(objectListing==null){
+            if (objectListing == null) {
                 return null;
             }
             List<OSSObjectSummary> sums = objectListing.getObjectSummaries();
@@ -105,7 +139,31 @@ public class OssDataHandler {
      * @param key
      * @throws IOException
      */
-    public static byte[] downLoadFile(OSSClient client, String key) throws IOException {
+    public static short[] downLoadFile(OSSClient client, String key) throws IOException {
+        System.out.println("Downloading an object");
+        OSSObject object = client.getObject(new GetObjectRequest(bucketName, key));
+        InputStream inputStream = object.getObjectContent();
+        object.getObjectContent();
+        byte[] bytes = ArrayUtil.input2byte(inputStream);
+        short[] shorts = ArrayUtil.byte2short(bytes);
+        if (bytes.length == 0) {
+            return null;
+        }
+        for (short s : shorts) {
+            System.out.println(s);
+        }
+        System.out.println("Content-Type: " + object.getObjectMetadata().getContentType());
+        return shorts;
+    }
+
+    /**
+     * Download an object from your bucket
+     *
+     * @param client
+     * @param key
+     * @throws IOException
+     */
+    public static byte[] downLoadFile2Byte(OSSClient client, String key) throws IOException {
         System.out.println("Downloading an object");
         OSSObject object = client.getObject(new GetObjectRequest(bucketName, key));
         InputStream inputStream = object.getObjectContent();
@@ -114,13 +172,8 @@ public class OssDataHandler {
         if (bytes.length == 0) {
             return null;
         }
-        List<String> strings = null;
-        for (byte b : bytes) {
-            System.out.println(b);
-        }
         System.out.println("Content-Type: " + object.getObjectMetadata().getContentType());
         return bytes;
-
     }
 
     /**

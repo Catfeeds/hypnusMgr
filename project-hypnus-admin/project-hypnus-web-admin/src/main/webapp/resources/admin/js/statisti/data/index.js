@@ -56,7 +56,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     if ($("#numLi").hasClass("on")) {
                         EventHandler.writerData4Chart(time, num, '订单总数');
                     } else {
-                        EventHandler.writerData4Chart(time, amount, '订单金额');
+                        // EventHandler.writerData4Chart(time, amount, '订单金额');
                     }
                 });
 
@@ -138,9 +138,9 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     }
 
                     if ($("#numLi").hasClass("on")) {
-                        EventHandler.writerData4Chart(result.pressure, '订单总数');
+                        EventHandler.writerData4Chart(result.pressure, '详细数据');
                     } else {
-                        EventHandler.writerData4Chart(time, amount, '订单金额');
+                        // EventHandler.writerData4Chart(time, amount, '订单金额');
                     }
                 });
             },
@@ -148,6 +148,27 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
             writerData4Chart: function (data, title) {
                 // 初始化报表
                 var chart = echarts.init($("#container_dingdan")[0]);
+
+                //时间轴数据
+                var xData = data.map(function (item) {
+                    return item[0];
+                });
+                //压力数据
+                var yDataP = data.map(function (item) {
+                    return item[1];
+                });
+                //气流数据
+                var yData2 = data.map(function (item) {
+                    return item[2];
+                });
+                //漏气
+                var yData3 = data.map(function (item) {
+                    return item[3];
+                });
+                //tv
+                var yData4 = data.map(function (item) {
+                    return item[4];
+                });
                 chart.showLoading({
                     text: "正在拼命加载中...",
                     x: "center",
@@ -159,23 +180,21 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 });
                 var option = {
                     title: {
-                        text: 'Beijing AQI'
+                        text: '',
+                        subtext: '',
+                        x: 'center'
                     },
                     tooltip: {
-                        trigger: 'axis'
-                    },
-                    xAxis: {
-                        data: data.map(function (item) {
-                            return item[0];
-                        })
-                    },
-                    yAxis: {
-                        splitLine: {
-                            show: false
+                        trigger: 'axis',
+                        axisPointer: {
+                            animation: false
                         }
                     },
+                    legend: {
+                        data: [],
+                        x: 'left'
+                    },
                     toolbox: {
-                        left: 'center',
                         feature: {
                             dataZoom: {
                                 yAxisIndex: 'none'
@@ -184,63 +203,151 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                             saveAsImage: {}
                         }
                     },
-                    dataZoom: [{
-                        startValue: '2014-06-01'
-                    }, {
-                        type: 'inside'
-                    }],
-                    visualMap: {
-                        top: 10,
-                        right: 10,
-                        pieces: [{
-                            gt: 0,
-                            lte: 50,
-                            color: '#096'
-                        }, {
-                            gt: 50,
-                            lte: 100,
-                            color: '#ffde33'
-                        }, {
-                            gt: 100,
-                            lte: 150,
-                            color: '#ff9933'
-                        }, {
-                            gt: 150,
-                            lte: 200,
-                            color: '#cc0033'
-                        }, {
-                            gt: 200,
-                            lte: 300,
-                            color: '#660099'
-                        }, {
-                            gt: 300,
-                            color: '#7e0023'
-                        }],
-                        outOfRange: {
-                            color: '#999'
-                        }
+                    axisPointer: {
+                        link: {xAxisIndex: 'all'}
                     },
-                    series: {
-                        name: 'Beijing AQI',
-                        type: 'line',
-                        data: data.map(function (item) {
-                            return item[1];
-                        }),
-                        markLine: {
-                            silent: true,
-                            data: [{
-                                yAxis: 50
-                            }, {
-                                yAxis: 100
-                            }, {
-                                yAxis: 150
-                            }, {
-                                yAxis: 200
-                            }, {
-                                yAxis: 300
-                            }]
+                    dataZoom: [
+                        {
+                            show: true,
+                            realtime: false,
+                            start: 30,
+                            end: 70,
+                            xAxisIndex: [0, 1, 2, 3]
+                        },
+                        {
+                            type: 'inside',
+                            realtime: false,
+                            start: 30,
+                            end: 70,
+                            xAxisIndex: [0, 1, 2, 3]
+                        },
+                        {
+                            type: 'inside',
+                            realtime: false,
+                            start: 30,
+                            end: 70,
+                            xAxisIndex: [0, 1, 2, 3]
+                        },
+                        {
+                            type: 'inside',
+                            realtime: false,
+                            start: 30,
+                            end: 70,
+                            xAxisIndex: [0, 1, 2, 3]
                         }
-                    }
+                    ],
+                    grid: [{
+                        left: 100,
+                        right: 100,
+                        top: '5%',
+                        height: '15%'
+                    }, {
+                        left: 100,
+                        right: 100,
+                        top: '30%',
+                        height: '15%'
+                    }, {
+                        left: 100,
+                        right: 100,
+                        top: '53%',
+                        height: '15%'
+                    }, {
+                        left: 100,
+                        right: 100,
+                        top: '75%',
+                        height: '15%'
+                    }],
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            axisLine: {onZero: true},
+                            data: xData,
+                            position: 'bottom'
+                        },
+                        {
+                            gridIndex: 1,
+                            type: 'category',
+                            boundaryGap: false,
+                            axisLine: {onZero: true},
+                            data: xData,
+                            position: 'bottom'
+                        }, {
+                            gridIndex: 2,
+                            type: 'category',
+                            boundaryGap: false,
+                            axisLine: {onZero: true},
+                            data: xData,
+                            position: 'bottom'
+                        },
+                        {
+                            gridIndex: 3,
+                            type: 'category',
+                            boundaryGap: false,
+                            axisLine: {onZero: true},
+                            data: xData,
+                            position: 'bottom'
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            name: 'Pressure(cmH2O)',
+                            type: 'value',
+                            max: 500
+                        },
+                        {
+                            gridIndex: 1,
+                            name: 'Flow(L/min)',
+                            type: 'value',
+                            inverse: false
+                        }, {
+                            gridIndex: 2,
+                            name: 'LeakInfo(L/min)',
+                            type: 'value',
+                            inverse: false
+                        },
+                        {
+                            gridIndex: 3,
+                            name: 'Tidal Volume(mL)',
+                            type: 'value',
+                            inverse: false
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'Pressure',
+                            type: 'line',
+                            symbolSize: 8,
+                            hoverAnimation: false,
+                            data: yDataP
+                        },
+                        {
+                            name: 'Flow',
+                            type: 'line',
+                            xAxisIndex: 1,
+                            yAxisIndex: 1,
+                            symbolSize: 8,
+                            hoverAnimation: false,
+                            data: yData2
+                        }, {
+                            name: 'LeakInfo',
+                            type: 'line',
+                            xAxisIndex: 2,
+                            yAxisIndex: 2,
+                            symbolSize: 8,
+                            hoverAnimation: false,
+                            data: yData3
+                        },
+                        {
+                            name: 'Tidal Volume',
+                            type: 'line',
+                            xAxisIndex: 3,
+                            yAxisIndex: 3,
+                            symbolSize: 8,
+                            hoverAnimation: false,
+                            data: yData4
+                        }
+                    ]
                 };
                 chart.setOption(option, true);
                 chart.hideLoading();

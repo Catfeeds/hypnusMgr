@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: runtime
@@ -38,7 +39,8 @@ public class UsetimeServiceImplTest extends SpringTest {
 
     @Test
     public void getDateFromOss() throws Exception {
-        usetimeService.getDateFromOss("0a0a0a0a0b0b0b0b0c0c0c0c", "2018-01-31", DateTimeUtil.FIVE_MINUTES_TIME);
+        Map map= usetimeService.getDateFromOss("0a0a0a0a0b0b0b0b0c0c0c0c", "2018-01-31", DateTimeUtil.FIVE_MINUTES_TIME);
+        System.out.println(map.isEmpty());
     }
 
 }

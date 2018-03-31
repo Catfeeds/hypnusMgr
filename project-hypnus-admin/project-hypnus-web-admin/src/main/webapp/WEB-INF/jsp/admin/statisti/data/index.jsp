@@ -63,11 +63,12 @@
 
     <div class="topTabBar">
         <ul class="topTab xw_topTab">
-            <li class="on xw_setPie" id="numLi">presure</li>
+            <li class="on xw_setPie" id="numLi">详细图形</li>
+            <li class="xw_setPie" >统计图形</li>
         </ul>
     </div>
     <div class="xw_showcontent" style="background:#fff;">
-        <div class="chartDiv" id="container_dingdan"></div>
+        <div class="chartsDiv" id="container_dingdan"></div>
     </div>
 </div>
 </body>

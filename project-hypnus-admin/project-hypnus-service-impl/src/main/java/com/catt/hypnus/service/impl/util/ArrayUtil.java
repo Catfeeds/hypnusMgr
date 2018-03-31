@@ -1,10 +1,11 @@
 package com.catt.hypnus.service.impl.util;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.Scanner;
 
 /**
  * @author: runtime
@@ -23,4 +24,11 @@ public class ArrayUtil {
         byte[] in2b = swapStream.toByteArray();
         return in2b;
     }
+
+    public static final short[] byte2short(byte[] ba) {
+        short[] sa = new short[ba.length / 2];
+        ByteBuffer.wrap(ba).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(sa);
+        return sa;
+    }
+
 }

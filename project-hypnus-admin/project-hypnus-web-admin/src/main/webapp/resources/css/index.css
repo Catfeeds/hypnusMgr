@@ -32,3 +32,12 @@
 	padding:10px 20px 10px 180px;
 	background:#fff;}
 .chartTime{background:#fff; border-bottom:1px dashed #e5e5e5;}
+
+/*
+统计图
+ */
+.chartsDiv{
+	height:1000px;
+	border-radius:8px;
+	margin-top:10px;
+	background:#fff;}
