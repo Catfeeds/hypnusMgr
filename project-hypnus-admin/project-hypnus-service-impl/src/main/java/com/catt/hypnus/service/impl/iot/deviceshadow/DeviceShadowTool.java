@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package com.catt.hypnus.service.impl.deviceMgr;
+package com.catt.hypnus.service.impl.iot.deviceshadow;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

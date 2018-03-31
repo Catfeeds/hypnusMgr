@@ -20,7 +20,9 @@ package com.catt.hypnus.service.impl.deviceMgr;
 import com.aliyuncs.AcsResponse;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.RpcAcsRequest;
-import com.catt.hypnus.aliyun.iot.util.LogUtil;
+import com.catt.hypnus.service.impl.iot.deviceshadow.client.IotClient;
+import com.catt.hypnus.service.impl.iot.util.LogUtil;
+
 
 public class BaseDeviceShadowTool {
 

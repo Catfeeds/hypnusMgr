@@ -15,13 +15,13 @@
  * limitations under the License.
  *
  */
-package com.catt.hypnus.service.deviceMgr;
+package com.catt.hypnus.service.impl.iot.deviceshadow;
 
 import com.aliyuncs.AcsResponse;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.RpcAcsRequest;
-import com.catt.hypnus.aliyun.iot.deviceshadow.client.IotClient;
-import com.catt.hypnus.aliyun.iot.util.logger;
+import com.catt.hypnus.service.impl.iot.deviceshadow.client.IotClient;
+import com.catt.hypnus.service.impl.iot.util.LogUtil;
 
 public class BaseDeviceShadowTool {
 
@@ -37,7 +37,7 @@ public class BaseDeviceShadowTool {
         try {
             response = client.getAcsResponse(request);
         } catch (Exception e) {
-            logger.print("执行失败：e:" + e.getMessage());
+            LogUtil.print("执行失败：e:" + e.getMessage());
         }
         return response;
     }
