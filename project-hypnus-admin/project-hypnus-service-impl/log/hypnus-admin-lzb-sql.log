@@ -1,17 +1,134 @@
-hypnus-admin 2018-03-25 00:06:23.005 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
-hypnus-admin 2018-03-25 00:06:23.473 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
-hypnus-admin 2018-03-25 00:06:23.980 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
-hypnus-admin 2018-03-25 00:06:24.457 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
-hypnus-admin 2018-03-25 00:06:24.956 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
-hypnus-admin 2018-03-25 00:06:25.941 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 00:06:26.039 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 00:06:28.793 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 00:06:28.840 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
-hypnus-admin 2018-03-25 00:06:29.359 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+hypnus-admin 2018-03-31 09:21:48.361 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-31 09:21:49.651 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-31 09:21:50.180 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-31 09:21:50.547 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-31 09:21:50.941 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-31 09:21:53.108 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 09:21:53.988 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 09:21:57.322 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 09:21:57.513 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+select count(usetime0_.I_ID) as col_0_0_ from USETIME usetime0_ where usetime0_.DEVICE_ID=?
+hypnus-admin 2018-03-31 09:21:57.525 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
+hypnus-admin 2018-03-31 09:21:57.525 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
+hypnus-admin 2018-03-31 09:21:57.579 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+SELECT COUNT(usetime0_.I_ID) AS col_0_0_
+FROM USETIME usetime0_
+WHERE usetime0_.DEVICE_ID = '0a0a0a0a0b0b0b0b0c0c0c0c'
+hypnus-admin 2018-03-31 09:21:57.580 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 57.146913 millis. 
+select count(usetime0_.I_ID) as col_0_0_ from USETIME usetime0_ where usetime0_.DEVICE_ID=?
+hypnus-admin 2018-03-31 09:21:57.580 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-31 09:21:57.582 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [col_0_0_]
+hypnus-admin 2018-03-31 09:21:57.586 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [1]
+hypnus-admin 2018-03-31 09:21:57.589 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-31 09:21:57.589 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-31 09:21:57.590 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 09:21:57.600 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 09:21:57.605 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created. 
+select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.STARTTIME desc limit ?
+hypnus-admin 2018-03-31 09:21:57.606 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c, 10]
+hypnus-admin 2018-03-31 09:21:57.606 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : [VARCHAR, INTEGER]
+hypnus-admin 2018-03-31 09:21:57.642 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed. 
+SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, usetime0_.D_MODIFY_DATE AS D_MODIFY3_37_, usetime0_.BREATH_FIT AS BREATH_F4_37_, usetime0_.BREATH_RATE AS BREATH_R5_37_
+	, usetime0_.BREATH_RATIO AS BREATH_R6_37_, usetime0_.BREATHRATE_POS AS BREATHRA7_37_, usetime0_.CURE_DELAY AS CURE_DEL8_37_, usetime0_.DATA_VERSION AS DATA_VER9_37_, usetime0_.DEP_LEVEL AS DEP_LEV10_37_
+	, usetime0_.DEP_TYPE AS DEP_TYP11_37_, usetime0_.DEVICE_ID AS DEVICE_12_37_, usetime0_.DILEAK_POS AS DILEAK_13_37_, usetime0_.END_TIME AS END_TIM14_37_, usetime0_.EXHALE_SENSITIVE AS EXHALE_15_37_
+	, usetime0_.FLOW_POS AS FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE AS INHALE_17_37_, usetime0_.INTIME_POS AS INTIME_18_37_, usetime0_.MODE AS MODE19_37_, usetime0_.MV_POS AS MV_POS20_37_
+	, usetime0_.PEROID AS PEROID21_37_, usetime0_.M_PRESSURE_1 AS M_PRESS22_37_, usetime0_.M_PRESSURE_2 AS M_PRESS23_37_, usetime0_.PRESSURE_POS AS PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT AS PRESSUR25_37_
+	, usetime0_.RECORD_TIME AS RECORD_26_37_, usetime0_.START_PRESSURE AS START_P27_37_, usetime0_.STARTTIME AS STARTTI28_37_
+FROM USETIME usetime0_
+WHERE usetime0_.DEVICE_ID = '0a0a0a0a0b0b0b0b0c0c0c0c'
+ORDER BY usetime0_.STARTTIME DESC
+LIMIT 10
+hypnus-admin 2018-03-31 09:21:57.642 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50001} query executed. 36.458485 millis. 
+select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.STARTTIME desc limit ?
+hypnus-admin 2018-03-31 09:21:57.643 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} open
+hypnus-admin 2018-03-31 09:21:57.643 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
+hypnus-admin 2018-03-31 09:21:57.649 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [23, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
+hypnus-admin 2018-03-31 09:21:57.671 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} closed
+hypnus-admin 2018-03-31 09:21:57.671 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters. 
+hypnus-admin 2018-03-31 09:21:57.671 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 09:23:15.079 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-31 09:23:15.079 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-31 09:23:15.080 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-31 09:23:15.080 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-31 09:23:15.081 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-31 09:23:15.081 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2018-03-31 09:23:15.081 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-31 10:00:38.217 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-31 10:00:38.608 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-31 10:00:39.004 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-31 10:00:39.400 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-31 10:00:39.790 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-31 10:00:40.818 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 10:00:40.944 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 10:00:43.987 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 10:00:44.143 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+select count(usetime0_.I_ID) as col_0_0_ from USETIME usetime0_ where 1=1
+hypnus-admin 2018-03-31 10:00:44.153 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : []
+hypnus-admin 2018-03-31 10:00:44.153 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : []
+hypnus-admin 2018-03-31 10:00:44.187 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+select count(usetime0_.I_ID) as col_0_0_ from USETIME usetime0_ where 1=1
+hypnus-admin 2018-03-31 10:00:44.188 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 37.135488 millis. 
+select count(usetime0_.I_ID) as col_0_0_ from USETIME usetime0_ where 1=1
+hypnus-admin 2018-03-31 10:00:44.188 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-31 10:00:44.190 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [col_0_0_]
+hypnus-admin 2018-03-31 10:00:44.196 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [86]
+hypnus-admin 2018-03-31 10:00:44.201 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-31 10:00:44.201 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-31 10:00:44.203 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 10:00:44.221 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 10:00:44.228 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} created. 
+select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where 1=1 order by usetime0_.STARTTIME desc limit ?
+hypnus-admin 2018-03-31 10:00:44.230 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Parameters : [10]
+hypnus-admin 2018-03-31 10:00:44.230 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} Types : [INTEGER]
+hypnus-admin 2018-03-31 10:00:44.289 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} executed. 
+SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, usetime0_.D_MODIFY_DATE AS D_MODIFY3_37_, usetime0_.BREATH_FIT AS BREATH_F4_37_, usetime0_.BREATH_RATE AS BREATH_R5_37_
+	, usetime0_.BREATH_RATIO AS BREATH_R6_37_, usetime0_.BREATHRATE_POS AS BREATHRA7_37_, usetime0_.CURE_DELAY AS CURE_DEL8_37_, usetime0_.DATA_VERSION AS DATA_VER9_37_, usetime0_.DEP_LEVEL AS DEP_LEV10_37_
+	, usetime0_.DEP_TYPE AS DEP_TYP11_37_, usetime0_.DEVICE_ID AS DEVICE_12_37_, usetime0_.DILEAK_POS AS DILEAK_13_37_, usetime0_.END_TIME AS END_TIM14_37_, usetime0_.EXHALE_SENSITIVE AS EXHALE_15_37_
+	, usetime0_.FLOW_POS AS FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE AS INHALE_17_37_, usetime0_.INTIME_POS AS INTIME_18_37_, usetime0_.MODE AS MODE19_37_, usetime0_.MV_POS AS MV_POS20_37_
+	, usetime0_.PEROID AS PEROID21_37_, usetime0_.M_PRESSURE_1 AS M_PRESS22_37_, usetime0_.M_PRESSURE_2 AS M_PRESS23_37_, usetime0_.PRESSURE_POS AS PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT AS PRESSUR25_37_
+	, usetime0_.RECORD_TIME AS RECORD_26_37_, usetime0_.START_PRESSURE AS START_P27_37_, usetime0_.STARTTIME AS STARTTI28_37_
+FROM USETIME usetime0_
+WHERE 1 = 1
+ORDER BY usetime0_.STARTTIME DESC
+LIMIT 10
+hypnus-admin 2018-03-31 10:00:44.289 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001, rs-50001} query executed. 57.740472 millis. 
+select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where 1=1 order by usetime0_.STARTTIME desc limit ?
+hypnus-admin 2018-03-31 10:00:44.289 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} open
+hypnus-admin 2018-03-31 10:00:44.289 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
+hypnus-admin 2018-03-31 10:00:44.289 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [null, null, null, 0, 18, 0, 2, 5, 7C_V1.17, 1, 2, 3633383630355111003C0036, 2, 2018-03-31 17:37:59, 2, 175, 2, 2, 2, 2, 14, 60.0, 40.0, 350, 30.0, 2018-03-30 17:38:26.060, 40.0, 2018-03-31 17:37:45]
+hypnus-admin 2018-03-31 10:00:44.290 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [null, null, null, 0, 18, 0, 0, 5, 7C_V1.17, 1, 2, 3633383630355111003C0036, 0, null, 2, 0, 2, 0, 2, 0, null, 60.0, 40.0, 0, 30.0, 2018-03-30 17:35:28.766, 40.0, 2018-03-31 17:34:49]
+hypnus-admin 2018-03-31 10:00:44.290 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [null, null, null, 0, 18, 0, 88, 5, 7C_V1.17, 1, 2, 3633383630355111003C0036, 89, 2018-03-31 14:24:07, 2, 5612, 2, 88, 2, 88, 449, 80.0, 45.0, 11224, 30.0, 2018-03-30 14:17:17.676, 40.0, 2018-03-31 14:16:38]
+hypnus-admin 2018-03-31 10:00:44.294 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [null, null, null, 0, 18, 0, 30, 0, 7C_V1.17, 1, 2, 3633383630355111003C0036, 30, 2018-03-31 14:10:00, 2, 1937, 2, 30, 1, 30, 155, 80.0, 80.0, 3874, 30.0, 2018-03-30 14:08:05.477, 40.0, 2018-03-31 14:07:26]
+hypnus-admin 2018-03-31 10:00:44.296 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [null, null, null, 0, 18, 0, 0, 5, 7C_V1.17, 1, 2, 3633383630355111003C0036, 1, 2018-03-31 14:07:07, 2, 62, 2, 0, 1, 0, 5, 80.0, 80.0, 124, 30.0, 2018-03-30 14:07:41.417, 40.0, 2018-03-31 14:07:02]
+hypnus-admin 2018-03-31 10:00:44.296 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [null, null, null, 0, 18, 0, 188, 5, 7C_V1.17, 1, 2, 3633383630355111003C0036, 189, 2018-03-31 14:06:41, 2, 11825, 2, 188, 1, 188, 946, 80.0, 45.0, 23650, 30.0, 2018-03-30 13:51:33.739, 40.0, 2018-03-31 13:50:55]
+hypnus-admin 2018-03-31 10:00:44.297 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [null, null, null, 0, 18, 0, 6, 5, 7C_V1.17, 1, 2, 3633383630355111003C0036, 6, 2018-03-31 13:50:38, 2, 375, 2, 6, 1, 6, 30, 80.0, 45.0, 750, 30.0, 2018-03-30 13:50:47.882, 40.0, 2018-03-31 13:50:08]
+hypnus-admin 2018-03-31 10:00:44.299 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [null, null, null, 0, 18, 0, 260, 5, 7C_V1.17, 2, 2, 3633383630355111003C0036, 260, 2018-03-31 13:44:40, 2, 16275, 2, 260, 3, 260, 1302, 50.0, 80.0, 32550, 30.0, 2018-03-30 13:23:36.899, 40.0, 2018-03-31 13:22:58]
+hypnus-admin 2018-03-31 10:00:44.299 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [null, null, null, 0, 18, 0, 11288, 0, 7C_V1.17, 1, 2, 3633383630355111003C0036, 11289, 2018-03-31 09:53:53, 2, 705595, 2, 11288, 4, 11288, 56079, 40.0, 50.0, 1411702, 30.0, 2018-03-30 18:19:34.821, 40.0, 2018-03-30 18:19:14]
+hypnus-admin 2018-03-31 10:00:44.300 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} Result: [null, null, null, 0, 18, 1, 11332, 0, 7C_V1.17, 2, 2, 363338363035511100290036, 11332, 2018-03-31 09:47:09, 2, 708877, 2, 11332, 5, 11332, 55891, 40.0, 60.0, 1417754, 30.0, 2018-03-30 18:15:31.024, 40.0, 2018-03-30 18:15:38]
+hypnus-admin 2018-03-31 10:00:44.300 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20001, rs-50001} closed
+hypnus-admin 2018-03-31 10:00:44.300 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} clearParameters. 
+hypnus-admin 2018-03-31 10:00:44.300 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 10:00:51.235 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-31 10:00:51.236 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-31 10:00:51.236 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-31 10:00:51.236 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-31 10:00:51.237 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-31 10:00:51.237 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20001} closed
+hypnus-admin 2018-03-31 10:00:51.237 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-31 11:35:09.804 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-31 11:35:10.205 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-31 11:35:10.598 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-31 11:35:10.987 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-31 11:35:11.380 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-31 11:35:12.246 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 11:35:12.325 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 11:35:14.833 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 11:35:14.868 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-31 11:35:15.303 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 00:06:29.373 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
-hypnus-admin 2018-03-25 00:06:29.373 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
-hypnus-admin 2018-03-25 00:06:29.444 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+hypnus-admin 2018-03-31 11:35:15.312 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
+hypnus-admin 2018-03-31 11:35:15.312 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
+hypnus-admin 2018-03-31 11:35:15.367 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
 SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, usetime0_.D_MODIFY_DATE AS D_MODIFY3_37_, usetime0_.BREATH_FIT AS BREATH_F4_37_, usetime0_.BREATH_RATE AS BREATH_R5_37_
 	, usetime0_.BREATH_RATIO AS BREATH_R6_37_, usetime0_.BREATHRATE_POS AS BREATHRA7_37_, usetime0_.CURE_DELAY AS CURE_DEL8_37_, usetime0_.DATA_VERSION AS DATA_VER9_37_, usetime0_.DEP_LEVEL AS DEP_LEV10_37_
 	, usetime0_.DEP_TYPE AS DEP_TYP11_37_, usetime0_.DEVICE_ID AS DEVICE_12_37_, usetime0_.DILEAK_POS AS DILEAK_13_37_, usetime0_.END_TIME AS END_TIM14_37_, usetime0_.EXHALE_SENSITIVE AS EXHALE_15_37_
@@ -21,36 +138,36 @@ SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, us
 FROM USETIME usetime0_
 WHERE usetime0_.DEVICE_ID = '0a0a0a0a0b0b0b0b0c0c0c0c'
 ORDER BY usetime0_.D_CREATE_DATE DESC
-hypnus-admin 2018-03-25 00:06:29.445 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 74.697671 millis. 
+hypnus-admin 2018-03-31 11:35:15.368 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 57.401026 millis. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 00:06:29.445 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
-hypnus-admin 2018-03-25 00:06:29.448 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
-hypnus-admin 2018-03-25 00:06:29.456 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [23, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
-hypnus-admin 2018-03-25 00:06:29.484 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
-hypnus-admin 2018-03-25 00:06:29.484 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
-hypnus-admin 2018-03-25 00:06:29.522 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
-hypnus-admin 2018-03-25 00:06:29.522 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
-hypnus-admin 2018-03-25 00:06:29.645 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 00:06:31.421 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
-hypnus-admin 2018-03-25 00:06:31.423 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
-hypnus-admin 2018-03-25 00:06:31.424 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
-hypnus-admin 2018-03-25 00:06:31.425 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
-hypnus-admin 2018-03-25 00:06:31.427 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
-hypnus-admin 2018-03-25 00:06:31.428 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
-hypnus-admin 2018-03-25 00:07:40.394 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
-hypnus-admin 2018-03-25 00:07:40.870 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
-hypnus-admin 2018-03-25 00:07:41.336 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
-hypnus-admin 2018-03-25 00:07:41.799 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
-hypnus-admin 2018-03-25 00:07:42.239 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
-hypnus-admin 2018-03-25 00:07:43.213 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 00:07:43.338 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 00:07:45.994 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 00:07:46.030 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
-hypnus-admin 2018-03-25 00:07:46.569 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+hypnus-admin 2018-03-31 11:35:15.368 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-31 11:35:15.370 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
+hypnus-admin 2018-03-31 11:35:15.379 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [122, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
+hypnus-admin 2018-03-31 11:35:15.396 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-31 11:35:15.396 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-31 11:35:15.427 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-31 11:35:15.428 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-31 11:35:15.520 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 11:35:22.127 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-31 11:35:22.128 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-31 11:35:22.129 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-31 11:35:22.130 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-31 11:35:22.130 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-31 11:35:22.131 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-31 11:59:08.354 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-31 11:59:08.743 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-31 11:59:09.138 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-31 11:59:09.536 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-31 11:59:09.941 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-31 11:59:10.810 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 11:59:10.913 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 11:59:13.389 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 11:59:13.424 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-31 11:59:13.933 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 00:07:46.580 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
-hypnus-admin 2018-03-25 00:07:46.581 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
-hypnus-admin 2018-03-25 00:07:46.644 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+hypnus-admin 2018-03-31 11:59:13.945 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
+hypnus-admin 2018-03-31 11:59:13.946 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
+hypnus-admin 2018-03-31 11:59:14.002 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
 SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, usetime0_.D_MODIFY_DATE AS D_MODIFY3_37_, usetime0_.BREATH_FIT AS BREATH_F4_37_, usetime0_.BREATH_RATE AS BREATH_R5_37_
 	, usetime0_.BREATH_RATIO AS BREATH_R6_37_, usetime0_.BREATHRATE_POS AS BREATHRA7_37_, usetime0_.CURE_DELAY AS CURE_DEL8_37_, usetime0_.DATA_VERSION AS DATA_VER9_37_, usetime0_.DEP_LEVEL AS DEP_LEV10_37_
 	, usetime0_.DEP_TYPE AS DEP_TYP11_37_, usetime0_.DEVICE_ID AS DEVICE_12_37_, usetime0_.DILEAK_POS AS DILEAK_13_37_, usetime0_.END_TIME AS END_TIM14_37_, usetime0_.EXHALE_SENSITIVE AS EXHALE_15_37_
@@ -60,36 +177,36 @@ SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, us
 FROM USETIME usetime0_
 WHERE usetime0_.DEVICE_ID = '0a0a0a0a0b0b0b0b0c0c0c0c'
 ORDER BY usetime0_.D_CREATE_DATE DESC
-hypnus-admin 2018-03-25 00:07:46.644 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 66.067672 millis. 
+hypnus-admin 2018-03-31 11:59:14.002 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 58.956283 millis. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 00:07:46.645 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
-hypnus-admin 2018-03-25 00:07:46.649 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
-hypnus-admin 2018-03-25 00:07:46.666 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [23, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
-hypnus-admin 2018-03-25 00:07:46.701 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
-hypnus-admin 2018-03-25 00:07:46.701 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
-hypnus-admin 2018-03-25 00:07:46.737 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
-hypnus-admin 2018-03-25 00:07:46.737 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
-hypnus-admin 2018-03-25 00:07:46.840 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 00:15:53.013 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
-hypnus-admin 2018-03-25 00:15:53.014 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
-hypnus-admin 2018-03-25 00:15:53.015 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
-hypnus-admin 2018-03-25 00:15:53.016 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
-hypnus-admin 2018-03-25 00:15:53.016 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
-hypnus-admin 2018-03-25 00:15:53.018 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
-hypnus-admin 2018-03-25 00:30:25.542 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
-hypnus-admin 2018-03-25 00:30:26.012 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
-hypnus-admin 2018-03-25 00:30:26.478 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
-hypnus-admin 2018-03-25 00:30:26.941 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
-hypnus-admin 2018-03-25 00:30:27.415 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
-hypnus-admin 2018-03-25 00:30:28.362 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 00:30:28.489 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 00:30:31.186 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 00:30:31.228 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
-hypnus-admin 2018-03-25 00:30:31.711 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+hypnus-admin 2018-03-31 11:59:14.002 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-31 11:59:14.005 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
+hypnus-admin 2018-03-31 11:59:14.013 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [122, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
+hypnus-admin 2018-03-31 11:59:14.028 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-31 11:59:14.028 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-31 11:59:14.061 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-31 11:59:14.061 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-31 11:59:14.175 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 11:59:15.672 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-31 11:59:15.673 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-31 11:59:15.673 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-31 11:59:15.674 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-31 11:59:15.674 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-31 11:59:15.675 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-31 13:56:40.055 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-31 13:56:40.465 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-31 13:56:40.867 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-31 13:56:41.254 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-31 13:56:41.643 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-31 13:56:42.625 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 13:56:42.755 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 13:56:45.468 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 13:56:45.503 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-31 13:56:45.961 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 00:30:31.725 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
-hypnus-admin 2018-03-25 00:30:31.725 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
-hypnus-admin 2018-03-25 00:30:31.791 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+hypnus-admin 2018-03-31 13:56:45.971 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
+hypnus-admin 2018-03-31 13:56:45.971 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
+hypnus-admin 2018-03-31 13:56:46.031 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
 SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, usetime0_.D_MODIFY_DATE AS D_MODIFY3_37_, usetime0_.BREATH_FIT AS BREATH_F4_37_, usetime0_.BREATH_RATE AS BREATH_R5_37_
 	, usetime0_.BREATH_RATIO AS BREATH_R6_37_, usetime0_.BREATHRATE_POS AS BREATHRA7_37_, usetime0_.CURE_DELAY AS CURE_DEL8_37_, usetime0_.DATA_VERSION AS DATA_VER9_37_, usetime0_.DEP_LEVEL AS DEP_LEV10_37_
 	, usetime0_.DEP_TYPE AS DEP_TYP11_37_, usetime0_.DEVICE_ID AS DEVICE_12_37_, usetime0_.DILEAK_POS AS DILEAK_13_37_, usetime0_.END_TIME AS END_TIM14_37_, usetime0_.EXHALE_SENSITIVE AS EXHALE_15_37_
@@ -99,30 +216,36 @@ SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, us
 FROM USETIME usetime0_
 WHERE usetime0_.DEVICE_ID = '0a0a0a0a0b0b0b0b0c0c0c0c'
 ORDER BY usetime0_.D_CREATE_DATE DESC
-hypnus-admin 2018-03-25 00:30:31.792 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 69.654317 millis. 
+hypnus-admin 2018-03-31 13:56:46.032 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 62.19895 millis. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 00:30:31.792 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
-hypnus-admin 2018-03-25 00:30:31.795 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
-hypnus-admin 2018-03-25 00:30:31.803 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [23, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
-hypnus-admin 2018-03-25 00:30:31.830 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
-hypnus-admin 2018-03-25 00:30:31.830 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
-hypnus-admin 2018-03-25 00:30:31.876 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
-hypnus-admin 2018-03-25 00:30:31.876 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
-hypnus-admin 2018-03-25 00:30:31.992 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 10:38:22.903 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
-hypnus-admin 2018-03-25 10:38:23.382 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
-hypnus-admin 2018-03-25 10:38:23.869 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
-hypnus-admin 2018-03-25 10:38:24.315 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
-hypnus-admin 2018-03-25 10:38:24.773 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
-hypnus-admin 2018-03-25 10:38:25.732 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 10:38:25.831 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 10:38:28.490 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 10:38:28.528 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
-hypnus-admin 2018-03-25 10:38:28.932 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+hypnus-admin 2018-03-31 13:56:46.032 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-31 13:56:46.035 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
+hypnus-admin 2018-03-31 13:56:46.045 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [122, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
+hypnus-admin 2018-03-31 13:56:46.068 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-31 13:56:46.068 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-31 13:56:46.099 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-31 13:56:46.100 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-31 13:56:46.195 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 13:56:47.406 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-31 13:56:47.407 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-31 13:56:47.408 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-31 13:56:47.409 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-31 13:56:47.409 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-31 13:56:47.410 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-31 13:57:27.297 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-31 13:57:27.686 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-31 13:57:28.076 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-31 13:57:28.476 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-31 13:57:28.864 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-31 13:57:29.845 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 13:57:29.957 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 13:57:32.972 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 13:57:33.049 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-31 13:57:33.464 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 10:38:28.940 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
-hypnus-admin 2018-03-25 10:38:28.940 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
-hypnus-admin 2018-03-25 10:38:29.023 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+hypnus-admin 2018-03-31 13:57:33.473 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
+hypnus-admin 2018-03-31 13:57:33.473 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
+hypnus-admin 2018-03-31 13:57:33.723 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
 SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, usetime0_.D_MODIFY_DATE AS D_MODIFY3_37_, usetime0_.BREATH_FIT AS BREATH_F4_37_, usetime0_.BREATH_RATE AS BREATH_R5_37_
 	, usetime0_.BREATH_RATIO AS BREATH_R6_37_, usetime0_.BREATHRATE_POS AS BREATHRA7_37_, usetime0_.CURE_DELAY AS CURE_DEL8_37_, usetime0_.DATA_VERSION AS DATA_VER9_37_, usetime0_.DEP_LEVEL AS DEP_LEV10_37_
 	, usetime0_.DEP_TYPE AS DEP_TYP11_37_, usetime0_.DEVICE_ID AS DEVICE_12_37_, usetime0_.DILEAK_POS AS DILEAK_13_37_, usetime0_.END_TIME AS END_TIM14_37_, usetime0_.EXHALE_SENSITIVE AS EXHALE_15_37_
@@ -132,36 +255,36 @@ SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, us
 FROM USETIME usetime0_
 WHERE usetime0_.DEVICE_ID = '0a0a0a0a0b0b0b0b0c0c0c0c'
 ORDER BY usetime0_.D_CREATE_DATE DESC
-hypnus-admin 2018-03-25 10:38:29.023 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 85.854444 millis. 
+hypnus-admin 2018-03-31 13:57:33.724 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 251.854207 millis. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 10:38:29.023 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
-hypnus-admin 2018-03-25 10:38:29.027 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
-hypnus-admin 2018-03-25 10:38:29.037 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [23, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
-hypnus-admin 2018-03-25 10:38:29.052 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
-hypnus-admin 2018-03-25 10:38:29.052 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
-hypnus-admin 2018-03-25 10:38:29.093 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
-hypnus-admin 2018-03-25 10:38:29.093 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
-hypnus-admin 2018-03-25 10:38:29.209 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 10:38:37.666 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
-hypnus-admin 2018-03-25 10:38:37.667 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
-hypnus-admin 2018-03-25 10:38:37.668 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
-hypnus-admin 2018-03-25 10:38:37.668 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
-hypnus-admin 2018-03-25 10:38:37.669 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
-hypnus-admin 2018-03-25 10:38:37.669 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
-hypnus-admin 2018-03-25 12:40:19.182 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
-hypnus-admin 2018-03-25 12:40:19.790 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
-hypnus-admin 2018-03-25 12:40:20.267 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
-hypnus-admin 2018-03-25 12:40:20.804 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
-hypnus-admin 2018-03-25 12:40:21.763 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
-hypnus-admin 2018-03-25 12:40:22.729 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 12:40:22.825 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 12:40:25.142 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 12:40:25.201 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
-hypnus-admin 2018-03-25 12:40:25.529 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+hypnus-admin 2018-03-31 13:57:33.724 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-31 13:57:33.727 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
+hypnus-admin 2018-03-31 13:57:33.735 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [122, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
+hypnus-admin 2018-03-31 13:57:33.756 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-31 13:57:33.756 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-31 13:57:33.886 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-31 13:57:33.887 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-31 13:57:34.013 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 13:58:51.719 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-31 13:58:51.720 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-31 13:58:51.720 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-31 13:58:51.721 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-31 13:58:51.721 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-31 13:58:51.722 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-31 13:59:35.152 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-31 13:59:35.558 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-31 13:59:35.965 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-31 13:59:36.378 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-31 13:59:36.801 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-31 13:59:37.789 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 13:59:37.912 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 13:59:41.097 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 13:59:41.137 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-31 13:59:41.537 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 12:40:25.537 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
-hypnus-admin 2018-03-25 12:40:25.537 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
-hypnus-admin 2018-03-25 12:40:25.632 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+hypnus-admin 2018-03-31 13:59:41.547 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
+hypnus-admin 2018-03-31 13:59:41.547 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
+hypnus-admin 2018-03-31 13:59:41.607 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
 SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, usetime0_.D_MODIFY_DATE AS D_MODIFY3_37_, usetime0_.BREATH_FIT AS BREATH_F4_37_, usetime0_.BREATH_RATE AS BREATH_R5_37_
 	, usetime0_.BREATH_RATIO AS BREATH_R6_37_, usetime0_.BREATHRATE_POS AS BREATHRA7_37_, usetime0_.CURE_DELAY AS CURE_DEL8_37_, usetime0_.DATA_VERSION AS DATA_VER9_37_, usetime0_.DEP_LEVEL AS DEP_LEV10_37_
 	, usetime0_.DEP_TYPE AS DEP_TYP11_37_, usetime0_.DEVICE_ID AS DEVICE_12_37_, usetime0_.DILEAK_POS AS DILEAK_13_37_, usetime0_.END_TIME AS END_TIM14_37_, usetime0_.EXHALE_SENSITIVE AS EXHALE_15_37_
@@ -171,36 +294,36 @@ SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, us
 FROM USETIME usetime0_
 WHERE usetime0_.DEVICE_ID = '0a0a0a0a0b0b0b0b0c0c0c0c'
 ORDER BY usetime0_.D_CREATE_DATE DESC
-hypnus-admin 2018-03-25 12:40:25.633 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 97.365766 millis. 
+hypnus-admin 2018-03-31 13:59:41.608 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 62.919752 millis. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 12:40:25.633 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
-hypnus-admin 2018-03-25 12:40:25.636 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
-hypnus-admin 2018-03-25 12:40:25.645 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [23, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
-hypnus-admin 2018-03-25 12:40:25.663 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
-hypnus-admin 2018-03-25 12:40:25.664 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
-hypnus-admin 2018-03-25 12:40:25.704 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
-hypnus-admin 2018-03-25 12:40:25.705 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
-hypnus-admin 2018-03-25 12:40:25.831 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 12:40:32.465 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
-hypnus-admin 2018-03-25 12:40:32.466 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
-hypnus-admin 2018-03-25 12:40:32.466 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
-hypnus-admin 2018-03-25 12:40:32.468 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
-hypnus-admin 2018-03-25 12:40:32.468 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
-hypnus-admin 2018-03-25 12:40:32.469 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
-hypnus-admin 2018-03-25 12:40:53.518 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
-hypnus-admin 2018-03-25 12:40:54.001 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
-hypnus-admin 2018-03-25 12:40:54.442 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
-hypnus-admin 2018-03-25 12:40:54.926 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
-hypnus-admin 2018-03-25 12:40:55.377 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
-hypnus-admin 2018-03-25 12:40:56.389 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 12:40:56.525 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 12:40:59.264 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
-hypnus-admin 2018-03-25 12:40:59.343 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
-hypnus-admin 2018-03-25 12:41:00.070 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
+hypnus-admin 2018-03-31 13:59:41.608 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-31 13:59:41.610 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
+hypnus-admin 2018-03-31 13:59:41.618 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [122, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
+hypnus-admin 2018-03-31 13:59:41.638 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-31 13:59:41.639 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-31 13:59:41.673 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-31 13:59:41.673 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-31 13:59:41.767 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 13:59:53.596 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-31 13:59:53.597 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-31 13:59:53.598 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-31 13:59:53.599 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-31 13:59:53.599 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-31 13:59:53.599 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-31 14:00:21.035 [main] DEBUG druid.sql.Connection - [] {conn-10001} connected
+hypnus-admin 2018-03-31 14:00:21.430 [main] DEBUG druid.sql.Connection - [] {conn-10002} connected
+hypnus-admin 2018-03-31 14:00:21.835 [main] DEBUG druid.sql.Connection - [] {conn-10003} connected
+hypnus-admin 2018-03-31 14:00:22.228 [main] DEBUG druid.sql.Connection - [] {conn-10004} connected
+hypnus-admin 2018-03-31 14:00:22.633 [main] DEBUG druid.sql.Connection - [] {conn-10005} connected
+hypnus-admin 2018-03-31 14:00:23.623 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 14:00:23.743 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 14:00:26.573 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-connect
+hypnus-admin 2018-03-31 14:00:26.616 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit false
+hypnus-admin 2018-03-31 14:00:27.065 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} created. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 12:41:00.081 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
-hypnus-admin 2018-03-25 12:41:00.081 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
-hypnus-admin 2018-03-25 12:41:00.144 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
+hypnus-admin 2018-03-31 14:00:27.074 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Parameters : [0a0a0a0a0b0b0b0b0c0c0c0c]
+hypnus-admin 2018-03-31 14:00:27.074 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} Types : [VARCHAR]
+hypnus-admin 2018-03-31 14:00:27.143 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} executed. 
 SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, usetime0_.D_MODIFY_DATE AS D_MODIFY3_37_, usetime0_.BREATH_FIT AS BREATH_F4_37_, usetime0_.BREATH_RATE AS BREATH_R5_37_
 	, usetime0_.BREATH_RATIO AS BREATH_R6_37_, usetime0_.BREATHRATE_POS AS BREATHRA7_37_, usetime0_.CURE_DELAY AS CURE_DEL8_37_, usetime0_.DATA_VERSION AS DATA_VER9_37_, usetime0_.DEP_LEVEL AS DEP_LEV10_37_
 	, usetime0_.DEP_TYPE AS DEP_TYP11_37_, usetime0_.DEVICE_ID AS DEVICE_12_37_, usetime0_.DILEAK_POS AS DILEAK_13_37_, usetime0_.END_TIME AS END_TIM14_37_, usetime0_.EXHALE_SENSITIVE AS EXHALE_15_37_
@@ -210,19 +333,19 @@ SELECT usetime0_.I_ID AS I_ID1_37_, usetime0_.D_CREATE_DATE AS D_CREATE2_37_, us
 FROM USETIME usetime0_
 WHERE usetime0_.DEVICE_ID = '0a0a0a0a0b0b0b0b0c0c0c0c'
 ORDER BY usetime0_.D_CREATE_DATE DESC
-hypnus-admin 2018-03-25 12:41:00.145 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 66.417313 millis. 
+hypnus-admin 2018-03-31 14:00:27.143 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000, rs-50000} query executed. 71.192179 millis. 
 select usetime0_.I_ID as I_ID1_37_, usetime0_.D_CREATE_DATE as D_CREATE2_37_, usetime0_.D_MODIFY_DATE as D_MODIFY3_37_, usetime0_.BREATH_FIT as BREATH_F4_37_, usetime0_.BREATH_RATE as BREATH_R5_37_, usetime0_.BREATH_RATIO as BREATH_R6_37_, usetime0_.BREATHRATE_POS as BREATHRA7_37_, usetime0_.CURE_DELAY as CURE_DEL8_37_, usetime0_.DATA_VERSION as DATA_VER9_37_, usetime0_.DEP_LEVEL as DEP_LEV10_37_, usetime0_.DEP_TYPE as DEP_TYP11_37_, usetime0_.DEVICE_ID as DEVICE_12_37_, usetime0_.DILEAK_POS as DILEAK_13_37_, usetime0_.END_TIME as END_TIM14_37_, usetime0_.EXHALE_SENSITIVE as EXHALE_15_37_, usetime0_.FLOW_POS as FLOW_PO16_37_, usetime0_.INHALE_SENSITIVE as INHALE_17_37_, usetime0_.INTIME_POS as INTIME_18_37_, usetime0_.MODE as MODE19_37_, usetime0_.MV_POS as MV_POS20_37_, usetime0_.PEROID as PEROID21_37_, usetime0_.M_PRESSURE_1 as M_PRESS22_37_, usetime0_.M_PRESSURE_2 as M_PRESS23_37_, usetime0_.PRESSURE_POS as PRESSUR24_37_, usetime0_.PRESSURE_SUPPORT as PRESSUR25_37_, usetime0_.RECORD_TIME as RECORD_26_37_, usetime0_.START_PRESSURE as START_P27_37_, usetime0_.STARTTIME as STARTTI28_37_ from USETIME usetime0_ where usetime0_.DEVICE_ID=? order by usetime0_.D_CREATE_DATE desc
-hypnus-admin 2018-03-25 12:41:00.145 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
-hypnus-admin 2018-03-25 12:41:00.148 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
-hypnus-admin 2018-03-25 12:41:00.158 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [23, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
-hypnus-admin 2018-03-25 12:41:00.184 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
-hypnus-admin 2018-03-25 12:41:00.184 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
-hypnus-admin 2018-03-25 12:41:00.222 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
-hypnus-admin 2018-03-25 12:41:00.223 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
-hypnus-admin 2018-03-25 12:41:00.330 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
-hypnus-admin 2018-03-25 12:41:45.300 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
-hypnus-admin 2018-03-25 12:41:45.301 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
-hypnus-admin 2018-03-25 12:41:45.302 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
-hypnus-admin 2018-03-25 12:41:45.303 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
-hypnus-admin 2018-03-25 12:41:45.303 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
-hypnus-admin 2018-03-25 12:41:45.303 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed
+hypnus-admin 2018-03-31 14:00:27.144 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} open
+hypnus-admin 2018-03-31 14:00:27.149 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Header: [i_id, d_create_date, d_modify_date, breath_fit, breath_rate, breath_ratio, breathrate_pos, cure_delay, data_version, dep_level, dep_type, device_id, dileak_pos, end_time, exhale_sensitive, flow_pos, inhale_sensitive, intime_pos, mode, mv_pos, peroid, m_pressure_1, m_pressure_2, pressure_pos, pressure_support, record_time, start_pressure, starttime]
+hypnus-admin 2018-03-31 14:00:27.158 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} Result: [122, 2018-03-24 11:31:19.0, 2018-03-24 11:31:22.0, null, null, null, 0, null, , null, null, 0a0a0a0a0b0b0b0b0c0c0c0c, 0, , null, 0, null, 0, 2, 0, null, 0.0, 0.0, 0, null, , 4.0, 2016-02-09 16:26:00]
+hypnus-admin 2018-03-31 14:00:27.181 [main] DEBUG druid.sql.ResultSet - [] {conn-10005, pstmt-20000, rs-50000} closed
+hypnus-admin 2018-03-31 14:00:27.181 [main] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} clearParameters. 
+hypnus-admin 2018-03-31 14:00:27.215 [main] DEBUG druid.sql.Connection - [] {conn-10005} commited
+hypnus-admin 2018-03-31 14:00:27.215 [main] DEBUG druid.sql.Connection - [] {conn-10005} setAutoCommit true
+hypnus-admin 2018-03-31 14:00:27.314 [main] DEBUG druid.sql.Connection - [] {conn-10005} pool-recycle
+hypnus-admin 2018-03-31 14:01:08.799 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10001} closed
+hypnus-admin 2018-03-31 14:01:08.800 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10002} closed
+hypnus-admin 2018-03-31 14:01:08.801 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10003} closed
+hypnus-admin 2018-03-31 14:01:08.802 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10004} closed
+hypnus-admin 2018-03-31 14:01:08.802 [Thread-4] DEBUG druid.sql.Statement - [] {conn-10005, pstmt-20000} closed
+hypnus-admin 2018-03-31 14:01:08.803 [Thread-4] DEBUG druid.sql.Connection - [] {conn-10005} closed

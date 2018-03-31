@@ -101,6 +101,7 @@ public class UsetimeServiceImpl implements UsetimeService {
         }
         List<String> fileList = OssDataHandler.listOfObject(keyPre);
         if (CollectionUtils.isEmpty(fileList)) {
+            logger.info("OSS中无数据文件");
             throw new BaseException("OSS中无数据文件");
         }
         short[] pressureBytes = null;

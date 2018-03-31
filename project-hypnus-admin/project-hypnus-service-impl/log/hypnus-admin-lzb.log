@@ -1,577 +1,192 @@
-hypnus-admin 2018-03-25 00:06:18.305 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@3a44431a, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@3c7f66c4, org.springframework.test.context.support.DirtiesContextTestExecutionListener@194bcebf]
-hypnus-admin 2018-03-25 00:06:18.903 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
-hypnus-admin 2018-03-25 00:06:20.735 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@74d1dc36: startup date [Sun Mar 25 00:06:20 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 00:06:21.377 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
-hypnus-admin 2018-03-25 00:06:21.378 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
-hypnus-admin 2018-03-25 00:06:25.093 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
-hypnus-admin 2018-03-25 00:06:25.195 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
-hypnus-admin 2018-03-25 00:06:25.247 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
-hypnus-admin 2018-03-25 00:06:25.282 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
+hypnus-admin 2018-03-31 09:21:43.918 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@4ef37659, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@776b83cc, org.springframework.test.context.support.DirtiesContextTestExecutionListener@37858383]
+hypnus-admin 2018-03-31 09:21:44.466 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
+hypnus-admin 2018-03-31 09:21:45.944 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@4d465b11: startup date [Sat Mar 31 09:21:45 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 09:21:46.717 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
+hypnus-admin 2018-03-31 09:21:46.718 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
+hypnus-admin 2018-03-31 09:21:51.046 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
+hypnus-admin 2018-03-31 09:21:51.149 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
+hypnus-admin 2018-03-31 09:21:51.243 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 09:21:51.282 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
 	name: default
 	...]
-hypnus-admin 2018-03-25 00:06:25.467 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
-hypnus-admin 2018-03-25 00:06:25.469 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
-hypnus-admin 2018-03-25 00:06:25.473 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
-hypnus-admin 2018-03-25 00:06:25.580 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
-hypnus-admin 2018-03-25 00:06:25.971 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
-hypnus-admin 2018-03-25 00:06:26.926 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
-hypnus-admin 2018-03-25 00:06:27.803 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
-hypnus-admin 2018-03-25 00:06:28.191 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
-hypnus-admin 2018-03-25 00:06:28.987 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
-hypnus-admin 2018-03-25 00:06:31.190 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@74d1dc36: startup date [Sun Mar 25 00:06:20 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 00:06:31.198 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
-hypnus-admin 2018-03-25 00:06:31.215 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
-hypnus-admin 2018-03-25 00:06:31.434 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
-hypnus-admin 2018-03-25 00:07:35.210 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@3a44431a, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@3c7f66c4, org.springframework.test.context.support.DirtiesContextTestExecutionListener@194bcebf]
-hypnus-admin 2018-03-25 00:07:35.837 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
-hypnus-admin 2018-03-25 00:07:37.891 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@1530c739: startup date [Sun Mar 25 00:07:37 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 00:07:38.675 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
-hypnus-admin 2018-03-25 00:07:38.676 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
-hypnus-admin 2018-03-25 00:07:42.377 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
-hypnus-admin 2018-03-25 00:07:42.482 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
-hypnus-admin 2018-03-25 00:07:42.532 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
-hypnus-admin 2018-03-25 00:07:42.563 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
+hypnus-admin 2018-03-31 09:21:51.541 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
+hypnus-admin 2018-03-31 09:21:51.545 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
+hypnus-admin 2018-03-31 09:21:51.549 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
+hypnus-admin 2018-03-31 09:21:51.683 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+hypnus-admin 2018-03-31 09:21:53.472 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+hypnus-admin 2018-03-31 09:21:55.085 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
+hypnus-admin 2018-03-31 09:21:55.905 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
+hypnus-admin 2018-03-31 09:21:56.347 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
+hypnus-admin 2018-03-31 09:21:57.138 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
+hypnus-admin 2018-03-31 09:23:15.051 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@4d465b11: startup date [Sat Mar 31 09:21:45 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 09:23:15.058 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
+hypnus-admin 2018-03-31 09:23:15.071 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 09:23:15.083 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
+hypnus-admin 2018-03-31 10:00:33.983 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@3a44431a, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@3c7f66c4, org.springframework.test.context.support.DirtiesContextTestExecutionListener@194bcebf]
+hypnus-admin 2018-03-31 10:00:34.541 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
+hypnus-admin 2018-03-31 10:00:36.008 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@1530c739: startup date [Sat Mar 31 10:00:36 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 10:00:36.811 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
+hypnus-admin 2018-03-31 10:00:36.813 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
+hypnus-admin 2018-03-31 10:00:39.893 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
+hypnus-admin 2018-03-31 10:00:39.980 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
+hypnus-admin 2018-03-31 10:00:40.035 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 10:00:40.077 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
 	name: default
 	...]
-hypnus-admin 2018-03-25 00:07:42.741 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
-hypnus-admin 2018-03-25 00:07:42.745 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
-hypnus-admin 2018-03-25 00:07:42.748 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
-hypnus-admin 2018-03-25 00:07:42.848 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
-hypnus-admin 2018-03-25 00:07:43.247 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
-hypnus-admin 2018-03-25 00:07:44.272 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
-hypnus-admin 2018-03-25 00:07:44.998 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
-hypnus-admin 2018-03-25 00:07:45.383 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
-hypnus-admin 2018-03-25 00:07:46.187 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
-hypnus-admin 2018-03-25 00:15:52.998 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@1530c739: startup date [Sun Mar 25 00:07:37 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 00:15:53.002 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
-hypnus-admin 2018-03-25 00:15:53.009 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
-hypnus-admin 2018-03-25 00:15:53.020 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
-hypnus-admin 2018-03-25 00:30:20.928 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@3a44431a, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@3c7f66c4, org.springframework.test.context.support.DirtiesContextTestExecutionListener@194bcebf]
-hypnus-admin 2018-03-25 00:30:21.541 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
-hypnus-admin 2018-03-25 00:30:23.377 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@1530c739: startup date [Sun Mar 25 00:30:23 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 00:30:24.028 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
-hypnus-admin 2018-03-25 00:30:24.029 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
-hypnus-admin 2018-03-25 00:30:27.559 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
-hypnus-admin 2018-03-25 00:30:27.663 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
-hypnus-admin 2018-03-25 00:30:27.708 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
-hypnus-admin 2018-03-25 00:30:27.738 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
+hypnus-admin 2018-03-31 10:00:40.333 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
+hypnus-admin 2018-03-31 10:00:40.337 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
+hypnus-admin 2018-03-31 10:00:40.339 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
+hypnus-admin 2018-03-31 10:00:40.438 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+hypnus-admin 2018-03-31 10:00:40.854 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+hypnus-admin 2018-03-31 10:00:42.003 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
+hypnus-admin 2018-03-31 10:00:42.835 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
+hypnus-admin 2018-03-31 10:00:43.202 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
+hypnus-admin 2018-03-31 10:00:43.827 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
+hypnus-admin 2018-03-31 10:00:51.228 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@1530c739: startup date [Sat Mar 31 10:00:36 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 10:00:51.229 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
+hypnus-admin 2018-03-31 10:00:51.233 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 10:00:51.238 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
+hypnus-admin 2018-03-31 11:35:05.362 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@768b970c, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@5a4041cc, org.springframework.test.context.support.DirtiesContextTestExecutionListener@15b3e5b]
+hypnus-admin 2018-03-31 11:35:05.933 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
+hypnus-admin 2018-03-31 11:35:07.578 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@37574691: startup date [Sat Mar 31 11:35:07 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 11:35:08.494 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
+hypnus-admin 2018-03-31 11:35:08.495 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
+hypnus-admin 2018-03-31 11:35:11.481 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
+hypnus-admin 2018-03-31 11:35:11.573 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
+hypnus-admin 2018-03-31 11:35:11.658 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 11:35:11.695 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
 	name: default
 	...]
-hypnus-admin 2018-03-25 00:30:27.910 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
-hypnus-admin 2018-03-25 00:30:27.912 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
-hypnus-admin 2018-03-25 00:30:27.914 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
-hypnus-admin 2018-03-25 00:30:27.997 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
-hypnus-admin 2018-03-25 00:30:28.393 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
-hypnus-admin 2018-03-25 00:30:29.381 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
-hypnus-admin 2018-03-25 00:30:30.145 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
-hypnus-admin 2018-03-25 00:30:30.564 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
-hypnus-admin 2018-03-25 00:30:31.373 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
-hypnus-admin 2018-03-25 10:38:18.228 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@768b970c, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@5a4041cc, org.springframework.test.context.support.DirtiesContextTestExecutionListener@15b3e5b]
-hypnus-admin 2018-03-25 10:38:18.665 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
-hypnus-admin 2018-03-25 10:38:20.916 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@37574691: startup date [Sun Mar 25 10:38:20 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 10:38:21.353 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
-hypnus-admin 2018-03-25 10:38:21.364 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
-hypnus-admin 2018-03-25 10:38:24.894 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
-hypnus-admin 2018-03-25 10:38:25.000 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
-hypnus-admin 2018-03-25 10:38:25.059 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
-hypnus-admin 2018-03-25 10:38:25.102 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
+hypnus-admin 2018-03-31 11:35:11.867 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
+hypnus-admin 2018-03-31 11:35:11.869 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
+hypnus-admin 2018-03-31 11:35:11.871 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
+hypnus-admin 2018-03-31 11:35:11.954 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+hypnus-admin 2018-03-31 11:35:12.269 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+hypnus-admin 2018-03-31 11:35:13.150 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
+hypnus-admin 2018-03-31 11:35:13.836 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
+hypnus-admin 2018-03-31 11:35:14.309 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
+hypnus-admin 2018-03-31 11:35:14.987 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
+hypnus-admin 2018-03-31 11:35:22.099 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@37574691: startup date [Sat Mar 31 11:35:07 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 11:35:22.107 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
+hypnus-admin 2018-03-31 11:35:22.118 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 11:35:22.133 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
+hypnus-admin 2018-03-31 11:59:04.101 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@768b970c, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@5a4041cc, org.springframework.test.context.support.DirtiesContextTestExecutionListener@15b3e5b]
+hypnus-admin 2018-03-31 11:59:04.585 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
+hypnus-admin 2018-03-31 11:59:06.379 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@37574691: startup date [Sat Mar 31 11:59:06 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 11:59:07.041 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
+hypnus-admin 2018-03-31 11:59:07.042 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
+hypnus-admin 2018-03-31 11:59:10.059 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
+hypnus-admin 2018-03-31 11:59:10.159 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
+hypnus-admin 2018-03-31 11:59:10.211 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 11:59:10.251 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
 	name: default
 	...]
-hypnus-admin 2018-03-25 10:38:25.367 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
-hypnus-admin 2018-03-25 10:38:25.370 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
-hypnus-admin 2018-03-25 10:38:25.373 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
-hypnus-admin 2018-03-25 10:38:25.466 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
-hypnus-admin 2018-03-25 10:38:25.765 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
-hypnus-admin 2018-03-25 10:38:26.722 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
-hypnus-admin 2018-03-25 10:38:27.497 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
-hypnus-admin 2018-03-25 10:38:27.904 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
-hypnus-admin 2018-03-25 10:38:28.668 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
-hypnus-admin 2018-03-25 10:38:37.650 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@37574691: startup date [Sun Mar 25 10:38:20 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 10:38:37.653 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
-hypnus-admin 2018-03-25 10:38:37.661 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
-hypnus-admin 2018-03-25 10:38:37.670 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
-hypnus-admin 2018-03-25 12:38:37.690 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@768b970c, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@5a4041cc, org.springframework.test.context.support.DirtiesContextTestExecutionListener@15b3e5b]
-hypnus-admin 2018-03-25 12:38:38.071 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
-hypnus-admin 2018-03-25 12:38:39.655 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@37574691: startup date [Sun Mar 25 12:38:39 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 12:38:40.092 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
-hypnus-admin 2018-03-25 12:38:40.093 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
-hypnus-admin 2018-03-25 12:38:51.860 [main] ERROR com.alibaba.druid.pool.DruidDataSource - [] init datasource error, url: jdbc:mysql://rm-uf61m889rnvnz74445o.mysql.rds.aliyuncs.com:3306/ihypnus_iot?useUnicode=true&characterEncoding=UTF-8
-com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_131]
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_131]
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1129) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:358) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2498) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2535) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2320) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:834) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:46) ~[mysql-connector-java-5.1.29.jar:na]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_131]
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_131]
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:416) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:347) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterEventAdapter.connection_connect(FilterEventAdapter.java:38) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:211) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1377) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1431) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:632) ~[druid-1.0.13.jar:1.0.13]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_131]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_131]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeCustomInitMethod(AbstractAutowireCapableBeanFactory.java:1694) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1633) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1562) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:539) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:351) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:108) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1469) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:956) [spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:747) [spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:480) [spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:125) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:109) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:261) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:68) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:86) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultTestContext.getApplicationContext(DefaultTestContext.java:72) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:117) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.prepareTestInstance(DependencyInjectionTestExecutionListener.java:83) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:212) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.createTest(SpringJUnit4ClassRunner.java:200) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner$1.runReflectiveCall(SpringJUnit4ClassRunner.java:252) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.methodBlock(SpringJUnit4ClassRunner.java:254) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:217) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:83) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:68) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:309) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:163) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runner.JUnitCore.run(JUnitCore.java:160) [junit-4.11.jar:na]
-	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70) [junit-rt.jar:na]
-Caused by: java.net.UnknownHostException: rm-uf61m889rnvnz74445o.mysql.rds.aliyuncs.com
-	at java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method) ~[na:1.8.0_131]
-	at java.net.InetAddress$2.lookupAllHostAddr(InetAddress.java:928) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAddressesFromNameService(InetAddress.java:1323) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName0(InetAddress.java:1276) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName(InetAddress.java:1192) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName(InetAddress.java:1126) ~[na:1.8.0_131]
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:248) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:308) ~[mysql-connector-java-5.1.29.jar:na]
-	... 81 common frames omitted
-hypnus-admin 2018-03-25 12:38:51.982 [main] ERROR com.alibaba.druid.pool.DruidDataSource - [] dataSource init error
-com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_131]
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_131]
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1129) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:358) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2498) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2535) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2320) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:834) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:46) ~[mysql-connector-java-5.1.29.jar:na]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_131]
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_131]
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:416) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:347) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterEventAdapter.connection_connect(FilterEventAdapter.java:38) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:211) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1377) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1431) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:632) ~[druid-1.0.13.jar:1.0.13]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_131]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_131]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeCustomInitMethod(AbstractAutowireCapableBeanFactory.java:1694) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1633) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1562) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:539) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:351) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:108) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1469) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194) [spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:956) [spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:747) [spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:480) [spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:125) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:109) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:261) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:68) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:86) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultTestContext.getApplicationContext(DefaultTestContext.java:72) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:117) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.prepareTestInstance(DependencyInjectionTestExecutionListener.java:83) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:212) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.createTest(SpringJUnit4ClassRunner.java:200) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner$1.runReflectiveCall(SpringJUnit4ClassRunner.java:252) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.methodBlock(SpringJUnit4ClassRunner.java:254) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:217) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:83) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:68) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:309) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:163) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runner.JUnitCore.run(JUnitCore.java:160) [junit-4.11.jar:na]
-	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70) [junit-rt.jar:na]
-Caused by: java.net.UnknownHostException: rm-uf61m889rnvnz74445o.mysql.rds.aliyuncs.com
-	at java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method) ~[na:1.8.0_131]
-	at java.net.InetAddress$2.lookupAllHostAddr(InetAddress.java:928) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAddressesFromNameService(InetAddress.java:1323) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName0(InetAddress.java:1276) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName(InetAddress.java:1192) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName(InetAddress.java:1126) ~[na:1.8.0_131]
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:248) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:308) ~[mysql-connector-java-5.1.29.jar:na]
-	... 81 common frames omitted
-hypnus-admin 2018-03-25 12:38:51.985 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
-hypnus-admin 2018-03-25 12:38:51.988 [main] WARN  org.springframework.context.support.GenericApplicationContext - [] Exception encountered during context initialization - cancelling refresh attempt
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [applicationContext-test.xml]: Cannot resolve reference to bean 'dataSource' while setting bean property 'dataSource'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [applicationContext-test.xml]: Invocation of init method failed; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:359) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:108) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1469) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:956) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:747) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:480) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:125) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:109) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:261) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:68) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:86) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultTestContext.getApplicationContext(DefaultTestContext.java:72) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:117) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.prepareTestInstance(DependencyInjectionTestExecutionListener.java:83) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:212) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.createTest(SpringJUnit4ClassRunner.java:200) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner$1.runReflectiveCall(SpringJUnit4ClassRunner.java:252) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.methodBlock(SpringJUnit4ClassRunner.java:254) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:217) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:83) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:68) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:309) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:163) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runner.JUnitCore.run(JUnitCore.java:160) [junit-4.11.jar:na]
-	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70) [junit-rt.jar:na]
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [applicationContext-test.xml]: Invocation of init method failed; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1566) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:539) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:351) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	... 42 common frames omitted
-Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_131]
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_131]
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1129) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:358) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2498) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2535) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2320) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:834) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:46) ~[mysql-connector-java-5.1.29.jar:na]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_131]
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_131]
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:416) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:347) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterEventAdapter.connection_connect(FilterEventAdapter.java:38) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:211) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1377) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1431) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:632) ~[druid-1.0.13.jar:1.0.13]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_131]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_131]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeCustomInitMethod(AbstractAutowireCapableBeanFactory.java:1694) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1633) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1562) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	... 49 common frames omitted
-Caused by: java.net.UnknownHostException: rm-uf61m889rnvnz74445o.mysql.rds.aliyuncs.com
-	at java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method) ~[na:1.8.0_131]
-	at java.net.InetAddress$2.lookupAllHostAddr(InetAddress.java:928) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAddressesFromNameService(InetAddress.java:1323) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName0(InetAddress.java:1276) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName(InetAddress.java:1192) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName(InetAddress.java:1126) ~[na:1.8.0_131]
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:248) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:308) ~[mysql-connector-java-5.1.29.jar:na]
-	... 81 common frames omitted
-hypnus-admin 2018-03-25 12:38:52.012 [main] ERROR org.springframework.test.context.TestContextManager - [] Caught exception while allowing TestExecutionListener [org.springframework.test.context.support.DependencyInjectionTestExecutionListener@5a4041cc] to prepare test instance [com.catt.hypnus.service.impl.deviceMgr.UsetimeServiceImplTest@751e664e]
-java.lang.IllegalStateException: Failed to load ApplicationContext
-	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:94) ~[spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultTestContext.getApplicationContext(DefaultTestContext.java:72) ~[spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:117) ~[spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.prepareTestInstance(DependencyInjectionTestExecutionListener.java:83) ~[spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:212) ~[spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.createTest(SpringJUnit4ClassRunner.java:200) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner$1.runReflectiveCall(SpringJUnit4ClassRunner.java:252) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.methodBlock(SpringJUnit4ClassRunner.java:254) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:217) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:83) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53) [junit-4.11.jar:na]
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:68) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:309) [junit-4.11.jar:na]
-	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:163) [spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.junit.runner.JUnitCore.run(JUnitCore.java:160) [junit-4.11.jar:na]
-	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242) [junit-rt.jar:na]
-	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70) [junit-rt.jar:na]
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [applicationContext-test.xml]: Cannot resolve reference to bean 'dataSource' while setting bean property 'dataSource'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [applicationContext-test.xml]: Invocation of init method failed; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:359) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:108) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1469) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:956) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:747) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:480) ~[spring-context-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:125) ~[spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60) ~[spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:109) ~[spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:261) ~[spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:68) ~[spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:86) ~[spring-test-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	... 24 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [applicationContext-test.xml]: Invocation of init method failed; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1566) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:539) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:351) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	... 42 common frames omitted
-Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_131]
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_131]
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1129) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:358) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2498) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2535) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2320) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:834) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:46) ~[mysql-connector-java-5.1.29.jar:na]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_131]
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_131]
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:416) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:347) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterEventAdapter.connection_connect(FilterEventAdapter.java:38) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:211) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1377) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1431) ~[druid-1.0.13.jar:1.0.13]
-	at com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:632) ~[druid-1.0.13.jar:1.0.13]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_131]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_131]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_131]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_131]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeCustomInitMethod(AbstractAutowireCapableBeanFactory.java:1694) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1633) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1562) ~[spring-beans-4.1.4.RELEASE.jar:4.1.4.RELEASE]
-	... 49 common frames omitted
-Caused by: java.net.UnknownHostException: rm-uf61m889rnvnz74445o.mysql.rds.aliyuncs.com
-	at java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method) ~[na:1.8.0_131]
-	at java.net.InetAddress$2.lookupAllHostAddr(InetAddress.java:928) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAddressesFromNameService(InetAddress.java:1323) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName0(InetAddress.java:1276) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName(InetAddress.java:1192) ~[na:1.8.0_131]
-	at java.net.InetAddress.getAllByName(InetAddress.java:1126) ~[na:1.8.0_131]
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:248) ~[mysql-connector-java-5.1.29.jar:na]
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:308) ~[mysql-connector-java-5.1.29.jar:na]
-	... 81 common frames omitted
-hypnus-admin 2018-03-25 12:40:14.917 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@768b970c, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@5a4041cc, org.springframework.test.context.support.DirtiesContextTestExecutionListener@15b3e5b]
-hypnus-admin 2018-03-25 12:40:15.320 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
-hypnus-admin 2018-03-25 12:40:16.919 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@37574691: startup date [Sun Mar 25 12:40:16 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 12:40:17.764 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
-hypnus-admin 2018-03-25 12:40:17.765 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
-hypnus-admin 2018-03-25 12:40:21.900 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
-hypnus-admin 2018-03-25 12:40:22.023 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
-hypnus-admin 2018-03-25 12:40:22.098 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
-hypnus-admin 2018-03-25 12:40:22.152 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
+hypnus-admin 2018-03-31 11:59:10.423 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
+hypnus-admin 2018-03-31 11:59:10.425 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
+hypnus-admin 2018-03-31 11:59:10.428 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
+hypnus-admin 2018-03-31 11:59:10.515 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+hypnus-admin 2018-03-31 11:59:10.836 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+hypnus-admin 2018-03-31 11:59:11.743 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
+hypnus-admin 2018-03-31 11:59:12.502 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
+hypnus-admin 2018-03-31 11:59:12.857 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
+hypnus-admin 2018-03-31 11:59:13.572 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
+hypnus-admin 2018-03-31 11:59:15.655 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@37574691: startup date [Sat Mar 31 11:59:06 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 11:59:15.660 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
+hypnus-admin 2018-03-31 11:59:15.668 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 11:59:15.676 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
+hypnus-admin 2018-03-31 13:56:35.640 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@776b83cc, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@37858383, org.springframework.test.context.support.DirtiesContextTestExecutionListener@4e268090]
+hypnus-admin 2018-03-31 13:56:36.382 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
+hypnus-admin 2018-03-31 13:56:37.842 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@49c7b90e: startup date [Sat Mar 31 13:56:37 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 13:56:38.601 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
+hypnus-admin 2018-03-31 13:56:38.602 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
+hypnus-admin 2018-03-31 13:56:41.751 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
+hypnus-admin 2018-03-31 13:56:41.840 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
+hypnus-admin 2018-03-31 13:56:41.900 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 13:56:41.936 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
 	name: default
 	...]
-hypnus-admin 2018-03-25 12:40:22.374 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
-hypnus-admin 2018-03-25 12:40:22.376 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
-hypnus-admin 2018-03-25 12:40:22.379 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
-hypnus-admin 2018-03-25 12:40:22.452 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
-hypnus-admin 2018-03-25 12:40:22.757 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
-hypnus-admin 2018-03-25 12:40:23.629 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
-hypnus-admin 2018-03-25 12:40:24.223 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
-hypnus-admin 2018-03-25 12:40:24.566 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
-hypnus-admin 2018-03-25 12:40:25.310 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
-hypnus-admin 2018-03-25 12:40:32.441 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@37574691: startup date [Sun Mar 25 12:40:16 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 12:40:32.449 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
-hypnus-admin 2018-03-25 12:40:32.456 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
-hypnus-admin 2018-03-25 12:40:32.471 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
-hypnus-admin 2018-03-25 12:40:49.590 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@776b83cc, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@37858383, org.springframework.test.context.support.DirtiesContextTestExecutionListener@4e268090]
-hypnus-admin 2018-03-25 12:40:50.083 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
-hypnus-admin 2018-03-25 12:40:51.477 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@49c7b90e: startup date [Sun Mar 25 12:40:51 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 12:40:52.056 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
-hypnus-admin 2018-03-25 12:40:52.057 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
-hypnus-admin 2018-03-25 12:40:55.508 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
-hypnus-admin 2018-03-25 12:40:55.613 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
-hypnus-admin 2018-03-25 12:40:55.664 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
-hypnus-admin 2018-03-25 12:40:55.705 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
+hypnus-admin 2018-03-31 13:56:42.119 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
+hypnus-admin 2018-03-31 13:56:42.122 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
+hypnus-admin 2018-03-31 13:56:42.124 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
+hypnus-admin 2018-03-31 13:56:42.223 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+hypnus-admin 2018-03-31 13:56:42.664 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+hypnus-admin 2018-03-31 13:56:43.721 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
+hypnus-admin 2018-03-31 13:56:44.445 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
+hypnus-admin 2018-03-31 13:56:44.824 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
+hypnus-admin 2018-03-31 13:56:45.634 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
+hypnus-admin 2018-03-31 13:56:47.382 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@49c7b90e: startup date [Sat Mar 31 13:56:37 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 13:56:47.386 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
+hypnus-admin 2018-03-31 13:56:47.401 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 13:56:47.411 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
+hypnus-admin 2018-03-31 13:57:23.454 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@3a44431a, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@3c7f66c4, org.springframework.test.context.support.DirtiesContextTestExecutionListener@194bcebf]
+hypnus-admin 2018-03-31 13:57:24.048 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
+hypnus-admin 2018-03-31 13:57:25.370 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@1530c739: startup date [Sat Mar 31 13:57:25 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 13:57:25.937 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
+hypnus-admin 2018-03-31 13:57:25.939 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
+hypnus-admin 2018-03-31 13:57:28.980 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
+hypnus-admin 2018-03-31 13:57:29.089 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
+hypnus-admin 2018-03-31 13:57:29.142 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 13:57:29.180 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
 	name: default
 	...]
-hypnus-admin 2018-03-25 12:40:55.917 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
-hypnus-admin 2018-03-25 12:40:55.922 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
-hypnus-admin 2018-03-25 12:40:55.925 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
-hypnus-admin 2018-03-25 12:40:56.038 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
-hypnus-admin 2018-03-25 12:40:56.431 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
-hypnus-admin 2018-03-25 12:40:57.557 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
-hypnus-admin 2018-03-25 12:40:58.230 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
-hypnus-admin 2018-03-25 12:40:58.603 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
-hypnus-admin 2018-03-25 12:40:59.516 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
-hypnus-admin 2018-03-25 12:41:45.287 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@49c7b90e: startup date [Sun Mar 25 12:40:51 CST 2018]; root of context hierarchy
-hypnus-admin 2018-03-25 12:41:45.289 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
-hypnus-admin 2018-03-25 12:41:45.296 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
-hypnus-admin 2018-03-25 12:41:45.305 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
+hypnus-admin 2018-03-31 13:57:29.398 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
+hypnus-admin 2018-03-31 13:57:29.401 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
+hypnus-admin 2018-03-31 13:57:29.405 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
+hypnus-admin 2018-03-31 13:57:29.496 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+hypnus-admin 2018-03-31 13:57:29.877 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+hypnus-admin 2018-03-31 13:57:30.976 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
+hypnus-admin 2018-03-31 13:57:31.909 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
+hypnus-admin 2018-03-31 13:57:32.295 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
+hypnus-admin 2018-03-31 13:57:33.182 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
+hypnus-admin 2018-03-31 13:58:51.710 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@1530c739: startup date [Sat Mar 31 13:57:25 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 13:58:51.712 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
+hypnus-admin 2018-03-31 13:58:51.717 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 13:58:51.723 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
+hypnus-admin 2018-03-31 13:59:30.642 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@3a44431a, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@3c7f66c4, org.springframework.test.context.support.DirtiesContextTestExecutionListener@194bcebf]
+hypnus-admin 2018-03-31 13:59:31.155 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
+hypnus-admin 2018-03-31 13:59:33.225 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@1530c739: startup date [Sat Mar 31 13:59:33 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 13:59:33.752 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
+hypnus-admin 2018-03-31 13:59:33.753 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
+hypnus-admin 2018-03-31 13:59:36.916 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
+hypnus-admin 2018-03-31 13:59:37.005 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
+hypnus-admin 2018-03-31 13:59:37.074 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 13:59:37.107 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+hypnus-admin 2018-03-31 13:59:37.285 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
+hypnus-admin 2018-03-31 13:59:37.288 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
+hypnus-admin 2018-03-31 13:59:37.290 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
+hypnus-admin 2018-03-31 13:59:37.393 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+hypnus-admin 2018-03-31 13:59:37.825 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+hypnus-admin 2018-03-31 13:59:38.904 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
+hypnus-admin 2018-03-31 13:59:39.786 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
+hypnus-admin 2018-03-31 13:59:40.159 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
+hypnus-admin 2018-03-31 13:59:41.264 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
+hypnus-admin 2018-03-31 13:59:53.585 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@1530c739: startup date [Sat Mar 31 13:59:33 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 13:59:53.587 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
+hypnus-admin 2018-03-31 13:59:53.593 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 13:59:53.600 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed
+hypnus-admin 2018-03-31 14:00:16.033 [main] INFO  org.springframework.test.context.support.DefaultTestContextBootstrapper - [] Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@3a44431a, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@3c7f66c4, org.springframework.test.context.support.DirtiesContextTestExecutionListener@194bcebf]
+hypnus-admin 2018-03-31 14:00:16.546 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - [] Loading XML bean definitions from class path resource [applicationContext-test.xml]
+hypnus-admin 2018-03-31 14:00:19.128 [main] INFO  org.springframework.context.support.GenericApplicationContext - [] Refreshing org.springframework.context.support.GenericApplicationContext@1530c739: startup date [Sat Mar 31 14:00:19 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 14:00:19.664 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/system.properties]
+hypnus-admin 2018-03-31 14:00:19.665 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - [] Loading properties file from class path resource [config.properties]
+hypnus-admin 2018-03-31 14:00:22.748 [main] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} inited
+hypnus-admin 2018-03-31 14:00:22.873 [main] INFO  org.springframework.orm.jpa.persistenceunit.PersistenceUnitReader - [] persistence.xml should be located inside META-INF directory; cannot determine persistence unit root URL for URL [file:/D:/project1/project-hypnus/project-hypnus-admin/project-hypnus-service-impl/target/classes/persistence.xml]
+hypnus-admin 2018-03-31 14:00:22.931 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Building JPA container EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 14:00:22.967 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - [] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+hypnus-admin 2018-03-31 14:00:23.140 [main] INFO  org.hibernate.Version - [] HHH000412: Hibernate Core {5.0.7.Final}
+hypnus-admin 2018-03-31 14:00:23.143 [main] INFO  org.hibernate.cfg.Environment - [] HHH000206: hibernate.properties not found
+hypnus-admin 2018-03-31 14:00:23.145 [main] INFO  org.hibernate.cfg.Environment - [] HHH000021: Bytecode provider name : javassist
+hypnus-admin 2018-03-31 14:00:23.256 [main] INFO  org.hibernate.annotations.common.Version - [] HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+hypnus-admin 2018-03-31 14:00:23.660 [main] INFO  org.hibernate.dialect.Dialect - [] HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+hypnus-admin 2018-03-31 14:00:24.751 [main] INFO  org.hibernate.search.engine.Version - [] HSEARCH000034: Hibernate Search 5.5.0.Final
+hypnus-admin 2018-03-31 14:00:25.540 [main] WARN  org.hibernate.search.engine.impl.ConfigContext - [] HSEARCH000075: Configuration setting hibernate.search.lucene_version was not specified: using LUCENE_CURRENT.
+hypnus-admin 2018-03-31 14:00:25.933 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Initializing EhCache CacheManager
+hypnus-admin 2018-03-31 14:00:26.782 [main] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator - [] HHH000397: Using ASTQueryTranslatorFactory
+hypnus-admin 2018-03-31 14:01:08.776 [Thread-4] INFO  org.springframework.context.support.GenericApplicationContext - [] Closing org.springframework.context.support.GenericApplicationContext@1530c739: startup date [Sat Mar 31 14:00:19 CST 2018]; root of context hierarchy
+hypnus-admin 2018-03-31 14:01:08.783 [Thread-4] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean - [] Shutting down EhCache CacheManager
+hypnus-admin 2018-03-31 14:01:08.793 [Thread-4] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - [] Closing JPA EntityManagerFactory for persistence unit 'default'
+hypnus-admin 2018-03-31 14:01:08.804 [Thread-4] INFO  com.alibaba.druid.pool.DruidDataSource - [] {dataSource-1} closed

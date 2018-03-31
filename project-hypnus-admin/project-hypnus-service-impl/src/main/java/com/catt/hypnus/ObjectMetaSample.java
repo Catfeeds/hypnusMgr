@@ -14,11 +14,6 @@ import java.io.IOException;
  */
 public class ObjectMetaSample {
 
-//    private static String endpoint = "<endpoint, http://oss-cn-hangzhou.aliyuncs.com>";
-//    private static String accessKeyId = "<accessKeyId>";
-//    private static String accessKeySecret = "<accessKeySecret>";
-//    private static String bucketName = "<bucketName>";
-
     private static String endpoint = "oss-cn-shanghai.aliyuncs.com";
     private static String accessKeyId = "LTAI5hvCHzOiuJ3f";
     private static String accessKeySecret = "FByHanHd0WtP2NBJbUReztPhI5GWoA";

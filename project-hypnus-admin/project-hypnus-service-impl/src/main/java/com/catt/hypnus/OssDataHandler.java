@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * oss数据存取类
  *
- * @author: lzb
+ * @author: runtime
  * @version: Ver 1.0
  * @Date: 2018/3/24
  */
@@ -98,9 +98,6 @@ public class OssDataHandler {
         OSSClient client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
         List<String> stringList = new ArrayList<>();
         try {
-//            String key = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/flow.edf";
-//            keyPrefix = "0a0a0a0a0b0b0b0b0c0c0c0c/2016-02-09 16:26:00/pressure.edf";
-//            String key = "0a0a0a0a0b0b0b0b0c0c0c0c/2016-02-09 16:26:00/t_log_login.sql";
             ObjectListing objectListing = listOfObjectWithPrefix(client, bucketName, keyPrefix);
             if (objectListing == null) {
                 return null;
@@ -149,9 +146,6 @@ public class OssDataHandler {
         if (bytes.length == 0) {
             return null;
         }
-        for (short s : shorts) {
-            System.out.println(s);
-        }
         System.out.println("Content-Type: " + object.getObjectMetadata().getContentType());
         return shorts;
     }
@@ -169,9 +163,6 @@ public class OssDataHandler {
         InputStream inputStream = object.getObjectContent();
         object.getObjectContent();
         byte[] bytes = ArrayUtil.input2byte(inputStream);
-        if (bytes.length == 0) {
-            return null;
-        }
         System.out.println("Content-Type: " + object.getObjectMetadata().getContentType());
         return bytes;
     }

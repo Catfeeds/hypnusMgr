@@ -224,6 +224,12 @@
             <version>3.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-iot</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
     </dependencies>
     <build>
         <defaultGoal>install</defaultGoal>
