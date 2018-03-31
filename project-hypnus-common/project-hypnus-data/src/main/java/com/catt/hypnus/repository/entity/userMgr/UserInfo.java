@@ -114,6 +114,10 @@ public class UserInfo extends BaseEntity {
      */
     private Long relUserId;
 
+    public void relSystemUser(Long userId){
+        this.relUserId = userId;
+    }
+
     public void init(){
         this.account = this.phone;
         this.password = DigestUtils.md5Hex(password);

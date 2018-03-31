@@ -21,7 +21,7 @@ public class AuthCode
 
     public AuthCode(){};
 
-    private final static int DEFAULT_SECOND = 60;
+    private final static int DEFAULT_SECOND = 150;
 
     private final static int DEFAULT_EXPIRE_MINUTE = 10;
 

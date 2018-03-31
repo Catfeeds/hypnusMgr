@@ -28,8 +28,12 @@ public class UserRegisterController
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
     public Message save(UserInfo userInfo) {
-       userService.addUserInfo(userInfo);
-        return Message.success("", new Object[0]);
+        try {
+            userService.addUserInfo(userInfo);
+            return Message.success();
+        } catch (RuntimeException e) {
+            return Message.error(e.getMessage());
+        }
     }
     @Resource(name="userServiceImpl")
     private UserService userService;

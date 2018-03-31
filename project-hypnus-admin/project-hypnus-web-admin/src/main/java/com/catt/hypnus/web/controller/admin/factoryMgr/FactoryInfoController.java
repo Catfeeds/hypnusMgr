@@ -78,17 +78,25 @@ public class FactoryInfoController
     @RequestMapping(value = "/pwd", method = RequestMethod.POST)
     @ResponseBody
     public Message updatePwd(Long id,String password){
+        try {
         factoryService.updatePassword(id,password);
+        } catch (RuntimeException e) {
+            return Message.error(e.getMessage());
+        }
         return Message.success();
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public Message save(@ModelAttribute("parameter") FactoryInfo factoryInfo) {
-        if(Objects.isNull(factoryInfo.getId())){
-            factoryService.addFactoryInfo(factoryInfo);
-        }else{
-            factoryService.updateFactoryInfo(factoryInfo);
+        try {
+            if (Objects.isNull(factoryInfo.getId())) {
+                factoryService.addFactoryInfo(factoryInfo);
+            } else {
+                factoryService.updateFactoryInfo(factoryInfo);
+            }
+        } catch (RuntimeException e) {
+            return Message.error(e.getMessage());
         }
         return Message.success();
     }

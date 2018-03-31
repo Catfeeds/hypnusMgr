@@ -99,8 +99,17 @@ var EventHandler = function(){
                     $("#email").focus();
                     return;
                 }
+                var params = {};
+                params.name = param.name;
+                params.connector = param.connector;
+                params.email = param.email;
+                params.phone = param.phone;
+                params.address = param.address;
+                if(param.id!=null&&param.id!=""){
+                    params.id = param.id;
+				}
 
-                $.post(path + "/admin/factoryMgr/save", param, function(backData) {
+                $.post(path + "/admin/factoryMgr/save", params, function(backData) {
                     _msgBox.tips("操作成功");
                     if (backData.type == 'success') {
                         goIndex(backData.type);

@@ -10,7 +10,7 @@
 <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
 <script src="${path}/resources/js/member.js" type="text/javascript"></script>
     <script src="${path}/resources/admin/common/temDataGrid.js"></script>
-    <script src="${path}/resources/admin/js/device/index.js" type="text/javascript"></script>
+    <script src="${path}/resources/admin/js/device/list.js" type="text/javascript"></script>
 </head>
 <body>
 	<div class="wrapper">
