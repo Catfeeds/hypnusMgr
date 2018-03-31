@@ -79,6 +79,10 @@ public class FactoryInfo extends BaseEntity {
      */
     private Long relUserId;
 
+    public void relSystemUser(Long userId){
+        this.relUserId = userId;
+    }
+
     public void updatePwd(String password){
         this.password = DigestUtils.md5Hex(password);
     }

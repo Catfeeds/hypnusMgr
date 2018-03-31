@@ -8,6 +8,8 @@ import com.catt.hypnus.repository.dao.factoryMgr.FactoryInfoDao;
 import com.catt.hypnus.repository.entity.factoryMgr.FactoryInfo;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +28,7 @@ public class FactoryInfoDaoImpl extends BaseDaoImpl<FactoryInfo, Long>
             param.put("phone",phone);
         }
         sb.append(" order by d_modify_date desc");
+
         return this.findPageBySql(sb.toString(),param,pageable,Map.class);
     }
 
@@ -41,5 +44,23 @@ public class FactoryInfoDaoImpl extends BaseDaoImpl<FactoryInfo, Long>
         sb.append(" order by d_modify_date desc");
         return this.findPageBySql(sb.toString(),param,pageable,Map.class);
     }
+
+    @Override
+    public FactoryInfo findByMobile(String phone) {
+        if(phone==null){
+            return null;
+        }else{
+            try{
+                String jql = "select f from FactoryInfo f where f.phone = :phone";
+                return (FactoryInfo) entityManager.createQuery(jql,FactoryInfo.class).setParameter("phone",phone).getSingleResult();
+            }catch (Exception e){
+                return null;
+            }
+
+        }
+    }
+
+    @PersistenceContext
+    protected EntityManager entityManager;
 
 }

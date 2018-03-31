@@ -25,4 +25,8 @@ public interface UserService extends BaseService<UserInfo, Long>
     void deleteUser(Long id);
 
     void updatePassword(Long id,String password);
+
+    UserInfo findByMobile(String phone);
+
+    boolean checkMobileIsUsed(String phone);
 }

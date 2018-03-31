@@ -39,7 +39,7 @@ var InitHandler = (function() {
                     phone.focus();
                     return ;
                 }
-                countDown($(this),60,EventHandler.getCode);
+                countDown($(this),150,EventHandler.getCode);
             });
 
 			//下一步
@@ -102,6 +102,7 @@ var EventHandler = function(){
                    _msgBox.tips("发送成功,请注意查收");
                }else{
                    _msgBox.tips(backData.content);
+                   return;
                }
            });
        },

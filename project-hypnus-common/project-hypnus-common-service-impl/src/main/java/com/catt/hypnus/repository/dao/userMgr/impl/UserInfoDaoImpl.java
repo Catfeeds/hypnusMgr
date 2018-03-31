@@ -5,6 +5,7 @@ import com.catt.common.base.pojo.search.Pageable;
 import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
 import com.catt.common.util.lang.StringUtil;
 import com.catt.hypnus.repository.dao.userMgr.UserInfoDao;
+import com.catt.hypnus.repository.entity.factoryMgr.FactoryInfo;
 import com.catt.hypnus.repository.entity.userMgr.UserInfo;
 import org.springframework.stereotype.Repository;
 
@@ -40,5 +41,20 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long>
 		}
 		sb.append(" order by d_modify_date desc");
 		return this.findPageBySql(sb.toString(),param,pageable,Map.class);
+	}
+
+	@Override
+	public UserInfo findByMobile(String phone) {
+		if(phone==null){
+			return null;
+		}else{
+			try{
+				String jql = "select f from UserInfo f where f.phone = :phone";
+				return (UserInfo) entityManager.createQuery(jql,UserInfo.class).setParameter("phone",phone).getSingleResult();
+			}catch (Exception e){
+				return null;
+			}
+
+		}
 	}
 }

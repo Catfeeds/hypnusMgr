@@ -27,6 +27,7 @@ function countDown(obj, _delay,callback) {
     var rel = obj.attr("data-rel");
     debugger;
     if (typeof  obj.attr("disabled") == "undefined") {
+        callback();
         var delay = _delay;
         obj.attr("disabled",true).find("span").text("已发送("+delay+"s)");
         var timer = setInterval(function() {
@@ -39,7 +40,6 @@ function countDown(obj, _delay,callback) {
                 obj.removeAttr("disabled").find("span").text("获取验证码");
             }
         }, 1000);
-        callback();
     } else {
         return false;
     }

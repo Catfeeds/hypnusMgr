@@ -20,4 +20,6 @@ public interface FactoryInfoDao extends BaseDao<FactoryInfo, Long> {
 
     Page<Map> queryListNonBind(String phone,Pageable pageable);
 
+    FactoryInfo findByMobile(String phone);
+
  }
