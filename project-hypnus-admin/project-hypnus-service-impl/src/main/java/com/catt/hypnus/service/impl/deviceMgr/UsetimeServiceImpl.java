@@ -2,13 +2,18 @@ package com.catt.hypnus.service.impl.deviceMgr;
 
 
 import com.catt.common.base.pojo.search.Filter;
+import com.catt.common.base.pojo.search.Order;
+import com.catt.common.base.pojo.search.Page;
+import com.catt.common.base.pojo.search.Pageable;
 import com.catt.common.module.exception.pojo.BaseException;
 import com.catt.hypnus.OssDataHandler;
 import com.catt.hypnus.repository.dao.deviceMgr.UsetimeDao;
 import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
+import com.catt.hypnus.repository.form.deviceMgr.UsetimeForm;
 import com.catt.hypnus.service.base.deviceMgr.UsetimeBaseService;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
 import com.gci.common.util.lang.DateUtil;
+import com.gci.common.util.lang.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +61,18 @@ public class UsetimeServiceImpl implements UsetimeService {
         filters.add(Filter.eq("deviceId", deviceId));
         List<Usetime> usetimeList = usetimeBaseService.findList(null, filters, null);
         return usetimeList;
+    }
+
+    public Page<Usetime> findPage(Pageable pageable, UsetimeForm usetimeForm) {
+        List<Filter> filters = new ArrayList<Filter>();
+        if (StringUtil.checkStr(usetimeForm.getDeviceId())) {
+            filters.add(Filter.eq("deviceId", usetimeForm.getDeviceId()));
+        }
+        List<Order> orders = new ArrayList<Order>();
+        orders.add(Order.desc("starttime"));
+        pageable.setFilters(filters);
+        pageable.setOrders(orders);
+        return usetimeDao.findPage(pageable);
     }
 
     public Map getDateFromOss(String deviceId, String startTime, int timeType) throws IOException {

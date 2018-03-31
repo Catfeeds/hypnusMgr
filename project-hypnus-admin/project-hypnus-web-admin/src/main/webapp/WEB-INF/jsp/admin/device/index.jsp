@@ -63,7 +63,7 @@
 
     <script type="text/html" id="template_dataList">
         {{each}}
-        <tr ondblclick="window.location.href = path +'/admin/deviceMgr/detail?id={{$value.i_id}}'" title="双击查看详情">
+        <tr onclick="window.location.href = path +'/admin/usetimeMgr/index.html?deviceId={{$value.device_id}}'" title="双击查看详情">
             <td><span class="tick xw_tick"></span></td>
             <td>{{$value.sn_id}}</td>
             <td>{{$value.model}}</td>
