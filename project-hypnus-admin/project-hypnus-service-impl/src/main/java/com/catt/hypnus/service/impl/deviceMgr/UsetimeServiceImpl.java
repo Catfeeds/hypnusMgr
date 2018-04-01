@@ -55,7 +55,6 @@ public class UsetimeServiceImpl implements UsetimeService {
     @Resource(name = "usetimeBaseServiceImpl")
     private UsetimeBaseService usetimeBaseService;
 
-
     public List<Usetime> findList(String deviceId, String startTime, String endTime) {
         List<Filter> filters = new ArrayList<Filter>();
         filters.add(Filter.eq("deviceId", deviceId));
@@ -162,6 +161,51 @@ public class UsetimeServiceImpl implements UsetimeService {
         }
         map.put("pressure", presureList);
         return map;
+    }
+
+    public Map baseStatisticData(String deviceId, String startTime, String endTime) {
+        List<Usetime> usetimeList = this.findList(deviceId, startTime, endTime);
+        /**
+         * 平均压力=压力1*时间1+压力2*时间2/时间1+时间2
+         * 90%压力计算
+         * 1，按照压力大小正序排序
+         * 2，计算压力之和*90%
+         * 3，逐个累加压力并与90%*sum进行比较，前值初次超过后值，当前usetime压力作为90%压力；
+         */
+        //压力总数
+        Double sumPresure = 0D;
+        //累加总数
+        Double changePresure = 0D;
+        Double pecentSumPresure = 0D;
+        //90%压力值
+        Double pecentPresure = 0D;
+        //时间总数
+        Long sumPeroid = 0l;
+        for (Usetime usetime : usetimeList) {
+            Double currDouble = (Double) usetime.getPressure1() * usetime.getPeroid();
+            sumPresure += currDouble;
+            sumPeroid += usetime.getPeroid();
+        }
+        pecentSumPresure = sumPresure * 0.9;
+        for (Usetime usetime : usetimeList) {
+            Double currDouble = (Double) usetime.getPressure1() * usetime.getPeroid();
+            changePresure += currDouble;
+            if (changePresure >= pecentSumPresure) {
+                pecentPresure = usetime.getPressure1();
+            }
+        }
+
+        /**
+         * 压力柱状图计算
+         * 当天的50%压力，90%压力两条柱状图
+         */
+        /**
+         * usetime柱状图，统计当天的使用时长
+         */
+
+
+        return null;
+
     }
 
 

@@ -12,6 +12,9 @@ package com.catt.hypnus.repository.entity;
  */
 public class DeviceShadow {
 
+    /**
+     * 起始压力
+     */
     private int start_pressure;
     private int intelligent_stop;
     private int temperature_unit;
@@ -20,12 +23,30 @@ public class DeviceShadow {
     private int intelligent_start;
     private int language;
     private int cpap_p;
+    /**
+     * ST呼气压力
+     */
     private int st_ex_p;
     private int swi_time;
+    /**
+     * 呼吸比
+     */
     private int breath_ratio;
+    /**
+     * 下降斜坡
+     */
     private int buckslope;
+    /**
+     * 呼吸频率
+     */
     private int breath_rate;
+    /**
+     * 呼气压力
+     */
     private int t_ex_p;
+    /**
+     * 治疗模式
+     */
     private int cure_model;
     private int tv_alarm;
     private int pipe;
@@ -35,6 +56,9 @@ public class DeviceShadow {
     private int bpap_ex_p;
     private int mv_alarm;
     private int mask;
+    /**
+     * T吸气压力
+     */
     private int t_in_p;
     private int heattube_tem;
     private int bpap_in_p;
@@ -49,10 +73,19 @@ public class DeviceShadow {
     private int breath_fit;
     private int light;
     private int machine;
+    /**
+     * 上升斜坡
+     */
     private int boostslope;
     private int pressure_support;
+    /**
+     * 延迟时间
+     */
     private int cure_delay;
     private int apap_min_p;
+    /**
+     * ST吸气压力
+     */
     private int st_in_p;
     private int flight_mode;
     private int autos_min_p;
