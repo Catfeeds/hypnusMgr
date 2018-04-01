@@ -142,6 +142,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     } else {
                         // EventHandler.writerData4Chart(time, amount, '订单金额');
                     }
+                    setParenHei();
                 });
             },
             // 报表
@@ -240,22 +241,22 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         left: 100,
                         right: 100,
                         top: '5%',
-                        height: '15%'
+                        height: '12%'
                     }, {
                         left: 100,
                         right: 100,
                         top: '30%',
-                        height: '15%'
+                        height: '12%'
                     }, {
                         left: 100,
                         right: 100,
                         top: '53%',
-                        height: '15%'
+                        height: '12%'
                     }, {
                         left: 100,
                         right: 100,
                         top: '75%',
-                        height: '15%'
+                        height: '12%'
                     }],
                     xAxis: [
                         {
@@ -351,6 +352,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 };
                 chart.setOption(option, true);
                 chart.hideLoading();
+                setParenHei();
             }
 
         };

@@ -18,29 +18,6 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 },
                 /** 初始化事件绑定 */
                 initEvent: function () {
-
-                    $("#deliverGoods").click(function () {
-                        var orderStatus = $('#orderStatus').val();
-                        var id = $('#id').val();
-                        if (orderStatus == "2") {
-                            msgBox.exWindow.open({
-                                title: '发货',
-                                url: path + "/admin/orderMgr/cusOrder/delivery.html?id=" + id,
-                                width: '400px',
-                                height: '210px',
-                                close: function (result) {
-                                    if (result) {
-                                        EventHandler.getCusOrderDetail();
-                                    }
-                                }
-                            });
-                        } else {
-                            msgBox.tips("该订单未支付或者已发货");
-                            return;
-                        }
-
-
-                    });
                     $("#printBill").click(function () {
                         EventHandler.printBill();
                     });
@@ -144,7 +121,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                         }
                     });
                 },
-                //打印物流小票
+                //设置设备参数
                 printBill: function () {
                     var orderStatus = $('#orderStatus').val();
                     var id = $('#id').val();
@@ -161,7 +138,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                                 }
                             });
                         } else {
-                            msgBox.tips("该订单未发货或者已收货");
+                            msgBox.tips("该设备不在线");
                             return;
                         }
                 },

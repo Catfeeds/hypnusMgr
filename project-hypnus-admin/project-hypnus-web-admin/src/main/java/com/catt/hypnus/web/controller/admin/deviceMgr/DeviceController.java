@@ -47,27 +47,38 @@ public class DeviceController extends BaseController {
         return "/admin/device/list";
     }
 
+    /**
+     * 设备参数
+     */
+    @RequestMapping(value = {"/detail.html"}, method = RequestMethod.GET)
+    public String toDetail(Model model, String deviceId) {
 
-    @RequestMapping(value="/selectUserPage/{deviceId}",method = RequestMethod.GET)
-    public String toSelectUserPage(@PathVariable("deviceId")String deviceId,
-                                   HttpServletRequest request, Model model){
-        model.addAttribute("deviceId",deviceId);
+        model.addAttribute("deviceId", deviceId);
+        return "/admin/device/detail";
+    }
+
+
+    @RequestMapping(value = "/selectUserPage/{deviceId}", method = RequestMethod.GET)
+    public String toSelectUserPage(@PathVariable("deviceId") String deviceId,
+                                   HttpServletRequest request, Model model) {
+        model.addAttribute("deviceId", deviceId);
         return "/admin/device/chooseCus";
     }
 
 
-    @RequestMapping(value="/selectFactoryPage/{deviceId}",method = RequestMethod.GET)
-    public String toSelectFactoryPage(@PathVariable("deviceId")String deviceId,
-                                      HttpServletRequest request, Model model){
-        model.addAttribute("deviceId",deviceId);
+    @RequestMapping(value = "/selectFactoryPage/{deviceId}", method = RequestMethod.GET)
+    public String toSelectFactoryPage(@PathVariable("deviceId") String deviceId,
+                                      HttpServletRequest request, Model model) {
+        model.addAttribute("deviceId", deviceId);
         return "/admin/device/chooseFactory";
     }
 
     @RequestMapping(value = {"/getPageList"}, method = RequestMethod.POST)
     @ResponseBody
-    public Page<Map> getRelPageList(DeviceForm deviceForm, Pageable pageable, @CurrentUser Long id){
-        return deviceService.findRelPage(deviceForm,id,pageable);
+    public Page<Map> getRelPageList(DeviceForm deviceForm, Pageable pageable, @CurrentUser Long id) {
+        return deviceService.findRelPage(deviceForm, id, pageable);
     }
+
     /**
      * 获取设备分页数据
      *
@@ -77,58 +88,58 @@ public class DeviceController extends BaseController {
     @RequestMapping(value = {"/getPageDevice"}, method = RequestMethod.POST)
     @ResponseBody
     public Page<Map> getPageShopOwner(DeviceForm deviceForm, Pageable pageable, @CurrentUser Long id) {
-        return deviceService.findPage(deviceForm,pageable);
+        return deviceService.findPage(deviceForm, pageable);
     }
 
-    @RequestMapping(value="/bindFactory",method = RequestMethod.POST)
+    @RequestMapping(value = "/bindFactory", method = RequestMethod.POST)
     @ResponseBody
-    public Message bindFactory(Long id,Long factoryId){
-        try{
-            deviceService.bindFactory(id,factoryId);
+    public Message bindFactory(Long id, Long factoryId) {
+        try {
+            deviceService.bindFactory(id, factoryId);
             return Message.success();
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return Message.error(e.getMessage());
-        }catch (Exception e){
-            return  Message.error("系统异常");
+        } catch (Exception e) {
+            return Message.error("系统异常");
         }
     }
 
-    @RequestMapping(value="/bindUser",method = RequestMethod.POST)
+    @RequestMapping(value = "/bindUser", method = RequestMethod.POST)
     @ResponseBody
-    public Message bindUser(Long id,Long userId){
-        try{
-            deviceService.bindUser(id,userId);
+    public Message bindUser(Long id, Long userId) {
+        try {
+            deviceService.bindUser(id, userId);
             return Message.success();
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return Message.error(e.getMessage());
-        }catch (Exception e){
-            return  Message.error("系统异常");
+        } catch (Exception e) {
+            return Message.error("系统异常");
         }
     }
 
-    @RequestMapping(value="/unbindUser",method = RequestMethod.POST)
+    @RequestMapping(value = "/unbindUser", method = RequestMethod.POST)
     @ResponseBody
-    public Message unbindUser(Long id){
-        try{
+    public Message unbindUser(Long id) {
+        try {
             deviceService.unbindUser(id);
             return Message.success();
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return Message.error(e.getMessage());
-        }catch (Exception e){
-            return  Message.error("系统异常");
+        } catch (Exception e) {
+            return Message.error("系统异常");
         }
     }
 
-    @RequestMapping(value="/unbindFactory",method = RequestMethod.POST)
+    @RequestMapping(value = "/unbindFactory", method = RequestMethod.POST)
     @ResponseBody
-    public Message unbindFactory(Long id){
-        try{
+    public Message unbindFactory(Long id) {
+        try {
             deviceService.unbindFactory(id);
             return Message.success();
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return Message.error(e.getMessage());
-        }catch (Exception e){
-            return  Message.error("系统异常");
+        } catch (Exception e) {
+            return Message.error("系统异常");
         }
     }
 

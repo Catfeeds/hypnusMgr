@@ -2,13 +2,20 @@ package com.catt.hypnus.service.impl.deviceMgr;
 
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.iot.model.v20170420.*;
+import com.aliyuncs.iot.model.v20170420.BatchGetDeviceStateRequest;
+import com.aliyuncs.iot.model.v20170420.BatchGetDeviceStateResponse;
+import com.aliyuncs.iot.model.v20170420.GetDeviceShadowRequest;
+import com.aliyuncs.iot.model.v20170420.GetDeviceShadowResponse;
+import com.aliyuncs.iot.model.v20170420.QueryDeviceRequest;
+import com.aliyuncs.iot.model.v20170420.QueryDeviceResponse;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.catt.hypnus.service.impl.deviceMgr.BaseDeviceShadowTool.executeTest;
 
 public class DeviceControlSample {
 
@@ -39,6 +46,11 @@ public class DeviceControlSample {
 //        }catch (Exception e){
 //            System.out.println(e.getMessage());
 //        }
+
+        GetDeviceShadowRequest getDeviceShadowRequest = new GetDeviceShadowRequest();
+        getDeviceShadowRequest.setProductKey(productKey);
+        getDeviceShadowRequest.setDeviceName("363338363035511100390036");
+        GetDeviceShadowResponse getDeviceShadowResponse = (GetDeviceShadowResponse)executeTest(getDeviceShadowRequest);
 
         QueryDeviceRequest request = new QueryDeviceRequest();
         request.setProductKey(productKey);
@@ -116,4 +128,6 @@ public class DeviceControlSample {
 
 
     }
+
+
 }
