@@ -1,4 +1,4 @@
-package com.catt.hypnus.service.impl.deviceMgr;
+package com.catt.hypnus.service.impl.iot;
 
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.DefaultAcsClient;

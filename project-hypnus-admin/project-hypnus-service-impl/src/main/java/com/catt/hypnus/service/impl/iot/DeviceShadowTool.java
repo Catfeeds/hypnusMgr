@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package com.catt.hypnus.service.impl.deviceMgr;
+package com.catt.hypnus.service.impl.iot;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -53,6 +53,7 @@ import com.aliyuncs.iot.model.v20170420.UpdateDeviceShadowRequest;
 import com.aliyuncs.iot.model.v20170420.UpdateDeviceShadowResponse;
 import com.aliyuncs.iot.model.v20170420.UpdateProductRequest;
 import com.aliyuncs.iot.model.v20170420.UpdateProductResponse;
+import com.catt.hypnus.service.impl.deviceMgr.BaseDeviceShadowTool;
 import com.catt.hypnus.service.impl.iot.util.LogUtil;
 import org.apache.commons.codec.binary.Base64;
 
