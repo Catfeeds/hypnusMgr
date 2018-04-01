@@ -21,7 +21,7 @@ public class DeviceDaoImpl extends BaseDaoImpl<Device, Long>
 		StringBuffer sql = new StringBuffer();
 		Map param = new HashMap<>();
 
-		sql.append("select d.*,f.phone,f.name,u.phone as userPhone from device_info d left join factory_info f on d.factory_id = f.i_id left join user_info u on d.cus_id = u.i_id where 1=1 ");
+		sql.append("select d.*,f.phone,f.name,u.phone as userPhone from device d left join factory_info f on d.factory_id = f.i_id left join user_info u on d.cus_id = u.i_id where 1=1 ");
 		if (StringUtil.isNotBlank(userMobile)) {
 			sql.append(" and u.phone = :userMobile ");
 			param.put("userMobile",userMobile);

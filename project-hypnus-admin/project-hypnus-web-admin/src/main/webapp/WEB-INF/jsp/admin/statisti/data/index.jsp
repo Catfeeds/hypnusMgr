@@ -16,7 +16,13 @@
     <script src="${path}/resources/admin/js/statisti/data/index.js" type="text/javascript"></script>
 
     <style type="text/css">
-        .really{background:#fff;padding:20px;color:#333;letter-spacing:2px;font-size:13px;}
+        .really {
+            background: #fff;
+            padding: 20px;
+            color: #333;
+            letter-spacing: 2px;
+            font-size: 13px;
+        }
     </style>
 </head>
 
@@ -57,6 +63,8 @@
                    onclick="WdatePicker({dateFmt:'yyyy-MM', maxDate:'#F{$dp.$D(\'createDateMonth\', {M:+12})||\'%y-%M\'}', minDate:'#F{$dp.$D(\'createDateMonth\')}'})"/>
         </div>
 
+        <input type="hidden" id="deviceId" value="${fn:escapeXml(param.deviceId)}"/>
+        <input type="hidden" id="startTime" value="${fn:escapeXml(param.startTime)}"/>
         <span class="btnGrey" style="margin-left:5px;" id="resetBtn">重置</span>
         <span class="btnRed" id="searchBtn">查询</span>
     </div>
@@ -64,7 +72,7 @@
     <div class="topTabBar">
         <ul class="topTab xw_topTab">
             <li class="on xw_setPie" id="numLi">详细图形</li>
-            <li class="xw_setPie" >统计图形</li>
+            <li class="xw_setPie">统计图形</li>
         </ul>
     </div>
     <div class="xw_showcontent" style="background:#fff;">

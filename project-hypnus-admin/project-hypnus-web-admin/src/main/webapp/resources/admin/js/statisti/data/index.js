@@ -117,6 +117,8 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     params.endCreateDate = $("#endDateMonth").val();
                 }
                 params.dateDimension = dateDimension;
+                params.deviceId = $("#deviceId").val();
+                params.startTime = $("#startTime").val();
 
                 // 初始化订单金额与订单总数
                 // DataHandler.getAmountNum(params, function(backData){

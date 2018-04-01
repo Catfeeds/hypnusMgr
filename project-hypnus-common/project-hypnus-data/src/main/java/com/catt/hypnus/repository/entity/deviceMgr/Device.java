@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 @Entity
 @JsonAutoDetect
-@Table(name = "DEVICE_INFO")
+@Table(name = "DEVICE")
 public class Device extends BaseEntity {
 
     private static final long serialVersionUID = 1L;

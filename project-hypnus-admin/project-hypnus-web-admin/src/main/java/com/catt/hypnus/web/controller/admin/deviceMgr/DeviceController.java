@@ -1,10 +1,12 @@
 package com.catt.hypnus.web.controller.admin.deviceMgr;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
 import com.catt.common.web.Message;
 import com.catt.common.web.controller.BaseController;
 import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.hypnus.repository.entity.DeviceShadow;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
 import com.catt.hypnus.service.deviceMgr.DeviceService;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 /**
@@ -152,6 +156,25 @@ public class DeviceController extends BaseController {
         }
     }
 
+    @RequestMapping(value = "/updateShadowDevice", method = RequestMethod.POST)
+    @ResponseBody
+    public Message updateShadowDevice(DeviceShadow deviceShadow, String deviceId) {
+        try {
+            deviceService.updateShadowDevice(deviceShadow, deviceId);
+            return Message.success();
+        } catch (RuntimeException e) {
+            return Message.error(e.getMessage());
+        } catch (Exception e) {
+            return Message.error("系统异常");
+        }
+    }
+
+    @RequestMapping(value = "/getShadowDevice", method = RequestMethod.POST)
+    @ResponseBody
+    public DeviceShadow getShadowDevice(String deviceId) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException, ClientException {
+        DeviceShadow deviceShadow = deviceService.getShadowDevice(deviceId);
+        return deviceShadow;
+    }
 
     // 设备信息
     @Resource(name = "deviceServiceImpl")

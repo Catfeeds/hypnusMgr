@@ -45,6 +45,11 @@
             <artifactId>aliyun-java-sdk-iot</artifactId>
             <version>4.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>RELEASE</version>
+        </dependency>
 
 
     </dependencies>

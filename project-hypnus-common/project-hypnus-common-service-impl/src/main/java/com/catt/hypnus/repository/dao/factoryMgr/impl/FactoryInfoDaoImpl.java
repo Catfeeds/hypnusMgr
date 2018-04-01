@@ -36,7 +36,7 @@ public class FactoryInfoDaoImpl extends BaseDaoImpl<FactoryInfo, Long>
     public Page<Map> queryListNonBind(String phone, Pageable pageable) {
         StringBuffer sb = new StringBuffer();
         Map param = new HashMap();
-        sb.append("select * from factory_info where i_id not in ( select factory_id from device_info where factory_id != '' group by factory_id) ");
+        sb.append("select * from factory_info where i_id not in ( select factory_id from device where factory_id != '' group by factory_id) ");
         if(StringUtil.isNotBlank(phone)){
             sb.append(" and phone = :phone");
             param.put("phone",phone);

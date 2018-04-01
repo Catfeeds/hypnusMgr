@@ -1,25 +1,31 @@
 package com.catt.hypnus.service.impl.iot;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.iot.model.v20170420.BatchGetDeviceStateRequest;
 import com.aliyuncs.iot.model.v20170420.BatchGetDeviceStateResponse;
 import com.aliyuncs.iot.model.v20170420.GetDeviceShadowRequest;
 import com.aliyuncs.iot.model.v20170420.GetDeviceShadowResponse;
+import com.aliyuncs.iot.model.v20170420.QueryDeviceByNameRequest;
+import com.aliyuncs.iot.model.v20170420.QueryDeviceByNameResponse;
 import com.aliyuncs.iot.model.v20170420.QueryDeviceRequest;
 import com.aliyuncs.iot.model.v20170420.QueryDeviceResponse;
+import com.aliyuncs.iot.model.v20170420.UpdateDeviceShadowRequest;
+import com.aliyuncs.iot.model.v20170420.UpdateDeviceShadowResponse;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-
-import static com.catt.hypnus.service.impl.deviceMgr.BaseDeviceShadowTool.executeTest;
+import java.util.Map;
 
 public class DeviceControlSample {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClientException {
         String productKey = "TeapvKrZpFA";
         String accessKey = "LTAI5hvCHzOiuJ3f";
         String accessSecret = "FByHanHd0WtP2NBJbUReztPhI5GWoA";
@@ -47,10 +53,19 @@ public class DeviceControlSample {
 //            System.out.println(e.getMessage());
 //        }
 
+        QueryDeviceByNameRequest queryDeviceByNameRequest = new QueryDeviceByNameRequest();
+        queryDeviceByNameRequest.setDeviceName("363338363035511100390036");
+        queryDeviceByNameRequest.setProductKey(productKey);
+
         GetDeviceShadowRequest getDeviceShadowRequest = new GetDeviceShadowRequest();
-        getDeviceShadowRequest.setProductKey(productKey);
         getDeviceShadowRequest.setDeviceName("363338363035511100390036");
-        GetDeviceShadowResponse getDeviceShadowResponse = (GetDeviceShadowResponse)executeTest(getDeviceShadowRequest);
+        getDeviceShadowRequest.setProductKey(productKey);
+
+        GetDeviceShadowResponse getDeviceShadowResponse = client.getAcsResponse(getDeviceShadowRequest);
+
+        String shadowJSON = getDeviceShadowResponse.getShadowMessage();
+        Map shadow= (Map) JSONObject.parse(shadowJSON);
+        QueryDeviceByNameResponse queryDeviceByNameResponse = client.getAcsResponse(queryDeviceByNameRequest);
 
         QueryDeviceRequest request = new QueryDeviceRequest();
         request.setProductKey(productKey);
@@ -91,31 +106,31 @@ public class DeviceControlSample {
                         System.out.println("获取设备影子失败！requestId:" + response.getRequestId() + "原因：" + response.getErrorMessage());
                     }
                     //更新影子设备状态
-//                    if(shadowObject != null)
-//                    {
-//                        UpdateDeviceShadowRequest request4 = new UpdateDeviceShadowRequest();
-//                        request4.setProductKey(d.getProductKey());
-//                        request4.setDeviceName(d.getDeviceName());
-//
-//                        Long shadowVersion =  shadowObject.getLong("version");
-//                        Map attMap = new LinkedHashMap();
-//                        attMap.put("language", 1);
-//                        Map reportedMap = new LinkedHashMap();
-//                        reportedMap.put("desired", attMap);
-//                        Map shadowJsonMap = new LinkedHashMap();
-//                        shadowJsonMap.put("method", "update");
-//                        shadowJsonMap.put("state", reportedMap);
-//                        shadowVersion++;
-//                        shadowJsonMap.put("version", shadowVersion);
-//
-//                        request4.setShadowMessage(JSON.toJSONString(shadowJsonMap));
-//                        UpdateDeviceShadowResponse response4 = client.getAcsResponse(request4);
-//                        if (response4 != null && response4.getSuccess() != false) {
-//                            System.out.println("更新设备影子成功！");
-//                        } else {
-//                            System.out.println("更新设备影子失败！requestId:" + response.getRequestId() + "原因：" + response.getErrorMessage());
-//                        }
-//                    }
+                    if(shadowObject != null)
+                    {
+                        UpdateDeviceShadowRequest request4 = new UpdateDeviceShadowRequest();
+                        request4.setProductKey(d.getProductKey());
+                        request4.setDeviceName(d.getDeviceName());
+
+                        Long shadowVersion =  shadowObject.getLong("version");
+                        Map attMap = new LinkedHashMap();
+                        attMap.put("language", 1);
+                        Map reportedMap = new LinkedHashMap();
+                        reportedMap.put("desired", attMap);
+                        Map shadowJsonMap = new LinkedHashMap();
+                        shadowJsonMap.put("method", "update");
+                        shadowJsonMap.put("state", reportedMap);
+                        shadowVersion++;
+                        shadowJsonMap.put("version", shadowVersion);
+
+                        request4.setShadowMessage(JSON.toJSONString(shadowJsonMap));
+                        UpdateDeviceShadowResponse response4 = client.getAcsResponse(request4);
+                        if (response4 != null && response4.getSuccess() != false) {
+                            System.out.println("更新设备影子成功！");
+                        } else {
+                            System.out.println("更新设备影子失败！requestId:" + response.getRequestId() + "原因：" + response.getErrorMessage());
+                        }
+                    }
 
                 }
 

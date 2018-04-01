@@ -45,7 +45,7 @@
 
     <script type="text/html" id="template_dataList">
         {{each}}
-        <tr onclick="window.location.href = path +'/admin/statisti/data/index.html?startTime={{$value.starttime}}'" title="双击查看详情">
+        <tr onclick="window.location.href = path +'/admin/statisti/data/index.html?startTime={{$value.starttime}}&deviceId={{$value.deviceId}}'" title="双击查看详情">
             <td><span class="tick xw_tick"></span></td>
             <td>{{$value.deviceId}}</td>
             <td>{{$value.starttime}}</td>
