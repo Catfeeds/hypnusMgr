@@ -93,29 +93,29 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
             initAmountMoudle: function () {
                 // 接口入参
                 var params = {};
-                if (dateDimension == "DAY") {
-                    if (!$("#createDateDay").val()) {
-                        msgBox.tips("统计时间不能为空");
-                        return;
-                    }
-                    if (!$("#endDateDay").val()) {
-                        msgBox.tips("统计时间不能为空");
-                        return;
-                    }
-                    params.startCreateDate = $("#createDateDay").val() + " 00:00:00";
-                    params.endCreateDate = $("#endDateDay").val() + " 23:59:59";
-                } else if (dateDimension == "MONTH") {
-                    if (!$("#createDateMonth").val()) {
-                        msgBox.tips("统计时间不能为空");
-                        return;
-                    }
-                    if (!$("#endDateMonth").val()) {
-                        msgBox.tips("统计时间不能为空");
-                        return;
-                    }
-                    params.startCreateDate = $("#createDateMonth").val() + "-01 00:00:00";
-                    params.endCreateDate = $("#endDateMonth").val();
-                }
+                // if (dateDimension == "DAY") {
+                //     if (!$("#createDateDay").val()) {
+                //         msgBox.tips("统计时间不能为空");
+                //         return;
+                //     }
+                //     if (!$("#endDateDay").val()) {
+                //         msgBox.tips("统计时间不能为空");
+                //         return;
+                //     }
+                //     params.startCreateDate = $("#createDateDay").val() + " 00:00:00";
+                //     params.endCreateDate = $("#endDateDay").val() + " 23:59:59";
+                // } else if (dateDimension == "MONTH") {
+                //     if (!$("#createDateMonth").val()) {
+                //         msgBox.tips("统计时间不能为空");
+                //         return;
+                //     }
+                //     if (!$("#endDateMonth").val()) {
+                //         msgBox.tips("统计时间不能为空");
+                //         return;
+                //     }
+                //     params.startCreateDate = $("#createDateMonth").val() + "-01 00:00:00";
+                //     params.endCreateDate = $("#endDateMonth").val();
+                // }
                 params.dateDimension = dateDimension;
                 params.deviceId = $("#deviceId").val();
                 params.startTime = $("#startTime").val();

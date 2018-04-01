@@ -25,7 +25,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +61,10 @@ public class UsetimeServiceImpl implements UsetimeService {
         return usetimeList;
     }
 
+    public List<Map> findMapList(String deviceId, String startTime, String endTime){
+        return usetimeDao.findMapList(deviceId,startTime,endTime);
+    }
+
     public Page<Usetime> findPage(Pageable pageable, UsetimeForm usetimeForm) {
         List<Filter> filters = new ArrayList<Filter>();
         if (StringUtil.checkStr(usetimeForm.getDeviceId())) {
@@ -74,6 +77,10 @@ public class UsetimeServiceImpl implements UsetimeService {
         return usetimeDao.findPage(pageable);
     }
 
+    public Page<Map> findPageMap(String deviceId, String startTime, String endTime, Pageable pageable) {
+        return usetimeDao.findPage(deviceId, startTime, endTime, pageable);
+    }
+
     public Map getDateFromOss(String deviceId, String startTime, int timeType) throws IOException {
         Map map = new HashMap();
         /**
@@ -82,18 +89,17 @@ public class UsetimeServiceImpl implements UsetimeService {
          * 3,从文件中读取数据
          * 4,组装数据
          */
-        List<String> usetimeStrList = new ArrayList<>();
-        List<String> packages = new ArrayList<>();
-        List<Usetime> usetimeList = this.findList(deviceId, startTime, null);
-        usetimeList.removeAll(Collections.singleton(null));
-        if (CollectionUtils.isEmpty(usetimeList)) {
-            throw new BaseException("次设备无使用记录");
-        }
-        usetimeList.forEach(usetime -> {
-            String start = usetime.getStarttime();
-            usetimeStrList.add(start);
-
-        });
+//        List<String> usetimeStrList = new ArrayList<>();
+//        List<String> packages = new ArrayList<>();
+//        List<Map> usetimeList = this.findMapList(deviceId, startTime, null);
+//        if (CollectionUtils.isEmpty(usetimeList)) {
+//            throw new BaseException("次设备无使用记录");
+//        }
+//        usetimeList.forEach(usetime -> {
+//            String start = usetime.getStarttime();
+//            usetimeStrList.add(start);
+//
+//        });
         String keyPre = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/";
         if (StringUtil.checkStr(deviceId) && StringUtil.checkStr(startTime)) {
             keyPre = deviceId + "/" + startTime + "/";
@@ -101,31 +107,39 @@ public class UsetimeServiceImpl implements UsetimeService {
         List<String> fileList = OssDataHandler.listOfObject(keyPre);
         if (CollectionUtils.isEmpty(fileList)) {
             logger.info("OSS中无数据文件");
-            throw new BaseException("OSS中无数据文件");
+            throw  BaseException.errorByErrInfo("OSS中无数据文件");
         }
         short[] pressureBytes = null;
-        byte[] flowBytes = null;
-        byte[] difleakBytes = null;
+        short[] flowBytes = null;
+        short[] difleakBytes = null;
         short[] tvBytes = null;
+        short[] brBytes = null;
+        short[] biBytes = null;
         for (String fileName : fileList) {
             if (fileName.contains("pressure.edf")) {
                 pressureBytes = OssDataHandler.getObjectData(fileName);
             }
             if (fileName.contains("flow.edf")) {
-                flowBytes = OssDataHandler.getObjectData2Byte(fileName);
+                flowBytes = OssDataHandler.getObjectData(fileName);
             }
             if (fileName.contains("difleak.edf")) {
-                difleakBytes = OssDataHandler.getObjectData2Byte(fileName);
+                difleakBytes = OssDataHandler.getObjectData(fileName);
             }
-            if (fileName.contains("mvtvbr.edf")) {
+            if (fileName.contains("tv.edf")) {
                 tvBytes = OssDataHandler.getObjectData(fileName);
+            }
+            if (fileName.contains("br.edf")) {
+                brBytes = OssDataHandler.getObjectData(fileName);
+            }
+            if (fileName.contains("bi.edf")) {
+                biBytes = OssDataHandler.getObjectData(fileName);
             }
         }
         List presureList = new ArrayList<>();
         try {
             List<String> timeList = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-            String str = startTime + " 12:00:00.000";
+            String str = startTime + ".000";
             for (int i = 0; i < timeType; i++) {
                 Date dt = sdf.parse(str);
                 Calendar rightNow = Calendar.getInstance();
@@ -151,6 +165,14 @@ public class UsetimeServiceImpl implements UsetimeService {
                 //tv
                 if (tvBytes != null && i <= tvBytes.length) {
                     dataList.add(tvBytes[i]);
+                }
+                //br
+                if (brBytes != null && i <= brBytes.length) {
+                    dataList.add(brBytes[i]);
+                }
+                //bi
+                if (biBytes != null && i <= biBytes.length) {
+                    dataList.add(biBytes[i]);
                 }
 
                 presureList.add(dataList);

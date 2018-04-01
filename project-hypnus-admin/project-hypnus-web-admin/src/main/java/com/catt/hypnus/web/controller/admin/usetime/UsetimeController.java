@@ -4,8 +4,6 @@ import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
 import com.catt.common.web.controller.BaseController;
 import com.catt.common.web.spring.resolver.annotation.CurrentUser;
-import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
-import com.catt.hypnus.repository.form.deviceMgr.UsetimeForm;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * <pre>
@@ -49,8 +48,8 @@ public class UsetimeController extends BaseController {
      */
     @RequestMapping(value = {"/getPageUsetime"}, method = RequestMethod.POST)
     @ResponseBody
-    public Page<Usetime> getPageShopOwner(UsetimeForm usetimeForm, Pageable pageable, @CurrentUser Long id) {
-        return usetimeService.findPage(pageable, usetimeForm);
+    public Page<Map> getPageShopOwner(String deviceId, Pageable pageable, @CurrentUser Long id) {
+        return usetimeService.findPageMap(deviceId, null, null, pageable);
     }
 
 
