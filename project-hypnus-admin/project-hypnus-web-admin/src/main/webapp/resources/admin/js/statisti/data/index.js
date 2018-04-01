@@ -2,8 +2,7 @@
 var dateDimension = "DAY";
 seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
     var time; // 横坐标，时间跨度
-    var amount; // 订单金额
-    var num; // 订单数量
+    var staticData; // 订单数量
 
     /** 初始化处理器 */
     var InitHandler = (function () {
@@ -128,17 +127,10 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
 
                 DataHandler.getOrderAmountStat(params, function (result) {
                     time = new Array(); // 横坐标，时间跨度
-                    amount = new Array(); // 订单金额
-                    num = new Array(); // 订单数量
-                    for (var i = 0, length = result.length; i < length; i++) {
-                        var item = result[i];
-                        time.push(item.time);
-                        amount.push(item.amount + '');
-                        num.push(item.num + '');
-                    }
-
+                    staticData = new Array(); // 订单数量
+                    staticData = result.pressure;
                     if ($("#numLi").hasClass("on")) {
-                        EventHandler.writerData4Chart(result.pressure, '详细数据');
+                        EventHandler.writerData4Chart(staticData, '详细数据');
                     } else {
                         // EventHandler.writerData4Chart(time, amount, '订单金额');
                     }

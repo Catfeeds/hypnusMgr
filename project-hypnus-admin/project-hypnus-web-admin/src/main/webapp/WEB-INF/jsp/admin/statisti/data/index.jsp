@@ -11,7 +11,7 @@
     <link type="text/css" href="${path}/resources/css/indexchild.css" rel="stylesheet"/>
     <link type="text/css" href="${path}/resources/css/timeChange.css" rel="stylesheet"/>
     <link type="text/css" href="${path}/resources/css/indexChildv2.css" rel="stylesheet"/>
-
+    <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
     <script type="text/javascript" src="${path}/resources/js/echarts.min.js"></script>
     <script src="${path}/resources/admin/js/statisti/data/index.js" type="text/javascript"></script>
 

@@ -22,7 +22,7 @@
                 <input type="hidden" name="deviceId" id="deviceId" value="${fn:escapeXml(param.deviceId)}"/>
             </div>
             <span class="btnGrey" style="margin-left:5px;" id="reset">重置</span>
-            <span class="btnRed" id="search">查询</span>
+            <span class="btnBlue" id="search">查询</span>
         </div>
 
         <div class="userDetail" style="min-height:400px">

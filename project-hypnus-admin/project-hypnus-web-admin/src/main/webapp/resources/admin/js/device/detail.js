@@ -76,17 +76,17 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                                 $('#status').html(cusOrderDetail.statusName);
                                 $('#logisticsTypeName').html(cusOrderDetail.logisticsTypeName);
                                 var htmlVal = cusOrderDetail.logisticsCode;
-                                if(cusOrderDetail.logisticsCode && cusOrderDetail.logisticsType) {
+                                if (cusOrderDetail.logisticsCode && cusOrderDetail.logisticsType) {
                                     $('#logisticsCode').click(function () {
                                         msgBox.exWindow.open({
                                             title: '物流信息',
-                                            url: path +"/admin/orderMgr/cusOrder/express/view/detail/"+cusOrderDetail.logisticsType +"/"+cusOrderDetail.logisticsCode,
+                                            url: path + "/admin/orderMgr/cusOrder/express/view/detail/" + cusOrderDetail.logisticsType + "/" + cusOrderDetail.logisticsCode,
                                             width: '500px',
                                             height: '600px'
                                         });
                                     });
                                     //跳转到微信页面进行物流查看
-                                    htmlVal = "<a href='#'>"+cusOrderDetail.logisticsCode+"</a>"
+                                    htmlVal = "<a href='#'>" + cusOrderDetail.logisticsCode + "</a>"
                                 }
                                 $('#logisticsCode').html(htmlVal);
                             } else {
@@ -123,24 +123,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 },
                 //设置设备参数
                 printBill: function () {
-                    var orderStatus = $('#orderStatus').val();
-                    var id = $('#id').val();
-                        if (orderStatus == "3") {
-                            msgBox.exWindow.open({
-                                title: '打印小票',
-                                url: path + "/admin/orderMgr/cusOrder/printBill.html?id=" + id,
-                                width: '340px',
-                                height: '700px',
-                                close: function (result) {
-                                    if (result) {
-                                        EventHandler.search();
-                                    }
-                                }
-                            });
-                        } else {
-                            msgBox.tips("该设备不在线");
-                            return;
-                        }
+                    window.location.href = path + '/admin/deviceMgr/paramSet.html';
                 },
 
             };

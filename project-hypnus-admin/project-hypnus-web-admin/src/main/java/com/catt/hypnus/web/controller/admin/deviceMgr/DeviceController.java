@@ -57,6 +57,15 @@ public class DeviceController extends BaseController {
         return "/admin/device/detail";
     }
 
+    /**
+     * 设备参数设置
+     */
+    @RequestMapping(value = {"/paramSet.html"}, method = RequestMethod.GET)
+    public String toParamSet(Model model, String deviceId) {
+        model.addAttribute("deviceId", deviceId);
+        return "/admin/device/deviceDetail";
+    }
+
 
     @RequestMapping(value = "/selectUserPage/{deviceId}", method = RequestMethod.GET)
     public String toSelectUserPage(@PathVariable("deviceId") String deviceId,
