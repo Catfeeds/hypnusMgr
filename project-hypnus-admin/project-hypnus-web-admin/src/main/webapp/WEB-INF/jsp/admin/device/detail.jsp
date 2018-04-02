@@ -29,7 +29,7 @@
     </div>
 
     <div class="userDetail">
-        <input type="hidden" name="id" id="id" value="${fn:escapeXml(param.id)}"/>
+        <input type="hidden" name="id" id="id" value="${fn:escapeXml(param.deviceId)}"/>
         <h1 class="tittle">
             <span class="btnBlue" id="printBill">设置设备参数</span>
             设备信息
@@ -38,7 +38,7 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>设备型号：</td>
-                    <th id="orderCode"></th>
+                    <th id="machine"></th>
                     <td>系统版本：</td>
                     <th colspan="1" id="createDate"></th>
                 </tr>
@@ -57,33 +57,33 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>工作模式：</td>
-                    <th id="orderCode"></th>
+                    <th id="cure_model"></th>
                     <td>设备参数：</td>
-                    <th id="createDate"></th>
+                    <th id="data_version"></th>
                 </tr>
                 <tr>
                     <td>吸气压力：</td>
-                    <th></th>
+                    <th ic="t_in_p"></th>
                     <td>呼气压力：</td>
-                    <th id="orderType"></th>
+                    <th id="t_ex_p"></th>
                 </tr>
                 <tr>
                     <td>起始压力：</td>
-                    <th></th>
+                    <th id="start_pressure"></th>
                     <td>延迟时间：</td>
-                    <th id="orderType"></th>
+                    <th id="cure_delay"></th>
                 </tr>
                 <tr>
                     <td>呼吸频率：</td>
-                    <th></th>
+                    <th id="breath_rate"></th>
                     <td>上升斜坡：</td>
-                    <th id="orderType"></th>
+                    <th id="boostslope"></th>
                 </tr>
                 <tr>
                     <td>下降斜坡：</td>
-                    <th></th>
+                    <th id="buckslope"></th>
                     <td>呼吸比：</td>
-                    <th id="orderType"></th>
+                    <th id="breath_ratio"></th>
                 </tr>
             </table>
         </div>

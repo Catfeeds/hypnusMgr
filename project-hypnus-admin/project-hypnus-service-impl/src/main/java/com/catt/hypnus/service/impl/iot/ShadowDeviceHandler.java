@@ -10,8 +10,10 @@ import com.aliyuncs.iot.model.v20170420.UpdateDeviceShadowRequest;
 import com.aliyuncs.iot.model.v20170420.UpdateDeviceShadowResponse;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import com.catt.common.module.exception.pojo.BaseException;
 import com.catt.common.util.collections.MapUtil;
 import com.catt.hypnus.repository.entity.DeviceShadow;
+import com.gci.common.util.lang.StringUtil;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
@@ -49,6 +51,9 @@ public class ShadowDeviceHandler {
 
         GetDeviceShadowResponse getDeviceShadowResponse = client.getAcsResponse(getDeviceShadowRequest);
         String shadowJSON = getDeviceShadowResponse.getShadowMessage();
+        if (!StringUtil.checkStr(shadowJSON)) {
+            throw BaseException.errorByErrInfo("没有找到此影子设备");
+        }
         Map shadow = (Map) JSONObject.parse(shadowJSON);
         Map state = (Map) shadow.get("state");
         Map reported = (Map) state.get("reported");
@@ -56,7 +61,7 @@ public class ShadowDeviceHandler {
         return deviceShadow;
     }
 
-    public static boolean updateShadowDevice(DeviceShadow deviceShadow,String deviceName) throws ClientException, InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException {
+    public static boolean updateShadowDevice(DeviceShadow deviceShadow, String deviceName) throws ClientException, InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException {
         try {
             DefaultProfile.addEndpoint("cn-shanghai",
                     "cn-shanghai", "Iot", "iot.cn-shanghai.aliyuncs.com");
@@ -76,7 +81,7 @@ public class ShadowDeviceHandler {
 
         JSONObject shadowObject = null;
         shadowObject = JSONObject.parseObject(getDeviceShadowResponse.getShadowMessage());
-        Long shadowVersion =  shadowObject.getLong("version");
+        Long shadowVersion = shadowObject.getLong("version");
         Map desired = MapUtil.convertBean(deviceShadow);
         Map shadowMessMap = new HashMap();
         Map state = new HashMap();
@@ -91,7 +96,7 @@ public class ShadowDeviceHandler {
         updateDeviceShadowRequest.setProductKey(productKey);
         String shadowMessage = JSONObject.toJSONString(shadowMessMap);
         updateDeviceShadowRequest.setShadowMessage(shadowMessage);
-        UpdateDeviceShadowResponse updateDeviceShadowResponse =  client.getAcsResponse(updateDeviceShadowRequest);
+        UpdateDeviceShadowResponse updateDeviceShadowResponse = client.getAcsResponse(updateDeviceShadowRequest);
         return updateDeviceShadowResponse.getSuccess();
 
     }

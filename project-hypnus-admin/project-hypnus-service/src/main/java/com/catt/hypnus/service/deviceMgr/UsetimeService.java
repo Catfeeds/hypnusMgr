@@ -19,6 +19,7 @@ public interface UsetimeService {
 
     /**
      * 查询使用记录
+     *
      * @param deviceId：设备id
      * @param startTime
      * @param endTime
@@ -26,13 +27,34 @@ public interface UsetimeService {
      */
     List<Usetime> findList(String deviceId, String startTime, String endTime);
 
+    /**
+     * 使用记录
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<Map> findMapList(String deviceId, String startTime, String endTime);
+
 
     /**
      * 分页查询使用记录
+     *
      * @param pageable
      * @return
      */
-    Page<Usetime>  findPage(Pageable pageable, UsetimeForm usetimeForm);
+    Page<Usetime> findPage(Pageable pageable, UsetimeForm usetimeForm);
+
+    /**
+     * 查询使用记录
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @param pageable
+     * @return
+     */
+    Page<Map> findPageMap(String deviceId, String startTime, String endTime, Pageable pageable);
 
     Map getDateFromOss(String deviceId, String startTime, int timeType) throws IOException;
 

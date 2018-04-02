@@ -151,27 +151,27 @@ public class UsetimeServiceImpl implements UsetimeService {
                 List dataList = new ArrayList<>();
                 dataList.add(timeList.get(i));
                 //压力数据
-                if (pressureBytes != null && i <= pressureBytes.length) {
+                if (pressureBytes != null && i < pressureBytes.length) {
                     dataList.add(pressureBytes[i]);
                 }
                 //气流
-                if (flowBytes != null && i <= flowBytes.length) {
+                if (flowBytes != null && i < flowBytes.length) {
                     dataList.add(flowBytes[i]);
                 }
                 //漏气
-                if (difleakBytes != null && i <= difleakBytes.length) {
+                if (difleakBytes != null && i < difleakBytes.length) {
                     dataList.add(difleakBytes[i]);
                 }
                 //tv
-                if (tvBytes != null && i <= tvBytes.length) {
+                if (tvBytes != null && i < tvBytes.length) {
                     dataList.add(tvBytes[i]);
                 }
                 //br
-                if (brBytes != null && i <= brBytes.length) {
+                if (brBytes != null && i < brBytes.length) {
                     dataList.add(brBytes[i]);
                 }
                 //bi
-                if (biBytes != null && i <= biBytes.length) {
+                if (biBytes != null && i < biBytes.length) {
                     dataList.add(biBytes[i]);
                 }
 

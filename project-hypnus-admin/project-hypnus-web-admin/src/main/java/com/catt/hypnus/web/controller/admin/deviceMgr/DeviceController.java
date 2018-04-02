@@ -156,6 +156,13 @@ public class DeviceController extends BaseController {
         }
     }
 
+    /**
+     * 更新影子设备参数
+     *
+     * @param deviceShadow
+     * @param deviceId
+     * @return
+     */
     @RequestMapping(value = "/updateShadowDevice", method = RequestMethod.POST)
     @ResponseBody
     public Message updateShadowDevice(DeviceShadow deviceShadow, String deviceId) {
@@ -169,6 +176,17 @@ public class DeviceController extends BaseController {
         }
     }
 
+    /**
+     * 获取影子设备参数
+     *
+     * @param deviceId
+     * @return
+     * @throws InvocationTargetException
+     * @throws IntrospectionException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws ClientException
+     */
     @RequestMapping(value = "/getShadowDevice", method = RequestMethod.POST)
     @ResponseBody
     public DeviceShadow getShadowDevice(String deviceId) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException, ClientException {

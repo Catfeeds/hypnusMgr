@@ -34,22 +34,22 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
 
                 //获取订单信息详情
                 getCusOrderDetail: function () {
-                    DataHandler.getCusOrderDetail({
-                        id: $('#id').val()
-                    }, function (cusOrderDetail) {
-                        if (cusOrderDetail) {
-                            $('#orderCode').html(cusOrderDetail.orderCode);
-                            $('#createDate').html(cusOrderDetail.createDate);
-                            $('#orderStatusName').html(cusOrderDetail.orderStatusName);
-                            $('#orderStatus').val(cusOrderDetail.orderStatus);
+                    DataHandler.getShadowDevice({
+                        deviceId: $('#id').val()
+                    }, function (shadowDevice) {
+                        if (shadowDevice) {
+                            $('#start_pressure').html(shadowDevice.start_pressure);
+                            $('#machine').html(shadowDevice.machine);
+                            $('#cure_model').html(shadowDevice.cure_model);
+                            $('#data_version').val(shadowDevice.data_version);
 
-                            $('#cusName').html(cusOrderDetail.cusName);
-                            $('#cusMobile').html(cusOrderDetail.cusMobile);
-                            $('#shopkeeperName').html(cusOrderDetail.shopkeeperName);
-                            $('#shopkeeperMobile').html(cusOrderDetail.shopkeeperMobile);
-                            $('#productAmount').html("￥" + cusOrderDetail.productAmount);
-                            $('#couponMoney').html("￥" + (cusOrderDetail.couponMoney == "" ? "0" : cusOrderDetail.couponMoney));
-                            $('#logisticsCost').html("￥" + cusOrderDetail.logisticsCost);
+                            $('#t_in_p').html(shadowDevice.t_in_p);
+                            $('#t_ex_p').html(shadowDevice.t_ex_p);
+                            $('#cure_delay').html(shadowDevice.cure_delay);
+                            $('#breath_rate').html(shadowDevice.breath_rate);
+                            $('#boostslope').html(shadowDevice.boostslope);
+                            $('#buckslope').html(shadowDevice.buckslope);
+                            $('#breath_ratio').html(shadowDevice.breath_ratio);
                             if (cusOrderDetail.orderType == 2) {
                                 $('#orderType').html("代理订单");
                             } else {
@@ -132,12 +132,12 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
         var DataHandler = (function () {
             return {
                 /**
-                 * 获取订单信息详情
+                 * 获取影子设备参数
                  * @param params
                  * @param callback
                  */
-                getCusOrderDetail: function (params, callback) {
-                    $.post(path + '/admin/orderMgr/cusOrder/getCusOrderDetail', params, function (backData) {
+                getShadowDevice: function (params, callback) {
+                    $.post(path + '/admin/deviceMgr/getShadowDevice', params, function (backData) {
                         callback(backData);
                     });
                 },

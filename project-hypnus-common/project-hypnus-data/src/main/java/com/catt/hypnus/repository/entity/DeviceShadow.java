@@ -7,10 +7,8 @@ package com.catt.hypnus.repository.entity;
  * 影子设备
  */
 
-/**
- * Copyright 2018 bejson.com
- */
-public class DeviceShadow {
+import java.io.Serializable;
+public class DeviceShadow implements Serializable {
 
     /**
      * 起始压力

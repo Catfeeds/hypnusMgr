@@ -164,6 +164,14 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 var yData4 = data.map(function (item) {
                     return item[4];
                 });
+                //br
+                var yData5 = data.map(function (item) {
+                    return item[5];
+                });
+                //bi
+                var yData6 = data.map(function (item) {
+                    return item[6];
+                });
                 chart.showLoading({
                     text: "正在拼命加载中...",
                     x: "center",
@@ -207,50 +215,74 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                             realtime: false,
                             start: 30,
                             end: 70,
-                            xAxisIndex: [0, 1, 2, 3]
+                            xAxisIndex: [0, 1, 2, 3, 4, 5],
                         },
                         {
                             type: 'inside',
                             realtime: false,
                             start: 30,
                             end: 70,
-                            xAxisIndex: [0, 1, 2, 3]
+                            xAxisIndex: [0, 1, 2, 3, 4, 5]
                         },
                         {
                             type: 'inside',
                             realtime: false,
                             start: 30,
                             end: 70,
-                            xAxisIndex: [0, 1, 2, 3]
+                            xAxisIndex: [0, 1, 2, 3, 4, 5]
                         },
                         {
                             type: 'inside',
                             realtime: false,
                             start: 30,
                             end: 70,
-                            xAxisIndex: [0, 1, 2, 3]
+                            xAxisIndex: [0, 1, 2, 3, 4, 5]
+                        },
+                        {
+                            type: 'inside',
+                            realtime: false,
+                            start: 30,
+                            end: 70,
+                            xAxisIndex: [0, 1, 2, 3, 4, 5]
+                        },
+                        {
+                            type: 'inside',
+                            realtime: false,
+                            start: 30,
+                            end: 70,
+                            xAxisIndex: [0, 1, 2, 3, 4, 5]
                         }
                     ],
                     grid: [{
                         left: 100,
                         right: 100,
                         top: '5%',
-                        height: '12%'
+                        height: '10%'
                     }, {
                         left: 100,
                         right: 100,
-                        top: '30%',
-                        height: '12%'
+                        top: '22%',
+                        height: '10%'
                     }, {
                         left: 100,
                         right: 100,
-                        top: '53%',
-                        height: '12%'
+                        top: '39%',
+                        height: '10%'
                     }, {
                         left: 100,
                         right: 100,
-                        top: '75%',
-                        height: '12%'
+                        top: '56%',
+                        height: '10%'
+                    }, {
+                        left: 100,
+                        right: 100,
+                        top: '73%',
+                        height: '10%'
+                    }, {
+                        left: 100,
+                        right: 100,
+                        top: '90%',
+                        height: '10%'
                     }],
                     xAxis: [
                         {
@@ -282,6 +314,22 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                             axisLine: {onZero: true},
                             data: xData,
                             position: 'bottom'
+                        },
+                        {
+                            gridIndex: 4,
+                            type: 'category',
+                            boundaryGap: false,
+                            axisLine: {onZero: true},
+                            data: xData,
+                            position: 'bottom'
+                        },
+                        {
+                            gridIndex: 5,
+                            type: 'category',
+                            boundaryGap: false,
+                            axisLine: {onZero: true},
+                            data: xData,
+                            position: 'bottom'
                         }
                     ],
                     yAxis: [
@@ -303,6 +351,18 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         },
                         {
                             gridIndex: 3,
+                            name: 'Tidal Volume(mL)',
+                            type: 'value',
+                            inverse: false
+                        },
+                        {
+                            gridIndex: 4,
+                            name: 'Tidal Volume(mL)',
+                            type: 'value',
+                            inverse: false
+                        },
+                        {
+                            gridIndex: 5,
                             name: 'Tidal Volume(mL)',
                             type: 'value',
                             inverse: false
@@ -341,6 +401,24 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                             symbolSize: 8,
                             hoverAnimation: false,
                             data: yData4
+                        },
+                        {
+                            name: 'Tidal Volume',
+                            type: 'line',
+                            xAxisIndex: 3,
+                            yAxisIndex: 3,
+                            symbolSize: 8,
+                            hoverAnimation: false,
+                            data: yData5
+                        },
+                        {
+                            name: 'Tidal Volume',
+                            type: 'line',
+                            xAxisIndex: 3,
+                            yAxisIndex: 3,
+                            symbolSize: 8,
+                            hoverAnimation: false,
+                            data: yData6
                         }
                     ]
                 };
