@@ -5,6 +5,7 @@ import com.aliyun.oss.ClientException;
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
 import com.catt.hypnus.repository.entity.DeviceShadow;
+import com.catt.hypnus.repository.entity.deviceMgr.Device;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
 
 import java.beans.IntrospectionException;
@@ -26,6 +27,8 @@ public interface DeviceService {
     Page<Map> findPage(DeviceForm deviceForm, Pageable pageable);
 
     Page<Map> findRelPage(DeviceForm deviceForm, Long sysUserId, Pageable pageable);
+
+    Device findDeviceByDeviceId(String deviceId);
 
     void bindUser(Long id, Long userId);
 

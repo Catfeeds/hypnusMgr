@@ -20,4 +20,6 @@ public interface DeviceDao extends BaseDao<Device, Long> {
     Page<Map> queryList(String snId, String userMobile, String factoryMobile, Pageable pageable);
 
     Page<Map> queryRelPageList(String snId, Long userId, Pageable pageable);
+
+    Device findDeviceByDeviceId(String deviceId);
 }

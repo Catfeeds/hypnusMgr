@@ -7,8 +7,12 @@ import com.catt.common.module.security.repository.dao.RoleDao;
 import com.catt.common.module.security.repository.dao.StaffDao;
 import com.catt.common.module.security.repository.entity.Role;
 import com.catt.common.module.security.repository.entity.Staff;
+import com.catt.hypnus.repository.dao.deviceMgr.BindLogInfoDao;
+import com.catt.hypnus.repository.dao.deviceMgr.DeviceDao;
 import com.catt.hypnus.repository.dao.factoryMgr.FactoryInfoDao;
 import com.catt.hypnus.repository.dao.userMgr.UserInfoDao;
+import com.catt.hypnus.repository.entity.deviceMgr.BindLogInfo;
+import com.catt.hypnus.repository.entity.deviceMgr.Device;
 import com.catt.hypnus.repository.entity.factoryMgr.FactoryInfo;
 import com.catt.hypnus.repository.entity.userMgr.UserInfo;
 import com.catt.hypnus.service.staff.StaffBuildService;
@@ -41,7 +45,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserInfo,Long> implements U
     }
 
     @Override
-    public void addUserInfo(UserInfo info) {
+    public void addUserInfo(UserInfo info,String deviceId) {
+        Device device = deviceDao.findDeviceByDeviceId(deviceId);
+        if(Objects.isNull(device)){
+            throw new RuntimeException("该设备号无法在系统中找到对应设备，请确认无误");
+        }
+        if(Objects.nonNull(device.getCusId())&&!Objects.equals("",device.getCusId())){
+            throw new RuntimeException("该设备号已经绑定用户，请联系厂商");
+        }
         info.init();
 
         Role role = roleDao.find(roleId);
@@ -50,6 +61,12 @@ public class UserServiceImpl extends BaseServiceImpl<UserInfo,Long> implements U
 
         info.relSystemUser(staff.getId());
         userInfoDao.saveOrUpdate(info);
+
+        //绑定设备
+        device.bindUser(info.getId());
+        deviceDao.saveOrUpdate(device);
+        BindLogInfo log = BindLogInfo.buildBindUserLog(info.getId(), device.getId());
+        bindLogInfoDao.saveOrUpdate(log);
     }
 
     @Override
@@ -116,6 +133,12 @@ public class UserServiceImpl extends BaseServiceImpl<UserInfo,Long> implements U
 
     @Resource(name="factoryInfoDaoImpl")
     private FactoryInfoDao factoryInfoDao;
+
+    @Resource(name = "deviceDaoImpl")
+    private DeviceDao deviceDao;
+
+    @Resource(name = "bindLogInfoDaoImpl")
+    private BindLogInfoDao bindLogInfoDao;
 
     @Autowired
     private StaffBuildService staffBuildService;

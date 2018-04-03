@@ -67,6 +67,11 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
+    public Device findDeviceByDeviceId(String deviceId) {
+        return deviceDao.findDeviceByDeviceId(deviceId);
+    }
+
+    @Override
     public void bindUser(Long id, Long userId) {
         Device device = deviceDao.find(id);
         device.bindUser(userId);

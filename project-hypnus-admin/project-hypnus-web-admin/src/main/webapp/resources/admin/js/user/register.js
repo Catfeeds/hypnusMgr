@@ -70,6 +70,7 @@ var InitHandler = (function() {
                     var pwdHtml = $("#password");
                     var phone = $("#finalPhone").val();
                     var confirmPwdHtml = $("#confirmPwd");
+                    var deviceIdHtml = $("#deviceId");
                     var reg = /^(?=.{6,14}$)[0-9a-zA-Z@!+-?]+$/;
                     if(!reg.test(pwdHtml.val())){
                         _msgBox.tips("密码必须在6-14位且不能含有非法字符");
@@ -81,7 +82,17 @@ var InitHandler = (function() {
                         confirmPwdHtml.focus();
                         return;
                     }
-                    EventHandler.register(phone,pwdHtml.val());
+                    if(deviceIdHtml.val()==null||deviceIdHtml.val().trim()==""){
+                        _msgBox.tips("请输入您的设备号");
+                        deviceIdHtml.focus();
+                        return;
+                    }
+                    var userInfo = {"phone":phone,"password":pwdHtml.val()},
+                        params = {"userInfo":userInfo,"deviceId":deviceIdHtml.val()};
+                    params.deviceId = deviceIdHtml.val();
+                    params.userInfo = userInfo;
+
+                    EventHandler.register(params);
                 }
             });
 
@@ -125,11 +136,12 @@ var EventHandler = function(){
                }
            })
        },
-        register:function(phone,password){
+        register:function(params){
             $.ajax({
                 type:"post",
-                data:{"phone":phone,"password":password},
+                data:JSON.stringify(params),
                 url:path + "/dmz/user/register",
+                contentType: "application/json",
                 success:function(){
                     _msgBox.tips("注册成功,2秒后跳转至登陆页");
                     setTimeout(function () {

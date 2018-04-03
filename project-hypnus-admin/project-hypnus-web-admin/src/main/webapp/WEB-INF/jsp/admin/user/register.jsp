@@ -98,13 +98,16 @@
                 </div>
                 <div id="secondStep" class="secondStep none">
                     <div>
-                        <input id="finalPhone" value="18520661698" class="kuang04" readonly/>
+                        <input id="finalPhone" value="" class="kuang04" type="hidden" readonly/>
                     </div>
                     <div>
                         <input id="password" name="password" type="password" placeholder="请输入您的密码" class="kuang02"/>
                     </div>
                     <div>
                         <input id="confirmPwd" name="confirmPwd" type="password" placeholder="请确认您的密码" class="kuang02"/>
+                    </div>
+                    <div>
+                        <input id="deviceId" name="deviceId" type="text" placeholder="请输入您的设备号" class="kuang02"/>
                     </div>
                     <div class="liubai">
                         <a class="btn registerBtn" id="register">注册</a>

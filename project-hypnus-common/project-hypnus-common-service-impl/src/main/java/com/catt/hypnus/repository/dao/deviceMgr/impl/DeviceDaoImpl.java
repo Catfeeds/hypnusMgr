@@ -6,6 +6,7 @@ import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
 import com.catt.common.util.lang.StringUtil;
 import com.catt.hypnus.repository.dao.deviceMgr.DeviceDao;
 import com.catt.hypnus.repository.entity.deviceMgr.Device;
+import com.catt.hypnus.repository.entity.userMgr.UserInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -52,5 +53,20 @@ public class DeviceDaoImpl extends BaseDaoImpl<Device, Long>
 		sql.append(" order by d_modify_date desc");
 
 		return this.findPageBySql(sql.toString(),param,pageable,Map.class);
+	}
+
+	@Override
+	public Device findDeviceByDeviceId(String deviceId) {
+		if(deviceId==null){
+			return null;
+		}else{
+			try{
+				String jql = "select f from Device f where f.deviceId = :deviceId";
+				return (Device) entityManager.createQuery(jql,Device.class).setParameter("deviceId",deviceId).getSingleResult();
+			}catch (Exception e){
+				return null;
+			}
+
+		}
 	}
 }

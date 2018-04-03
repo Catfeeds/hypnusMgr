@@ -16,7 +16,7 @@ import java.util.Random;
 public class SmsService
 {
     public String smsAuthCode(String phone) {
-        String msg = buildRandomString();
+        String msg = "短信验证码:"+buildRandomString()+",10分钟内有效,请勿泄露";
         String uriString = UriComponentsBuilder.fromUriString(SMS_URL).buildAndExpand(msg,phone).toUriString();
         String result = restTemplate.getForObject(uriString,String.class);
         String[] codeArray = result.split(",");

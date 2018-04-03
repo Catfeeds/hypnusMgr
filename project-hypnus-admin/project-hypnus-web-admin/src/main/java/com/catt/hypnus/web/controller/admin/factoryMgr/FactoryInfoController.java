@@ -72,7 +72,7 @@ public class FactoryInfoController
     @RequestMapping(value = {"/searchFactory"}, method = RequestMethod.POST)
     @ResponseBody
     public Page<Map> searchFactory(FactoryForm factoryForm, Pageable pageable){
-        return factoryService.queryListNonBind(factoryForm.getFactoryMobile(),pageable);
+        return factoryService.queryList(factoryForm.getFactoryMobile(),pageable);
     }
 
     @RequestMapping(value = "/pwd", method = RequestMethod.POST)

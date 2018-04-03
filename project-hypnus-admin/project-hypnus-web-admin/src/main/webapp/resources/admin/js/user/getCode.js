@@ -25,7 +25,6 @@ function getLocalDelay(rel) {
  */
 function countDown(obj, _delay,callback) {
     var rel = obj.attr("data-rel");
-    debugger;
     if (typeof  obj.attr("disabled") == "undefined") {
         callback();
         var delay = _delay;
