@@ -6,13 +6,14 @@ import com.catt.common.base.pojo.search.Order;
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
 import com.catt.common.module.exception.pojo.BaseException;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
 import com.catt.hypnus.OssDataHandler;
 import com.catt.hypnus.repository.dao.deviceMgr.UsetimeDao;
 import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
 import com.catt.hypnus.repository.form.deviceMgr.UsetimeForm;
 import com.catt.hypnus.service.base.deviceMgr.UsetimeBaseService;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
-import com.gci.common.util.lang.DateUtil;
 import com.gci.common.util.lang.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +63,37 @@ public class UsetimeServiceImpl implements UsetimeService {
         return usetimeList;
     }
 
-    public List<Map> findMapList(String deviceId, String startTime, String endTime){
-        return usetimeDao.findMapList(deviceId,startTime,endTime);
+    public List<Map> findMapList(String deviceId, String startTime, String endTime) {
+        return usetimeDao.findMapList(deviceId, startTime, endTime);
+    }
+
+    public List<Map> findListByDay(String deviceId) {
+        GregorianCalendar ca = new GregorianCalendar();
+        Calendar cal = Calendar.getInstance();
+        Date today = new Date();
+        Date yesterday = DateUtil.addDays(today, -1);
+        Date startDate = null;
+        Date endDate = null;
+        //上午,以当前时间为结束时间
+        if (ca.get(GregorianCalendar.AM_PM) == 0) {
+            endDate = today;
+        } else { //当前为下午，取当天12点
+            cal.set(Calendar.HOUR, 23);
+            cal.set(Calendar.SECOND, 59);
+            cal.set(Calendar.MINUTE, 59);
+            endDate = DateUtil.addDays(cal.getTime(), -1);
+        }
+        cal.setTime(yesterday);
+        cal.set(Calendar.HOUR, 24);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        startDate = DateUtil.addDays(cal.getTime(), -1);
+        List<Map> list = usetimeDao.findList(deviceId, startDate, endDate);
+        if (CollectionUtils.isEmpty(list)) {
+            throw BaseException.errorByErrInfo("无使用记录数据");
+        }
+        return list;
+
     }
 
     public Page<Usetime> findPage(Pageable pageable, UsetimeForm usetimeForm) {
@@ -100,14 +131,14 @@ public class UsetimeServiceImpl implements UsetimeService {
 //            usetimeStrList.add(start);
 //
 //        });
-        String keyPre = "0a0a0a0a0b0b0b0b0c0c0c0c/2018-01-31/";
+        String keyPre = "";
         if (StringUtil.checkStr(deviceId) && StringUtil.checkStr(startTime)) {
             keyPre = deviceId + "/" + startTime + "/";
         }
         List<String> fileList = OssDataHandler.listOfObject(keyPre);
         if (CollectionUtils.isEmpty(fileList)) {
             logger.info("OSS中无数据文件");
-            throw  BaseException.errorByErrInfo("OSS中无数据文件");
+            throw BaseException.errorByErrInfo("OSS中无数据文件");
         }
         short[] pressureBytes = null;
         short[] flowBytes = null;
@@ -185,8 +216,9 @@ public class UsetimeServiceImpl implements UsetimeService {
         return map;
     }
 
-    public Map baseStatisticData(String deviceId, String startTime, String endTime) {
-        List<Usetime> usetimeList = this.findList(deviceId, startTime, endTime);
+    public Map baseStatisticData(String deviceId) {
+        List<Map> usetimeList = this.findListByDay(deviceId);
+        Map map = new HashMap();
         /**
          * 平均压力=压力1*时间1+压力2*时间2/时间1+时间2
          * 90%压力计算
@@ -195,27 +227,95 @@ public class UsetimeServiceImpl implements UsetimeService {
          * 3，逐个累加压力并与90%*sum进行比较，前值初次超过后值，当前usetime压力作为90%压力；
          */
         //压力总数
-        Double sumPresure = 0D;
+        Double sumPresure1 = 0D;
+        Double sumPresure2 = 0D;
+        Long sumMvPos = 0l;
+
         //累加总数
-        Double changePresure = 0D;
-        Double pecentSumPresure = 0D;
+        Double changePresure1 = 0D;
+        Double changePresure2 = 0D;
+        Long changeMvPos = 0l;
+
+
+        Double pecentSumPresure1 = 0D;
+        Double pecentSumPresure2 = 0D;
+        Double pecentSumMvPos = 0d;
+
         //90%压力值
-        Double pecentPresure = 0D;
+        Double pecentPresure1 = 0D;
+        Double pecentPresure2 = 0D;
+        //潮气量
+        Long pecentMvPos = 0l;
+
+        //%50压力
+        Double averagePresure1 = 0D;
+        Double averagePresure2 = 0D;
+        Long averageMvPos = 0l;
+
         //时间总数
         Long sumPeroid = 0l;
-        for (Usetime usetime : usetimeList) {
-            Double currDouble = (Double) usetime.getPressure1() * usetime.getPeroid();
-            sumPresure += currDouble;
-            sumPeroid += usetime.getPeroid();
+        for (Map usetime : usetimeList) {
+            Double pressure1 = MapUtil.getDouble(usetime, "presure1") == null ? 0d : MapUtil.getDouble(usetime, "presure1");
+            Double pressure2 = MapUtil.getDouble(usetime, "presure2") == null ? 0d : MapUtil.getDouble(usetime, "presure2");
+            Long mvPos = MapUtil.getLong(usetime, "mvPos") == null ? 0l : MapUtil.getLong(usetime, "mvPos");
+
+            Long peroid = MapUtil.getLong(usetime, "peroid") == null ? 0l : MapUtil.getLong(usetime, "peroid");
+            Double currDouble1 = (Double) pressure1 * peroid;
+            Double currDouble2 = (Double) pressure2 * peroid;
+            Long currMvPos = mvPos * peroid;
+            sumPresure1 += currDouble1;
+            sumPresure2 += currDouble2;
+            sumMvPos += currMvPos;
+            sumPeroid += peroid;
         }
-        pecentSumPresure = sumPresure * 0.9;
-        for (Usetime usetime : usetimeList) {
-            Double currDouble = (Double) usetime.getPressure1() * usetime.getPeroid();
-            changePresure += currDouble;
-            if (changePresure >= pecentSumPresure) {
-                pecentPresure = usetime.getPressure1();
+        if (sumPeroid == 0) {
+            averagePresure1 = 0d;
+            averagePresure2 = 0d;
+            averageMvPos = 0l;
+        } else {
+            averagePresure1 = sumPresure1 / sumPeroid;
+            averagePresure2 = sumPresure2 / sumPeroid;
+            averageMvPos = sumMvPos / sumPeroid;
+        }
+        pecentSumPresure1 = sumPresure1 * 0.9;
+        pecentSumPresure2 = sumPresure2 * 0.9;
+        pecentSumMvPos = sumMvPos * 0.9;
+        for (Map usetime : usetimeList) {
+            Double pressure1 = MapUtil.getDouble(usetime, "presure1") == null ? 0d : MapUtil.getDouble(usetime, "presure1");
+            Long peroid = MapUtil.getLong(usetime, "peroid") == null ? 0l : MapUtil.getLong(usetime, "peroid");
+            Double currDouble = (Double) pressure1 * peroid;
+            changePresure1 += currDouble;
+            if (changePresure1 > pecentSumPresure1) {
+                pecentPresure1 = pressure1;
+                break;
             }
         }
+        for (Map usetime : usetimeList) {
+            Double pressure2 = MapUtil.getDouble(usetime, "presure2") == null ? 0d : MapUtil.getDouble(usetime, "presure2");
+            Long peroid = MapUtil.getLong(usetime, "peroid") == null ? 0l : MapUtil.getLong(usetime, "peroid");
+            Double currDouble = (Double) pressure2 * peroid;
+            changePresure2 += currDouble;
+            if (changePresure2 > pecentSumPresure2) {
+                pecentPresure2 = pressure2;
+                break;
+            }
+        }
+        for (Map usetime : usetimeList) {
+            Long mvPos = MapUtil.getLong(usetime, "mvPos") == null ? 0l : MapUtil.getLong(usetime, "mvPos");
+            Long peroid = MapUtil.getLong(usetime, "peroid") == null ? 0l : MapUtil.getLong(usetime, "peroid");
+            Long currDouble = mvPos * peroid;
+            changeMvPos += currDouble;
+            if (changeMvPos > pecentSumMvPos) {
+                pecentMvPos = mvPos;
+                break;
+            }
+        }
+        map.put("pecentPresure1", pecentPresure1);
+        map.put("averagePresure1", averagePresure1);
+        map.put("pecentPresure2", pecentPresure2);
+        map.put("averagePresure2", averagePresure2);
+        map.put("averageMvPos", averageMvPos);
+        map.put("pecentMvPos", pecentMvPos);
 
         /**
          * 压力柱状图计算
@@ -226,7 +326,7 @@ public class UsetimeServiceImpl implements UsetimeService {
          */
 
 
-        return null;
+        return map;
 
     }
 

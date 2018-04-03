@@ -9,6 +9,7 @@ import com.catt.common.web.spring.resolver.annotation.CurrentUser;
 import com.catt.hypnus.repository.entity.DeviceShadow;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
 import com.catt.hypnus.service.deviceMgr.DeviceService;
+import com.catt.hypnus.service.deviceMgr.UsetimeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -189,13 +190,30 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = "/getShadowDevice", method = RequestMethod.POST)
     @ResponseBody
-    public DeviceShadow getShadowDevice(String deviceId) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException, ClientException {
+    public DeviceShadow getShadowDevice(String deviceId) throws InvocationTargetException,
+            IntrospectionException, InstantiationException, IllegalAccessException, ClientException {
         DeviceShadow deviceShadow = deviceService.getShadowDevice(deviceId);
         return deviceShadow;
+    }
+
+    /**
+     * 获取影子设备参数
+     *
+     * @param deviceId
+     */
+    @RequestMapping(value = "/getUseData", method = RequestMethod.POST)
+    @ResponseBody
+    public Map getUseData(String deviceId) {
+        Map useData = usetimeService.baseStatisticData(deviceId);
+        return useData;
     }
 
     // 设备信息
     @Resource(name = "deviceServiceImpl")
     private DeviceService deviceService;
+
+    // 设备信息
+    @Resource(name = "usetimeServiceImpl")
+    private UsetimeService usetimeService;
 
 }

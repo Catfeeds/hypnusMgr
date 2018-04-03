@@ -14,6 +14,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                     var id = $('#id').val();
                     if (id) {
                         EventHandler.getCusOrderDetail();
+                        EventHandler.getUseData();
                     }
                 },
                 /** 初始化事件绑定 */
@@ -32,7 +33,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
         var EventHandler = (function () {
             return {
 
-                //获取订单信息详情
+                //获取详情
                 getCusOrderDetail: function () {
                     DataHandler.getShadowDevice({
                         deviceId: $('#id').val()
@@ -41,7 +42,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                             $('#start_pressure').html(shadowDevice.start_pressure);
                             $('#machine').html(shadowDevice.machine);
                             $('#cure_model').html(shadowDevice.cure_model);
-                            $('#data_version').val(shadowDevice.data_version);
+                            $('#data_version').html(shadowDevice.data_version);
 
                             $('#t_in_p').html(shadowDevice.t_in_p);
                             $('#t_ex_p').html(shadowDevice.t_ex_p);
@@ -121,6 +122,22 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                         }
                     });
                 },
+                getUseData: function () {
+                    DataHandler.getUseData({
+                        deviceId: $('#id').val()
+                    }, function (shadowDevice) {
+                        if (shadowDevice) {
+                            $('#averagePresure1').html(shadowDevice.averagePresure1);
+                            $('#pecentPresure1').html(shadowDevice.pecentPresure1);
+                            $('#averagePresure2').html(shadowDevice.averagePresure2);
+                            $('#pecentPresure2').html(shadowDevice.pecentPresure2);
+
+                            $('#averageMvPos').html(shadowDevice.averageMvPos);
+                            $('#pecentMvPos').html(shadowDevice.pecentMvPos);
+                            setParenHei();
+                        }
+                    });
+                },
                 //设置设备参数
                 printBill: function () {
                     window.location.href = path + '/admin/deviceMgr/paramSet.html';
@@ -138,6 +155,16 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                  */
                 getShadowDevice: function (params, callback) {
                     $.post(path + '/admin/deviceMgr/getShadowDevice', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+                /**
+                 * 获取设备参数
+                 * @param params
+                 * @param callback
+                 */
+                getUseData: function (params, callback) {
+                    $.post(path + '/admin/deviceMgr/getUseData', params, function (backData) {
                         callback(backData);
                     });
                 },

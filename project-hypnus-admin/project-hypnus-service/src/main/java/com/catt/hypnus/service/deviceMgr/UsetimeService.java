@@ -29,12 +29,21 @@ public interface UsetimeService {
 
     /**
      * 使用记录
+     *
      * @param deviceId
      * @param startTime
      * @param endTime
      * @return
      */
     List<Map> findMapList(String deviceId, String startTime, String endTime);
+
+    /**
+     * 按日期查询使用记录
+     *
+     * @param deviceId
+     * @return
+     */
+    List<Map> findListByDay(String deviceId);
 
 
     /**
@@ -57,6 +66,14 @@ public interface UsetimeService {
     Page<Map> findPageMap(String deviceId, String startTime, String endTime, Pageable pageable);
 
     Map getDateFromOss(String deviceId, String startTime, int timeType) throws IOException;
+
+    /**
+     * 使用记录数据统计
+     *
+     * @param deviceId
+     * @return
+     */
+    Map baseStatisticData(String deviceId);
 
 }
 

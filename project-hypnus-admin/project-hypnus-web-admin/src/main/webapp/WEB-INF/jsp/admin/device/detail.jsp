@@ -96,15 +96,15 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>平均吸气压力：</td>
-                    <th id="orderCode"></th>
+                    <th id="averagePresure1"></th>
                     <td>90%吸气压力：</td>
-                    <th id="createDate"></th>
+                    <th id="pecentPresure1"></th>
                 </tr>
                 <tr>
                     <td>平均呼气压力：</td>
-                    <th></th>
+                    <th id="averagePresure2"></th>
                     <td>90%呼气压力：</td>
-                    <th id="orderType"></th>
+                    <th id="pecentPresure2"></th>
                 </tr>
             </table>
         </div>
@@ -154,9 +154,9 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>50%潮气量：</td>
-                    <th id="orderCode"></th>
+                    <th id="averageMvPos"></th>
                     <td>90%潮气量：</td>
-                    <th id="createDate"></th>
+                    <th id="pecentMvPos"></th>
                 </tr>
             </table>
         </div>

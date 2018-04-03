@@ -30,24 +30,42 @@ public class UsetimeServiceImplTest extends SpringTest {
     }
 
     @Test
+    public void findMapList() throws Exception {
+        List<Map> usetimeList = usetimeService.findMapList("393035393436470B0039002A", "2018-04-02 19:49:30", "2018-04-03 11:33:53");
+        System.out.println(usetimeList.size());
+    }
+
+    @Test
+    public void findListByDay() throws Exception {
+        List<Map> usetimeList = usetimeService.findListByDay("393035393436470B0039002A");
+        System.out.println(usetimeList.size());
+    }
+
+    @Test
+    public void baseStatisticData() throws Exception {
+        Map map = usetimeService.baseStatisticData("393035393436470B0039002A");
+        System.out.println(map.isEmpty());
+    }
+
+    @Test
     public void findPage() throws Exception {
         Pageable pageable = new Pageable(1, 10);
-        UsetimeForm  usetimeForm=new UsetimeForm();
-        Page<Usetime> usetimePage = usetimeService.findPage(pageable,usetimeForm);
+        UsetimeForm usetimeForm = new UsetimeForm();
+        Page<Usetime> usetimePage = usetimeService.findPage(pageable, usetimeForm);
         System.out.println(usetimePage.getContent().size());
     }
 
     @Test
     public void findPageMap() throws Exception {
         Pageable pageable = new Pageable(1, 10);
-        String deviceId="363338363035511100290036";
-        Page<Map> usetimePage = usetimeService.findPageMap(deviceId,null,null,pageable);
+        String deviceId = "363338363035511100290036";
+        Page<Map> usetimePage = usetimeService.findPageMap(deviceId, null, null, pageable);
         System.out.println(usetimePage.getContent().size());
     }
 
     @Test
     public void getDateFromOss() throws Exception {
-        Map map= usetimeService.getDateFromOss("0a0a0a0a0b0b0b0b0c0c0c0c", "2018-01-31", DateTimeUtil.FIVE_MINUTES_TIME);
+        Map map = usetimeService.getDateFromOss("0a0a0a0a0b0b0b0b0c0c0c0c", "2018-01-31", DateTimeUtil.FIVE_MINUTES_TIME);
         System.out.println(map.isEmpty());
     }
 

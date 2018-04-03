@@ -8,6 +8,7 @@ import com.catt.hypnus.repository.dao.deviceMgr.UsetimeDao;
 import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         return this.findPageBySql(sql.toString(), param, pageable, Map.class);
     }
 
+
     public List<Map> findMapList(String deviceId, String startTime, String endTime) {
         StringBuffer sql = new StringBuffer();
         Map param = new HashMap<>();
@@ -44,11 +46,33 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
             param.put("deviceId", deviceId);
         }
         if (StringUtil.isNotBlank(startTime)) {
-            sql.append(" AND t.starttime = :startTime ");
+            sql.append(" AND t.record_time >= :startTime ");
             param.put("startTime", startTime);
         }
-        sql.append(" order by t.starttime desc");
-        return this.findListBySql(sql.toString(),param,Map.class);
+        if (StringUtil.isNotBlank(endTime)) {
+            sql.append(" AND t.record_time <= :endTime ");
+            param.put("endTime", endTime);
+        }
+        sql.append(" order by t.record_time asc");
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+    public List<Map> findList(String deviceId, Date startTime, Date endTime) {
+        StringBuffer sql = new StringBuffer();
+        Map param = new HashMap<>();
+        sql.append(baseSql());
+        if (StringUtil.isNotBlank(deviceId)) {
+            sql.append(" AND t.device_id = :deviceId ");
+            param.put("deviceId", deviceId);
+        }
+        if (startTime != null && endTime != null) {
+            sql.append(" AND (t.record_time between :startTime ");
+            param.put("startTime", startTime);
+            sql.append(" AND  :endTime )");
+            param.put("endTime", endTime);
+        }
+        sql.append(" order by t.record_time asc");
+        return this.findListBySql(sql.toString(), param, Map.class);
     }
 
     public StringBuffer baseSql() {

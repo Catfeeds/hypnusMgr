@@ -28,7 +28,7 @@
 
 <body>
 
-<div class="wrapper">
+<div class="wrapper2Data">
     <div class="positionNow">主页 &gt; <a>详细图形</a></div>
     <%--<div class="searchBar">--%>
         <%--<div class="searchBox">--%>
