@@ -12,25 +12,25 @@ import java.util.Random;
  * @Date: 2018/3/26 20:19
  * @Desc:
  **/
-@Service(value="smsService")
-public class SmsService
-{
+@Service(value = "smsService")
+public class SmsService {
     public String smsAuthCode(String phone) {
-        String msg = "【和普乐】短信验证码"+buildRandomString()+"，10分钟内有效，请勿泄露。";
-        String uriString = UriComponentsBuilder.fromUriString(SMS_URL).buildAndExpand(msg,phone).toUriString();
-        String result = restTemplate.getForObject(uriString,String.class);
+        String radomString = buildRandomString();
+        String msg = "【和普乐】短信验证码" + radomString + "，10分钟内有效，请勿泄露。";
+        String uriString = UriComponentsBuilder.fromUriString(SMS_URL).buildAndExpand(msg, phone).toUriString();
+        String result = restTemplate.getForObject(uriString, String.class);
         String[] codeArray = result.split(",");
-        if(!codeArray[0].equals("0")){
-            throw new RuntimeException("发送验证码失败,原因为:"+codeArray[1]);
+        if (!codeArray[0].equals("0")) {
+            throw new RuntimeException("发送验证码失败,原因为:" + codeArray[1]);
         }
-        return msg;
+        return radomString;
     }
 
-    private String buildRandomString(){
+    private String buildRandomString() {
         String base = "1234567890";
         Random random = new Random();
         StringBuffer buffer = new StringBuffer();
-        for(int i=0;i< 6;i++){
+        for (int i = 0; i < 6; i++) {
             int number = random.nextInt(base.length());
             buffer.append(base.charAt(number));
         }

@@ -25,7 +25,7 @@
 <body>
 <div class="wrapper">
     <div class="positionNow">
-        <a>主页 &gt; </a><a href="${path}/admin/deviceMgr/index.html">设备列表</a> &gt; <a style="color:#ff4d4d;">设备参数</a>
+        <a>主页 &gt; </a><a>设备列表</a> &gt; <a style="color:#ff4d4d;">设备参数</a>
     </div>
 
     <div class="userDetail">

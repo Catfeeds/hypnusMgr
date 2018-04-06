@@ -99,7 +99,7 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     if((deviceId==null||deviceId=='')||factoryId==''){
                         msgBox.tips("操作异常,请刷新后重试");
                     }
-                    $.post(path + "/admin/deviceMgr/bindFactory", {"id":deviceId,"factoryId":factoryId}, function(backData) {
+                    $.post(path + "/admin/deviceMgr/bindFactory", {"deviceId":deviceId,"factoryId":factoryId}, function(backData) {
                         if (backData.type == 'success') {
                             msgBox.tips("绑定成功");
                             msgBox.exWindow.close(backData.type);

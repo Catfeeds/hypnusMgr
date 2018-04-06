@@ -99,7 +99,7 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     if((deviceId==null||deviceId=='')||userId==''){
                         msgBox.tips("操作异常,请刷新后重试");
                     }
-                    $.post(path + "/admin/deviceMgr/bindUser", {"id":deviceId,"userId":userId}, function(backData) {
+                    $.post(path + "/admin/deviceMgr/bindUser", {"deviceId":deviceId,"userId":userId}, function(backData) {
                         if (backData.type == 'success') {
                             msgBox.tips("绑定成功");
                             msgBox.exWindow.close(backData.type);
