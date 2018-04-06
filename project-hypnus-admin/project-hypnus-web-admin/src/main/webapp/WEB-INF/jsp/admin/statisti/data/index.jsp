@@ -11,7 +11,6 @@
     <link type="text/css" href="${path}/resources/css/indexchild.css" rel="stylesheet"/>
     <link type="text/css" href="${path}/resources/css/timeChange.css" rel="stylesheet"/>
     <link type="text/css" href="${path}/resources/css/indexChildv2.css" rel="stylesheet"/>
-    <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
     <script type="text/javascript" src="${path}/resources/js/echarts.min.js"></script>
     <script src="${path}/resources/admin/js/statisti/data/index.js" type="text/javascript"></script>
 
@@ -74,11 +73,14 @@
             <input type="hidden" id="deviceId" value="${fn:escapeXml(param.deviceId)}"/>
             <input type="hidden" id="startTime" value="${fn:escapeXml(param.startTime)}"/>
             <li class="on xw_setPie" id="numLi">详细图形</li>
-            <li class="xw_setPie">统计图形</li>
+            <li class="xw_setPie" id="staticLi">统计图形</li>
         </ul>
     </div>
     <div class="xw_showcontent" style="background:#fff;">
         <div class="chartsDiv" id="container_dingdan"></div>
+    </div>
+    <div class="xw_showcontent" style="background:#fff;">
+        <div class="chartsDiv" id="container_static"></div>
     </div>
 </div>
 </body>

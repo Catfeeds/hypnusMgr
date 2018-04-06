@@ -2,7 +2,8 @@
 var dateDimension = "DAY";
 seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
     var time; // 横坐标，时间跨度
-    var staticData; // 订单数量
+    var staticData = new Array(); // 详细数据
+    var graphics // 详细数据
 
     /** 初始化处理器 */
     var InitHandler = (function () {
@@ -52,10 +53,11 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 $(".xw_setPie").click(function () {
                     $(".xw_topTab li").removeClass("on");
                     $(this).addClass("on");
+                    debugger
                     if ($("#numLi").hasClass("on")) {
-                        EventHandler.writerData4Chart(time, num, '订单总数');
+                        EventHandler.writerData4Chart(staticData, '订单总数');
                     } else {
-                        // EventHandler.writerData4Chart(time, amount, '订单金额');
+                        EventHandler.writerStaticData4Chart(graphics, '订单金额');
                     }
                 });
 
@@ -133,10 +135,14 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     staticData = result.pressure;
                     if ($("#numLi").hasClass("on")) {
                         EventHandler.writerData4Chart(staticData, '详细数据');
-                    } else {
-                        // EventHandler.writerData4Chart(time, amount, '订单金额');
                     }
-                    setParenHei();
+                });
+                DataHandler.getStaticData(params, function (result) {
+                    time = new Array(); // 横坐标，时间跨度
+                    graphics = result;
+                    if ($("#staticLi").hasClass("on")) {
+                        EventHandler.writerStaticData4Chart(graphics, '详细数据');
+                    }
                 });
             },
             // 报表
@@ -424,7 +430,68 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 };
                 chart.setOption(option, true);
                 chart.hideLoading();
-                setParenHei();
+            },
+            writerStaticData4Chart: function (data, title) {
+                // 初始化报表
+                var chart = echarts.init($("#container_dingdan")[0]);
+                var apnea = data.apnea;
+                var hypopnea = data.hypopnea;
+                //时间轴数据
+                var xData = apnea.dateList;
+                var yApneaData = apnea.eventList;
+                var yHypopneaData = hypopnea.eventList;
+                chart.showLoading({
+                    text: "正在拼命加载中...",
+                    x: "center",
+                    y: "center",
+                    textStyle: {
+                        fontSize: 20
+                    },
+                    effect: "bubble"
+                });
+                var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: ['AI', 'HI']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        top: '3%',
+                        height: '10%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: xData
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'AI',
+                            type: 'bar',
+                            data: yApneaData
+                        },
+                        {
+                            name: 'HI',
+                            type: 'bar',
+                            data: yHypopneaData
+                        }
+                    ]
+                };
+                chart.setOption(option, true);
+                chart.hideLoading();
             }
 
         };
@@ -436,15 +503,15 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
     var DataHandler = function () {
         return {
             /**
-             * 获取统计时间范围内的订单金额与订单数量
+             * 柱状图统计
              */
-            getAmountNum: function (param, callback) {
-                $.post(path + '/admin/statisti/order/getAmountNum', param, function (backData) {
+            getStaticData: function (param, callback) {
+                $.post(path + '/admin/statisti/data/getStaticData', param, function (backData) {
                     callback(backData);
                 });
             },
             /**
-             * 获取订单金额统计情况
+             * 波形图统计
              */
             getOrderAmountStat: function (param, callback) {
                 $.post(path + '/admin/statisti/data/getDateFromOss', param, function (backData) {

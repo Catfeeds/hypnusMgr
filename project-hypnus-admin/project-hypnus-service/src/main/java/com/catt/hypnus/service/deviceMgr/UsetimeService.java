@@ -7,6 +7,7 @@ import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
 import com.catt.hypnus.repository.form.deviceMgr.UsetimeForm;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +75,24 @@ public interface UsetimeService {
      * @return
      */
     Map baseStatisticData(String deviceId);
+
+    /**
+     * 呼吸事件等的统计数据
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Map getEventData(String deviceId, Date startTime, Date endTime);
+
+    /**
+     * AH事件统计
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Map getHypopneaEventData(String deviceId, Date startTime, Date endTime);
 
 }
 

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -70,21 +69,16 @@ public class DataStatistiController extends BaseController {
     }
 
     /**
-     * 获取订单金额统计情况
+     * 获取柱状图数据
      *
-     * @param startCreateDate 统计开始时间
-     * @param endCreateDate   统计结束时间
-     * @param dateDimension   统计周期
+     * @param endCreateDate 统计结束时间
+     * @param dateDimension 统计周期
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = {"/getOrderAmountStat"}, method = RequestMethod.POST)
-    public List<Map> getOrderAmountStat(Date startCreateDate, Date endCreateDate, DateDimension dateDimension) {
-        if (dateDimension.equals(DateDimension.MONTH)) {
-            endCreateDate = DateUtil.getMonthLastDateTime(endCreateDate);
-        }
-//        return orderStatistiService.getOrderAmountStat(startCreateDate, endCreateDate, dateDimension);
-        return null;
+    @RequestMapping(value = {"/getStaticData"}, method = RequestMethod.POST)
+    public Map getStaticData(String deviceId, Date endCreateDate, DateDimension dateDimension) {
+        return usetimeService.getEventData(deviceId, null, null);
     }
 
 }

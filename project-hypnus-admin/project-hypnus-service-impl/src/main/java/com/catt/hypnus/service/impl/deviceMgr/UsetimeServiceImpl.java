@@ -10,6 +10,8 @@ import com.catt.common.util.collections.MapUtil;
 import com.catt.common.util.lang.DateUtil;
 import com.catt.hypnus.OssDataHandler;
 import com.catt.hypnus.repository.dao.deviceMgr.UsetimeDao;
+import com.catt.hypnus.repository.dao.eventMgr.ApneaEventDao;
+import com.catt.hypnus.repository.dao.eventMgr.HypopneaEventDao;
 import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
 import com.catt.hypnus.repository.form.deviceMgr.UsetimeForm;
 import com.catt.hypnus.service.base.deviceMgr.UsetimeBaseService;
@@ -52,6 +54,19 @@ public class UsetimeServiceImpl implements UsetimeService {
 
     @Resource(name = "usetimeDaoImpl")
     private UsetimeDao usetimeDao;
+
+    /**
+     * AI事件
+     */
+    @Resource(name = "apneaEventDaoImpl")
+    private ApneaEventDao apneaEventDao;
+
+    /**
+     * Hi事件
+     */
+    @Resource(name = "hypopneaEventDaoImpl")
+    private HypopneaEventDao hypopneaEventDao;
+
 
     @Resource(name = "usetimeBaseServiceImpl")
     private UsetimeBaseService usetimeBaseService;
@@ -330,5 +345,65 @@ public class UsetimeServiceImpl implements UsetimeService {
 
     }
 
+    public Map getEventData(String deviceId, Date startTime, Date endTime) {
+        Map event = new HashMap();
+        Map apnea = this.getApneaData(deviceId, startTime, endTime);
+        Map hypopnea = this.getHypopneaEventData(deviceId, startTime, endTime);
+        event.put("apnea", apnea);
+        event.put("hypopnea", hypopnea);
+        return event;
+    }
 
+    public Map getApneaData(String deviceId, Date startTime, Date endTime) {
+        Map apnea = new HashMap();
+        List<Map> apneaEventList = apneaEventDao.findApneaEventByDeviceId(deviceId, startTime, endTime);
+        List<String> dateList = new ArrayList<>();
+        List<Double> eventList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(apneaEventList)) {
+            for (Map apneaEvent : apneaEventList) {
+                Double apneaData = 0d;
+                String dayTime = MapUtil.getString(apneaEvent, "dayTime");
+                if (!StringUtil.checkStr(dayTime)) {
+                    break;
+                }
+                Double apneaSum = MapUtil.getDouble(apneaEvent, "apneaSum");
+                Double peroidSum = MapUtil.getDouble(apneaEvent, "peroidSum") == null ? 0d : MapUtil.getDouble(apneaEvent, "peroidSum");
+                if (peroidSum != 0d) {
+                    apneaData = apneaSum / peroidSum;
+                }
+                dateList.add(dayTime);
+                eventList.add(apneaData);
+            }
+        }
+        apnea.put("dateList", dateList);
+        apnea.put("eventList", eventList);
+        return apnea;
+
+    }
+
+    public Map getHypopneaEventData(String deviceId, Date startTime, Date endTime) {
+        Map hypopnea = new HashMap();
+        List<Map> apneaEventList = hypopneaEventDao.findHypopneaEventByDeviceId(deviceId, startTime, endTime);
+        List<String> dateList = new ArrayList<>();
+        List<Double> eventList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(apneaEventList)) {
+            for (Map apneaEvent : apneaEventList) {
+                Double apneaData = 0d;
+                String dayTime = MapUtil.getString(apneaEvent, "dayTime");
+                if (!StringUtil.checkStr(dayTime)) {
+                    break;
+                }
+                Double apneaSum = MapUtil.getDouble(apneaEvent, "apneaSum");
+                Double peroidSum = MapUtil.getDouble(apneaEvent, "peroidSum") == null ? 0d : MapUtil.getDouble(apneaEvent, "peroidSum");
+                if (peroidSum != 0d) {
+                    apneaData = apneaSum / peroidSum;
+                }
+                dateList.add(dayTime);
+                eventList.add(apneaData);
+            }
+        }
+        hypopnea.put("dateList", dateList);
+        hypopnea.put("eventList", eventList);
+        return hypopnea;
+    }
 }

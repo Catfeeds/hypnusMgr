@@ -48,6 +48,17 @@ public class UsetimeServiceImplTest extends SpringTest {
     }
 
     @Test
+    public void getEventData() throws Exception {
+        Map map = usetimeService.getEventData("393035393436470B0039002A",null,null);
+        System.out.println(map.isEmpty());
+    }
+    @Test
+    public void getHypopneaEventData() throws Exception {
+        Map map = usetimeService.getHypopneaEventData("3633383630355111003C0036",null,null);
+        System.out.println(map.isEmpty());
+    }
+
+    @Test
     public void findPage() throws Exception {
         Pageable pageable = new Pageable(1, 10);
         UsetimeForm usetimeForm = new UsetimeForm();
