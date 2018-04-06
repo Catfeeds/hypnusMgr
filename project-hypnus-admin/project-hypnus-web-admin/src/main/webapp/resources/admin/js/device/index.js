@@ -101,7 +101,7 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     }
                     msgBox.exWindow.open({
                         title: '选择绑定用户',
-                        url: path + "/admin/deviceMgr/selectUserPage/" + checked[0].id,
+                        url: path + "/admin/deviceMgr/selectUserPage/" + checked[0].deviceId,
                         width: '1000px',
                         height: '400px',
                         close: function (result) {
@@ -119,7 +119,7 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     };
                     msgBox.exWindow.open({
                         title: '选择绑定经销商',
-                        url: path + "/admin/deviceMgr/selectFactoryPage/" + checked[0].id,
+                        url: path + "/admin/deviceMgr/selectFactoryPage/" + checked[0].deviceId,
                         width: '1000px',
                         height: '400px',
                         close: function (result) {
@@ -143,7 +143,7 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                                 $.ajax({
                                     type:"post",
                                     url:path+"/admin/deviceMgr/unbindUser",
-                                    data:{"id":checked[0].id},
+                                    data:{"deviceId":checked[0].deviceId},
                                     success:function(){
                                         EventHandler.search();
                                     },
@@ -169,7 +169,7 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                                 $.ajax({
                                     type:"post",
                                     url:path+"/admin/deviceMgr/unbindFactory",
-                                    data:{"id":checked[0].id},
+                                    data:{"deviceId":checked[0].deviceId},
                                     success:function(){
                                         EventHandler.search();
                                     },

@@ -4,6 +4,8 @@ package com.catt.hypnus.service.impl.deviceMgr;
 import com.aliyuncs.exceptions.ClientException;
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.collections.MapUtil;
+import com.catt.common.util.lang.DateUtil;
 import com.catt.hypnus.repository.dao.deviceMgr.BindLogInfoDao;
 import com.catt.hypnus.repository.dao.deviceMgr.DeviceDao;
 import com.catt.hypnus.repository.dao.factoryMgr.FactoryInfoDao;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 
@@ -72,42 +75,60 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public void bindUser(Long id, Long userId) {
-        Device device = deviceDao.find(id);
+    public void bindUser(String deviceId, Long userId) {
+        Device device = this.findDeviceById(deviceId);
         device.bindUser(userId);
         deviceDao.saveOrUpdate(device);
-        BindLogInfo log = BindLogInfo.buildBindUserLog(userId, id);
+        BindLogInfo log = BindLogInfo.buildBindUserLog(userId, deviceId);
         bindLogInfoDao.saveOrUpdate(log);
     }
 
     @Override
-    public void bindFactory(Long id, Long factoryId) {
-        Device device = deviceDao.find(id);
+    public void bindFactory(String deviceId, Long factoryId) {
+        Device device = this.findDeviceById(deviceId);
         device.bindFactory(factoryId);
         deviceDao.saveOrUpdate(device);
-        BindLogInfo log = BindLogInfo.buildBindFactoryLog(factoryId, id);
+        BindLogInfo log = BindLogInfo.buildBindFactoryLog(factoryId, deviceId);
         bindLogInfoDao.saveOrUpdate(log);
     }
 
     @Override
-    public void unbindUser(Long id) {
-        Device device = deviceDao.find(id);
+    public void unbindUser(String deviceId) {
+        Device device = this.findDeviceById(deviceId);
         Long userId = device.getCusId();
         device.unbindUser();
         deviceDao.saveOrUpdate(device);
-        BindLogInfo log = BindLogInfo.buildUnBindUserLog(userId, id);
+        BindLogInfo log = BindLogInfo.buildUnBindUserLog(userId, deviceId);
         bindLogInfoDao.saveOrUpdate(log);
     }
 
     @Override
-    public void unbindFactory(Long id) {
-        Device device = deviceDao.find(id);
+    public void unbindFactory(String deviceId) {
+        Device device = this.findDeviceById(deviceId);
         Long factoryId = device.getFactoryId();
         device.unbindFactory();
-        BindLogInfo log = BindLogInfo.buildUnBindFactoryLog(factoryId, id);
+        BindLogInfo log = BindLogInfo.buildUnBindFactoryLog(factoryId, deviceId);
         deviceDao.saveOrUpdate(device);
         bindLogInfoDao.saveOrUpdate(log);
     }
+
+    public Device findDeviceById(String deviceId) {
+        Map map = deviceDao.findByDeviceId(deviceId);
+        Device device = null;
+        if (map != null) {
+            device = new Device();
+            device.setDeviceId(MapUtil.getString(map, "deviceId"));
+            device.setSnId(MapUtil.getString(map, "snId"));
+            device.setModel(MapUtil.getString(map, "model"));
+            device.setFactoryId(MapUtil.getLong(map, "factoryId"));
+            device.setCusId(MapUtil.getLong(map, "cusId"));
+            device.setId(MapUtil.getLong(map,"id"));
+            Date productDate = DateUtil.parseDate(MapUtil.getString(map, "productDate"));
+            device.setProductdate(productDate);
+        }
+        return device;
+    }
+
 
     public DeviceShadow getShadowDevice(String deviceName) throws ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
         DeviceShadow shadow = ShadowDeviceHandler.getShadowDevice(deviceName);

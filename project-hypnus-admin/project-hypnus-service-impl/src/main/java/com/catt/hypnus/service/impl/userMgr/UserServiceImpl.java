@@ -65,7 +65,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserInfo,Long> implements U
         //绑定设备
         device.bindUser(info.getId());
         deviceDao.saveOrUpdate(device);
-        BindLogInfo log = BindLogInfo.buildBindUserLog(info.getId(), device.getId());
+        BindLogInfo log = BindLogInfo.buildBindUserLog(info.getId(), device.getDeviceId());
         bindLogInfoDao.saveOrUpdate(log);
     }
 

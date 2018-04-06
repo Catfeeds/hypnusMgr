@@ -10,10 +10,10 @@ import java.util.Map;
 
 /**
  * 设备表Dao接口
- * 
+ *
  * @author runtime
- * @date 2018-03-14 20:05:38
  * @version V1.0
+ * @date 2018-03-14 20:05:38
  */
 public interface DeviceDao extends BaseDao<Device, Long> {
 
@@ -22,4 +22,7 @@ public interface DeviceDao extends BaseDao<Device, Long> {
     Page<Map> queryRelPageList(String snId, Long userId, Pageable pageable);
 
     Device findDeviceByDeviceId(String deviceId);
+
+    Map findByDeviceId(String deviceId);
+
 }

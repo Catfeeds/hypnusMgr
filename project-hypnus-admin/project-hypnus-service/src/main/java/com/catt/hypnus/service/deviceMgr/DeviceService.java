@@ -30,13 +30,20 @@ public interface DeviceService {
 
     Device findDeviceByDeviceId(String deviceId);
 
-    void bindUser(Long id, Long userId);
+    void bindUser(String deviceId, Long userId);
 
-    void bindFactory(Long id, Long factoryId);
+    void bindFactory(String deviceId, Long factoryId);
 
-    void unbindUser(Long id);
+    void unbindUser(String deviceId);
 
-    void unbindFactory(Long id);
+    void unbindFactory(String deviceId);
+
+    /**
+     * 查询设备
+     * @param deviceId
+     * @return
+     */
+    Device findDeviceById(String deviceId) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException;
 
     /**
      * 查询影子设备参数

@@ -35,7 +35,7 @@ public class BindLogInfo extends BaseEntity {
      * 设备标识
      * </pre>
      */
-    private Long deviceId;
+    private String deviceId;
     /**
      * <pre>
      * 类型
@@ -61,31 +61,31 @@ public class BindLogInfo extends BaseEntity {
 
     }
 
-    public BindLogInfo(Long userId,Long deviceId){
+    public BindLogInfo(Long userId,String deviceId){
         this.userId = userId;
         this.deviceId = deviceId;
     }
 
-    public static BindLogInfo buildBindUserLog(Long userId,Long deviceId){
+    public static BindLogInfo buildBindUserLog(Long userId,String deviceId){
         BindLogInfo info = new BindLogInfo(userId,deviceId);
         info.setStatus(1);
         info.setType(1);
         return info;
     }
-    public static BindLogInfo buildBindFactoryLog(Long userId,Long deviceId){
+    public static BindLogInfo buildBindFactoryLog(Long userId,String deviceId){
         BindLogInfo info = new BindLogInfo(userId,deviceId);
         info.setStatus(1);
         info.setType(2);
         return info;
     }
-    public static BindLogInfo buildUnBindUserLog(Long userId,Long deviceId){
+    public static BindLogInfo buildUnBindUserLog(Long userId,String deviceId){
         BindLogInfo info = new BindLogInfo(userId,deviceId);
         info.setStatus(2);
         info.setType(1);
         info.setUnbindDate(new Date());
         return info;
     }
-    public static BindLogInfo buildUnBindFactoryLog(Long userId,Long deviceId){
+    public static BindLogInfo buildUnBindFactoryLog(Long userId,String deviceId){
         BindLogInfo info = new BindLogInfo(userId,deviceId);
         info.setType(2);
         info.setStatus(2);
@@ -103,11 +103,11 @@ public class BindLogInfo extends BaseEntity {
     }
 
     @Column(name = "DEVICE_ID")
-    public Long getDeviceId() {
+    public String getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(Long deviceId) {
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
 

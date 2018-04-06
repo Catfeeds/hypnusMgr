@@ -107,9 +107,9 @@ public class DeviceController extends BaseController {
 
     @RequestMapping(value = "/bindFactory", method = RequestMethod.POST)
     @ResponseBody
-    public Message bindFactory(Long id, Long factoryId) {
+    public Message bindFactory(String deviceId, Long factoryId) {
         try {
-            deviceService.bindFactory(id, factoryId);
+            deviceService.bindFactory(deviceId, factoryId);
             return Message.success();
         } catch (RuntimeException e) {
             return Message.error(e.getMessage());
@@ -120,9 +120,9 @@ public class DeviceController extends BaseController {
 
     @RequestMapping(value = "/bindUser", method = RequestMethod.POST)
     @ResponseBody
-    public Message bindUser(Long id, Long userId) {
+    public Message bindUser(String deviceId, Long userId) {
         try {
-            deviceService.bindUser(id, userId);
+            deviceService.bindUser(deviceId, userId);
             return Message.success();
         } catch (RuntimeException e) {
             return Message.error(e.getMessage());
@@ -133,9 +133,9 @@ public class DeviceController extends BaseController {
 
     @RequestMapping(value = "/unbindUser", method = RequestMethod.POST)
     @ResponseBody
-    public Message unbindUser(Long id) {
+    public Message unbindUser(String deviceId) {
         try {
-            deviceService.unbindUser(id);
+            deviceService.unbindUser(deviceId);
             return Message.success();
         } catch (RuntimeException e) {
             return Message.error(e.getMessage());
@@ -146,9 +146,9 @@ public class DeviceController extends BaseController {
 
     @RequestMapping(value = "/unbindFactory", method = RequestMethod.POST)
     @ResponseBody
-    public Message unbindFactory(Long id) {
+    public Message unbindFactory(String deviceId) {
         try {
-            deviceService.unbindFactory(id);
+            deviceService.unbindFactory(deviceId);
             return Message.success();
         } catch (RuntimeException e) {
             return Message.error(e.getMessage());
