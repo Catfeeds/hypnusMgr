@@ -84,4 +84,31 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         sql.append("WHERE 1=1 ");
         return sql;
     }
+
+    public List<Map> findSumPeroid(String deviceId, Date startTime, Date endTime) {
+        StringBuffer sql = new StringBuffer();
+        Map param = new HashMap<>();
+        Map result = null;
+        sql.append(sumSql());
+        if (StringUtil.isNotBlank(deviceId)) {
+            sql.append(" AND u.device_id = :deviceId ");
+            param.put("deviceId", deviceId);
+        }
+        if (startTime != null && endTime != null) {
+            sql.append(" AND (u.end_time between :startTime ");
+            param.put("startTime", startTime);
+            sql.append(" AND  :endTime )");
+            param.put("endTime", endTime);
+        }
+        sql.append(" GROUP BY DATE_FORMAT(DATE_ADD(u.end_time, INTERVAL 12 HOUR), '%Y-%m-%d')");
+        List<Map> relultList = this.findListBySql(sql.toString(), param, Map.class);
+        return relultList;
+    }
+
+    public StringBuffer sumSql() {
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT DATE_FORMAT(DATE_ADD(u.end_time, INTERVAL 12 HOUR), '%Y-%m-%d') as dayTime,  SUM(u.peroid) as sumPeroid  from usetime u ");
+        sql.append(" WHERE 1=1 ");
+        return sql;
+    }
 }

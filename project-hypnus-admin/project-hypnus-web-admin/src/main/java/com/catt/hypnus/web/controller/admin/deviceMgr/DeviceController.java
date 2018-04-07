@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -204,7 +205,7 @@ public class DeviceController extends BaseController {
     @RequestMapping(value = "/getUseData", method = RequestMethod.POST)
     @ResponseBody
     public Map getUseData(String deviceId) {
-        Map useData = usetimeService.baseStatisticData(deviceId);
+        Map useData = usetimeService.baseStatisticData(deviceId, new Date());
         return useData;
     }
 

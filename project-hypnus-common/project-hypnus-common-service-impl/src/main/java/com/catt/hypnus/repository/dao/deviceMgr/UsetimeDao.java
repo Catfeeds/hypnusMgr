@@ -20,6 +20,7 @@ import java.util.Map;
 public interface UsetimeDao extends BaseDao<Usetime, Long> {
     /**
      * 分页查询使用记录
+     *
      * @param deviceId
      * @param startTime
      * @param endTime
@@ -30,6 +31,7 @@ public interface UsetimeDao extends BaseDao<Usetime, Long> {
 
     /**
      * 使用记录列表
+     *
      * @param deviceId
      * @param startTime
      * @param endTime
@@ -39,11 +41,22 @@ public interface UsetimeDao extends BaseDao<Usetime, Long> {
 
     /**
      * 日期查询使用记录
+     *
      * @param deviceId
      * @param startTime
      * @param endTime
      * @return
      */
     List<Map> findList(String deviceId, Date startTime, Date endTime);
+
+    /**
+     * 使用时长计算
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<Map> findSumPeroid(String deviceId, Date startTime, Date endTime);
 
 }

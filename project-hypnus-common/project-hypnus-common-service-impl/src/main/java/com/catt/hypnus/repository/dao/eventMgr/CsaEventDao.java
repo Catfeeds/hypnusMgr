@@ -4,6 +4,10 @@ package com.catt.hypnus.repository.dao.eventMgr;
 import com.catt.common.base.repository.dao.BaseDao;
 import com.catt.hypnus.repository.entity.eventMgtr.CsaEvent;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 /**
  * csa_eventDao接口
  * 
@@ -12,5 +16,14 @@ import com.catt.hypnus.repository.entity.eventMgtr.CsaEvent;
  * @version V1.0
  */
 public interface CsaEventDao extends BaseDao<CsaEvent, Long> {
+
+    /**
+     * 统计呼吸暂停事件
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<Map> findCsaEventByDeviceId(String deviceId, Date startTime, Date endTime);
 
 }

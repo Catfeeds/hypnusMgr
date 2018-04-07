@@ -53,11 +53,19 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 $(".xw_setPie").click(function () {
                     $(".xw_topTab li").removeClass("on");
                     $(this).addClass("on");
-                    debugger
                     if ($("#numLi").hasClass("on")) {
-                        EventHandler.writerData4Chart(staticData, '订单总数');
-                    } else {
-                        EventHandler.writerStaticData4Chart(graphics, '订单金额');
+                        EventHandler.writerData4Chart(staticData, '');
+                    } else if($("#staticLi").hasClass("on")) {
+                        EventHandler.writerStaticData4Chart(graphics, '');
+                    }
+                    else if($("#csaLi").hasClass("on")) {
+                        EventHandler.writerCsaData4Chart(graphics, '');
+                    }
+                    else if($("#csrLi").hasClass("on")) {
+                        EventHandler.writerCsrData4Chart(graphics, '');
+                    }
+                    else if($("#pbLi").hasClass("on")) {
+                        EventHandler.writerPbticData4Chart(graphics, '');
                     }
                 });
 
@@ -272,22 +280,22 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     }, {
                         left: 100,
                         right: 100,
-                        top: '39%',
+                        top: '36%',
                         height: '10%'
                     }, {
                         left: 100,
                         right: 100,
-                        top: '56%',
+                        top: '54%',
                         height: '10%'
                     }, {
                         left: 100,
                         right: 100,
-                        top: '73%',
+                        top: '67%',
                         height: '10%'
                     }, {
                         left: 100,
                         right: 100,
-                        top: '90%',
+                        top: '80%',
                         height: '10%'
                     }],
                     xAxis: [
@@ -462,8 +470,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     grid: {
                         left: '3%',
                         right: '4%',
-                        top: '3%',
-                        height: '10%',
+                        top: '10%',
                         containLabel: true
                     },
                     xAxis: [
@@ -487,6 +494,175 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                             name: 'HI',
                             type: 'bar',
                             data: yHypopneaData
+                        }
+                    ]
+                };
+                chart.setOption(option, true);
+                chart.hideLoading();
+            },
+            writerCsaData4Chart: function (data, title) {
+                // 初始化报表
+                var chart = echarts.init($("#container_dingdan")[0]);
+
+                var csa = data.csa;
+
+                //时间轴数据
+                var xData = csa.dateList;
+
+                var yCsaData = csa.eventList;
+
+                chart.showLoading({
+                    text: "正在拼命加载中...",
+                    x: "center",
+                    y: "center",
+                    textStyle: {
+                        fontSize: 20
+                    },
+                    effect: "bubble"
+                });
+                var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: ['CSA']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        top: '10%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: xData
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'CSA',
+                            type: 'bar',
+                            data: yCsaData
+                        }
+                    ]
+                };
+                chart.setOption(option, true);
+                chart.hideLoading();
+            },
+            writerCsrData4Chart: function (data, title) {
+                // 初始化报表
+                var chart = echarts.init($("#container_dingdan")[0]);
+
+                var csr = data.csr;
+                //时间轴数据
+                var xData = csr.dateList;
+                var yCsrData = csr.eventList;
+
+                chart.showLoading({
+                    text: "正在拼命加载中...",
+                    x: "center",
+                    y: "center",
+                    textStyle: {
+                        fontSize: 20
+                    },
+                    effect: "bubble"
+                });
+                var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: ['CSR']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        top: '10%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: xData
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'CSR',
+                            type: 'bar',
+                            data: yCsrData
+                        }
+                    ]
+                };
+                chart.setOption(option, true);
+                chart.hideLoading();
+            },
+            writerPbticData4Chart: function (data, title) {
+                // 初始化报表
+                var chart = echarts.init($("#container_dingdan")[0]);
+
+                var pb = data.pb;
+                //时间轴数据
+                var xData = pb.dateList;
+                var yPbData = pb.eventList;
+                chart.showLoading({
+                    text: "正在拼命加载中...",
+                    x: "center",
+                    y: "center",
+                    textStyle: {
+                        fontSize: 20
+                    },
+                    effect: "bubble"
+                });
+                var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: ['PB']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        top: '10%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: xData
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'PB',
+                            type: 'bar',
+                            data: yPbData
                         }
                     ]
                 };

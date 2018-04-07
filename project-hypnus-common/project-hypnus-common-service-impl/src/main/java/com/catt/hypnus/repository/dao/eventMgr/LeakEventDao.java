@@ -4,6 +4,10 @@ package com.catt.hypnus.repository.dao.eventMgr;
 import com.catt.common.base.repository.dao.BaseDao;
 import com.catt.hypnus.repository.entity.eventMgtr.LeakEvent;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 /**
  * leak_eventDao接口
  * 
@@ -12,5 +16,7 @@ import com.catt.hypnus.repository.entity.eventMgtr.LeakEvent;
  * @version V1.0
  */
 public interface LeakEventDao extends BaseDao<LeakEvent, Long> {
+
+    List<Map> findLeakEventByDeviceId(String deviceId, Date startTime, Date endTime);
 
 }

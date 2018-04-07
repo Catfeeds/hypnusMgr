@@ -21,6 +21,7 @@ public class Usetime extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
     public static final int FIVE_MINUTES_TIME = 1000 * 60 * 5 / 80;
+    public static final int ONE_Hour_TIME = 1000 * 60 * 60 / 80;
 
 
     /**

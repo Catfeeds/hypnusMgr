@@ -18,11 +18,22 @@ import java.util.Map;
 public interface ApneaEventDao extends BaseDao<ApneaEvent, Long> {
     /**
      * 统计呼吸暂停事件
+     *
      * @param deviceId
      * @param startTime
      * @param endTime
      * @return
      */
     List<Map> findApneaEventByDeviceId(String deviceId, Date startTime, Date endTime);
+
+    /**
+     * 呼吸暂停次数
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<Map> count(String deviceId, Date startTime, Date endTime);
 
 }

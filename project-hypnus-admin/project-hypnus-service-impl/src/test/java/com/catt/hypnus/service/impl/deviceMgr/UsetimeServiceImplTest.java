@@ -10,6 +10,7 @@ import com.catt.hypnus.service.impl.util.DateTimeUtil;
 import org.junit.Test;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -37,19 +38,20 @@ public class UsetimeServiceImplTest extends SpringTest {
 
     @Test
     public void findListByDay() throws Exception {
-        List<Map> usetimeList = usetimeService.findListByDay("393035393436470B0039002A");
+        List<Map> usetimeList = usetimeService.findListByDay("393035393436470B0039002A",new Date());
         System.out.println(usetimeList.size());
     }
 
     @Test
     public void baseStatisticData() throws Exception {
-        Map map = usetimeService.baseStatisticData("393035393436470B0039002A");
+        Map map = usetimeService.baseStatisticData("393035393436470B0039002A",new Date());
         System.out.println(map.isEmpty());
     }
 
+
     @Test
     public void getEventData() throws Exception {
-        Map map = usetimeService.getEventData("393035393436470B0039002A",null,null);
+        Map map = usetimeService.getEventData("CP70100505S",null,null);
         System.out.println(map.isEmpty());
     }
     @Test

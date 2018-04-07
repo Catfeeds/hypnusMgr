@@ -4,6 +4,10 @@ package com.catt.hypnus.repository.dao.eventMgr;
 import com.catt.common.base.repository.dao.BaseDao;
 import com.catt.hypnus.repository.entity.eventMgtr.ApcpEvent;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 /**
  * apcp_eventDao接口
  * 
@@ -12,5 +16,7 @@ import com.catt.hypnus.repository.entity.eventMgtr.ApcpEvent;
  * @version V1.0
  */
 public interface ApcpEventDao extends BaseDao<ApcpEvent, Long> {
+
+    List<Map> findApcpEventByDeviceId(String deviceId, Date startTime, Date endTime);
 
 }

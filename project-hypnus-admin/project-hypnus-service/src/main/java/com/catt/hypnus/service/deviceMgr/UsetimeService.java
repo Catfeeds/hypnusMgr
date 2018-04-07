@@ -44,7 +44,7 @@ public interface UsetimeService {
      * @param deviceId
      * @return
      */
-    List<Map> findListByDay(String deviceId);
+    List<Map> findListByDay(String deviceId,Date today);
 
 
     /**
@@ -74,7 +74,7 @@ public interface UsetimeService {
      * @param deviceId
      * @return
      */
-    Map baseStatisticData(String deviceId);
+    Map baseStatisticData(String deviceId, Date today);
 
     /**
      * 呼吸事件等的统计数据
@@ -93,6 +93,8 @@ public interface UsetimeService {
      * @return
      */
     Map getHypopneaEventData(String deviceId, Date startTime, Date endTime);
+
+    Map getApneaData(String deviceId, Date startTime, Date endTime);
 
 }
 
