@@ -25,13 +25,13 @@
 <body>
 <div class="wrapper">
     <div class="positionNow">
-        <a>主页 &gt; </a><a>设备列表</a> &gt; <a style="color:#ff4d4d;">设备参数</a>
+        <a>主页 &gt; </a><a>设备列表</a> &gt; <a style="color:#ff4d4d;">统计数据</a>
     </div>
 
     <div class="userDetail">
         <input type="hidden" name="id" id="id" value="${fn:escapeXml(param.deviceId)}"/>
         <h1 class="tittle">
-            <span class="btnBlue" id="printBill">设置设备参数</span>
+            <span class="btnBlue" id="printBill">统计图形</span>
             设备信息
         </h1>
         <div class="activityMsn">

@@ -72,18 +72,18 @@
         <ul class="topTab xw_topTab">
             <input type="hidden" id="deviceId" value="${fn:escapeXml(param.deviceId)}"/>
             <input type="hidden" id="startTime" value="${fn:escapeXml(param.startTime)}"/>
-            <li class="on xw_setPie" id="numLi">详细图形</li>
-            <li class="xw_setPie" id="staticLi">AHI</li>
+            <li class="on xw_setPie" id="staticLi">AHI</li>
             <li class="xw_setPie" id="csaLi">CSA</li>
             <li class="xw_setPie" id="csrLi">CAR</li>
             <li class="xw_setPie" id="pbLi">PB</li>
+            <li class="xw_setPie" id="numLi">详细图形</li>
         </ul>
     </div>
     <div class="xw_showcontent" style="background:#fff;">
         <div class="chartsDiv" id="container_dingdan"></div>
     </div>
     <div class="xw_showcontent" style="background:#fff;">
-        <div class="chartsDiv" id="container_static"></div>
+        <div class="bottomDiv" id="container_static"></div>
     </div>
 </div>
 </body>
