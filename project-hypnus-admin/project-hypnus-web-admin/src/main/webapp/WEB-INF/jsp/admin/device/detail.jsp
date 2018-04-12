@@ -38,13 +38,13 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>设备型号：</td>
-                    <th id="machine"></th>
+                    <th id="model"></th>
                     <td>系统版本：</td>
-                    <th colspan="1" id="createDate"></th>
+                    <th colspan="1" id="data_version"></th>
                 </tr>
                 <tr>
                     <td>使用时间：</td>
-                    <th id="orderCode"></th>
+                    <th id="useTime"></th>
                 </tr>
             </table>
         </div>
@@ -58,24 +58,22 @@
                 <tr>
                     <td>工作模式：</td>
                     <th id="cure_model"></th>
-                    <td>设备参数：</td>
-                    <th id="data_version"></th>
                 </tr>
                 <tr>
                     <td>吸气压力：</td>
-                    <th ic="t_in_p"></th>
+                    <th id="presure1"></th>
                     <td>呼气压力：</td>
-                    <th id="t_ex_p"></th>
+                    <th id="presure2"></th>
                 </tr>
                 <tr>
                     <td>起始压力：</td>
-                    <th id="start_pressure"></th>
+                    <th id="startPressure"></th>
                     <td>延迟时间：</td>
-                    <th id="cure_delay"></th>
+                    <th id="cureDelay"></th>
                 </tr>
                 <tr>
                     <td>呼吸频率：</td>
-                    <th id="breath_rate"></th>
+                    <th id="breathRate"></th>
                     <td>上升斜坡：</td>
                     <th id="boostslope"></th>
                 </tr>
@@ -83,7 +81,7 @@
                     <td>下降斜坡：</td>
                     <th id="buckslope"></th>
                     <td>呼吸比：</td>
-                    <th id="breath_ratio"></th>
+                    <th id="breathRatio"></th>
                 </tr>
             </table>
         </div>
@@ -117,31 +115,26 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>总天数：</td>
-                    <th id="orderCode"></th>
+                    <th id="totalDays"></th>
                     <td>使用>=4小时天数：</td>
-                    <th id="createDate"></th>
+                    <th id="moreThan4HoursDays"></th>
                 </tr>
                 <tr>
                     <td>未使用天数：</td>
-                    <th></th>
-                    <td>总是用时间：</td>
-                    <th id="orderType"></th>
+                    <th id="noUseDays"></th>
+                    <td>总使用时间：</td>
+                    <th id="totalTimes"></th>
                 </tr>
-                <tr>
-                    <td>总天数：</td>
-                    <th id="orderCode"></th>
-                    <td>使用>=4小时天数：</td>
-                    <th id="createDate"></th>
-                </tr>
+
                 <tr>
                     <td>使用<4小时天数：</td>
-                    <th></th>
+                    <th id="lessThan4HoursDays"></th>
                     <td>平均每天使用时长：</td>
-                    <th id="orderType"></th>
+                    <th id="averageUseTime"></th>
                 </tr>
                 <tr>
                     <td>使用>=4小时天数百分比：</td>
-                    <th></th>
+                    <th id="moreThan4HoursPercent"></th>
                 </tr>
             </table>
         </div>
