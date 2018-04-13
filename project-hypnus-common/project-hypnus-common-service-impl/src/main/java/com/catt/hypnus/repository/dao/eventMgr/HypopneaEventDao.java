@@ -17,6 +17,7 @@ import java.util.Map;
  */
 public interface HypopneaEventDao extends BaseDao<HypopneaEvent, Long> {
     List<Map> findHypopneaEventByDeviceId(String deviceId, Date startTime, Date endTime);
+    List<Map> count(String deviceId, String startTime, String endTime);
 
 
 }

@@ -34,6 +34,6 @@ public interface ApneaEventDao extends BaseDao<ApneaEvent, Long> {
      * @param endTime
      * @return
      */
-    List<Map> count(String deviceId, Date startTime, Date endTime);
+    List<Map> count(String deviceId, String startTime, String endTime);
 
 }

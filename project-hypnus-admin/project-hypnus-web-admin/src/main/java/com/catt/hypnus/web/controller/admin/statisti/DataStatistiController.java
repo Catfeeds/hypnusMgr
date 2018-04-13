@@ -3,7 +3,6 @@ package com.catt.hypnus.web.controller.admin.statisti;
 import com.catt.common.util.lang.DateUtil;
 import com.catt.common.web.controller.BaseController;
 import com.catt.hypnus.repository.data.comEnum.DateDimension;
-import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
 import com.catt.hypnus.service.deviceMgr.DeviceService;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
 import org.springframework.stereotype.Controller;
@@ -44,12 +43,6 @@ public class DataStatistiController extends BaseController {
      */
     @RequestMapping(value = "/index.html")
     public String toIndex(Model model, String deviceId, String startTime) {
-        Date now = new Date();
-        Date monthFirstDateTime = DateUtil.getMonthFirstDateTime(now);
-        model.addAttribute("createDateDay", DateUtil.format(monthFirstDateTime, DateUtil.yyyyMMdd));
-        model.addAttribute("endDateDay", DateUtil.format(now, DateUtil.yyyyMMdd));
-        model.addAttribute("createDateMonth", DateUtil.format(DateUtil.getCurrYearFirst(), "yyyy-MM"));
-        model.addAttribute("endDateMonth", DateUtil.format(now, "yyyy-MM"));
         model.addAttribute("deviceId", deviceId);
         model.addAttribute("startTime", startTime);
         return "/admin/statisti/data/index";
@@ -64,21 +57,30 @@ public class DataStatistiController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = {"/getDateFromOss"}, method = RequestMethod.POST)
-    public Map getDateFromOss(String deviceId, String startTime, DateDimension dateDimension) throws IOException {
-        return usetimeService.getDateFromOss(deviceId, startTime, Usetime.FIVE_MINUTES_TIME);
+    public Map getDateFromOss(String deviceId, DateDimension dateDimension) throws IOException {
+        String today = DateUtil.format(new Date(), DateUtil.yyyyMMdd);
+        return usetimeService.getDateFromOss(deviceId, today, today);
     }
 
     /**
      * 获取柱状图数据
      *
-     * @param endCreateDate 统计结束时间
      * @param dateDimension 统计周期
      * @return
      */
     @ResponseBody
     @RequestMapping(value = {"/getStaticData"}, method = RequestMethod.POST)
-    public Map getStaticData(String deviceId, Date endCreateDate, DateDimension dateDimension) {
-        return usetimeService.getEventData(deviceId, null, null);
+    public Map getStaticData(String deviceId, DateDimension dateDimension) {
+        String today = DateUtil.format(new Date(), DateUtil.yyyyMMdd);
+        if (dateDimension.equals(DateDimension.DAY)) {
+            return usetimeService.getEventData(deviceId, today, today);
+        } else if (dateDimension.equals(DateDimension.WEEK)) {
+            String weekBegin = DateUtil.format(DateUtil.addDays(new Date(), -7), DateUtil.yyyyMMdd);
+            return usetimeService.getEventData(deviceId, weekBegin, today);
+        } else {
+            String monthBegin = DateUtil.format(DateUtil.addDays(new Date(), -30), DateUtil.yyyyMMdd);
+            return usetimeService.getEventData(deviceId, monthBegin, today);
+        }
     }
 
 }

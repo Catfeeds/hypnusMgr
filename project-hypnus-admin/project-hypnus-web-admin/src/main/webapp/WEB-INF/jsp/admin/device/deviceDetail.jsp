@@ -33,7 +33,7 @@
     <div class="positionNow">主页 &gt; <a>设备列表</a>&gt;<a>设备参数设置</a></div>
     <div class="searchBar">
         <div class="searchBox">
-            <span class="searchName">默认工作模式：</span>
+            <span class="searchName" style="top: 50%;">默认工作模式：</span>
             <select class="workModeselectList">
                 <option value="1">CPAP</option>
                 <option value="2">BRAP-S</option>

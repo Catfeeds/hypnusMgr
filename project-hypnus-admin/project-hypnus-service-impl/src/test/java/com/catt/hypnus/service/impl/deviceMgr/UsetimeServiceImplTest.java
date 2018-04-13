@@ -6,7 +6,6 @@ import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
 import com.catt.hypnus.repository.form.deviceMgr.UsetimeForm;
 import com.catt.hypnus.service.SpringTest;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
-import com.catt.hypnus.service.impl.util.DateTimeUtil;
 import org.junit.Test;
 
 import javax.annotation.Resource;
@@ -38,25 +37,33 @@ public class UsetimeServiceImplTest extends SpringTest {
 
     @Test
     public void findListByDay() throws Exception {
-        List<Map> usetimeList = usetimeService.findListByDay("393035393436470B0039002A",new Date());
+        List<Map> usetimeList = usetimeService.findListByDay("393035393436470B0039002A", new Date());
         System.out.println(usetimeList.size());
     }
 
     @Test
     public void baseStatisticData() throws Exception {
-        Map map = usetimeService.baseStatisticData("393035393436470B0039002A",new Date());
+        Map map = usetimeService.baseStatisticData("393035393436470B0039002A", null,null);
         System.out.println(map.isEmpty());
     }
 
 
     @Test
     public void getEventData() throws Exception {
-        Map map = usetimeService.getEventData("CP70100505S",null,null);
+        Map map = usetimeService.getEventData("CP70100505S", null, null);
         System.out.println(map.isEmpty());
     }
+
+
+    @Test
+    public void findListByTimeStr() throws Exception {
+        List<Map> list = usetimeService.findListByTimeStr("CP70100505S", "2018-04-10", "2018-04-10");
+        System.out.println(list.size());
+    }
+
     @Test
     public void getHypopneaEventData() throws Exception {
-        Map map = usetimeService.getHypopneaEventData("3633383630355111003C0036",null,null);
+        Map map = usetimeService.getHypopneaEventData("3633383630355111003C0036", "2016-04-23", "2016-04-23");
         System.out.println(map.isEmpty());
     }
 
@@ -78,7 +85,7 @@ public class UsetimeServiceImplTest extends SpringTest {
 
     @Test
     public void getDateFromOss() throws Exception {
-        Map map = usetimeService.getDateFromOss("0a0a0a0a0b0b0b0b0c0c0c0c", "2018-01-31", DateTimeUtil.FIVE_MINUTES_TIME);
+        Map map = usetimeService.getDateFromOss("0a0a0a0a0b0b0b0b0c0c0c0c", "2018-01-31", "2018-01-31");
         System.out.println(map.isEmpty());
     }
 

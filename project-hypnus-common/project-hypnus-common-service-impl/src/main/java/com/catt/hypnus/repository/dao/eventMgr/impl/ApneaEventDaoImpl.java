@@ -45,7 +45,7 @@ public class ApneaEventDaoImpl extends BaseDaoImpl<ApneaEvent, Long>
         return sql;
     }
 
-    public List<Map> count(String deviceId, Date startTime, Date endTime) {
+    public List<Map> count(String deviceId, String startTime, String endTime) {
         StringBuffer sql = new StringBuffer();
         Map param = new HashMap<>();
         Map result = null;
@@ -54,8 +54,8 @@ public class ApneaEventDaoImpl extends BaseDaoImpl<ApneaEvent, Long>
             sql.append(" AND u.device_id = :deviceId ");
             param.put("deviceId", deviceId);
         }
-        if (startTime != null && endTime != null) {
-            sql.append(" AND (u.apnea_recordtime between :startTime ");
+        if (StringUtil.checkStr(startTime) && StringUtil.checkStr(endTime)) {
+            sql.append(" AND (DATE_FORMAT(DATE_ADD(u.apnea_recordtime, INTERVAL 12 HOUR), '%Y-%m-%d') between :startTime ");
             param.put("startTime", startTime);
             sql.append(" AND  :endTime )");
             param.put("endTime", endTime);

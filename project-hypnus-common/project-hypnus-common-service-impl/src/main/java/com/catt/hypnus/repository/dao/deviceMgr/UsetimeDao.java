@@ -49,6 +49,16 @@ public interface UsetimeDao extends BaseDao<Usetime, Long> {
      */
     List<Map> findList(String deviceId, Date startTime, Date endTime);
 
+
+    /**
+     * 统计数据中使用，全部提前12小时统计
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<Map> findListByTimeStr(String deviceId, String startTime, String endTime);
+
     /**
      * 使用时长计算
      *
@@ -57,6 +67,6 @@ public interface UsetimeDao extends BaseDao<Usetime, Long> {
      * @param endTime
      * @return
      */
-    List<Map> findSumPeroid(String deviceId, Date startTime, Date endTime);
+    List<Map> findSumPeroid(String deviceId, String startTime, String endTime);
 
 }

@@ -35,17 +35,20 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                         EventHandler.reset();
                     });
 
-                    $("#bindUser").click(function(){
+                    $("#bindUser").click(function () {
                         EventHandler.bindUser();
                     });
-                    $("#bindFactory").click(function(){
+                    $("#bindFactory").click(function () {
                         EventHandler.bindFactory();
                     });
-                    $("#unbindUser").click(function(){
+                    $("#unbindUser").click(function () {
                         EventHandler.unbindUser();
                     });
-                    $("#unbindFactory").click(function(){
+                    $("#unbindFactory").click(function () {
                         EventHandler.unbindFactory();
+                    });
+                    $("#paramSet").click(function () {
+                        EventHandler.paramSet();
                     });
 
                     //动态绑定click(动态生成的html)
@@ -93,7 +96,7 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     $("#factoryMobile").val("");
                 },
 
-                bindUser:function(){
+                bindUser: function () {
                     var checked = templateList.getChecked("dataList", "tr");
                     if (checked.length != 1 || checked[0].userId != "") {
                         msgBox.tips("请选择一台还未绑定用户的设备");
@@ -111,12 +114,13 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                         }
                     });
                 },
-                bindFactory:function(){
+                bindFactory: function () {
                     var checked = templateList.getChecked("dataList", "tr");
                     if (checked.length != 1 || checked[0].factoryId != "") {
                         msgBox.tips("请选择一台还未绑定经销商的设备");
                         return;
-                    };
+                    }
+                    ;
                     msgBox.exWindow.open({
                         title: '选择绑定经销商',
                         url: path + "/admin/deviceMgr/selectFactoryPage/" + checked[0].deviceId,
@@ -129,7 +133,7 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                         }
                     });
                 },
-                unbindUser:function(){
+                unbindUser: function () {
                     var checked = templateList.getChecked("dataList", "tr");
                     if (checked.length != 1 || checked[0].userId == "") {
                         msgBox.tips("请选择一台已经绑定了用户的设备进行操作");
@@ -141,13 +145,13 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                         callback: function (btnType) {
                             if (btnType == 'ok') {
                                 $.ajax({
-                                    type:"post",
-                                    url:path+"/admin/deviceMgr/unbindUser",
-                                    data:{"deviceId":checked[0].deviceId},
-                                    success:function(){
+                                    type: "post",
+                                    url: path + "/admin/deviceMgr/unbindUser",
+                                    data: {"deviceId": checked[0].deviceId},
+                                    success: function () {
                                         EventHandler.search();
                                     },
-                                    error:function(){
+                                    error: function () {
                                         msgBox.tips("操作失败");
                                     }
                                 })
@@ -155,31 +159,13 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                         }
                     });
                 },
-                unbindFactory:function(){
+                paramSet: function () {
                     var checked = templateList.getChecked("dataList", "tr");
-                    if (checked.length != 1 || checked[0].factoryId == "") {
-                        msgBox.tips("请选择一台已经绑定了经销商的设备进行操作");
+                    if (checked.length != 1 || checked[0].deviceId == "") {
+                        msgBox.tips("请选择一台设备");
                         return;
                     }
-                    msgBox.confirm({
-                        title: '提示',
-                        msg: '您确定要解除该设备绑定的经销商吗？',
-                        callback: function (btnType) {
-                            if (btnType == 'ok') {
-                                $.ajax({
-                                    type:"post",
-                                    url:path+"/admin/deviceMgr/unbindFactory",
-                                    data:{"deviceId":checked[0].deviceId},
-                                    success:function(){
-                                        EventHandler.search();
-                                    },
-                                    error:function(){
-                                        msgBox.tips("操作失败");
-                                    }
-                                })
-                            }
-                        }
-                    });
+                    window.location.href = path + '/admin/deviceMgr/paramSet.html?deviceId=' + checked[0].deviceId;
                 },
                 //审核
                 auditCus: function () {
@@ -187,7 +173,7 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     if (checked.length <= 0) {
                         msgBox.tips("请选择需要审核的用户");
                         return;
-                    }else if(checked.length > 1){
+                    } else if (checked.length > 1) {
                         msgBox.tips("一次只能审核一位用户");
                         return;
                     }

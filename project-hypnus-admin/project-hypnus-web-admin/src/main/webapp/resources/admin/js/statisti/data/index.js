@@ -33,10 +33,10 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         $("#MonthDiv").hide();
                         dateDimension = "DAY";
                         EventHandler.initAmountMoudle();
-                    } else if ("month" == $(this).attr("id")) {
+                    } else if ("week" == $(this).attr("id")) {
                         $("#dayDiv").hide();
                         $("#MonthDiv").show();
-                        dateDimension = "MONTH";
+                        dateDimension = "WEEK";
                         EventHandler.initAmountMoudle();
                     }
                 });
@@ -54,43 +54,22 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     $(".xw_topTab li").removeClass("on");
                     $(this).addClass("on");
                     if ($("#numLi").hasClass("on")) {
+                        $("#staticDiv").show();
+                        $("#aiDiv").hide();
+                        $("#csrDiv").hide();
+                        $("#csaDiv").hide();
+                        $("#pbDiv").hide();
                         EventHandler.writerData4Chart(staticData, '');
                     } else if ($("#staticLi").hasClass("on")) {
-                        if (graphics.length > 0) {
-                            EventHandler.writerStaticData4Chart(graphics, '');
-                        }
-                    }
-                    else if ($("#csaLi").hasClass("on")) {
-                        if (graphics.length > 0) {
-                            EventHandler.writerCsaData4Chart(graphics, '');
-                        }
-                    }
-                    else if ($("#csrLi").hasClass("on")) {
-                        if (graphics.length > 0) {
-                            EventHandler.writerCsrData4Chart(graphics, '');
-                        }
-                    }
-                    else if ($("#pbLi").hasClass("on")) {
-                        if (graphics.length > 0) {
-                            EventHandler.writerPbticData4Chart(graphics, '');
-                        }
+                        $("#staticDiv").hide();
+                        $("#aiDiv").show();
+                        $("#csrDiv").show();
+                        $("#csaDiv").show();
+                        $("#pbDiv").show();
+                        EventHandler.writeOtherData4Chart(graphics, '');
                     }
                 });
 
-                $("#amountInstructions").click(function () {
-                    layer.open({
-                        title: false,
-                        content: $("#amountContent").html(),
-                        area: ['710px', '260px']
-                    });
-                });
-                $("#numInstructions").click(function () {
-                    layer.open({
-                        title: false,
-                        content: $("#numContent").html(),
-                        area: ['500px', '200px']
-                    });
-                });
             },
 
             initData: function () {
@@ -101,59 +80,29 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
     /** 事件处理器 */
     var EventHandler = (function () {
         return {
-            //重置
-            reset: function () {
-                $("#createDateDay").val($("#createDateDayHidden").val());
-                $("#endDateDay").val($("#endDateDayHidden").val());
-                $("#day").click();
-            },
-            // 订单金额统计报表
+            // 详细图形数据
             initAmountMoudle: function () {
                 // 接口入参
                 var params = {};
-                // if (dateDimension == "DAY") {
-                //     if (!$("#createDateDay").val()) {
-                //         msgBox.tips("统计时间不能为空");
-                //         return;
-                //     }
-                //     if (!$("#endDateDay").val()) {
-                //         msgBox.tips("统计时间不能为空");
-                //         return;
-                //     }
-                //     params.startCreateDate = $("#createDateDay").val() + " 00:00:00";
-                //     params.endCreateDate = $("#endDateDay").val() + " 23:59:59";
-                // } else if (dateDimension == "MONTH") {
-                //     if (!$("#createDateMonth").val()) {
-                //         msgBox.tips("统计时间不能为空");
-                //         return;
-                //     }
-                //     if (!$("#endDateMonth").val()) {
-                //         msgBox.tips("统计时间不能为空");
-                //         return;
-                //     }
-                //     params.startCreateDate = $("#createDateMonth").val() + "-01 00:00:00";
-                //     params.endCreateDate = $("#endDateMonth").val();
-                // }
                 params.dateDimension = dateDimension;
                 params.deviceId = $("#deviceId").val();
                 params.startTime = $("#startTime").val();
-
+                DataHandler.getStaticData(params, function (result) {
+                    time = new Array(); // 横坐标，时间跨度
+                    graphics = result;
+                    if ($("#staticLi").hasClass("on")) {
+                        $("#staticDiv").hide();
+                        $("#aiDiv").show();
+                        $("#csrDiv").show();
+                        $("#csaDiv").show();
+                        $("#pbDiv").show();
+                        EventHandler.writeOtherData4Chart(graphics, '详细数据');
+                    }
+                });
                 DataHandler.getOrderAmountStat(params, function (result) {
                     time = new Array(); // 横坐标，时间跨度
                     staticData = new Array(); // 订单数量
                     staticData = result.pressure;
-                    if ($("#numLi").hasClass("on")) {
-                        EventHandler.writerData4Chart(staticData, '详细数据');
-                    }
-                });
-                DataHandler.getStaticData(params, function (result) {
-                    if (result.type == 'success') {
-                        time = new Array(); // 横坐标，时间跨度
-                        graphics = result;
-                        if ($("#staticLi").hasClass("on")) {
-                            EventHandler.writerStaticData4Chart(graphics, '详细数据');
-                        }
-                    }
                 });
             },
             // 报表
@@ -286,7 +235,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     }, {
                         left: 100,
                         right: 100,
-                        top: '36%',
+                        top: '39%',
                         height: '10%'
                     }, {
                         left: 100,
@@ -296,12 +245,12 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     }, {
                         left: 100,
                         right: 100,
-                        top: '67%',
+                        top: '70%',
                         height: '10%'
                     }, {
                         left: 100,
                         right: 100,
-                        top: '80%',
+                        top: '86%',
                         height: '10%'
                     }],
                     xAxis: [
@@ -377,13 +326,13 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         },
                         {
                             gridIndex: 4,
-                            name: 'Tidal Volume(mL)',
+                            name: 'Respiration Rate(Breaths/min)',
                             type: 'value',
                             inverse: false
                         },
                         {
                             gridIndex: 5,
-                            name: 'Tidal Volume(mL)',
+                            name: 'Minute Ventilation (L/min)',
                             type: 'value',
                             inverse: false
                         }
@@ -425,8 +374,8 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         {
                             name: 'Tidal Volume',
                             type: 'line',
-                            xAxisIndex: 3,
-                            yAxisIndex: 3,
+                            xAxisIndex: 4,
+                            yAxisIndex: 4,
                             symbolSize: 8,
                             hoverAnimation: false,
                             data: yData5
@@ -434,8 +383,8 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         {
                             name: 'Tidal Volume',
                             type: 'line',
-                            xAxisIndex: 3,
-                            yAxisIndex: 3,
+                            xAxisIndex: 5,
+                            yAxisIndex: 5,
                             symbolSize: 8,
                             hoverAnimation: false,
                             data: yData6
@@ -445,13 +394,22 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 chart.setOption(option, true);
                 chart.hideLoading();
             },
+            writeOtherData4Chart: function (data, title) {
+                EventHandler.writerStaticData4Chart(data);
+                EventHandler.writerCsaData4Chart(data);
+                EventHandler.writerCsrData4Chart(data);
+                EventHandler.writerPbticData4Chart(data);
+            },
             writerStaticData4Chart: function (data, title) {
                 // 初始化报表
-                var chart = echarts.init($("#container_dingdan")[0]);
-                debugger
+                var chart = echarts.init($("#container_ai")[0]);
                 var apnea = data.apnea;
                 var hypopnea = data.hypopnea;
                 //时间轴数据
+                if (apnea.dateList.length == 0) {
+                    msgBox.tips("无统计数据");
+                    return;
+                }
                 var xData = apnea.dateList;
                 var yApneaData = apnea.eventList;
                 var yHypopneaData = hypopnea.eventList;
@@ -478,6 +436,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         left: '3%',
                         right: '4%',
                         top: '10%',
+                        bottom: '10%',
                         containLabel: true
                     },
                     xAxis: [
@@ -509,10 +468,13 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
             },
             writerCsaData4Chart: function (data, title) {
                 // 初始化报表
-                var chart = echarts.init($("#container_dingdan")[0]);
+                var chart = echarts.init($("#container_csa")[0]);
 
                 var csa = data.csa;
-
+                if (csa.dateList.length == 0) {
+                    msgBox.tips("无统计数据");
+                    return;
+                }
                 //时间轴数据
                 var xData = csa.dateList;
 
@@ -541,6 +503,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         left: '3%',
                         right: '4%',
                         top: '10%',
+                        bottom: '10%',
                         containLabel: true
                     },
                     xAxis: [
@@ -567,9 +530,13 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
             },
             writerCsrData4Chart: function (data, title) {
                 // 初始化报表
-                var chart = echarts.init($("#container_dingdan")[0]);
+                var chart = echarts.init($("#container_csr")[0]);
 
                 var csr = data.csr;
+                if (csr.dateList.length == 0) {
+                    msgBox.tips("无统计数据");
+                    return;
+                }
                 //时间轴数据
                 var xData = csr.dateList;
                 var yCsrData = csr.eventList;
@@ -597,6 +564,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         left: '3%',
                         right: '4%',
                         top: '10%',
+                        bottom: '10%',
                         containLabel: true
                     },
                     xAxis: [
@@ -623,9 +591,13 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
             },
             writerPbticData4Chart: function (data, title) {
                 // 初始化报表
-                var chart = echarts.init($("#container_dingdan")[0]);
+                var chart = echarts.init($("#container_pb")[0]);
 
                 var pb = data.pb;
+                if (pb.dateList.length == 0) {
+                    msgBox.tips("无统计数据");
+                    return;
+                }
                 //时间轴数据
                 var xData = pb.dateList;
                 var yPbData = pb.eventList;
@@ -652,6 +624,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         left: '3%',
                         right: '4%',
                         top: '10%',
+                        bottom: '10%',
                         containLabel: true
                     },
                     xAxis: [

@@ -13,7 +13,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 initPage: function () {
                     var id = $('#id').val();
                     if (id) {
-                        EventHandler.getCusOrderDetail();
+                        // EventHandler.getCusOrderDetail();
                         EventHandler.getUseData();
                     }
                 },
@@ -21,6 +21,9 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 initEvent: function () {
                     $("#printBill").click(function () {
                         EventHandler.printBill();
+                    });
+                    $("#searchBtn").click(function () {
+                        EventHandler.getUseData();
                     });
 
                 },
@@ -124,7 +127,9 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 },
                 getUseData: function () {
                     DataHandler.getUseData({
-                        deviceId: $('#id').val()
+                        deviceId: $('#id').val(),
+                        startDate:$('#createDateDay').val(),
+                        endDate:$('#endDateDay').val()
                     }, function (shadowDevice) {
                         if (shadowDevice) {
                             $('#averagePresure1').html(shadowDevice.averagePresure1);

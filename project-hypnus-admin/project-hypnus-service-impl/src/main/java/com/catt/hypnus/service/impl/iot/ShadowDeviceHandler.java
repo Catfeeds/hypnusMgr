@@ -12,7 +12,7 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.catt.common.module.exception.pojo.BaseException;
 import com.catt.common.util.collections.MapUtil;
-import com.catt.hypnus.repository.entity.DeviceShadow;
+import com.catt.hypnus.repository.entity.userMgr.DeviceShadowDTO;
 import com.gci.common.util.lang.StringUtil;
 
 import java.beans.IntrospectionException;
@@ -30,7 +30,7 @@ public class ShadowDeviceHandler {
     private static String accessKey = "LTAI5hvCHzOiuJ3f";
     private static String accessSecret = "FByHanHd0WtP2NBJbUReztPhI5GWoA";
 
-    public static DeviceShadow getShadowDevice(String deviceName) throws ClientException, InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException {
+    public static Map getShadowDevice(String deviceName) throws ClientException, InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException {
         try {
             DefaultProfile.addEndpoint("cn-shanghai",
                     "cn-shanghai", "Iot", "iot.cn-shanghai.aliyuncs.com");
@@ -57,11 +57,12 @@ public class ShadowDeviceHandler {
         Map shadow = (Map) JSONObject.parse(shadowJSON);
         Map state = (Map) shadow.get("state");
         Map reported = (Map) state.get("reported");
-        DeviceShadow deviceShadow = (DeviceShadow) MapUtil.convertMap(DeviceShadow.class, reported);
-        return deviceShadow;
+//        DeviceShadow deviceShadow = (DeviceShadow) MapUtil.convertMap(DeviceShadow.class, reported);
+//        DeviceShadowDTO deviceShadow = (DeviceShadowDTO) MapUtil.convertMap(DeviceShadowDTO.class, reported);
+        return reported;
     }
 
-    public static boolean updateShadowDevice(DeviceShadow deviceShadow, String deviceName) throws ClientException, InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException {
+    public static boolean updateShadowDevice(DeviceShadowDTO deviceShadow, String deviceName) throws ClientException, InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException {
         try {
             DefaultProfile.addEndpoint("cn-shanghai",
                     "cn-shanghai", "Iot", "iot.cn-shanghai.aliyuncs.com");

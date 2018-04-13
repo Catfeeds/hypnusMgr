@@ -9,15 +9,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <%@include file="/common/headModule2.jsp" %>
+    <%@include file="/common/headModule.jsp" %>
     <title>设备参数</title>
+    <link type="text/css" rel="stylesheet" href="${path}/resources/css/public.css"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/css/common.css"/>
+    <link type="text/css" href="${path}/resources/css/timeChange.css" rel="stylesheet"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/css/activitiesDetail.css"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/css/activities_list.css"/>
     <link type="text/css" href="${path}/resources/css/addActivities.css" rel="stylesheet"/>
+
     <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
     <script src="${path}/resources/js/member.js" type="text/javascript"></script>
-
     <script src="${path}/resources/admin/js/device/detail.js" type="text/javascript"></script>
 
 </head>
@@ -27,11 +29,41 @@
     <div class="positionNow">
         <a>主页 &gt; </a><a>设备列表</a> &gt; <a style="color:#ff4d4d;">统计数据</a>
     </div>
+    <div class="searchBar">
+
+
+        <input type="hidden" id="createDateDayHidden" value="${createDateDay}"/>
+        <input type="hidden" id="endDateDayHidden" value="${endDateDay}"/>
+
+        <div class="searchitem" id="dayDiv">
+            <span>统计时间</span>
+            <input class="zjInput" type="text" style="width:140px;" id="createDateDay" value="${createDateDay}"
+                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'endDateDay\')||\'%y-%M-%d\'}', minDate:'#F{$dp.$D(\'endDateDay\', {d:-30})}'})"
+                   style="width: 180px;"/>
+            <span class="formText" style="margin:8px 5px 0; float:none;">~</span>
+            <input class="zjInput" type="text" style="width:140px;" id="endDateDay" value="${endDateDay}"
+                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'createDateDay\', {d:+30})||\'%y-%M-%d\'}', minDate:'#F{$dp.$D(\'createDateDay\')}'})"/>
+        </div>
+
+        <div class="searchitem" id="MonthDiv" style="display: none">
+            <span>统计时间</span>
+            <input class="zjInput" type="text" style="width:140px;" id="createDateMonth" value="${createDateMonth}"
+                   onclick="WdatePicker({dateFmt:'yyyy-MM', maxDate:'#F{$dp.$D(\'endDateMonth\')||\'%y-%M\'}', minDate:'#F{$dp.$D(\'endDateMonth\', {M:-12})}'})"
+                   style="width: 180px;"/>
+            <span class="formText" style="margin:8px 5px 0; float:none;">~</span>
+            <input class="zjInput" type="text" style="width:140px;" id="endDateMonth" value="${endDateMonth}"
+                   onclick="WdatePicker({dateFmt:'yyyy-MM', maxDate:'#F{$dp.$D(\'createDateMonth\', {M:+12})||\'%y-%M\'}', minDate:'#F{$dp.$D(\'createDateMonth\')}'})"/>
+        </div>
+
+        <input type="hidden" id="deviceId" value="${fn:escapeXml(param.deviceId)}"/>
+        <input type="hidden" id="startTime" value="${fn:escapeXml(param.startTime)}"/>
+        <span class="btnBlue" style="margin-left:5px;" id="printBill">统计图形</span>
+        <span class="btnRed" id="searchBtn">统计</span>
+    </div>
 
     <div class="userDetail">
         <input type="hidden" name="id" id="id" value="${fn:escapeXml(param.deviceId)}"/>
         <h1 class="tittle">
-            <span class="btnBlue" id="printBill">统计图形</span>
             设备信息
         </h1>
         <div class="activityMsn">
@@ -41,10 +73,6 @@
                     <th id="machine"></th>
                     <td>系统版本：</td>
                     <th colspan="1" id="createDate"></th>
-                </tr>
-                <tr>
-                    <td>使用时间：</td>
-                    <th id="orderCode"></th>
                 </tr>
             </table>
         </div>

@@ -44,4 +44,32 @@ public class HypopneaEventDaoImpl extends BaseDaoImpl<HypopneaEvent, Long>
 		return sql;
 	}
 
+	public List<Map> count(String deviceId, String startTime, String endTime) {
+		StringBuffer sql = new StringBuffer();
+		Map param = new HashMap<>();
+		Map result = null;
+		sql.append(sumSql());
+		if (StringUtil.isNotBlank(deviceId)) {
+			sql.append(" AND u.device_id = :deviceId ");
+			param.put("deviceId", deviceId);
+		}
+		if (StringUtil.checkStr(startTime) && StringUtil.checkStr(endTime)) {
+			sql.append(" AND (DATE_FORMAT(DATE_ADD(u.hypopnea_recordtime, INTERVAL 12 HOUR), '%Y-%m-%d') between :startTime ");
+			param.put("startTime", startTime);
+			sql.append(" AND  :endTime )");
+			param.put("endTime", endTime);
+		}
+
+		sql.append(" GROUP BY DATE_FORMAT(DATE_ADD(u.hypopnea_recordtime, INTERVAL 12 HOUR), '%Y-%m-%d')");
+		List<Map> relultList = this.findListBySql(sql.toString(), param, Map.class);
+		return relultList;
+	}
+
+	public StringBuffer sumSql() {
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT DATE_FORMAT(DATE_ADD(u.hypopnea_recordtime, INTERVAL 12 HOUR), '%Y-%m-%d') as dayTime,  count(u.hypopnea_id) as count  from HYPOPNEA_EVENT u ");
+		sql.append(" WHERE 1=1 ");
+		return sql;
+	}
+
 }
