@@ -197,6 +197,7 @@ public class DeviceController extends BaseController {
             IntrospectionException, InstantiationException, IllegalAccessException, ClientException {
         Map deviceShadow = deviceService.getShadowDevice(deviceId);
         return deviceShadow;
+        //test
     }
 
     /**
