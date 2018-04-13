@@ -271,7 +271,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 // },
 
 
-                //设置设备参数
+                //设置设备参数 统计图形
                 printBill: function () {
                     var deviceId = $('#id').val();
                     window.location.href = path + '/admin/statisti/data/index.html?deviceId=' + deviceId;
