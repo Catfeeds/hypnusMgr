@@ -45,12 +45,10 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
             sql.append(" AND t.device_id = :deviceId ");
             param.put("deviceId", deviceId);
         }
-        if (StringUtil.isNotBlank(startTime)) {
-            sql.append(" AND t.record_time >= :startTime ");
+        if (startTime != null && endTime != null) {
+            sql.append(" AND (DATE_FORMAT(DATE_ADD(t.end_time, INTERVAL 12 HOUR), '%Y-%m-%d') BETWEEN :startTime ");
             param.put("startTime", startTime);
-        }
-        if (StringUtil.isNotBlank(endTime)) {
-            sql.append(" AND t.record_time <= :endTime ");
+            sql.append(" AND  :endTime )");
             param.put("endTime", endTime);
         }
         sql.append(" order by t.record_time asc");
@@ -75,6 +73,24 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         return this.findListBySql(sql.toString(), param, Map.class);
     }
 
+    public List<Map> findListByTimeStr(String deviceId, String startTime, String endTime) {
+        StringBuffer sql = new StringBuffer();
+        Map param = new HashMap<>();
+        sql.append(baseSql());
+        if (StringUtil.isNotBlank(deviceId)) {
+            sql.append(" AND t.device_id = :deviceId ");
+            param.put("deviceId", deviceId);
+        }
+        if (StringUtil.checkStr(startTime)&&StringUtil.checkStr(endTime)) {
+            sql.append(" AND (DATE_FORMAT(DATE_SUB(t.end_time, INTERVAL 12 HOUR), '%Y-%m-%d') BETWEEN :startTime ");
+            param.put("startTime", startTime);
+            sql.append(" AND  :endTime )");
+            param.put("endTime", endTime);
+        }
+        sql.append(" ORDER by t.end_time asc");
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
     public StringBuffer baseSql() {
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT t.device_id as deviceId,t.starttime,t.end_time as endTime,t.mode,t.breathrate_pos as breathratePos,t.breath_fit as breathFit,t.breath_rate as breathRate,");
@@ -85,7 +101,14 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         return sql;
     }
 
-    public List<Map> findSumPeroid(String deviceId, Date startTime, Date endTime) {
+    /**
+     * 周期中使用，时间全部延后12小时
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public List<Map> findSumPeroid(String deviceId, String startTime, String endTime) {
         StringBuffer sql = new StringBuffer();
         Map param = new HashMap<>();
         Map result = null;
@@ -95,7 +118,7 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
             param.put("deviceId", deviceId);
         }
         if (startTime != null && endTime != null) {
-            sql.append(" AND (u.end_time between :startTime ");
+            sql.append(" AND (DATE_FORMAT(DATE_ADD(u.end_time, INTERVAL 12 HOUR), '%Y-%m-%d') BETWEEN :startTime ");
             param.put("startTime", startTime);
             sql.append(" AND  :endTime )");
             param.put("endTime", endTime);

@@ -56,6 +56,15 @@ public interface UsetimeService {
     Page<Usetime> findPage(Pageable pageable, UsetimeForm usetimeForm);
 
     /**
+     * 统计数据使用，提前12小时
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<Map> findListByTimeStr(String deviceId, String startTime, String endTime);
+
+    /**
      * 查询使用记录
      *
      * @param deviceId
@@ -66,7 +75,7 @@ public interface UsetimeService {
      */
     Page<Map> findPageMap(String deviceId, String startTime, String endTime, Pageable pageable);
 
-    Map getDateFromOss(String deviceId, String startTime, int timeType) throws IOException;
+    Map getDateFromOss(String deviceId, String startTime, String endTime) throws IOException;
 
     /**
      * 使用记录数据统计
@@ -74,7 +83,7 @@ public interface UsetimeService {
      * @param deviceId
      * @return
      */
-    Map baseStatisticData(String deviceId, Date today);
+    Map baseStatisticData(String deviceId, String startTime, String endTime);
 
     /**
      * 呼吸事件等的统计数据
@@ -83,7 +92,7 @@ public interface UsetimeService {
      * @param endTime
      * @return
      */
-    Map getEventData(String deviceId, Date startTime, Date endTime);
+    Map getEventData(String deviceId, String startTime, String endTime);
 
     /**
      * AH事件统计
@@ -92,9 +101,9 @@ public interface UsetimeService {
      * @param endTime
      * @return
      */
-    Map getHypopneaEventData(String deviceId, Date startTime, Date endTime);
+    Map getHypopneaEventData(String deviceId, String startTime, String endTime);
 
-    Map getApneaData(String deviceId, Date startTime, Date endTime);
+    Map getApneaData(String deviceId, String startTime, String endTime);
 
 }
 

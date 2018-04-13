@@ -9,5 +9,5 @@ package com.catt.hypnus.repository.data.comEnum;
  * @date 2016/10/17
  */
 public enum DateDimension {
-    DAY, MONTH, YEAR
+    DAY, WEEK, MONTH, YEAR
 }

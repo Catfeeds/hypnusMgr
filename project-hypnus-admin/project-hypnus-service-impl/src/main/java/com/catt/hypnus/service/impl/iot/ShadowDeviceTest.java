@@ -1,10 +1,10 @@
 package com.catt.hypnus.service.impl.iot;
 
 import com.aliyuncs.exceptions.ClientException;
-import com.catt.hypnus.repository.entity.DeviceShadow;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 /**
  * @author: lzb
@@ -13,11 +13,11 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class ShadowDeviceTest {
     public static void main(String[] args) throws ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        DeviceShadow shadow = ShadowDeviceHandler.getShadowDevice("363338363035511100390036");
-        System.out.println(shadow.getAi_alarm());
-        shadow.setAi_alarm(1);
-        ShadowDeviceHandler.updateShadowDevice(shadow,"363338363035511100390036");
+        Map shadow = ShadowDeviceHandler.getShadowDevice("363338363035511100390036");
+//        System.out.println(shadow.getAi_alarm());
+//        shadow.setAi_alarm("1");
+//        ShadowDeviceHandler.updateShadowDevice(shadow,"363338363035511100390036");
         shadow = ShadowDeviceHandler.getShadowDevice("363338363035511100390036");
-        System.out.println(shadow.getAi_alarm());
+//        System.out.println(shadow.getAi_alarm());
     }
 }

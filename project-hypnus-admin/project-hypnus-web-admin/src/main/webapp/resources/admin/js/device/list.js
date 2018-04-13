@@ -32,6 +32,9 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                     $('#reset').click(function () {
                         EventHandler.reset();
                     });
+                    $("#paramSet").click(function () {
+                        EventHandler.paramSet();
+                    });
                     //动态绑定click(动态生成的html)
                     $("#dataList").on('click', '.xw_tick', templateList.check);
 
@@ -71,6 +74,14 @@ seajs.use(['$', 'template', 'msgBox', 'util', 'pageBar', 'jquery.json'],
                 //重置
                 reset: function () {
                     $("#snId").val("");
+                },
+                paramSet: function () {
+                    var checked = templateList.getChecked("dataList", "tr");
+                    if (checked.length != 1 || checked[0].deviceId == "") {
+                        msgBox.tips("请选择一台设备");
+                        return;
+                    }
+                    window.location.href = path + '/admin/deviceMgr/paramSet.html?deviceId=' + checked[0].deviceId;
                 },
             }
         }();

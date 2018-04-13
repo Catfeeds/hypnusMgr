@@ -25,6 +25,7 @@
         </div>
 
         <div class="resultBar">
+            <span class="btnBlue" style="margin-left:6px;" id="paramSet">设置参数</span>
            <%-- <span class="btnRed" style="margin-left:6px;" id="unbindUser">解绑用户</span>
             <span class="btnRed" style="margin-left:6px;" id="unbindFactory">解绑经销商</span>
             <span class="btnGrey" style="margin-left:6px;" id="bindUser">绑定用户</span>

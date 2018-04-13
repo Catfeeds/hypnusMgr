@@ -10,10 +10,10 @@ import com.catt.hypnus.repository.dao.deviceMgr.BindLogInfoDao;
 import com.catt.hypnus.repository.dao.deviceMgr.DeviceDao;
 import com.catt.hypnus.repository.dao.factoryMgr.FactoryInfoDao;
 import com.catt.hypnus.repository.dao.userMgr.UserInfoDao;
-import com.catt.hypnus.repository.entity.DeviceShadow;
 import com.catt.hypnus.repository.entity.deviceMgr.BindLogInfo;
 import com.catt.hypnus.repository.entity.deviceMgr.Device;
 import com.catt.hypnus.repository.entity.factoryMgr.FactoryInfo;
+import com.catt.hypnus.repository.entity.userMgr.DeviceShadowDTO;
 import com.catt.hypnus.repository.entity.userMgr.UserInfo;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
 import com.catt.hypnus.service.deviceMgr.DeviceService;
@@ -130,12 +130,12 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
 
-    public DeviceShadow getShadowDevice(String deviceName) throws ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        DeviceShadow shadow = ShadowDeviceHandler.getShadowDevice(deviceName);
+    public Map getShadowDevice(String deviceName) throws ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        Map shadow = ShadowDeviceHandler.getShadowDevice(deviceName);
         return shadow;
     }
 
-    public boolean updateShadowDevice(DeviceShadow shadow, String deviceName) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException, ClientException {
+    public boolean updateShadowDevice(DeviceShadowDTO shadow, String deviceName) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException, ClientException {
         return ShadowDeviceHandler.updateShadowDevice(shadow, deviceName);
     }
 }

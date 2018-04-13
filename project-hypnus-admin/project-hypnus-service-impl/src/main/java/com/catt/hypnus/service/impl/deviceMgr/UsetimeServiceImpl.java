@@ -21,6 +21,7 @@ import com.catt.hypnus.service.base.deviceMgr.UsetimeBaseService;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
 import com.gci.common.util.lang.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -103,6 +104,13 @@ public class UsetimeServiceImpl implements UsetimeService {
         return usetimeDao.findMapList(deviceId, startTime, endTime);
     }
 
+    /**
+     * 查询当天使用数据
+     *
+     * @param deviceId
+     * @param today
+     * @return
+     */
     public List<Map> findListByDay(String deviceId, Date today) {
         GregorianCalendar ca = new GregorianCalendar();
         Calendar cal = Calendar.getInstance();
@@ -131,6 +139,11 @@ public class UsetimeServiceImpl implements UsetimeService {
 
     }
 
+    public List<Map> findListByTimeStr(String deviceId, String startTime, String endTime) {
+        return usetimeDao.findListByTimeStr(deviceId, startTime, endTime);
+    }
+
+
     public Page<Usetime> findPage(Pageable pageable, UsetimeForm usetimeForm) {
         List<Filter> filters = new ArrayList<Filter>();
         if (StringUtil.checkStr(usetimeForm.getDeviceId())) {
@@ -147,7 +160,7 @@ public class UsetimeServiceImpl implements UsetimeService {
         return usetimeDao.findPage(deviceId, startTime, endTime, pageable);
     }
 
-    public Map getDateFromOss(String deviceId, String startTime, int timeType) throws IOException {
+    public Map getDateFromOss(String deviceId, String startTime, String endTime) throws IOException {
         Map map = new HashMap();
         /**
          * 1,数据库查询基础数据
@@ -155,23 +168,29 @@ public class UsetimeServiceImpl implements UsetimeService {
          * 3,从文件中读取数据
          * 4,组装数据
          */
-//        List<String> usetimeStrList = new ArrayList<>();
+        List<String> usetimeStrList = new ArrayList<>();
 //        List<String> packages = new ArrayList<>();
-//        List<Map> usetimeList = this.findMapList(deviceId, startTime, null);
-//        if (CollectionUtils.isEmpty(usetimeList)) {
-//            throw new BaseException("次设备无使用记录");
-//        }
-//        usetimeList.forEach(usetime -> {
-//            String start = usetime.getStarttime();
-//            usetimeStrList.add(start);
-//
-//        });
-        String keyPre = "";
-        if (StringUtil.checkStr(deviceId) && StringUtil.checkStr(startTime)) {
-            keyPre = deviceId + "/" + startTime + "/";
+        List<Map> usetimeList = this.findMapList(deviceId, startTime, endTime);
+        if (CollectionUtils.isEmpty(usetimeList)) {
+            throw new BaseException("设备无使用记录");
         }
-        List<String> fileList = OssDataHandler.listOfObject(keyPre);
-        if (CollectionUtils.isEmpty(fileList)) {
+
+        String startTimeStr = MapUtil.getString(usetimeList.get(0), "starttime");
+        usetimeList.forEach(usetime -> {
+            String start = MapUtil.getString(usetime, "starttime");
+            usetimeStrList.add(start);
+
+        });
+        List<String> fileLists = new ArrayList<>();
+        for (String str : usetimeStrList) {
+            String keyPre = "";
+            if (StringUtil.checkStr(deviceId) && StringUtil.checkStr(startTime)) {
+                keyPre = deviceId + "/" + str + "/";
+            }
+            List<String> fileList = OssDataHandler.listOfObject(keyPre);
+            fileLists.addAll(fileList);
+        }
+        if (CollectionUtils.isEmpty(fileLists)) {
             logger.info("OSS中无数据文件");
             throw BaseException.errorByErrInfo("OSS中无数据文件");
         }
@@ -181,36 +200,44 @@ public class UsetimeServiceImpl implements UsetimeService {
         short[] tvBytes = null;
         short[] brBytes = null;
         short[] biBytes = null;
-        for (String fileName : fileList) {
+
+        List<Short> pressureList = new ArrayList<>();
+        for (String fileName : fileLists) {
             if (fileName.contains("pressure.edf")) {
-                pressureBytes = OssDataHandler.getObjectData(fileName);
+                short[] temp = OssDataHandler.getObjectData(fileName);
+                pressureBytes = (short[]) ArrayUtils.addAll(pressureBytes, temp);
             }
             if (fileName.contains("flow.edf")) {
-                flowBytes = OssDataHandler.getObjectData2Byte(fileName);
+                byte[] temp = OssDataHandler.getObjectData2Byte(fileName);
+                flowBytes = (byte[]) ArrayUtils.addAll(flowBytes, temp);
             }
             if (fileName.contains("difleak.edf")) {
-                difleakBytes = OssDataHandler.getObjectData2Byte(fileName);
+                byte[] temp = OssDataHandler.getObjectData2Byte(fileName);
+                difleakBytes = (byte[]) ArrayUtils.addAll(difleakBytes, temp);
             }
             if (fileName.contains("tv.edf")) {
-                tvBytes = OssDataHandler.getObjectData(fileName);
+                short[] temp = OssDataHandler.getObjectData(fileName);
+                tvBytes = (short[]) ArrayUtils.addAll(tvBytes, temp);
             }
             if (fileName.contains("br.edf")) {
-                brBytes = OssDataHandler.getObjectData(fileName);
+                short[] temp = OssDataHandler.getObjectData(fileName);
+                brBytes = (short[]) ArrayUtils.addAll(brBytes, temp);
             }
             if (fileName.contains("bi.edf")) {
-                biBytes = OssDataHandler.getObjectData(fileName);
+                short[] temp = OssDataHandler.getObjectData(fileName);
+                biBytes = (short[]) ArrayUtils.addAll(biBytes, temp);
             }
         }
         List presureList = new ArrayList<>();
         try {
             List<String> timeList = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-            String str = startTime + ".000";
-            for (int i = 0; i < timeType; i++) {
+            String str = startTimeStr + ".000";
+            for (int i = 0; i < 24 * 60; i++) {
                 Date dt = sdf.parse(str);
                 Calendar rightNow = Calendar.getInstance();
                 rightNow.setTime(dt);
-                rightNow.add(Calendar.MILLISECOND, 80);//周期为80毫秒
+                rightNow.add(Calendar.MILLISECOND, 60000);//周期为80毫秒
                 Date dt1 = rightNow.getTime();
                 String dt2 = DateUtil.format(dt1, "yyyy-MM-dd HH:mm:ss.SSS");
                 timeList.add(str);
@@ -251,8 +278,8 @@ public class UsetimeServiceImpl implements UsetimeService {
         return map;
     }
 
-    public Map baseStatisticData(String deviceId, Date today) {
-        List<Map> usetimeList = this.findListByDay(deviceId, today);
+    public Map baseStatisticData(String deviceId, String startTime, String endTime) {
+        List<Map> usetimeList = this.findListByTimeStr(deviceId, startTime, endTime);
         Map map = new HashMap();
         /**
          * 平均压力=压力1*时间1+压力2*时间2/时间1+时间2
@@ -365,25 +392,42 @@ public class UsetimeServiceImpl implements UsetimeService {
 
     }
 
-    public Map getEventData(String deviceId, Date startTime, Date endTime) {
+    public Map getEventData(String deviceId, String startTime, String endTime) {
         Map event = new HashMap();
         Map apnea = this.getApneaData(deviceId, startTime, endTime);
+        Map hypopnea = this.getHypopneaEventData(deviceId, startTime, endTime);
         event.put("apnea", apnea);
-        event.put("hypopnea", apnea);
+        event.put("hypopnea", hypopnea);
         event.put("csa", apnea);
         event.put("csr", apnea);
         event.put("pb", apnea);
         return event;
     }
 
-    public Map getApneaData(String deviceId, Date startTime, Date endTime) {
+    public Map getApneaData(String deviceId, String startTime, String endTime) {
         Map event = new HashMap();
         List<Map> usetimeList = usetimeDao.findSumPeroid(deviceId, startTime, endTime);
         List<Map<String, Double>> usetimeMapList = new ArrayList<>();
-        if (CollectionUtils.isEmpty(usetimeList)) {
-            throw BaseException.errorByErrInfo("无使用记录");
-        }
+        List<String> dateList = new ArrayList<>();
+        List<Double> eventList = new ArrayList<>();
         List<Map> apneaList = apneaEventDao.count(deviceId, startTime, endTime);
+        if (CollectionUtils.isEmpty(apneaList) || CollectionUtils.isEmpty(usetimeList)) {
+            if (startTime.equals(endTime)) {
+                dateList.add(startTime);
+                eventList.add(0.0);
+            } else {
+                Date startDate = DateUtil.parseDate(startTime);
+                for (int i = 0; i < 7; i++) {
+                    String currentDateStr = DateUtil.format(DateUtil.addDays(startDate, i), DateUtil.yyyyMMdd);
+                    dateList.add(currentDateStr);
+                    eventList.add(0.0);
+                }
+
+            }
+            event.put("dateList", dateList);
+            event.put("eventList", eventList);
+            return event;
+        }
         for (Map usetime : usetimeList) {
             String dayTime = MapUtil.getString(usetime, "dayTime");
             Double sumPeroid = MapUtil.getDouble(usetime, "sumPeroid");
@@ -391,8 +435,7 @@ public class UsetimeServiceImpl implements UsetimeService {
             usetimeMap.put(dayTime, sumPeroid);
             usetimeMapList.add(usetimeMap);
         }
-        List<String> dateList = new ArrayList<>();
-        List<Double> eventList = new ArrayList<>();
+
         for (Map<String, Double> usetimeMap : usetimeMapList) {
             if (CollectionUtils.isNotEmpty(apneaList)) {
                 for (Map apnea : apneaList) {
@@ -413,30 +456,55 @@ public class UsetimeServiceImpl implements UsetimeService {
 
     }
 
-    public Map getHypopneaEventData(String deviceId, Date startTime, Date endTime) {
-        Map hypopnea = new HashMap();
-        List<Map> apneaEventList = hypopneaEventDao.findHypopneaEventByDeviceId(deviceId, startTime, endTime);
+    public Map getHypopneaEventData(String deviceId, String startTime, String endTime) {
+        Map event = new HashMap();
+        List<Map> usetimeList = usetimeDao.findSumPeroid(deviceId, startTime, endTime);
+        List<Map<String, Double>> usetimeMapList = new ArrayList<>();
         List<String> dateList = new ArrayList<>();
         List<Double> eventList = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(apneaEventList)) {
-            for (Map apneaEvent : apneaEventList) {
-                Double apneaData = 0d;
-                String dayTime = MapUtil.getString(apneaEvent, "dayTime");
-                if (!StringUtil.checkStr(dayTime)) {
-                    break;
+        List<Map> apneaList = hypopneaEventDao.count(deviceId, startTime, endTime);
+        if (CollectionUtils.isEmpty(apneaList) || CollectionUtils.isEmpty(usetimeList)) {
+            if (startTime.equals(endTime)) {
+                dateList.add(startTime);
+                eventList.add(0.0);
+            } else {
+                Date startDate = DateUtil.parseDate(startTime);
+                for (int i = 0; i < 7; i++) {
+                    String currentDateStr = DateUtil.format(DateUtil.addDays(startDate, i), DateUtil.yyyyMMdd);
+                    dateList.add(currentDateStr);
+                    eventList.add(0.0);
                 }
-                Double apneaSum = MapUtil.getDouble(apneaEvent, "apneaSum");
-                Double peroidSum = MapUtil.getDouble(apneaEvent, "peroidSum") == null ? 0d : MapUtil.getDouble(apneaEvent, "peroidSum");
-                if (peroidSum != 0d) {
-                    apneaData = apneaSum / peroidSum;
+
+            }
+            event.put("dateList", dateList);
+            event.put("eventList", eventList);
+            return event;
+        }
+        for (Map usetime : usetimeList) {
+            String dayTime = MapUtil.getString(usetime, "dayTime");
+            Double sumPeroid = MapUtil.getDouble(usetime, "sumPeroid");
+            Map<String, Double> usetimeMap = new HashMap<>();
+            usetimeMap.put(dayTime, sumPeroid);
+            usetimeMapList.add(usetimeMap);
+        }
+
+        for (Map<String, Double> usetimeMap : usetimeMapList) {
+            if (CollectionUtils.isNotEmpty(apneaList)) {
+                for (Map apnea : apneaList) {
+                    String dayTime = MapUtil.getString(apnea, "dayTime");
+                    Double count = MapUtil.getDouble(apnea, "count");
+                    if (usetimeMap.containsKey(dayTime)) {
+                        Double sumPeroid = usetimeMap.get(dayTime);
+                        Double result = count / sumPeroid * 3600;
+                        dateList.add(dayTime);
+                        eventList.add(result);
+                    }
                 }
-                dateList.add(dayTime);
-                eventList.add(apneaData);
             }
         }
-        hypopnea.put("dateList", dateList);
-        hypopnea.put("eventList", eventList);
-        return hypopnea;
+        event.put("dateList", dateList);
+        event.put("eventList", eventList);
+        return event;
     }
 
     public Map getCsaEventData(String deviceId, Date startTime, Date endTime) {
