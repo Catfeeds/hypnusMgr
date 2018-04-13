@@ -37,7 +37,12 @@
 统计图
  */
 .chartsDiv{
-	height:800px;
+	height:1200px;
+	border-radius:8px;
+	margin-top:10px;
+	background:#fff;}
+.bottomDiv{
+	height:30px;
 	border-radius:8px;
 	margin-top:10px;
 	background:#fff;}

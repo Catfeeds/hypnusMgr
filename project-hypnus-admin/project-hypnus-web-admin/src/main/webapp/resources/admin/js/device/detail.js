@@ -140,7 +140,8 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 },
                 //设置设备参数
                 printBill: function () {
-                    window.location.href = path + '/admin/deviceMgr/paramSet.html';
+                    var deviceId = $('#id').val();
+                    window.location.href = path + '/admin/statisti/data/index.html?deviceId=' + deviceId;
                 },
 
             };

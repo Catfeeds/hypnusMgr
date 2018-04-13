@@ -3,7 +3,7 @@ var dateDimension = "DAY";
 seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
     var time; // 横坐标，时间跨度
     var staticData = new Array(); // 详细数据
-    var graphics // 详细数据
+    var graphics = {}; // 详细数据
 
     /** 初始化处理器 */
     var InitHandler = (function () {
@@ -55,17 +55,25 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     $(this).addClass("on");
                     if ($("#numLi").hasClass("on")) {
                         EventHandler.writerData4Chart(staticData, '');
-                    } else if($("#staticLi").hasClass("on")) {
-                        EventHandler.writerStaticData4Chart(graphics, '');
+                    } else if ($("#staticLi").hasClass("on")) {
+                        if (graphics.length > 0) {
+                            EventHandler.writerStaticData4Chart(graphics, '');
+                        }
                     }
-                    else if($("#csaLi").hasClass("on")) {
-                        EventHandler.writerCsaData4Chart(graphics, '');
+                    else if ($("#csaLi").hasClass("on")) {
+                        if (graphics.length > 0) {
+                            EventHandler.writerCsaData4Chart(graphics, '');
+                        }
                     }
-                    else if($("#csrLi").hasClass("on")) {
-                        EventHandler.writerCsrData4Chart(graphics, '');
+                    else if ($("#csrLi").hasClass("on")) {
+                        if (graphics.length > 0) {
+                            EventHandler.writerCsrData4Chart(graphics, '');
+                        }
                     }
-                    else if($("#pbLi").hasClass("on")) {
-                        EventHandler.writerPbticData4Chart(graphics, '');
+                    else if ($("#pbLi").hasClass("on")) {
+                        if (graphics.length > 0) {
+                            EventHandler.writerPbticData4Chart(graphics, '');
+                        }
                     }
                 });
 
@@ -130,13 +138,6 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 params.deviceId = $("#deviceId").val();
                 params.startTime = $("#startTime").val();
 
-                // 初始化订单金额与订单总数
-                // DataHandler.getAmountNum(params, function(backData){
-                //     for(var key in backData){
-                //         $("#"+key).html(backData[key]);
-                //     }
-                // });
-
                 DataHandler.getOrderAmountStat(params, function (result) {
                     time = new Array(); // 横坐标，时间跨度
                     staticData = new Array(); // 订单数量
@@ -146,10 +147,12 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     }
                 });
                 DataHandler.getStaticData(params, function (result) {
-                    time = new Array(); // 横坐标，时间跨度
-                    graphics = result;
-                    if ($("#staticLi").hasClass("on")) {
-                        EventHandler.writerStaticData4Chart(graphics, '详细数据');
+                    if (result.type == 'success') {
+                        time = new Array(); // 横坐标，时间跨度
+                        graphics = result;
+                        if ($("#staticLi").hasClass("on")) {
+                            EventHandler.writerStaticData4Chart(graphics, '详细数据');
+                        }
                     }
                 });
             },
@@ -157,6 +160,9 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
             writerData4Chart: function (data, title) {
                 // 初始化报表
                 var chart = echarts.init($("#container_dingdan")[0]);
+                if (data.length == 0) {
+                    return;
+                }
 
                 //时间轴数据
                 var xData = data.map(function (item) {
@@ -442,6 +448,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
             writerStaticData4Chart: function (data, title) {
                 // 初始化报表
                 var chart = echarts.init($("#container_dingdan")[0]);
+                debugger
                 var apnea = data.apnea;
                 var hypopnea = data.hypopnea;
                 //时间轴数据
@@ -669,7 +676,6 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 chart.setOption(option, true);
                 chart.hideLoading();
             }
-
         };
     })();
 
