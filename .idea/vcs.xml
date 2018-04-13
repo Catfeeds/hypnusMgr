@@ -3,10 +3,5 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/project-hypnus-admin" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/project-hypnus-admin/project-hypnus-service-impl" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/project-hypnus-common" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/project-hypnus-common/project-hypnus-common-service-impl" vcs="svn" />
   </component>
 </project>

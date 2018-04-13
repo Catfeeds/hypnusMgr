@@ -6,8 +6,8 @@ import com.catt.common.base.pojo.search.Pageable;
 import com.catt.common.web.Message;
 import com.catt.common.web.controller.BaseController;
 import com.catt.common.web.spring.resolver.annotation.CurrentUser;
-import com.catt.hypnus.repository.entity.DeviceShadow;
 import com.catt.hypnus.repository.entity.deviceMgr.Device;
+import com.catt.hypnus.repository.entity.userMgr.DeviceShadowDTO;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
 import com.catt.hypnus.service.deviceMgr.DeviceService;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
@@ -22,7 +22,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -169,7 +168,7 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = "/updateShadowDevice", method = RequestMethod.POST)
     @ResponseBody
-    public Message updateShadowDevice(DeviceShadow deviceShadow, String deviceId) {
+    public Message updateShadowDevice(DeviceShadowDTO deviceShadow, String deviceId) {
         try {
             deviceService.updateShadowDevice(deviceShadow, deviceId);
             return Message.success();
@@ -193,9 +192,9 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = "/getShadowDevice", method = RequestMethod.POST)
     @ResponseBody
-    public DeviceShadow getShadowDevice(String deviceId) throws InvocationTargetException,
+    public Map getShadowDevice(String deviceId) throws InvocationTargetException,
             IntrospectionException, InstantiationException, IllegalAccessException, ClientException {
-        DeviceShadow deviceShadow = deviceService.getShadowDevice(deviceId);
+        Map deviceShadow = deviceService.getShadowDevice(deviceId);
         return deviceShadow;
     }
 
@@ -207,7 +206,7 @@ public class DeviceController extends BaseController {
     @RequestMapping(value = "/getUseData", method = RequestMethod.POST)
     @ResponseBody
     public Map getUseData(String deviceId) {
-        Map useData = usetimeService.baseStatisticData(deviceId, new Date());
+        Map useData = usetimeService.baseStatisticData(deviceId, "","");
         return useData;
     }
 
