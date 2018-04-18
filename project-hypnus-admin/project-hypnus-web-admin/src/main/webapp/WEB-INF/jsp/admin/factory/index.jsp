@@ -30,6 +30,7 @@
                 <tr>
                     <th width="40px"><div class="tickAll xw_tickAll"></div></th>
                     <th>经销商名称</th>
+                    <th>经销商ID</th>
                     <th>联系人</th>
                     <th>手机号码</th>
                     <th>邮箱</th>
@@ -50,6 +51,7 @@
         <tr>
             <td><span class="tick xw_tick"></span></td>
             <td>{{$value.name}}</td>
+            <td>{{$value.i_id}}</td>
             <td>{{$value.connector}}</td>
             <td>{{$value.phone}}</td>
             <td>{{$value.email}}</td>

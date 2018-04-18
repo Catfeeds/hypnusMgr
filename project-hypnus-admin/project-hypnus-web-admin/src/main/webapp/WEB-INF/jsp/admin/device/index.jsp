@@ -50,8 +50,8 @@
                     <th>绑定经销商名称</th>
                     <th>绑定经销商手机</th>
                     <th>出厂日期</th>
-                    <th>是否绑定经销商</th>
-                    <th>是否绑定用户</th>
+                    <%--<th>是否绑定经销商</th>--%>
+                    <%--<th>是否绑定用户</th>--%>
                 </tr>
                 <tbody id="dataList"></tbody>
             </table>
@@ -72,20 +72,20 @@
             <td>{{$value.name}}</td>
             <td>{{$value.phone}}</td>
             <td>{{$value.productDate}}</td>
-            <td>
-                {{if $value.factory_id == ''}}
-                <span class="bgRed">未绑定</span>
-                {{else}}
-                <span class="bgBlue">已绑定</span>
-                {{/if}}
-            </td>
-            <td>
-                {{if $value.cus_id == ''}}
-                <span class="bgRed">未绑定</span>
-                {{else}}
-                <span class="bgBlue">已绑定</span>
-                {{/if}}
-            </td>
+            <%--<td>--%>
+                <%--{{if $value.factory_id == ''}}--%>
+                <%--<span class="bgRed">未绑定</span>--%>
+                <%--{{else}}--%>
+                <%--<span class="bgBlue">已绑定</span>--%>
+                <%--{{/if}}--%>
+            <%--</td>--%>
+            <%--<td>--%>
+                <%--{{if $value.cus_id == ''}}--%>
+                <%--<span class="bgRed">未绑定</span>--%>
+                <%--{{else}}--%>
+                <%--<span class="bgBlue">已绑定</span>--%>
+                <%--{{/if}}--%>
+            <%--</td>--%>
             <input type="hidden" name="id" value="{{$value.i_id}}" param="param">
             <input type="hidden" name="deviceId" value="{{$value.device_id}}" param="param">
             <input type="hidden" name="factoryId" value="{{$value.factory_id}}" param="param">
