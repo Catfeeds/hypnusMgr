@@ -9,17 +9,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <%@include file="/common/headModule.jsp" %>
+    <%@include file="/common/headModule2.jsp" %>
     <title>设备参数</title>
-    <link type="text/css" rel="stylesheet" href="${path}/resources/css/public.css"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/css/common.css"/>
-    <link type="text/css" href="${path}/resources/css/timeChange.css" rel="stylesheet"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/css/activitiesDetail.css"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/css/activities_list.css"/>
     <link type="text/css" href="${path}/resources/css/addActivities.css" rel="stylesheet"/>
-
     <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
     <script src="${path}/resources/js/member.js" type="text/javascript"></script>
+
     <script src="${path}/resources/admin/js/device/detail.js" type="text/javascript"></script>
 
 </head>
@@ -29,50 +27,24 @@
     <div class="positionNow">
         <a>主页 &gt; </a><a>设备列表</a> &gt; <a style="color:#ff4d4d;">统计数据</a>
     </div>
-    <div class="searchBar">
-
-
-        <input type="hidden" id="createDateDayHidden" value="${createDateDay}"/>
-        <input type="hidden" id="endDateDayHidden" value="${endDateDay}"/>
-
-        <div class="searchitem" id="dayDiv">
-            <span>统计时间</span>
-            <input class="zjInput" type="text" style="width:140px;" id="createDateDay" value="${createDateDay}"
-                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'endDateDay\')||\'%y-%M-%d\'}', minDate:'#F{$dp.$D(\'endDateDay\', {d:-30})}'})"
-                   style="width: 180px;"/>
-            <span class="formText" style="margin:8px 5px 0; float:none;">~</span>
-            <input class="zjInput" type="text" style="width:140px;" id="endDateDay" value="${endDateDay}"
-                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'createDateDay\', {d:+30})||\'%y-%M-%d\'}', minDate:'#F{$dp.$D(\'createDateDay\')}'})"/>
-        </div>
-
-        <div class="searchitem" id="MonthDiv" style="display: none">
-            <span>统计时间</span>
-            <input class="zjInput" type="text" style="width:140px;" id="createDateMonth" value="${createDateMonth}"
-                   onclick="WdatePicker({dateFmt:'yyyy-MM', maxDate:'#F{$dp.$D(\'endDateMonth\')||\'%y-%M\'}', minDate:'#F{$dp.$D(\'endDateMonth\', {M:-12})}'})"
-                   style="width: 180px;"/>
-            <span class="formText" style="margin:8px 5px 0; float:none;">~</span>
-            <input class="zjInput" type="text" style="width:140px;" id="endDateMonth" value="${endDateMonth}"
-                   onclick="WdatePicker({dateFmt:'yyyy-MM', maxDate:'#F{$dp.$D(\'createDateMonth\', {M:+12})||\'%y-%M\'}', minDate:'#F{$dp.$D(\'createDateMonth\')}'})"/>
-        </div>
-
-        <input type="hidden" id="deviceId" value="${fn:escapeXml(param.deviceId)}"/>
-        <input type="hidden" id="startTime" value="${fn:escapeXml(param.startTime)}"/>
-        <span class="btnBlue" style="margin-left:5px;" id="printBill">统计图形</span>
-        <span class="btnRed" id="searchBtn">统计</span>
-    </div>
 
     <div class="userDetail">
         <input type="hidden" name="id" id="id" value="${fn:escapeXml(param.deviceId)}"/>
         <h1 class="tittle">
+            <span class="btnBlue" id="printBill">统计图形</span>
             设备信息
         </h1>
         <div class="activityMsn">
             <table class="activityMsnTable">
                 <tr>
                     <td>设备型号：</td>
-                    <th id="machine"></th>
+                    <th id="model"></th>
                     <td>系统版本：</td>
-                    <th colspan="1" id="createDate"></th>
+                    <th colspan="1" id="data_version"></th>
+                </tr>
+                <tr>
+                    <td>使用时间：</td>
+                    <th id="useTime"></th>
                 </tr>
             </table>
         </div>
@@ -86,24 +58,22 @@
                 <tr>
                     <td>工作模式：</td>
                     <th id="cure_model"></th>
-                    <td>设备参数：</td>
-                    <th id="data_version"></th>
                 </tr>
                 <tr>
                     <td>吸气压力：</td>
-                    <th ic="t_in_p"></th>
+                    <th id="presure1"></th>
                     <td>呼气压力：</td>
-                    <th id="t_ex_p"></th>
+                    <th id="presure2"></th>
                 </tr>
                 <tr>
                     <td>起始压力：</td>
-                    <th id="start_pressure"></th>
+                    <th id="startPressure"></th>
                     <td>延迟时间：</td>
-                    <th id="cure_delay"></th>
+                    <th id="cureDelay"></th>
                 </tr>
                 <tr>
                     <td>呼吸频率：</td>
-                    <th id="breath_rate"></th>
+                    <th id="breathRate"></th>
                     <td>上升斜坡：</td>
                     <th id="boostslope"></th>
                 </tr>
@@ -111,7 +81,7 @@
                     <td>下降斜坡：</td>
                     <th id="buckslope"></th>
                     <td>呼吸比：</td>
-                    <th id="breath_ratio"></th>
+                    <th id="breathRatio"></th>
                 </tr>
             </table>
         </div>
@@ -145,31 +115,26 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>总天数：</td>
-                    <th id="orderCode"></th>
+                    <th id="totalDays"></th>
                     <td>使用>=4小时天数：</td>
-                    <th id="createDate"></th>
+                    <th id="moreThan4HoursDays"></th>
                 </tr>
                 <tr>
                     <td>未使用天数：</td>
-                    <th></th>
-                    <td>总是用时间：</td>
-                    <th id="orderType"></th>
+                    <th id="noUseDays"></th>
+                    <td>总使用时间：</td>
+                    <th id="totalTimes"></th>
                 </tr>
-                <tr>
-                    <td>总天数：</td>
-                    <th id="orderCode"></th>
-                    <td>使用>=4小时天数：</td>
-                    <th id="createDate"></th>
-                </tr>
+
                 <tr>
                     <td>使用<4小时天数：</td>
-                    <th></th>
+                    <th id="lessThan4HoursDays"></th>
                     <td>平均每天使用时长：</td>
-                    <th id="orderType"></th>
+                    <th id="averageUseTime"></th>
                 </tr>
                 <tr>
                     <td>使用>=4小时天数百分比：</td>
-                    <th></th>
+                    <th id="moreThan4HoursPercent"></th>
                 </tr>
             </table>
         </div>

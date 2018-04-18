@@ -3,11 +3,11 @@ package com.catt.hypnus.web.controller.admin.deviceMgr;
 import com.aliyuncs.exceptions.ClientException;
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
-import com.catt.common.util.lang.DateUtil;
 import com.catt.common.web.Message;
 import com.catt.common.web.controller.BaseController;
 import com.catt.common.web.spring.resolver.annotation.CurrentUser;
-import com.catt.hypnus.repository.entity.DeviceShadow;
+import com.catt.hypnus.repository.entity.deviceMgr.Device;
+import com.catt.hypnus.repository.entity.userMgr.DeviceShadowDTO;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
 import com.catt.hypnus.service.deviceMgr.DeviceService;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,8 +59,7 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = {"/detail.html"}, method = RequestMethod.GET)
     public String toDetail(Model model, String deviceId) {
-        model.addAttribute("createDateDay", DateUtil.format(DateUtil.addDays(new Date(), -1), "yyyy-MM-dd"));
-        model.addAttribute("endDateDay", DateUtil.format(new Date(), "yyyy-MM-dd"));
+
         model.addAttribute("deviceId", deviceId);
         return "/admin/device/detail";
     }
@@ -169,9 +168,9 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = "/updateShadowDevice", method = RequestMethod.POST)
     @ResponseBody
-    public Message updateShadowDevice(DeviceShadow deviceShadow, String deviceId) {
+    public Message updateShadowDevice(DeviceShadowDTO deviceShadow, String deviceId) {
         try {
-//            deviceService.updateShadowDevice(deviceShadow, deviceId);
+            deviceService.updateShadowDevice(deviceShadow, deviceId);
             return Message.success();
         } catch (RuntimeException e) {
             return Message.error(e.getMessage());
@@ -197,28 +196,76 @@ public class DeviceController extends BaseController {
             IntrospectionException, InstantiationException, IllegalAccessException, ClientException {
         Map deviceShadow = deviceService.getShadowDevice(deviceId);
         return deviceShadow;
-        //test
     }
 
     /**
-     * 统计数据
+     * 获取统计数据页面的设备信息
      *
      * @param deviceId
      */
     @RequestMapping(value = "/getUseData", method = RequestMethod.POST)
     @ResponseBody
-    public Map getUseData(String deviceId, Date startDate, Date endDate) {
-        String startTime = DateUtil.format(startDate, DateUtil.yyyyMMdd);
-        String endTime = DateUtil.format(endDate, DateUtil.yyyyMMdd);
-        Map useData = usetimeService.baseStatisticData(deviceId, startTime,endTime);
+    public Map getUseData(String deviceId) {
+        Map useData = usetimeService.baseStatisticData(deviceId, "","");
         return useData;
     }
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 获取统计数据页面的设备信息
+     *
+     * @param deviceId
+     */
+    @RequestMapping(value = "/getStatisticsData", method = RequestMethod.POST)
+    @ResponseBody
+    public Device getStatisticsData(String deviceId){
+        Device device = deviceService.findDeviceByDeviceId(deviceId);
+        return device;
+    }
+
+
+
+    /**
+     * 获取统计数据页面的工作参数
+     *
+     * @param deviceId
+     */
+    @RequestMapping(value = "/getStatisticsDataWorkParam", method = RequestMethod.POST)
+    @ResponseBody
+    public Map getStatisticsDataWorkParam(String deviceId)  {
+
+        String startTime = "2018-04-11 17:28:44";
+        String endTime = "2018-04-11 18:02:51";
+
+        List<Map> usetimeServiceMapList = usetimeService.findMapList(deviceId,startTime,endTime);
+
+        Map testUseTime = usetimeServiceMapList.get(0);
+
+        return testUseTime;
+
+    }
+
+
+
+
+
+
+
+
 
     // 设备信息
     @Resource(name = "deviceServiceImpl")
     private DeviceService deviceService;
 
-    // 设备信息
+    // 使用时间信息
     @Resource(name = "usetimeServiceImpl")
     private UsetimeService usetimeService;
 
