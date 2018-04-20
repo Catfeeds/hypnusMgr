@@ -13,8 +13,12 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 initPage: function () {
                     var id = $('#id').val();
                     if (id) {
-                        EventHandler.getStatisticsData();
+                        EventHandler.getStatisticsDataDeviceInfo();
                         EventHandler.getStatisticsDataWorkParam();
+                        EventHandler.getStatisticsDataFromOSS();
+
+
+
                         EventHandler.getCusOrderDetail();
                         EventHandler.getUseData();
                     }
@@ -36,8 +40,8 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
             return {
 
                 //获取设备信息
-                getStatisticsData: function () {
-                    DataHandler.getStatisticsData({
+                getStatisticsDataDeviceInfo: function () {
+                    DataHandler.getStatisticsDataDeviceInfo({
                         deviceId: $('#id').val()
                     }, function (device) {
                         if (device) {
@@ -155,6 +159,30 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                             $('#lessThan4HoursDays').html(testUseTime.breathRatio);
                             $('#averageUseTime').html(testUseTime.breathRatio+"小时");
                             $('#moreThan4HoursPercent').html(testUseTime.breathRatio+"%");
+                        }
+                    });
+                },
+
+
+                //获取潮气量，分钟通气量，呼吸频率，呼吸比
+                getStatisticsDataFromOSS: function () {
+                    DataHandler.getStatisticsDataFromOSS({
+                        deviceId: $('#id').val()
+                    }, function (ossDataMap) {
+                        if (ossDataMap) {
+
+                            $('#fiftyPercentTV').html(ossDataMap.fiftyPercentTV);
+                            $('#ninetyPercentTV').html(ossDataMap.ninetyPercentTV);
+
+                            $('#fiftyPercentMV').html(ossDataMap.fiftyPercentMV+"  L/min");
+                            $('#ninetyPercentMV').html(ossDataMap.ninetyPercentMV+"  L/min");
+
+                            $('#fiftyPercentBR').html(ossDataMap.fiftyPercentBR);
+                            $('#ninetyPercentBR').html(ossDataMap.ninetyPercentBR);
+
+                            $('#fiftyPercentBP').html(ossDataMap.fiftyPercentBP);
+                            $('#ninetyPercentBP').html(ossDataMap.ninetyPercentBP);
+
                         }
                     });
                 },
@@ -287,8 +315,8 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                  * @param params
                  * @param callback
                  */
-                getStatisticsData: function (params, callback) {
-                    $.post(path + '/admin/deviceMgr/getStatisticsData', params, function (backData) {
+                getStatisticsDataDeviceInfo: function (params, callback) {
+                    $.post(path + '/admin/deviceMgr/getStatisticsDataDeviceInfo', params, function (backData) {
                         callback(backData);
                     });
                 },
@@ -300,6 +328,17 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                  */
                 getStatisticsDataWorkParam: function (params, callback) {
                     $.post(path + '/admin/deviceMgr/getStatisticsDataWorkParam', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 获取统计数据-潮气量，分钟通气量，呼吸频率，呼吸比，呼吸事件，漏气信息
+                 * @param params
+                 * @param callback
+                 */
+                getStatisticsDataFromOSS: function (params, callback) {
+                    $.post(path + '/admin/deviceMgr/getStatisticsDataFromOSS', params, function (backData) {
                         callback(backData);
                     });
                 },

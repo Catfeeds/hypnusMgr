@@ -52,6 +52,11 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
             param.put("endTime", endTime);
         }
         sql.append(" order by t.record_time asc");
+
+
+        System.out.println("小喇叭，就睇下你咩料："+sql.toString());
+
+
         return this.findListBySql(sql.toString(), param, Map.class);
     }
 
@@ -72,6 +77,62 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         sql.append(" order by t.record_time asc");
         return this.findListBySql(sql.toString(), param, Map.class);
     }
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 查询当天使用记录
+     *
+     * @param deviceId
+     * @param todayString
+     * @return
+     */
+    public List<Map> findListByToday(String deviceId,String todayString ) {
+        StringBuffer sql = new StringBuffer();
+        Map param = new HashMap<>();
+        sql.append(baseSql());
+        if (StringUtil.isNotBlank(deviceId)) {
+            sql.append(" AND t.device_id = :deviceId ");
+            param.put("deviceId", deviceId);
+        }
+        if (todayString != null) {
+            sql.append(" AND t.startTime = :startTime");
+            param.put("startTime", todayString);
+        }
+        sql.append(" order by t.record_time asc");
+
+
+        System.out.println("小喇叭！DAO的SQL：" + sql.toString());
+
+
+
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public List<Map> findListByTimeStr(String deviceId, String startTime, String endTime) {
         StringBuffer sql = new StringBuffer();
