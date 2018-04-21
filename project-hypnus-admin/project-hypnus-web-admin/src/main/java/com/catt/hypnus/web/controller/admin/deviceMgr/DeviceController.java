@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.beans.IntrospectionException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Map;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * <pre>
@@ -224,9 +226,9 @@ public class DeviceController extends BaseController {
      *
      * @param deviceId
      */
-    @RequestMapping(value = "/getStatisticsData", method = RequestMethod.POST)
+    @RequestMapping(value = "/getStatisticsDataDeviceInfo", method = RequestMethod.POST)
     @ResponseBody
-    public Device getStatisticsData(String deviceId){
+    public Device getStatisticsDataDeviceInfo(String deviceId){
         Device device = deviceService.findDeviceByDeviceId(deviceId);
         return device;
     }
@@ -242,18 +244,167 @@ public class DeviceController extends BaseController {
     @ResponseBody
     public Map getStatisticsDataWorkParam(String deviceId)  {
 
-        String startTime = "2018-04-11 17:28:44";
-        String endTime = "2018-04-11 18:02:51";
+//        String startTime = "2018-04-11 16:03:23";
+//        String endTime = "2018-04-11 16:03:27";
 
-        List<Map> usetimeServiceMapList = usetimeService.findMapList(deviceId,startTime,endTime);
+//        List<Map> usetimeServiceMapList = usetimeService.findMapList(deviceId,startTime,endTime);
 
-        Map testUseTime = usetimeServiceMapList.get(0);
+        Date day = new Date();
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+//        System.out.println("Controller打印时间："+df.format(day));
+
+
+        Date today = new Date();
+
+
+        List<Map> usetimeServiceMapList2 = usetimeService.findListByToday(deviceId,today);
+
+        Map testUseTime = usetimeServiceMapList2.get(0);
 
         return testUseTime;
 
     }
 
 
+
+    /**
+     * 获取统计数据页面的潮气量，分钟通气量，呼吸频率，呼吸比，呼吸事件，漏气信息
+     *
+     * @param deviceId
+     */
+    @RequestMapping(value = "/getStatisticsDataFromOSS", method = RequestMethod.POST)
+    @ResponseBody
+    public Map getStatisticsDataFromOSS(String deviceId) throws IOException {
+
+        System.out.println("正在努力从OSS中获取相关数据");
+
+        String startTime = "2018-04-12 14:00:00";
+        String endTime = "2018-04-13 18:13:13";
+
+
+        Map map = usetimeService.getDateFromOss(deviceId,startTime,endTime);
+        System.out.println("您获取的数据是：");
+        System.out.println(map);
+
+        List plist = (List) map.get("pressure");
+
+        int plistSize = plist.size();
+
+        //1.计算潮气量
+        //1.1.获取所有潮气量数值
+        List sortTVList = new ArrayList<>();
+
+        for(int i = 0; i < plistSize; i++){
+            List tvList = (List) plist.get(i);
+            short tvValue = (short) tvList.get(6);
+            sortTVList.add(tvValue);
+        }
+        //1.2.按照从小到大排列潮气量数值
+        Collections.sort(sortTVList);
+
+        //1.3.取50%与90%位置的数值
+
+        short fiftyPercentTV = (short) sortTVList.get((int) (plistSize*0.5));
+
+        short ninetyPercentTV = (short) sortTVList.get((int) (plistSize*0.9));
+
+
+        //2.计算分钟通气量
+        //2.1.获取所有吸气时长（BI）和呼吸频率（BR）数值
+        List sortMVList = new ArrayList<>();
+
+        for(int i = 0; i < plistSize; i++){
+            List mvList = (List) plist.get(i);
+            short biValue = (short) mvList.get(1);
+            byte brValue = (byte) mvList.get(2);
+            double mvValue = (double) (biValue*brValue);
+
+            DecimalFormat df = new DecimalFormat("0.0");
+            sortMVList.add(df.format(mvValue*0.001));
+        }
+        //2.2.按照从小到大排列分钟通气量数值
+        Collections.sort(sortMVList);
+
+        //2.3.取50%与90%位置的数值
+
+        String fiftyPercentMV = (String) sortMVList.get((int) (plistSize*0.5));
+
+        String ninetyPercentMV = (String) sortMVList.get((int) (plistSize*0.9));
+
+
+
+        //3.计算呼吸频率
+        //3.1.获取所有呼吸频率数值
+        List sortBRList = new ArrayList<>();
+
+        for(int i = 0; i < plistSize; i++){
+            List brList = (List) plist.get(i);
+            byte brValue = (byte) brList.get(2);
+            sortBRList.add(brValue);
+        }
+        //3.2.按照从小到大排列呼吸频率数值
+        Collections.sort(sortBRList);
+
+        //3.3.取50%与90%位置的数值
+
+        byte fiftyPercentBR = (byte) sortBRList.get((int) (plistSize*0.5));
+
+        byte ninetyPercentBR = (byte) sortBRList.get((int) (plistSize*0.9));
+
+
+
+        //4.计算呼吸比
+        //4.1.获取所有呼吸频率，吸气时长数值
+        List sortBPList = new ArrayList<>();
+
+        for(int i = 0; i < plistSize; i++){
+            List birList = (List) plist.get(i);
+            short biValue = (short) birList.get(1);
+            byte brValue = (byte) birList.get(2);
+            byte bpValue = 0;
+
+            if(brValue!=0){
+                // 计算呼气时长
+                byte boValue = (byte) (60/brValue-biValue);
+                //呼吸比 = 呼气时长/吸气时长
+                bpValue = (byte) (boValue/biValue);
+            }else{
+                bpValue = 0;
+            }
+            sortBPList.add(bpValue);
+        }
+        //4.2.按照从小到大排列呼吸比数值
+        Collections.sort(sortBPList);
+
+        //4.3.取50%与90%位置的数值
+
+        byte fiftyPercentBP = (byte) sortBPList.get((int) (plistSize*0.5));
+
+        byte ninetyPercentBP = (byte) sortBPList.get((int) (plistSize*0.9));
+
+
+        //组装数据
+        HashMap ossDataMap = new HashMap();
+        //潮气量
+        ossDataMap.put("fiftyPercentTV",fiftyPercentTV);
+        ossDataMap.put("ninetyPercentTV",ninetyPercentTV);
+
+        //分钟通气量
+        ossDataMap.put("fiftyPercentMV",fiftyPercentMV);
+        ossDataMap.put("ninetyPercentMV",ninetyPercentMV);
+
+        //呼吸频率
+        ossDataMap.put("fiftyPercentBR",fiftyPercentBR);
+        ossDataMap.put("ninetyPercentBR",ninetyPercentBR);
+
+        //呼吸比
+        ossDataMap.put("fiftyPercentBP",fiftyPercentBP);
+        ossDataMap.put("ninetyPercentBP",ninetyPercentBP);
+
+        return ossDataMap;
+    }
 
 
 

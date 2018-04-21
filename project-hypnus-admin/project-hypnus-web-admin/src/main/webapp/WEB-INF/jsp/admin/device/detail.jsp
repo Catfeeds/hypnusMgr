@@ -147,9 +147,9 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>50%潮气量：</td>
-                    <th id="averageMvPos"></th>
+                    <th id="fiftyPercentTV"></th>
                     <td>90%潮气量：</td>
-                    <th id="pecentMvPos"></th>
+                    <th id="ninetyPercentTV"></th>
                 </tr>
             </table>
         </div>
@@ -162,9 +162,9 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>50%分钟通气量：</td>
-                    <th id="orderCode"></th>
+                    <th id="fiftyPercentMV"></th>
                     <td>90%分钟通气量：</td>
-                    <th id="createDate"></th>
+                    <th id="ninetyPercentMV"></th>
                 </tr>
             </table>
         </div>
@@ -177,9 +177,9 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>50%呼气频率：</td>
-                    <th id="orderCode"></th>
+                    <th id="fiftyPercentBR"></th>
                     <td>90%呼气频率：</td>
-                    <th id="createDate"></th>
+                    <th id="ninetyPercentBR"></th>
                 </tr>
             </table>
         </div>
@@ -192,9 +192,9 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>50%呼吸比：</td>
-                    <th id="orderCode"></th>
+                    <th id="fiftyPercentBP"></th>
                     <td>90%呼吸比：</td>
-                    <th id="createDate"></th>
+                    <th id="ninetyPercentBP"></th>
                 </tr>
             </table>
         </div>

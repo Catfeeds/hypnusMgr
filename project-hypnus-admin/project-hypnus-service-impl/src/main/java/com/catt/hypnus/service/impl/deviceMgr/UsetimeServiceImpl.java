@@ -139,6 +139,49 @@ public class UsetimeServiceImpl implements UsetimeService {
 
     }
 
+
+
+
+
+    /**
+     * 查询当天使用数据
+     *
+     * @param deviceId
+     * @param today
+     * @return
+     */
+    public List<Map> findListByToday(String deviceId, Date today) {
+
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String todayString = sdf.format(today);
+        System.out.println("小喇叭！Service打印时间：" + todayString);
+
+
+        //由于数据库没有最新记录，所以用固定的开始时间进行测试
+        String todayStringTest = "2018-04-11 16:06:38";
+
+        List<Map> list = usetimeDao.findListByToday(deviceId,todayStringTest);
+
+        if (CollectionUtils.isEmpty(list)) {
+            throw BaseException.errorByErrInfo("无使用记录数据");
+        }
+        return list;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     public List<Map> findListByTimeStr(String deviceId, String startTime, String endTime) {
         return usetimeDao.findListByTimeStr(deviceId, startTime, endTime);
     }
@@ -168,6 +211,8 @@ public class UsetimeServiceImpl implements UsetimeService {
          * 3,从文件中读取数据
          * 4,组装数据
          */
+
+        //1.检查设备有无使用记录
         List<String> usetimeStrList = new ArrayList<>();
 //        List<String> packages = new ArrayList<>();
         List<Map> usetimeList = this.findMapList(deviceId, startTime, endTime);
@@ -175,12 +220,14 @@ public class UsetimeServiceImpl implements UsetimeService {
             throw new BaseException("设备无使用记录");
         }
 
+        //2.检查OSS中有无数据文件
         String startTimeStr = MapUtil.getString(usetimeList.get(0), "starttime");
         usetimeList.forEach(usetime -> {
             String start = MapUtil.getString(usetime, "starttime");
             usetimeStrList.add(start);
 
         });
+
         List<String> fileLists = new ArrayList<>();
         for (String str : usetimeStrList) {
             String keyPre = "";
@@ -194,14 +241,19 @@ public class UsetimeServiceImpl implements UsetimeService {
             logger.info("OSS中无数据文件");
             throw BaseException.errorByErrInfo("OSS中无数据文件");
         }
-        short[] pressureBytes = null;
-        byte[] flowBytes = null;
-        byte[] difleakBytes = null;
-        short[] tvBytes = null;
-        short[] brBytes = null;
-        short[] biBytes = null;
 
+        //3.从OSS文件中读取数据
+        short[] pressureBytes = null;//一次治疗开始到结束的实时“压力”值
+        byte[] flowBytes = null;//一次治疗开始到结束的实时“流量”值
+        byte[] difleakBytes = null;//一次治疗开始到结束的实时“漏气”值
+        short[] tvBytes = null;//一次治疗开始到结束的实时“潮气量”值
+        short[] brBytes = null;//一次治疗开始到结束的实时“呼吸频率”值
+        short[] biBytes = null;//一次治疗开始到结束的实时“吸气时长”值
+
+        // 乜鬼嘢嚟？貌似冇春用
         List<Short> pressureList = new ArrayList<>();
+
+        // 利用OssDataHandler从OSS文件中读取数据
         for (String fileName : fileLists) {
             if (fileName.contains("pressure.edf")) {
                 short[] temp = OssDataHandler.getObjectData(fileName);
@@ -228,11 +280,14 @@ public class UsetimeServiceImpl implements UsetimeService {
                 biBytes = (short[]) ArrayUtils.addAll(biBytes, temp);
             }
         }
+
+        //组装数据
         List presureList = new ArrayList<>();
         try {
             List<String> timeList = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
             String str = startTimeStr + ".000";
+            // 循环统计一天的数据
             for (int i = 0; i < 24 * 60; i++) {
                 Date dt = sdf.parse(str);
                 Calendar rightNow = Calendar.getInstance();
@@ -241,7 +296,9 @@ public class UsetimeServiceImpl implements UsetimeService {
                 Date dt1 = rightNow.getTime();
                 String dt2 = DateUtil.format(dt1, "yyyy-MM-dd HH:mm:ss.SSS");
                 timeList.add(str);
+
                 List dataList = new ArrayList<>();
+
                 dataList.add(timeList.get(i));
                 //压力数据
                 if (pressureBytes != null && i < pressureBytes.length) {

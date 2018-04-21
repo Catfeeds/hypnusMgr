@@ -50,6 +50,29 @@ public interface UsetimeDao extends BaseDao<Usetime, Long> {
     List<Map> findList(String deviceId, Date startTime, Date endTime);
 
 
+
+
+    /**
+     * 查询当天使用记录
+     *
+     * @param deviceId
+     * @param todayString
+     * @return
+     */
+    List<Map> findListByToday(String deviceId,String todayString);
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * 统计数据中使用，全部提前12小时统计
      * @param deviceId

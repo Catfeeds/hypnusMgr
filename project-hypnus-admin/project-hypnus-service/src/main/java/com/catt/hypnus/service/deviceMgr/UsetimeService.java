@@ -47,6 +47,30 @@ public interface UsetimeService {
     List<Map> findListByDay(String deviceId,Date today);
 
 
+
+
+
+    /**
+     * 按日期查询使用记录
+     *
+     * @param deviceId
+     * @return
+     */
+    List<Map> findListByToday(String deviceId,Date today);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * 分页查询使用记录
      *
