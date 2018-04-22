@@ -51,7 +51,7 @@ public interface DeviceService {
      * @param deviceName
      * @return
      */
-    Map getShadowDevice(String deviceName) throws ClientException, com.aliyuncs.exceptions.ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException;
+    DeviceShadowDTO getShadowDevice(String deviceName) throws ClientException, com.aliyuncs.exceptions.ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException;
 
     /**
      * 更新影子设备参数

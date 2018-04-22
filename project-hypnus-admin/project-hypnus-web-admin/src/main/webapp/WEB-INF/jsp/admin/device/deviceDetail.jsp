@@ -10,23 +10,15 @@
     <script src="${path}/resources/js/common_ctr.js" type="text/javascript"></script>
     <script src="${path}/resources/js/member.js" type="text/javascript"></script>
     <script src="${path}/resources/admin/common/temDataGrid.js"></script>
-    <script src="${path}/resources/admin/js/device/index.js" type="text/javascript"></script>
-
     <link type="text/css" href="${path}/resources/safeMgr/css/manage.css" rel="stylesheet"/>
     <link type="text/css" href="${path}/resources/safeMgr/css/commonstyle.css" rel="stylesheet"/>
     <link type="text/css" href="${path}/resources/safeMgr/css/public.css" rel="stylesheet"/>
     <script src="${path}/resources/safeMgr/js/sonjs02.js" type="text/javascript"></script>
-    <script src="${path}/resources/admin/js/sysMgr/userCenter/index.js" type="text/javascript"></script>
-
-
     <link rel="stylesheet" type="text/css" href="${path}/resources/safeMgr/css/ziyuanDetail_ctr.css"/>
     <link rel="stylesheet" type="text/css" href="${path}/resources/safeMgr/css/addziyuan_style.css"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/css/addnew.css"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/safeMgr/css/shijianchanpin.css"/>
-
     <script type="text/javascript" src="${path}/resources/admin/js/device/deviceShadowEdit.js"></script>
-
-
 </head>
 <body>
 <div class="wrapper">
@@ -56,7 +48,7 @@
         <div class="objBoxContB" style=" margin-bottom:0px;">
             <form id="saveForm" method="post">
                 <div class="addFormCont" style="padding-top:0px;">
-                    <input id="id" type="hidden" name="id" value="${info.id}"/>
+                    <input id="id" type="hidden" name="id" value="${fn:escapeXml(param.deviceId)}"/>
                     <div class="addFormContHead">
                         <h1 class="addFormConthText">参数设置</h1>
                     </div>
@@ -65,7 +57,9 @@
                             <tr>
                                 <th>吸气压力</th>
                                 <td>
-                                    <input id="name" name="name" value="${info.name}" class="proInput" type="number"
+                                    <input id="t_in_p" name="t_in_p"  class="proInput" type="number"
+                                           style="width:241px;height:10px"/>
+                                    <input id="deviceID" name="deviceID"  type="hidden"
                                            style="width:241px;height:10px"/>
                                 </td>
 
@@ -85,13 +79,13 @@
                             <tr>
                                 <th>呼气压力</th>
                                 <td>
-                                    <input id="name22" name="name" value="${info.name}" class="proInput" type="number"
+                                    <input id="t_ex_p" name="t_ex_p"  class="proInput" type="number"
                                            style="width:241px;height:10px"/>
                                 </td>
 
                                 <th>加温管</th>
                                 <td>
-                                    <input id="connector11" name="connector" value="${info.connector}" class="proInput"
+                                    <input id="connector11" name="connector"  class="proInput"
                                            type="number" style="width:241px;height:10px"/>
                                 </td>
                             </tr>
@@ -99,7 +93,7 @@
                             <tr>
                                 <th>起始压力</th>
                                 <td>
-                                    <input id="name0" name="name" value="${info.name}" class="proInput" type="number"
+                                    <input id="start_pressure" name="start_pressure"  class="proInput" type="number"
                                            style="width:241px;height:10px"/>
                                 </td>
 
@@ -115,7 +109,7 @@
                             <tr>
                                 <th>延迟时间</th>
                                 <td>
-                                    <input id="name2" name="name" value="${info.name}" class="proInput" type="number"
+                                    <input id="cure_delay" name="cure_delay"  class="proInput" type="number"
                                            style="width:241px;height:10px"/>
                                 </td>
 
@@ -132,7 +126,7 @@
                             <tr>
                                 <th>呼吸频率</th>
                                 <td>
-                                    <input id="name4" name="name" value="${info.name}" class="proInput" type="number"
+                                    <input id="breath_rate" name="breath_rate"  class="proInput" type="number"
                                            style="width:241px;height:10px"/>
                                 </td>
 
@@ -149,7 +143,7 @@
                             <tr>
                                 <th>呼吸比I:E 1：</th>
                                 <td>
-                                    <input id="name6" name="name" value="${info.name}" class="proInput" type="number"
+                                    <input id="breath_ratio" name="breath_ratio"  class="proInput" type="number"
                                            style="width:241px;height:10px"/>
                                 </td>
 

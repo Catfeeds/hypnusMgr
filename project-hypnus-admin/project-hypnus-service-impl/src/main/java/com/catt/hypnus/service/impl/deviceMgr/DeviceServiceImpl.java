@@ -130,8 +130,8 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
 
-    public Map getShadowDevice(String deviceName) throws ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        Map shadow = ShadowDeviceHandler.getShadowDevice(deviceName);
+    public DeviceShadowDTO getShadowDevice(String deviceName) throws ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        DeviceShadowDTO shadow = ShadowDeviceHandler.getShadowDevice(deviceName);
         return shadow;
     }
 

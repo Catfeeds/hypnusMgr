@@ -176,7 +176,7 @@ public class DeviceController extends BaseController {
     @ResponseBody
     public Message updateShadowDevice(DeviceShadowDTO deviceShadow, String deviceId) {
         try {
-            deviceService.updateShadowDevice(deviceShadow, deviceId);
+            deviceService.updateShadowDevice(deviceShadow, deviceShadow.getDeviceID());
             return Message.success();
         } catch (RuntimeException e) {
             return Message.error(e.getMessage());
@@ -198,9 +198,9 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = "/getShadowDevice", method = RequestMethod.POST)
     @ResponseBody
-    public Map getShadowDevice(String deviceId) throws InvocationTargetException,
+    public DeviceShadowDTO getShadowDevice(String deviceId) throws InvocationTargetException,
             IntrospectionException, InstantiationException, IllegalAccessException, ClientException {
-        Map deviceShadow = deviceService.getShadowDevice(deviceId);
+        DeviceShadowDTO deviceShadow = deviceService.getShadowDevice(deviceId);
         return deviceShadow;
     }
 
