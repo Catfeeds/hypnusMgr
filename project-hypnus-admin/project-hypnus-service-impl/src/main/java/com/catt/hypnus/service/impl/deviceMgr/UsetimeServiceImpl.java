@@ -140,9 +140,6 @@ public class UsetimeServiceImpl implements UsetimeService {
     }
 
 
-
-
-
     /**
      * 查询当天使用数据
      *
@@ -152,8 +149,6 @@ public class UsetimeServiceImpl implements UsetimeService {
      */
     public List<Map> findListByToday(String deviceId, Date today) {
 
-
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String todayString = sdf.format(today);
         System.out.println("小喇叭！Service打印时间：" + todayString);
@@ -162,25 +157,11 @@ public class UsetimeServiceImpl implements UsetimeService {
         //由于数据库没有最新记录，所以用固定的开始时间进行测试
         String todayStringTest = "2018-04-11 16:06:38";
 
-        List<Map> list = usetimeDao.findListByToday(deviceId,todayStringTest);
+        List<Map> list = usetimeDao.findListByToday(deviceId, todayStringTest);
 
-        if (CollectionUtils.isEmpty(list)) {
-            throw BaseException.errorByErrInfo("无使用记录数据");
-        }
         return list;
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
     public List<Map> findListByTimeStr(String deviceId, String startTime, String endTime) {
         return usetimeDao.findListByTimeStr(deviceId, startTime, endTime);
@@ -203,7 +184,7 @@ public class UsetimeServiceImpl implements UsetimeService {
         return usetimeDao.findPage(deviceId, startTime, endTime, pageable);
     }
 
-    public Map getDateFromOss(String deviceId, String startTime, String endTime) throws IOException {
+    public Map getDateFromOss(String deviceId, String startTime, String endTime) throws IOException, ParseException {
         Map map = new HashMap();
         /**
          * 1,数据库查询基础数据
@@ -215,31 +196,31 @@ public class UsetimeServiceImpl implements UsetimeService {
         //1.检查设备有无使用记录
         List<String> usetimeStrList = new ArrayList<>();
 //        List<String> packages = new ArrayList<>();
+        String startTimeStr = "";
         List<Map> usetimeList = this.findMapList(deviceId, startTime, endTime);
         if (CollectionUtils.isEmpty(usetimeList)) {
-            throw new BaseException("设备无使用记录");
+            logger.info("无使用记录");
+            startTimeStr = startTime + "";
+        } else {
+            startTimeStr = MapUtil.getString(usetimeList.get(0), "starttime");
         }
 
         //2.检查OSS中有无数据文件
-        String startTimeStr = MapUtil.getString(usetimeList.get(0), "starttime");
-        usetimeList.forEach(usetime -> {
-            String start = MapUtil.getString(usetime, "starttime");
-            usetimeStrList.add(start);
-
-        });
-
         List<String> fileLists = new ArrayList<>();
-        for (String str : usetimeStrList) {
-            String keyPre = "";
-            if (StringUtil.checkStr(deviceId) && StringUtil.checkStr(startTime)) {
-                keyPre = deviceId + "/" + str + "/";
+        if (CollectionUtils.isNotEmpty(usetimeList)) {
+            usetimeList.forEach(usetime -> {
+                String start = MapUtil.getString(usetime, "starttime");
+                usetimeStrList.add(start);
+
+            });
+            for (String str : usetimeStrList) {
+                String keyPre = "";
+                if (StringUtil.checkStr(deviceId) && StringUtil.checkStr(startTime)) {
+                    keyPre = deviceId + "/" + str + "/";
+                }
+                List<String> fileList = OssDataHandler.listOfObject(keyPre);
+                fileLists.addAll(fileList);
             }
-            List<String> fileList = OssDataHandler.listOfObject(keyPre);
-            fileLists.addAll(fileList);
-        }
-        if (CollectionUtils.isEmpty(fileLists)) {
-            logger.info("OSS中无数据文件");
-            throw BaseException.errorByErrInfo("OSS中无数据文件");
         }
 
         //3.从OSS文件中读取数据
@@ -250,86 +231,102 @@ public class UsetimeServiceImpl implements UsetimeService {
         short[] brBytes = null;//一次治疗开始到结束的实时“呼吸频率”值
         short[] biBytes = null;//一次治疗开始到结束的实时“吸气时长”值
 
-        // 乜鬼嘢嚟？貌似冇春用
-        List<Short> pressureList = new ArrayList<>();
-
-        // 利用OssDataHandler从OSS文件中读取数据
-        for (String fileName : fileLists) {
-            if (fileName.contains("pressure.edf")) {
-                short[] temp = OssDataHandler.getObjectData(fileName);
-                pressureBytes = (short[]) ArrayUtils.addAll(pressureBytes, temp);
-            }
-            if (fileName.contains("flow.edf")) {
-                byte[] temp = OssDataHandler.getObjectData2Byte(fileName);
-                flowBytes = (byte[]) ArrayUtils.addAll(flowBytes, temp);
-            }
-            if (fileName.contains("difleak.edf")) {
-                byte[] temp = OssDataHandler.getObjectData2Byte(fileName);
-                difleakBytes = (byte[]) ArrayUtils.addAll(difleakBytes, temp);
-            }
-            if (fileName.contains("tv.edf")) {
-                short[] temp = OssDataHandler.getObjectData(fileName);
-                tvBytes = (short[]) ArrayUtils.addAll(tvBytes, temp);
-            }
-            if (fileName.contains("br.edf")) {
-                short[] temp = OssDataHandler.getObjectData(fileName);
-                brBytes = (short[]) ArrayUtils.addAll(brBytes, temp);
-            }
-            if (fileName.contains("bi.edf")) {
-                short[] temp = OssDataHandler.getObjectData(fileName);
-                biBytes = (short[]) ArrayUtils.addAll(biBytes, temp);
+        if (CollectionUtils.isEmpty(fileLists)) {
+            logger.info("OSS中无数据文件");
+        } else {
+            // 利用OssDataHandler从OSS文件中读取数据
+            for (String fileName : fileLists) {
+                if (fileName.contains("pressure.edf")) {
+                    short[] temp = OssDataHandler.getObjectData(fileName);
+                    pressureBytes = (short[]) ArrayUtils.addAll(pressureBytes, temp);
+                }
+                if (fileName.contains("flow.edf")) {
+                    byte[] temp = OssDataHandler.getObjectData2Byte(fileName);
+                    flowBytes = (byte[]) ArrayUtils.addAll(flowBytes, temp);
+                }
+                if (fileName.contains("difleak.edf")) {
+                    byte[] temp = OssDataHandler.getObjectData2Byte(fileName);
+                    difleakBytes = (byte[]) ArrayUtils.addAll(difleakBytes, temp);
+                }
+                if (fileName.contains("tv.edf")) {
+                    short[] temp = OssDataHandler.getObjectData(fileName);
+                    tvBytes = (short[]) ArrayUtils.addAll(tvBytes, temp);
+                }
+                if (fileName.contains("br.edf")) {
+                    short[] temp = OssDataHandler.getObjectData(fileName);
+                    brBytes = (short[]) ArrayUtils.addAll(brBytes, temp);
+                }
+                if (fileName.contains("bi.edf")) {
+                    short[] temp = OssDataHandler.getObjectData(fileName);
+                    biBytes = (short[]) ArrayUtils.addAll(biBytes, temp);
+                }
             }
         }
 
+
         //组装数据
         List presureList = new ArrayList<>();
-        try {
-            List<String> timeList = new ArrayList<>();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-            String str = startTimeStr + ".000";
-            // 循环统计一天的数据
-            for (int i = 0; i < 24 * 60; i++) {
-                Date dt = sdf.parse(str);
-                Calendar rightNow = Calendar.getInstance();
-                rightNow.setTime(dt);
-                rightNow.add(Calendar.MILLISECOND, 60000);//周期为80毫秒
-                Date dt1 = rightNow.getTime();
-                String dt2 = DateUtil.format(dt1, "yyyy-MM-dd HH:mm:ss.SSS");
-                timeList.add(str);
+        List<String> timeList = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        String str = startTimeStr + ".000";
+        // 循环统计一天的数据
+        for (int i = 0; i < 24 * 60; i++) {
+            Date dt = sdf.parse(str);
+            Calendar rightNow = Calendar.getInstance();
+            rightNow.setTime(dt);
+            rightNow.add(Calendar.MILLISECOND, 60000);//周期为80毫秒
+            Date dt1 = rightNow.getTime();
+            String dt2 = DateUtil.format(dt1, "yyyy-MM-dd HH:mm:ss.SSS");
+            timeList.add(str);
 
-                List dataList = new ArrayList<>();
+            List dataList = new ArrayList<>();
 
-                dataList.add(timeList.get(i));
-                //压力数据
-                if (pressureBytes != null && i < pressureBytes.length) {
-                    dataList.add(pressureBytes[i]);
-                }
-                //气流
-                if (flowBytes != null && i < flowBytes.length) {
-                    dataList.add(flowBytes[i]);
-                }
-                //漏气
-                if (difleakBytes != null && i < difleakBytes.length) {
-                    dataList.add(difleakBytes[i]);
-                }
-                //tv
-                if (tvBytes != null && i < tvBytes.length) {
-                    dataList.add(tvBytes[i]);
-                }
-                //br
-                if (brBytes != null && i < brBytes.length) {
-                    dataList.add(brBytes[i]);
-                }
-                //bi
-                if (biBytes != null && i < biBytes.length) {
-                    dataList.add(biBytes[i]);
-                }
-
-                presureList.add(dataList);
-                str = dt2;
+            dataList.add(timeList.get(i));
+            //压力数据
+            if (pressureBytes != null && i < pressureBytes.length) {
+                dataList.add(pressureBytes[i]);
+            } else {
+                short[] bytes = new short[]{0};
+                dataList.add(bytes[0]);
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
+            //气流
+            if (flowBytes != null && i < flowBytes.length) {
+                dataList.add(flowBytes[i]);
+            } else {
+                byte[] bytes = new byte[]{0};
+                dataList.add(bytes[0]);
+            }
+            //漏气
+            if (difleakBytes != null && i < difleakBytes.length) {
+                dataList.add(difleakBytes[i]);
+            } else {
+                byte[] bytes = new byte[]{0};
+                dataList.add(bytes[0]);
+            }
+            //tv
+            if (tvBytes != null && i < tvBytes.length) {
+                dataList.add(tvBytes[i]);
+            } else {
+                short[] bytes = new short[]{0};
+                dataList.add(bytes[0]);
+            }
+            //br
+            if (brBytes != null && i < brBytes.length) {
+                dataList.add(brBytes[i]);
+            } else {
+                short[] bytes = new short[]{0};
+                dataList.add(bytes[0]);
+            }
+            //bi
+            if (biBytes != null && i < biBytes.length) {
+                dataList.add(biBytes[i]);
+            } else {
+                short[] bytes = new short[]{0};
+                dataList.add(bytes[0]);
+            }
+
+            presureList.add(dataList);
+            str = dt2;
         }
         map.put("pressure", presureList);
         return map;
@@ -474,7 +471,8 @@ public class UsetimeServiceImpl implements UsetimeService {
                 eventList.add(0.0);
             } else {
                 Date startDate = DateUtil.parseDate(startTime);
-                for (int i = 0; i < 7; i++) {
+                Integer between = DateUtil.getDaysBetween(DateUtil.parseDate(startTime), DateUtil.parseDate(endTime));
+                for (int i = 0; i < between; i++) {
                     String currentDateStr = DateUtil.format(DateUtil.addDays(startDate, i), DateUtil.yyyyMMdd);
                     dateList.add(currentDateStr);
                     eventList.add(0.0);
@@ -526,7 +524,8 @@ public class UsetimeServiceImpl implements UsetimeService {
                 eventList.add(0.0);
             } else {
                 Date startDate = DateUtil.parseDate(startTime);
-                for (int i = 0; i < 7; i++) {
+                Integer between = DateUtil.getDaysBetween(DateUtil.parseDate(startTime), DateUtil.parseDate(endTime));
+                for (int i = 0; i < between; i++) {
                     String currentDateStr = DateUtil.format(DateUtil.addDays(startDate, i), DateUtil.yyyyMMdd);
                     dateList.add(currentDateStr);
                     eventList.add(0.0);

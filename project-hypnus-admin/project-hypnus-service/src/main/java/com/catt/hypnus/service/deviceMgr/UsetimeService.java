@@ -7,6 +7,7 @@ import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
 import com.catt.hypnus.repository.form.deviceMgr.UsetimeForm;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -58,19 +59,6 @@ public interface UsetimeService {
      */
     List<Map> findListByToday(String deviceId,Date today);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 分页查询使用记录
      *
@@ -99,7 +87,7 @@ public interface UsetimeService {
      */
     Page<Map> findPageMap(String deviceId, String startTime, String endTime, Pageable pageable);
 
-    Map getDateFromOss(String deviceId, String startTime, String endTime) throws IOException;
+    Map getDateFromOss(String deviceId, String startTime, String endTime) throws IOException, ParseException;
 
     /**
      * 使用记录数据统计

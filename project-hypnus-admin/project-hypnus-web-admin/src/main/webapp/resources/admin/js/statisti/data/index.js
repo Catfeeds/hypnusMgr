@@ -23,23 +23,23 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
             /** 初始化事件绑定 */
             initEvent: function () {
                 // 时间维度选择
-                $(".xw_calendar_datechange span").click(function () {
-                    $(this).parents(".searchBox").find(".xw_calendar_datechange span").removeClass("timeOn");
-                    $(this).addClass("timeOn");
-
-                    // 更改时间维度查询
-                    if ("day" == $(this).attr("id")) {
-                        $("#dayDiv").show();
-                        $("#MonthDiv").hide();
-                        dateDimension = "DAY";
-                        EventHandler.initAmountMoudle();
-                    } else if ("week" == $(this).attr("id")) {
-                        $("#dayDiv").hide();
-                        $("#MonthDiv").show();
-                        dateDimension = "WEEK";
-                        EventHandler.initAmountMoudle();
-                    }
-                });
+                // $(".xw_calendar_datechange span").click(function () {
+                //     $(this).parents(".searchBox").find(".xw_calendar_datechange span").removeClass("timeOn");
+                //     $(this).addClass("timeOn");
+                //
+                //     // 更改时间维度查询
+                //     if ("day" == $(this).attr("id")) {
+                //         $("#dayDiv").show();
+                //         $("#MonthDiv").hide();
+                //         dateDimension = "DAY";
+                //         EventHandler.initAmountMoudle();
+                //     } else if ("week" == $(this).attr("id")) {
+                //         $("#dayDiv").hide();
+                //         $("#MonthDiv").show();
+                //         dateDimension = "WEEK";
+                //         EventHandler.initAmountMoudle();
+                //     }
+                // });
 
                 // 统计图查询按钮
                 $("#searchBtn").click(function () {
@@ -56,23 +56,39 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     if ($("#numLi").hasClass("on")) {
                         $("#staticDiv").show();
                         $("#aiDiv").hide();
-                        $("#csrDiv").hide();
                         $("#csaDiv").hide();
+                        $("#csrDiv").hide();
                         $("#pbDiv").hide();
                         EventHandler.writerData4Chart(staticData, '');
                     } else if ($("#staticLi").hasClass("on")) {
                         $("#staticDiv").hide();
                         $("#aiDiv").show();
-                        $("#csrDiv").show();
                         $("#csaDiv").show();
+                        $("#csrDiv").show();
                         $("#pbDiv").show();
                         EventHandler.writeOtherData4Chart(graphics, '');
+                    } else if ($("#staticData").hasClass("on")) {
+                        EventHandler.detailData();
                     }
                 });
 
             },
 
             initData: function () {
+                var type = $("#type").val();
+                $(".xw_topTab li").removeClass("on");
+                if (type == 1) {
+                    $("#staticLi").addClass("on");
+                    $("#staticDiv").hide();
+                    $("#aiDiv").show();
+                    EventHandler.writeOtherData4Chart(graphics, '');
+                } else {
+                    $("#numLi").addClass("on");
+                    $("#staticDiv").show();
+                    $("#aiDiv").hide();
+                    EventHandler.writerData4Chart(staticData, '');
+                }
+
             }
         };
     })();
@@ -84,9 +100,9 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
             initAmountMoudle: function () {
                 // 接口入参
                 var params = {};
-                params.dateDimension = dateDimension;
                 params.deviceId = $("#deviceId").val();
-                params.startTime = $("#startTime").val();
+                params.createDateDay = $("#createDateDay").val();
+                params.endDateDay = $("#endDateDay").val();
                 DataHandler.getStaticData(params, function (result) {
                     time = new Array(); // 横坐标，时间跨度
                     graphics = result;
@@ -648,7 +664,15 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 };
                 chart.setOption(option, true);
                 chart.hideLoading();
-            }
+            },
+            detailData: function () {
+                debugger
+                var deviceId = $('#id').val();
+                var createDateDay = $('#createDateDay').val();
+                var endDateDay = $('#endDateDay').val();
+                window.location.href = path + '/admin/deviceMgr/detail.html?deviceId=' + deviceId +
+                    '&createDateDay=' + createDateDay + '&endDateDay=' + endDateDay;
+            },
         };
     })();
 

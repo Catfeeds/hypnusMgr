@@ -117,23 +117,6 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         return this.findListBySql(sql.toString(), param, Map.class);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public List<Map> findListByTimeStr(String deviceId, String startTime, String endTime) {
         StringBuffer sql = new StringBuffer();
         Map param = new HashMap<>();

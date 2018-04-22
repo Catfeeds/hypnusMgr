@@ -3,6 +3,7 @@ package com.catt.hypnus.web.controller.admin.deviceMgr;
 import com.aliyuncs.exceptions.ClientException;
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
+import com.catt.common.util.lang.DateUtil;
 import com.catt.common.web.Message;
 import com.catt.common.web.controller.BaseController;
 import com.catt.common.web.spring.resolver.annotation.CurrentUser;
@@ -11,6 +12,7 @@ import com.catt.hypnus.repository.entity.userMgr.DeviceShadowDTO;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
 import com.catt.hypnus.service.deviceMgr.DeviceService;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -61,7 +64,8 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = {"/detail.html"}, method = RequestMethod.GET)
     public String toDetail(Model model, String deviceId) {
-
+        model.addAttribute("createDateDay", DateUtil.format(DateUtil.addDays(new Date(), -1), "yyyy-MM-dd"));
+        model.addAttribute("endDateDay", DateUtil.format(new Date(), "yyyy-MM-dd"));
         model.addAttribute("deviceId", deviceId);
         return "/admin/device/detail";
     }
@@ -207,18 +211,10 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = "/getUseData", method = RequestMethod.POST)
     @ResponseBody
-    public Map getUseData(String deviceId) {
-        Map useData = usetimeService.baseStatisticData(deviceId, "","");
+    public Map getUseData(String deviceId, String startTime, String endTime) {
+        Map useData = usetimeService.baseStatisticData(deviceId, startTime, endTime);
         return useData;
     }
-
-
-
-
-
-
-
-
 
 
     /**
@@ -228,11 +224,10 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = "/getStatisticsDataDeviceInfo", method = RequestMethod.POST)
     @ResponseBody
-    public Device getStatisticsDataDeviceInfo(String deviceId){
+    public Device getStatisticsDataDeviceInfo(String deviceId) {
         Device device = deviceService.findDeviceByDeviceId(deviceId);
         return device;
     }
-
 
 
     /**
@@ -242,7 +237,7 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = "/getStatisticsDataWorkParam", method = RequestMethod.POST)
     @ResponseBody
-    public Map getStatisticsDataWorkParam(String deviceId)  {
+    public Map getStatisticsDataWorkParam(String deviceId) {
 
 //        String startTime = "2018-04-11 16:03:23";
 //        String endTime = "2018-04-11 16:03:27";
@@ -254,19 +249,18 @@ public class DeviceController extends BaseController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 //        System.out.println("Controller打印时间："+df.format(day));
-
-
         Date today = new Date();
 
+        List<Map> usetimeServiceMapList2 = usetimeService.findListByToday(deviceId, today);
 
-        List<Map> usetimeServiceMapList2 = usetimeService.findListByToday(deviceId,today);
-
-        Map testUseTime = usetimeServiceMapList2.get(0);
+        Map testUseTime = new HashMap();
+        if (CollectionUtils.isNotEmpty(usetimeServiceMapList2)) {
+            testUseTime = usetimeServiceMapList2.get(0);
+        }
 
         return testUseTime;
 
     }
-
 
 
     /**
@@ -276,7 +270,7 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = "/getStatisticsDataFromOSS", method = RequestMethod.POST)
     @ResponseBody
-    public Map getStatisticsDataFromOSS(String deviceId) throws IOException {
+    public Map getStatisticsDataFromOSS(String deviceId) throws IOException, ParseException {
 
         System.out.println("正在努力从OSS中获取相关数据");
 
@@ -284,7 +278,7 @@ public class DeviceController extends BaseController {
         String endTime = "2018-04-13 18:13:13";
 
 
-        Map map = usetimeService.getDateFromOss(deviceId,startTime,endTime);
+        Map map = usetimeService.getDateFromOss(deviceId, startTime, endTime);
         System.out.println("您获取的数据是：");
         System.out.println(map);
 
@@ -296,50 +290,51 @@ public class DeviceController extends BaseController {
         //1.1.获取所有潮气量数值
         List sortTVList = new ArrayList<>();
 
-        for(int i = 0; i < plistSize; i++){
+        for (int i = 0; i < plistSize; i++) {
             List tvList = (List) plist.get(i);
-            short tvValue = (short) tvList.get(6);
-            sortTVList.add(tvValue);
+            if (tvList.size() > 6) {
+                short tvValue = (short) tvList.get(6);
+                sortTVList.add(tvValue);
+            }
         }
         //1.2.按照从小到大排列潮气量数值
         Collections.sort(sortTVList);
 
         //1.3.取50%与90%位置的数值
 
-        short fiftyPercentTV = (short) sortTVList.get((int) (plistSize*0.5));
+        short fiftyPercentTV = (short) sortTVList.get((int) (sortTVList.size() * 0.5));
 
-        short ninetyPercentTV = (short) sortTVList.get((int) (plistSize*0.9));
+        short ninetyPercentTV = (short) sortTVList.get((int) (sortTVList.size() * 0.9));
 
 
         //2.计算分钟通气量
         //2.1.获取所有吸气时长（BI）和呼吸频率（BR）数值
         List sortMVList = new ArrayList<>();
 
-        for(int i = 0; i < plistSize; i++){
+        for (int i = 0; i < plistSize; i++) {
             List mvList = (List) plist.get(i);
             short biValue = (short) mvList.get(1);
             byte brValue = (byte) mvList.get(2);
-            double mvValue = (double) (biValue*brValue);
+            double mvValue = (double) (biValue * brValue);
 
             DecimalFormat df = new DecimalFormat("0.0");
-            sortMVList.add(df.format(mvValue*0.001));
+            sortMVList.add(df.format(mvValue * 0.001));
         }
         //2.2.按照从小到大排列分钟通气量数值
         Collections.sort(sortMVList);
 
         //2.3.取50%与90%位置的数值
 
-        String fiftyPercentMV = (String) sortMVList.get((int) (plistSize*0.5));
+        String fiftyPercentMV = (String) sortMVList.get((int) (sortMVList.size() * 0.5));
 
-        String ninetyPercentMV = (String) sortMVList.get((int) (plistSize*0.9));
-
+        String ninetyPercentMV = (String) sortMVList.get((int) (sortMVList.size() * 0.9));
 
 
         //3.计算呼吸频率
         //3.1.获取所有呼吸频率数值
         List sortBRList = new ArrayList<>();
 
-        for(int i = 0; i < plistSize; i++){
+        for (int i = 0; i < plistSize; i++) {
             List brList = (List) plist.get(i);
             byte brValue = (byte) brList.get(2);
             sortBRList.add(brValue);
@@ -349,28 +344,27 @@ public class DeviceController extends BaseController {
 
         //3.3.取50%与90%位置的数值
 
-        byte fiftyPercentBR = (byte) sortBRList.get((int) (plistSize*0.5));
+        byte fiftyPercentBR = (byte) sortBRList.get((int) (sortBRList.size() * 0.5));
 
-        byte ninetyPercentBR = (byte) sortBRList.get((int) (plistSize*0.9));
-
+        byte ninetyPercentBR = (byte) sortBRList.get((int) (sortBRList.size() * 0.9));
 
 
         //4.计算呼吸比
         //4.1.获取所有呼吸频率，吸气时长数值
         List sortBPList = new ArrayList<>();
 
-        for(int i = 0; i < plistSize; i++){
+        for (int i = 0; i < plistSize; i++) {
             List birList = (List) plist.get(i);
             short biValue = (short) birList.get(1);
             byte brValue = (byte) birList.get(2);
             byte bpValue = 0;
 
-            if(brValue!=0){
+            if (brValue != 0) {
                 // 计算呼气时长
-                byte boValue = (byte) (60/brValue-biValue);
+                byte boValue = (byte) (60 / brValue - biValue);
                 //呼吸比 = 呼气时长/吸气时长
-                bpValue = (byte) (boValue/biValue);
-            }else{
+                bpValue = (byte) (boValue / biValue);
+            } else {
                 bpValue = 0;
             }
             sortBPList.add(bpValue);
@@ -380,36 +374,31 @@ public class DeviceController extends BaseController {
 
         //4.3.取50%与90%位置的数值
 
-        byte fiftyPercentBP = (byte) sortBPList.get((int) (plistSize*0.5));
+        byte fiftyPercentBP = (byte) sortBPList.get((int) (sortBPList.size() * 0.5));
 
-        byte ninetyPercentBP = (byte) sortBPList.get((int) (plistSize*0.9));
+        byte ninetyPercentBP = (byte) sortBPList.get((int) (sortBPList.size() * 0.9));
 
 
         //组装数据
         HashMap ossDataMap = new HashMap();
         //潮气量
-        ossDataMap.put("fiftyPercentTV",fiftyPercentTV);
-        ossDataMap.put("ninetyPercentTV",ninetyPercentTV);
+        ossDataMap.put("fiftyPercentTV", fiftyPercentTV);
+        ossDataMap.put("ninetyPercentTV", ninetyPercentTV);
 
         //分钟通气量
-        ossDataMap.put("fiftyPercentMV",fiftyPercentMV);
-        ossDataMap.put("ninetyPercentMV",ninetyPercentMV);
+        ossDataMap.put("fiftyPercentMV", fiftyPercentMV);
+        ossDataMap.put("ninetyPercentMV", ninetyPercentMV);
 
         //呼吸频率
-        ossDataMap.put("fiftyPercentBR",fiftyPercentBR);
-        ossDataMap.put("ninetyPercentBR",ninetyPercentBR);
+        ossDataMap.put("fiftyPercentBR", fiftyPercentBR);
+        ossDataMap.put("ninetyPercentBR", ninetyPercentBR);
 
         //呼吸比
-        ossDataMap.put("fiftyPercentBP",fiftyPercentBP);
-        ossDataMap.put("ninetyPercentBP",ninetyPercentBP);
+        ossDataMap.put("fiftyPercentBP", fiftyPercentBP);
+        ossDataMap.put("ninetyPercentBP", ninetyPercentBP);
 
         return ossDataMap;
     }
-
-
-
-
-
 
 
     // 设备信息

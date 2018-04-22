@@ -13,11 +13,11 @@ import java.util.Map;
  */
 public class ShadowDeviceTest {
     public static void main(String[] args) throws ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        Map shadow = ShadowDeviceHandler.getShadowDevice("363338363035511100390036");
+        Map shadow = ShadowDeviceHandler.getShadowDevice("CP70100505S");
 //        System.out.println(shadow.getAi_alarm());
 //        shadow.setAi_alarm("1");
 //        ShadowDeviceHandler.updateShadowDevice(shadow,"363338363035511100390036");
-        shadow = ShadowDeviceHandler.getShadowDevice("363338363035511100390036");
-//        System.out.println(shadow.getAi_alarm());
+        shadow = ShadowDeviceHandler.getShadowDevice("CP70100505S");
+        System.out.println(shadow.isEmpty());
     }
 }
