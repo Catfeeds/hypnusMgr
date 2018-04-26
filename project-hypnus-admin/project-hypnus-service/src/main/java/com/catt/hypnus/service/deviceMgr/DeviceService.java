@@ -4,6 +4,7 @@ package com.catt.hypnus.service.deviceMgr;
 import com.aliyun.oss.ClientException;
 import com.catt.common.base.pojo.search.Page;
 import com.catt.common.base.pojo.search.Pageable;
+import com.catt.hypnus.repository.entity.DeviceShadow;
 import com.catt.hypnus.repository.entity.deviceMgr.Device;
 import com.catt.hypnus.repository.entity.userMgr.DeviceShadowDTO;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
@@ -51,7 +52,7 @@ public interface DeviceService {
      * @param deviceName
      * @return
      */
-    DeviceShadowDTO getShadowDevice(String deviceName) throws ClientException, com.aliyuncs.exceptions.ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException;
+    DeviceShadow getShadowDevice(String deviceName) throws ClientException, com.aliyuncs.exceptions.ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException;
 
     /**
      * 更新影子设备参数

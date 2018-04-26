@@ -7,6 +7,7 @@ import com.catt.common.util.lang.DateUtil;
 import com.catt.common.web.Message;
 import com.catt.common.web.controller.BaseController;
 import com.catt.common.web.spring.resolver.annotation.CurrentUser;
+import com.catt.hypnus.repository.entity.DeviceShadow;
 import com.catt.hypnus.repository.entity.deviceMgr.Device;
 import com.catt.hypnus.repository.entity.userMgr.DeviceShadowDTO;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
@@ -28,7 +29,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <pre>
@@ -198,9 +204,9 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = "/getShadowDevice", method = RequestMethod.POST)
     @ResponseBody
-    public DeviceShadowDTO getShadowDevice(String deviceId) throws InvocationTargetException,
+    public DeviceShadow getShadowDevice(String deviceId) throws InvocationTargetException,
             IntrospectionException, InstantiationException, IllegalAccessException, ClientException {
-        DeviceShadowDTO deviceShadow = deviceService.getShadowDevice(deviceId);
+        DeviceShadow deviceShadow = deviceService.getShadowDevice(deviceId);
         return deviceShadow;
     }
 
