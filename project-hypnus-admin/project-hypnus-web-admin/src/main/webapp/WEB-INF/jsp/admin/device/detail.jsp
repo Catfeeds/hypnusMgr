@@ -244,25 +244,25 @@
             <table class="activityMsnTable">
                 <tr>
                     <td>AHI：</td>
-                    <th id="orderCode"></th>
+                    <th id="ahi"></th>
                     <td>AI：</td>
-                    <th id="createDate"></th>
+                    <th id="ai"></th>
                 </tr>
                 <tr>
                     <td>HI：</td>
-                    <th id="orderCode"></th>
+                    <th id="hi"></th>
                     <td>Snore：</td>
-                    <th id="createDate"></th>
+                    <th id="snore"></th>
                 </tr>
                 <tr>
                     <td>CSA：</td>
-                    <th id="orderCode"></th>
+                    <th id="csa"></th>
                     <td>CSR：</td>
-                    <th id="createDate"></th>
+                    <th id="csr"></th>
                 </tr>
                 <tr>
                     <td>PB：</td>
-                    <th id="orderCode"></th>
+                    <th id="pb"></th>
                 </tr>
             </table>
         </div>

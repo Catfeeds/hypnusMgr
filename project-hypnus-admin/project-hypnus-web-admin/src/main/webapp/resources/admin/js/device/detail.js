@@ -14,7 +14,9 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                     var id = $('#id').val();
                     if (id) {
                         EventHandler.getStatisticsDataWorkParam();
+                        EventHandler.getStatisticsDataUseInfo();
                         EventHandler.getStatisticsDataFromOSS();
+                        EventHandler.getBreathEventData();
                         EventHandler.getUseData();
                     }
                 },
@@ -33,6 +35,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                     });
                     $("#searchBtn").click(function () {
                         EventHandler.getStatisticsDataWorkParam();
+                        EventHandler.getStatisticsDataUseInfo();
                         EventHandler.getStatisticsDataFromOSS();
                         EventHandler.getUseData();
                     });
@@ -49,28 +52,41 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 getStatisticsDataWorkParam: function () {
                     DataHandler.getStatisticsDataWorkParam({
                         deviceId: $('#id').val()
-                    }, function (testUseTime) {
-                        if (testUseTime) {
-                            $('#cure_model').html(testUseTime.mode);
-                            $('#data_version').html(testUseTime.dataVersion);
+                    }, function (workParamMap) {
+                        if (workParamMap) {
+                            $('#model').html(workParamMap.model);
+                            $('#data_version').html(workParamMap.dataVersion);
+                            $('#useTime').html(workParamMap.yesterday+"~"+workParamMap.today);
 
-                            $('#presure1').html(testUseTime.presure1);
-                            $('#presure2').html(testUseTime.presure2);
-                            $('#startPressure').html(testUseTime.startPresure);
-                            $('#cureDelay').html(testUseTime.cureDelay);
-                            $('#breathRate').html(testUseTime.breathRate);
+                            $('#cure_model').html(workParamMap.mode);
+                            $('#presure1').html(workParamMap.presure1);
+                            $('#presure2').html(workParamMap.presure2);
+                            $('#startPressure').html(workParamMap.startPresure);
+                            $('#cureDelay').html(workParamMap.cureDelay);
+                            $('#breathRate').html(workParamMap.breathRate);
                             $('#boostslope').html();
                             $('#buckslope').html();
-                            $('#breathRatio').html(testUseTime.breathRatio);
+                            $('#breathRatio').html(workParamMap.breathRatio);
+                        }
+                    });
+                },
 
+                //获取使用信息
+                getStatisticsDataUseInfo: function () {
+                    DataHandler.getStatisticsDataUseInfo({
+                        deviceId: $('#id').val(),
+                        startTime: $('#createDateDay').val(),
+                        endTime: $('#endDateDay').val()
+                    }, function (useInfoMap) {
+                        if (useInfoMap) {
                             //获取使用信息
-                            $('#totalDays').html(testUseTime.breathRatio);
-                            $('#moreThan4HoursDays').html(testUseTime.breathRatio);
+                            $('#totalDays').html(useInfoMap.totalDays);
+                            $('#moreThan4HoursDays').html(useInfoMap.moreThan4HoursDays);
                             $('#noUseDays').html(0);
-                            $('#totalTimes').html(testUseTime.peroid);
-                            $('#lessThan4HoursDays').html(testUseTime.breathRatio);
-                            $('#averageUseTime').html(testUseTime.breathRatio + "小时");
-                            $('#moreThan4HoursPercent').html(testUseTime.breathRatio + "%");
+                            $('#totalTimes').html(useInfoMap.totalTimes+ "小时");
+                            $('#lessThan4HoursDays').html(useInfoMap.lessThan4HoursDays);
+                            $('#averageUseTime').html(useInfoMap.averageUseTime + "小时");
+                            $('#moreThan4HoursPercent').html(useInfoMap.moreThan4HoursPercent + "%");
                         }
                     });
                 },
@@ -93,6 +109,29 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
 
                             $('#fiftyPercentBP').html(ossDataMap.fiftyPercentBP);
                             $('#ninetyPercentBP').html(ossDataMap.ninetyPercentBP);
+
+                        }
+                    });
+                },
+
+                //获取呼吸事件
+                getBreathEventData: function () {
+                    DataHandler.getBreathEventData({
+                        deviceId: $('#id').val()
+                    }, function (breathEventDataMap) {
+                        if (breathEventDataMap) {
+
+                            $('#ahi').html(breathEventDataMap.ahi);
+                            $('#ai').html(breathEventDataMap.ai);
+
+                            $('#hi').html(breathEventDataMap.hi);
+                            $('#snore').html(breathEventDataMap.snore);
+
+                            $('#csa').html(breathEventDataMap.csa);
+                            $('#csr').html(breathEventDataMap.csr);
+
+                            $('#pb').html(breathEventDataMap.pb);
+
 
                         }
                     });
@@ -143,7 +182,18 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 },
 
                 /**
-                 * 获取统计数据-潮气量，分钟通气量，呼吸频率，呼吸比，呼吸事件，漏气信息
+                 * 获取统计数据-使用信息
+                 * @param params
+                 * @param callback
+                 */
+                getStatisticsDataUseInfo: function (params, callback) {
+                    $.post(path + '/admin/statisti/data/getStatisticsDataUseInfo', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 获取统计数据-潮气量，分钟通气量，呼吸频率，呼吸比
                  * @param params
                  * @param callback
                  */
@@ -152,6 +202,18 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                         callback(backData);
                     });
                 },
+
+                /**
+                 * 获取统计数据-呼吸事件
+                 * @param params
+                 * @param callback
+                 */
+                getBreathEventData: function (params, callback) {
+                    $.post(path + '/admin/statisti/data/getBreathEventData', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
                 /**
                  * 获取设备参数
                  * @param params

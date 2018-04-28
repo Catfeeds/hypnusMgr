@@ -6,7 +6,9 @@ import com.catt.common.base.repository.dao.impl.BaseDaoImpl;
 import com.catt.common.util.lang.StringUtil;
 import com.catt.hypnus.repository.dao.deviceMgr.UsetimeDao;
 import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
+import com.gci.common.util.collections.CollectionUtil;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -53,10 +55,6 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         }
         sql.append(" order by t.record_time asc");
 
-
-        System.out.println("小喇叭，就睇下你咩料："+sql.toString());
-
-
         return this.findListBySql(sql.toString(), param, Map.class);
     }
 
@@ -79,28 +77,28 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
     }
 
 
-
-
-
-
-
-
-
-
-
     /**
-     * 查询当天使用记录
+     * 获取设备信息，工作参数数据（设备详情统计数据）
      *
      * @param deviceId
      * @param todayString
      * @return
      */
-    public List<Map> findListByToday(String deviceId,String todayString ) {
+    public Map getStatisticsDataWorkParam(String deviceId,String todayString ) {
         StringBuffer sql = new StringBuffer();
+        Map workParamMap = null;
         Map param = new HashMap<>();
-        sql.append(baseSql());
+        sql.append("SELECT t.device_id as deviceId,t.starttime,t.end_time as endTime,t.mode,t.breathrate_pos as breathratePos,t.breath_fit as breathFit,t.breath_rate as breathRate,");
+        sql.append("t.breath_ratio as breathRatio,t.cure_delay as cureDelay,t.data_version as dataVersion,t.dep_level as depLevel,t.dep_type as depType,");
+        sql.append("t.dileak_pos as dileakPos,t.exhale_sensitive as exhaleSensitive,t.intime_pos as intimePos,t.mv_pos as mvPos,t.m_pressure_1 as presure1,t.m_pressure_2 as presure2,t.peroid,");
+        sql.append("t.pressure_pos as presurePos,t.pressure_support as presureSupport,t.record_time as recordTime,t.start_pressure as startPresure,d.model from usetime t,device d ");
+        sql.append("WHERE 1=1 ");
         if (StringUtil.isNotBlank(deviceId)) {
             sql.append(" AND t.device_id = :deviceId ");
+            param.put("deviceId", deviceId);
+        }
+        if (StringUtil.isNotBlank(deviceId)) {
+            sql.append(" AND d.device_id = :deviceId ");
             param.put("deviceId", deviceId);
         }
         if (todayString != null) {
@@ -109,12 +107,11 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         }
         sql.append(" order by t.record_time asc");
 
-
-        System.out.println("小喇叭！DAO的SQL：" + sql.toString());
-
-
-
-        return this.findListBySql(sql.toString(), param, Map.class);
+        List<Map> workParamList = this.findListBySql(sql.toString(), param, Map.class);
+        if (CollectionUtil.isNotEmpty(workParamList)) {
+            workParamMap = workParamList.get(0);
+        }
+        return workParamMap;
     }
 
     public List<Map> findListByTimeStr(String deviceId, String startTime, String endTime) {
@@ -178,4 +175,77 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         sql.append(" WHERE 1=1 ");
         return sql;
     }
+
+
+    /**
+     * 获取呼吸事件数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param date
+     * @return
+     */
+    @Override
+    public Map getBreathEventData(String deviceId, String date) {
+        Assert.notNull(deviceId);
+        Map breathEventDataMap = null;
+        StringBuffer sql = new StringBuffer();
+        Map param = new HashMap();
+        sql.append("select t.ai_cnt as ai,t.hi_cnt as hi, t.snore_cnt as snore,t.csa_cnt as csa,t.csr_cnt as csr,t.pb_cnt as pb");
+        sql.append(" from t_dev_day_statistics t ");
+        if (StringUtil.checkStr(deviceId)) {
+            sql.append(" where t.device_id =:deviceId");
+            param.put("deviceId", deviceId);
+        }
+        if (StringUtil.checkStr(date)) {
+            sql.append(" AND t.date_mark = :date ");
+            param.put("date", date);
+        }
+        List<Map> breathEventDataList = this.findListBySql(sql.toString(), param, Map.class);
+        if (CollectionUtil.isNotEmpty(breathEventDataList)) {
+            breathEventDataMap = breathEventDataList.get(0);
+        }
+        return breathEventDataMap;
+    }
+
+    /**
+     * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Override
+    public Map getStatisticsDataUseInfo(String deviceId, String startTime,String endTime) {
+        Assert.notNull(deviceId);
+        Map useInfoMap = null;
+        StringBuffer sql = new StringBuffer();
+        Map param = new HashMap();
+        sql.append("select t.usedays as usedays,t.use4days as use4days, t.useseconds as useseconds");
+        sql.append(" from t_dev_day_statistics t ");
+        if (StringUtil.checkStr(deviceId)) {
+            sql.append(" where t.device_id =:deviceId");
+            param.put("deviceId", deviceId);
+        }
+        if (StringUtil.checkStr(startTime)) {
+            sql.append(" AND t.date_mark BETWEEN :startTime");
+            param.put("startTime", startTime);
+            sql.append(" AND  :endTime ");
+            param.put("endTime", endTime);
+        }
+        List<Map> useInfoMapList = this.findListBySql(sql.toString(), param, Map.class);
+        if (CollectionUtil.isNotEmpty(useInfoMapList)) {
+            useInfoMap = useInfoMapList.get(0);
+        }
+        return useInfoMap;
+    }
+
+
+
+
+
+
+
+
+
 }

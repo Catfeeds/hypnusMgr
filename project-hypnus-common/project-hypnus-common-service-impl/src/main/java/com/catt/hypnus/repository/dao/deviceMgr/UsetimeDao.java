@@ -50,27 +50,14 @@ public interface UsetimeDao extends BaseDao<Usetime, Long> {
     List<Map> findList(String deviceId, Date startTime, Date endTime);
 
 
-
-
     /**
-     * 查询当天使用记录
+     * 获取设备信息，工作参数数据（设备详情统计数据）
      *
      * @param deviceId
      * @param todayString
      * @return
      */
-    List<Map> findListByToday(String deviceId,String todayString);
-
-
-
-
-
-
-
-
-
-
-
+    Map getStatisticsDataWorkParam(String deviceId,String todayString);
 
 
     /**
@@ -91,5 +78,26 @@ public interface UsetimeDao extends BaseDao<Usetime, Long> {
      * @return
      */
     List<Map> findSumPeroid(String deviceId, String startTime, String endTime);
+
+
+
+    /**
+     * 获取呼吸事件数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param date
+     * @return
+     */
+    Map getBreathEventData(String deviceId, String date);
+
+    /**
+     * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Map getStatisticsDataUseInfo(String deviceId, String startTime,String endTime);
 
 }

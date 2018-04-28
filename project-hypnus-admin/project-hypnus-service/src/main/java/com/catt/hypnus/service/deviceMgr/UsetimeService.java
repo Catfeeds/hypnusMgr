@@ -48,16 +48,13 @@ public interface UsetimeService {
     List<Map> findListByDay(String deviceId,Date today);
 
 
-
-
-
     /**
-     * 按日期查询使用记录
+     * 获取设备信息，工作参数数据（设备详情统计数据）
      *
      * @param deviceId
      * @return
      */
-    List<Map> findListByToday(String deviceId,Date today);
+    Map getStatisticsDataWorkParam(String deviceId,Date today);
 
     /**
      * 分页查询使用记录
@@ -116,6 +113,27 @@ public interface UsetimeService {
     Map getHypopneaEventData(String deviceId, String startTime, String endTime);
 
     Map getApneaData(String deviceId, String startTime, String endTime);
+
+
+
+    /**
+     * 获取呼吸事件数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param date
+     * @return
+     */
+    Map getBreathEventData(String deviceId, String date);
+
+    /**
+     * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Map getStatisticsDataUseInfo(String deviceId, String startTime,String endTime);
 
 }
 

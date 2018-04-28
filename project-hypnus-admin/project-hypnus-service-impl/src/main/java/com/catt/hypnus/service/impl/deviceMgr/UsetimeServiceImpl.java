@@ -141,25 +141,30 @@ public class UsetimeServiceImpl implements UsetimeService {
 
 
     /**
-     * 查询当天使用数据
+     * 获取设备信息，工作参数数据（设备详情统计数据）
      *
      * @param deviceId
      * @param today
      * @return
      */
-    public List<Map> findListByToday(String deviceId, Date today) {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String todayString = sdf.format(today);
-        System.out.println("小喇叭！Service打印时间：" + todayString);
-
-
+    public Map getStatisticsDataWorkParam(String deviceId, Date today) {
         //由于数据库没有最新记录，所以用固定的开始时间进行测试
         String todayStringTest = "2018-04-11 16:06:38";
 
-        List<Map> list = usetimeDao.findListByToday(deviceId, todayStringTest);
+        //当天日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String todayString = sdf.format(today);
+        //昨天日期
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE,-1);
+        String yesterday = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
 
-        return list;
+        Map workParamMap = usetimeDao.getStatisticsDataWorkParam(deviceId, todayStringTest);
+
+        workParamMap.put("yesterday",yesterday);
+        workParamMap.put("today",todayString);
+
+        return workParamMap;
 
     }
 
@@ -639,6 +644,88 @@ public class UsetimeServiceImpl implements UsetimeService {
         hypopnea.put("dateList", dateList);
         hypopnea.put("eventList", eventList);
         return hypopnea;
+    }
+
+
+
+    /**
+     * 获取呼吸事件数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param date
+     * @return
+     */
+    @Override
+    public Map getBreathEventData(String deviceId, String date) {
+        Map breathEventDataMap;
+        breathEventDataMap = usetimeDao.getBreathEventData(deviceId,date);
+        if(breathEventDataMap!=null){
+            //计算AHI=AI+HI
+            int ai = (int) breathEventDataMap.get("ai");
+            int hi = (int) breathEventDataMap.get("hi");
+            int ahi = ai+hi;
+            breathEventDataMap.put("ahi",ahi);
+
+            return breathEventDataMap;
+        }else {//如果没有数据，则显示0
+            Map breathEventDataMapForNull = new HashMap();
+
+            breathEventDataMapForNull.put("ahi",0);
+            breathEventDataMapForNull.put("ai",0);
+            breathEventDataMapForNull.put("hi",0);
+            breathEventDataMapForNull.put("snore",0);
+            breathEventDataMapForNull.put("csa",0);
+            breathEventDataMapForNull.put("csr",0);
+            breathEventDataMapForNull.put("pb",0);
+
+            return breathEventDataMapForNull;
+        }
+    }
+
+    /**
+     * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Override
+    public Map getStatisticsDataUseInfo(String deviceId, String startTime,String endTime){
+        Map useInfoMap ;
+        useInfoMap = usetimeDao.getStatisticsDataUseInfo(deviceId,startTime,endTime);
+        if (useInfoMap!=null){
+            //计算总天数 = 使用时间段总天数
+            useInfoMap.put("totalDays",1);
+            //计算使用>=4小时天数 = 使用时间段内记录条数的use4days总和
+            useInfoMap.put("moreThan4HoursDays",useInfoMap.get("use4days"));
+            //计算未使用天数 = 使用时间段总天数 - 使用时间段内记录条数
+            useInfoMap.put("noUseDays",0);
+            //计算总使用时间 = 使用时间段内记录条数的 usesecond总和 单位：小时
+            int totalSeconds = (int) useInfoMap.get("useseconds");
+            double totalTimes = totalSeconds/3600;//把秒转换为小时
+            useInfoMap.put("totalTimes",totalTimes);
+            //计算使用<4小时天数 = 使用时间段内记录条数use4days为0的总和
+            useInfoMap.put("lessThan4HoursDays",0);
+            //计算平均每天使用时长 = 总使用时间/总天数
+            useInfoMap.put("averageUseTime",0);
+            //计算使用>=4小时天数百分比 = 使用>=4小时天数/总天数
+            useInfoMap.put("moreThan4HoursPercent",0);
+
+            return useInfoMap;
+        }else{//如果没有数据，则显示0
+            Map useInfoMapForNull = new HashMap();
+            useInfoMapForNull.put("totalDays",1);//默认显示使用总天数为：1天
+            useInfoMapForNull.put("moreThan4HoursDays",0);
+            useInfoMapForNull.put("noUseDays",0);
+            useInfoMapForNull.put("totalTimes",0);
+            useInfoMapForNull.put("lessThan4HoursDays",0);
+            useInfoMapForNull.put("averageUseTime",0);
+            useInfoMapForNull.put("moreThan4HoursPercent",0);
+
+            return useInfoMapForNull;
+        }
+
     }
 
 }
