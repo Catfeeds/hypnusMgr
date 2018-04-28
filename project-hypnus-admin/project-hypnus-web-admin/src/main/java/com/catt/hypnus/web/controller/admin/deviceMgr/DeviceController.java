@@ -13,7 +13,6 @@ import com.catt.hypnus.repository.entity.userMgr.DeviceShadowDTO;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
 import com.catt.hypnus.service.deviceMgr.DeviceService;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,13 +27,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <pre>
@@ -245,26 +238,16 @@ public class DeviceController extends BaseController {
     @ResponseBody
     public Map getStatisticsDataWorkParam(String deviceId) {
 
-//        String startTime = "2018-04-11 16:03:23";
-//        String endTime = "2018-04-11 16:03:27";
-
-//        List<Map> usetimeServiceMapList = usetimeService.findMapList(deviceId,startTime,endTime);
-
-        Date day = new Date();
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-//        System.out.println("Controller打印时间："+df.format(day));
         Date today = new Date();
 
-        List<Map> usetimeServiceMapList2 = usetimeService.findListByToday(deviceId, today);
+        Map usetimeServiceMap = usetimeService.getStatisticsDataWorkParam(deviceId, today);
 
-        Map testUseTime = new HashMap();
-        if (CollectionUtils.isNotEmpty(usetimeServiceMapList2)) {
-            testUseTime = usetimeServiceMapList2.get(0);
-        }
+//        Map testUseTime = new HashMap();
+//        if (CollectionUtils.isNotEmpty(usetimeServiceMapList2)) {
+//            testUseTime = usetimeServiceMapList2.get(0);
+//        }
 
-        return testUseTime;
+        return usetimeServiceMap;
 
     }
 
