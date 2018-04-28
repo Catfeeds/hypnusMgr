@@ -1,7 +1,7 @@
 package com.catt.hypnus.service.impl.iot;
 
 import com.aliyuncs.exceptions.ClientException;
-import com.catt.hypnus.repository.entity.userMgr.DeviceShadowDTO;
+import com.catt.hypnus.repository.entity.DeviceShadow;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
@@ -13,7 +13,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class ShadowDeviceTest {
     public static void main(String[] args) throws ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        DeviceShadowDTO shadow = ShadowDeviceHandler.getShadowDevice("CP70100505S");
+        DeviceShadow shadow = ShadowDeviceHandler.getShadowDevice("CP70100505S");
 //        System.out.println(shadow.getAi_alarm());
 //        shadow.setAi_alarm("1");
 //        ShadowDeviceHandler.updateShadowDevice(shadow,"363338363035511100390036");

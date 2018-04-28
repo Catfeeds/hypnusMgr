@@ -10,6 +10,7 @@ import com.catt.hypnus.repository.dao.deviceMgr.BindLogInfoDao;
 import com.catt.hypnus.repository.dao.deviceMgr.DeviceDao;
 import com.catt.hypnus.repository.dao.factoryMgr.FactoryInfoDao;
 import com.catt.hypnus.repository.dao.userMgr.UserInfoDao;
+import com.catt.hypnus.repository.entity.DeviceShadow;
 import com.catt.hypnus.repository.entity.deviceMgr.BindLogInfo;
 import com.catt.hypnus.repository.entity.deviceMgr.Device;
 import com.catt.hypnus.repository.entity.factoryMgr.FactoryInfo;
@@ -130,8 +131,8 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
 
-    public DeviceShadowDTO getShadowDevice(String deviceName) throws ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        DeviceShadowDTO shadow = ShadowDeviceHandler.getShadowDevice(deviceName);
+    public DeviceShadow getShadowDevice(String deviceName) throws ClientException, IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        DeviceShadow shadow = ShadowDeviceHandler.getShadowDevice(deviceName);
         return shadow;
     }
 
