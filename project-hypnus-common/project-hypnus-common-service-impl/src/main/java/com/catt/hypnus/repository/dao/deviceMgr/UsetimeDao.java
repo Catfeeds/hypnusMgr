@@ -59,6 +59,15 @@ public interface UsetimeDao extends BaseDao<Usetime, Long> {
      */
     Map getStatisticsDataWorkParam(String deviceId,String todayString);
 
+    /**
+     * 获取设备信息，工作参数数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param starttime
+     * @param endtime
+     * @return
+     */
+    List<Map>  getStatisticsDataWorkParamPeriod(String deviceId,String starttime, String endtime);
 
     /**
      * 统计数据中使用，全部提前12小时统计

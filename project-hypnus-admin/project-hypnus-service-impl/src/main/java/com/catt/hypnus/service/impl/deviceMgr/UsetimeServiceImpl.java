@@ -161,6 +161,70 @@ public class UsetimeServiceImpl implements UsetimeService {
 
     }
 
+    /**
+     * 重载一个获取设备信息，工作参数数据（设备详情统计数据）
+     * @auth lizb
+     * @param deviceId
+     * @param starttime
+     * @param endtime
+     * @return
+     */
+    public Map getStatisticsDataWorkParamPeriod(String deviceId, String starttime, String endtime) {
+
+        List<Map> workParamMaplist = usetimeDao.getStatisticsDataWorkParamPeriod(deviceId, starttime, endtime);
+        Map workParamMap = new HashMap();
+        Set modes = new HashSet();
+        Set pres1 = new HashSet();
+        Set pres2 = new HashSet();
+        Set startp = new HashSet();
+        Set delay = new HashSet();
+        for(Map<String, Object>map : workParamMaplist){
+            modes.add(map.get("mode"));
+            pres1.add(map.get("presure1"));
+            pres2.add(map.get("presure2"));
+            startp.add(map.get("startPresure"));
+            delay.add(map.get("cureDelay"));
+        }
+        if(modes.size()==1)
+        {
+            workParamMap.put("mode",workParamMaplist.get(0).get("mode"));
+        }
+        else
+        {//模式冲突
+            workParamMap.put("mode",0);
+        }
+
+        if(pres1.size()==1)
+            workParamMap.put("presure1",workParamMaplist.get(0).get("presure1"));
+        else
+            workParamMap.put("presure1","设置冲突");
+
+        if(pres2.size()==1)
+            workParamMap.put("presure2",workParamMaplist.get(0).get("presure2"));
+        else
+            workParamMap.put("presure2","设置冲突");
+
+        if(startp.size()==1)
+            workParamMap.put("startPresure",workParamMaplist.get(0).get("startPresure"));
+        else
+            workParamMap.put("startPresure","设置冲突");
+
+        if(delay.size()==1)
+            workParamMap.put("cureDelay",workParamMaplist.get(0).get("cureDelay"));
+        else
+            workParamMap.put("cureDelay","设置冲突");
+
+//        if(!workParamMaplist.isEmpty())
+//            workParamMap = workParamMaplist.get(0);
+
+        workParamMap.put("model",workParamMaplist.get(0).get("model"));
+        workParamMap.put("dataVersion",workParamMaplist.get(0).get("dataVersion"));
+        workParamMap.put("yesterday",starttime);
+        workParamMap.put("today",endtime);
+        return workParamMap;
+
+    }
+
     public List<Map> findListByTimeStr(String deviceId, String startTime, String endTime) {
         return usetimeDao.findListByTimeStr(deviceId, startTime, endTime);
     }

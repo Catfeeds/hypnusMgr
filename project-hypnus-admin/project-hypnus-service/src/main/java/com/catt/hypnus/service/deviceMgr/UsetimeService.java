@@ -57,6 +57,16 @@ public interface UsetimeService {
     Map getStatisticsDataWorkParam(String deviceId,Date today);
 
     /**
+     * 获取设备信息，工作参数数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param starttime
+     * @param endtime
+     * @return
+     */
+    Map getStatisticsDataWorkParamPeriod(String deviceId,String starttime, String endtime);
+
+    /**
      * 分页查询使用记录
      *
      * @param pageable
