@@ -82,7 +82,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                             //获取使用信息
                             $('#totalDays').html(useInfoMap.totalDays);
                             $('#moreThan4HoursDays').html(useInfoMap.moreThan4HoursDays);
-                            $('#noUseDays').html(0);
+                            $('#noUseDays').html(useInfoMap.noUseDays);
                             $('#totalTimes').html(useInfoMap.totalTimes+ "小时");
                             $('#lessThan4HoursDays').html(useInfoMap.lessThan4HoursDays);
                             $('#averageUseTime').html(useInfoMap.averageUseTime + "小时");

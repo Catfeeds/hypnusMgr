@@ -10,11 +10,7 @@ import com.catt.common.util.collections.MapUtil;
 import com.catt.common.util.lang.DateUtil;
 import com.catt.hypnus.OssDataHandler;
 import com.catt.hypnus.repository.dao.deviceMgr.UsetimeDao;
-import com.catt.hypnus.repository.dao.eventMgr.ApneaEventDao;
-import com.catt.hypnus.repository.dao.eventMgr.CsaEventDao;
-import com.catt.hypnus.repository.dao.eventMgr.CsrEventDao;
-import com.catt.hypnus.repository.dao.eventMgr.HypopneaEventDao;
-import com.catt.hypnus.repository.dao.eventMgr.PbEventDao;
+import com.catt.hypnus.repository.dao.eventMgr.*;
 import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
 import com.catt.hypnus.repository.form.deviceMgr.UsetimeForm;
 import com.catt.hypnus.service.base.deviceMgr.UsetimeBaseService;
@@ -28,15 +24,12 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 使用记录接口实现类
@@ -692,32 +685,51 @@ public class UsetimeServiceImpl implements UsetimeService {
      */
     @Override
     public Map getStatisticsDataUseInfo(String deviceId, String startTime,String endTime){
+        Map totalTimesMap = usetimeDao.getStatisticsDataTotalTimes(deviceId,startTime,endTime);//获取总使用时间
         Map useInfoMap ;
         useInfoMap = usetimeDao.getStatisticsDataUseInfo(deviceId,startTime,endTime);
         if (useInfoMap!=null){
             //计算总天数 = 使用时间段总天数
-            useInfoMap.put("totalDays",1);
+            BigInteger t_totalDays = (BigInteger) totalTimesMap.get("totalDays");
+            int totalDays = t_totalDays.intValue();
+            useInfoMap.put("totalDays",totalDays);
+
             //计算使用>=4小时天数 = 使用时间段内记录条数的use4days总和
-            useInfoMap.put("moreThan4HoursDays",useInfoMap.get("use4days"));
-            //计算未使用天数 = 使用时间段总天数 - 使用时间段内记录条数
-            useInfoMap.put("noUseDays",0);
+            BigDecimal t_moreThan4HoursDays = (BigDecimal) totalTimesMap.get("totalUse4days");
+            int moreThan4HoursDays = t_moreThan4HoursDays.intValue();
+            useInfoMap.put("moreThan4HoursDays",moreThan4HoursDays);
+
+            //计算未使用天数 = 使用时间段总天数 - 使用时间段内总使用天数
+            BigDecimal t_totalUseDays = (BigDecimal) totalTimesMap.get("totalUseDays");
+            int totalUseDays = t_totalUseDays.intValue();
+            int noUseDays = totalDays - totalUseDays;
+            useInfoMap.put("noUseDays",noUseDays);
+
             //计算总使用时间 = 使用时间段内记录条数的 usesecond总和 单位：小时
-            int totalSeconds = (int) useInfoMap.get("useseconds");
-            double totalTimes = totalSeconds/3600;//把秒转换为小时
+            BigDecimal totalSeconds = (BigDecimal) totalTimesMap.get("totalSeconds");
+            DecimalFormat df = new DecimalFormat("0.00");
+            String totalTimes = df.format(totalSeconds.doubleValue()/3600);//把秒转换为小时，保留两位小数
             useInfoMap.put("totalTimes",totalTimes);
-            //计算使用<4小时天数 = 使用时间段内记录条数use4days为0的总和
-            useInfoMap.put("lessThan4HoursDays",0);
+
+            //计算使用<4小时天数 = 总使用天数-使用>=4小时天数
+            int lessThan4HoursDays = totalUseDays - moreThan4HoursDays;
+            useInfoMap.put("lessThan4HoursDays",lessThan4HoursDays);
+
             //计算平均每天使用时长 = 总使用时间/总天数
-            useInfoMap.put("averageUseTime",0);
-            //计算使用>=4小时天数百分比 = 使用>=4小时天数/总天数
-            useInfoMap.put("moreThan4HoursPercent",0);
+            String averageUseTime = df.format((totalSeconds.doubleValue()/3600)/totalDays);
+            useInfoMap.put("averageUseTime",averageUseTime);
+
+            //计算使用>=4小时天数百分比 = 使用>=4小时天数/总使用天数
+            DecimalFormat df_averageUseTime = new DecimalFormat("0.0");
+            String moreThan4HoursPercent = df_averageUseTime.format(moreThan4HoursDays/totalDays*100);
+            useInfoMap.put("moreThan4HoursPercent",moreThan4HoursPercent);
 
             return useInfoMap;
         }else{//如果没有数据，则显示0
             Map useInfoMapForNull = new HashMap();
             useInfoMapForNull.put("totalDays",1);//默认显示使用总天数为：1天
             useInfoMapForNull.put("moreThan4HoursDays",0);
-            useInfoMapForNull.put("noUseDays",0);
+            useInfoMapForNull.put("noUseDays",1);
             useInfoMapForNull.put("totalTimes",0);
             useInfoMapForNull.put("lessThan4HoursDays",0);
             useInfoMapForNull.put("averageUseTime",0);

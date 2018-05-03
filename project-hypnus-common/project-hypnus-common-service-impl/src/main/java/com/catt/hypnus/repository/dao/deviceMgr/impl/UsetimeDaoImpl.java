@@ -240,6 +240,42 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         return useInfoMap;
     }
 
+    /**
+     * 获取总使用时间
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Override
+    public Map getStatisticsDataTotalTimes(String deviceId, String startTime,String endTime) {
+        Assert.notNull(deviceId);
+        Map totalTimesMap = null;
+        StringBuffer sql = new StringBuffer();
+        Map param = new HashMap();
+        sql.append("SELECT SUM(`useseconds`)  AS totalSeconds,SUM(`usedays`)  AS  totalUseDays,SUM(`use4days`) AS totalUse4days,");
+        sql.append("DATEDIFF( :endTime");
+        param.put("endTime", endTime);
+        sql.append(", :startTime) AS totalDays ");
+        param.put("startTime", startTime);
+        sql.append(" from t_dev_day_statistics t ");
+        if (StringUtil.checkStr(deviceId)) {
+            sql.append(" where t.device_id =:deviceId");
+            param.put("deviceId", deviceId);
+        }
+        if (StringUtil.checkStr(startTime)) {
+            sql.append(" AND t.date_mark BETWEEN :startTime");
+            param.put("startTime", startTime);
+            sql.append(" AND  :endTime ");
+            param.put("endTime", endTime);
+        }
+        List<Map> totalTimesList = this.findListBySql(sql.toString(), param, Map.class);
+        if (CollectionUtil.isNotEmpty(totalTimesList)) {
+            totalTimesMap = totalTimesList.get(0);
+        }
+        return totalTimesMap;
+    }
 
 
 
