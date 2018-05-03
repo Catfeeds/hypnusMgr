@@ -80,7 +80,7 @@
                     <th colspan="1" id="data_version"></th>
                 </tr>
                 <tr>
-                    <td>使用时间：</td>
+                    <td>时间段：</td>
                     <th id="useTime"></th>
                 </tr>
             </table>
@@ -95,31 +95,32 @@
                 <tr>
                     <td>工作模式：</td>
                     <th id="cure_model"></th>
+                    <td></td><th></th>
                 </tr>
-                <tr>
-                    <td>吸气压力：</td>
+                <tr class="controlmode">
+                    <td id="pressure1_name">吸气压力：</td>
                     <th id="presure1"></th>
-                    <td>呼气压力：</td>
+                    <td id="pressure2_name">呼气压力：</td>
                     <th id="presure2"></th>
                 </tr>
-                <tr>
+                <tr class="controlmode">
                     <td>起始压力：</td>
                     <th id="startPressure"></th>
                     <td>延迟时间：</td>
                     <th id="cureDelay"></th>
                 </tr>
-                <tr>
+            <%--    <tr class="controlmode">
                     <td>呼吸频率：</td>
                     <th id="breathRate"></th>
                     <td>上升斜坡：</td>
                     <th id="boostslope"></th>
                 </tr>
-                <tr>
+                <tr class="controlmode">
                     <td>下降斜坡：</td>
                     <th id="buckslope"></th>
                     <td>呼吸比：</td>
                     <th id="breathRatio"></th>
-                </tr>
+                </tr>--%>
             </table>
         </div>
     </div>

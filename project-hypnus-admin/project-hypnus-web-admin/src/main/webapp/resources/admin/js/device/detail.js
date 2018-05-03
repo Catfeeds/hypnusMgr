@@ -51,22 +51,70 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 //获取工作参数
                 getStatisticsDataWorkParam: function () {
                     DataHandler.getStatisticsDataWorkParam({
-                        deviceId: $('#id').val()
+                        deviceId: $('#id').val(),
+                        startTime: $('#createDateDay').val(),
+                        endTime: $('#endDateDay').val()
                     }, function (workParamMap) {
                         if (workParamMap) {
                             $('#model').html(workParamMap.model);
                             $('#data_version').html(workParamMap.dataVersion);
                             $('#useTime').html(workParamMap.yesterday+"~"+workParamMap.today);
 
-                            $('#cure_model').html(workParamMap.mode);
-                            $('#presure1').html(workParamMap.presure1);
-                            $('#presure2').html(workParamMap.presure2);
-                            $('#startPressure').html(workParamMap.startPresure);
-                            $('#cureDelay').html(workParamMap.cureDelay);
-                            $('#breathRate').html(workParamMap.breathRate);
-                            $('#boostslope').html();
-                            $('#buckslope').html();
-                            $('#breathRatio').html(workParamMap.breathRatio);
+                            var modestring =  new Array();
+                            modestring[0] ="设置冲突";
+                            modestring[1] ="CPAP";
+                            modestring[2] ="APAP";
+                            modestring[3] ="BPAP-S";
+                            modestring[4] ="AutoBPAP-S";
+                            modestring[5] ="BPAP-T";
+                            modestring[6] ="BPAP-ST";
+
+                            if(workParamMap.mode ==1)
+                            {
+                                $('#pressure1_name').html("治疗压力：");
+                                $('#pressure2_name').hidden();
+                                $('#presure2').hidden();
+                            }
+                            else if (workParamMap.mode ==2)
+                            {
+                                $('#pressure1_name').html("最大压力：");
+                                $('#pressure2_name').html("最小压力：");
+                            }
+                            else if(workParamMap.mode ==3)
+                            {
+                                $('#pressure1_name').html("吸气压力：");
+                                $('#pressure2_name').html("呼气压力：");
+                            }
+                            else if(workParamMap.mode ==4)
+                            {
+                                $('#pressure1_name').html("最小吸气压力：");
+                                $('#pressure2_name').html("最大呼气压力：");
+                            }
+                            else (workParamMap.mode ==5)
+                            {
+                                $('#pressure1_name').html("IPAP压力：");
+                                $('#pressure2_name').html("EPAP压力：");
+                            }
+
+                            if(workParamMap.mode ==0)
+                            {
+                                $('#cure_model').html("Conflict");
+                                $('.controlmode').hide();
+                            }
+                            else
+                            {
+                                $('#cure_model').html(modestring[workParamMap.mode]);
+                                $('#presure1').html(workParamMap.presure1);
+                                $('#presure2').html(workParamMap.presure2);
+                                $('#startPressure').html(workParamMap.startPresure);
+                                $('#cureDelay').html(workParamMap.cureDelay);
+                                /*$('#breathRate').html(workParamMap.breathRate);
+                                $('#boostslope').html();
+                                $('#buckslope').html();
+                                $('#breathRatio').html(workParamMap.breathRatio);*/
+                                $('.controlmode').show();
+                            }
+
                         }
                     });
                 },
@@ -176,7 +224,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                  * @param callback
                  */
                 getStatisticsDataWorkParam: function (params, callback) {
-                    $.post(path + '/admin/deviceMgr/getStatisticsDataWorkParam', params, function (backData) {
+                    $.post(path + '/admin/deviceMgr/getStatisticsDataWorkParamNew', params, function (backData) {
                         callback(backData);
                     });
                 },

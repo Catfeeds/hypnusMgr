@@ -246,11 +246,27 @@ public class DeviceController extends BaseController {
 //        if (CollectionUtils.isNotEmpty(usetimeServiceMapList2)) {
 //            testUseTime = usetimeServiceMapList2.get(0);
 //        }
-
+        System.out.println("data work param Controller deal with");
         return usetimeServiceMap;
 
     }
 
+    /**
+     * 重写工作参数的实现方法
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     */
+    @RequestMapping(value = "/getStatisticsDataWorkParamNew", method = RequestMethod.POST)
+    @ResponseBody
+    public Map getStatisticsDataWorkParamNew(String deviceId,String startTime,String endTime) {
+        //默认一天从中午12点开始算计
+        startTime += " 12:00:00";
+        endTime += " 12:00:00";
+        System.out.println("new work param Controller  starttime ="+startTime+" endtime = "+endTime);
+        Map usetimeServiceMap = usetimeService.getStatisticsDataWorkParamPeriod(deviceId, startTime, endTime);
+        return usetimeServiceMap;
+    }
 
     /**
      * 获取统计数据页面的潮气量，分钟通气量，呼吸频率，呼吸比，呼吸事件，漏气信息
