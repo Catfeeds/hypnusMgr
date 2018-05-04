@@ -142,7 +142,9 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 //获取潮气量，分钟通气量，呼吸频率，呼吸比
                 getStatisticsDataFromOSS: function () {
                     DataHandler.getStatisticsDataFromOSS({
-                        deviceId: $('#id').val()
+                        deviceId: $('#id').val(),
+                        startTime: $('#createDateDay').val(),
+                        endTime: $('#endDateDay').val()
                     }, function (ossDataMap) {
                         if (ossDataMap) {
 
@@ -246,7 +248,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                  * @param callback
                  */
                 getStatisticsDataFromOSS: function (params, callback) {
-                    $.post(path + '/admin/deviceMgr/getStatisticsDataFromOSS', params, function (backData) {
+                    $.post(path + '/admin/statisti/data/getStatisticsDataFromOSS', params, function (backData) {
                         callback(backData);
                     });
                 },

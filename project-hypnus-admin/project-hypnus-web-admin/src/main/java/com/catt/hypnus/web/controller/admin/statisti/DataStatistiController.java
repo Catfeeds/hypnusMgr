@@ -34,7 +34,7 @@ public class DataStatistiController extends BaseController {
     @Resource(name = "deviceServiceImpl")
     private DeviceService deviceService;
 
-    // 订单统计服务接口
+    // 使用时间信息
 
     @Resource(name = "usetimeServiceImpl")
     private UsetimeService usetimeService;
@@ -79,6 +79,31 @@ public class DataStatistiController extends BaseController {
     }
 
 
+    /**
+     * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/getStatisticsDataUseInfo"}, method = RequestMethod.POST)
+    public Map getStatisticsDataUseInfo(String deviceId,String startTime,String endTime) {
+        Map useInfoMap = usetimeService.getStatisticsDataUseInfo(deviceId,startTime,endTime);
+        return useInfoMap;
+    }
+
+    /**
+     * 获取统计数据页面的潮气量，分钟通气量，呼吸频率，呼吸比（从OSS文件中读取）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     */
+    @RequestMapping(value = "/getStatisticsDataFromOSS", method = RequestMethod.POST)
+    @ResponseBody
+    public Map getStatisticsDataFromOSS(String deviceId,String startTime,String endTime){
+        Map ossDataMap = usetimeService.getStatisticsDataFromOSS(deviceId,startTime,endTime);
+        return ossDataMap;
+    }
 
     /**
      * 获取呼吸事件数据（设备详情统计数据）
@@ -96,26 +121,5 @@ public class DataStatistiController extends BaseController {
         return breathEventDataMap;
     }
 
-    /**
-     * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）
-     *
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = {"/getStatisticsDataUseInfo"}, method = RequestMethod.POST)
-    public Map getStatisticsDataUseInfo(String deviceId,String startTime,String endTime) {
-        System.out.println("正在努力获取使用信息");
-        System.out.println("统计开始时间："+startTime);
-        System.out.println("统计结束时间："+endTime);
-
-//        //根据计算规则获取当前日期的前一天
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.add(Calendar.DATE,-1);
-//        String yesterday = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-
-        Map useInfoMap = usetimeService.getStatisticsDataUseInfo(deviceId,startTime,endTime);
-        System.out.println("喇叭星！万众期待的使用信息："+useInfoMap);
-        return useInfoMap;
-    }
 
 }

@@ -145,5 +145,15 @@ public interface UsetimeService {
      */
     Map getStatisticsDataUseInfo(String deviceId, String startTime,String endTime);
 
+    /**
+     * 获取统计数据页面的潮气量，分钟通气量，呼吸频率，呼吸比（从OSS文件中读取）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Map getStatisticsDataFromOSS(String deviceId,String startTime,String endTime);
+
 }
 
