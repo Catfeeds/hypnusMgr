@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -107,17 +105,15 @@ public class DataStatistiController extends BaseController {
 
     /**
      * 获取呼吸事件数据（设备详情统计数据）
-     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
      * @return
      */
     @ResponseBody
     @RequestMapping(value = {"/getBreathEventData"}, method = RequestMethod.POST)
-    public Map getBreathEventData(String deviceId) {
-        //根据计算规则获取当前日期的前一天
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE,-1);
-        String yesterday = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-        Map breathEventDataMap = usetimeService.getBreathEventData(deviceId,yesterday);
+    public Map getBreathEventData(String deviceId,String startTime,String endTime) {
+        Map breathEventDataMap = usetimeService.getBreathEventData(deviceId,startTime,endTime);
         return breathEventDataMap;
     }
 

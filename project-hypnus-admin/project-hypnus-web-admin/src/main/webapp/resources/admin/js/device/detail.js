@@ -37,6 +37,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                         EventHandler.getStatisticsDataWorkParam();
                         EventHandler.getStatisticsDataUseInfo();
                         EventHandler.getStatisticsDataFromOSS();
+                        EventHandler.getBreathEventData();
                         EventHandler.getUseData();
                     });
                 },
@@ -167,7 +168,9 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 //获取呼吸事件
                 getBreathEventData: function () {
                     DataHandler.getBreathEventData({
-                        deviceId: $('#id').val()
+                        deviceId: $('#id').val(),
+                        startTime: $('#createDateDay').val(),
+                        endTime: $('#endDateDay').val()
                     }, function (breathEventDataMap) {
                         if (breathEventDataMap) {
 

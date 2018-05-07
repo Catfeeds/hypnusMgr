@@ -709,13 +709,14 @@ public class UsetimeServiceImpl implements UsetimeService {
      * 获取呼吸事件数据（设备详情统计数据）
      *
      * @param deviceId
-     * @param date
+     * @param startTime
+     * @param endTime
      * @return
      */
     @Override
-    public Map getBreathEventData(String deviceId, String date) {
+    public Map getBreathEventData(String deviceId,String startTime,String endTime) {
         Map breathEventDataMap;
-        breathEventDataMap = usetimeDao.getBreathEventData(deviceId,date);
+        breathEventDataMap = usetimeDao.getBreathEventData(deviceId,startTime,endTime);
         if(breathEventDataMap!=null){
             //计算AHI=AI+HI
             int ai = (int) breathEventDataMap.get("ai");
@@ -949,5 +950,10 @@ public class UsetimeServiceImpl implements UsetimeService {
 
         return ossDataMap;
     }
+
+
+
+
+
 
 }

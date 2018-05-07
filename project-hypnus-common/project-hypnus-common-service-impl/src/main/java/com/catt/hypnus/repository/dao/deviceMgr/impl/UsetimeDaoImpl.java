@@ -217,11 +217,12 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
      * 获取呼吸事件数据（设备详情统计数据）
      *
      * @param deviceId
-     * @param date
+     * @param startTime
+     * @param endTime
      * @return
      */
     @Override
-    public Map getBreathEventData(String deviceId, String date) {
+    public Map getBreathEventData(String deviceId,String startTime,String endTime) {
         Assert.notNull(deviceId);
         Map breathEventDataMap = null;
         StringBuffer sql = new StringBuffer();
@@ -232,9 +233,11 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
             sql.append(" where t.device_id =:deviceId");
             param.put("deviceId", deviceId);
         }
-        if (StringUtil.checkStr(date)) {
-            sql.append(" AND t.date_mark = :date ");
-            param.put("date", date);
+        if (StringUtil.checkStr(startTime)) {
+            sql.append(" AND t.date_mark BETWEEN :startTime");
+            param.put("startTime", startTime);
+            sql.append(" AND  :endTime ");
+            param.put("endTime", endTime);
         }
         List<Map> breathEventDataList = this.findListBySql(sql.toString(), param, Map.class);
         if (CollectionUtil.isNotEmpty(breathEventDataList)) {
