@@ -111,13 +111,13 @@ public interface UsetimeDao extends BaseDao<Usetime, Long> {
     Map getStatisticsDataUseInfo(String deviceId, String startTime,String endTime);
 
     /**
-     * 获取总使用时间
+     * 从t_dev_day_statistics表中获取总使用时间，总使用天数，总天数，总漏气量
      *
      * @param deviceId
      * @param startTime
      * @param endTime
      * @return
      */
-    Map getStatisticsDataTotalTimes(String deviceId, String startTime,String endTime);
+    Map getStatisticsDataTotalData(String deviceId, String startTime,String endTime);
 
 }

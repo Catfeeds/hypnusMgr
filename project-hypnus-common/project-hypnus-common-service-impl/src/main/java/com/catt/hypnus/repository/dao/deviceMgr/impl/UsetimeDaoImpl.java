@@ -288,12 +288,12 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
      * @return
      */
     @Override
-    public Map getStatisticsDataTotalTimes(String deviceId, String startTime,String endTime) {
+    public Map getStatisticsDataTotalData(String deviceId, String startTime,String endTime) {
         Assert.notNull(deviceId);
         Map totalTimesMap = null;
         StringBuffer sql = new StringBuffer();
         Map param = new HashMap();
-        sql.append("SELECT SUM(`useseconds`)  AS totalSeconds,SUM(`usedays`)  AS  totalUseDays,SUM(`use4days`) AS totalUse4days,");
+        sql.append("SELECT SUM(`useseconds`)  AS totalSeconds,SUM(`usedays`)  AS  totalUseDays,SUM(`use4days`) AS totalUse4days,SUM(`leak_volume`) AS totalLeakVolume,");
         sql.append("DATEDIFF( :endTime");
         param.put("endTime", endTime);
         sql.append(", :startTime) AS totalDays ");

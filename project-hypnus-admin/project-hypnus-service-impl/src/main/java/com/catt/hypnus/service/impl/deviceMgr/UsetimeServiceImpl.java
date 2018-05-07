@@ -709,42 +709,6 @@ public class UsetimeServiceImpl implements UsetimeService {
     }
 
 
-
-    /**
-     * 获取呼吸事件数据（设备详情统计数据）
-     *
-     * @param deviceId
-     * @param startTime
-     * @param endTime
-     * @return
-     */
-    @Override
-    public Map getBreathEventData(String deviceId,String startTime,String endTime) {
-        Map breathEventDataMap;
-        breathEventDataMap = usetimeDao.getBreathEventData(deviceId,startTime,endTime);
-        if(breathEventDataMap!=null){
-            //计算AHI=AI+HI
-            int ai = (int) breathEventDataMap.get("ai");
-            int hi = (int) breathEventDataMap.get("hi");
-            int ahi = ai+hi;
-            breathEventDataMap.put("ahi",ahi);
-
-            return breathEventDataMap;
-        }else {//如果没有数据，则显示0
-            Map breathEventDataMapForNull = new HashMap();
-
-            breathEventDataMapForNull.put("ahi",0);
-            breathEventDataMapForNull.put("ai",0);
-            breathEventDataMapForNull.put("hi",0);
-            breathEventDataMapForNull.put("snore",0);
-            breathEventDataMapForNull.put("csa",0);
-            breathEventDataMapForNull.put("csr",0);
-            breathEventDataMapForNull.put("pb",0);
-
-            return breathEventDataMapForNull;
-        }
-    }
-
     /**
      * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）
      *
@@ -755,28 +719,28 @@ public class UsetimeServiceImpl implements UsetimeService {
      */
     @Override
     public Map getStatisticsDataUseInfo(String deviceId, String startTime,String endTime){
-        Map totalTimesMap = usetimeDao.getStatisticsDataTotalTimes(deviceId,startTime,endTime);//获取总使用时间
+        Map totalDataMap = usetimeDao.getStatisticsDataTotalData(deviceId,startTime,endTime);
         Map useInfoMap ;
         useInfoMap = usetimeDao.getStatisticsDataUseInfo(deviceId,startTime,endTime);
         if (useInfoMap!=null){
             //计算总天数 = 使用时间段总天数
-            BigInteger t_totalDays = (BigInteger) totalTimesMap.get("totalDays");
+            BigInteger t_totalDays = (BigInteger) totalDataMap.get("totalDays");
             int totalDays = t_totalDays.intValue();
             useInfoMap.put("totalDays",totalDays);
 
             //计算使用>=4小时天数 = 使用时间段内记录条数的use4days总和
-            BigDecimal t_moreThan4HoursDays = (BigDecimal) totalTimesMap.get("totalUse4days");
+            BigDecimal t_moreThan4HoursDays = (BigDecimal) totalDataMap.get("totalUse4days");
             int moreThan4HoursDays = t_moreThan4HoursDays.intValue();
             useInfoMap.put("moreThan4HoursDays",moreThan4HoursDays);
 
             //计算未使用天数 = 使用时间段总天数 - 使用时间段内总使用天数
-            BigDecimal t_totalUseDays = (BigDecimal) totalTimesMap.get("totalUseDays");
+            BigDecimal t_totalUseDays = (BigDecimal) totalDataMap.get("totalUseDays");
             int totalUseDays = t_totalUseDays.intValue();
             int noUseDays = totalDays - totalUseDays;
             useInfoMap.put("noUseDays",noUseDays);
 
             //计算总使用时间 = 使用时间段内记录条数的 usesecond总和 单位：小时
-            BigDecimal totalSeconds = (BigDecimal) totalTimesMap.get("totalSeconds");
+            BigDecimal totalSeconds = (BigDecimal) totalDataMap.get("totalSeconds");
             DecimalFormat df = new DecimalFormat("0.00");
             String totalTimes = df.format(totalSeconds.doubleValue()/3600);//把秒转换为小时，保留两位小数
             useInfoMap.put("totalTimes",totalTimes);
@@ -957,8 +921,67 @@ public class UsetimeServiceImpl implements UsetimeService {
     }
 
 
+    /**
+     * 获取呼吸事件数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Override
+    public Map getBreathEventData(String deviceId,String startTime,String endTime) {
+        Map breathEventDataMap;
+        breathEventDataMap = usetimeDao.getBreathEventData(deviceId,startTime,endTime);
+        if(breathEventDataMap!=null){
+            //计算AHI=AI+HI
+            int ai = (int) breathEventDataMap.get("ai");
+            int hi = (int) breathEventDataMap.get("hi");
+            int ahi = ai+hi;
+            breathEventDataMap.put("ahi",ahi);
+
+            return breathEventDataMap;
+        }else {//如果没有数据，则显示0
+            Map breathEventDataMapForNull = new HashMap();
+
+            breathEventDataMapForNull.put("ahi",0);
+            breathEventDataMapForNull.put("ai",0);
+            breathEventDataMapForNull.put("hi",0);
+            breathEventDataMapForNull.put("snore",0);
+            breathEventDataMapForNull.put("csa",0);
+            breathEventDataMapForNull.put("csr",0);
+            breathEventDataMapForNull.put("pb",0);
+
+            return breathEventDataMapForNull;
+        }
+    }
 
 
+    /**
+     * 获取漏气信息数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Override
+    public Map getLeakInfoData(String deviceId,String startTime,String endTime) {
+        Map totalDataMap = usetimeDao.getStatisticsDataTotalData(deviceId,startTime,endTime);
+        Map leakInfoDataMap = new HashMap();
+        //总漏气量 单位：L
+        BigDecimal t_totalLeakVolume = (BigDecimal) totalDataMap.get("totalLeakVolume");
+        int totalLeakVolume = t_totalLeakVolume.intValue();
+        leakInfoDataMap.put("totalLeakVolume",totalLeakVolume);
+
+        //平均漏气量 = 总漏气量（L）/总使用时间（分钟）
+        BigDecimal t_totalSeconds = (BigDecimal) totalDataMap.get("totalSeconds");
+        double totalSeconds = t_totalSeconds.doubleValue();
+        DecimalFormat df = new DecimalFormat("0.0");
+        String averageLeakVolume = df.format(totalLeakVolume/(totalSeconds/60));
+        leakInfoDataMap.put("averageLeakVolume",averageLeakVolume);
+        return leakInfoDataMap;
+    }
 
 
 }

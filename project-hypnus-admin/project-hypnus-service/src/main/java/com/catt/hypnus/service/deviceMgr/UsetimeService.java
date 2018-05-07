@@ -125,17 +125,6 @@ public interface UsetimeService {
     Map getApneaData(String deviceId, String startTime, String endTime);
 
 
-
-    /**
-     * 获取呼吸事件数据（设备详情统计数据）
-     *
-     * @param deviceId
-     * @param startTime
-     * @param endTime
-     * @return
-     */
-    Map getBreathEventData(String deviceId,String startTime,String endTime);
-
     /**
      * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）
      *
@@ -155,6 +144,26 @@ public interface UsetimeService {
      * @return
      */
     Map getStatisticsDataFromOSS(String deviceId,String startTime,String endTime);
+
+    /**
+     * 获取呼吸事件数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Map getBreathEventData(String deviceId,String startTime,String endTime);
+
+    /**
+     * 获取漏气信息数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Map getLeakInfoData(String deviceId,String startTime,String endTime);
 
 
 }

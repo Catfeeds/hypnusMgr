@@ -120,5 +120,19 @@ public class DataStatistiController extends BaseController {
         return breathEventDataMap;
     }
 
+    /**
+     * 获取漏气信息数据（设备详情统计数据）
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/getLeakInfoData"}, method = RequestMethod.POST)
+    public Map getLeakInfoData(String deviceId,String startTime,String endTime) {
+        Map leakInfoDataMap = usetimeService.getLeakInfoData(deviceId,startTime,endTime);
+        return leakInfoDataMap;
+    }
+
 
 }

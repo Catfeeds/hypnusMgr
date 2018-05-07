@@ -17,6 +17,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                         EventHandler.getStatisticsDataUseInfo();
                         EventHandler.getStatisticsDataFromOSS();
                         EventHandler.getBreathEventData();
+                        EventHandler.getLeakInfoData();
                         EventHandler.getUseData();
                     }
                 },
@@ -38,6 +39,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                         EventHandler.getStatisticsDataUseInfo();
                         EventHandler.getStatisticsDataFromOSS();
                         EventHandler.getBreathEventData();
+                        EventHandler.getLeakInfoData();
                         EventHandler.getUseData();
                     });
                 },
@@ -149,8 +151,8 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                     }, function (ossDataMap) {
                         if (ossDataMap) {
 
-                            $('#fiftyPercentTV').html(ossDataMap.fiftyPercentTV);
-                            $('#ninetyPercentTV').html(ossDataMap.ninetyPercentTV);
+                            $('#fiftyPercentTV').html(ossDataMap.fiftyPercentTV + "  mL");
+                            $('#ninetyPercentTV').html(ossDataMap.ninetyPercentTV + "  mL");
 
                             $('#fiftyPercentMV').html(ossDataMap.fiftyPercentMV + "  L/min");
                             $('#ninetyPercentMV').html(ossDataMap.ninetyPercentMV + "  L/min");
@@ -190,6 +192,20 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                     });
                 },
 
+                //获取漏气信息
+                getLeakInfoData: function () {
+                    DataHandler.getLeakInfoData({
+                        deviceId: $('#id').val(),
+                        startTime: $('#createDateDay').val(),
+                        endTime: $('#endDateDay').val()
+                    }, function (leakInfoDataMap) {
+                        if (leakInfoDataMap) {
+                            $('#averageLeakVolume').html(leakInfoDataMap.averageLeakVolume+ "  L/min");
+                            $('#totalLeakVolume').html(leakInfoDataMap.totalLeakVolume+ "  L");
+                        }
+                    });
+                },
+
                 getUseData: function () {
                     DataHandler.getUseData({
                         deviceId: $('#id').val(),
@@ -197,13 +213,11 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                         endTime: $('#endDateDay').val()
                     }, function (device) {
                         if (device) {
-                            $('#averagePresure1').html(device.averagePresure1);
-                            $('#pecentPresure1').html(device.pecentPresure1);
-                            $('#averagePresure2').html(device.averagePresure2);
-                            $('#pecentPresure2').html(device.pecentPresure2);
+                            $('#averagePresure1').html(device.averagePresure1+" cmH2O");
+                            $('#pecentPresure1').html(device.pecentPresure1+" cmH2O");
+                            $('#averagePresure2').html(device.averagePresure2+" cmH2O");
+                            $('#pecentPresure2').html(device.pecentPresure2+" cmH2O");
 
-                            $('#averageMvPos').html(device.averageMvPos);
-                            $('#pecentMvPos').html(device.pecentMvPos);
                             setParenHei();
                         }
                     });
@@ -263,6 +277,17 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                  */
                 getBreathEventData: function (params, callback) {
                     $.post(path + '/admin/statisti/data/getBreathEventData', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 获取统计数据-漏气信息
+                 * @param params
+                 * @param callback
+                 */
+                getLeakInfoData: function (params, callback) {
+                    $.post(path + '/admin/statisti/data/getLeakInfoData', params, function (backData) {
                         callback(backData);
                     });
                 },

@@ -275,10 +275,10 @@
         <div class="activityMsn">
             <table class="activityMsnTable">
                 <tr>
-                    <td>50%漏气量：</td>
-                    <th id="averageMvPos"></th>
-                    <td>90%漏气量：</td>
-                    <th id="pecentMvPos"></th>
+                    <td>平均漏气量：</td>
+                    <th id="averageLeakVolume"></th>
+                    <td>总漏气量：</td>
+                    <th id="totalLeakVolume"></th>
                 </tr>
             </table>
         </div>
