@@ -60,7 +60,7 @@ public class DeviceController extends BaseController {
      * 设备参数
      */
     @RequestMapping(value = {"/detail.html"}, method = RequestMethod.GET)
-    public String toDetail(Model model, String deviceId) {
+    public String toDetail(Model model, String deviceId,String createDateDay, String endDateDay) {
         model.addAttribute("createDateDay", DateUtil.format(DateUtil.addDays(new Date(), -1), "yyyy-MM-dd"));
         model.addAttribute("endDateDay", DateUtil.format(new Date(), "yyyy-MM-dd"));
         model.addAttribute("deviceId", deviceId);

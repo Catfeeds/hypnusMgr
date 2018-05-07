@@ -129,17 +129,18 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     return;
                 }
 
+                console.log("data lenght = %d", data.length);
                 //时间轴数据
                 var xData = data.map(function (item) {
                     return item[0];
                 });
                 //压力数据
                 var yDataP = data.map(function (item) {
-                    return item[1];
+                    return item;
                 });
                 //气流数据
                 var yData2 = data.map(function (item) {
-                    return item[2];
+                    return item;
                 });
                 //漏气
                 var yData3 = data.map(function (item) {
@@ -666,10 +667,11 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 chart.hideLoading();
             },
             detailData: function () {
-                debugger
-                var deviceId = $('#id').val();
+                var deviceId = $('#deviceId').val();
+                console.log("device id = %s",deviceId);
                 var createDateDay = $('#createDateDay').val();
                 var endDateDay = $('#endDateDay').val();
+               // debugger
                 window.location.href = path + '/admin/deviceMgr/detail.html?deviceId=' + deviceId +
                     '&createDateDay=' + createDateDay + '&endDateDay=' + endDateDay;
             },

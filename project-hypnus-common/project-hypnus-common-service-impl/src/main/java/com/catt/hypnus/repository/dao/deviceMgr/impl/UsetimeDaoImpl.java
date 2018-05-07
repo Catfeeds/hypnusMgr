@@ -139,7 +139,7 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
             param.put("deviceId", deviceId);
         }
         if (starttime != null) {
-            sql.append(" AND t.startTime >= :startTime AND t.starttime < :etime");
+            sql.append(" AND ((t.startTime >= :startTime AND t.starttime < :etime) OR (t.end_time > :startTime AND t.end_time < :etime) OR (t.startTime < :startTime AND t.end_time > :etime))");
             param.put("startTime", starttime);
             param.put("etime", endtime);
         }

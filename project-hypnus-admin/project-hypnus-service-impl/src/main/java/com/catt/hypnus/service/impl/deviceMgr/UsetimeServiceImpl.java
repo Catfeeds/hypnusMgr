@@ -195,22 +195,27 @@ public class UsetimeServiceImpl implements UsetimeService {
         }
 
         if(pres1.size()==1)
-            workParamMap.put("presure1",workParamMaplist.get(0).get("presure1"));
+        {
+            Double tempp = ((Double) workParamMaplist.get(0).get("presure1"))/10.0;
+            workParamMap.put("presure1", tempp.toString()+" cmH2O");
+        }
         else
             workParamMap.put("presure1","设置冲突");
 
-        if(pres2.size()==1)
-            workParamMap.put("presure2",workParamMaplist.get(0).get("presure2"));
-        else
+        if(pres2.size()==1){
+            Double temp2 = ((Double)workParamMaplist.get(0).get("presure2"))/10.0;
+            workParamMap.put("presure2",temp2.toString()+" cmH2O");
+        }else
             workParamMap.put("presure2","设置冲突");
 
-        if(startp.size()==1)
-            workParamMap.put("startPresure",workParamMaplist.get(0).get("startPresure"));
-        else
+        if(startp.size()==1) {
+            Double temp3 = ((Double)workParamMaplist.get(0).get("startPresure"))/10.0;
+            workParamMap.put("startPresure", temp3.toString()+" cmH2O");
+        }else
             workParamMap.put("startPresure","设置冲突");
 
         if(delay.size()==1)
-            workParamMap.put("cureDelay",workParamMaplist.get(0).get("cureDelay"));
+            workParamMap.put("cureDelay",workParamMaplist.get(0).get("cureDelay")+" Min");
         else
             workParamMap.put("cureDelay","设置冲突");
 

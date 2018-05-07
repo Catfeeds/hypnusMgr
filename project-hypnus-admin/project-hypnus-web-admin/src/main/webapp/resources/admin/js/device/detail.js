@@ -88,10 +88,10 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                             }
                             else if(workParamMap.mode ==4)
                             {
-                                $('#pressure1_name').html("最小吸气压力：");
-                                $('#pressure2_name').html("最大呼气压力：");
+                                $('#pressure1_name').html("最大呼气压力：");
+                                $('#pressure2_name').html("最小吸气压力：");
                             }
-                            else (workParamMap.mode ==5)
+                            else
                             {
                                 $('#pressure1_name').html("IPAP压力：");
                                 $('#pressure2_name').html("EPAP压力：");
@@ -99,7 +99,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
 
                             if(workParamMap.mode ==0)
                             {
-                                $('#cure_model').html("Conflict");
+                                $('#cure_model').html("模式冲突");
                                 $('.controlmode').hide();
                             }
                             else
@@ -143,7 +143,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 //获取潮气量，分钟通气量，呼吸频率，呼吸比
                 getStatisticsDataFromOSS: function () {
                     DataHandler.getStatisticsDataFromOSS({
-                        deviceId: $('#id').val(),
+                        deviceId: $('#deviceId').val(),
                         startTime: $('#createDateDay').val(),
                         endTime: $('#endDateDay').val()
                     }, function (ossDataMap) {
@@ -211,7 +211,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
 
                 //设置设备参数 统计图形
                 detailData: function (type) {
-                    var deviceId = $('#id').val();
+                    var deviceId = $('#deviceId').val();
                     var createDateDay = $('#createDateDay').val();
                     var endDateDay = $('#endDateDay').val();
                     window.location.href = path + '/admin/statisti/data/index.html?deviceId=' + deviceId +
