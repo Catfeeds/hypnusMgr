@@ -871,25 +871,21 @@ public class UsetimeServiceImpl implements UsetimeService {
             }
         }
 
-
-
          //列出一个月前的日期
         List dateList2 = new ArrayList();
         //根据计算规则获取当前日期的前30天日期
-        for (int i = 30;i>1;i--){
+        for (int i = 30;i>0;i--){
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DATE,-i);
             String yesterday = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
             dateList2.add(yesterday);
         }
 
-        for (int j = 0;j<28;j++){
+        for (int j = 0;j<29;j++){
             eventList.add(j,0.0);
         }
 
-
         event.put("dateList", dateList2);
-
 
         event.put("eventList", eventList);
         return event;
@@ -944,23 +940,19 @@ public class UsetimeServiceImpl implements UsetimeService {
             }
         }
 
-
         //列出一个月前的日期
         List dateList2 = new ArrayList();
         //根据计算规则获取当前日期的前30天日期
-        for (int i = 30;i>1;i--){
+        for (int i = 30;i>0;i--){
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DATE,-i);
             String yesterday = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
             dateList2.add(yesterday);
         }
 
-        for (int j = 0;j<28;j++){
+        for (int j = 0;j<29;j++){
             eventList.add(j,0.0);
         }
-
-
-
 
         event.put("dateList", dateList2);
         event.put("eventList", eventList);
@@ -1334,7 +1326,8 @@ public class UsetimeServiceImpl implements UsetimeService {
 
         Map chartDataMap = new HashMap();
 
-        Map ahiDataMap = new HashMap();
+        Map aiDataMap = new HashMap();
+        Map hiDataMap = new HashMap();
         Map csaDataMap = new HashMap();
         Map csrDataMap = new HashMap();
         Map pbDataMap = new HashMap();
@@ -1345,23 +1338,34 @@ public class UsetimeServiceImpl implements UsetimeService {
 
 
         //呼吸事件List
-        List ahiEventList = new ArrayList();
-        ahiEventList.add(breathEventDataMap.get("ai"));
-        ahiEventList.add(breathEventDataMap.get("hi"));
-        ahiDataMap.put("eventList", ahiEventList);
+        List aiEventList = new ArrayList();
+        aiEventList.add(breathEventDataMap.get("ai"));
+
+        List hiEventList = new ArrayList();
+        hiEventList.add(breathEventDataMap.get("hi"));
 
         List csaEventList = new ArrayList();
         csaEventList.add(breathEventDataMap.get("csa"));
-        csaDataMap.put("eventList", csaEventList);
 
         List csrEventList = new ArrayList();
         csrEventList.add(breathEventDataMap.get("csr"));
-        csrDataMap.put("eventList", csrEventList);
 
         List pbEventList = new ArrayList();
         pbEventList.add(breathEventDataMap.get("pb"));
-        pbDataMap.put("eventList", pbEventList);
 
+        for (int j = 0;j<29;j++){
+            aiEventList.add(j,0.0);
+            hiEventList.add(j,0.0);
+            csaEventList.add(j,0.0);
+            csrEventList.add(j,0.0);
+            pbEventList.add(j,0.0);
+        }
+
+        aiDataMap.put("eventList", aiEventList);
+        hiDataMap.put("eventList", hiEventList);
+        csaDataMap.put("eventList", csaEventList);
+        csrDataMap.put("eventList", csrEventList);
+        pbDataMap.put("eventList", pbEventList);
 
         //把前一个月的数据放入eventList中
         for (int i = 0;i<monthBreathEventDataList.size();i++){
@@ -1375,7 +1379,7 @@ public class UsetimeServiceImpl implements UsetimeService {
 
         List dateList = new ArrayList();
         //根据计算规则获取当前日期的前30天日期
-        for (int i = 30;i>1;i--){
+        for (int i = 30;i>0;i--){
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DATE,-i);
             String yesterday = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
@@ -1383,16 +1387,14 @@ public class UsetimeServiceImpl implements UsetimeService {
         }
 
         //统计时间List
-        ahiDataMap.put("dateList", dateList);
+        aiDataMap.put("dateList", dateList);
+        hiDataMap.put("dateList", dateList);
         csaDataMap.put("dateList", dateList);
         csrDataMap.put("dateList", dateList);
         pbDataMap.put("dateList", dateList);
 
-
-        chartDataMap.put("apnea", ahiDataMap);
-        chartDataMap.put("hypopnea", ahiDataMap);
-
-
+        chartDataMap.put("apnea", aiDataMap);
+        chartDataMap.put("hypopnea", hiDataMap);
         chartDataMap.put("csa", csaDataMap);
         chartDataMap.put("csr", csrDataMap);
         chartDataMap.put("pb", pbDataMap);
