@@ -48,7 +48,7 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
             param.put("deviceId", deviceId);
         }
         if (startTime != null && endTime != null) {
-            sql.append(" AND (DATE_FORMAT(DATE_ADD(t.end_time, INTERVAL 12 HOUR), '%Y-%m-%d') BETWEEN :startTime ");
+            sql.append(" AND (DATE_FORMAT(DATE_SUB(t.starttime, INTERVAL 12 HOUR), '%Y-%m-%d') BETWEEN :startTime ");
             param.put("startTime", startTime);
             sql.append(" AND  :endTime )");
             param.put("endTime", endTime);

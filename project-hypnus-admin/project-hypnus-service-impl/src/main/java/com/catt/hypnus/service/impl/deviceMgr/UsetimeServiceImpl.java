@@ -26,9 +26,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.*;
 
 /**
@@ -251,6 +249,192 @@ public class UsetimeServiceImpl implements UsetimeService {
         return usetimeDao.findPage(deviceId, startTime, endTime, pageable);
     }
 
+    /**
+     * @param deviceId
+     * @param selectDate 一天的标识,注意靠前
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
+    public Map getDetailFormOss(String deviceId, String selectDate) throws IOException, ParseException{
+        Map map = new HashMap();
+        Map usetimeMap = new HashMap();
+      //  Map pathList = new HashMap<>();
+        List presureList = new ArrayList<>();
+        /**
+         * 1,数据库查询基础数据
+         * 2,从oss查询文件列表
+         * 3,从文件中读取数据
+         * 4,组装数据
+         */
+        //0.先做必要的时间转换
+        DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        ParsePosition pos = new ParsePosition(0);
+        Date stime = format1.parse(selectDate);
+        Calendar c = Calendar.getInstance();
+        c.setTime(stime);
+        c.add(Calendar.DAY_OF_MONTH, 1);// 今天+1天
+        Date etime = c.getTime();
+        String afterSelectDate = format1.format(etime);
+
+
+        //1,数据库查询基础数据
+        List<Map> usetimeList = this.findMapList(deviceId, selectDate, afterSelectDate);
+        //用完了将选定时间设置会规定时间
+        c.setTime(stime);
+        c.add(Calendar.HOUR_OF_DAY, 12);
+        stime = c.getTime();
+        c.setTime(etime);
+        c.add(Calendar.HOUR_OF_DAY, 12);
+        etime = c.getTime();
+
+        if (CollectionUtils.isEmpty(usetimeList)) {
+            logger.info("无使用记录");
+            return  null;
+        }
+        else {  //有usetime才处理
+            for(int i=0; i< usetimeList.size();i++)
+            {//先读出所有的可能usetime
+                pos.setIndex(0);
+                Date key = format2.parse(MapUtil.getString(usetimeList.get(i), "starttime"), pos);
+                pos.setIndex(0);
+                Date value = format2.parse(MapUtil.getString(usetimeList.get(i), "endTime"), pos);
+                //注意边界时间边界可能越出
+                usetimeMap.put(key , value);
+            }
+
+         /*   if (StringUtil.checkStr(deviceId) && StringUtil.checkStr(selectDate)) {
+                usetimeList.forEach(usetime -> {
+                    String start = MapUtil.getString(usetime, "starttime");
+                    pathList.add(start ,deviceId + "/" + start + "/");
+                });
+            }
+            else{
+                logger.info("无法正确生成文件路径！");
+                return null;
+            }*/
+            int addperoid = 500;  // 设置数据间隔为2000ms
+            double gap80 = addperoid/80;
+            double gap5000 = addperoid/5000d;
+            double gap10000 = addperoid/10000d;
+
+            Iterator<Map.Entry<Date, Date>> entries = usetimeMap.entrySet().iterator();
+            while (entries.hasNext()) {
+                Map.Entry<Date, Date> entry = entries.next();
+                //a.时间先计算偏差范围
+                int startoff=-1, endoff=-1;
+                if(entry.getKey().before(stime)){
+                    if(entry.getValue().before(stime))
+                        continue;
+
+                    //计算startoff
+                    startoff = (int)((stime.getTime()-entry.getKey().getTime()));
+                }
+                if(entry.getValue().after(etime)){
+                    if(entry.getKey().after(etime))
+                        continue;
+                    //计算startoff
+                    endoff = (int) ((etime.getTime()- entry.getKey().getTime()));
+                }
+
+                String pathPre = deviceId + "/" + format2.format(entry.getKey()) + "/";
+                List<String> fileLists = OssDataHandler.listOfObject(pathPre);
+                if (CollectionUtils.isEmpty(fileLists)) {
+                    logger.info("OSS中无数据文件");
+                    return null;
+                } else {
+                    //接下要拼装数据及其重要
+                    short[] pressAarry = null;
+                    byte[] flowAarry = null;
+                    byte[] difAarry = null;
+                    short[] tvAarry = null;
+                    short[] brAarry = null;
+                    for (String fileName : fileLists) {
+                        if (fileName.contains("pressure.edf")) {
+                            pressAarry = OssDataHandler.getObjectDataShort(fileName,startoff/80,endoff/80);  //注意数据间隔是80ms
+                        }
+                        else if (fileName.contains("flow.edf")) {
+                            flowAarry = OssDataHandler.getObjectDataByte(fileName,startoff,endoff);//注意数据间隔是80ms
+                        }
+                        else if (fileName.contains("difleak.edf")) {
+                            difAarry = OssDataHandler.getObjectDataByte(fileName,startoff/5000,endoff/5000);//注意数据间隔是5000ms
+                        }
+                        else if (fileName.contains("tv.edf")) {
+                            tvAarry = OssDataHandler.getObjectDataShort(fileName,startoff/10000,endoff/10000); ////注意数据间隔是10000ms
+                        }
+                        else if (fileName.contains("br.edf")) {
+                            brAarry = OssDataHandler.getObjectDataShort(fileName,startoff/10000,endoff/10000); //注意数据间隔是10000ms
+                        }
+                     /*   if (fileName.contains("bi.edf")) {
+                            short[] temp = OssDataHandler.getObjectData(fileName);
+
+                        }*/
+                    }
+
+                    //组合数据
+
+
+                    c.setTime(entry.getKey());
+                    short[] s0 = new short[]{0};
+                    byte[] b0 = new byte[]{0};
+                    for(int i=0; i< (int)(entry.getValue().getTime()- entry.getKey().getTime())/addperoid; i++) {
+                        c.add(Calendar.MILLISECOND, addperoid);
+                        Date temp = c.getTime();
+
+                        List dataList = new ArrayList<>();
+                        dataList.add(format3.format(temp));
+                        //压力数据
+                        int tempPrss = (int)(i*gap80);
+                        if (pressAarry != null && tempPrss < pressAarry.length) {
+                            dataList.add(pressAarry[tempPrss]);
+                        } else {
+                            dataList.add(s0[0]);
+                        }
+                        //气流
+                        if (flowAarry != null && tempPrss < flowAarry.length) {
+                            dataList.add(flowAarry[tempPrss]);
+                        } else {
+                            dataList.add(b0[0]);
+                        }
+                        //漏气
+                        int tempdif = (int)(i*gap5000);
+                        if (difAarry != null && tempdif < difAarry.length) {
+                            dataList.add(difAarry[tempdif]);
+                        } else {
+                            dataList.add(b0[0]);
+                        }
+                        //tv
+                        int tempmv = (int)(i*gap10000);
+                        if (tvAarry != null && tempmv < tvAarry.length) {
+                            dataList.add(tvAarry[tempmv]);
+                        } else {
+                            dataList.add(s0[0]);
+                        }
+                        //br
+                        if (brAarry != null && tempmv < brAarry.length) {
+                            dataList.add(brAarry[tempmv]);
+                        } else {
+                            dataList.add(s0[0]);
+                        }
+                        //bi
+                        if (tvAarry!=null && brAarry != null && tempmv < tvAarry.length && tempmv < brAarry.length) {
+                            dataList.add(tvAarry[tempmv]*brAarry[tempmv]);
+                        } else {
+                            dataList.add(s0[0]);
+                        }
+
+                        presureList.add(dataList);
+                    }
+                }
+            }
+            map.put("pressure", presureList);
+        }
+        return map;
+    }
+
+
     public Map getDateFromOss(String deviceId, String startTime, String endTime) throws IOException, ParseException {
         Map map = new HashMap();
         /**
@@ -264,12 +448,25 @@ public class UsetimeServiceImpl implements UsetimeService {
         List<String> usetimeStrList = new ArrayList<>();
 //        List<String> packages = new ArrayList<>();
         String startTimeStr = "";
+        Map usetimeMap = new HashMap();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        ParsePosition pos = new ParsePosition(0);
+     //
+
         List<Map> usetimeList = this.findMapList(deviceId, startTime, endTime);
         if (CollectionUtils.isEmpty(usetimeList)) {
             logger.info("无使用记录");
             startTimeStr = startTime + "";
         } else {
             startTimeStr = MapUtil.getString(usetimeList.get(0), "starttime");
+            for(int i=0; i< usetimeList.size();i++)
+            {
+                pos.setIndex(0);
+                Date key = formatter.parse(MapUtil.getString(usetimeList.get(i), "starttime"), pos);
+                pos.setIndex(0);
+                Date value = formatter.parse(MapUtil.getString(usetimeList.get(i), "endTime"), pos);
+                usetimeMap.put(key , value);
+            }
         }
 
         //2.检查OSS中有无数据文件
@@ -298,13 +495,22 @@ public class UsetimeServiceImpl implements UsetimeService {
         short[] brBytes = null;//一次治疗开始到结束的实时“呼吸频率”值
         short[] biBytes = null;//一次治疗开始到结束的实时“吸气时长”值
 
+        Map presIndex = new HashMap();
+
         if (CollectionUtils.isEmpty(fileLists)) {
             logger.info("OSS中无数据文件");
         } else {
             // 利用OssDataHandler从OSS文件中读取数据
             for (String fileName : fileLists) {
+                String[] tempstr = fileName.split("/");
+               // pos.setIndex(0);
+               // Date key = formatter.parse(tempstr[1]);
                 if (fileName.contains("pressure.edf")) {
                     short[] temp = OssDataHandler.getObjectData(fileName);
+                    if(pressureBytes == null)
+                        presIndex.put(tempstr[1], 0);
+                    else
+                        presIndex.put(tempstr[1], pressureBytes.length);
                     pressureBytes = (short[]) ArrayUtils.addAll(pressureBytes, temp);
                 }
                 if (fileName.contains("flow.edf")) {
@@ -330,18 +536,104 @@ public class UsetimeServiceImpl implements UsetimeService {
             }
         }
 
-
         //组装数据
         List presureList = new ArrayList<>();
         List<String> timeList = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         String str = startTimeStr + ".000";
         // 循环统计一天的数据
-        for (int i = 0; i < 24 * 60; i++) {
+        String strtest = startTime +" 12:00:00";
+        int gap = 25;
+        double gapdif = gap/(12.5d*5);
+        double gapmv = gap/125d;
+
+        //lizb rewrite it
+/*        pos.setIndex(0);
+        Date strtodate = formatter.parse(strtest, pos);
+        for (int i = 0; i < 24 * 60 * 10; i++){
+            Calendar rightNow = Calendar.getInstance();
+            rightNow.setTime(strtodate);
+            rightNow.add(Calendar.MILLISECOND, 12000);//周期为80毫秒
+            strtodate= rightNow.getTime();
+            String dt2 = DateUtil.format(strtodate, "yyyy-MM-dd HH:mm:ss.SSS");
+            List dataList = new ArrayList<>();
+            dataList.add(dt2);
+
+            boolean ret = false;
+            Date retDate = null ;
+            String retstr = null;
+            Iterator<Map.Entry<Date, Date>> entries = usetimeMap.entrySet().iterator();
+            while (entries.hasNext()) {
+                Map.Entry<Date, Date> entry = entries.next();
+                if(strtodate.compareTo(entry.getKey())>=0 && strtodate.compareTo(entry.getValue())<=0){
+                    ret = true;
+                    SimpleDateFormat dsa = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    retDate = entry.getKey();
+                    retstr = formatter.format(retDate);
+                    break;
+                }
+            }
+
+            short[] s0 = new short[]{0};
+            byte[] bytes = new byte[]{0};
+            if(ret)
+            {
+                int offset = (int)presIndex.get(retstr) ;
+                offset += (int)((strtodate.getTime() - retDate.getTime())/12000);
+                //压力数据
+                if (pressureBytes != null && offset < pressureBytes.length) {
+                    dataList.add(pressureBytes[i]);
+                } else {
+                    dataList.add(s0[0]);
+                }
+                //气流
+                if (flowBytes != null && i < flowBytes.length) {
+                    dataList.add(flowBytes[i*gap]);
+                } else {
+                    dataList.add(bytes[0]);
+                }
+                //漏气
+                int tempdif = (int)(i*gapdif);
+                if (difleakBytes != null && tempdif < difleakBytes.length) {
+                    dataList.add(difleakBytes[tempdif]);
+                } else {
+                    dataList.add(bytes[0]);
+                }
+                //tv
+                int tempmv = (int)(i*gapmv);
+                if (tvBytes != null && tempmv < tvBytes.length) {
+                    dataList.add(tvBytes[tempmv]);
+                } else {
+                    dataList.add(bytes[0]);
+                }
+                //br
+                if (brBytes != null && tempmv < brBytes.length) {
+                    dataList.add(brBytes[tempmv]);
+                } else {
+                    dataList.add(bytes[0]);
+                }
+                //bi
+                if (biBytes != null && tempmv < tvBytes.length && tempmv < brBytes.length) {
+                    dataList.add(tvBytes[tempmv]*brBytes[tempmv]);
+                } else {
+                    dataList.add(bytes[0]);
+                }
+            }
+            else {
+                dataList.add(s0[0]);
+                dataList.add(bytes[0]);
+                dataList.add(bytes[0]);
+                dataList.add(bytes[0]);
+                dataList.add(bytes[0]);
+                dataList.add(bytes[0]);
+            }
+            presureList.add(dataList);
+        }*/
+        for (int i = 0; i < 4 * 60 * 10; i++) {
             Date dt = sdf.parse(str);
             Calendar rightNow = Calendar.getInstance();
             rightNow.setTime(dt);
-            rightNow.add(Calendar.MILLISECOND, 60000);//周期为80毫秒
+            rightNow.add(Calendar.MILLISECOND, 2000);//周期为80毫秒
             Date dt1 = rightNow.getTime();
             String dt2 = DateUtil.format(dt1, "yyyy-MM-dd HH:mm:ss.SSS");
             timeList.add(str);
@@ -350,43 +642,48 @@ public class UsetimeServiceImpl implements UsetimeService {
 
             dataList.add(timeList.get(i));
             //压力数据
-            if (pressureBytes != null && i < pressureBytes.length) {
-                dataList.add(pressureBytes[i]);
+            if (pressureBytes != null && i*gap < pressureBytes.length) {
+                dataList.add(pressureBytes[i*gap]);
             } else {
                 short[] bytes = new short[]{0};
                 dataList.add(bytes[0]);
             }
             //气流
-            if (flowBytes != null && i < flowBytes.length) {
-                dataList.add(flowBytes[i]);
+            if (flowBytes != null && i*gap < flowBytes.length) {
+                dataList.add(flowBytes[i*gap]);
             } else {
                 byte[] bytes = new byte[]{0};
                 dataList.add(bytes[0]);
             }
             //漏气
-            if (difleakBytes != null && i < difleakBytes.length) {
-                dataList.add(difleakBytes[i]);
+            int tempdif = (int)(i*gapdif);
+            if (difleakBytes != null && tempdif < difleakBytes.length) {
+                dataList.add(difleakBytes[tempdif]);
             } else {
                 byte[] bytes = new byte[]{0};
                 dataList.add(bytes[0]);
             }
             //tv
-            if (tvBytes != null && i < tvBytes.length) {
-                dataList.add(tvBytes[i]);
+            int tempmv = (int)(i*gapmv);
+            if (tvBytes != null && tempmv < tvBytes.length) {
+                dataList.add(tvBytes[tempmv]);
             } else {
                 short[] bytes = new short[]{0};
                 dataList.add(bytes[0]);
+
             }
             //br
-            if (brBytes != null && i < brBytes.length) {
-                dataList.add(brBytes[i]);
+            if (brBytes != null && tempmv < brBytes.length) {
+             //   dataList.add(brBytes[i]);
+                dataList.add(brBytes[tempmv]);
             } else {
                 short[] bytes = new short[]{0};
                 dataList.add(bytes[0]);
             }
-            //bi
-            if (biBytes != null && i < biBytes.length) {
-                dataList.add(biBytes[i]);
+            //mv
+            if (biBytes != null && tempmv < tvBytes.length && tempmv < brBytes.length) {
+             //   dataList.add(biBytes[i]);
+                dataList.add(tvBytes[tempmv]*brBytes[tempmv]);
             } else {
                 short[] bytes = new short[]{0};
                 dataList.add(bytes[0]);
@@ -519,9 +816,9 @@ public class UsetimeServiceImpl implements UsetimeService {
         Map hypopnea = this.getHypopneaEventData(deviceId, startTime, endTime);
         event.put("apnea", apnea);
         event.put("hypopnea", hypopnea);
-        event.put("csa", apnea);
-        event.put("csr", apnea);
-        event.put("pb", apnea);
+        event.put("csa", 0);
+        event.put("csr", 0);
+        event.put("pb", 0);
         return event;
     }
 
@@ -813,8 +1110,8 @@ public class UsetimeServiceImpl implements UsetimeService {
         for (int i = 0; i < plistSize; i++) {
             List tvList = (List) plist.get(i);
             if (tvList.size() > 6) {
-                short tvValue = (short) tvList.get(6);
-                sortTVList.add(tvValue);
+                Number tvValue =  (Number) tvList.get(6);
+                sortTVList.add(tvValue.shortValue());
             }
         }
         //1.2.按照从小到大排列潮气量数值
