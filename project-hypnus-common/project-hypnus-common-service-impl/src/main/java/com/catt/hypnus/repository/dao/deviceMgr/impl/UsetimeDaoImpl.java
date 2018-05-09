@@ -316,7 +316,34 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         return totalTimesMap;
     }
 
-
+    /**
+     * 获取月度呼吸事件数据（呼吸事件柱状图）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Override
+    public List<Map> getMonthBreathEventData(String deviceId,String startTime,String endTime) {
+        Assert.notNull(deviceId);
+        StringBuffer sql = new StringBuffer();
+        Map param = new HashMap();
+        sql.append("select t.ai_cnt as ai,t.hi_cnt as hi, t.snore_cnt as snore,t.csa_cnt as csa,t.csr_cnt as csr,t.pb_cnt as pb");
+        sql.append(" from t_dev_day_statistics t ");
+        if (StringUtil.checkStr(deviceId)) {
+            sql.append(" where t.device_id =:deviceId");
+            param.put("deviceId", deviceId);
+        }
+        if (StringUtil.checkStr(startTime)) {
+            sql.append(" AND t.date_mark BETWEEN :startTime");
+            param.put("startTime", startTime);
+            sql.append(" AND  :endTime ");
+            param.put("endTime", endTime);
+        }
+        List<Map> monthBreathEventDataList = this.findListBySql(sql.toString(), param, Map.class);
+        return monthBreathEventDataList;
+    }
 
 
 

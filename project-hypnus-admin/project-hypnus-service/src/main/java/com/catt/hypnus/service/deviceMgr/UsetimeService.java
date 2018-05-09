@@ -165,6 +165,16 @@ public interface UsetimeService {
      */
     Map getLeakInfoData(String deviceId,String startTime,String endTime);
 
+    /**
+     * 获取统计图形数据（呼吸事件柱状图）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Map getStatisticsChartData(String deviceId,String startTime,String endTime);
+
 
 }
 

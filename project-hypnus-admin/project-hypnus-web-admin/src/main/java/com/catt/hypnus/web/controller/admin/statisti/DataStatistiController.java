@@ -76,7 +76,20 @@ public class DataStatistiController extends BaseController {
     @RequestMapping(value = {"/getStaticData"}, method = RequestMethod.POST)
     public Map getStaticData(String deviceId, String createDateDay, String endDateDay) {
         String today = DateUtil.format(new Date(), DateUtil.yyyyMMdd);
-        return usetimeService.getEventData(deviceId, createDateDay, endDateDay);
+
+        //从事件表中读取数据
+        Map dataMap = usetimeService.getEventData(deviceId, createDateDay, endDateDay);
+
+        System.out.println("柱状图map："+dataMap);
+
+        //从t_dev_day_statistics表中读取数据
+        Map chartDataMap = usetimeService.getStatisticsChartData(deviceId, createDateDay, endDateDay);
+
+        System.out.println("统计图形map："+chartDataMap);
+
+//        return chartDataMap;
+
+        return dataMap;
     }
 
 
