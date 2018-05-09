@@ -60,9 +60,10 @@ public class DataStatistiController extends BaseController {
     @RequestMapping(value = {"/getDateFromOss"}, method = RequestMethod.POST)
     public Map getDateFromOss(String deviceId, String createDateDay) throws IOException, ParseException {
         String today = DateUtil.format(new Date(), DateUtil.yyyyMMdd);
-        today += "12:00:00";
-        createDateDay = createDateDay + " 12:00:00";
-        Map ret = usetimeService.getDateFromOss(deviceId, createDateDay, today);
+     //   today += " 12:00:00";
+     //   createDateDay = createDateDay + " 12:00:00";
+      //  Map ret = usetimeService.getDateFromOss(deviceId, createDateDay, today);
+        Map ret = usetimeService.getDetailFormOss(deviceId,createDateDay);
         return ret;
 
     }

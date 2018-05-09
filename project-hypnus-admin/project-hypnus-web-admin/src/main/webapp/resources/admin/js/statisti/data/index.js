@@ -199,43 +199,43 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         {
                             show: true,
                             realtime: false,
-                            start: 30,
-                            end: 70,
+                            start: 0,
+                            end: 100,
                             xAxisIndex: [0, 1, 2, 3, 4, 5],
                         },
                         {
                             type: 'inside',
                             realtime: false,
-                            start: 30,
-                            end: 70,
+                            start: 0,
+                            end: 100,
                             xAxisIndex: [0, 1, 2, 3, 4, 5]
                         },
                         {
                             type: 'inside',
                             realtime: false,
-                            start: 30,
-                            end: 70,
+                            start: 0,
+                            end: 100,
                             xAxisIndex: [0, 1, 2, 3, 4, 5]
                         },
                         {
                             type: 'inside',
                             realtime: false,
-                            start: 30,
-                            end: 70,
+                            start: 0,
+                            end: 100,
                             xAxisIndex: [0, 1, 2, 3, 4, 5]
                         },
                         {
                             type: 'inside',
                             realtime: false,
-                            start: 30,
-                            end: 70,
+                            start: 0,
+                            end: 100,
                             xAxisIndex: [0, 1, 2, 3, 4, 5]
                         },
                         {
                             type: 'inside',
                             realtime: false,
-                            start: 30,
-                            end: 70,
+                            start: 0,
+                            end: 100,
                             xAxisIndex: [0, 1, 2, 3, 4, 5]
                         }
                     ],
@@ -320,9 +320,9 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     ],
                     yAxis: [
                         {
-                            name: 'Pressure(cmH2O)',
+                            name: 'Pressure(mmH2O)',
                             type: 'value',
-                            max: 500
+                            max: 300
                         },
                         {
                             gridIndex: 1,
@@ -349,7 +349,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                         },
                         {
                             gridIndex: 5,
-                            name: 'Minute Ventilation (L/min)',
+                            name: 'Minute Ventilation (mL/min)',
                             type: 'value',
                             inverse: false
                         }
@@ -389,7 +389,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                             data: yData4
                         },
                         {
-                            name: 'Tidal Volume',
+                            name: 'Breaths Rate',
                             type: 'line',
                             xAxisIndex: 4,
                             yAxisIndex: 4,
@@ -398,7 +398,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                             data: yData5
                         },
                         {
-                            name: 'Tidal Volume',
+                            name: 'Minute Ventilation',
                             type: 'line',
                             xAxisIndex: 5,
                             yAxisIndex: 5,

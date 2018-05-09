@@ -96,6 +96,7 @@ public interface UsetimeService {
 
     Map getDateFromOss(String deviceId, String startTime, String endTime) throws IOException, ParseException;
 
+    Map getDetailFormOss(String deviceId, String startTime) throws IOException, ParseException;
     /**
      * 使用记录数据统计
      *
