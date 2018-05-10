@@ -88,9 +88,9 @@ public class DataStatistiController extends BaseController {
 
         System.out.println("新的表柱状图map："+chartDataMap);
 
-//        return chartDataMap;
+        return chartDataMap;
 
-        return dataMap;
+//        return dataMap;
     }
 
 
