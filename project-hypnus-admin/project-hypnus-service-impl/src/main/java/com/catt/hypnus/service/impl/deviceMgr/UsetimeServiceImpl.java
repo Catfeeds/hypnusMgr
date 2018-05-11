@@ -15,6 +15,7 @@ import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
 import com.catt.hypnus.repository.form.deviceMgr.UsetimeForm;
 import com.catt.hypnus.service.base.deviceMgr.UsetimeBaseService;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
+import com.gci.common.util.collections.CollectionUtil;
 import com.gci.common.util.lang.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -1280,15 +1281,57 @@ public class UsetimeServiceImpl implements UsetimeService {
      */
     @Override
     public Map getBreathEventData(String deviceId,String startTime,String endTime) {
-        Map breathEventDataMap;
-        breathEventDataMap = usetimeDao.getBreathEventData(deviceId,startTime,endTime);
-        if(breathEventDataMap!=null){
-            //计算AHI=AI+HI
-            int ai = (int) breathEventDataMap.get("ai");
-            int hi = (int) breathEventDataMap.get("hi");
-            int ahi = ai+hi;
-            breathEventDataMap.put("ahi",ahi);
+        Map totalDataMap = usetimeDao.getStatisticsDataTotalData(deviceId,startTime,endTime);
 
+        //获取总使用时间 单位：小时
+        String totalHoursStr = "";
+        if(totalDataMap != null){
+            BigDecimal t_totalSeconds = (BigDecimal) totalDataMap.get("totalSeconds");
+            if(t_totalSeconds != null){
+                double totalSeconds = t_totalSeconds.doubleValue();
+                DecimalFormat df = new DecimalFormat("0.0");
+                totalHoursStr = df.format(totalSeconds/3600);
+            }
+        }
+
+        double totalHours;
+        if(!totalHoursStr.isEmpty()){
+            totalHours = Double.valueOf(totalHoursStr);
+        }else{
+            totalHours = 1.0;
+        }
+
+        Map breathEventDataMap = new HashMap();
+        List breathEventDataList = usetimeDao.getBreathEventData(deviceId,startTime,endTime);
+        int ahi = 0;
+        int ai = 0;
+        int hi = 0;
+        int snore = 0;
+        int csa = 0;
+        int csr = 0;
+        int pb = 0;
+        if(CollectionUtil.isNotEmpty(breathEventDataList)){
+            for(int i=0; i< breathEventDataList.size();i++){
+                breathEventDataMap = (Map) breathEventDataList.get(i);
+                //计算AHI=AI+HI
+                ai += (int) breathEventDataMap.get("ai");
+                hi += (int) breathEventDataMap.get("hi");
+                ahi += ai+hi;
+                snore += (int) breathEventDataMap.get("snore");
+                csa += (int) breathEventDataMap.get("csa");
+                csr += (int) breathEventDataMap.get("csr");
+                pb += (int) breathEventDataMap.get("pb");
+
+            }
+            if(totalHours != 0){
+                breathEventDataMap.put("ahi",ahi/totalHours);
+                breathEventDataMap.put("ai",ai/totalHours);
+                breathEventDataMap.put("hi",hi/totalHours);
+                breathEventDataMap.put("snore",snore/totalHours);
+                breathEventDataMap.put("csa",csa/totalHours);
+                breathEventDataMap.put("csr",csr/totalHours);
+                breathEventDataMap.put("pb",pb/totalHours);
+            }
             return breathEventDataMap;
         }else {//如果没有数据，则显示0
             Map breathEventDataMapForNull = new HashMap();
@@ -1371,33 +1414,64 @@ public class UsetimeServiceImpl implements UsetimeService {
         Map csrDataMap = new HashMap();
         Map pbDataMap = new HashMap();
 
-        Map breathEventDataMap = this.getBreathEventData(deviceId, startTime, endTime);
-        //列出前一个月的数据
-        List monthBreathEventDataList = this.getMonthBreathEventData(deviceId, startTime);
+        Map breathEventDataMap;
 
-
-        //呼吸事件List
         List aiEventList = new ArrayList();
-        aiEventList.add(breathEventDataMap.get("ai"));
-
         List hiEventList = new ArrayList();
-        hiEventList.add(breathEventDataMap.get("hi"));
-
         List csaEventList = new ArrayList();
-        csaEventList.add(breathEventDataMap.get("csa"));
-
         List csrEventList = new ArrayList();
-        csrEventList.add(breathEventDataMap.get("csr"));
-
         List pbEventList = new ArrayList();
-        pbEventList.add(breathEventDataMap.get("pb"));
 
-        for (int j = 0;j<29;j++){
-            aiEventList.add(j,0.0);
-            hiEventList.add(j,0.0);
-            csaEventList.add(j,0.0);
-            csrEventList.add(j,0.0);
-            pbEventList.add(j,0.0);
+        List breathEventDataList = usetimeDao.getBreathEventData(deviceId,startTime,endTime);
+
+        if(CollectionUtil.isNotEmpty(breathEventDataList)){
+            //1.先填充30条数据进数组
+            for (int j = 0;j<30;j++){
+                aiEventList.add(j,0.0);
+                hiEventList.add(j,0.0);
+                csaEventList.add(j,0.0);
+                csrEventList.add(j,0.0);
+                pbEventList.add(j,0.0);
+            }
+            //2.遍历数组，对比时间，将数据插入
+            int listSize = breathEventDataList.size();
+            for(int i=0; i< listSize;i++){
+                breathEventDataMap = (Map) breathEventDataList.get(i);
+
+                Date datemark = (Date) breathEventDataMap.get("datemark");
+
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date endDate = null;
+                try {
+                    endDate = df.parse(endTime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                int days = (int) ((endDate.getTime() - datemark.getTime()) / (1000*3600*24));
+
+                int eIndex = 30 - days;
+                //呼吸事件List
+                aiEventList.add(eIndex,breathEventDataMap.get("ai"));
+
+                hiEventList.add(eIndex,breathEventDataMap.get("hi"));
+
+                csaEventList.add(eIndex,breathEventDataMap.get("csa"));
+
+                csrEventList.add(eIndex,breathEventDataMap.get("csr"));
+
+                pbEventList.add(eIndex,breathEventDataMap.get("pb"));
+
+            }
+
+        }else{
+            for (int j = 0;j<30;j++){
+                aiEventList.add(j,0.0);
+                hiEventList.add(j,0.0);
+                csaEventList.add(j,0.0);
+                csrEventList.add(j,0.0);
+                pbEventList.add(j,0.0);
+            }
         }
 
         aiDataMap.put("eventList", aiEventList);
@@ -1405,16 +1479,6 @@ public class UsetimeServiceImpl implements UsetimeService {
         csaDataMap.put("eventList", csaEventList);
         csrDataMap.put("eventList", csrEventList);
         pbDataMap.put("eventList", pbEventList);
-
-        //把前一个月的数据放入eventList中
-        for (int i = 0;i<monthBreathEventDataList.size();i++){
-//            Map dayBreathEventDataMap = (Map) monthBreathEventDataList.get(i);
-//            csaEventList.add(dayBreathEventDataMap.get("csa"));
-//            csaDataMap.put("eventList", csaEventList);
-//
-//            csrEventList.add(dayBreathEventDataMap.get("csr"));
-//            csrDataMap.put("eventList", csrEventList);
-        }
 
         List dateList = new ArrayList();
         //根据计算规则获取当前日期的前30天日期
@@ -1442,23 +1506,7 @@ public class UsetimeServiceImpl implements UsetimeService {
 
     }
 
-    /**
-     * 获取月度呼吸事件数据（呼吸事件柱状图）
-     *
-     * @param deviceId
-     * @param startTime
-     * @return
-     */
-    public List<Map> getMonthBreathEventData(String deviceId,String startTime) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE,-31);
-        String oneMonthBeforeday = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-        String monthStart = oneMonthBeforeday;
 
-        String monthEnd = startTime;
-        List<Map> monthBreathEventDataList = usetimeDao.getMonthBreathEventData(deviceId, monthStart, monthEnd);
-        return monthBreathEventDataList;
-    }
 
 
 
