@@ -19,53 +19,243 @@
     <link type="text/css" rel="stylesheet" href="${path}/resources/css/addnew.css"/>
     <link type="text/css" rel="stylesheet" href="${path}/resources/safeMgr/css/shijianchanpin.css"/>
     <script type="text/javascript" src="${path}/resources/admin/js/device/deviceShadowEdit.js"></script>
+
 </head>
 <body>
+<style type="text/css">
+    .CPAP, .APAP, .S,.Auto-S, .T,.ST {
+     display: none;
+    }
+</style>
+
 <div class="wrapper">
     <div class="positionNow">主页 &gt; <a>设备列表</a>&gt;<a>设备参数设置</a></div>
     <div class="searchBar">
         <div class="searchBox">
             <span class="searchName" style="top: 50%;">默认工作模式：</span>
-            <select class="workModeselectList">
-                <option value="1">CPAP</option>
-                <option value="2">BRAP-S</option>
-                <option value="3">AutoBRAP-S</option>
-                <option value="4">BRAP-T</option>
-                <option value="5">BRAP-ST</option>
+            <select class="searchInputText" id="cure_mode" name="cure_mode" form="saveForm" onchange="modeSelectHandler(this[selectedIndex].value);">
+                <option value="0">CPAP</option>
+                <option value="1">Auto-CPAP</option>
+                <option value="2">BPAP-S</option>
+                <option value="3">AutoBPAP-S</option>
+                <option value="4">BPAP-T</option>
+                <option value="5">BPAP-ST</option>
             </select>
         </div>
         <div class="searchBox">
-            <span class="searchName">型号：</span>
-            <input class="searchInputText" id="model" type="text" style="width:130px;"/>
+            <span class="searchName">设备序列号：</span>
+            <input class="searchInputText" type="text" style="width:130px;" value="${fn:escapeXml(param.deviceId)}" readonly="true"/>
         </div>
         <div class="searchBox">
-            <span class="searchName">系统版本：</span>
-            <input class="searchInputText" id="systemVersion" type="text" style="width:130px;"/>
+            <span class="searchName">设备当前状态：</span>
+            <input class="searchInputText" id="cur_state" type="text" style="width:130px;" readonly="true"/>
+        </div>
+        <div class="searchBox">
+            <span class="searchName" >系统版本：</span>
+            <input class="searchInputText" id="data_version" type="text" style="width:130px;" readonly="true"/>
         </div>
     </div>
 
-    <div class="pageMain" style="min-height: 0px; height:auto;">
+    <div class="pageMain" style=" padding-left: 0px; padding-right: 10px; min-height: 0px; height:auto;">
         <div class="objBoxContB" style=" margin-bottom:0px;">
             <form id="saveForm" method="post">
                 <div class="addFormCont" style="padding-top:0px;">
                     <input id="id" type="hidden" name="id" value="${fn:escapeXml(param.deviceId)}"/>
+                    <input id="deviceID" name="deviceID"  type="hidden"
+                           style="width:241px;height:10px"/>
                     <div class="addFormContHead">
                         <h1 class="addFormConthText">参数设置</h1>
                     </div>
                     <div class="addFormContBody">
                         <table class="addFormTable">
-                            <tr>
-                                <th>吸气压力</th>
+
+                            <tr class="CPAP">
+                                <th>治疗压力</th>
                                 <td>
-                                    <input id="t_in_p" name="t_in_p"  class="proInput" type="number"
-                                           style="width:241px;height:10px"/>
-                                    <input id="deviceID" name="deviceID"  type="hidden"
-                                           style="width:241px;height:10px"/>
+                                    <select id="cpap_p" name="cpap_p" class="workModeselectList" style="width:260px;height:20px">
+                                    <%
+                                        for(int i=0; i<53; i++)
+                                            out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                    %>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr class="APAP">
+                                <th>最大压力</th>
+                                <td>
+                                    <select id="apap_max_p" name="apap_max_p"  class="workModeselectList" style="width:260px;height:20px" onchange="checkPressure(1)" >
+                                        <%
+                                            for(int i=0; i<53; i++)
+                                                out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                        %>
+                                    </select>
                                 </td>
 
+                                <th>最小压力</th>
+                                <td>
+                                    <select id="apap_min_p" name="apap_min_p" class="workModeselectList" style="width:260px;height:20px" onchange="checkPressure(2)" >
+                                        <%
+                                            for(int i=0; i<53; i++)
+                                                out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                        %>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr class="S">
+                                <th>吸气压力</th>
+                                <td>
+                                    <select id="bpap_in_p" name="bpap_in_p" class="workModeselectList" style="width:260px;height:20px" onchange="checkPressure(1)" >
+                                        <%
+                                            for(int i=0; i<53; i++)
+                                                out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                        %>
+                                    </select>
+                                </td>
+                                <th>呼气压力</th>
+                                <td>
+                                    <select id="bpap_ex_p" name="bpap_ex_p" class="workModeselectList" style="width:260px;height:20px" onchange="checkPressure(2)" >
+                                        <%
+                                            for(int i=0; i<53; i++)
+                                                out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                        %>
+                                    </select>
+
+                                </td>
+                            </tr>
+
+                            <tr class="Auto-S">
+                                <th>最小吸气压力</th>
+                                <td>
+                                   <%-- <input id="autos_min_p" name="autos_min_p"  class="proInput" type="number"
+                                           style="width:241px;height:10px"/>--%>
+                                    <select id="autos_min_p" name="autos_min_p" class="workModeselectList" style="width:260px;height:20px" onchange="checkPressure(1)" >
+                                        <%
+                                            for(int i=0; i<53; i++)
+                                                out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                        %>
+                                    </select>
+
+                                </td>
+                                <th>最大呼气压力</th>
+                                <td>
+                                    <%--<input id="autos_max_p" name="autos_max_p"  class="proInput" type="number"
+                                           style="width:241px;height:10px"/>--%>
+                                    <select id="autos_max_p" name="autos_max_p" class="workModeselectList" style="width:260px;height:20px" onchange="checkPressure(2)" >
+                                        <%
+                                            for(int i=0; i<53; i++)
+                                                out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                        %>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr class="T" >
+                                <th>吸气压力</th>
+                                <td>
+                                   <%-- <input id="t_in_p" name="t_in_p"  class="proInput" type="number"
+                                           style="width:241px;height:10px"/>--%>
+                                    <select id="t_in_p" name="t_in_p" class="workModeselectList" style="width:260px;height:20px" onchange="checkPressure(1)" >
+                                        <%
+                                            for(int i=0; i<53; i++)
+                                                out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                        %>
+                                    </select>
+                                </td>
+                                <th>呼气压力</th>
+                                <td>
+                                   <%-- <input id="t_ex_p" name="t_ex_p"  class="proInput" type="number"
+                                           style="width:241px;height:10px"/>--%>
+                                    <select id="t_ex_p" name="t_ex_p" class="workModeselectList" style="width:260px;height:20px" onchange="checkPressure(2)" >
+                                        <%
+                                            for(int i=0; i<53; i++)
+                                                out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                        %>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr class="ST" >
+                                <th>吸气压力</th>
+                                <td>
+                                    <%--<input id="st_in_p" name="st_in_p"  class="proInput" type="number"
+                                           style="width:241px;height:10px"/>--%>
+                                    <select id="st_in_p" name="st_in_p" class="workModeselectList" style="width:260px;height:20px" onchange="checkPressure(1);" >
+                                        <%
+                                            for(int i=0; i<53; i++)
+                                                out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                        %>
+                                    </select>
+                                </td>
+                                <th>呼气压力</th>
+                                <td>
+                                   <%-- <input id="st_ex_p" name="st_ex_p"  class="proInput" type="number"
+                                           style="width:241px;height:10px"/>--%>
+                                    <select id="st_ex_p" name="st_ex_p" class="workModeselectList" style="width:260px;height:20px" onchange="checkPressure(2);" >
+                                        <%
+                                            for(int i=0; i<53; i++)
+                                                out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                        %>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>起始压力</th>
+                                <td>
+                                  <%--  <input id="start_pressure" name="start_pressure"  class="proInput" type="number"
+                                           style="width:241px;height:10px"/>--%>
+                                    <select id="start_pressure" name="start_pressure" class="workModeselectList" style="width:260px;height:20px" onchange="checkPressure(3);">
+                                        <%
+                                            for(int i=0; i<53; i++)
+                                                out.write("<option value=\'"+(40+i*5)+"'\">"+ (4.0+i*0.5) +" cmH2O</option>");
+                                        %>
+                                    </select>
+                                </td>
+
+                                <th>延迟时间</th>
+                                <td>
+                                   <%-- <input id="cure_delay" name="cure_delay"  class="proInput" type="number"
+                                           style="width:241px;height:10px"/>--%>
+                                    <select id="cure_delay" name="cure_delay" class="workModeselectList" style="width:260px;height:20px">
+                                        <option value="0">关闭</option>
+                                        <option value="5">5 min</option>
+                                        <option value="10">10 min</option>
+                                        <option value="15">15 min</option>
+                                        <option value="20">20 min</option>
+                                        <option value="25">25 min</option>
+                                        <option value="30">30 min</option>
+                                        <option value="35">35 min</option>
+                                        <option value="40">40 min</option>
+                                        <option value="45">45 min</option>
+                                    </select>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <th>智能启动</th>
+                                <td>
+                                    <select id="intelligent_start" name="intelligent_start" class="workModeselectList" style="width:260px;height:20px">
+                                        <option value="0">关闭</option>
+                                        <option value="1">开启</option>
+                                    </select>
+                                </td>
+
+                                <th>智能停止</th>
+                                <td>
+                                    <select id="intelligent_stop" name="intelligent_stop" class="workModeselectList" style="width:260px;height:20px">
+                                        <option value="0">关闭</option>
+                                        <option value="1">开启</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
                                 <th>湿化水平</th>
                                 <td>
-                                    <select class="workModeselectList" style="width:260px;height:20px">
+                                    <select id="humidify_level" name="humidify_level" class="workModeselectList" style="width:260px;height:20px">
                                         <option value="0">关闭</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -74,62 +264,67 @@
                                         <option value="4">5</option>
                                     </select>
                                 </td>
-                            </tr>
-
-                            <tr>
-                                <th>呼气压力</th>
-                                <td>
-                                    <input id="t_ex_p" name="t_ex_p"  class="proInput" type="number"
-                                           style="width:241px;height:10px"/>
-                                </td>
-
-                                <th>加温管</th>
-                                <td>
-                                    <input id="connector11" name="connector"  class="proInput"
-                                           type="number" style="width:241px;height:10px"/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>起始压力</th>
-                                <td>
-                                    <input id="start_pressure" name="start_pressure"  class="proInput" type="number"
-                                           style="width:241px;height:10px"/>
-                                </td>
-
-                                <th>智能启停</th>
-                                <td>
-                                    <select class="workModeselectList" style="width:260px;height:20px">
-                                        <option value="0">关闭</option>
-                                        <option value="1">开启</option>
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>延迟时间</th>
-                                <td>
-                                    <input id="cure_delay" name="cure_delay"  class="proInput" type="number"
-                                           style="width:241px;height:10px"/>
-                                </td>
 
                                 <th>面罩类型</th>
                                 <td>
-                                    <select class="workModeselectList" style="width:260px;height:20px">
+                                    <select id="mask" name="mask" class="workModeselectList" style="width:260px;height:20px">
                                         <option value="0">鼻罩</option>
                                         <option value="1">全面罩</option>
-                                        <option value="1">鼻枕</option>
+                                        <option value="2">鼻枕</option>
                                     </select>
                                 </td>
                             </tr>
 
-                            <tr>
+                            <tr class="S ST Auto-S T">
                                 <th>呼吸频率</th>
                                 <td>
-                                    <input id="breath_rate" name="breath_rate"  class="proInput" type="number"
+                                    <input id="breath_rate" name="breath_rate"  class="proInput" type="number" min=5 max=40 step=1
                                            style="width:241px;height:10px"/>
                                 </td>
 
+                                <th>呼吸比I:E</th>
+                                <td>
+                                   <%-- <input id="breath_ratio" name="breath_ratio"  class="proInput" type="number"
+                                           style="width:241px;height:10px"/>--%>
+                                    <select id="breath_ratio" name="breath_ratio" class="workModeselectList" style="width:260px;height:20px">
+                                        <option value="0">1 : 1</option>
+                                        <option value="1">1 : 1.5</option>
+                                        <option value="2">1 : 2</option>
+                                        <option value="3">1 : 2.5</option>
+                                        <option value="4">1 : 3</option>
+                                        <option value="5">1 : 3.5</option>
+                                        <option value="6">1 : 4</option>
+                                        <option value="7">1 : 4.5</option>
+                                        <option value="8">1 : 5</option>
+                                        <option value="9">1 : 5.5</option>
+                                        <option value="10">1 : 6</option>
+                                    </select>
+                                </td>
+
+                            </tr>
+
+                            <tr class="ST S Auto-S T ST">
+                                <th>上升斜坡</th>
+                                <td>
+                                    <select id="boostslope"  name="boostslope" class="workModeselectList" style="width:260px;height:20px">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </td>
+                                <th>下降斜坡</th>
+                                <td>
+                                    <select id="buckslope" name="buckslope" class="workModeselectList" style="width:260px;height:20px">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                        <%--    <tr>
                                 <th>管道类型</th>
                                 <td>
                                     <select class="workModeselectList" style="width:260px;height:20px">
@@ -138,42 +333,7 @@
                                         <option value="1">加温管</option>
                                     </select>
                                 </td>
-                            </tr>
-
-                            <tr>
-                                <th>呼吸比I:E 1：</th>
-                                <td>
-                                    <input id="breath_ratio" name="breath_ratio"  class="proInput" type="number"
-                                           style="width:241px;height:10px"/>
-                                </td>
-
-                            </tr>
-
-                            <tr>
-                                <th>上升斜坡</th>
-                                <td>
-                                    <select class="workModeselectList" style="width:260px;height:20px">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                    </select>
-                                </td>
-
-                            </tr>
-
-                            <tr>
-                                <th>下降斜坡</th>
-                                <td>
-                                    <select class="workModeselectList" style="width:260px;height:20px">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                    </select>
-                                </td>
-                            </tr>
-
+                            </tr>--%>
 
                         </table>
                     </div>

@@ -139,4 +139,8 @@ public class DeviceServiceImpl implements DeviceService {
     public boolean updateShadowDevice(DeviceShadowDTO shadow, String deviceName) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException, ClientException {
         return ShadowDeviceHandler.updateShadowDevice(shadow, deviceName);
     }
+
+    public  boolean updateShadowDeviceMap(Map shadow, String deviceName) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException, com.aliyuncs.exceptions.ClientException {
+        return ShadowDeviceHandler.updateShadowDeviceMap(shadow, deviceName);
+    }
 }

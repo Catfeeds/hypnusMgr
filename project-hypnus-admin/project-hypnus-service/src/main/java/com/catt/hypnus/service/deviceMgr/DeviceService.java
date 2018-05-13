@@ -63,5 +63,16 @@ public interface DeviceService {
      */
     boolean updateShadowDevice(DeviceShadowDTO shadow, String deviceName) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException, com.aliyuncs.exceptions.ClientException;
 
+    /**
+     * @param shadow
+     * @param deviceName
+     * @return
+     * @throws InvocationTargetException
+     * @throws IntrospectionException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws com.aliyuncs.exceptions.ClientException
+     */
+    boolean updateShadowDeviceMap(Map shadow, String deviceName) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException, com.aliyuncs.exceptions.ClientException;
 }
 

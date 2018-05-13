@@ -9,7 +9,10 @@ package com.catt.hypnus.repository.entity;
 
 import java.io.Serializable;
 public class DeviceShadow implements Serializable {
-
+    /**
+     * 当前的设备状态
+     */
+    private String cur_state;
     /**
      * 起始压力
      */
@@ -45,7 +48,7 @@ public class DeviceShadow implements Serializable {
     /**
      * 治疗模式
      */
-    private int cure_model;
+    private int cure_mode;
     private int tv_alarm;
     private int pipe;
     private int leak_alarm;
@@ -87,6 +90,14 @@ public class DeviceShadow implements Serializable {
     private int st_in_p;
     private int flight_mode;
     private int autos_min_p;
+
+    public String getCur_state() {
+        return cur_state;
+    }
+
+    public void setCur_state(String cur_state) {
+        this.cur_state = cur_state;
+    }
 
     public void setStart_pressure(int start_pressure) {
         this.start_pressure = start_pressure;
@@ -200,12 +211,12 @@ public class DeviceShadow implements Serializable {
         return t_ex_p;
     }
 
-    public void setCure_model(int cure_model) {
-        this.cure_model = cure_model;
+    public void setCure_mode(int cure_mode) {
+        this.cure_mode = cure_mode;
     }
 
-    public int getCure_model() {
-        return cure_model;
+    public int getCure_mode() {
+        return cure_mode;
     }
 
     public void setTv_alarm(int tv_alarm) {

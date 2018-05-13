@@ -9,16 +9,12 @@ import com.catt.common.web.controller.BaseController;
 import com.catt.common.web.spring.resolver.annotation.CurrentUser;
 import com.catt.hypnus.repository.entity.DeviceShadow;
 import com.catt.hypnus.repository.entity.deviceMgr.Device;
-import com.catt.hypnus.repository.entity.userMgr.DeviceShadowDTO;
 import com.catt.hypnus.repository.form.deviceMgr.DeviceForm;
 import com.catt.hypnus.service.deviceMgr.DeviceService;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -171,9 +167,10 @@ public class DeviceController extends BaseController {
      */
     @RequestMapping(value = "/updateShadowDevice", method = RequestMethod.POST)
     @ResponseBody
-    public Message updateShadowDevice(DeviceShadowDTO deviceShadow, String deviceId) {
+    public Message updateShadowDevice(@RequestBody Map deviceShadow, String deviceId) {
         try {
-            deviceService.updateShadowDevice(deviceShadow, deviceShadow.getDeviceID());
+          //  deviceService.updateShadowDevice(deviceShadow, deviceShadow.getDeviceID());
+            deviceService.updateShadowDeviceMap(deviceShadow, deviceShadow.get("deviceID").toString());
             return Message.success();
         } catch (RuntimeException e) {
             return Message.error(e.getMessage());
