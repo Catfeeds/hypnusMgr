@@ -222,12 +222,12 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
      * @return
      */
     @Override
-    public Map getBreathEventData(String deviceId,String startTime,String endTime) {
+    public List<Map> getBreathEventData(String deviceId,String startTime,String endTime) {
         Assert.notNull(deviceId);
-        Map breathEventDataMap = null;
+//        Map breathEventDataMap = null;
         StringBuffer sql = new StringBuffer();
         Map param = new HashMap();
-        sql.append("select t.ai_cnt as ai,t.hi_cnt as hi, t.snore_cnt as snore,t.csa_cnt as csa,t.csr_cnt as csr,t.pb_cnt as pb");
+        sql.append("select t.ai_cnt as ai,t.hi_cnt as hi, t.snore_cnt as snore,t.csa_cnt as csa,t.csr_cnt as csr,t.pb_cnt as pb,t.`date_mark`as datemark");
         sql.append(" from t_dev_day_statistics t ");
         if (StringUtil.checkStr(deviceId)) {
             sql.append(" where t.device_id =:deviceId");
@@ -240,10 +240,10 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
             param.put("endTime", endTime);
         }
         List<Map> breathEventDataList = this.findListBySql(sql.toString(), param, Map.class);
-        if (CollectionUtil.isNotEmpty(breathEventDataList)) {
-            breathEventDataMap = breathEventDataList.get(0);
-        }
-        return breathEventDataMap;
+//        if (CollectionUtil.isNotEmpty(breathEventDataList)) {
+//            breathEventDataMap = breathEventDataList.get(0);
+//        }
+        return breathEventDataList;
     }
 
     /**

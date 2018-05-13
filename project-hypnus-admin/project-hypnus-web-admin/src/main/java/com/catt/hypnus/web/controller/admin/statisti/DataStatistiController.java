@@ -79,18 +79,18 @@ public class DataStatistiController extends BaseController {
         String today = DateUtil.format(new Date(), DateUtil.yyyyMMdd);
 
         //从事件表中读取数据
-        Map dataMap = usetimeService.getEventData(deviceId, createDateDay, endDateDay);
+//        Map dataMap = usetimeService.getEventData(deviceId, createDateDay, endDateDay);
 
-        System.out.println("事件表柱状图map："+dataMap);
+//        System.out.println("事件表柱状图map："+dataMap);
 
         //从t_dev_day_statistics表中读取数据
         Map chartDataMap = usetimeService.getStatisticsChartData(deviceId, createDateDay, endDateDay);
 
         System.out.println("新的表柱状图map："+chartDataMap);
 
-//        return chartDataMap;
+        return chartDataMap;
 
-        return dataMap;
+//        return dataMap;
     }
 
 

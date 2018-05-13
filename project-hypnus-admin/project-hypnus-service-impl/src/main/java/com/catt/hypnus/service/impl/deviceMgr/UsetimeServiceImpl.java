@@ -15,6 +15,7 @@ import com.catt.hypnus.repository.entity.deviceMgr.Usetime;
 import com.catt.hypnus.repository.form.deviceMgr.UsetimeForm;
 import com.catt.hypnus.service.base.deviceMgr.UsetimeBaseService;
 import com.catt.hypnus.service.deviceMgr.UsetimeService;
+import com.gci.common.util.collections.CollectionUtil;
 import com.gci.common.util.lang.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -220,8 +221,13 @@ public class UsetimeServiceImpl implements UsetimeService {
 //        if(!workParamMaplist.isEmpty())
 //            workParamMap = workParamMaplist.get(0);
 
-        workParamMap.put("model",workParamMaplist.get(0).get("model"));
-        workParamMap.put("dataVersion",workParamMaplist.get(0).get("dataVersion"));
+        if(workParamMaplist.size() != 0){
+            workParamMap.put("model",workParamMaplist.get(0).get("model"));
+            workParamMap.put("dataVersion",workParamMaplist.get(0).get("dataVersion"));
+        }else{
+            workParamMap.put("model","未知");
+            workParamMap.put("dataVersion","未知");
+        }
         workParamMap.put("yesterday",starttime);
         workParamMap.put("today",endtime);
         return workParamMap;
@@ -461,11 +467,11 @@ public class UsetimeServiceImpl implements UsetimeService {
             startTimeStr = MapUtil.getString(usetimeList.get(0), "starttime");
             for(int i=0; i< usetimeList.size();i++)
             {
-                pos.setIndex(0);
-                Date key = formatter.parse(MapUtil.getString(usetimeList.get(i), "starttime"), pos);
-                pos.setIndex(0);
-                Date value = formatter.parse(MapUtil.getString(usetimeList.get(i), "endTime"), pos);
-                usetimeMap.put(key , value);
+//                pos.setIndex(0);
+//                Date key = formatter.parse(MapUtil.getString(usetimeList.get(i), "starttime"), pos);
+//                pos.setIndex(0);
+//                Date value = formatter.parse(MapUtil.getString(usetimeList.get(i), "endTime"), pos);
+//                usetimeMap.put(key , value);
             }
         }
 
@@ -1113,13 +1119,6 @@ public class UsetimeServiceImpl implements UsetimeService {
      */
     @Override
     public Map getStatisticsDataFromOSS(String deviceId,String startTime,String endTime){
-
-        System.out.println("正在努力从OSS中获取相关数据");
-
-//        String startTime = "2018-04-12 14:00:00";
-//        String endTime = "2018-04-13 18:13:13";
-
-
         Map map = null;
         try {
             map = this.getDateFromOss(deviceId, startTime, endTime);
@@ -1128,125 +1127,147 @@ public class UsetimeServiceImpl implements UsetimeService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        System.out.println("您获取的数据是：");
-        System.out.println(map);
 
-        List plist = (List) map.get("pressure");
+        if( map != null ){
 
-        int plistSize = plist.size();
+            List plist = (List) map.get("pressure");//未做非空判断，容易报错
 
-        //1.计算潮气量
-        //1.1.获取所有潮气量数值
-        List sortTVList = new ArrayList<>();
+            int plistSize = plist.size();
 
-        for (int i = 0; i < plistSize; i++) {
-            List tvList = (List) plist.get(i);
-            if (tvList.size() > 6) {
-                Number tvValue =  (Number) tvList.get(6);
-                sortTVList.add(tvValue.shortValue());
+            //1.计算潮气量
+            //1.1.获取所有潮气量数值
+            List sortTVList = new ArrayList<>();
+
+            for (int i = 0; i < plistSize; i++) {
+                List tvList = (List) plist.get(i);
+                if (tvList.size() > 6) {
+                    Number tvValue =  (Number) tvList.get(6);
+                    sortTVList.add(tvValue.shortValue());
+                }
             }
-        }
-        //1.2.按照从小到大排列潮气量数值
-        Collections.sort(sortTVList);
+            //1.2.按照从小到大排列潮气量数值
+            Collections.sort(sortTVList);
 
-        //1.3.取50%与90%位置的数值
+            //1.3.取50%与90%位置的数值
 
-        short fiftyPercentTV = (short) sortTVList.get((int) (sortTVList.size() * 0.5));
+            short fiftyPercentTV = (short) sortTVList.get((int) (sortTVList.size() * 0.5));
 
-        short ninetyPercentTV = (short) sortTVList.get((int) (sortTVList.size() * 0.9));
-
-
-        //2.计算分钟通气量
-        //2.1.获取所有吸气时长（BI）和呼吸频率（BR）数值
-        List sortMVList = new ArrayList<>();
-
-        for (int i = 0; i < plistSize; i++) {
-            List mvList = (List) plist.get(i);
-            short biValue = (short) mvList.get(1);
-            byte brValue = (byte) mvList.get(2);
-            double mvValue = (double) (biValue * brValue);
-
-            DecimalFormat df = new DecimalFormat("0.0");
-            sortMVList.add(df.format(mvValue * 0.001));
-        }
-        //2.2.按照从小到大排列分钟通气量数值
-        Collections.sort(sortMVList);
-
-        //2.3.取50%与90%位置的数值
-
-        String fiftyPercentMV = (String) sortMVList.get((int) (sortMVList.size() * 0.5));
-
-        String ninetyPercentMV = (String) sortMVList.get((int) (sortMVList.size() * 0.9));
+            short ninetyPercentTV = (short) sortTVList.get((int) (sortTVList.size() * 0.9));
 
 
-        //3.计算呼吸频率
-        //3.1.获取所有呼吸频率数值
-        List sortBRList = new ArrayList<>();
+            //2.计算分钟通气量
+            //2.1.获取所有吸气时长（BI）和呼吸频率（BR）数值
+            List sortMVList = new ArrayList<>();
 
-        for (int i = 0; i < plistSize; i++) {
-            List brList = (List) plist.get(i);
-            byte brValue = (byte) brList.get(2);
-            sortBRList.add(brValue);
-        }
-        //3.2.按照从小到大排列呼吸频率数值
-        Collections.sort(sortBRList);
+            for (int i = 0; i < plistSize; i++) {
+                List mvList = (List) plist.get(i);
+                short biValue = (short) mvList.get(1);
+                byte brValue = (byte) mvList.get(2);
+                double mvValue = (double) (biValue * brValue);
 
-        //3.3.取50%与90%位置的数值
-
-        byte fiftyPercentBR = (byte) sortBRList.get((int) (sortBRList.size() * 0.5));
-
-        byte ninetyPercentBR = (byte) sortBRList.get((int) (sortBRList.size() * 0.9));
-
-
-        //4.计算呼吸比
-        //4.1.获取所有呼吸频率，吸气时长数值
-        List sortBPList = new ArrayList<>();
-
-        for (int i = 0; i < plistSize; i++) {
-            List birList = (List) plist.get(i);
-            short biValue = (short) birList.get(1);
-            byte brValue = (byte) birList.get(2);
-            byte bpValue = 0;
-
-            if (brValue != 0) {
-                // 计算呼气时长
-                byte boValue = (byte) (60 / brValue - biValue);
-                //呼吸比 = 呼气时长/吸气时长
-                bpValue = (byte) (boValue / biValue);
-            } else {
-                bpValue = 0;
+                DecimalFormat df = new DecimalFormat("0.0");
+                sortMVList.add(df.format(mvValue * 0.001));
             }
-            sortBPList.add(bpValue);
+            //2.2.按照从小到大排列分钟通气量数值
+            Collections.sort(sortMVList);
+
+            //2.3.取50%与90%位置的数值
+
+            String fiftyPercentMV = (String) sortMVList.get((int) (sortMVList.size() * 0.5));
+
+            String ninetyPercentMV = (String) sortMVList.get((int) (sortMVList.size() * 0.9));
+
+
+            //3.计算呼吸频率
+            //3.1.获取所有呼吸频率数值
+            List sortBRList = new ArrayList<>();
+
+            for (int i = 0; i < plistSize; i++) {
+                List brList = (List) plist.get(i);
+                byte brValue = (byte) brList.get(2);
+                sortBRList.add(brValue);
+            }
+            //3.2.按照从小到大排列呼吸频率数值
+            Collections.sort(sortBRList);
+
+            //3.3.取50%与90%位置的数值
+
+            byte fiftyPercentBR = (byte) sortBRList.get((int) (sortBRList.size() * 0.5));
+
+            byte ninetyPercentBR = (byte) sortBRList.get((int) (sortBRList.size() * 0.9));
+
+
+            //4.计算呼吸比
+            //4.1.获取所有呼吸频率，吸气时长数值
+            List sortBPList = new ArrayList<>();
+
+            for (int i = 0; i < plistSize; i++) {
+                List birList = (List) plist.get(i);
+                short biValue = (short) birList.get(1);
+                byte brValue = (byte) birList.get(2);
+                byte bpValue = 0;
+
+                if (brValue != 0) {
+                    // 计算呼气时长
+                    byte boValue = (byte) (60 / brValue - biValue);
+                    //呼吸比 = 呼气时长/吸气时长
+                    bpValue = (byte) (boValue / biValue);
+                } else {
+                    bpValue = 0;
+                }
+                sortBPList.add(bpValue);
+            }
+            //4.2.按照从小到大排列呼吸比数值
+            Collections.sort(sortBPList);
+
+            //4.3.取50%与90%位置的数值
+
+            byte fiftyPercentBP = (byte) sortBPList.get((int) (sortBPList.size() * 0.5));
+
+            byte ninetyPercentBP = (byte) sortBPList.get((int) (sortBPList.size() * 0.9));
+
+
+            //组装数据
+            HashMap ossDataMap = new HashMap();
+            //潮气量
+            ossDataMap.put("fiftyPercentTV", fiftyPercentTV);
+            ossDataMap.put("ninetyPercentTV", ninetyPercentTV);
+
+            //分钟通气量
+            ossDataMap.put("fiftyPercentMV", fiftyPercentMV);
+            ossDataMap.put("ninetyPercentMV", ninetyPercentMV);
+
+            //呼吸频率
+            ossDataMap.put("fiftyPercentBR", fiftyPercentBR);
+            ossDataMap.put("ninetyPercentBR", ninetyPercentBR);
+
+            //呼吸比
+            ossDataMap.put("fiftyPercentBP", fiftyPercentBP);
+            ossDataMap.put("ninetyPercentBP", ninetyPercentBP);
+
+            return ossDataMap;
+
+        }else{//如果没有数据，则显示0
+            Map ossDataMapForNull = new HashMap();
+            //潮气量
+            ossDataMapForNull.put("fiftyPercentTV", 0);
+            ossDataMapForNull.put("ninetyPercentTV", 0);
+
+            //分钟通气量
+            ossDataMapForNull.put("fiftyPercentMV", 0);
+            ossDataMapForNull.put("ninetyPercentMV", 0);
+
+            //呼吸频率
+            ossDataMapForNull.put("fiftyPercentBR", 0);
+            ossDataMapForNull.put("ninetyPercentBR", 0);
+
+            //呼吸比
+            ossDataMapForNull.put("fiftyPercentBP", 0);
+            ossDataMapForNull.put("ninetyPercentBP", 0);
+            return ossDataMapForNull;
         }
-        //4.2.按照从小到大排列呼吸比数值
-        Collections.sort(sortBPList);
-
-        //4.3.取50%与90%位置的数值
-
-        byte fiftyPercentBP = (byte) sortBPList.get((int) (sortBPList.size() * 0.5));
-
-        byte ninetyPercentBP = (byte) sortBPList.get((int) (sortBPList.size() * 0.9));
 
 
-        //组装数据
-        HashMap ossDataMap = new HashMap();
-        //潮气量
-        ossDataMap.put("fiftyPercentTV", fiftyPercentTV);
-        ossDataMap.put("ninetyPercentTV", ninetyPercentTV);
-
-        //分钟通气量
-        ossDataMap.put("fiftyPercentMV", fiftyPercentMV);
-        ossDataMap.put("ninetyPercentMV", ninetyPercentMV);
-
-        //呼吸频率
-        ossDataMap.put("fiftyPercentBR", fiftyPercentBR);
-        ossDataMap.put("ninetyPercentBR", ninetyPercentBR);
-
-        //呼吸比
-        ossDataMap.put("fiftyPercentBP", fiftyPercentBP);
-        ossDataMap.put("ninetyPercentBP", ninetyPercentBP);
-
-        return ossDataMap;
     }
 
 
@@ -1260,15 +1281,57 @@ public class UsetimeServiceImpl implements UsetimeService {
      */
     @Override
     public Map getBreathEventData(String deviceId,String startTime,String endTime) {
-        Map breathEventDataMap;
-        breathEventDataMap = usetimeDao.getBreathEventData(deviceId,startTime,endTime);
-        if(breathEventDataMap!=null){
-            //计算AHI=AI+HI
-            int ai = (int) breathEventDataMap.get("ai");
-            int hi = (int) breathEventDataMap.get("hi");
-            int ahi = ai+hi;
-            breathEventDataMap.put("ahi",ahi);
+        Map totalDataMap = usetimeDao.getStatisticsDataTotalData(deviceId,startTime,endTime);
 
+        //获取总使用时间 单位：小时
+        String totalHoursStr = "";
+        if(totalDataMap != null){
+            BigDecimal t_totalSeconds = (BigDecimal) totalDataMap.get("totalSeconds");
+            if(t_totalSeconds != null){
+                double totalSeconds = t_totalSeconds.doubleValue();
+                DecimalFormat df = new DecimalFormat("0.0");
+                totalHoursStr = df.format(totalSeconds/3600);
+            }
+        }
+
+        double totalHours;
+        if(!totalHoursStr.isEmpty()){
+            totalHours = Double.valueOf(totalHoursStr);
+        }else{
+            totalHours = 1.0;
+        }
+
+        Map breathEventDataMap = new HashMap();
+        List breathEventDataList = usetimeDao.getBreathEventData(deviceId,startTime,endTime);
+        int ahi = 0;
+        int ai = 0;
+        int hi = 0;
+        int snore = 0;
+        int csa = 0;
+        int csr = 0;
+        int pb = 0;
+        if(CollectionUtil.isNotEmpty(breathEventDataList)){
+            for(int i=0; i< breathEventDataList.size();i++){
+                breathEventDataMap = (Map) breathEventDataList.get(i);
+                //计算AHI=AI+HI
+                ai += (int) breathEventDataMap.get("ai");
+                hi += (int) breathEventDataMap.get("hi");
+                ahi += ai+hi;
+                snore += (int) breathEventDataMap.get("snore");
+                csa += (int) breathEventDataMap.get("csa");
+                csr += (int) breathEventDataMap.get("csr");
+                pb += (int) breathEventDataMap.get("pb");
+
+            }
+            if(totalHours != 0){
+                breathEventDataMap.put("ahi",ahi/totalHours);
+                breathEventDataMap.put("ai",ai/totalHours);
+                breathEventDataMap.put("hi",hi/totalHours);
+                breathEventDataMap.put("snore",snore/totalHours);
+                breathEventDataMap.put("csa",csa/totalHours);
+                breathEventDataMap.put("csr",csr/totalHours);
+                breathEventDataMap.put("pb",pb/totalHours);
+            }
             return breathEventDataMap;
         }else {//如果没有数据，则显示0
             Map breathEventDataMapForNull = new HashMap();
@@ -1298,18 +1361,37 @@ public class UsetimeServiceImpl implements UsetimeService {
     public Map getLeakInfoData(String deviceId,String startTime,String endTime) {
         Map totalDataMap = usetimeDao.getStatisticsDataTotalData(deviceId,startTime,endTime);
         Map leakInfoDataMap = new HashMap();
-        //总漏气量 单位：L
-        BigDecimal t_totalLeakVolume = (BigDecimal) totalDataMap.get("totalLeakVolume");
-        int totalLeakVolume = t_totalLeakVolume.intValue();
-        leakInfoDataMap.put("totalLeakVolume",totalLeakVolume);
+        if(totalDataMap!=null){
+            //总漏气量 单位：L
+            BigDecimal t_totalLeakVolume = (BigDecimal) totalDataMap.get("totalLeakVolume");
+            int totalLeakVolume;
+            if(t_totalLeakVolume != null){
+                totalLeakVolume = t_totalLeakVolume.intValue();
+            }else{
+                totalLeakVolume = 0;
+            }
+            leakInfoDataMap.put("totalLeakVolume",totalLeakVolume);
 
-        //平均漏气量 = 总漏气量（L）/总使用时间（分钟）
-        BigDecimal t_totalSeconds = (BigDecimal) totalDataMap.get("totalSeconds");
-        double totalSeconds = t_totalSeconds.doubleValue();
-        DecimalFormat df = new DecimalFormat("0.0");
-        String averageLeakVolume = df.format(totalLeakVolume/(totalSeconds/60));
-        leakInfoDataMap.put("averageLeakVolume",averageLeakVolume);
-        return leakInfoDataMap;
+
+            //平均漏气量 = 总漏气量（L）/总使用时间（分钟）
+            BigDecimal t_totalSeconds = (BigDecimal) totalDataMap.get("totalSeconds");
+            String averageLeakVolume;
+            if(t_totalSeconds != null){
+                double totalSeconds = t_totalSeconds.doubleValue();
+                DecimalFormat df = new DecimalFormat("0.0");
+                 averageLeakVolume = df.format(totalLeakVolume/(totalSeconds/60));
+            }else{
+                averageLeakVolume = "0";
+            }
+            leakInfoDataMap.put("averageLeakVolume",averageLeakVolume);
+            return leakInfoDataMap;
+        }else {//如果没有数据，则显示0
+            Map leakInfoDataMapForNull = new HashMap();
+            leakInfoDataMapForNull.put("totalLeakVolume",0);
+            leakInfoDataMapForNull.put("averageLeakVolume",0);
+            return leakInfoDataMapForNull;
+        }
+
     }
 
 
@@ -1332,33 +1414,64 @@ public class UsetimeServiceImpl implements UsetimeService {
         Map csrDataMap = new HashMap();
         Map pbDataMap = new HashMap();
 
-        Map breathEventDataMap = this.getBreathEventData(deviceId, startTime, endTime);
-        //列出前一个月的数据
-        List monthBreathEventDataList = this.getMonthBreathEventData(deviceId, startTime);
+        Map breathEventDataMap;
 
-
-        //呼吸事件List
         List aiEventList = new ArrayList();
-        aiEventList.add(breathEventDataMap.get("ai"));
-
         List hiEventList = new ArrayList();
-        hiEventList.add(breathEventDataMap.get("hi"));
-
         List csaEventList = new ArrayList();
-        csaEventList.add(breathEventDataMap.get("csa"));
-
         List csrEventList = new ArrayList();
-        csrEventList.add(breathEventDataMap.get("csr"));
-
         List pbEventList = new ArrayList();
-        pbEventList.add(breathEventDataMap.get("pb"));
 
-        for (int j = 0;j<29;j++){
-            aiEventList.add(j,0.0);
-            hiEventList.add(j,0.0);
-            csaEventList.add(j,0.0);
-            csrEventList.add(j,0.0);
-            pbEventList.add(j,0.0);
+        List breathEventDataList = usetimeDao.getBreathEventData(deviceId,startTime,endTime);
+
+        if(CollectionUtil.isNotEmpty(breathEventDataList)){
+            //1.先填充30条数据进数组
+            for (int j = 0;j<30;j++){
+                aiEventList.add(j,0.0);
+                hiEventList.add(j,0.0);
+                csaEventList.add(j,0.0);
+                csrEventList.add(j,0.0);
+                pbEventList.add(j,0.0);
+            }
+            //2.遍历数组，对比时间，将数据插入
+            int listSize = breathEventDataList.size();
+            for(int i=0; i< listSize;i++){
+                breathEventDataMap = (Map) breathEventDataList.get(i);
+
+                Date datemark = (Date) breathEventDataMap.get("datemark");
+
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date endDate = null;
+                try {
+                    endDate = df.parse(endTime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                int days = (int) ((endDate.getTime() - datemark.getTime()) / (1000*3600*24));
+
+                int eIndex = 30 - days;
+                //呼吸事件List
+                aiEventList.add(eIndex,breathEventDataMap.get("ai"));
+
+                hiEventList.add(eIndex,breathEventDataMap.get("hi"));
+
+                csaEventList.add(eIndex,breathEventDataMap.get("csa"));
+
+                csrEventList.add(eIndex,breathEventDataMap.get("csr"));
+
+                pbEventList.add(eIndex,breathEventDataMap.get("pb"));
+
+            }
+
+        }else{
+            for (int j = 0;j<30;j++){
+                aiEventList.add(j,0.0);
+                hiEventList.add(j,0.0);
+                csaEventList.add(j,0.0);
+                csrEventList.add(j,0.0);
+                pbEventList.add(j,0.0);
+            }
         }
 
         aiDataMap.put("eventList", aiEventList);
@@ -1366,16 +1479,6 @@ public class UsetimeServiceImpl implements UsetimeService {
         csaDataMap.put("eventList", csaEventList);
         csrDataMap.put("eventList", csrEventList);
         pbDataMap.put("eventList", pbEventList);
-
-        //把前一个月的数据放入eventList中
-        for (int i = 0;i<monthBreathEventDataList.size();i++){
-//            Map dayBreathEventDataMap = (Map) monthBreathEventDataList.get(i);
-//            csaEventList.add(dayBreathEventDataMap.get("csa"));
-//            csaDataMap.put("eventList", csaEventList);
-//
-//            csrEventList.add(dayBreathEventDataMap.get("csr"));
-//            csrDataMap.put("eventList", csrEventList);
-        }
 
         List dateList = new ArrayList();
         //根据计算规则获取当前日期的前30天日期
@@ -1403,23 +1506,7 @@ public class UsetimeServiceImpl implements UsetimeService {
 
     }
 
-    /**
-     * 获取月度呼吸事件数据（呼吸事件柱状图）
-     *
-     * @param deviceId
-     * @param startTime
-     * @return
-     */
-    public List<Map> getMonthBreathEventData(String deviceId,String startTime) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE,-31);
-        String oneMonthBeforeday = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-        String monthStart = oneMonthBeforeday;
 
-        String monthEnd = startTime;
-        List<Map> monthBreathEventDataList = usetimeDao.getMonthBreathEventData(deviceId, monthStart, monthEnd);
-        return monthBreathEventDataList;
-    }
 
 
 
