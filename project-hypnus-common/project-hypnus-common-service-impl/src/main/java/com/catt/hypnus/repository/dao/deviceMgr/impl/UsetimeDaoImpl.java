@@ -253,6 +253,36 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
     }
 
     /**
+     * 获取治疗压力数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Override
+    public List<Map> getTreatmentPressure(String deviceId, String startTime,String endTime) {
+        Assert.notNull(deviceId);
+        StringBuffer sql = new StringBuffer();
+        Map param = new HashMap();
+        sql.append("SELECT t.`tp_in` AS tpIn,");
+        sql.append("t.`tp_ex` AS tpEx");
+        sql.append(" from t_dev_day_statistics t ");
+        if (StringUtil.checkStr(deviceId)) {
+            sql.append(" where t.device_id =:deviceId");
+            param.put("deviceId", deviceId);
+        }
+        if (StringUtil.checkStr(startTime)) {
+            sql.append(" AND t.date_mark BETWEEN :startTime");
+            param.put("startTime", startTime);
+            sql.append(" AND  :endTime ");
+            param.put("endTime", endTime);
+        }
+        List<Map> treatmentPressureMapList = this.findListBySql(sql.toString(), param, Map.class);
+        return treatmentPressureMapList;
+    }
+
+    /**
      * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）
      *
      * @param deviceId

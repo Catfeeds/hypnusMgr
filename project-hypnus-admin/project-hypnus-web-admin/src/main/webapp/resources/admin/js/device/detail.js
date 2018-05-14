@@ -14,11 +14,11 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                     var id = $('#id').val();
                     if (id) {
                         EventHandler.getStatisticsDataWorkParam();
+                        EventHandler.getTreatmentPressure();
                         EventHandler.getStatisticsDataUseInfo();
                         EventHandler.getStatisticsDataFromOSS();
                         EventHandler.getBreathEventData();
                         EventHandler.getLeakInfoData();
-                        EventHandler.getUseData();
                     }
                 },
                 /** 初始化事件绑定 */
@@ -36,11 +36,11 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                     });
                     $("#searchBtn").click(function () {
                         EventHandler.getStatisticsDataWorkParam();
+                        EventHandler.getTreatmentPressure();
                         EventHandler.getStatisticsDataUseInfo();
                         EventHandler.getStatisticsDataFromOSS();
                         EventHandler.getBreathEventData();
                         EventHandler.getLeakInfoData();
-                        EventHandler.getUseData();
                     });
                 },
                 /** 初始化数据加载 */
@@ -118,6 +118,21 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                                 $('.controlmode').show();
                             }
 
+                        }
+                    });
+                },
+
+                //获取治疗压力
+                getTreatmentPressure: function () {
+                    DataHandler.getTreatmentPressure({
+                        deviceId: $('#id').val(),
+                        startTime: $('#createDateDay').val(),
+                        endTime: $('#endDateDay').val()
+                    }, function (treatmentPressureMap) {
+                        if (treatmentPressureMap) {
+                            //获取治疗压力
+                            $('#ninetyPercentPresure1').html(treatmentPressureMap.tpIn +" cmH2O");
+                            $('#ninetyPercentPresure2').html(treatmentPressureMap.tpEx +" cmH2O");
                         }
                     });
                 },
@@ -206,23 +221,6 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                     });
                 },
 
-                getUseData: function () {
-                    DataHandler.getUseData({
-                        deviceId: $('#id').val(),
-                        startTime: $('#createDateDay').val(),
-                        endTime: $('#endDateDay').val()
-                    }, function (device) {
-                        if (device) {
-                            $('#averagePresure1').html(device.averagePresure1+" cmH2O");
-                            $('#pecentPresure1').html(device.pecentPresure1+" cmH2O");
-                            $('#averagePresure2').html(device.averagePresure2+" cmH2O");
-                            $('#pecentPresure2').html(device.pecentPresure2+" cmH2O");
-
-                            setParenHei();
-                        }
-                    });
-                },
-
                 //设置设备参数 统计图形
                 detailData: function (type) {
                     var deviceId = $('#deviceId').val();
@@ -244,6 +242,17 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                  */
                 getStatisticsDataWorkParam: function (params, callback) {
                     $.post(path + '/admin/deviceMgr/getStatisticsDataWorkParamNew', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 获取统计数据-治疗压力
+                 * @param params
+                 * @param callback
+                 */
+                getTreatmentPressure: function (params, callback) {
+                    $.post(path + '/admin/statisti/data/getTreatmentPressure', params, function (backData) {
                         callback(backData);
                     });
                 },
@@ -291,18 +300,6 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                         callback(backData);
                     });
                 },
-
-                /**
-                 * 获取设备参数
-                 * @param params
-                 * @param callback
-                 */
-                getUseData: function (params, callback) {
-                    $.post(path + '/admin/deviceMgr/getUseData', params, function (backData) {
-                        callback(backData);
-                    });
-                },
-
 
             };
         })();

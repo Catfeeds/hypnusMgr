@@ -1043,6 +1043,56 @@ public class UsetimeServiceImpl implements UsetimeService {
         return hypopnea;
     }
 
+    /**
+     * 获取治疗压力数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Override
+    public Map getTreatmentPressure(String deviceId, String startTime,String endTime){
+        Map treatmentPressureMap = new HashMap();
+        List treatmentPressureMapList = usetimeDao.getTreatmentPressure(deviceId,startTime,endTime);
+
+        System.out.println("treatmentPressureMapList："+ treatmentPressureMapList);
+
+        if(CollectionUtil.isNotEmpty(treatmentPressureMapList)){
+            List tpInList = new ArrayList();
+            List tpExList = new ArrayList();
+
+            for(int i=0; i< treatmentPressureMapList.size();i++) {
+
+                Map tpMap = (Map) treatmentPressureMapList.get(i);
+                int tpIn = (int) tpMap.get("tpIn");
+                tpInList.add(tpIn);
+                Collections.sort(tpInList);
+
+                int tpEx = (int) tpMap.get("tpEx");
+                tpExList.add(tpEx);
+                Collections.sort(tpExList);
+
+            }
+            int i_tpIn = (int) tpInList.get(tpInList.size()/2);
+            int i_tpEx = (int) tpExList.get(tpExList.size()/2);
+            double tpIn = i_tpIn*0.1;
+            double tpEx = i_tpEx*0.1;
+            DecimalFormat df = new DecimalFormat("0.0");
+            treatmentPressureMap.put("tpIn",df.format(tpIn));
+            treatmentPressureMap.put("tpEx",df.format(tpEx));
+
+            return treatmentPressureMap;
+        }else {//如果没有数据，则显示0
+            Map treatmentPressureMapForNull = new HashMap();
+
+            treatmentPressureMapForNull.put("ninetyPercentPresure1",0.0);
+            treatmentPressureMapForNull.put("ninetyPercentPresure2",0.0);
+
+            return treatmentPressureMapForNull;
+
+        }
+    }
 
     /**
      * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）

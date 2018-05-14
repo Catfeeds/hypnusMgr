@@ -131,16 +131,10 @@
         <div class="activityMsn">
             <table class="activityMsnTable">
                 <tr>
-                    <td>平均吸气压力：</td>
-                    <th id="averagePresure1"></th>
                     <td>90%吸气压力：</td>
-                    <th id="pecentPresure1"></th>
-                </tr>
-                <tr>
-                    <td>平均呼气压力：</td>
-                    <th id="averagePresure2"></th>
+                    <th id="ninetyPercentPresure1"></th>
                     <td>90%呼气压力：</td>
-                    <th id="pecentPresure2"></th>
+                    <th id="ninetyPercentPresure2"></th>
                 </tr>
             </table>
         </div>
