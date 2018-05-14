@@ -80,7 +80,11 @@
         <ul class="topTab xw_topTab">
             <li class="on xw_setPie" id="staticData">统计数据</li>
             <li class="xw_setPie" id="staticLi">统计图形</li>
-            <li class="xw_setPie" id="numLi">详细图形</li>
+            <li class="xw_setPie" id="numLi">详细图形
+                <input class="zjInput" type="text" style="width:140px;" id="selectDateDay" value="${createDateDay}"
+                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'endDateDay\')||\'%y-%M-%d\'}', minDate:'#F{$dp.$D(\'createDateDay\')}'})"
+                   style="width: 180px;"/>
+            </li>
         </ul>
     </div>
     <div class="xw_showcontent" style="background:#fff;" id="staticDiv">

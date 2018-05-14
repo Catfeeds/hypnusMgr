@@ -93,7 +93,8 @@ public class UsetimeServiceImpl implements UsetimeService {
     }
 
     public List<Map> findMapList(String deviceId, String startTime, String endTime) {
-        return usetimeDao.findMapList(deviceId, startTime, endTime);
+    //    return usetimeDao.findMapList(deviceId, startTime, endTime);
+        return usetimeDao.findUsetimeList(deviceId, startTime, endTime);
     }
 
     /**
@@ -190,7 +191,7 @@ public class UsetimeServiceImpl implements UsetimeService {
         }
         else
         {//模式冲突
-            workParamMap.put("mode",0);
+            workParamMap.put("mode",100);
         }
 
         if(pres1.size()==1)
@@ -264,7 +265,7 @@ public class UsetimeServiceImpl implements UsetimeService {
      */
     public Map getDetailFormOss(String deviceId, String selectDate) throws IOException, ParseException{
         Map map = new HashMap();
-        Map usetimeMap = new HashMap();
+        Map usetimeMap = new TreeMap();
       //  Map pathList = new HashMap<>();
         List presureList = new ArrayList<>();
         /**
@@ -278,12 +279,13 @@ public class UsetimeServiceImpl implements UsetimeService {
         SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat format3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         ParsePosition pos = new ParsePosition(0);
-        Date stime = format1.parse(selectDate);
+        selectDate = selectDate + " 12:00:00";
+        Date stime = format2.parse(selectDate);
         Calendar c = Calendar.getInstance();
         c.setTime(stime);
         c.add(Calendar.DAY_OF_MONTH, 1);// 今天+1天
         Date etime = c.getTime();
-        String afterSelectDate = format1.format(etime);
+        String afterSelectDate = format2.format(etime);
 
 
         //1,数据库查询基础数据
@@ -306,7 +308,11 @@ public class UsetimeServiceImpl implements UsetimeService {
                 pos.setIndex(0);
                 Date key = format2.parse(MapUtil.getString(usetimeList.get(i), "starttime"), pos);
                 pos.setIndex(0);
-                Date value = format2.parse(MapUtil.getString(usetimeList.get(i), "endTime"), pos);
+                Date value = null;
+                if(MapUtil.getString(usetimeList.get(i), "endTime") != null)
+                    value= format2.parse(MapUtil.getString(usetimeList.get(i), "endTime"), pos);
+                else
+                    continue;
                 //注意边界时间边界可能越出
                 usetimeMap.put(key , value);
             }

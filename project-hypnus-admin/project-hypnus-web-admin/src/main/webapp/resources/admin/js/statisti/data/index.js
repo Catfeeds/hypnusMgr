@@ -86,6 +86,9 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     $("#numLi").addClass("on");
                     $("#staticDiv").show();
                     $("#aiDiv").hide();
+                    $("#csaDiv").hide();
+                    $("#csrDiv").hide();
+                    $("#pbDiv").hide();
                     EventHandler.writerData4Chart(staticData, '');
                 }
 
@@ -103,6 +106,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 params.deviceId = $("#deviceId").val();
                 params.createDateDay = $("#createDateDay").val();
                 params.endDateDay = $("#endDateDay").val();
+                params.selectDate =  $("#selectDateDay").val();
                 DataHandler.getStaticData(params, function (result) {
                     time = new Array(); // 横坐标，时间跨度
                     graphics = result;
@@ -119,6 +123,15 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                     time = new Array(); // 横坐标，时间跨度
                     staticData = new Array(); // 订单数量
                     staticData = result.pressure;
+                    if($("#numLi").hasClass("on"))
+                    {
+                        $("#aiDiv").hide();
+                        $("#csaDiv").hide();
+                        $("#csrDiv").hide();
+                        $("#pbDiv").hide();
+                        $("#staticDiv").show();
+                        EventHandler.writerData4Chart(staticData, '');
+                    }
                 });
             },
             // 报表

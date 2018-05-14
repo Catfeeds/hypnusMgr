@@ -7,7 +7,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 init: function () {
                     this.initPage();
                     this.initEvent();
-                    this.initData();
+                 //   this.initData();
                 },
                 /** 初始化界面 */
                 initPage: function () {
@@ -18,7 +18,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                         EventHandler.getStatisticsDataFromOSS();
                         EventHandler.getBreathEventData();
                         EventHandler.getLeakInfoData();
-                        EventHandler.getUseData();
+                     //   EventHandler.getUseData();
                     }
                 },
                 /** 初始化事件绑定 */
@@ -40,7 +40,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                         EventHandler.getStatisticsDataFromOSS();
                         EventHandler.getBreathEventData();
                         EventHandler.getLeakInfoData();
-                        EventHandler.getUseData();
+                      //  EventHandler.getUseData();
                     });
                 },
                 /** 初始化数据加载 */
@@ -64,42 +64,41 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                             $('#useTime').html(workParamMap.yesterday+"~"+workParamMap.today);
 
                             var modestring =  new Array();
-                            modestring[0] ="设置冲突";
-                            modestring[1] ="CPAP";
-                            modestring[2] ="APAP";
-                            modestring[3] ="BPAP-S";
-                            modestring[4] ="AutoBPAP-S";
-                            modestring[5] ="BPAP-T";
-                            modestring[6] ="BPAP-ST";
+                            modestring[0] ="CPAP";
+                            modestring[1] ="APAP";
+                            modestring[2] ="BPAP-S";
+                            modestring[3] ="AutoBPAP-S";
+                            modestring[4] ="BPAP-T";
+                            modestring[5] ="BPAP-ST";
 
-                            if(workParamMap.mode ==1)
+                            if(workParamMap.mode ==0)
                             {
                                 $('#pressure1_name').html("治疗压力：");
                                 $('#pressure2_name').hidden();
                                 $('#presure2').hidden();
                             }
-                            else if (workParamMap.mode ==2)
+                            else if (workParamMap.mode ==1)
                             {
                                 $('#pressure1_name').html("最大压力：");
                                 $('#pressure2_name').html("最小压力：");
                             }
-                            else if(workParamMap.mode ==3)
+                            else if(workParamMap.mode ==2)
                             {
                                 $('#pressure1_name').html("吸气压力：");
                                 $('#pressure2_name').html("呼气压力：");
                             }
-                            else if(workParamMap.mode ==4)
+                            else if(workParamMap.mode ==3)
                             {
                                 $('#pressure1_name').html("最大呼气压力：");
                                 $('#pressure2_name').html("最小吸气压力：");
                             }
-                            else
+                            else if(workParamMap.mode == 4 || workParamMap.mode == 5 )
                             {
                                 $('#pressure1_name').html("IPAP压力：");
                                 $('#pressure2_name').html("EPAP压力：");
                             }
 
-                            if(workParamMap.mode ==0)
+                            if(workParamMap.mode == 100)
                             {
                                 $('#cure_model').html("模式冲突");
                                 $('.controlmode').hide();

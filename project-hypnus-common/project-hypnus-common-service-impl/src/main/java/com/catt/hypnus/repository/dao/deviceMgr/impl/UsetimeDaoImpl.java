@@ -38,6 +38,23 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         return this.findPageBySql(sql.toString(), param, pageable, Map.class);
     }
 
+    public List<Map> findUsetimeList(String deviceId, String startTime, String endTime){
+        StringBuffer sql = new StringBuffer();
+        Map param = new HashMap<>();
+        sql.append(baseSql());
+        if (StringUtil.isNotBlank(deviceId)) {
+            sql.append(" AND t.device_id = :deviceId ");
+            param.put("deviceId", deviceId);
+        }
+        if (startTime != null) {
+            sql.append(" AND ((t.startTime >= :startTime AND t.starttime < :etime) OR (t.end_time > :startTime AND t.end_time < :etime) OR (t.startTime < :startTime AND t.end_time > :etime))");
+            param.put("startTime", startTime);
+            param.put("etime", endTime);
+        }
+        sql.append(" order by t.record_time asc");
+
+        return this.findListBySql(sql.toString(), param, Map.class);
+    }
 
     public List<Map> findMapList(String deviceId, String startTime, String endTime) {
         StringBuffer sql = new StringBuffer();

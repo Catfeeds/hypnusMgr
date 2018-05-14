@@ -40,6 +40,16 @@ public interface UsetimeDao extends BaseDao<Usetime, Long> {
     List<Map> findMapList(String deviceId, String startTime, String endTime);
 
     /**
+     * 使用记录列表
+     * @auth  lizb
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<Map> findUsetimeList(String deviceId, String startTime, String endTime);
+
+    /**
      * 日期查询使用记录
      *
      * @param deviceId
