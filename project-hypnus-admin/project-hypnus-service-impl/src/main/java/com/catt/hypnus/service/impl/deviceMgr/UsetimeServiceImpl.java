@@ -1281,57 +1281,57 @@ public class UsetimeServiceImpl implements UsetimeService {
      */
     @Override
     public Map getBreathEventData(String deviceId,String startTime,String endTime) {
-        Map totalDataMap = usetimeDao.getStatisticsDataTotalData(deviceId,startTime,endTime);
-
-        //获取总使用时间 单位：小时
-        String totalHoursStr = "";
-        if(totalDataMap != null){
-            BigDecimal t_totalSeconds = (BigDecimal) totalDataMap.get("totalSeconds");
-            if(t_totalSeconds != null){
-                double totalSeconds = t_totalSeconds.doubleValue();
-                DecimalFormat df = new DecimalFormat("0.0");
-                totalHoursStr = df.format(totalSeconds/3600);
-            }
-        }
-
-        double totalHours;
-        if(!totalHoursStr.isEmpty()){
-            totalHours = Double.valueOf(totalHoursStr);
-        }else{
-            totalHours = 1.0;
-        }
-
         Map breathEventDataMap = new HashMap();
         List breathEventDataList = usetimeDao.getBreathEventData(deviceId,startTime,endTime);
-        int ahi = 0;
-        int ai = 0;
-        int hi = 0;
-        int snore = 0;
-        int csa = 0;
-        int csr = 0;
-        int pb = 0;
+        double d_ahi = 0;
+        double d_ai = 0;
+        double d_hi = 0;
+        double d_snore = 0;
+        double d_csa = 0;
+        double d_csr = 0;
+        double d_pb = 0;
         if(CollectionUtil.isNotEmpty(breathEventDataList)){
             for(int i=0; i< breathEventDataList.size();i++){
                 breathEventDataMap = (Map) breathEventDataList.get(i);
                 //计算AHI=AI+HI
-                ai += (int) breathEventDataMap.get("ai");
-                hi += (int) breathEventDataMap.get("hi");
-                ahi += ai+hi;
-                snore += (int) breathEventDataMap.get("snore");
-                csa += (int) breathEventDataMap.get("csa");
-                csr += (int) breathEventDataMap.get("csr");
-                pb += (int) breathEventDataMap.get("pb");
+                BigDecimal bd_ai = (BigDecimal) breathEventDataMap.get("ai");
+                d_ai += bd_ai.doubleValue();
+
+                BigDecimal bd_hi = (BigDecimal) breathEventDataMap.get("hi");
+                d_hi += bd_hi.doubleValue();
+
+                d_ahi = d_ai + d_hi;
+
+                BigDecimal bd_snore = (BigDecimal) breathEventDataMap.get("snore");
+                d_snore += bd_snore.doubleValue();
+
+                BigDecimal bd_csa = (BigDecimal) breathEventDataMap.get("csa");
+                d_csa += bd_csa.doubleValue();
+
+                BigDecimal bd_csr = (BigDecimal) breathEventDataMap.get("csr");
+                d_csr += bd_csr.doubleValue();
+
+                BigDecimal bd_pb = (BigDecimal) breathEventDataMap.get("pb");
+                d_pb += bd_pb.doubleValue();
 
             }
-            if(totalHours != 0){
-                breathEventDataMap.put("ahi",ahi/totalHours);
-                breathEventDataMap.put("ai",ai/totalHours);
-                breathEventDataMap.put("hi",hi/totalHours);
-                breathEventDataMap.put("snore",snore/totalHours);
-                breathEventDataMap.put("csa",csa/totalHours);
-                breathEventDataMap.put("csr",csr/totalHours);
-                breathEventDataMap.put("pb",pb/totalHours);
-            }
+            DecimalFormat df = new DecimalFormat("0.0");
+            String ahi = df.format(d_ahi);
+            String ai = df.format(d_ai);
+            String hi = df.format(d_hi);
+            String snore = df.format(d_snore);
+            String csa = df.format(d_csa);
+            String csr = df.format(d_csr);
+            String pb = df.format(d_pb);
+
+                breathEventDataMap.put("ahi",ahi);
+                breathEventDataMap.put("ai",ai);
+                breathEventDataMap.put("hi",hi);
+                breathEventDataMap.put("snore",snore);
+                breathEventDataMap.put("csa",csa);
+                breathEventDataMap.put("csr",csr);
+                breathEventDataMap.put("pb",pb);
+
             return breathEventDataMap;
         }else {//如果没有数据，则显示0
             Map breathEventDataMapForNull = new HashMap();
@@ -1372,19 +1372,19 @@ public class UsetimeServiceImpl implements UsetimeService {
             }
             leakInfoDataMap.put("totalLeakVolume",totalLeakVolume);
 
-
             //平均漏气量 = 总漏气量（L）/总使用时间（分钟）
-            BigDecimal t_totalSeconds = (BigDecimal) totalDataMap.get("totalSeconds");
+            BigDecimal t_averageLeakVolume = (BigDecimal) totalDataMap.get("averageLeakVolume");
             String averageLeakVolume;
-            if(t_totalSeconds != null){
-                double totalSeconds = t_totalSeconds.doubleValue();
+            if(t_averageLeakVolume != null){
                 DecimalFormat df = new DecimalFormat("0.0");
-                 averageLeakVolume = df.format(totalLeakVolume/(totalSeconds/60));
+                averageLeakVolume = df.format(t_averageLeakVolume.doubleValue());
             }else{
                 averageLeakVolume = "0";
             }
             leakInfoDataMap.put("averageLeakVolume",averageLeakVolume);
+
             return leakInfoDataMap;
+
         }else {//如果没有数据，则显示0
             Map leakInfoDataMapForNull = new HashMap();
             leakInfoDataMapForNull.put("totalLeakVolume",0);
@@ -1451,7 +1451,7 @@ public class UsetimeServiceImpl implements UsetimeService {
                 int days = (int) ((endDate.getTime() - datemark.getTime()) / (1000*3600*24));
 
                 int eIndex = 30 - days;
-                //呼吸事件List
+                //呼吸事件List //还需要除以使用时间
                 aiEventList.add(eIndex,breathEventDataMap.get("ai"));
 
                 hiEventList.add(eIndex,breathEventDataMap.get("hi"));

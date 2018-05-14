@@ -227,7 +227,13 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
 //        Map breathEventDataMap = null;
         StringBuffer sql = new StringBuffer();
         Map param = new HashMap();
-        sql.append("select t.ai_cnt as ai,t.hi_cnt as hi, t.snore_cnt as snore,t.csa_cnt as csa,t.csr_cnt as csr,t.pb_cnt as pb,t.`date_mark`as datemark");
+        sql.append("SELECT  t.ai_cnt / (t.`useseconds`/ 3600 ) as ai,");
+        sql.append("t.hi_cnt / (t.`useseconds`/ 3600 ) as hi,");
+        sql.append("t.snore_cnt / (t.`useseconds`/ 3600 ) as snore,");
+        sql.append("t.csa_cnt / (t.`useseconds`/ 3600 ) as csa,");
+        sql.append("t.csr_cnt / (t.`useseconds`/ 3600 ) as csr,");
+        sql.append("t.pb_cnt / (t.`useseconds`/ 3600 ) as pb,");
+        sql.append("t.`date_mark`as datemark");
         sql.append(" from t_dev_day_statistics t ");
         if (StringUtil.checkStr(deviceId)) {
             sql.append(" where t.device_id =:deviceId");
@@ -280,7 +286,7 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
     }
 
     /**
-     * 获取总使用时间
+     * 从t_dev_day_statistics表中获取总使用时间，总使用天数，总天数，总漏气量
      *
      * @param deviceId
      * @param startTime
@@ -293,7 +299,7 @@ public class UsetimeDaoImpl extends BaseDaoImpl<Usetime, Long>
         Map totalTimesMap = null;
         StringBuffer sql = new StringBuffer();
         Map param = new HashMap();
-        sql.append("SELECT SUM(`useseconds`)  AS totalSeconds,SUM(`usedays`)  AS  totalUseDays,SUM(`use4days`) AS totalUse4days,SUM(`leak_volume`) AS totalLeakVolume,");
+        sql.append("SELECT SUM(`useseconds`)  AS totalSeconds,SUM(`usedays`)  AS  totalUseDays,SUM(`use4days`) AS totalUse4days,SUM(`leak_volume`) AS totalLeakVolume,SUM(t.`leak_volume`) / (SUM(t.`useseconds`)/60) AS averageLeakVolume,");
         sql.append("DATEDIFF( :endTime");
         param.put("endTime", endTime);
         sql.append(", :startTime) AS totalDays ");
