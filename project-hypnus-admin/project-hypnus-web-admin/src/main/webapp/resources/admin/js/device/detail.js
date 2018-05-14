@@ -14,6 +14,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                     var id = $('#id').val();
                     if (id) {
                         EventHandler.getStatisticsDataWorkParam();
+                        EventHandler.getTreatmentPressure();
                         EventHandler.getStatisticsDataUseInfo();
                         EventHandler.getStatisticsDataFromOSS();
                         EventHandler.getBreathEventData();
@@ -36,6 +37,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                     });
                     $("#searchBtn").click(function () {
                         EventHandler.getStatisticsDataWorkParam();
+                        EventHandler.getTreatmentPressure();
                         EventHandler.getStatisticsDataUseInfo();
                         EventHandler.getStatisticsDataFromOSS();
                         EventHandler.getBreathEventData();

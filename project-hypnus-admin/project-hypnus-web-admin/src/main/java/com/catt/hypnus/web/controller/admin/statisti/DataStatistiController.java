@@ -83,7 +83,7 @@ public class DataStatistiController extends BaseController {
 
 //        System.out.println("事件表柱状图map："+dataMap);
 
-        //从t_dev_day_statistics表中读取数据
+        //从t_dev_day_statistics表中读取数据 histogram 柱状图
         Map chartDataMap = usetimeService.getStatisticsChartData(deviceId, createDateDay, endDateDay);
 
         System.out.println("新的表柱状图map："+chartDataMap);
@@ -95,8 +95,26 @@ public class DataStatistiController extends BaseController {
 
 
     /**
+     * 获取治疗压力数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"/getTreatmentPressure"}, method = RequestMethod.POST)
+    public Map getTreatmentPressure(String deviceId,String startTime,String endTime) {
+        Map treatmentPressureMap = usetimeService.getTreatmentPressure(deviceId,startTime,endTime);
+        return treatmentPressureMap;
+    }
+
+    /**
      * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）
      *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
      * @return
      */
     @ResponseBody

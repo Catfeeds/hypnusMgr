@@ -127,6 +127,16 @@ public interface UsetimeService {
 
 
     /**
+     * 获取治疗压力数据（设备详情统计数据）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Map getTreatmentPressure(String deviceId, String startTime,String endTime);
+
+    /**
      * 获取使用信息数据：初次进入详情页面默认统计时间为一天（设备详情统计数据）
      *
      * @param deviceId
