@@ -1454,9 +1454,9 @@ public class UsetimeServiceImpl implements UsetimeService {
      * @return
      */
     @Override
-    public Map getStatisticsChartData(String deviceId,String startTime,String endTime) {
+    public Map getHistogramData(String deviceId,String startTime,String endTime) {
 
-        Map chartDataMap = new HashMap();
+        Map histogramMap = new HashMap();
 
         Map aiDataMap = new HashMap();
         Map hiDataMap = new HashMap();
@@ -1465,7 +1465,7 @@ public class UsetimeServiceImpl implements UsetimeService {
         Map pbDataMap = new HashMap();
 
         Map breathEventDataMap;
-
+        // EventList
         List aiEventList = new ArrayList();
         List hiEventList = new ArrayList();
         List csaEventList = new ArrayList();
@@ -1475,7 +1475,7 @@ public class UsetimeServiceImpl implements UsetimeService {
         List breathEventDataList = usetimeDao.getBreathEventData(deviceId,startTime,endTime);
 
         if(CollectionUtil.isNotEmpty(breathEventDataList)){
-            //1.先填充30条数据进数组
+            //1.先填充30条数据进EventList
             for (int j = 0;j<30;j++){
                 aiEventList.add(j,0.0);
                 hiEventList.add(j,0.0);
@@ -1483,37 +1483,59 @@ public class UsetimeServiceImpl implements UsetimeService {
                 csrEventList.add(j,0.0);
                 pbEventList.add(j,0.0);
             }
-            //2.遍历数组，对比时间，将数据插入
+
             int listSize = breathEventDataList.size();
-            for(int i=0; i< listSize;i++){
-                breathEventDataMap = (Map) breathEventDataList.get(i);
 
-                Date datemark = (Date) breathEventDataMap.get("datemark");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-
-                Date endDate = null;
-                try {
-                    endDate = df.parse(endTime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                int days = (int) ((endDate.getTime() - datemark.getTime()) / (1000*3600*24));
-
-                int eIndex = 30 - days;
-                //呼吸事件List //还需要除以使用时间
-                aiEventList.add(eIndex,breathEventDataMap.get("ai"));
-
-                hiEventList.add(eIndex,breathEventDataMap.get("hi"));
-
-                csaEventList.add(eIndex,breathEventDataMap.get("csa"));
-
-                csrEventList.add(eIndex,breathEventDataMap.get("csr"));
-
-                pbEventList.add(eIndex,breathEventDataMap.get("pb"));
-
+            Date endDate = null;
+            try {
+                endDate = df.parse(endTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
 
+            Date stratDate = null;
+            try {
+                stratDate = df.parse(startTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            int daysInterval = (int) ((endDate.getTime() - stratDate.getTime()) / (1000*3600*24));
+
+            Date todayDate = new Date();
+            int endInterval = (int) ((todayDate.getTime() - endDate.getTime()) / (1000*3600*24));
+            //2.根据datemark将呼吸事件存入EventList
+            for(int i=0; i< daysInterval;i++){
+
+                if(i<listSize){
+
+                    breathEventDataMap = (Map) breathEventDataList.get(i);
+
+                    Date datemark = (Date) breathEventDataMap.get("datemark");
+
+                    int datemarkInterval = (int) ((endDate.getTime() - datemark.getTime()) / (1000*3600*24));
+
+                    // 呼吸事件索引
+                    int eIndex = 30 - datemarkInterval - endInterval;
+
+                    //呼吸事件List
+                    DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
+                    aiEventList.set(eIndex,decimalFormat.format(breathEventDataMap.get("ai")));
+
+                    hiEventList.set(eIndex,decimalFormat.format(breathEventDataMap.get("hi")));
+
+                    csaEventList.set(eIndex,decimalFormat.format(breathEventDataMap.get("csa")));
+
+                    csrEventList.set(eIndex,decimalFormat.format(breathEventDataMap.get("csr")));
+
+                    pbEventList.set(eIndex,decimalFormat.format(breathEventDataMap.get("pb")));
+
+                }
+
+            }// end of for
         }else{
             for (int j = 0;j<30;j++){
                 aiEventList.add(j,0.0);
@@ -1529,7 +1551,7 @@ public class UsetimeServiceImpl implements UsetimeService {
         csaDataMap.put("eventList", csaEventList);
         csrDataMap.put("eventList", csrEventList);
         pbDataMap.put("eventList", pbEventList);
-
+        // DateList
         List dateList = new ArrayList();
         //根据计算规则获取当前日期的前30天日期
         for (int i = 30;i>0;i--){
@@ -1546,13 +1568,13 @@ public class UsetimeServiceImpl implements UsetimeService {
         csrDataMap.put("dateList", dateList);
         pbDataMap.put("dateList", dateList);
 
-        chartDataMap.put("apnea", aiDataMap);
-        chartDataMap.put("hypopnea", hiDataMap);
-        chartDataMap.put("csa", csaDataMap);
-        chartDataMap.put("csr", csrDataMap);
-        chartDataMap.put("pb", pbDataMap);
+        histogramMap.put("apnea", aiDataMap);
+        histogramMap.put("hypopnea", hiDataMap);
+        histogramMap.put("csa", csaDataMap);
+        histogramMap.put("csr", csrDataMap);
+        histogramMap.put("pb", pbDataMap);
 
-        return chartDataMap;
+        return histogramMap;
 
     }
 

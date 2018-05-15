@@ -103,7 +103,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
                 params.deviceId = $("#deviceId").val();
                 params.createDateDay = $("#createDateDay").val();
                 params.endDateDay = $("#endDateDay").val();
-                DataHandler.getStaticData(params, function (result) {
+                DataHandler.getHistogramData(params, function (result) {
                     time = new Array(); // 横坐标，时间跨度
                     graphics = result;
                     if ($("#staticLi").hasClass("on")) {
@@ -686,8 +686,8 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
             /**
              * 柱状图统计
              */
-            getStaticData: function (param, callback) {
-                $.post(path + '/admin/statisti/data/getStaticData', param, function (backData) {
+            getHistogramData: function (param, callback) {
+                $.post(path + '/admin/statisti/data/getHistogramData', param, function (backData) {
                     callback(backData);
                 });
             },
