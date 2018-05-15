@@ -184,7 +184,7 @@ public interface UsetimeService {
      * @param endTime
      * @return
      */
-    Map getStatisticsChartData(String deviceId,String startTime,String endTime);
+    Map getHistogramData(String deviceId,String startTime,String endTime);
 
 
 }

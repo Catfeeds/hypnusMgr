@@ -69,28 +69,16 @@ public class DataStatistiController extends BaseController {
     }
 
     /**
-     * 获取柱状图数据
+     * 获取统计图形数据（呼吸事件柱状图）
      *
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = {"/getStaticData"}, method = RequestMethod.POST)
-    public Map getStaticData(String deviceId, String createDateDay, String endDateDay) {
-        String today = DateUtil.format(new Date(), DateUtil.yyyyMMdd);
-
-        //从事件表中读取数据
-//        Map dataMap = usetimeService.getEventData(deviceId, createDateDay, endDateDay);
-
-//        System.out.println("事件表柱状图map："+dataMap);
-
-        //从t_dev_day_statistics表中读取数据 histogram 柱状图
-        Map chartDataMap = usetimeService.getStatisticsChartData(deviceId, createDateDay, endDateDay);
-
-        System.out.println("新的表柱状图map："+chartDataMap);
-
+    @RequestMapping(value = {"/getHistogramData"}, method = RequestMethod.POST)
+    public Map getHistogramData(String deviceId, String createDateDay, String endDateDay) {
+        Map chartDataMap = usetimeService.getHistogramData(deviceId, createDateDay, endDateDay);
         return chartDataMap;
 
-//        return dataMap;
     }
 
 
