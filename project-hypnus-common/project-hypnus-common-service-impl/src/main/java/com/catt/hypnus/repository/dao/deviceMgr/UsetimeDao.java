@@ -130,14 +130,4 @@ public interface UsetimeDao extends BaseDao<Usetime, Long> {
      */
     Map getStatisticsDataTotalData(String deviceId, String startTime,String endTime);
 
-    /**
-     * 获取月度呼吸事件数据（呼吸事件柱状图）
-     *
-     * @param deviceId
-     * @param startTime
-     * @param endTime
-     * @return
-     */
-    List<Map> getMonthBreathEventData(String deviceId, String startTime, String endTime);
-
 }
