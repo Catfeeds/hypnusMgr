@@ -7,7 +7,7 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                 init: function () {
                     this.initPage();
                     this.initEvent();
-                 //   this.initData();
+                    this.initData();
                 },
                 /** 初始化界面 */
                 initPage: function () {
@@ -119,6 +119,21 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                                 $('.controlmode').show();
                             }
 
+                        }
+                    });
+                },
+
+                //获取治疗压力
+                getTreatmentPressure: function () {
+                    DataHandler.getTreatmentPressure({
+                        deviceId: $('#id').val(),
+                        startTime: $('#createDateDay').val(),
+                        endTime: $('#endDateDay').val()
+                    }, function (treatmentPressureMap) {
+                        if (treatmentPressureMap) {
+                            //获取治疗压力
+                            $('#ninetyPercentPresure1').html(treatmentPressureMap.tpIn +" cmH2O");
+                            $('#ninetyPercentPresure2').html(treatmentPressureMap.tpEx +" cmH2O");
                         }
                     });
                 },
@@ -245,6 +260,17 @@ seajs.use(['$', 'adminSystem', 'template', 'msgBox', 'util', 'pageBar', 'jquery.
                  */
                 getStatisticsDataWorkParam: function (params, callback) {
                     $.post(path + '/admin/deviceMgr/getStatisticsDataWorkParamNew', params, function (backData) {
+                        callback(backData);
+                    });
+                },
+
+                /**
+                 * 获取统计数据-治疗压力
+                 * @param params
+                 * @param callback
+                 */
+                getTreatmentPressure: function (params, callback) {
+                    $.post(path + '/admin/statisti/data/getTreatmentPressure', params, function (backData) {
                         callback(backData);
                     });
                 },
