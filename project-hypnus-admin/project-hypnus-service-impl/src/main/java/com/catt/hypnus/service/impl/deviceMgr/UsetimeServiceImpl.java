@@ -1165,6 +1165,166 @@ public class UsetimeServiceImpl implements UsetimeService {
 
     }
 
+    /**从OSS文件中读取潮气量(tv)，呼吸频率(br)，吸气时长(bi)，分钟通气量（mv）
+     *
+     * @param deviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
+    public Map getDataFormOSS(String deviceId,String startTime,String endTime) throws IOException, ParseException{
+        Map ossDataMap = new HashMap();
+        Map usetimeMap = new TreeMap();
+        List ossDataList = new ArrayList<>();
+        /**
+         * 1,数据库查询基础数据
+         * 2,从oss查询文件列表
+         * 3,从文件中读取数据
+         * 4,组装数据
+         */
+        //0.先做必要的时间转换
+//        DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+        ParsePosition pos = new ParsePosition(0);
+
+        startTime = startTime + " 12:00:00";
+
+        endTime = endTime + " 12:00:00";
+
+        Date startDate = format2.parse(startTime);
+        Date endDate = format2.parse(endTime);
+        Calendar c = Calendar.getInstance();
+
+//        c.setTime(stime);
+//        c.add(Calendar.DAY_OF_MONTH, 1);// 今天+1天
+//        Date etime = c.getTime();
+//        String afterSelectDate = format2.format(etime);
+
+
+        //1,数据库查询基础数据
+        List<Map> usetimeList = this.findMapList(deviceId, startTime, endTime);
+
+        //用完了将选定时间设置回规定时间
+        c.setTime(startDate);
+//        c.add(Calendar.HOUR_OF_DAY, 12);
+        startDate = c.getTime();
+
+        c.setTime(endDate);
+//        c.add(Calendar.HOUR_OF_DAY, 12);
+        endDate = c.getTime();
+
+        if (CollectionUtils.isEmpty(usetimeList)) {
+            logger.info("无使用记录");
+            return  null;
+        }
+        else {  //有usetime才处理
+            for(int i=0; i< usetimeList.size();i++)
+            {//先读出所有的可能usetime
+                pos.setIndex(0);
+                Date key = format2.parse(MapUtil.getString(usetimeList.get(i), "starttime"), pos);
+                pos.setIndex(0);
+                Date value = null;
+                if(MapUtil.getString(usetimeList.get(i), "endTime") != null)
+                    value = format2.parse(MapUtil.getString(usetimeList.get(i), "endTime"), pos);
+                else
+                    continue;
+                //注意边界时间边界可能越出
+                usetimeMap.put(key , value);
+            }
+
+            int addperoid = 500;  // 设置数据间隔为500ms
+            double gap10000 = addperoid/10000d;
+
+            Iterator<Map.Entry<Date, Date>> entries = usetimeMap.entrySet().iterator();
+            while (entries.hasNext()) {
+                Map.Entry<Date, Date> entry = entries.next();
+                //a.时间先计算偏差范围
+                int startoff = -1, endoff = -1;
+                if(entry.getKey().before(startDate)){
+                    if(entry.getValue().before(startDate))
+                        continue;
+
+                    //计算startoff
+                    startoff = (int)((startDate.getTime()-entry.getKey().getTime()));
+                }
+                if(entry.getValue().after(endDate)){
+                    if(entry.getKey().after(endDate))
+                        continue;
+                    //计算endoff
+                    endoff = (int) ((endDate.getTime()- entry.getKey().getTime()));
+                }
+
+                String pathPre = deviceId + "/" + format2.format(entry.getKey()) + "/";
+                List<String> fileLists = OssDataHandler.listOfObject(pathPre);
+
+                if (CollectionUtils.isEmpty(fileLists)) {
+                    logger.info("OSS中无数据文件");
+                    return null;
+                } else {
+                    //拼装数据
+                    short[] tvAarry = null; //潮气量
+                    short[] brAarry = null; //呼吸频率
+                    short[] biAarry = null; //吸气时长
+                    for (String fileName : fileLists) {
+                        if (fileName.contains("tv.edf")) {
+                            tvAarry = OssDataHandler.getObjectDataShort(fileName,startoff/10000,endoff/10000); ////注意数据间隔是10000ms
+                        }
+                        else if (fileName.contains("br.edf")) {
+                            brAarry = OssDataHandler.getObjectDataShort(fileName,startoff/10000,endoff/10000); //注意数据间隔是10000ms
+                        }
+                        else if (fileName.contains("bi.edf")) {
+                            biAarry = OssDataHandler.getObjectDataShort(fileName,startoff/10000,endoff/10000); //注意数据间隔是10000ms
+                        }
+                    }
+                    //组合数据
+                    c.setTime(entry.getKey());
+                    short[] s0 = new short[]{0};
+                    for(int i=0; i< (int)(entry.getValue().getTime()- entry.getKey().getTime())/addperoid; i++) {
+                        c.add(Calendar.MILLISECOND, addperoid);
+                        Date temp = c.getTime();
+
+                        List dataList = new ArrayList<>();
+                        dataList.add(format3.format(temp));
+
+                        int tempInt = (int)(i*gap10000);
+                        //潮气量（tv）
+                        if (tvAarry != null && tempInt < tvAarry.length) {
+                            dataList.add(tvAarry[tempInt]);
+                        } else {
+                            dataList.add(s0[0]);
+                        }
+                        //呼吸频率（br）
+                        if (brAarry != null && tempInt < brAarry.length) {
+                            dataList.add(brAarry[tempInt]);
+                        } else {
+                            dataList.add(s0[0]);
+                        }
+                        //吸气时长（bi）
+                        if (biAarry != null && tempInt < biAarry.length) {
+                            dataList.add(biAarry[tempInt]);
+                        } else {
+                            dataList.add(s0[0]);
+                        }
+                        //分钟通气量（mv）
+                        if (tvAarry!=null && brAarry != null && tempInt < tvAarry.length && tempInt < brAarry.length) {
+                            dataList.add(tvAarry[tempInt]*brAarry[tempInt]);
+                        } else {
+                            dataList.add(s0[0]);
+                        }
+
+                        ossDataList.add(dataList);
+                    }
+                }
+            }
+            ossDataMap.put("ossDataList", ossDataList);
+        }
+        return ossDataMap;
+    }
+
     /**
      * 获取统计数据页面的潮气量，分钟通气量，呼吸频率，呼吸比（从OSS文件中读取）
      *
@@ -1175,18 +1335,20 @@ public class UsetimeServiceImpl implements UsetimeService {
      */
     @Override
     public Map getStatisticsDataFromOSS(String deviceId,String startTime,String endTime){
-        Map map = null;
+
+        Map ossMap = null;
         try {
-            map = this.getDateFromOss(deviceId, startTime, endTime);
+            ossMap = this.getDataFormOSS(deviceId, startTime, endTime);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if( map != null ){
 
-            List plist = (List) map.get("pressure");//未做非空判断，容易报错
+        if( ossMap != null ){
+
+            List plist = (List) ossMap.get("ossDataList");
 
             int plistSize = plist.size();
 
@@ -1196,10 +1358,8 @@ public class UsetimeServiceImpl implements UsetimeService {
 
             for (int i = 0; i < plistSize; i++) {
                 List tvList = (List) plist.get(i);
-                if (tvList.size() > 6) {
-                    Number tvValue =  (Number) tvList.get(6);
+                    Number tvValue =  (Number) tvList.get(1);
                     sortTVList.add(tvValue.shortValue());
-                }
             }
             //1.2.按照从小到大排列潮气量数值
             Collections.sort(sortTVList);
@@ -1212,17 +1372,14 @@ public class UsetimeServiceImpl implements UsetimeService {
 
 
             //2.计算分钟通气量
-            //2.1.获取所有吸气时长（BI）和呼吸频率（BR）数值
+            //2.1.
             List sortMVList = new ArrayList<>();
 
             for (int i = 0; i < plistSize; i++) {
                 List mvList = (List) plist.get(i);
-                short biValue = (short) mvList.get(1);
-                byte brValue = (byte) mvList.get(2);
-                double mvValue = (double) (biValue * brValue);
-
+                Number mvValue =  (Number) mvList.get(4);
                 DecimalFormat df = new DecimalFormat("0.0");
-                sortMVList.add(df.format(mvValue * 0.001));
+                sortMVList.add(df.format(mvValue.doubleValue() * 0.001));
             }
             //2.2.按照从小到大排列分钟通气量数值
             Collections.sort(sortMVList);
@@ -1240,7 +1397,7 @@ public class UsetimeServiceImpl implements UsetimeService {
 
             for (int i = 0; i < plistSize; i++) {
                 List brList = (List) plist.get(i);
-                byte brValue = (byte) brList.get(2);
+                short brValue = (short) brList.get(2);
                 sortBRList.add(brValue);
             }
             //3.2.按照从小到大排列呼吸频率数值
@@ -1248,9 +1405,9 @@ public class UsetimeServiceImpl implements UsetimeService {
 
             //3.3.取50%与90%位置的数值
 
-            byte fiftyPercentBR = (byte) sortBRList.get((int) (sortBRList.size() * 0.5));
+            short fiftyPercentBR = (short) sortBRList.get((int) (sortBRList.size() * 0.5));
 
-            byte ninetyPercentBR = (byte) sortBRList.get((int) (sortBRList.size() * 0.9));
+            short ninetyPercentBR = (short) sortBRList.get((int) (sortBRList.size() * 0.9));
 
 
             //4.计算呼吸比
@@ -1259,15 +1416,15 @@ public class UsetimeServiceImpl implements UsetimeService {
 
             for (int i = 0; i < plistSize; i++) {
                 List birList = (List) plist.get(i);
-                short biValue = (short) birList.get(1);
-                byte brValue = (byte) birList.get(2);
-                byte bpValue = 0;
+                short biValue = (short) birList.get(3);
+                short brValue = (short) birList.get(2);
+                short bpValue ;
 
                 if (brValue != 0) {
                     // 计算呼气时长
-                    byte boValue = (byte) (60 / brValue - biValue);
+                    short boValue = (short) (60 / brValue - biValue);
                     //呼吸比 = 呼气时长/吸气时长
-                    bpValue = (byte) (boValue / biValue);
+                    bpValue = (short) (boValue / biValue);
                 } else {
                     bpValue = 0;
                 }
@@ -1278,9 +1435,9 @@ public class UsetimeServiceImpl implements UsetimeService {
 
             //4.3.取50%与90%位置的数值
 
-            byte fiftyPercentBP = (byte) sortBPList.get((int) (sortBPList.size() * 0.5));
+            short fiftyPercentBP = (short) sortBPList.get((int) (sortBPList.size() * 0.5));
 
-            byte ninetyPercentBP = (byte) sortBPList.get((int) (sortBPList.size() * 0.9));
+            short ninetyPercentBP = (short) sortBPList.get((int) (sortBPList.size() * 0.9));
 
 
             //组装数据
