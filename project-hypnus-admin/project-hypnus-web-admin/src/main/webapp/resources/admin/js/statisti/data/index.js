@@ -700,7 +700,7 @@ seajs.use(['$', 'msgBox', 'util', 'jquery.json'], function ($, msgBox, util) {
              * 柱状图统计
              */
             getStaticData: function (param, callback) {
-                $.post(path + '/admin/statisti/data/getStaticData', param, function (backData) {
+                $.post(path + '/admin/statisti/data/getHistogramData', param, function (backData) {
                     callback(backData);
                 });
             },

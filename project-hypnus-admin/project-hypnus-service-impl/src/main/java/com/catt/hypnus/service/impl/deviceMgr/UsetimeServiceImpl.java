@@ -468,7 +468,7 @@ public class UsetimeServiceImpl implements UsetimeService {
         List<Map> usetimeList = this.findMapList(deviceId, startTime, endTime);
         if (CollectionUtils.isEmpty(usetimeList)) {
             logger.info("无使用记录");
-            startTimeStr = startTime + "";
+            return null;
         } else {
             startTimeStr = MapUtil.getString(usetimeList.get(0), "starttime");
             for(int i=0; i< usetimeList.size();i++)
